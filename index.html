@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подбор Масел и Смазок - Интерактивный Классификатор</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Заголовок -->
+        <header class="header">
+            <h1>🔧 Подбор Масел и Смазок</h1>
+            <p class="subtitle">Интерактивный классификатор по международным стандартам</p>
+        </header>
+
+        <!-- Переключатель между масла/смазки -->
+        <div class="tabs">
+            <button class="tab-button active" data-tab="motor">Моторные Масла</button>
+            <button class="tab-button" data-tab="greases">Пластичные Смазки</button>
+        </div>
+
+        <!-- Контент для моторных масел -->
+        <div id="motor-content" class="tab-content active">
+            <div class="filter-section">
+                <h2>Параметры подбора моторного масла</h2>
+                
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label for="sae-filter">Вязкость SAE</label>
+                        <select id="sae-filter" class="filter-select">
+                            <option value="">Все варианты</option>
+                        </select>
+                        <small>Класс вязкости по SAE J300</small>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="api-filter">Качество API</label>
+                        <select id="api-filter" class="filter-select">
+                            <option value="">Все варианты</option>
+                        </select>
+                        <small>Спецификация American Petroleum Institute</small>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="acea-filter">Стандарт ACEA</label>
+                        <select id="acea-filter" class="filter-select">
+                            <option value="">Все варианты</option>
+                        </select>
+                        <small>Европейская классификация</small>
+                    </div>
+                </div>
+
+                <button id="motor-search-btn" class="search-button">
+                    🔍 Найти масло
+                </button>
+
+                <button id="motor-reset-btn" class="reset-button">
+                    ↺ Сбросить фильтры
+                </button>
+            </div>
+
+            <div id="motor-results" class="results-section">
+                <div class="results-header">
+                    <h3>Результаты поиска</h3>
+                    <span id="motor-count" class="results-count">0 найдено</span>
+                </div>
+                <div id="motor-cards" class="cards-container">
+                    <!-- Результаты будут здесь -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Контент для смазок -->
+        <div id="greases-content" class="tab-content">
+            <div class="filter-section">
+                <h2>Параметры подбора пластичной смазки</h2>
+                
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label for="consistency-filter">Консистенция NLGI</label>
+                        <select id="consistency-filter" class="filter-select">
+                            <option value="">Все варианты</option>
+                        </select>
+                        <small>Класс консистенции по NLGI</small>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="thickener-filter">Тип загустителя</label>
+                        <select id="thickener-filter" class="filter-select">
+                            <option value="">Все варианты</option>
+                        </select>
+                        <small>Основа смазки</small>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="temp-filter">Температурный диапазон</label>
+                        <select id="temp-filter" class="filter-select">
+                            <option value="">Все варианты</option>
+                        </select>
+                        <small>Рабочая температура</small>
+                    </div>
+                </div>
+
+                <button id="greases-search-btn" class="search-button">
+                    🔍 Найти смазку
+                </button>
+
+                <button id="greases-reset-btn" class="reset-button">
+                    ↺ Сбросить фильтры
+                </button>
+            </div>
+
+            <div id="greases-results" class="results-section">
+                <div class="results-header">
+                    <h3>Результаты поиска</h3>
+                    <span id="greases-count" class="results-count">0 найдено</span>
+                </div>
+                <div id="greases-cards" class="cards-container">
+                    <!-- Результаты будут здесь -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Футер -->
+        <footer class="footer">
+            <p>📚 База данных: 29 моторных масел, 32 пластичные смазки</p>
+            <p>🌐 Стандарты: SAE, API, ACEA, DIN, ASTM, ISO, NLGI</p>
+            <p>© 2024 Классификатор масел и смазок Узбекистана</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
