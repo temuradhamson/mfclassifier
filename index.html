@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Классификатор моторных масел | МинФин</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">🛢️</div>
+                <div class="logo-text">
+                    <h1>Классификатор моторных масел</h1>
+                    <span class="subtitle">Министерство Финансов Республики Узбекистан</span>
+                </div>
+            </div>
+            <nav class="nav-tabs">
+                <button class="tab-btn active" data-tab="table">📋 Таблица</button>
+                <button class="tab-btn" data-tab="stats">📊 Статистика</button>
+                <button class="tab-btn" data-tab="export">📥 Экспорт</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- Фильтры -->
+        <section class="filters-section">
+            <div class="filters-header">
+                <h2>🔍 Фильтры</h2>
+                <button id="clearFilters" class="btn-secondary">Сбросить</button>
+            </div>
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label for="filterBrand">Бренд</label>
+                    <select id="filterBrand">
+                        <option value="">Все бренды</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterViscosity">Класс вязкости</label>
+                    <select id="filterViscosity">
+                        <option value="">Все классы</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterStandard">Стандарт</label>
+                    <select id="filterStandard">
+                        <option value="">Все стандарты</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterPackaging">Упаковка</label>
+                    <select id="filterPackaging">
+                        <option value="">Все виды</option>
+                    </select>
+                </div>
+                <div class="filter-group filter-search">
+                    <label for="filterSearch">Поиск</label>
+                    <input type="text" id="filterSearch" placeholder="Поиск по названию...">
+                </div>
+            </div>
+        </section>
+
+        <!-- Таблица -->
+        <section id="tableSection" class="content-section active">
+            <div class="table-info">
+                <span id="resultsCount">Загрузка...</span>
+            </div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th data-sort="name">Наименование <span class="sort-icon">↕</span></th>
+                            <th data-sort="viscosity_class">Класс вязкости <span class="sort-icon">↕</span></th>
+                            <th data-sort="standard">Стандарт <span class="sort-icon">↕</span></th>
+                            <th data-sort="specification">Спецификация <span class="sort-icon">↕</span></th>
+                            <th data-sort="unit">Ед.изм <span class="sort-icon">↕</span></th>
+                            <th data-sort="packaging">Упаковка <span class="sort-icon">↕</span></th>
+                            <th data-sort="brand">Бренд <span class="sort-icon">↕</span></th>
+                            <th data-sort="container">Тара <span class="sort-icon">↕</span></th>
+                            <th data-sort="ikpu">ИКПУ <span class="sort-icon">↕</span></th>
+                            <th data-sort="enkt">ЕНКТ <span class="sort-icon">↕</span></th>
+                            <th data-sort="tnved">ТН ВЭД <span class="sort-icon">↕</span></th>
+                            <th data-sort="skp">СКП <span class="sort-icon">↕</span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Данные загружаются через JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Статистика -->
+        <section id="statsSection" class="content-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📦</div>
+                    <div class="stat-value" id="totalProducts">0</div>
+                    <div class="stat-label">Всего позиций</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🏷️</div>
+                    <div class="stat-value" id="totalBrands">0</div>
+                    <div class="stat-label">Брендов</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💧</div>
+                    <div class="stat-value" id="totalViscosity">0</div>
+                    <div class="stat-label">Классов вязкости</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📋</div>
+                    <div class="stat-value" id="totalStandards">0</div>
+                    <div class="stat-label">Стандартов</div>
+                </div>
+            </div>
+            
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3>По брендам</h3>
+                    <div id="brandChart" class="chart-container"></div>
+                </div>
+                <div class="chart-card">
+                    <h3>По классам вязкости</h3>
+                    <div id="viscosityChart" class="chart-container"></div>
+                </div>
+                <div class="chart-card">
+                    <h3>По упаковке</h3>
+                    <div id="packagingChart" class="chart-container"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Экспорт -->
+        <section id="exportSection" class="content-section">
+            <div class="export-grid">
+                <div class="export-card" id="exportCSV">
+                    <div class="export-icon">📄</div>
+                    <h3>CSV</h3>
+                    <p>Экспорт в формате CSV для Excel</p>
+                </div>
+                <div class="export-card" id="exportJSON">
+                    <div class="export-icon">📋</div>
+                    <h3>JSON</h3>
+                    <p>Экспорт в формате JSON</p>
+                </div>
+                <div class="export-card" id="exportPrint">
+                    <div class="export-icon">🖨️</div>
+                    <h3>Печать</h3>
+                    <p>Открыть окно печати</p>
+                </div>
+                <div class="export-card" id="exportCopy">
+                    <div class="export-icon">📎</div>
+                    <h3>Копировать</h3>
+                    <p>Скопировать в буфер обмена</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Модальное окно -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- Toast уведомления -->
+    <div id="toast" class="toast"></div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>© 2024 Министерство Финансов Республики Узбекистан</p>
+            <p class="footer-stats">
+                База данных: <span id="footerTotal">0</span> позиций | 
+                Обновлено: <span id="footerDate"></span>
+            </p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
