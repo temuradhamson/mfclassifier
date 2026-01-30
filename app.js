@@ -86,6 +86,37 @@ function updateStandardNumbers() {
     applyFilters();
 }
 
+// Обновление списка классов вязкости в зависимости от выбранного стандарта
+function updateViscosityOptions() {
+    const viscosityStandard = document.getElementById('filterViscosityStandard').value;
+    let viscosities;
+
+    if (viscosityStandard === 'SAE') {
+        // Показываем только SAE классы (те, что начинаются с "SAE")
+        viscosities = [...new Set(allData
+            .filter(item => item.viscosity_standard === 'SAE')
+            .map(item => item.viscosity_class)
+        )].sort();
+    } else if (viscosityStandard === 'ГОСТ') {
+        // Показываем только ГОСТ классы
+        viscosities = [...new Set(allData
+            .filter(item => item.viscosity_standard === 'ГОСТ' && item.viscosity_class_gost)
+            .map(item => item.viscosity_class_gost)
+        )].sort();
+    } else {
+        // Показываем все классы
+        viscosities = [...new Set(allData.map(item => {
+            // Для ГОСТ масел показываем viscosity_class_gost, для остальных - viscosity_class
+            return item.viscosity_class_gost || item.viscosity_class;
+        }))].sort();
+    }
+
+    fillSelect('filterViscosity', viscosities);
+
+    // Применяем фильтры после обновления списка
+    applyFilters();
+}
+
 // Настройка обработчиков событий
 function setupEventListeners() {
     // Табы
@@ -94,9 +125,10 @@ function setupEventListeners() {
             switchTab(e.target.dataset.tab);
         });
     });
-    
+
     // Фильтры
     document.getElementById('filterBrand').addEventListener('change', applyFilters);
+    document.getElementById('filterViscosityStandard').addEventListener('change', updateViscosityOptions);
     document.getElementById('filterViscosity').addEventListener('change', applyFilters);
     document.getElementById('filterStandardType').addEventListener('change', updateStandardNumbers);
     document.getElementById('filterStandardNumber').addEventListener('change', applyFilters);
@@ -155,6 +187,7 @@ function switchTab(tabName) {
 // Применение фильтров
 function applyFilters() {
     const brand = document.getElementById('filterBrand').value;
+    const viscosityStandard = document.getElementById('filterViscosityStandard').value;
     const viscosity = document.getElementById('filterViscosity').value;
     const standardType = document.getElementById('filterStandardType').value;
     const standardNumber = document.getElementById('filterStandardNumber').value;
@@ -163,7 +196,19 @@ function applyFilters() {
 
     filteredData = allData.filter(item => {
         if (brand && item.brand !== brand) return false;
-        if (viscosity && item.viscosity_class !== viscosity) return false;
+
+        // Фильтр по стандарту вязкости
+        if (viscosityStandard && item.viscosity_standard !== viscosityStandard) return false;
+
+        // Фильтр по классу вязкости
+        if (viscosity) {
+            if (item.viscosity_standard === 'ГОСТ') {
+                if (item.viscosity_class_gost !== viscosity) return false;
+            } else {
+                if (item.viscosity_class !== viscosity) return false;
+            }
+        }
+
         if (standardType && !item.standard.includes(standardType)) return false;
         if (standardNumber && item.standard !== standardNumber) return false;
 
@@ -191,6 +236,7 @@ function extractVolume(container) {
 // Сброс фильтров
 function clearFilters() {
     document.getElementById('filterBrand').value = '';
+    document.getElementById('filterViscosityStandard').value = '';
     document.getElementById('filterViscosity').value = '';
     document.getElementById('filterStandardType').value = '';
     document.getElementById('filterStandardNumber').value = '';
@@ -200,8 +246,9 @@ function clearFilters() {
     filteredData = [...allData];
     currentSort = { field: null, direction: 'asc' };
 
-    // Обновляем список номеров стандартов
+    // Обновляем список номеров стандартов и вязкостей
     updateStandardNumbers();
+    updateViscosityOptions();
 
     renderTable();
     updateResultsCount();
@@ -253,7 +300,7 @@ function renderTable() {
     if (filteredData.length === 0) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="11" class="no-data">
+                <td colspan="12" class="no-data">
                     <div class="no-data-content">
                         <span class="no-data-icon">🔍</span>
                         <p>Ничего не найдено</p>
@@ -264,22 +311,30 @@ function renderTable() {
         `;
         return;
     }
-    
-    tbody.innerHTML = filteredData.map(item => `
-        <tr onclick="showDetail(${item.id})">
-            <td><strong>${item.name}</strong></td>
-            <td><span class="badge badge-viscosity">${item.viscosity_class}</span></td>
-            <td>${item.standard}</td>
-            <td>${item.unit}</td>
-            <td>${item.packaging}</td>
-            <td><span class="badge badge-brand">${item.brand}</span></td>
-            <td>${item.container}</td>
-            <td class="code-cell">${item.ikpu}</td>
-            <td class="code-cell">${item.enkt}</td>
-            <td class="code-cell">${item.tnved}</td>
-            <td class="code-cell">${item.skp}</td>
-        </tr>
-    `).join('');
+
+    tbody.innerHTML = filteredData.map(item => {
+        // Определяем, какой класс вязкости показывать
+        const displayViscosity = item.viscosity_standard === 'ГОСТ' && item.viscosity_class_gost
+            ? item.viscosity_class_gost
+            : item.viscosity_class;
+
+        return `
+            <tr onclick="showDetail(${item.id})">
+                <td><strong>${item.name}</strong></td>
+                <td><span class="badge ${item.viscosity_standard === 'ГОСТ' ? 'badge-brand' : 'badge-viscosity'}">${item.viscosity_standard}</span></td>
+                <td><span class="badge badge-viscosity">${displayViscosity}</span></td>
+                <td>${item.standard}</td>
+                <td>${item.unit}</td>
+                <td>${item.packaging}</td>
+                <td><span class="badge badge-brand">${item.brand}</span></td>
+                <td>${item.container}</td>
+                <td class="code-cell">${item.ikpu}</td>
+                <td class="code-cell">${item.enkt}</td>
+                <td class="code-cell">${item.tnved}</td>
+                <td class="code-cell">${item.skp}</td>
+            </tr>
+        `;
+    }).join('');
 }
 
 // Обновление счетчика результатов
@@ -554,9 +609,53 @@ function showDetail(id) {
         `;
     }).join('');
 
+    // Формируем информацию о вязкости
+    const displayViscosity = item.viscosity_standard === 'ГОСТ' && item.viscosity_class_gost
+        ? item.viscosity_class_gost
+        : item.viscosity_class;
+
+    const viscosityInfo = item.viscosity_standard === 'ГОСТ' && item.viscosity_class_gost
+        ? `
+            <div class="detail-row">
+                <span class="detail-label">Класс вязкости (ГОСТ):</span>
+                <span class="detail-value"><span class="badge badge-viscosity">${item.viscosity_class_gost}</span></span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Эквивалент SAE:</span>
+                <span class="detail-value"><span class="badge badge-viscosity">${item.viscosity_class}</span></span>
+            </div>
+        `
+        : `
+            <div class="detail-row">
+                <span class="detail-label">Класс вязкости:</span>
+                <span class="detail-value"><span class="badge badge-viscosity">${item.viscosity_class}</span></span>
+            </div>
+        `;
+
     modalBody.innerHTML = `
         <h2>${item.brand} ${item.name}</h2>
         <div class="detail-grid">
+            <div class="detail-section detail-codes">
+                <h3>🔢 Коды классификации</h3>
+                <div class="codes-grid">
+                    <div class="code-box">
+                        <span class="code-label">ИКПУ</span>
+                        <span class="code-value">${item.ikpu}</span>
+                    </div>
+                    <div class="code-box">
+                        <span class="code-label">ЕНКТ</span>
+                        <span class="code-value">${item.enkt}</span>
+                    </div>
+                    <div class="code-box">
+                        <span class="code-label">ТН ВЭД</span>
+                        <span class="code-value">${item.tnved}</span>
+                    </div>
+                    <div class="code-box">
+                        <span class="code-label">СКП</span>
+                        <span class="code-value">${item.skp}</span>
+                    </div>
+                </div>
+            </div>
             <div class="detail-section">
                 <h3>🛢️ Характеристики</h3>
                 <div class="detail-row">
@@ -564,9 +663,10 @@ function showDetail(id) {
                     <span class="detail-value">${item.name}</span>
                 </div>
                 <div class="detail-row">
-                    <span class="detail-label">Класс вязкости:</span>
-                    <span class="detail-value"><span class="badge badge-viscosity">${item.viscosity_class}</span></span>
+                    <span class="detail-label">Стандарт вязкости:</span>
+                    <span class="detail-value"><span class="badge ${item.viscosity_standard === 'ГОСТ' ? 'badge-brand' : 'badge-viscosity'}">${item.viscosity_standard}</span></span>
                 </div>
+                ${viscosityInfo}
                 <div class="detail-row">
                     <span class="detail-label">Спецификация:</span>
                     <span class="detail-value">${item.standard}</span>
@@ -599,27 +699,6 @@ function showDetail(id) {
                 </div>
             </div>
             ` : ''}
-            <div class="detail-section detail-codes">
-                <h3>🔢 Коды классификации</h3>
-                <div class="codes-grid">
-                    <div class="code-box">
-                        <span class="code-label">ИКПУ</span>
-                        <span class="code-value">${item.ikpu}</span>
-                    </div>
-                    <div class="code-box">
-                        <span class="code-label">ЕНКТ</span>
-                        <span class="code-value">${item.enkt}</span>
-                    </div>
-                    <div class="code-box">
-                        <span class="code-label">ТН ВЭД</span>
-                        <span class="code-value">${item.tnved}</span>
-                    </div>
-                    <div class="code-box">
-                        <span class="code-label">СКП</span>
-                        <span class="code-value">${item.skp}</span>
-                    </div>
-                </div>
-            </div>
         </div>
     `;
 
@@ -633,22 +712,29 @@ function closeModal() {
 
 // Экспорт в CSV
 function exportCSV() {
-    const headers = ['Наименование', 'Класс вязкости', 'Спецификация',
+    const headers = ['Наименование', 'Стандарт вязкости', 'Класс вязкости', 'Спецификация',
                      'Ед.изм', 'Упаковка', 'Бренд', 'Тара', 'ИКПУ', 'ЕНКТ', 'ТН ВЭД', 'СКП'];
 
-    const rows = filteredData.map(item => [
-        item.name,
-        item.viscosity_class,
-        item.standard,
-        item.unit,
-        item.packaging,
-        item.brand,
-        item.container,
-        item.ikpu,
-        item.enkt,
-        item.tnved,
-        item.skp
-    ]);
+    const rows = filteredData.map(item => {
+        const displayViscosity = item.viscosity_standard === 'ГОСТ' && item.viscosity_class_gost
+            ? item.viscosity_class_gost
+            : item.viscosity_class;
+
+        return [
+            item.name,
+            item.viscosity_standard,
+            displayViscosity,
+            item.standard,
+            item.unit,
+            item.packaging,
+            item.brand,
+            item.container,
+            item.ikpu,
+            item.enkt,
+            item.tnved,
+            item.skp
+        ];
+    });
     
     const csvContent = '\uFEFF' + // BOM для Excel
         headers.join(';') + '\n' +
@@ -667,22 +753,29 @@ function exportJSON() {
 
 // Копирование в буфер
 function copyToClipboard() {
-    const headers = ['Наименование', 'Класс вязкости', 'Спецификация',
+    const headers = ['Наименование', 'Стандарт вязкости', 'Класс вязкости', 'Спецификация',
                      'Ед.изм', 'Упаковка', 'Бренд', 'Тара', 'ИКПУ', 'ЕНКТ', 'ТН ВЭД', 'СКП'];
 
-    const rows = filteredData.map(item => [
-        item.name,
-        item.viscosity_class,
-        item.standard,
-        item.unit,
-        item.packaging,
-        item.brand,
-        item.container,
-        item.ikpu,
-        item.enkt,
-        item.tnved,
-        item.skp
-    ].join('\t'));
+    const rows = filteredData.map(item => {
+        const displayViscosity = item.viscosity_standard === 'ГОСТ' && item.viscosity_class_gost
+            ? item.viscosity_class_gost
+            : item.viscosity_class;
+
+        return [
+            item.name,
+            item.viscosity_standard,
+            displayViscosity,
+            item.standard,
+            item.unit,
+            item.packaging,
+            item.brand,
+            item.container,
+            item.ikpu,
+            item.enkt,
+            item.tnved,
+            item.skp
+        ].join('\t');
+    });
     
     const text = headers.join('\t') + '\n' + rows.join('\n');
     

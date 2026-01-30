@@ -36,6 +36,14 @@
             </div>
             <div class="filters-grid">
                 <div class="filter-group">
+                    <label for="filterViscosityStandard">Стандарт класса вязкости</label>
+                    <select id="filterViscosityStandard">
+                        <option value="">Все стандарты</option>
+                        <option value="SAE">SAE</option>
+                        <option value="ГОСТ">ГОСТ</option>
+                    </select>
+                </div>
+                <div class="filter-group">
                     <label for="filterViscosity">Класс вязкости</label>
                     <select id="filterViscosity">
                         <option value="">Все классы</option>
@@ -95,6 +103,7 @@
                     <thead>
                         <tr>
                             <th data-sort="name">Наименование <span class="sort-icon">↕</span></th>
+                            <th data-sort="viscosity_standard">Стандарт вязкости <span class="sort-icon">↕</span></th>
                             <th data-sort="viscosity_class">Класс вязкости <span class="sort-icon">↕</span></th>
                             <th data-sort="standard">Спецификация <span class="sort-icon">↕</span></th>
                             <th data-sort="unit">Ед.изм <span class="sort-icon">↕</span></th>
