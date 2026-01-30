@@ -469,7 +469,7 @@ body {
 .modal-content {
     background: var(--bg-card);
     border-radius: var(--radius-lg);
-    max-width: 700px;
+    max-width: 900px;
     width: 100%;
     max-height: 90vh;
     overflow-y: auto;
@@ -552,6 +552,66 @@ body {
     font-family: 'Monaco', 'Consolas', monospace;
     font-weight: 600;
     color: var(--primary);
+}
+
+/* Стандарты и допуски в модальном окне */
+.detail-standards {
+    grid-column: 1 / -1;
+}
+
+.standards-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.standard-item {
+    background: var(--bg);
+    border-radius: var(--radius);
+    padding: 1rem;
+    border-left: 4px solid var(--primary);
+}
+
+.standard-badge {
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius);
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin-bottom: 0.75rem;
+}
+
+.standard-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.standard-desc {
+    color: var(--text);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.standard-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    font-size: 0.85rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border);
+}
+
+.standard-meta span {
+    color: var(--text-light);
+}
+
+.standard-meta strong {
+    color: var(--text);
+    font-weight: 600;
 }
 
 /* Toast */
