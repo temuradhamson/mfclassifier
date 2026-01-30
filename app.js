@@ -65,10 +65,15 @@ function updateStandardNumbers() {
     let standards;
 
     if (standardType) {
-        // Фильтруем стандарты по типу
+        // Фильтруем стандарты по типу - проверяем точное совпадение
         standards = [...new Set(allData
             .map(item => item.standard)
-            .filter(std => std.includes(standardType))
+            .filter(std => {
+                // Разбиваем стандарт на отдельные части (по запятой или пробелу)
+                const parts = std.split(/[,\s]+/);
+                // Проверяем, есть ли выбранный тип среди частей
+                return parts.some(part => part.startsWith(standardType));
+            })
         )].sort();
     } else {
         // Показываем все стандарты
@@ -248,7 +253,7 @@ function renderTable() {
     if (filteredData.length === 0) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="12" class="no-data">
+                <td colspan="11" class="no-data">
                     <div class="no-data-content">
                         <span class="no-data-icon">🔍</span>
                         <p>Ничего не найдено</p>
@@ -265,7 +270,6 @@ function renderTable() {
             <td><strong>${item.name}</strong></td>
             <td><span class="badge badge-viscosity">${item.viscosity_class}</span></td>
             <td>${item.standard}</td>
-            <td>${item.specification}</td>
             <td>${item.unit}</td>
             <td>${item.packaging}</td>
             <td><span class="badge badge-brand">${item.brand}</span></td>
@@ -375,7 +379,7 @@ function showDetail(id) {
                     <span class="detail-value"><span class="badge badge-viscosity">${item.viscosity_class}</span></span>
                 </div>
                 <div class="detail-row">
-                    <span class="detail-label">Стандарт:</span>
+                    <span class="detail-label">Спецификация:</span>
                     <span class="detail-value">${item.standard}</span>
                 </div>
             </div>
@@ -432,14 +436,13 @@ function closeModal() {
 
 // Экспорт в CSV
 function exportCSV() {
-    const headers = ['Наименование', 'Класс вязкости', 'Стандарт', 'Спецификация', 
+    const headers = ['Наименование', 'Класс вязкости', 'Спецификация',
                      'Ед.изм', 'Упаковка', 'Бренд', 'Тара', 'ИКПУ', 'ЕНКТ', 'ТН ВЭД', 'СКП'];
-    
+
     const rows = filteredData.map(item => [
         item.name,
         item.viscosity_class,
         item.standard,
-        item.specification,
         item.unit,
         item.packaging,
         item.brand,
@@ -467,14 +470,13 @@ function exportJSON() {
 
 // Копирование в буфер
 function copyToClipboard() {
-    const headers = ['Наименование', 'Класс вязкости', 'Стандарт', 'Спецификация', 
+    const headers = ['Наименование', 'Класс вязкости', 'Спецификация',
                      'Ед.изм', 'Упаковка', 'Бренд', 'Тара', 'ИКПУ', 'ЕНКТ', 'ТН ВЭД', 'СКП'];
-    
+
     const rows = filteredData.map(item => [
         item.name,
         item.viscosity_class,
         item.standard,
-        item.specification,
         item.unit,
         item.packaging,
         item.brand,
