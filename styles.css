@@ -203,11 +203,13 @@ body {
     background: var(--bg-card);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow);
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 
 .data-table {
     width: 100%;
+    min-width: 1200px;
     border-collapse: collapse;
     font-size: 0.9rem;
 }
@@ -639,10 +641,6 @@ body {
     
     .filters-grid {
         grid-template-columns: 1fr;
-    }
-    
-    .table-container {
-        overflow-x: auto;
     }
     
     .data-table {
