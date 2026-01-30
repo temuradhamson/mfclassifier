@@ -36,27 +36,46 @@
             </div>
             <div class="filters-grid">
                 <div class="filter-group">
-                    <label for="filterBrand">Бренд</label>
-                    <select id="filterBrand">
-                        <option value="">Все бренды</option>
-                    </select>
-                </div>
-                <div class="filter-group">
                     <label for="filterViscosity">Класс вязкости</label>
                     <select id="filterViscosity">
                         <option value="">Все классы</option>
                     </select>
                 </div>
                 <div class="filter-group">
-                    <label for="filterStandard">Стандарт</label>
-                    <select id="filterStandard">
-                        <option value="">Все стандарты</option>
+                    <label for="filterStandardType">Тип стандарта</label>
+                    <select id="filterStandardType">
+                        <option value="">Все типы</option>
+                        <option value="API">API</option>
+                        <option value="ГОСТ">ГОСТ</option>
+                        <option value="Ts">Ts</option>
+                        <option value="ТУ">ТУ</option>
                     </select>
                 </div>
                 <div class="filter-group">
-                    <label for="filterPackaging">Упаковка</label>
-                    <select id="filterPackaging">
-                        <option value="">Все виды</option>
+                    <label for="filterStandardNumber">Номер стандарта</label>
+                    <select id="filterStandardNumber">
+                        <option value="">Все номера</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterVolume">Объем тары</label>
+                    <select id="filterVolume">
+                        <option value="">Все объемы</option>
+                        <option value="1">1 л</option>
+                        <option value="2">2 л</option>
+                        <option value="4">4 л</option>
+                        <option value="5">5 л</option>
+                        <option value="10">10 л</option>
+                        <option value="20">20 л</option>
+                        <option value="60">60 л</option>
+                        <option value="200">200 л</option>
+                        <option value="1000">1000 л</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterBrand">Бренд</label>
+                    <select id="filterBrand">
+                        <option value="">Все бренды</option>
                     </select>
                 </div>
                 <div class="filter-group filter-search">
@@ -131,8 +150,12 @@
                     <div id="viscosityChart" class="chart-container"></div>
                 </div>
                 <div class="chart-card">
-                    <h3>По упаковке</h3>
-                    <div id="packagingChart" class="chart-container"></div>
+                    <h3>По стандартам</h3>
+                    <div id="standardChart" class="chart-container"></div>
+                </div>
+                <div class="chart-card">
+                    <h3>По таре</h3>
+                    <div id="containerChart" class="chart-container"></div>
                 </div>
             </div>
         </section>

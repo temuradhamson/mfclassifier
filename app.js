@@ -32,32 +32,53 @@ async function loadData() {
 function populateFilters() {
     const brands = [...new Set(allData.map(item => item.brand))].sort();
     const viscosities = [...new Set(allData.map(item => item.viscosity_class))].sort();
-    const standards = [...new Set(allData.map(item => item.standard))].sort();
-    const packagings = [...new Set(allData.map(item => item.packaging))].sort();
-    
+
     fillSelect('filterBrand', brands);
     fillSelect('filterViscosity', viscosities);
-    fillSelect('filterStandard', standards);
-    fillSelect('filterPackaging', packagings);
+
+    // Заполняем номера стандартов при первой загрузке
+    updateStandardNumbers();
 }
 
 function fillSelect(id, options) {
     const select = document.getElementById(id);
     const currentValue = select.value;
-    
+
     // Сохраняем первую опцию "Все..."
     const firstOption = select.options[0];
     select.innerHTML = '';
     select.appendChild(firstOption);
-    
+
     options.forEach(opt => {
         const option = document.createElement('option');
         option.value = opt;
         option.textContent = opt;
         select.appendChild(option);
     });
-    
+
     select.value = currentValue;
+}
+
+// Обновление списка номеров стандартов в зависимости от выбранного типа
+function updateStandardNumbers() {
+    const standardType = document.getElementById('filterStandardType').value;
+    let standards;
+
+    if (standardType) {
+        // Фильтруем стандарты по типу
+        standards = [...new Set(allData
+            .map(item => item.standard)
+            .filter(std => std.includes(standardType))
+        )].sort();
+    } else {
+        // Показываем все стандарты
+        standards = [...new Set(allData.map(item => item.standard))].sort();
+    }
+
+    fillSelect('filterStandardNumber', standards);
+
+    // Применяем фильтры после обновления списка
+    applyFilters();
 }
 
 // Настройка обработчиков событий
@@ -72,8 +93,9 @@ function setupEventListeners() {
     // Фильтры
     document.getElementById('filterBrand').addEventListener('change', applyFilters);
     document.getElementById('filterViscosity').addEventListener('change', applyFilters);
-    document.getElementById('filterStandard').addEventListener('change', applyFilters);
-    document.getElementById('filterPackaging').addEventListener('change', applyFilters);
+    document.getElementById('filterStandardType').addEventListener('change', updateStandardNumbers);
+    document.getElementById('filterStandardNumber').addEventListener('change', applyFilters);
+    document.getElementById('filterVolume').addEventListener('change', applyFilters);
     
     // Поиск с задержкой
     let searchTimeout;
@@ -129,35 +151,53 @@ function switchTab(tabName) {
 function applyFilters() {
     const brand = document.getElementById('filterBrand').value;
     const viscosity = document.getElementById('filterViscosity').value;
-    const standard = document.getElementById('filterStandard').value;
-    const packaging = document.getElementById('filterPackaging').value;
+    const standardType = document.getElementById('filterStandardType').value;
+    const standardNumber = document.getElementById('filterStandardNumber').value;
+    const volume = document.getElementById('filterVolume').value;
     const search = document.getElementById('filterSearch').value.toLowerCase();
-    
+
     filteredData = allData.filter(item => {
         if (brand && item.brand !== brand) return false;
         if (viscosity && item.viscosity_class !== viscosity) return false;
-        if (standard && item.standard !== standard) return false;
-        if (packaging && item.packaging !== packaging) return false;
-        if (search && !item.name.toLowerCase().includes(search) && 
+        if (standardType && !item.standard.includes(standardType)) return false;
+        if (standardNumber && item.standard !== standardNumber) return false;
+
+        // Фильтр по объему тары
+        if (volume) {
+            const containerVolume = extractVolume(item.container);
+            if (containerVolume !== parseInt(volume)) return false;
+        }
+
+        if (search && !item.name.toLowerCase().includes(search) &&
             !item.brand.toLowerCase().includes(search)) return false;
         return true;
     });
-    
+
     renderTable();
     updateResultsCount();
+}
+
+// Извлечение объема из строки контейнера
+function extractVolume(container) {
+    const match = container.match(/(\d+)\s*(литр|л)/i);
+    return match ? parseInt(match[1]) : null;
 }
 
 // Сброс фильтров
 function clearFilters() {
     document.getElementById('filterBrand').value = '';
     document.getElementById('filterViscosity').value = '';
-    document.getElementById('filterStandard').value = '';
-    document.getElementById('filterPackaging').value = '';
+    document.getElementById('filterStandardType').value = '';
+    document.getElementById('filterStandardNumber').value = '';
+    document.getElementById('filterVolume').value = '';
     document.getElementById('filterSearch').value = '';
-    
+
     filteredData = [...allData];
     currentSort = { field: null, direction: 'asc' };
-    
+
+    // Обновляем список номеров стандартов
+    updateStandardNumbers();
+
     renderTable();
     updateResultsCount();
     showToast('Фильтры сброшены');
@@ -261,7 +301,8 @@ function updateStats() {
     // Графики
     renderChart('brandChart', countByField('brand'));
     renderChart('viscosityChart', countByField('viscosity_class'));
-    renderChart('packagingChart', countByField('packaging'));
+    renderChart('standardChart', countByField('standard'));
+    renderChart('containerChart', countByVolume());
 }
 
 // Подсчет по полю
@@ -273,6 +314,26 @@ function countByField(field) {
     });
     return Object.entries(counts)
         .sort((a, b) => b[1] - a[1])
+        .slice(0, 10);
+}
+
+// Подсчет по объему тары
+function countByVolume() {
+    const counts = {};
+    filteredData.forEach(item => {
+        const volume = extractVolume(item.container);
+        if (volume) {
+            const key = `${volume} л`;
+            counts[key] = (counts[key] || 0) + 1;
+        }
+    });
+    return Object.entries(counts)
+        .sort((a, b) => {
+            // Сортируем по числовому значению объема
+            const volA = parseInt(a[0]);
+            const volB = parseInt(b[0]);
+            return volA - volB;
+        })
         .slice(0, 10);
 }
 
@@ -316,10 +377,6 @@ function showDetail(id) {
                 <div class="detail-row">
                     <span class="detail-label">Стандарт:</span>
                     <span class="detail-value">${item.standard}</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Спецификация:</span>
-                    <span class="detail-value">${item.specification}</span>
                 </div>
             </div>
             <div class="detail-section">
