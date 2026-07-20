@@ -13,6 +13,7 @@ const state = {
   analyticsScenario: "engine",
   impactLotPage: 1,
   impactLotQuery: "",
+  impactChartFilter: null,
   products: [],
   classes: [],
 };
@@ -111,6 +112,7 @@ function bindEvents() {
     state.analyticsScenario = button.dataset.impactScenario;
     state.impactLotPage = 1;
     state.impactLotQuery = "";
+    state.impactChartFilter = null;
     $("impactLotSearch").value = "";
     renderImpact();
   });
@@ -124,10 +126,36 @@ function bindEvents() {
     }, 120);
   });
   $("impactLots").addEventListener("click", (event) => {
-    if (event.target.closest("a")) return;
     const row = event.target.closest("[data-impact-lot]");
     if (row) openImpactLot(row.dataset.impactLot);
   });
+  $("impactView").addEventListener("click", (event) => {
+    if (event.target.closest("[data-clear-impact-filter]")) {
+      state.impactChartFilter = null;
+      state.impactLotPage = 1;
+      renderImpactLots();
+      return;
+    }
+    const target = event.target.closest("[data-chart-filter]");
+    if (!target) return;
+    const kind = target.dataset.chartFilter;
+    state.impactChartFilter = {
+      kind,
+      value: target.dataset.value || "",
+      from: Number(target.dataset.from || 0),
+      to: target.dataset.to ? Number(target.dataset.to) : null,
+      phase: target.dataset.phase || "",
+    };
+    state.impactLotPage = 1;
+    renderImpactLots();
+    $("impactLots").closest(".impact-panel").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+  $("impactView").addEventListener("pointermove", (event) => {
+    const target = event.target.closest("[data-tip]");
+    if (!target) return hideChartTooltip();
+    showChartTooltip(target.dataset.tip, event.clientX, event.clientY);
+  });
+  $("impactView").addEventListener("pointerleave", hideChartTooltip);
 
   $("matcherForm").addEventListener("submit", runMatcher);
   $("matchResults").addEventListener("click", (event) => {
@@ -239,7 +267,7 @@ function renderImpact() {
     [formatNumber(ANALYTICS.methodology.production_lots_at_build), "лота в production ANIQLIK"],
     [formatNumber(ANALYTICS.metrics.sample_lots), "реальных лотов в расширенной выборке"],
     [formatNumber(ANALYTICS.metrics.professional_segments), "профессиональных ценовых сегментов"],
-    [formatNumber(ANALYTICS.metrics.linked_original_lots), "проверяемых ссылок на оригинал"],
+    [formatNumber(ANALYTICS.metrics.detailed_lots), "лотов с раскрываемой карточкой деталей"],
   ].map(([value, label]) => `<div><strong>${value}</strong><span>${esc(label)}</span></div>`).join("");
   $("impactTabs").innerHTML = ANALYTICS.scenarios.map((item) => `<button class="${item.id === state.analyticsScenario ? "active" : ""}" data-impact-scenario="${esc(item.id)}">${esc(item.title)}<em>${item.before.lots}</em></button>`).join("");
   const scenario = ANALYTICS.scenarios.find((item) => item.id === state.analyticsScenario) || ANALYTICS.scenarios[0];
@@ -252,7 +280,8 @@ function renderImpact() {
   const maxPrice = Math.max(...scenario.after.segments.map((item) => item.avg_price_per_kg));
   $("impactSegments").innerHTML = `<div class="segment-list">${scenario.after.segments.map((item) => {
     const delta = item.difference_from_coarse_pct;
-    return `<div class="segment-row"><div><b>${esc(item.key)}</b><small>${item.lots} ${item.lots === 1 ? "лот · малая выборка" : "лота"}</small></div><div class="segment-track"><i style="width:${Math.max(4, item.avg_price_per_kg / maxPrice * 100)}%"></i><u style="left:${scenario.before.avg_price_per_kg / maxPrice * 100}%" title="Средняя до классификатора"></u></div><strong>${rub(item.avg_price_per_kg)}</strong><span class="delta ${delta > 0 ? "up" : "down"}">${delta > 0 ? "+" : ""}${delta}%</span></div>`;
+    const tip = `${item.key}\n${item.lots} лотов · средняя ${rub(item.avg_price_per_kg)}\nОтклонение от общей средней ${delta > 0 ? "+" : ""}${delta}%\nНажмите, чтобы показать эти лоты`;
+    return `<div class="segment-row interactive-chart-item" data-chart-filter="segment" data-value="${esc(item.key)}" data-tip="${esc(tip)}"><div><b>${esc(item.key)}</b><small>${item.lots} ${item.lots === 1 ? "лот · малая выборка" : "лота"}</small></div><div class="segment-track"><i style="width:${Math.max(4, item.avg_price_per_kg / maxPrice * 100)}%"></i><u style="left:${scenario.before.avg_price_per_kg / maxPrice * 100}%" title="Средняя до классификатора"></u></div><strong>${rub(item.avg_price_per_kg)}</strong><span class="delta ${delta > 0 ? "up" : "down"}">${delta > 0 ? "+" : ""}${delta}%</span></div>`;
   }).join("")}</div><div class="segment-legend"><span><i></i>Средняя конкретного продукта</span><span><u></u>Средняя старшей группы: ${rub(scenario.before.avg_price_per_kg)}</span></div>`;
   renderImpactCharts(scenario);
   renderImpactLots();
@@ -262,7 +291,10 @@ function renderImpact() {
 function renderImpactCharts(scenario) {
   const histogram = scenario.price_histogram || [];
   const maxBin = Math.max(1, ...histogram.map((item) => item.count));
-  $("impactHistogram").innerHTML = `<div class="histogram">${histogram.map((item) => `<div class="histogram-bin"><b>${item.count}</b><i style="height:${Math.max(5, item.count / maxBin * 100)}%"></i><span>${compactRub(item.from)}</span></div>`).join("")}</div><div class="chart-note"><span>Минимум ${rub(histogram[0]?.from)}</span><b>Общая средняя ${rub(scenario.before.avg_price_per_kg)}</b><span>Максимум ${rub(histogram.at(-1)?.to)}</span></div>`;
+  $("impactHistogram").innerHTML = `<div class="histogram">${histogram.map((item) => {
+    const tip = `${item.count} лотов\n${rub(item.from)} — ${rub(item.to)}\n${Math.round(item.count / scenario.before.lots * 100)}% выборки · нажмите для фильтра`;
+    return `<div class="histogram-bin interactive-chart-item" data-chart-filter="price" data-from="${item.from}" data-to="${item.to}" data-tip="${esc(tip)}"><b>${item.count}</b><i style="height:${Math.max(5, item.count / maxBin * 100)}%"></i><span>${compactRub(item.from)}</span></div>`;
+  }).join("")}</div><div class="chart-note"><span>Минимум ${rub(histogram[0]?.from)}</span><b>Общая средняя ${rub(scenario.before.avg_price_per_kg)}</b><span>Максимум ${rub(histogram.at(-1)?.to)}</span></div>`;
 
   const palette = ["#3d73e6", "#38a8b8", "#6f64d9", "#e7a23c", "#e26464", "#58a46b", "#a366c2"];
   const top = scenario.after.segments.slice().sort((a, b) => b.lots - a.lots).slice(0, 6);
@@ -274,7 +306,11 @@ function renderImpactCharts(scenario) {
     offset += item.lots / scenario.before.lots * 100;
     return `${palette[index % palette.length]} ${start}% ${offset}%`;
   }).join(",");
-  $("impactComposition").innerHTML = `<div class="composition-chart"><div class="composition-donut" style="background:conic-gradient(${stops})"><div><strong>${scenario.after.segment_count}</strong><span>сегментов</span></div></div><div class="composition-legend">${composition.map((item, index) => `<div><i style="background:${palette[index % palette.length]}"></i><span>${esc(item.key)}</span><b>${Math.round(item.lots / scenario.before.lots * 100)}%</b></div>`).join("")}</div></div>`;
+  $("impactComposition").innerHTML = `<div class="composition-chart"><div class="composition-donut" style="background:conic-gradient(${stops})" data-tip="${scenario.after.segment_count} профессиональных сегментов вместо одной старшей группы"><div><strong>${scenario.after.segment_count}</strong><span>сегментов</span></div></div><div class="composition-legend">${composition.map((item, index) => {
+    const clickable = item.key !== "Другие сегменты";
+    const tip = `${item.key}\n${item.lots} лотов · ${Math.round(item.lots / scenario.before.lots * 100)}% выборки${clickable ? "\nНажмите для фильтра" : ""}`;
+    return `<div class="${clickable ? "interactive-chart-item" : ""}" ${clickable ? `data-chart-filter="segment" data-value="${esc(item.key)}"` : ""} data-tip="${esc(tip)}"><i style="background:${palette[index % palette.length]}"></i><span>${esc(item.key)}</span><b>${Math.round(item.lots / scenario.before.lots * 100)}%</b></div>`;
+  }).join("")}</div></div>`;
 
   const trend = scenario.monthly_prices || [];
   if (trend.length < 2) {
@@ -286,30 +322,72 @@ function renderImpactCharts(scenario) {
     const x = (index) => 34 + index * (712 / Math.max(1, trend.length - 1));
     const y = (value) => 18 + (max - value) / Math.max(1, max - min) * 150;
     const points = (field) => trend.map((item, index) => `${x(index)},${y(item[field])}`).join(" ");
-    $("impactTrend").innerHTML = `<svg class="trend-chart" viewBox="0 0 780 215" role="img" aria-label="Динамика средней и медианной цены"><line x1="34" y1="168" x2="746" y2="168" class="axis-line"></line><polyline points="${points("avg")}" class="trend-line avg"></polyline><polyline points="${points("median")}" class="trend-line median"></polyline>${trend.map((item, index) => `<circle cx="${x(index)}" cy="${y(item.avg)}" r="3" class="trend-dot avg"><title>${esc(item.month)} · средняя ${rub(item.avg)} · ${item.lots} лотов</title></circle><text x="${x(index)}" y="194" text-anchor="middle">${esc(item.month.slice(2))}</text>`).join("")}</svg><div class="trend-legend"><span><i class="avg"></i>Средняя цена</span><span><i class="median"></i>Медианная цена</span></div>`;
+    $("impactTrend").innerHTML = `<svg class="trend-chart" viewBox="0 0 780 215" role="img" aria-label="Динамика средней и медианной цены"><line x1="34" y1="168" x2="746" y2="168" class="axis-line"></line><polyline points="${points("avg")}" class="trend-line avg"></polyline><polyline points="${points("median")}" class="trend-line median"></polyline>${trend.map((item, index) => {
+      const tip = `${item.month}\n${item.lots} лотов\nСредняя ${rub(item.avg)} · медиана ${rub(item.median)}\nНажмите для фильтра по месяцу`;
+      return `<circle cx="${x(index)}" cy="${y(item.avg)}" r="5" class="trend-dot avg interactive-chart-item" data-chart-filter="month" data-value="${esc(item.month)}" data-tip="${esc(tip)}"></circle><circle cx="${x(index)}" cy="${y(item.median)}" r="4" class="trend-dot median interactive-chart-item" data-chart-filter="month" data-value="${esc(item.month)}" data-tip="${esc(tip)}"></circle><text x="${x(index)}" y="194" text-anchor="middle">${esc(item.month.slice(2))}</text>`;
+    }).join("")}</svg><div class="trend-legend"><span><i class="avg"></i>Средняя цена</span><span><i class="median"></i>Медианная цена</span></div>`;
   }
 
   const ranges = scenario.after.segments.slice().sort((a, b) => b.lots - a.lots).slice(0, 8);
   const rangeMin = Math.min(...ranges.map((item) => item.min_price_per_kg));
   const rangeMax = Math.max(...ranges.map((item) => item.max_price_per_kg));
   const pos = (value) => (value - rangeMin) / Math.max(1, rangeMax - rangeMin) * 100;
-  $("impactRanges").innerHTML = `<div class="range-chart">${ranges.map((item) => `<div class="range-row"><div><b>${esc(item.key)}</b><small>${item.lots} лотов</small></div><div class="range-track"><i style="left:${pos(item.min_price_per_kg)}%;width:${Math.max(1.2, pos(item.max_price_per_kg) - pos(item.min_price_per_kg))}%"></i><u style="left:${pos(item.median_price_per_kg)}%" title="Медиана ${rub(item.median_price_per_kg)}"></u></div><span>${rub(item.min_price_per_kg)} — ${rub(item.max_price_per_kg)}</span></div>`).join("")}</div>`;
+  $("impactRanges").innerHTML = `<div class="range-chart">${ranges.map((item) => {
+    const tip = `${item.key}\nМинимум ${rub(item.min_price_per_kg)}\nМедиана ${rub(item.median_price_per_kg)}\nМаксимум ${rub(item.max_price_per_kg)}\nНажмите для фильтра`;
+    return `<div class="range-row interactive-chart-item" data-chart-filter="segment" data-value="${esc(item.key)}" data-tip="${esc(tip)}"><div><b>${esc(item.key)}</b><small>${item.lots} лотов</small></div><div class="range-track"><i style="left:${pos(item.min_price_per_kg)}%;width:${Math.max(1.2, pos(item.max_price_per_kg) - pos(item.min_price_per_kg))}%"></i><u style="left:${pos(item.median_price_per_kg)}%"></u></div><span>${rub(item.min_price_per_kg)} — ${rub(item.max_price_per_kg)}</span></div>`;
+  }).join("")}</div>`;
+
+  renderImpactAccuracy(scenario);
+}
+
+function renderImpactAccuracy(scenario) {
+  const accuracy = scenario.benchmark_accuracy;
+  const maxError = Math.max(1, accuracy.before_error_pct, accuracy.after_error_pct);
+  $("impactAccuracy").innerHTML = `<div class="accuracy-result"><strong>−${accuracy.error_reduction_pct}%</strong><span>снижение средней ошибки ценового ориентира</span></div><div class="accuracy-bars">${[
+    ["До · одна медиана группы", accuracy.before_error_pct, "before"],
+    ["После · медиана своего класса", accuracy.after_error_pct, "after"],
+  ].map(([label, value, phase]) => `<div data-tip="${esc(`${label}\nСреднее абсолютное отклонение ${value}%`)}"><span>${esc(label)}</span><div><i class="${phase}" style="width:${value / maxError * 100}%"></i></div><b>${value}%</b></div>`).join("")}</div><div class="accuracy-zone"><div><small>Лоты в коридоре ±20% · до</small><strong>${accuracy.before_within_20_pct}%</strong></div><i>→</i><div><small>После классификации</small><strong>${accuracy.after_within_20_pct}%</strong></div></div>`;
+
+  const maxBand = Math.max(1, ...scenario.deviation_bands.flatMap((item) => [item.before, item.after]));
+  $("impactDeviation").innerHTML = `<div class="deviation-legend"><span><i class="before"></i>До классификатора</span><span><i class="after"></i>После</span></div><div class="deviation-chart">${scenario.deviation_bands.map((item) => `<div class="deviation-column"><div class="deviation-bars"><i class="before interactive-chart-item" style="height:${Math.max(4, item.before / maxBand * 100)}%" data-chart-filter="deviation" data-phase="before" data-from="${item.from}" ${item.to ? `data-to="${item.to}"` : ""} data-tip="${esc(`До классификатора\n${item.label} от единого ориентира\n${item.before} лотов · нажмите для фильтра`)}"><b>${item.before}</b></i><i class="after interactive-chart-item" style="height:${Math.max(4, item.after / maxBand * 100)}%" data-chart-filter="deviation" data-phase="after" data-from="${item.from}" ${item.to ? `data-to="${item.to}"` : ""} data-tip="${esc(`После классификатора\n${item.label} от ориентира своего класса\n${item.after} лотов · нажмите для фильтра`)}"><b>${item.after}</b></i></div><span>${esc(item.label)}</span></div>`).join("")}</div>`;
 }
 
 function currentImpactScenario() {
   return ANALYTICS.scenarios.find((item) => item.id === state.analyticsScenario) || ANALYTICS.scenarios[0];
 }
 
+function impactFilterLabel(filter) {
+  if (!filter) return "";
+  if (filter.kind === "segment") return `Сегмент: ${filter.value}`;
+  if (filter.kind === "month") return `Месяц: ${filter.value}`;
+  if (filter.kind === "price") return `Цена: ${rub(filter.from)} — ${rub(filter.to)}`;
+  if (filter.kind === "deviation") return `${filter.phase === "before" ? "До" : "После"}: отклонение ${filter.from}%${filter.to ? `–${filter.to}%` : "+"}`;
+  return "Фильтр графика";
+}
+
+function matchesImpactChartFilter(item, filter) {
+  if (!filter) return true;
+  if (filter.kind === "segment") return item.professional_key === filter.value;
+  if (filter.kind === "month") return String(item.date || "").startsWith(filter.value);
+  if (filter.kind === "price") return item.price_per_kg >= filter.from && item.price_per_kg <= filter.to;
+  if (filter.kind === "deviation") {
+    const value = item[filter.phase === "before" ? "before_deviation_pct" : "after_deviation_pct"];
+    return value >= filter.from && (filter.to === null || value < filter.to);
+  }
+  return true;
+}
+
 function renderImpactLots() {
   const scenario = currentImpactScenario();
   if (!scenario) return;
   const query = norm(state.impactLotQuery);
-  const lots = scenario.lots.filter((item) => !query || norm([item.lot_number, item.raw_product_name, item.raw_brand_text, item.professional_key, item.manufacturer].join(" ")).includes(query));
+  const lots = scenario.lots.filter((item) => matchesImpactChartFilter(item, state.impactChartFilter) && (!query || norm([item.lot_number, item.raw_product_name, item.raw_brand_text, item.professional_key, item.manufacturer].join(" ")).includes(query)));
   const pages = Math.max(1, Math.ceil(lots.length / IMPACT_PAGE_SIZE));
   state.impactLotPage = Math.min(state.impactLotPage, pages);
   const slice = lots.slice((state.impactLotPage - 1) * IMPACT_PAGE_SIZE, state.impactLotPage * IMPACT_PAGE_SIZE);
   $("impactLotCount").textContent = `${formatNumber(lots.length)} из ${formatNumber(scenario.lots.length)} лотов`;
-  $("impactLots").innerHTML = slice.length ? slice.map((item) => `<tr data-impact-lot="${esc(item.source_row_id)}"><td>${item.original_url ? `<a class="lot-source-link" href="${esc(item.original_url)}" target="_blank" rel="noopener noreferrer"><b>${esc(item.lot_number)}</b><i>↗</i></a>` : `<b>${esc(item.lot_number)}</b>`}<small>${esc(formatDate(item.date))}${item.lot_id ? ` · ID ${esc(item.lot_id)}` : ""}</small></td><td><span>${esc(item.raw_product_name)}</span><small>${esc(item.raw_brand_text)}</small></td><td><span class="enriched-key">${esc(item.professional_key)}</span><small class="demo-origin">вычислено для демонстрации</small></td><td><b>${rub(item.price_per_kg)}</b><small>${item.quantity ? `${formatNumber(item.quantity)} ${esc(item.measure)}` : ""}</small></td></tr>`).join("") : '<tr><td colspan="4" class="empty-state">Лоты не найдены</td></tr>';
+  $("impactActiveFilter").innerHTML = state.impactChartFilter ? `<button type="button" data-clear-impact-filter>${esc(impactFilterLabel(state.impactChartFilter))}<b>×</b></button>` : "";
+  $("impactLots").innerHTML = slice.length ? slice.map((item) => `<tr data-impact-lot="${esc(item.source_row_id)}"><td><b>${esc(item.lot_number)}</b><small>${esc(formatDate(item.date))}${item.lot_id ? ` · ID ${esc(item.lot_id)}` : ""}</small></td><td><span>${esc(item.raw_product_name)}</span><small>${esc(item.raw_brand_text)}</small></td><td><span class="enriched-key">${esc(item.professional_key)}</span><small class="demo-origin">вычислено для демонстрации</small></td><td><b>${rub(item.price_per_kg)}</b><small>${item.quantity ? `${formatNumber(item.quantity)} ${esc(item.measure)}` : ""}</small></td></tr>`).join("") : '<tr><td colspan="4" class="empty-state">Лоты не найдены</td></tr>';
   renderPagination("impactLotPagination", state.impactLotPage, pages, (page) => { state.impactLotPage = page; renderImpactLots(); });
 }
 
@@ -317,7 +395,7 @@ function openImpactLot(sourceRowId) {
   const lot = currentImpactScenario()?.lots.find((item) => String(item.source_row_id) === String(sourceRowId));
   if (!lot) return;
   const sourceRows = [
-    ["Номер лота", lot.lot_number], ["Публичный lot_id", lot.lot_id], ["Дата начала", formatDate(lot.date)],
+    ["Номер лота", lot.lot_number], ["ID лота ANIQLIK", lot.lot_id], ["Дата начала", formatDate(lot.date)],
     ["Исходное наименование", lot.raw_product_name], ["Бренд / марка", lot.raw_brand_text],
     ["Количество", lot.quantity ? `${formatNumber(lot.quantity)} ${lot.measure}` : null],
     ["Эквивалент массы", lot.quantity_kg ? `${formatNumber(lot.quantity_kg)} кг` : null],
@@ -327,7 +405,21 @@ function openImpactLot(sourceRowId) {
     ["Производитель", lot.manufacturer], ["Страна", lot.country],
   ].filter(([, value]) => has(value));
   const inferredRows = Object.entries(lot.enriched_fields || {});
-  openDrawer(`<div class="drawer-hero impact-drawer-hero"><span class="eyebrow">ANIQLIK · реальный лот</span><h2>${esc(lot.lot_number)}</h2><p>${esc(lot.raw_brand_text || lot.raw_product_name)}</p><div class="drawer-chips"><span>${esc(lot.professional_key)}</span><span>DEMO-ОБОГАЩЕНИЕ</span></div></div><div class="drawer-body">${lot.original_url ? `<a class="original-lot-button" href="${esc(lot.original_url)}" target="_blank" rel="noopener noreferrer">Открыть оригинальный лот на cooperation.uz <b>↗</b></a>` : ""}<div class="drawer-note"><strong>Разделение источников</strong><br>Коммерческие сведения взяты из ANIQLIK. Профессиональные поля ниже вычислены демонстрационно и не записаны в исходную БД.</div>${detailSection("Исходные данные лота", sourceRows)}${detailSection("Профессиональное обогащение", inferredRows)}${lot.technical_specs ? `<section class="drawer-section"><h3>Технические характеристики</h3><p class="lot-long-text">${esc(lot.technical_specs)}</p></section>` : ""}${lot.functional_characteristics ? `<section class="drawer-section"><h3>Функциональные характеристики</h3><p class="lot-long-text">${esc(lot.functional_characteristics)}</p></section>` : ""}</div>`);
+  openDrawer(`<div class="drawer-hero impact-drawer-hero"><span class="eyebrow">ANIQLIK · реальный лот</span><h2>${esc(lot.lot_number)}</h2><p>${esc(lot.raw_brand_text || lot.raw_product_name)}</p><div class="drawer-chips"><span>${esc(lot.professional_key)}</span><span>DEMO-ОБОГАЩЕНИЕ</span></div></div><div class="drawer-body"><div class="drawer-note"><strong>Разделение источников</strong><br>Коммерческие сведения взяты из ANIQLIK. Профессиональные поля ниже вычислены демонстрационно и не записаны в исходную БД.</div>${detailSection("Исходные данные лота", sourceRows)}${detailSection("Профессиональное обогащение", inferredRows)}${detailSection("Влияние классификатора", [["Отклонение от общей медианы (до)", `${lot.before_deviation_pct}%`], ["Отклонение от медианы своего класса (после)", `${lot.after_deviation_pct}%`]])}${lot.technical_specs ? `<section class="drawer-section"><h3>Технические характеристики</h3><p class="lot-long-text">${esc(lot.technical_specs)}</p></section>` : ""}${lot.functional_characteristics ? `<section class="drawer-section"><h3>Функциональные характеристики</h3><p class="lot-long-text">${esc(lot.functional_characteristics)}</p></section>` : ""}</div>`);
+}
+
+function showChartTooltip(message, x, y) {
+  const tooltip = $("chartTooltip");
+  tooltip.textContent = message;
+  tooltip.classList.add("show");
+  const left = Math.min(window.innerWidth - 240, x + 14);
+  const top = Math.min(window.innerHeight - 120, y + 14);
+  tooltip.style.left = `${Math.max(8, left)}px`;
+  tooltip.style.top = `${Math.max(8, top)}px`;
+}
+
+function hideChartTooltip() {
+  $("chartTooltip").classList.remove("show");
 }
 
 function productSearchText(item) {

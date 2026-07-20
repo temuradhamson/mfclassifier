@@ -249,9 +249,7 @@ def build_scenario(source: list[dict], config: dict, rng: random.Random, lot_map
             "source_row_id": row.get("id"),
             "lot_id": lot_id,
             "lot_number": row.get("lot_number"),
-            "original_url": f"https://new.cooperation.uz/lots/{lot_id}" if lot_id else None,
             "offer_number": source_ref.get("offer_number"),
-            "offer_url": f"https://new.cooperation.uz/e-catalog/22/{source_ref.get('offer_number')}" if source_ref.get("offer_number") else None,
             "date": str(row.get("start_date") or "")[:10],
             "raw_product_name": clean(row.get("product_name")),
             "raw_brand_text": clean(row.get("brand")),
@@ -288,6 +286,31 @@ def build_scenario(source: list[dict], config: dict, rng: random.Random, lot_map
         })
     segment_rows.sort(key=lambda item: (-item["lots"], item["key"]))
 
+    segment_medians = {row["key"]: row["median_price_per_kg"] for row in segment_rows}
+    before_median = round(median(item["price_per_kg"] for item in lots))
+    for lot in lots:
+        segment_median = segment_medians[lot["professional_key"]]
+        lot["before_deviation_pct"] = round(abs(lot["price_per_kg"] - before_median) / before_median * 100, 1)
+        lot["after_deviation_pct"] = round(abs(lot["price_per_kg"] - segment_median) / segment_median * 100, 1)
+
+    before_error = round(mean(item["before_deviation_pct"] for item in lots), 1)
+    after_error = round(mean(item["after_deviation_pct"] for item in lots), 1)
+    accuracy = {
+        "before_error_pct": before_error,
+        "after_error_pct": after_error,
+        "error_reduction_pct": round((1 - after_error / before_error) * 100, 1) if before_error else 0,
+        "before_within_20_pct": round(sum(item["before_deviation_pct"] <= 20 for item in lots) / len(lots) * 100, 1),
+        "after_within_20_pct": round(sum(item["after_deviation_pct"] <= 20 for item in lots) / len(lots) * 100, 1),
+    }
+    deviation_bands = []
+    for label, low_band, high_band in [("0–10%", 0, 10), ("10–25%", 10, 25), ("25–50%", 25, 50), (">50%", 50, None)]:
+        def band_count(field: str) -> int:
+            return sum(low_band <= item[field] < high_band if high_band else item[field] >= low_band for item in lots)
+        deviation_bands.append({
+            "label": label, "from": low_band, "to": high_band,
+            "before": band_count("before_deviation_pct"), "after": band_count("after_deviation_pct"),
+        })
+
     monthly = defaultdict(list)
     for lot in lots:
         if lot["date"]:
@@ -303,7 +326,7 @@ def build_scenario(source: list[dict], config: dict, rng: random.Random, lot_map
             "group": config["before_group"],
             "lots": len(lots),
             "avg_price_per_kg": before_avg,
-            "median_price_per_kg": round(median(lot_prices)),
+            "median_price_per_kg": before_median,
             "available_dimensions": ["наименование", "количество", "цена"],
         },
         "after": {
@@ -317,6 +340,8 @@ def build_scenario(source: list[dict], config: dict, rng: random.Random, lot_map
         "eligible_lots": len(candidates),
         "price_histogram": histogram(lot_prices),
         "monthly_prices": monthly_rows,
+        "benchmark_accuracy": accuracy,
+        "deviation_bands": deviation_bands,
     }
 
 
@@ -342,15 +367,14 @@ def main() -> None:
             "production_lots_at_build": 2404,
             "source_export_lots": len(source),
             "random_seed": SEED,
-            "selection": f"Воспроизводимая стратифицированная случайная выборка до {MAX_PER_SCENARIO} лотов на сценарий среди записей с валидной ценой, подтверждённой публичной связью и извлекаемым полным профессиональным ключом; крайние 2% цен исключены как контроль единиц измерения.",
+            "selection": f"Воспроизводимая стратифицированная случайная выборка до {MAX_PER_SCENARIO} лотов на сценарий среди записей с валидной ценой и извлекаемым полным профессиональным ключом; крайние 2% цен исключены как контроль единиц измерения.",
             "disclosure": "Профессиональные поля добавлены демонстрационно правилами классификатора и не записаны в исходную production-БД ANIQLIK.",
-            "original_url_pattern": "https://new.cooperation.uz/lots/{lot_id}",
         },
         "metrics": {
             "sample_lots": sum(len(item["lots"]) for item in scenarios),
             "scenarios": len(scenarios),
             "professional_segments": sum(item["after"]["segment_count"] for item in scenarios),
-            "linked_original_lots": sum(1 for item in scenarios for lot in item["lots"] if lot["original_url"]),
+            "detailed_lots": sum(len(item["lots"]) for item in scenarios),
         },
         "scenarios": scenarios,
     }

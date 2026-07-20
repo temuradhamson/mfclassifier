@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Единый классификатор масел, смазок и технических жидкостей">
   <title>MF Classifier — смазочные материалы</title>
-  <link rel="stylesheet" href="styles.css?v=3.3.0">
+  <link rel="stylesheet" href="styles.css?v=3.4.0">
 </head>
 <body>
   <div class="app-shell">
@@ -167,9 +167,11 @@
           <article class="panel impact-chart-card"><div class="panel-heading"><div><span class="kicker">Структура рынка</span><h2>Доли профессиональных сегментов</h2></div><span class="chart-unit">по количеству</span></div><div id="impactComposition"></div></article>
           <article class="panel impact-chart-card wide-chart"><div class="panel-heading"><div><span class="kicker">Динамика</span><h2>Средняя и медианная цена по месяцам</h2></div><span class="chart-unit">сопоставимые лоты</span></div><div id="impactTrend"></div></article>
           <article class="panel impact-chart-card wide-chart"><div class="panel-heading"><div><span class="kicker">Разброс внутри класса</span><h2>Минимум · медиана · максимум</h2></div><span class="chart-unit">крупнейшие сегменты</span></div><div id="impactRanges"></div></article>
+          <article class="panel impact-chart-card"><div class="panel-heading"><div><span class="kicker">Точность ориентира</span><h2>Ошибка ценового эталона: до и после</h2></div><span class="chart-unit">меньше — лучше</span></div><div id="impactAccuracy"></div></article>
+          <article class="panel impact-chart-card"><div class="panel-heading"><div><span class="kicker">Практический эффект</span><h2>Насколько лоты отклоняются от эталона</h2></div><span class="chart-unit">нажмите на столбец</span></div><div id="impactDeviation"></div></article>
         </div>
         <article class="panel impact-panel"><div class="panel-heading"><div><span class="kicker">Почему меняется результат</span><h2>Средняя цена после профессионального разреза</h2></div><span class="impact-criterion" id="impactCriterion"></span></div><div id="impactSegments"></div></article>
-        <article class="panel impact-panel"><div class="panel-heading"><div><span class="kicker">Проверяемая выборка</span><h2>Какие лоты были обогащены</h2></div><span class="demo-label">ДЕМО-ПОЛЯ</span></div><div class="impact-lot-toolbar"><label class="filter-search"><span>⌕</span><input id="impactLotSearch" type="search" placeholder="Номер лота, товар, бренд, профессиональный ключ…"></label><strong id="impactLotCount"></strong><span>Нажмите строку для деталей · ↗ откроет оригинал</span></div><div class="table-scroll"><table class="impact-table"><thead><tr><th>Лот ANIQLIK</th><th>Как было</th><th>Добавленный профессиональный ключ</th><th>Цена / кг</th></tr></thead><tbody id="impactLots"></tbody></table></div><div class="pagination" id="impactLotPagination"></div></article>
+        <article class="panel impact-panel"><div class="panel-heading"><div><span class="kicker">Проверяемая выборка</span><h2>Какие лоты были обогащены</h2></div><span class="demo-label">ДЕМО-ПОЛЯ</span></div><div class="impact-lot-toolbar"><label class="filter-search"><span>⌕</span><input id="impactLotSearch" type="search" placeholder="Номер лота, товар, бренд, профессиональный ключ…"></label><strong id="impactLotCount"></strong><span>Нажмите строку, чтобы открыть детали внутри классификатора</span><div id="impactActiveFilter"></div></div><div class="table-scroll"><table class="impact-table"><thead><tr><th>Лот ANIQLIK</th><th>Как было</th><th>Добавленный профессиональный ключ</th><th>Цена / кг</th></tr></thead><tbody id="impactLots"></tbody></table></div><div class="pagination" id="impactLotPagination"></div></article>
         <div class="impact-method" id="impactMethod"></div>
       </section>
 
@@ -211,8 +213,9 @@
   </div>
 
   <div class="toast" id="toast"></div>
-  <script src="data/catalog-v3.js?v=3.3.0"></script>
-  <script src="data/analytics-demo.js?v=3.3.0"></script>
-  <script src="app.js?v=3.3.0"></script>
+  <div class="chart-tooltip" id="chartTooltip" role="tooltip"></div>
+  <script src="data/catalog-v3.js?v=3.4.0"></script>
+  <script src="data/analytics-demo.js?v=3.4.0"></script>
+  <script src="app.js?v=3.4.0"></script>
 </body>
 </html>
