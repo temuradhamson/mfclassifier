@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-07-20",
+  "sources": [
+    {
+      "source_id": "user-supplied-chilon-2026",
+      "title": "Продукция и классификаторы 2026",
+      "owner": "User-supplied project data",
+      "source_type": "XLSX",
+      "source_locator": "sources/products_classified_2026.xlsx",
+      "source_sha256": "eb2688d132a2e4a74bb5519e7e105a0c15eebe85947c07da5b0fc9370d1c0108",
+      "access_status": "authorized_project_input",
+      "bulk_ingest_allowed": true,
+      "publication_status": "internal_and_derived_facts",
+      "notes": "Передано пользователем для построения классификатора; исходная формулировка и provenance сохраняются."
+    },
+    {
+      "source_id": "legacy-mfclassifier",
+      "title": "MF Classifier legacy multibrand seed",
+      "owner": "MF Classifier project",
+      "source_type": "JSON",
+      "source_locator": "motor_oils.json",
+      "source_sha256": "99845943d5f5ba0bc089ac6cb117bfdbfd8ef80936c1db17c8f62dcd80aa86d8",
+      "access_status": "authorized_project_input",
+      "bulk_ingest_allowed": true,
+      "publication_status": "needs_evidence_upgrade",
+      "notes": "Разрешён как внутренний проектный seed; внешние карточки брендов требуют подтверждения официальным TDS/PDS."
+    },
+    {
+      "source_id": "aichilon-internal",
+      "title": "AIChilon product and packaging master",
+      "owner": "CHILON project",
+      "source_type": "SQLite",
+      "source_locator": "/workspace/chilon/aichilon/var/chilon_seed.sqlite",
+      "source_sha256": "c601b35eff1224b3a3933bad2aa051f2b18e7714714bbcaab3e85bf571905f79",
+      "access_status": "authorized_project_input",
+      "bulk_ingest_allowed": true,
+      "publication_status": "internal_and_derived_facts",
+      "notes": "Внутренний справочник продуктов и упаковок; клиентские, пользовательские, заявочные и ценовые таблицы в мировой seed не переносятся."
+    },
+    {
+      "source_id": "totalenergies-global",
+      "title": "TotalEnergies Lubricants Catalog",
+      "owner": "TotalEnergies Lubrifiants S.A.",
+      "source_type": "website_database",
+      "source_url": "https://lubricants.catalog.totalenergies.com/corporate/en_UK",
+      "terms_url": "https://lubadmin.totalenergies.com/static/terms/cso-terms-of-use.pdf",
+      "access_status": "written_permission_required",
+      "bulk_ingest_allowed": false,
+      "publication_status": "count_only_until_permission",
+      "observed_count": 1246,
+      "notes": "GTCU section 4.3 prohibits extraction or reuse of a substantial part of the database. No bulk crawl until written permission or licensed feed."
+    },
+    {
+      "source_id": "shell-epc",
+      "title": "Shell Product Catalogue",
+      "owner": "Shell",
+      "source_type": "website_database",
+      "source_url": "https://www.epc.shell.com/?lang=eng",
+      "access_status": "permission_or_permitted_feed_required",
+      "bulk_ingest_allowed": false,
+      "publication_status": "links_and_count_evidence_only",
+      "notes": "Portal warns that copying is permitted only under its terms; review and permission required before bulk acquisition."
+    }
+  ]
+}

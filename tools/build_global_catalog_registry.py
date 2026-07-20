@@ -16,7 +16,7 @@ OUTPUT = ROOT / "deliverables" / "Global_lubricants_catalog_registry.xlsx"
 
 
 SOURCES = [
-    ("TotalEnergies", "Global", "Product catalog", "https://lubricants.catalog.totalenergies.com/corporate/en_UK", 1246, "products", "Public catalog; count observed 2026-07-20", "ready_for_technical_review"),
+    ("TotalEnergies", "Global", "Product catalog", "https://lubricants.catalog.totalenergies.com/corporate/en_UK", 1246, "products", "Count observed 2026-07-20; GTCU 4.3 prohibits substantial database extraction/reuse", "written_permission_required"),
     ("Shell", "Global / market-specific", "EPC product catalog", "https://www.epc.shell.com/?lang=eng", None, None, "TDS/SDS by market; copying is restricted by site terms", "permission_or_permitted_access_required"),
     ("Mobil", "Global / market-specific", "Industrial product search", "https://www.mobil.com/en/lubricants/for-businesses/industrial/lubricants/search", None, None, "Search by product, specification, application and equipment builder", "ready_for_technical_review"),
     ("FUCHS", "India", "Product finder", "https://www.fuchs.com/in/en/products/service-links/product-finder/", 1115, "products", "Broad automotive, industrial, grease and metalworking portfolio", "ready_for_technical_review"),

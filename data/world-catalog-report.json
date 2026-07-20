@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "run_id": "seed-2026-07-20",
+  "snapshot_date": "2026-07-20",
+  "status": "seed_only_world_catalog_incomplete",
+  "input_rows": 591,
+  "normalized_input_sha256": "819d11779ffccddf9683a9b18a70e39bd5a1b8d72d9811fb5bb46d136b0f8073",
+  "canonical_rows": 591,
+  "brands": 21,
+  "families": {
+    "C": 12,
+    "G": 11,
+    "H": 58,
+    "I": 58,
+    "M": 220,
+    "S": 205,
+    "T": 8,
+    "TF": 9,
+    "U": 10
+  },
+  "project_source_rows": 443,
+  "legacy_rows_needing_evidence": 88,
+  "internal_master_rows": 60,
+  "aichilon_source_products": 317,
+  "aichilon_products_matched_to_existing": 255,
+  "aichilon_products_added": 60,
+  "aichilon_rows_excluded": 2,
+  "offers": 2874,
+  "active_offers": 1455,
+  "archived_offers": 1419,
+  "duplicate_decisions": {
+    "keep_separate_specification_conflict": 2
+  },
+  "quality_issues": {
+    "professional_key_incomplete": 106,
+    "classification_family_conflict": 214
+  },
+  "bulk_sources_allowed": [
+    "user-supplied-chilon-2026",
+    "legacy-mfclassifier",
+    "aichilon-internal"
+  ],
+  "bulk_sources_blocked": [
+    "totalenergies-global",
+    "shell-epc"
+  ],
+  "confirmed_world_total": null,
+  "completion_note": "The seed proves the pipeline, not worldwide coverage. Exact worldwide count remains pending licensed/authorized source ingestion."
+}

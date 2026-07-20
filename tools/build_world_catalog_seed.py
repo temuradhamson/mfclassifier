@@ -1,0 +1,585 @@
+#!/usr/bin/env python3
+"""Build the normalized, provenance-aware seed for the worldwide product catalog."""
+
+from __future__ import annotations
+
+import hashlib
+import json
+import re
+import sqlite3
+import unicodedata
+from collections import Counter, defaultdict
+from datetime import date, datetime, timezone
+from pathlib import Path
+
+from openpyxl import Workbook
+from openpyxl.styles import Alignment, Font, PatternFill
+from openpyxl.utils import get_column_letter
+
+
+ROOT = Path(__file__).resolve().parents[1]
+CATALOG = ROOT / "data" / "catalog-v3.json"
+POLICY = ROOT / "data" / "global-source-policy.json"
+JSONL_OUT = ROOT / "data" / "world-catalog-products.jsonl"
+REPORT_OUT = ROOT / "data" / "world-catalog-report.json"
+SQLITE_OUT = ROOT / "data" / "world-catalog.sqlite3"
+XLSX_OUT = ROOT / "deliverables" / "World_lubricants_catalog_seed.xlsx"
+AICHILON_DB = Path("/workspace/chilon/aichilon/var/chilon_seed.sqlite")
+SCHEMA_VERSION = 1
+SNAPSHOT_DATE = "2026-07-20"
+
+FAMILY_NAMES = {
+    "M": "Моторные масла",
+    "T": "Трансмиссионные масла",
+    "H": "Гидравлические масла",
+    "I": "Индустриальные масла",
+    "C": "Компрессорные масла",
+    "U": "Турбинные масла",
+    "E": "Электроизоляционные масла",
+    "G": "Пластичные смазки",
+    "TF": "Охлаждающие и технические жидкости",
+    "S": "Специальные продукты",
+}
+
+EXPECTED_ENKT_BASE = {
+    "M": "19.20.29.110",
+    "T": "19.20.29.120",
+    "H": "19.20.29.130",
+    "I": "19.20.29.140",
+    "C": "19.20.29.150",
+    "U": "19.20.29.160",
+    "E": "19.20.29.172",
+    "G": "19.20.29.210",
+}
+
+
+def text(value) -> str:
+    return str(value or "").strip()
+
+
+def normalize(value) -> str:
+    value = unicodedata.normalize("NFKC", text(value)).casefold().replace("ё", "е")
+    return re.sub(r"[^0-9a-zа-я]+", " ", value).strip()
+
+
+def source_for(row: dict) -> str:
+    source = text(row.get("source"))
+    if source == "products_classified_2026":
+        return "user-supplied-chilon-2026"
+    if source == "legacy_mfclassifier":
+        return "legacy-mfclassifier"
+    if source == "aichilon_internal":
+        return "aichilon-internal"
+    if "+" in source:
+        return "user-supplied-chilon-2026"
+    return "legacy-mfclassifier"
+
+
+def extract_sae(row: dict) -> tuple[str, str]:
+    raw = " ".join([text(row.get("sae_class")), text(row.get("name"))]).upper()
+    engine = re.search(r"(?<![0-9])((?:0|5|10|15|20|25)W)[-\s]?([0-9]{2})(?![0-9])", raw)
+    if engine:
+        return f"{engine.group(1)}-{engine.group(2)}", ""
+    gear = re.search(r"(?<![0-9])(70W|75W|80W|85W)(?:[-\s]?([0-9]{2,3}))?(?![0-9])", raw)
+    if gear:
+        return "", gear.group(1) + (f"-{gear.group(2)}" if gear.group(2) else "")
+    mono = re.fullmatch(r"(?:SAE\s*)?([0-9]{2,3})", text(row.get("sae_class")).upper())
+    if mono:
+        return (f"SAE {mono.group(1)}", "") if row.get("category_code") == "M" else ("", f"SAE {mono.group(1)}")
+    return "", ""
+
+
+def extract_performance(row: dict) -> dict:
+    raw = " ".join([text(row.get("api_class")), text(row.get("technical_document"))]).upper()
+    api_patterns = [
+        r"\bAPI\s+(SP|SN\s+PLUS|SN|SM|SL|SJ|SH|SG|CK-4|CJ-4|CI-4\s+PLUS|CI-4|CH-4|CG-4|CF-4|CF|FA-4)(?:\s*[/,]\s*(CF|SN|SM|SL|SJ))?",
+        r"\b(GL-[1-6])\b",
+    ]
+    api = []
+    api_gl = []
+    for index, pattern in enumerate(api_patterns):
+        for match in re.finditer(pattern, raw):
+            values = [v.replace("  ", " ") for v in match.groups() if v]
+            (api_gl if index else api).extend(values)
+    acea = []
+    for match in re.finditer(r"\b(?:ACEA\s*)?([ACE][0-9](?:/[BCE][0-9])?(?:-[0-9]{2})?|A[0-9]/B[0-9])\b", raw):
+        acea.append(match.group(1))
+    ilsac = []
+    for match in re.finditer(r"\b(?:ILSAC\s*)?(GF-[1-7])\b", raw):
+        ilsac.append(match.group(1))
+    return {
+        "api": sorted(set(api)),
+        "api_gl": sorted(set(api_gl)),
+        "acea": sorted(set(acea)),
+        "ilsac": sorted(set(ilsac)),
+        "performance_raw": text(row.get("api_class")) or text(row.get("technical_document")),
+    }
+
+
+def canonical_record(row: dict) -> dict:
+    sae_engine, sae_gear = extract_sae(row)
+    performance = extract_performance(row)
+    family_code = text(row.get("category_code"))
+    iso_vg = ""
+    if family_code in {"H", "I", "C", "U", "E"} and row.get("viscosity") not in (None, ""):
+        iso_vg = text(row.get("viscosity"))
+    nlgi = text(row.get("grease_class"))
+    if family_code == "G" and not nlgi:
+        match = re.search(r"\bNLGI\s*(00|0|[1-6])\b|\bEP\s*(00|0|[1-6])\b", text(row.get("name")), re.I)
+        if match:
+            nlgi = next(value for value in match.groups() if value is not None)
+    class_match = row.get("class_match") or {}
+    source_id = source_for(row)
+    source_record_id = text(row.get("legacy_id") or row.get("source_number") or row.get("id"))
+    specs = {
+        **performance,
+        "sae_engine": sae_engine,
+        "sae_gear": sae_gear,
+        "iso_vg": iso_vg,
+        "din_gost_class": text(row.get("din_gost_class")),
+        "gost_name": text(row.get("gost_name")),
+        "coolant_class": text(row.get("coolant_class")),
+        "grease_class": text(row.get("grease_class")),
+        "nlgi": nlgi,
+    }
+    signature_parts = [
+        normalize(row.get("brand")), normalize(row.get("name")), normalize(sae_engine),
+        normalize(sae_gear), normalize(iso_vg), normalize("|".join(performance["api"])),
+        normalize("|".join(performance["api_gl"])), normalize("|".join(performance["acea"])),
+        normalize("|".join(performance["ilsac"])), normalize(row.get("din_gost_class")),
+        normalize(row.get("coolant_class")), normalize(row.get("grease_class")),
+        normalize(nlgi),
+    ]
+    canonical_key = "|".join(signature_parts)
+    canonical_hash = hashlib.sha256(canonical_key.encode()).hexdigest()[:20]
+    record = {
+        "product_id": f"WC-{canonical_hash}",
+        "canonical_key": canonical_key,
+        "manufacturer": text(row.get("brand")),
+        "brand": text(row.get("brand")),
+        "product_name_raw": text(row.get("name")),
+        "product_name_normalized": normalize(row.get("name")),
+        "market": "UZ",
+        "family_code": family_code,
+        "family": FAMILY_NAMES.get(family_code, text(row.get("family"))),
+        "category": text(row.get("category")),
+        "specifications": specs,
+        "candidate_technical_profile_id": text(class_match.get("class_id")),
+        "profile_match_confidence": class_match.get("confidence"),
+        "profile_match_status": text(class_match.get("status")),
+        "profile_match_basis": class_match.get("basis") or [],
+        "source_id": source_id,
+        "source_record_id": source_record_id,
+        "source_row": row.get("source_row"),
+        "evidence_status": (
+            "project_source_row" if source_id == "user-supplied-chilon-2026"
+            else "internal_product_master" if source_id == "aichilon-internal"
+            else "legacy_needs_official_tds"
+        ),
+        "lifecycle_status": "active_or_unknown",
+        "certificate_status": text(row.get("certificate_status")),
+        "codes": {
+            k: {
+                "value": text(row.get(k)),
+                "source_id": (
+                    "legacy-mfclassifier" if k in {"ikpu", "enkt", "skp"}
+                    else source_id
+                ),
+                "status": "source_reported_unverified",
+            }
+            for k in ["tnved_code", "ikpu", "enkt", "skp"] if text(row.get(k))
+        },
+        "certificate": {
+            "number": text(row.get("certificate_number")),
+            "issued_at": text(row.get("certificate_issued_at")),
+            "expires_at": text(row.get("certificate_expires_at")),
+            "local_producer_certificate": text(row.get("local_producer_certificate")),
+            "technical_document": text(row.get("technical_document")),
+        },
+        "snapshot_date": SNAPSHOT_DATE,
+    }
+    return record
+
+
+def aichilon_family(category: str, name: str) -> str:
+    value = normalize(name)
+    if "смазк" in value or "grease" in value:
+        return "G"
+    if any(token in value for token in ["сож", "антифриз", "coolant", "тормозн", "теплоносител"]):
+        return "TF"
+    if any(token in value for token in ["трансмис", "редуктор", "gear", " atf "]):
+        return "T"
+    if "гидрав" in value:
+        return "H"
+    if "компресс" in value:
+        return "C"
+    if "турбин" in value:
+        return "U"
+    if "трансформ" in value or "электроизоля" in value:
+        return "E"
+    if "мотор" in value or re.search(r"\b(?:0|5|10|15|20|25)w[ -]?[0-9]{2}\b", value):
+        return "M"
+    if normalize(category) == "масла":
+        return "I"
+    return "S"
+
+
+def aichilon_seed() -> tuple[list[dict], list[dict], list[dict]]:
+    db = sqlite3.connect(f"file:{AICHILON_DB}?mode=ro", uri=True)
+    products = []
+    exclusions = []
+    for product_id, brand, category, name, is_active, archive_type, archive_reason in db.execute("""
+        SELECT p.id, b.code, p.category, p.name, p.is_active, p.archive_type, p.archive_reason
+        FROM products p JOIN brands b ON b.id=p.brand_id ORDER BY p.id
+    """):
+        if normalize(name) in {"в литрах", "мой тестовый товар"}:
+            exclusions.append({"source_record_id": product_id, "name": name, "reason": "non_product_service_or_test_row"})
+            continue
+        family_code = aichilon_family(category or "", name)
+        viscosity = ""
+        match = re.search(r"\b(?:ISO\s*)?VG\s*([0-9]{1,4})\b", name, re.I)
+        if not match and family_code in {"H", "I", "C", "U"}:
+            match = re.search(r"\b([0-9]{1,4})\s*$", name)
+        if match:
+            viscosity = match.group(1)
+        api_match = re.search(r"\bAPI\s+(.+)$", name, re.I)
+        products.append({
+            "id": f"AICHILON-{product_id}",
+            "source_number": product_id,
+            "source_row": None,
+            "brand": brand,
+            "name": name,
+            "category": category or FAMILY_NAMES.get(family_code, ""),
+            "category_code": family_code,
+            "family": FAMILY_NAMES.get(family_code, ""),
+            "viscosity": viscosity,
+            "api_class": api_match.group(1) if api_match else "",
+            "source": "aichilon_internal",
+            "is_active": bool(is_active),
+            "archive_type": archive_type,
+            "archive_reason": archive_reason,
+        })
+    packages = [dict(zip(
+        ["package_id", "source_product_id", "package_name", "unit", "quantity_per_package", "is_active", "weight_kg", "density_kg_per_l", "archive_type", "archive_reason"], row
+    )) for row in db.execute("""
+        SELECT id, product_id, package_name, unit, quantity_per_package, is_active,
+               weight_kg, density_kg_per_l, archive_type, archive_reason
+        FROM product_packages ORDER BY id
+    """)]
+    db.close()
+    return products, packages, exclusions
+
+
+def deduplicate(records: list[dict]) -> tuple[list[dict], list[dict]]:
+    by_key = defaultdict(list)
+    for record in records:
+        by_key[record["canonical_key"]].append(record)
+    canonical = []
+    candidates = []
+    for group in by_key.values():
+        canonical.append(group[0])
+        for duplicate in group[1:]:
+            candidates.append({
+                "product_id_a": group[0]["product_id"],
+                "product_id_b": duplicate["product_id"],
+                "reason": "identical_normalized_identity_and_professional_signature",
+                "score": 1.0,
+                "decision": "merged",
+            })
+    by_name = defaultdict(list)
+    for record in canonical:
+        by_name[(normalize(record["brand"]), record["product_name_normalized"])].append(record)
+    for group in by_name.values():
+        if len(group) < 2:
+            continue
+        for left, right in zip(group, group[1:]):
+            candidates.append({
+                "product_id_a": left["product_id"],
+                "product_id_b": right["product_id"],
+                "reason": "same_brand_and_name_but_different_professional_signature",
+                "score": 0.7,
+                "decision": "keep_separate_specification_conflict",
+            })
+    return canonical, candidates
+
+
+def quality_issues(records: list[dict]) -> list[dict]:
+    issues = []
+    for row in records:
+        expected = EXPECTED_ENKT_BASE.get(row["family_code"])
+        for system in ["enkt", "skp"]:
+            code = row["codes"].get(system, {}).get("value", "")
+            if expected and code and not code.startswith(expected):
+                issues.append({
+                    "product_id": row["product_id"],
+                    "issue_code": "classification_family_conflict",
+                    "severity": "high",
+                    "field": system.upper(),
+                    "value": code,
+                    "expected": expected,
+                    "action": "Do not use for analytics; remap against current ENKT/SKP and retain legacy value as evidence.",
+                })
+        specs = row["specifications"]
+        missing = []
+        if row["family_code"] == "M":
+            if not specs["sae_engine"]:
+                missing.append("SAE")
+            if not specs["api"] and not specs["acea"] and not specs["ilsac"]:
+                missing.append("API/ACEA/ILSAC")
+        elif row["family_code"] in {"H", "I", "C", "U"} and not specs["iso_vg"]:
+            missing.append("ISO VG")
+        if missing:
+            issues.append({
+                "product_id": row["product_id"],
+                "issue_code": "professional_key_incomplete",
+                "severity": "medium",
+                "field": "professional_key",
+                "value": "",
+                "expected": "; ".join(missing),
+                "action": "Obtain an official TDS/PDS or certificate before strict equivalence matching.",
+            })
+    return issues
+
+
+def build_sqlite(records: list[dict], candidates: list[dict], issues: list[dict], source_links: list[dict], offers: list[dict], policies: dict, run_id: str) -> None:
+    if SQLITE_OUT.exists():
+        SQLITE_OUT.unlink()
+    db = sqlite3.connect(SQLITE_OUT)
+    db.executescript("""
+    PRAGMA foreign_keys=ON;
+    CREATE TABLE ingest_runs(run_id TEXT PRIMARY KEY, snapshot_date TEXT NOT NULL, generated_at TEXT NOT NULL, input_rows INTEGER NOT NULL, canonical_rows INTEGER NOT NULL);
+    CREATE TABLE sources(source_id TEXT PRIMARY KEY, title TEXT NOT NULL, owner TEXT, source_type TEXT, source_locator TEXT, source_sha256 TEXT, source_url TEXT, terms_url TEXT, access_status TEXT NOT NULL, bulk_ingest_allowed INTEGER NOT NULL, publication_status TEXT, observed_count INTEGER, notes TEXT);
+    CREATE TABLE products(product_id TEXT PRIMARY KEY, canonical_key TEXT UNIQUE NOT NULL, manufacturer TEXT, brand TEXT NOT NULL, product_name_raw TEXT NOT NULL, product_name_normalized TEXT NOT NULL, market TEXT, family_code TEXT, family TEXT, category TEXT, candidate_technical_profile_id TEXT, profile_match_confidence REAL, profile_match_status TEXT, profile_match_basis_json TEXT NOT NULL, source_id TEXT NOT NULL REFERENCES sources(source_id), source_record_id TEXT, source_row INTEGER, evidence_status TEXT NOT NULL, lifecycle_status TEXT NOT NULL, snapshot_date TEXT NOT NULL);
+    CREATE TABLE product_sources(product_id TEXT NOT NULL REFERENCES products(product_id), source_id TEXT NOT NULL REFERENCES sources(source_id), source_record_id TEXT NOT NULL, source_row INTEGER, relation TEXT NOT NULL, PRIMARY KEY(product_id, source_id, source_record_id));
+    CREATE TABLE specifications(product_id TEXT NOT NULL REFERENCES products(product_id), spec_type TEXT NOT NULL, spec_value TEXT NOT NULL, is_parsed INTEGER NOT NULL, PRIMARY KEY(product_id, spec_type, spec_value));
+    CREATE TABLE external_codes(product_id TEXT NOT NULL REFERENCES products(product_id), code_system TEXT NOT NULL, code_value TEXT NOT NULL, source_id TEXT NOT NULL REFERENCES sources(source_id), status TEXT NOT NULL, PRIMARY KEY(product_id, code_system, code_value));
+    CREATE TABLE certificates(product_id TEXT NOT NULL REFERENCES products(product_id), certificate_number TEXT, issued_at TEXT, expires_at TEXT, local_producer_certificate TEXT, technical_document TEXT, certificate_status TEXT);
+    CREATE TABLE duplicate_decisions(product_id_a TEXT NOT NULL, product_id_b TEXT NOT NULL, reason TEXT NOT NULL, score REAL NOT NULL, decision TEXT NOT NULL);
+    CREATE TABLE quality_issues(product_id TEXT NOT NULL REFERENCES products(product_id), issue_code TEXT NOT NULL, severity TEXT NOT NULL, field TEXT NOT NULL, value TEXT, expected TEXT, action TEXT NOT NULL);
+    CREATE TABLE product_offers(offer_id TEXT PRIMARY KEY, product_id TEXT NOT NULL REFERENCES products(product_id), market TEXT NOT NULL, package_name TEXT NOT NULL, unit TEXT NOT NULL, quantity_per_package REAL, weight_kg REAL, density_kg_per_l REAL, lifecycle_status TEXT NOT NULL, archive_type TEXT, archive_reason TEXT, source_id TEXT NOT NULL REFERENCES sources(source_id), source_record_id TEXT NOT NULL);
+    CREATE INDEX products_brand_name_idx ON products(brand, product_name_normalized);
+    CREATE INDEX products_family_idx ON products(family_code);
+    CREATE INDEX specs_type_value_idx ON specifications(spec_type, spec_value);
+    CREATE INDEX codes_system_value_idx ON external_codes(code_system, code_value);
+    CREATE INDEX offers_product_idx ON product_offers(product_id);
+    """)
+    db.execute("INSERT INTO ingest_runs VALUES (?,?,?,?,?)", (run_id, SNAPSHOT_DATE, datetime.now(timezone.utc).isoformat(), len(records), len(records)))
+    for source in policies["sources"]:
+        db.execute("INSERT INTO sources VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", (
+            source["source_id"], source["title"], source.get("owner"), source.get("source_type"),
+            source.get("source_locator"), source.get("source_sha256"), source.get("source_url"), source.get("terms_url"),
+            source["access_status"], int(source["bulk_ingest_allowed"]), source.get("publication_status"),
+            source.get("observed_count"), source.get("notes"),
+        ))
+    for row in records:
+        db.execute("INSERT INTO products VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", (
+            row["product_id"], row["canonical_key"], row["manufacturer"], row["brand"],
+            row["product_name_raw"], row["product_name_normalized"], row["market"], row["family_code"],
+            row["family"], row["category"], row["candidate_technical_profile_id"],
+            row["profile_match_confidence"], row["profile_match_status"],
+            json.dumps(row["profile_match_basis"], ensure_ascii=False), row["source_id"],
+            row["source_record_id"], row["source_row"], row["evidence_status"], row["lifecycle_status"],
+            row["snapshot_date"],
+        ))
+        for spec_type, value in row["specifications"].items():
+            values = value if isinstance(value, list) else [value]
+            for item in values:
+                if text(item):
+                    db.execute("INSERT OR IGNORE INTO specifications VALUES (?,?,?,?)", (row["product_id"], spec_type, text(item), int(spec_type != "performance_raw")))
+        for system, code in row["codes"].items():
+            db.execute("INSERT INTO external_codes VALUES (?,?,?,?,?)", (row["product_id"], system.upper(), code["value"], code["source_id"], code["status"]))
+        cert = row["certificate"]
+        if any(cert.values()):
+            db.execute("INSERT INTO certificates VALUES (?,?,?,?,?,?,?)", (
+                row["product_id"], cert["number"], cert["issued_at"], cert["expires_at"],
+                cert["local_producer_certificate"], cert["technical_document"], row["certificate_status"],
+            ))
+    db.executemany("INSERT INTO duplicate_decisions VALUES (:product_id_a,:product_id_b,:reason,:score,:decision)", candidates)
+    db.executemany("INSERT INTO quality_issues VALUES (:product_id,:issue_code,:severity,:field,:value,:expected,:action)", issues)
+    db.executemany("INSERT INTO product_sources VALUES (:product_id,:source_id,:source_record_id,:source_row,:relation)", source_links)
+    db.executemany("INSERT INTO product_offers VALUES (:offer_id,:product_id,:market,:package_name,:unit,:quantity_per_package,:weight_kg,:density_kg_per_l,:lifecycle_status,:archive_type,:archive_reason,:source_id,:source_record_id)", offers)
+    db.commit()
+    db.close()
+
+
+def style_sheet(ws) -> None:
+    fill = PatternFill("solid", fgColor="17365D")
+    for cell in ws[1]:
+        cell.fill = fill
+        cell.font = Font(color="FFFFFF", bold=True)
+        cell.alignment = Alignment(vertical="center", wrap_text=True)
+    ws.freeze_panes = "A2"
+    ws.auto_filter.ref = ws.dimensions
+    for column in ws.columns:
+        letter = get_column_letter(column[0].column)
+        ws.column_dimensions[letter].width = min(55, max(11, max(len(text(c.value)) for c in column) + 2))
+    for row in ws.iter_rows(min_row=2):
+        for cell in row:
+            cell.alignment = Alignment(vertical="top", wrap_text=True)
+
+
+def add_sheet(wb, title, headers, rows):
+    ws = wb.create_sheet(title)
+    ws.append(headers)
+    for row in rows:
+        ws.append(row)
+    style_sheet(ws)
+
+
+def build_workbook(records: list[dict], candidates: list[dict], issues: list[dict], offers: list[dict], exclusions: list[dict], policies: dict, report: dict) -> None:
+    wb = Workbook()
+    wb.remove(wb.active)
+    add_sheet(wb, "01_Паспорт", ["Показатель", "Значение"], [
+        ("Статус", "Проверенный seed; мировой каталог ещё не завершён"),
+        ("Дата среза", SNAPSHOT_DATE),
+        ("Входных строк", report["input_rows"]),
+        ("Канонических строк", report["canonical_rows"]),
+        ("Брендов", report["brands"]),
+        ("Строк с проектным первичным источником", report["project_source_rows"]),
+        ("Legacy-строк, ожидающих официальный TDS/PDS", report["legacy_rows_needing_evidence"]),
+        ("Активных offer/SKU упаковок", report["active_offers"]),
+        ("Подтверждённый мировой итог", "НЕ ОПРЕДЕЛЁН: подключён только проектный seed"),
+    ])
+    headers = ["Product ID", "Бренд", "Исходное название", "Рынок", "Семейство", "Категория", "SAE", "SAE Gear", "ISO VG", "API", "API GL", "ACEA", "ILSAC", "Кандидат техпрофиля", "Уверенность", "Источник", "Строка источника", "Статус доказательства"]
+    add_sheet(wb, "02_Продукты", headers, [[
+        r["product_id"], r["brand"], r["product_name_raw"], r["market"], r["family"], r["category"],
+        r["specifications"]["sae_engine"], r["specifications"]["sae_gear"], r["specifications"]["iso_vg"],
+        "; ".join(r["specifications"]["api"]), "; ".join(r["specifications"]["api_gl"]),
+        "; ".join(r["specifications"]["acea"]), "; ".join(r["specifications"]["ilsac"]),
+        r["candidate_technical_profile_id"], r["profile_match_confidence"], r["source_id"], r["source_row"], r["evidence_status"],
+    ] for r in records])
+    add_sheet(wb, "03_Источники_и_права", ["Source ID", "Название", "Владелец", "URL/файл", "SHA-256", "Статус доступа", "Bulk ingest", "Публикация", "Примечание"], [[
+        s["source_id"], s["title"], s.get("owner"), s.get("source_url") or s.get("source_locator"), s.get("source_sha256"), s["access_status"],
+        "да" if s["bulk_ingest_allowed"] else "нет", s.get("publication_status"), s.get("notes"),
+    ] for s in policies["sources"]])
+    add_sheet(wb, "04_Дедупликация", ["Product A", "Product B", "Причина", "Score", "Решение"], [[
+        c["product_id_a"], c["product_id_b"], c["reason"], c["score"], c["decision"]
+    ] for c in candidates])
+    add_sheet(wb, "05_По_брендам", ["Бренд", "Канонических строк"], sorted(Counter(r["brand"] for r in records).items(), key=lambda x: (-x[1], x[0])))
+    add_sheet(wb, "06_По_семействам", ["Код", "Семейство", "Канонических строк"], [[code, FAMILY_NAMES.get(code, code), count] for code, count in sorted(Counter(r["family_code"] for r in records).items())])
+    add_sheet(wb, "07_Запрос_прав", ["Поле", "Текст"], [
+        ("Тема", "Request for permission / machine-readable lubricant product data for Uzbekistan classification project"),
+        ("Цель", "Создание государственного профессионального классификатора смазочных материалов и сопоставления ENKT–SKP–IKPU–HS/TN VED."),
+        ("Запрашиваемые данные", "Product ID, brand, product/grade name, market, lifecycle, viscosity, standards, OEM approvals, application, TDS/PDS/SDS links and update date."),
+        ("Запрашиваемое право", "Непосредственная машинная выгрузка или API/feed; хранение фактических характеристик и ссылок; регулярное обновление; публикация производных классификационных соответствий."),
+        ("Что не требуется", "Не требуется право переиздавать фотографии, фирменное оформление или полный текст технических документов."),
+        ("Формат", "CSV/JSON/XML/API/SFTP или периодический архив; предпочтительно стабильный manufacturer product ID."),
+        ("Контроль происхождения", "Для каждой строки сохраняются владелец, URL/идентификатор, рынок, дата получения, версия и хэш источника."),
+        ("Контактный вопрос", "Просим подтвердить допустимый объём использования, атрибуцию, частоту обновления и ограничения на публикацию."),
+    ])
+    by_id = {row["product_id"]: row for row in records}
+    add_sheet(wb, "08_Проблемы_качества", ["Product ID", "Бренд", "Продукт", "Код проблемы", "Уровень", "Поле", "Значение", "Ожидалось", "Действие"], [[
+        issue["product_id"], by_id[issue["product_id"]]["brand"], by_id[issue["product_id"]]["product_name_raw"],
+        issue["issue_code"], issue["severity"], issue["field"], issue["value"], issue["expected"], issue["action"],
+    ] for issue in issues])
+    add_sheet(wb, "09_Упаковки_SKU", ["Offer ID", "Product ID", "Рынок", "Упаковка", "Единица", "Количество", "Вес, кг", "Плотность, кг/л", "Статус", "Архив", "Причина", "Source record"], [[
+        o["offer_id"], o["product_id"], o["market"], o["package_name"], o["unit"], o["quantity_per_package"],
+        o["weight_kg"], o["density_kg_per_l"], o["lifecycle_status"], o["archive_type"], o["archive_reason"], o["source_record_id"],
+    ] for o in offers])
+    add_sheet(wb, "10_Исключённые_строки", ["Source record", "Название", "Причина"], [[
+        e["source_record_id"], e["name"], e["reason"]
+    ] for e in exclusions])
+    XLSX_OUT.parent.mkdir(parents=True, exist_ok=True)
+    wb.save(XLSX_OUT)
+
+
+def main() -> None:
+    source = json.loads(CATALOG.read_text(encoding="utf-8"))
+    policies = json.loads(POLICY.read_text(encoding="utf-8"))
+    input_records = [canonical_record(row) for row in source["products"]]
+    aichilon_products, aichilon_packages, exclusions = aichilon_seed()
+    existing_by_name = defaultdict(list)
+    for row in input_records:
+        existing_by_name[(normalize(row["brand"]), row["product_name_normalized"])].append(row)
+    aichilon_product_key = {}
+    aichilon_new_rows = 0
+    aichilon_matched_rows = 0
+    for raw in aichilon_products:
+        key = (normalize(raw["brand"]), normalize(raw["name"]))
+        matches = existing_by_name.get(key, [])
+        if matches:
+            target = matches[0]
+            aichilon_matched_rows += 1
+        else:
+            target = canonical_record(raw)
+            target["lifecycle_status"] = "active" if raw["is_active"] else "archived"
+            input_records.append(target)
+            existing_by_name[key].append(target)
+            aichilon_new_rows += 1
+        aichilon_product_key[int(raw["source_number"])] = target["canonical_key"]
+    records, candidates = deduplicate(input_records)
+    canonical_by_key = {row["canonical_key"]: row for row in records}
+    source_links = [{
+        "product_id": row["product_id"], "source_id": row["source_id"], "source_record_id": row["source_record_id"],
+        "source_row": row["source_row"], "relation": "primary_seed_record",
+    } for row in records]
+    source_link_keys = {(link["product_id"], link["source_id"], link["source_record_id"]) for link in source_links}
+    for raw in aichilon_products:
+        target = canonical_by_key[aichilon_product_key[int(raw["source_number"])]]
+        link = {
+            "product_id": target["product_id"], "source_id": "aichilon-internal", "source_record_id": text(raw["source_number"]),
+            "source_row": None, "relation": "internal_product_master",
+        }
+        link_key = (link["product_id"], link["source_id"], link["source_record_id"])
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
+    offers = []
+    for package in aichilon_packages:
+        canonical_key = aichilon_product_key.get(int(package["source_product_id"]))
+        if not canonical_key:
+            continue
+        target = canonical_by_key[canonical_key]
+        offers.append({
+            "offer_id": f"AICHILON-PACKAGE-{package['package_id']}",
+            "product_id": target["product_id"],
+            "market": "UZ",
+            "package_name": text(package["package_name"]),
+            "unit": text(package["unit"]),
+            "quantity_per_package": package["quantity_per_package"],
+            "weight_kg": package["weight_kg"],
+            "density_kg_per_l": package["density_kg_per_l"],
+            "lifecycle_status": "active" if package["is_active"] else "archived",
+            "archive_type": text(package["archive_type"]),
+            "archive_reason": text(package["archive_reason"]),
+            "source_id": "aichilon-internal",
+            "source_record_id": text(package["package_id"]),
+        })
+    issues = quality_issues(records)
+    run_id = f"seed-{SNAPSHOT_DATE}"
+    JSONL_OUT.write_text("".join(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n" for row in records), encoding="utf-8")
+    report = {
+        "schema_version": SCHEMA_VERSION,
+        "run_id": run_id,
+        "snapshot_date": SNAPSHOT_DATE,
+        "status": "seed_only_world_catalog_incomplete",
+        "input_rows": len(input_records),
+        "normalized_input_sha256": hashlib.sha256(CATALOG.read_bytes()).hexdigest(),
+        "canonical_rows": len(records),
+        "brands": len({r["brand"] for r in records}),
+        "families": dict(sorted(Counter(r["family_code"] for r in records).items())),
+        "project_source_rows": sum(r["evidence_status"] == "project_source_row" for r in records),
+        "legacy_rows_needing_evidence": sum(r["evidence_status"] == "legacy_needs_official_tds" for r in records),
+        "internal_master_rows": sum(r["evidence_status"] == "internal_product_master" for r in records),
+        "aichilon_source_products": len(aichilon_products) + len(exclusions),
+        "aichilon_products_matched_to_existing": aichilon_matched_rows,
+        "aichilon_products_added": aichilon_new_rows,
+        "aichilon_rows_excluded": len(exclusions),
+        "offers": len(offers),
+        "active_offers": sum(o["lifecycle_status"] == "active" for o in offers),
+        "archived_offers": sum(o["lifecycle_status"] == "archived" for o in offers),
+        "duplicate_decisions": dict(Counter(c["decision"] for c in candidates)),
+        "quality_issues": dict(Counter(i["issue_code"] for i in issues)),
+        "bulk_sources_allowed": [s["source_id"] for s in policies["sources"] if s["bulk_ingest_allowed"]],
+        "bulk_sources_blocked": [s["source_id"] for s in policies["sources"] if not s["bulk_ingest_allowed"]],
+        "confirmed_world_total": None,
+        "completion_note": "The seed proves the pipeline, not worldwide coverage. Exact worldwide count remains pending licensed/authorized source ingestion.",
+    }
+    REPORT_OUT.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    build_sqlite(records, candidates, issues, source_links, offers, policies, run_id)
+    build_workbook(records, candidates, issues, offers, exclusions, policies, report)
+    print(json.dumps(report, ensure_ascii=False))
+
+
+if __name__ == "__main__":
+    main()
