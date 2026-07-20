@@ -251,6 +251,20 @@
       "notes": "Четыре списка масел для DIWA с интервалами замены 60 000, 120 000, 180 000 и 240 000 км содержат 226 продуктов. Это текущие старшие версии, опубликованные на официальной странице Driventic; даты самих списков 17.01.2022, 06.03.2025 и 20.08.2025 сохранены без подмены датой страницы."
     },
     {
+      "source_id": "MERCEDES_DTFR_APPROVED_FLUIDS",
+      "title": "Mercedes-Benz Trucks Operating Fluids DTFR",
+      "owner": "Daimler Truck AG",
+      "source_type": "official_oem_approval_registry_api",
+      "source_locator": "data/mercedes-dtfr-approved-fluids.jsonl",
+      "source_url": "https://bevo.mercedes-benz-trucks.com/api/v1/all/",
+      "source_sha256": "d5622ac2f5276900c6998ee6152ba35f52e41e26688f192d321809dda543ee49",
+      "access_status": "public_official_approval_registry_api",
+      "bulk_ingest_allowed": true,
+      "publication_status": "derived_factual_records_with_attribution",
+      "observed_count": 1892,
+      "notes": "63 продуктовых листа DTFR дали 2 102 вхождения одобрений и 1 892 уникальных внутренних product ID. Обзорные листы и листы, которые прямо отсылают к допускам другого OEM, исключены. 38 продуктов встречаются только в явно исторических листах и сохранены с историческим lifecycle."
+    },
+    {
       "source_id": "totalenergies-global",
       "title": "TotalEnergies Lubricants Catalog",
       "owner": "TotalEnergies Lubrifiants S.A.",

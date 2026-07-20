@@ -3,7 +3,7 @@
   "run_id": "seed-2026-07-20",
   "snapshot_date": "2026-07-20",
   "status": "seed_only_world_catalog_incomplete",
-  "input_rows": 9978,
+  "input_rows": 11870,
   "normalized_input_sha256": "819d11779ffccddf9683a9b18a70e39bd5a1b8d72d9811fb5bb46d136b0f8073",
   "jaso_normalized_input_sha256": "b664fea5aee78de7303c33bf13d3c9ac26c8779b78beac24c54295b4d58603d3",
   "official_licensed_input_sha256": "533183ffbc755268ef12b54a556d1f3ea78db4fc80b564e12c391a10a8e2075e",
@@ -11,18 +11,19 @@
   "zf_te_ml_input_sha256": "b4812ab38f24e50371250ced3a555df3c85bb72344227fdb42da04b120561dfe",
   "allison_input_sha256": "f937834a441233ae38dee923865db175e23ac65c631669e060a70cd72a8aabfb",
   "driventic_diwa_input_sha256": "4f6c858e8e2faaf6bf3665dc4d9c8c8b9fe8b1f758894fa5c89b1ec58dfd87a5",
-  "canonical_rows": 9977,
-  "brands": 1294,
+  "mercedes_dtfr_input_sha256": "d5622ac2f5276900c6998ee6152ba35f52e41e26688f192d321809dda543ee49",
+  "canonical_rows": 11869,
+  "brands": 1541,
   "families": {
-    "C": 12,
+    "C": 14,
     "E": 4,
-    "G": 485,
-    "H": 277,
+    "G": 539,
+    "H": 290,
     "I": 58,
-    "M": 5790,
-    "S": 1399,
-    "T": 1871,
-    "TF": 61,
+    "M": 7068,
+    "S": 1402,
+    "T": 2262,
+    "TF": 212,
     "U": 20
   },
   "project_source_rows": 443,
@@ -33,10 +34,11 @@
   "official_licensed_source_rows": 3037,
   "official_government_program_rows": 892,
   "usda_biopreferred_source_rows": 892,
-  "official_oem_approval_rows": 1828,
+  "official_oem_approval_rows": 3720,
   "zf_te_ml_source_rows": 1498,
   "allison_source_rows": 104,
   "driventic_diwa_source_rows": 226,
+  "mercedes_dtfr_source_rows": 1892,
   "jaso_source_rows": 3630,
   "jaso_unique_oil_codes": 3629,
   "aichilon_source_products": 317,
@@ -48,10 +50,10 @@
   "archived_offers": 1419,
   "duplicate_decisions": {
     "merged": 1,
-    "keep_separate_specification_conflict": 2501
+    "keep_separate_specification_conflict": 2504
   },
   "quality_issues": {
-    "professional_key_incomplete": 395,
+    "professional_key_incomplete": 412,
     "classification_family_conflict": 214
   },
   "bulk_sources_allowed": [
@@ -73,7 +75,8 @@
     "usda-biopreferred",
     "ZF_TE_ML",
     "ALLISON_APPROVED_FLUIDS",
-    "DRIVENTIC_DIWA_APPROVED_OILS"
+    "DRIVENTIC_DIWA_APPROVED_OILS",
+    "MERCEDES_DTFR_APPROVED_FLUIDS"
   ],
   "bulk_sources_blocked": [
     "totalenergies-global",

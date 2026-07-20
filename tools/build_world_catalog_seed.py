@@ -31,6 +31,7 @@ USDA_BIOPREFERRED_JSONL = ROOT / "data" / "usda-biopreferred-products.jsonl"
 ZF_TE_ML_JSONL = ROOT / "data" / "zf-te-ml-approved-products.jsonl"
 ALLISON_JSONL = ROOT / "data" / "allison-approved-fluids.jsonl"
 DRIVENTIC_DIWA_JSONL = ROOT / "data" / "driventic-diwa-approved-oils.jsonl"
+MERCEDES_DTFR_JSONL = ROOT / "data" / "mercedes-dtfr-approved-fluids.jsonl"
 SCHEMA_VERSION = 1
 SNAPSHOT_DATE = "2026-07-20"
 
@@ -518,6 +519,46 @@ def driventic_diwa_record(row: dict) -> dict:
     return record
 
 
+def mercedes_dtfr_record(row: dict) -> dict:
+    sae_class = row["sae_grades"][0] if row["sae_grades"] else ""
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["company"],
+        "name": row["product_name"],
+        "category": "Эксплуатационные жидкости с допуском Mercedes-Benz Trucks DTFR",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": sae_class,
+        "source": "MERCEDES_DTFR_APPROVED_FLUIDS",
+    }
+    record = canonical_record(generic)
+    record["manufacturer"] = row["company"]
+    record["brand"] = row["company"]
+    record["market"] = "GLOBAL_MERCEDES_DTFR_APPROVED"
+    record["source_id"] = "MERCEDES_DTFR_APPROVED_FLUIDS"
+    record["source_record_id"] = row["source_record_id"]
+    record["source_row"] = None
+    record["evidence_status"] = "official_oem_approval_registry"
+    record["lifecycle_status"] = "historical_approval" if row["historical_only"] else "approved_as_of_current_registry"
+    record["snapshot_date"] = row["snapshot_date"]
+    record["specifications"]["oem_approvals"] = [
+        f"Mercedes-Benz Trucks {sheet}" for sheet in row["dtfr_sheets"]
+    ]
+    record["specifications"]["mercedes_dtfr_sheets"] = row["dtfr_sheets"]
+    record["specifications"]["sae_grades_source_reported"] = row["sae_grades"]
+    record["specifications"]["licensed_standard"] = "Mercedes-Benz Trucks DTFR"
+    record["canonical_key"] += f"|mercedes_dtfr_product_id:{normalize(row['dtfr_product_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    record["codes"]["mercedes_dtfr_product_id"] = {
+        "system": "MERCEDES_DTFR_PRODUCT_ID",
+        "value": row["dtfr_product_id"],
+        "source_id": "MERCEDES_DTFR_APPROVED_FLUIDS",
+        "status": "official_oem_approval_registry",
+    }
+    return record
+
+
 def deduplicate(records: list[dict]) -> tuple[list[dict], list[dict]]:
     by_key = defaultdict(list)
     for record in records:
@@ -755,6 +796,9 @@ def main() -> None:
     driventic_source_rows = [json.loads(line) for line in DRIVENTIC_DIWA_JSONL.read_text(encoding="utf-8").splitlines() if line]
     driventic_records = [driventic_diwa_record(row) for row in driventic_source_rows]
     input_records.extend(driventic_records)
+    mercedes_dtfr_source_rows = [json.loads(line) for line in MERCEDES_DTFR_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    mercedes_dtfr_records = [mercedes_dtfr_record(row) for row in mercedes_dtfr_source_rows]
+    input_records.extend(mercedes_dtfr_records)
     aichilon_products, aichilon_packages, exclusions = aichilon_seed()
     existing_by_name = defaultdict(list)
     for row in input_records:
@@ -858,6 +902,17 @@ def main() -> None:
         if link_key not in source_link_keys:
             source_links.append(link)
             source_link_keys.add(link_key)
+    for raw, normalized_row in zip(mercedes_dtfr_source_rows, mercedes_dtfr_records):
+        target = canonical_by_key[normalized_row["canonical_key"]]
+        link = {
+            "product_id": target["product_id"], "source_id": "MERCEDES_DTFR_APPROVED_FLUIDS",
+            "source_record_id": raw["source_record_id"], "source_row": None,
+            "relation": "official_oem_approval_registry",
+        }
+        link_key = (link["product_id"], link["source_id"], link["source_record_id"])
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     offers = []
     for package in aichilon_packages:
         canonical_key = aichilon_product_key.get(int(package["source_product_id"]))
@@ -895,6 +950,7 @@ def main() -> None:
         "zf_te_ml_input_sha256": hashlib.sha256(ZF_TE_ML_JSONL.read_bytes()).hexdigest(),
         "allison_input_sha256": hashlib.sha256(ALLISON_JSONL.read_bytes()).hexdigest(),
         "driventic_diwa_input_sha256": hashlib.sha256(DRIVENTIC_DIWA_JSONL.read_bytes()).hexdigest(),
+        "mercedes_dtfr_input_sha256": hashlib.sha256(MERCEDES_DTFR_JSONL.read_bytes()).hexdigest(),
         "canonical_rows": len(records),
         "brands": len({r["brand"] for r in records}),
         "families": dict(sorted(Counter(r["family_code"] for r in records).items())),
@@ -910,6 +966,7 @@ def main() -> None:
         "zf_te_ml_source_rows": len(zf_source_rows),
         "allison_source_rows": len(allison_source_rows),
         "driventic_diwa_source_rows": len(driventic_source_rows),
+        "mercedes_dtfr_source_rows": len(mercedes_dtfr_source_rows),
         "jaso_source_rows": len(jaso_source_rows),
         "jaso_unique_oil_codes": len({r["oil_code"] for r in jaso_source_rows}),
         "aichilon_source_products": len(aichilon_products) + len(exclusions),

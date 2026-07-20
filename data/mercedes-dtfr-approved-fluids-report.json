@@ -1,0 +1,539 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-07-20",
+  "source_id": "MERCEDES_DTFR_APPROVED_FLUIDS",
+  "landing_url": "https://bevo.mercedes-benz-trucks.com/",
+  "source_url": "https://bevo.mercedes-benz-trucks.com/api/v1/all/",
+  "source_response_sha256": "62851cb917b4aff5d17602357154a9a375d5ea84e38487b9dcf43593628cf11b",
+  "sheets": 63,
+  "approval_occurrences": 2102,
+  "products": 1892,
+  "current_products": 1854,
+  "historical_only_products": 38,
+  "companies": 247,
+  "families": {
+    "C": 2,
+    "G": 54,
+    "H": 13,
+    "M": 1278,
+    "S": 3,
+    "T": 391,
+    "TF": 151
+  },
+  "normalized_output_sha256": "d5622ac2f5276900c6998ee6152ba35f52e41e26688f192d321809dda543ee49",
+  "source_sheets": [
+    {
+      "sheet_number": "DTFR 10B100",
+      "category": "E-Antriebssysteme",
+      "title_en": "Automatic Transmission Fluids (E-Fluid, Truck E-Axle Motorcircuit)",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 1
+    },
+    {
+      "sheet_number": "DTFR 10D100",
+      "category": "E-Antriebssysteme",
+      "title_en": "Electric Motor Oils (BEV-LH)",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 1
+    },
+    {
+      "sheet_number": "DTFR 10E100",
+      "category": "E-Antriebssysteme",
+      "title_en": "Axle Gear Oils (BEV-LH)",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 1
+    },
+    {
+      "sheet_number": "DTFR 12B100",
+      "category": "Achsenöl",
+      "title_en": "Gear Oils (Hypoid Gear)",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 45
+    },
+    {
+      "sheet_number": "DTFR 12B110",
+      "category": "Achsenöl",
+      "title_en": "Gear Oils (CV, Mineral Oil)",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 37
+    },
+    {
+      "sheet_number": "DTFR 12B120",
+      "category": "Achsenöl",
+      "title_en": "Gear Oils (CV, Hypoid Gear)",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 16
+    },
+    {
+      "sheet_number": "DTFR 12B130",
+      "category": "Achsenöl",
+      "title_en": "Gear Oils (Hypoid Gear)",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 7
+    },
+    {
+      "sheet_number": "DTFR 12B140",
+      "category": "Achsenöl",
+      "title_en": "Gear Oils (Hypoid Gear)",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 60
+    },
+    {
+      "sheet_number": "DTFR 13B100",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Steering/Manual Transmission)",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 58
+    },
+    {
+      "sheet_number": "DTFR 13B110",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Transfer Case)",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 22
+    },
+    {
+      "sheet_number": "DTFR 13B120",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Gear)",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 7
+    },
+    {
+      "sheet_number": "DTFR 13B140",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Gear)",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 3
+    },
+    {
+      "sheet_number": "DTFR 13B150",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Gear)",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 2
+    },
+    {
+      "sheet_number": "DTFR 13B160",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Gear)",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 2
+    },
+    {
+      "sheet_number": "DTFR 13B170",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Transfer Box)",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 3
+    },
+    {
+      "sheet_number": "DTFR 13C100 H",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, 4/5-Speed Automatic) - historical",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": true,
+      "products": 21
+    },
+    {
+      "sheet_number": "DTFR 13C110 H",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, ZF/ AG4 Automatic) - historical",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": true,
+      "products": 2
+    },
+    {
+      "sheet_number": "DTFR 13C120 H",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, Type A Suffix A) - historical",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": true,
+      "products": 5
+    },
+    {
+      "sheet_number": "DTFR 13C130 H",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, 7-Speed DCT) - historical",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": true,
+      "products": 1
+    },
+    {
+      "sheet_number": "DTFR 13C140 H",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, Steering/automatic) - historical",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": true,
+      "products": 7
+    },
+    {
+      "sheet_number": "DTFR 13C150 H",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, Automatic) - historical",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": true,
+      "products": 4
+    },
+    {
+      "sheet_number": "DTFR 13C160 H",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, Automatic) - historical",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": true,
+      "products": 1
+    },
+    {
+      "sheet_number": "DTFR 13C170",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, Allison/Automatic)",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 50
+    },
+    {
+      "sheet_number": "DTFR 13C180",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, Allison-/Retarder)",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 6
+    },
+    {
+      "sheet_number": "DTFR 13C190",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, Allison-/Retarder)",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 7
+    },
+    {
+      "sheet_number": "DTFR 13D100",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Retarder)",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 7
+    },
+    {
+      "sheet_number": "DTFR 13D110",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Retarder)",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 5
+    },
+    {
+      "sheet_number": "DTFR 13D120",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Retarder)",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 4
+    },
+    {
+      "sheet_number": "DTFR 13D130",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (ATF, Retarder)",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 2
+    },
+    {
+      "sheet_number": "DTFR 15B110",
+      "category": "Motoröl",
+      "title_en": "Multigrade Service Engine Oils",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 341
+    },
+    {
+      "sheet_number": "DTFR 15B120",
+      "category": "Motoröl",
+      "title_en": "Multigrade Service Engine Oils",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 146
+    },
+    {
+      "sheet_number": "DTFR 15C100",
+      "category": "Motoröl",
+      "title_en": "Low SPAsh multigrade service engine oils",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 298
+    },
+    {
+      "sheet_number": "DTFR 15C110",
+      "category": "Motoröl",
+      "title_en": "Low SPAsh multigrade service engine oils",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 421
+    },
+    {
+      "sheet_number": "DTFR 15C120",
+      "category": "Motoröl",
+      "title_en": "Low SPAsh multigrade service engine oils",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 192
+    },
+    {
+      "sheet_number": "DTFR 15C130",
+      "category": "Motoröl",
+      "title_en": "Low SPAsh multigrade service engine oils",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 49
+    },
+    {
+      "sheet_number": "DTFR 15C140",
+      "category": "Motoröl",
+      "title_en": "Low SPAsh multigrade service engine oils",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 15
+    },
+    {
+      "sheet_number": "DTFR 15D100",
+      "category": "Motoröl",
+      "title_en": "Low SPAsh Multigrade Service Engine Oils",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 18
+    },
+    {
+      "sheet_number": "DTFR 29B100",
+      "category": "Korrosions- / Frostschutzmittel",
+      "title_en": "Anticorrosion/antifreeze additives (water-soluble) without antifreeze protection requirement",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 1
+    },
+    {
+      "sheet_number": "DTFR 29C100",
+      "category": "Korrosions- / Frostschutzmittel",
+      "title_en": "Anticorrosion/Antifreeze Agents",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 22
+    },
+    {
+      "sheet_number": "DTFR 29C110",
+      "category": "Korrosions- / Frostschutzmittel",
+      "title_en": "Anticorrosion/Antifreeze Agents",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 29
+    },
+    {
+      "sheet_number": "DTFR 29C120",
+      "category": "Korrosions- / Frostschutzmittel",
+      "title_en": "Anticorrosion/Antifreeze Agents",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 35
+    },
+    {
+      "sheet_number": "DTFR 29C130",
+      "category": "Korrosions- / Frostschutzmittel",
+      "title_en": "Anticorrosion/Antifreeze Agents without SWR",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 3
+    },
+    {
+      "sheet_number": "DTFR 29D100",
+      "category": "Korrosions- / Frostschutzmittel",
+      "title_en": "Premixed Anticorrosion/Antifreeze Agents",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 15
+    },
+    {
+      "sheet_number": "DTFR 29D110",
+      "category": "Korrosions- / Frostschutzmittel",
+      "title_en": "Premixed Anticorrosion/Antifreeze Agents",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 18
+    },
+    {
+      "sheet_number": "DTFR 29D120",
+      "category": "Korrosions- / Frostschutzmittel",
+      "title_en": "Premixed Anticorrosion/Antifreeze Agents",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 26
+    },
+    {
+      "sheet_number": "DTFR 29D130",
+      "category": "Korrosions- / Frostschutzmittel",
+      "title_en": "Premixed Anticorrosion/antifreeze agents without SWR",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 2
+    },
+    {
+      "sheet_number": "DTFR 30B100",
+      "category": "Bremsflüssigkeit",
+      "title_en": "Brake Fluid",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 1
+    },
+    {
+      "sheet_number": "DTFR 31B100",
+      "category": "Hydrauliköl",
+      "title_en": "Hydraulic Fluids (Tipper)",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 5
+    },
+    {
+      "sheet_number": "DTFR 31B110",
+      "category": "Hydrauliköl",
+      "title_en": "Hydraulic Fluids",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 2
+    },
+    {
+      "sheet_number": "DTFR 31B120",
+      "category": "Hydrauliköl",
+      "title_en": "Hydraulic Fluids",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 3
+    },
+    {
+      "sheet_number": "DTFR 31B130",
+      "category": "Hydrauliköl",
+      "title_en": "Hydraulic Fluids",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 2
+    },
+    {
+      "sheet_number": "DTFR 31B140",
+      "category": "Hydrauliköl",
+      "title_en": "Hydraulic Fluids",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 1
+    },
+    {
+      "sheet_number": "DTFR 32B100",
+      "category": "edAC-Öl",
+      "title_en": "edAC oil",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 2
+    },
+    {
+      "sheet_number": "DTFR 33B100",
+      "category": "Fett",
+      "title_en": "Grease (NLGI Class 00/000, Liquid Grease)",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 18
+    },
+    {
+      "sheet_number": "DTFR 33B110",
+      "category": "Fett",
+      "title_en": "Grease (NLGI Class 2, Long-Life Grease)",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 1
+    },
+    {
+      "sheet_number": "DTFR 33B120",
+      "category": "Fett",
+      "title_en": "Grease (NLGI Class 2, Multi-Purpose Grease)",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 24
+    },
+    {
+      "sheet_number": "DTFR 33B130",
+      "category": "Fett",
+      "title_en": "Grease (NLGI Class 2, Wheel Bearing Grease)",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 6
+    },
+    {
+      "sheet_number": "DTFR 33B140",
+      "category": "Fett",
+      "title_en": "Grease (NLGI Class 2, Drive shaft Grease)",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 2
+    },
+    {
+      "sheet_number": "DTFR 33B150",
+      "category": "Fett",
+      "title_en": "Grease (NLGI Class 2, Complex Grease)",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 1
+    },
+    {
+      "sheet_number": "DTFR 33C110",
+      "category": "Fett",
+      "title_en": "Lubricants for Electrical Equipment",
+      "published_at": "2025-03-13T09:42:00",
+      "historical": false,
+      "products": 2
+    },
+    {
+      "sheet_number": "DTFR 36B110",
+      "category": "Kompressoröl",
+      "title_en": "Refrigerator Oils",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 1
+    },
+    {
+      "sheet_number": "DTFR 36B120",
+      "category": "Kompressoröl",
+      "title_en": "Refrigerator Oils (Bock/Bitzer air conditioners)",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 1
+    },
+    {
+      "sheet_number": "DTFR 38B100",
+      "category": "Lenkgetriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, Steering)",
+      "published_at": "2026-07-20T16:20:00",
+      "historical": false,
+      "products": 12
+    }
+  ],
+  "excluded_non_approval_sheets": [
+    "DTFR 12C100",
+    "DTFR 12C110",
+    "DTFR 13E100",
+    "DTFR 15A100",
+    "DTFR 15E100",
+    "DTFR 31A100"
+  ],
+  "publication_scope": "Derived factual approval records with attribution; page design, PDFs and explanatory text are not republished."
+}
