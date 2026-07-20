@@ -382,6 +382,21 @@
       "notes": "Из 1 174 встроенных строк исключены 84 серии и четыре единицы оборудования; 79 повторных source-вхождений объединены, получено 1 007 конкретных продуктов. Итальянские описательные признаки использованы только для классификации карточек без дерева групп; публикуются факты, UID/URL и хэши, без описаний."
     },
     {
+      "source_id": "FUCHS_SWEDEN_PRODUCT_FINDER",
+      "title": "FUCHS Sweden Product Finder",
+      "owner": "FUCHS LUBRICANTS SWEDEN AB",
+      "source_type": "official_manufacturer_embedded_product_catalog",
+      "source_locator": "data/fuchs-sweden-products.jsonl",
+      "source_url": "https://www.fuchs.com/se/en/products/service-links/product-finder/",
+      "terms_url": "https://www.fuchs.com/se/en/imprint/",
+      "source_sha256": "965d55eb9464233dadf86ce086e6115cf4b091dd52ab70fc1403c882c91c586a",
+      "access_status": "public_full_catalog_embedded_in_official_page",
+      "bulk_ingest_allowed": true,
+      "publication_status": "factual_fields_only_with_attribution_no_marketing_descriptions",
+      "observed_count": 675,
+      "notes": "Все 675 встроенных карточек являются конкретными продуктами; серий, оборудования и повторных source-вхождений не обнаружено. Карточки без дерева групп классифицированы по официальным фактическим признакам; описания не публикуются."
+    },
+    {
       "source_id": "totalenergies-global",
       "title": "TotalEnergies Lubricants Catalog",
       "owner": "TotalEnergies Lubrifiants S.A.",

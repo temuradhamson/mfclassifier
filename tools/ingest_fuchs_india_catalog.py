@@ -102,11 +102,20 @@ def classify_family(title: str, paths: list[list[str]], source_text: str) -> tup
         return "S", "special_product_group"
     if "industrial lubricants" in path_text or any(token in path_text for token in ["chain lubric", "machine oils", "slideway oils", "textile machine oils", "wire rope", "środki smarowe do zastosowań przemysłowych", "smarowanie łańcuchów", "oleje maszynowe", "oleje do maszyn mleczarskich", "oleje do prowadnic", "oleje do maszyn włókienniczych", "lin stalowych"]):
         return "I", "industrial_product_group"
+    upper_title = title.upper()
+    if re.search(r"\b(?:CHAIN|CHAIN SAW) (?:LUBE|OIL)|\bCHAINWAY\b", upper_title):
+        return "I", "explicit_product_line_and_application"
+    if re.search(r"^RENOLIN (?:DTA|UNISYN CLP .* PA)\b", upper_title):
+        return "I", "explicit_product_line_and_application"
+    if re.search(r"^RENOLIN (?:HIGH GEAR|PG |PA )", upper_title):
+        return "T", "explicit_product_line_and_application"
+    if re.search(r"MONO(?:ETHYLENE|PROPYLENE)GLYCOL|\bTOLUENE\b", upper_title):
+        return "TF", "explicit_chemical_product"
     if primary_brand_prefix(title) == "RENOLIT":
         return "G", "brand_line_and_explicit_application"
     if re.search(r"\bengine oil\b|oil for [^.]{0,40}engines|olej(?:e)? do silnik|olej silnik|olio (?:per )?motor|olio motore|motori? [24][ -]?tempi", text):
         return "M", "explicit_text"
-    if primary_brand_prefix(title) in {"ECOCUT", "LUBRODAL", "RENOFORM", "VISCOR", "VITROLIS", "WISURA"}:
+    if primary_brand_prefix(title) in {"ECOCOOL", "ECOCUT", "LUBRODAL", "PLANTOCUT", "RENOFORM", "SAWBAND", "VISCOR", "VITROLIS", "WISURA"}:
         return "TF", "brand_line_and_explicit_application"
     if re.search(r"\bhydraulic\b|olio idraulic|fluido idraulic", text):
         return "H", "explicit_text"
