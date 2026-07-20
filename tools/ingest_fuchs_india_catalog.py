@@ -51,7 +51,7 @@ def flatten_groups(groups: list[dict]) -> dict[int, dict]:
 
 
 def is_series(title: str) -> bool:
-    return bool(re.search(r"\bseries\b|-series\b", title, re.I))
+    return bool(re.search(r"\bseries\b|-series\b|\bseria\b|-seria\b|\bgrupa\b|-grupa\b", title, re.I))
 
 
 def classify_family(title: str, paths: list[list[str]], source_text: str) -> tuple[str, str]:
@@ -59,26 +59,26 @@ def classify_family(title: str, paths: list[list[str]], source_text: str) -> tup
     text = f"{title} {source_text}".casefold()
     if "grease guns" in path_text or "application equipment" in path_text:
         return "", "excluded_equipment"
-    if "lubricating greases" in path_text or "special greases" in path_text or " pastes" in path_text or re.search(r"\bgrease\b|\bpaste\b", text):
+    if "lubricating greases" in path_text or "special greases" in path_text or " pastes" in path_text or "smary" in path_text or re.search(r"\bgrease\b|\bpaste\b", text):
         return "G", "product_group_or_explicit_product_form"
-    if "multifunctional fluids (stou)" in path_text:
+    if "multifunctional fluids (stou)" in path_text or "płyny wielofukcyjne (stou)" in path_text:
         return "S", "multifunctional_product_group"
-    if "shock absorber fluids" in path_text or "suspension/fork fluids" in path_text or "fork oils" in path_text:
+    if "shock absorber fluids" in path_text or "suspension/fork fluids" in path_text or "fork oils" in path_text or "ciecze robocze do zawieszeń" in path_text or "widełek sprzęgieł" in path_text:
         return "H", "suspension_fluid_product_group"
     if "chain saw oils" in path_text:
         return "I", "chain_lubricant_product_group"
     if "glass manufacturing process" in path_text or "hot forming" in path_text:
         return "TF", "technical_fluid_product_group"
-    if "transformer oils" in path_text or "isolating oils" in path_text:
+    if "transformer oils" in path_text or "isolating oils" in path_text or "oleje transformatorowe" in path_text or "oleje elektroizolacyjne" in path_text:
         return "E", "product_group"
-    if "turbine oils" in path_text:
+    if "turbine oils" in path_text or "oleje turbinowe" in path_text:
         return "U", "product_group"
-    if any(token in path_text for token in ["compressor oils", "refrigeration oils", "vacuum pump oils", "compressor fluids", "oils for compressed air tools"]):
+    if any(token in path_text for token in ["compressor oils", "refrigeration oils", "vacuum pump oils", "compressor fluids", "oils for compressed air tools", "oleje sprężarkowe", "oleje do sprężarek chłodniczych", "oleje do pomp próżniowych"]):
         return "C", "product_group"
-    if "engine oils" in path_text:
+    if "engine oils" in path_text or "oleje silnikowe" in path_text or "oleje do silników" in path_text or "oleje do 2-suwowych silników" in path_text or "oleje do 4-suwowych silników" in path_text:
         return "M", "product_group"
-    hydraulic_group = "hydraulic" in path_text
-    gear_group = any(token in path_text for token in ["gear oils", "gear lubrication", "open gear", "transmission fluids", "axle/differential", "multifunctional fluids (utto)"])
+    hydraulic_group = "hydraulic" in path_text or "hydraulik" in path_text
+    gear_group = any(token in path_text for token in ["gear oils", "gear lubrication", "open gear", "transmission fluids", "axle/differential", "multifunctional fluids (utto)", "oleje przekładniowe", "oleje do przekładni", "skrzyni biegów", "skrzyń biegów", "mechanizmów różnicowych", "oleje uniwersalne (utto)"])
     if hydraulic_group and gear_group:
         return "S", "multifunctional_product_groups"
     if hydraulic_group:
@@ -89,17 +89,25 @@ def classify_family(title: str, paths: list[list[str]], source_text: str) -> tup
         "metal processing", "service fluids", "shock absorber fluids", "fork oils", "coolants/antifreeze",
         "brake fluids", "cleaners", "cutting", "grinding", "quenching", "forming lubricants",
         "release agents", "cooling lubricants", "heat transfer oils", "glass manufacturing process",
+        "obróbka metali", "ciecze do obróbki", "środki antyadhezyjne", "przemysłowe środki myjące",
+        "środki antykorozyjne", "ciecze procesowe specjalne", "oleje do obróbki cieplnej",
+        "płyny hamulcowe", "płyny chłodzące", "środki czyszczące", "produkty czyszczące",
+        "czyszczenie filtrów", "ciecze robocze do hamulców",
     ]):
         return "TF", "technical_fluid_product_group"
     if any(token in path_text for token in ["corrosion prevent", "dry coatings", "solid film", "sprays", "fuel additives"]):
         return "S", "special_product_group"
-    if "industrial lubricants" in path_text or any(token in path_text for token in ["chain lubric", "machine oils", "slideway oils", "textile machine oils", "wire rope"]):
+    if "industrial lubricants" in path_text or any(token in path_text for token in ["chain lubric", "machine oils", "slideway oils", "textile machine oils", "wire rope", "środki smarowe do zastosowań przemysłowych", "smarowanie łańcuchów", "oleje maszynowe", "oleje do maszyn mleczarskich", "oleje do prowadnic", "oleje do maszyn włókienniczych", "lin stalowych"]):
         return "I", "industrial_product_group"
-    if re.search(r"\bengine oil\b", text):
+    if primary_brand_prefix(title) == "RENOLIT":
+        return "G", "brand_line_and_explicit_application"
+    if re.search(r"\bengine oil\b|olej(?:e)? do silnik|olej silnik", text):
         return "M", "explicit_text"
     if primary_brand_prefix(title) in {"ECOCUT", "LUBRODAL", "VITROLIS"}:
         return "TF", "brand_line_and_explicit_application"
     if re.search(r"\bhydraulic\b", text):
+        return "H", "explicit_text"
+    if re.search(r"\bshock absorber\b", text):
         return "H", "explicit_text"
     if re.search(r"\bcompressor\b|\brefrigeration\b|\bvacuum pump\b", text):
         return "C", "explicit_text"

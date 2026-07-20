@@ -352,6 +352,21 @@
       "notes": "Официальная страница содержит 1 464 конкретные карточки без серийных заглушек и повторных source-вхождений. Публикуются только фактические поля, допуски, рекомендации, классификация, UID/URL и хэши; маркетинговые описания не копируются. Межрыночные совпадения объединяются по точному нормализованному названию и профессиональному семейству, конфликты остаются раздельными."
     },
     {
+      "source_id": "FUCHS_POLAND_PRODUCT_FINDER",
+      "title": "FUCHS Poland Product Finder",
+      "owner": "FUCHS OIL CORPORATION (PL) SP. Z O.O.",
+      "source_type": "official_manufacturer_embedded_product_catalog",
+      "source_locator": "data/fuchs-poland-products.jsonl",
+      "source_url": "https://www.fuchs.com/pl/en/products/service-links/product-finder/",
+      "terms_url": "https://www.fuchs.com/pl/en/imprint/",
+      "source_sha256": "a2049c41d02ddef88bd18e88c7008cb8eea1ee735a987b948bf10b36fb80280f",
+      "access_status": "public_full_catalog_embedded_in_official_page",
+      "bulk_ingest_allowed": true,
+      "publication_status": "factual_fields_only_with_attribution_no_marketing_descriptions",
+      "observed_count": 690,
+      "notes": "Из 776 встроенных строк исключена 81 локализованная строка серии/группы; пять повторных source-вхождений объединены, получено 690 конкретных продуктов. Польское дерево категорий семантически нормализовано в общие профессиональные семейства. Публикуются только факты, UID/URL и хэши, без маркетинговых описаний."
+    },
+    {
       "source_id": "totalenergies-global",
       "title": "TotalEnergies Lubricants Catalog",
       "owner": "TotalEnergies Lubrifiants S.A.",

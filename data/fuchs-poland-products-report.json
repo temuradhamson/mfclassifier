@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-07-20",
+  "source_id": "FUCHS_POLAND_PRODUCT_FINDER",
+  "source_url": "https://www.fuchs.com/pl/en/products/service-links/product-finder/",
+  "imprint_url": "https://www.fuchs.com/pl/en/imprint/",
+  "source_html_sha256": "5fd8015dd8369ce3d1fd68ff5b036cd0f218abdb4a63d69db1a9dc1a9350815a",
+  "imprint_html_sha256": "72a1b47c19f951cb105be40f3ec94d6daa9fc6d017bc922394bf82ee57a5f5c1",
+  "embedded_source_rows": 776,
+  "products": 690,
+  "source_series_rows_excluded": 81,
+  "equipment_rows_excluded": 0,
+  "duplicate_source_occurrences_merged": 5,
+  "families": {
+    "C": 7,
+    "E": 3,
+    "G": 116,
+    "H": 58,
+    "I": 37,
+    "M": 114,
+    "S": 27,
+    "T": 81,
+    "TF": 246,
+    "U": 1
+  },
+  "brand_lines": 25,
+  "compound_designation_review_rows": 26,
+  "classification_basis": {
+    "brand_line_and_explicit_application": 26,
+    "explicit_text": 4,
+    "industrial_product_group": 37,
+    "multifunctional_product_group": 4,
+    "multifunctional_product_groups": 15,
+    "product_group": 259,
+    "product_group_or_explicit_product_form": 113,
+    "special_product_fallback": 8,
+    "suspension_fluid_product_group": 2,
+    "technical_fluid_product_group": 222
+  },
+  "normalized_output_sha256": "a2049c41d02ddef88bd18e88c7008cb8eea1ee735a987b948bf10b36fb80280f",
+  "rights_review": "Only factual fields are republished with attribution. Marketing descriptions are excluded and represented only by SHA-256 evidence hashes; the applicable imprint limits copying of documentation for commercial use.",
+  "publication_scope": "Product identity, region, group, specifications, approvals, recommendations and derived technical fields; no marketing descriptions or page layout."
+}
