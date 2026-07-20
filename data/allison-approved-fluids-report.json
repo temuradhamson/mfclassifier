@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-07-20",
+  "source_id": "ALLISON_APPROVED_FLUIDS",
+  "landing_url": "https://allisontransmission.com/en-gb/aftermarket---channel/parts---service/allison-approved-fluids",
+  "lists": 6,
+  "products": 104,
+  "unique_approval_numbers": 117,
+  "approval_occurrences": 119,
+  "marketers_brands": 63,
+  "normalized_output_sha256": "f937834a441233ae38dee923865db175e23ac65c631669e060a70cd72a8aabfb",
+  "source_files": [
+    {
+      "list_id": "ALLISON_TES_668",
+      "specifications": [
+        "Allison TES 668"
+      ],
+      "list_date": "2026-06-24",
+      "url": "https://allisontransmission.bynder.com/m/5ebfbe82073eb1e8/original/Allison-TES-668-Approved-Fluids-List.pdf",
+      "source_sha256": "4a8a8602bb2d8be060fed7663163333778060256620a63af2e97023383edbbde",
+      "pages": 2,
+      "products": 49,
+      "approval_numbers": 56
+    },
+    {
+      "list_id": "ALLISON_TES_295_468",
+      "specifications": [
+        "Allison TES 295",
+        "Allison TES 468"
+      ],
+      "list_date": "2025-06-18",
+      "url": "https://allisontransmission.bynder.com/m/d20987fc6b2e871/original/Allison-TES-295-TES-468-Approved-Fluids-List.pdf",
+      "source_sha256": "9e0a4f0004e57791022c9797ee23a5fd7d136e077d5d5874a40aee1ca342df39",
+      "pages": 1,
+      "products": 14,
+      "approval_numbers": 14
+    },
+    {
+      "list_id": "ALLISON_TES_389",
+      "specifications": [
+        "Allison TES 389"
+      ],
+      "list_date": "2026-03-31",
+      "url": "https://allisontransmission.bynder.com/m/7f99f5c23ff0ee6b/original/Allison-TES-389-Approved-Fluids-List.pdf",
+      "source_sha256": "372312d4a16179377e645bc09e1667c0117c1fb79eadfb004947beb3563e6720",
+      "pages": 1,
+      "products": 10,
+      "approval_numbers": 14
+    },
+    {
+      "list_id": "ALLISON_TES_439",
+      "specifications": [
+        "Allison TES 439"
+      ],
+      "list_date": "2025-06-18",
+      "url": "https://allisontransmission.bynder.com/m/691b721c72579d00/original/Allison-TES-439-Approved-Fluids-List.pdf",
+      "source_sha256": "89ad33cd9aee5dce101f2b8da369083c31aafce3e36031db7bfa6c6deed12c6d",
+      "pages": 1,
+      "products": 29,
+      "approval_numbers": 33
+    },
+    {
+      "list_id": "ALLISON_TES_353",
+      "specifications": [
+        "Allison TES 353"
+      ],
+      "list_date": "2025-06-18",
+      "url": "https://allisontransmission.bynder.com/m/292fed4acc84cc88/original/Allison-TES-353-Approved-Fluids-List.pdf",
+      "source_sha256": "b7f1cc3b1e5300e374282fbc498c62fc4e6aad09f05cb8d15aca6b785d6d1cc2",
+      "pages": 1,
+      "products": 1,
+      "approval_numbers": 1
+    },
+    {
+      "list_id": "ALLISON_TES_781",
+      "specifications": [
+        "Allison TES 781"
+      ],
+      "list_date": "2025-09-29",
+      "url": "https://allisontransmission.bynder.com/m/14364c2c91dd1db/original/Allison-TES-781-Approved-Fluids-List.pdf",
+      "source_sha256": "795fbd19a64b9b13131724b450942e262bbfcbd2e493fc360bf9e59739dde3e3",
+      "pages": 1,
+      "products": 1,
+      "approval_numbers": 1
+    }
+  ],
+  "publication_scope": "Derived factual approval records with attribution; Allison PDF design and full text are not republished."
+}

@@ -29,6 +29,7 @@ JASO_JSONL = ROOT / "data" / "jaso-filed-oils.jsonl"
 LICENSED_JSONL = ROOT / "data" / "official-licensed-products.jsonl"
 USDA_BIOPREFERRED_JSONL = ROOT / "data" / "usda-biopreferred-products.jsonl"
 ZF_TE_ML_JSONL = ROOT / "data" / "zf-te-ml-approved-products.jsonl"
+ALLISON_JSONL = ROOT / "data" / "allison-approved-fluids.jsonl"
 SCHEMA_VERSION = 1
 SNAPSHOT_DATE = "2026-07-20"
 
@@ -447,6 +448,43 @@ def zf_te_ml_record(row: dict) -> dict:
     return record
 
 
+def allison_record(row: dict) -> dict:
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["marketer_brand"],
+        "name": row["product_name"],
+        "category": "Жидкости, одобренные Allison Transmission",
+        "category_code": "T",
+        "family": FAMILY_NAMES["T"],
+        "sae_class": row["product_name"],
+        "source": "ALLISON_APPROVED_FLUIDS",
+    }
+    record = canonical_record(generic)
+    record["manufacturer"] = row["marketer_brand"]
+    record["brand"] = row["marketer_brand"]
+    record["market"] = "GLOBAL_ALLISON_APPROVED"
+    record["source_id"] = "ALLISON_APPROVED_FLUIDS"
+    record["source_record_id"] = row["source_record_id"]
+    record["source_row"] = None
+    record["evidence_status"] = "official_oem_approval_registry"
+    record["lifecycle_status"] = "approved_as_of_list_date"
+    record["snapshot_date"] = row["list_date"]
+    record["specifications"]["oem_approvals"] = row["specifications"]
+    record["specifications"]["allison_approval_numbers"] = row["approval_numbers"]
+    record["specifications"]["licensed_standard"] = "Allison TES"
+    record["canonical_key"] += f"|allison_registry_record:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    for index, approval_number in enumerate(row["approval_numbers"], 1):
+        record["codes"][f"allison_approval_number_{index}"] = {
+            "system": "ALLISON_APPROVAL_NUMBER",
+            "value": approval_number,
+            "source_id": "ALLISON_APPROVED_FLUIDS",
+            "status": "official_oem_approval_registry",
+        }
+    return record
+
+
 def deduplicate(records: list[dict]) -> tuple[list[dict], list[dict]]:
     by_key = defaultdict(list)
     for record in records:
@@ -566,7 +604,7 @@ def build_sqlite(records: list[dict], candidates: list[dict], issues: list[dict]
                 if text(item):
                     db.execute("INSERT OR IGNORE INTO specifications VALUES (?,?,?,?)", (row["product_id"], spec_type, text(item), int(spec_type != "performance_raw")))
         for system, code in row["codes"].items():
-            db.execute("INSERT INTO external_codes VALUES (?,?,?,?,?)", (row["product_id"], system.upper(), code["value"], code["source_id"], code["status"]))
+            db.execute("INSERT INTO external_codes VALUES (?,?,?,?,?)", (row["product_id"], code.get("system", system).upper(), code["value"], code["source_id"], code["status"]))
         cert = row["certificate"]
         if any(cert.values()):
             db.execute("INSERT INTO certificates VALUES (?,?,?,?,?,?,?)", (
@@ -678,6 +716,9 @@ def main() -> None:
     zf_source_rows = [json.loads(line) for line in ZF_TE_ML_JSONL.read_text(encoding="utf-8").splitlines() if line]
     zf_records = [zf_te_ml_record(row) for row in zf_source_rows]
     input_records.extend(zf_records)
+    allison_source_rows = [json.loads(line) for line in ALLISON_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    allison_records = [allison_record(row) for row in allison_source_rows]
+    input_records.extend(allison_records)
     aichilon_products, aichilon_packages, exclusions = aichilon_seed()
     existing_by_name = defaultdict(list)
     for row in input_records:
@@ -759,6 +800,17 @@ def main() -> None:
         if link_key not in source_link_keys:
             source_links.append(link)
             source_link_keys.add(link_key)
+    for raw, normalized_row in zip(allison_source_rows, allison_records):
+        target = canonical_by_key[normalized_row["canonical_key"]]
+        link = {
+            "product_id": target["product_id"], "source_id": "ALLISON_APPROVED_FLUIDS",
+            "source_record_id": raw["source_record_id"], "source_row": None,
+            "relation": "official_oem_approval_registry",
+        }
+        link_key = (link["product_id"], link["source_id"], link["source_record_id"])
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     offers = []
     for package in aichilon_packages:
         canonical_key = aichilon_product_key.get(int(package["source_product_id"]))
@@ -794,6 +846,7 @@ def main() -> None:
         "official_licensed_input_sha256": hashlib.sha256(LICENSED_JSONL.read_bytes()).hexdigest(),
         "usda_biopreferred_input_sha256": hashlib.sha256(USDA_BIOPREFERRED_JSONL.read_bytes()).hexdigest(),
         "zf_te_ml_input_sha256": hashlib.sha256(ZF_TE_ML_JSONL.read_bytes()).hexdigest(),
+        "allison_input_sha256": hashlib.sha256(ALLISON_JSONL.read_bytes()).hexdigest(),
         "canonical_rows": len(records),
         "brands": len({r["brand"] for r in records}),
         "families": dict(sorted(Counter(r["family_code"] for r in records).items())),
@@ -807,6 +860,7 @@ def main() -> None:
         "usda_biopreferred_source_rows": len(biopreferred_source_rows),
         "official_oem_approval_rows": sum(r["evidence_status"] == "official_oem_approval_registry" for r in records),
         "zf_te_ml_source_rows": len(zf_source_rows),
+        "allison_source_rows": len(allison_source_rows),
         "jaso_source_rows": len(jaso_source_rows),
         "jaso_unique_oil_codes": len({r["oil_code"] for r in jaso_source_rows}),
         "aichilon_source_products": len(aichilon_products) + len(exclusions),

@@ -223,6 +223,20 @@
       "notes": "Официальный ZIP ZF от 01.07.2026 содержит 28 PDF и 4 919 вхождений одобрений. Они объединены по 1 498 уникальным ZF approval numbers; сохранены TE-ML sheet, lubricant class, page и хэши PDF, но оформление и полный текст PDF не переиздаются. SHA-256 архива: ad8bf0de338d9d18e956bcb6215d81dd578a08e72291c7565b3f5df73d911b11."
     },
     {
+      "source_id": "ALLISON_APPROVED_FLUIDS",
+      "title": "Allison Transmission Approved Fluids",
+      "owner": "Allison Transmission, Inc.",
+      "source_type": "official_oem_approval_registry_pdfs",
+      "source_locator": "data/allison-approved-fluids.jsonl",
+      "source_url": "https://allisontransmission.com/en-gb/aftermarket---channel/parts---service/allison-approved-fluids",
+      "source_sha256": "f937834a441233ae38dee923865db175e23ac65c631669e060a70cd72a8aabfb",
+      "access_status": "public_official_approval_lists",
+      "bulk_ingest_allowed": true,
+      "publication_status": "derived_factual_records_with_attribution",
+      "observed_count": 104,
+      "notes": "Шесть официальных списков TES содержат 104 продукта и 119 вхождений номеров одобрения (117 уникальных). Сохранены marketer/brand, product name, TES specification, approval numbers, page, дата списка, URL и хэши PDF; оформление и полный текст PDF не переиздаются."
+    },
+    {
       "source_id": "totalenergies-global",
       "title": "TotalEnergies Lubricants Catalog",
       "owner": "TotalEnergies Lubrifiants S.A.",

@@ -3,14 +3,15 @@
   "run_id": "seed-2026-07-20",
   "snapshot_date": "2026-07-20",
   "status": "seed_only_world_catalog_incomplete",
-  "input_rows": 9648,
+  "input_rows": 9752,
   "normalized_input_sha256": "819d11779ffccddf9683a9b18a70e39bd5a1b8d72d9811fb5bb46d136b0f8073",
   "jaso_normalized_input_sha256": "b664fea5aee78de7303c33bf13d3c9ac26c8779b78beac24c54295b4d58603d3",
   "official_licensed_input_sha256": "533183ffbc755268ef12b54a556d1f3ea78db4fc80b564e12c391a10a8e2075e",
   "usda_biopreferred_input_sha256": "1f301afa1ca9ea8e603c4c9818b7824d166f2c7e22ef7bd23daa29e516d1802a",
   "zf_te_ml_input_sha256": "b4812ab38f24e50371250ced3a555df3c85bb72344227fdb42da04b120561dfe",
-  "canonical_rows": 9647,
-  "brands": 1165,
+  "allison_input_sha256": "f937834a441233ae38dee923865db175e23ac65c631669e060a70cd72a8aabfb",
+  "canonical_rows": 9751,
+  "brands": 1218,
   "families": {
     "C": 12,
     "E": 4,
@@ -19,7 +20,7 @@
     "I": 58,
     "M": 5790,
     "S": 1399,
-    "T": 1541,
+    "T": 1645,
     "TF": 61,
     "U": 20
   },
@@ -31,8 +32,9 @@
   "official_licensed_source_rows": 3037,
   "official_government_program_rows": 892,
   "usda_biopreferred_source_rows": 892,
-  "official_oem_approval_rows": 1498,
+  "official_oem_approval_rows": 1602,
   "zf_te_ml_source_rows": 1498,
+  "allison_source_rows": 104,
   "jaso_source_rows": 3630,
   "jaso_unique_oil_codes": 3629,
   "aichilon_source_products": 317,
@@ -67,7 +69,8 @@
     "NLGI_CERTIFIED",
     "EU_ECOLABEL_LUBRICANTS",
     "usda-biopreferred",
-    "ZF_TE_ML"
+    "ZF_TE_ML",
+    "ALLISON_APPROVED_FLUIDS"
   ],
   "bulk_sources_blocked": [
     "totalenergies-global",
