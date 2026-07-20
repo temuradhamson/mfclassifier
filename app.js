@@ -329,9 +329,9 @@ function filteredProducts() {
 
 function productSpecs(item) {
   return unique([
-    item.viscosity ? `ISO VG ${item.viscosity}` : null,
-    item.sae_class ? `SAE ${item.sae_class}` : null,
-    item.api_class ? `API ${item.api_class}` : null,
+    item.viscosity ? `ISO VG ${normalizeIsoVg(item.viscosity)}` : null,
+    item.sae_class ? `SAE ${normalizeSae(item.sae_class)}` : null,
+    item.api_class ? `API ${apiValue(item)}` : null,
     item.din_gost_class, item.coolant_class, item.grease_class,
   ]).slice(0, 4);
 }
@@ -455,11 +455,12 @@ function renderReferences() {
   state.referenceRows = rows;
   const container = $("referenceContent");
   if (state.reference === "temperatures") {
-    container.innerHTML = `<div class="temperature-scale">${rows.map((item) => {
+    container.innerHTML = `<div class="temperature-scale">
+      <div class="temperature-axis"><span>Общая шкала</span><div class="temperature-axis-track"><i style="left:0%">−273</i><i style="left:${temperaturePosition(0)}%">0</i><i style="left:${temperaturePosition(300)}%">300</i><b style="left:${temperaturePosition(300)}%" aria-label="разрыв шкалы">//</b><i style="left:100%">2000</i></div><small>°C</small></div>
+      ${rows.map((item) => {
       const min = Number(item["От °C"]), max = Number(item["До °C"]);
-      const left = Math.max(0, Math.min(100, (min + 273) / 2273 * 100));
-      const right = Math.max(0, Math.min(100, (max + 273) / 2273 * 100));
-      return `<div class="temperature-row"><div><b>${esc(item["Зона"])}</b><small>${esc(item["Код"])}</small></div><div class="temperature-range"><i style="left:${left}%"></i><i style="left:${right}%"></i></div><small>${min}…${max} °C</small></div>`;
+      const left = temperaturePosition(min), right = temperaturePosition(max);
+      return `<div class="temperature-row"><div><b>${esc(item["Зона"])}</b><small>${esc(item["Код"])}</small></div><div class="temperature-range"><span style="left:${left}%;width:${Math.max(.5, right - left)}%"></span><i class="range-start" style="left:${left}%"></i><i class="range-end" style="left:${right}%"></i>${max > 300 ? `<b class="range-break" style="left:${temperaturePosition(300)}%">//</b>` : ""}</div><small>${min}…${max} °C</small></div>`;
     }).join("")}</div>`;
     return;
   }
@@ -468,6 +469,13 @@ function renderReferences() {
     return;
   }
   container.innerHTML = `<div class="reference-grid">${rows.map((item, index) => referenceCard(item, index)).join("")}</div>`;
+}
+
+function temperaturePosition(value) {
+  const number = Math.max(-273, Math.min(2000, Number(value)));
+  // 300…2000 °C is shown as an explicitly broken extension so that the
+  // practically important −273…300 °C ranges remain readable.
+  return number <= 300 ? (number + 273) / 573 * 82 : 82 + (number - 300) / 1700 * 18;
 }
 
 function referenceCard(item, index) {
@@ -491,42 +499,55 @@ function detailSection(title, fields) {
   return `<section class="drawer-section"><h3>${esc(title)}</h3><dl class="detail-list">${rows.map(([label, value]) => `<div><dt>${esc(label)}</dt><dd>${esc(Array.isArray(value) ? value.join("; ") : value)}</dd></div>`).join("")}</dl></section>`;
 }
 
+function apiTokens(item) {
+  const raw = apiValue(item).toUpperCase().replaceAll("С", "C").replaceAll("Н", "H");
+  return unique((raw.match(/\b(?:S[ABCDEFGHJKLMNP]|C[A-HJKN](?:-\d)?(?:\s+PLUS)?|F[AP]|GL-?[1-6])\b/g) || []).map((value) => value.replace(/\s+/g, " ")));
+}
+
 function functionalTokens(item) {
   const profile = professionalProfile(item);
-  const raw = `${apiValue(item)} ${aceaValue(item)} ${item.din_gost_class || ""} ${item.gost_name || ""} ${item.grease_class || ""}`
-    .toUpperCase().replaceAll("С", "C").replaceAll("Н", "H");
+  if (["engine", "gear"].includes(profile.kind)) return apiTokens(item);
+  if (profile.kind === "coolant") return unique([compact(item.technical_document)]);
+  if (profile.kind === "grease") return unique([compact(profile.grade)]);
+  return unique(standardValues(item).map((entry) => `${compact(entry.system)}:${compact(entry.value)}`));
+}
+
+function equivalenceSignature(item) {
+  const profile = professionalProfile(item);
+  const grade = compact(profile.grade);
+  const standards = functionalTokens(item);
+  if (!grade || !standards.length || standards.some((value) => !value)) return null;
   if (["engine", "gear"].includes(profile.kind)) {
-    return unique(raw.match(/\b(?:S[ABCDEFGHJKLMNP]|C[A-HJKN](?:-\d)?|F[AP]|GL-?[1-6])\b/g) || []);
+    return { key: `${profile.kind}|${grade}|${standards.join("|")}`, reason: `${profile.gradeLabel.replace("Вязкость ", "")} ${profile.grade} + точный ${profile.kind === "gear" ? "API GL" : "API"} ${standards.join("/")}` };
   }
-  if (profile.kind === "coolant") return unique([compact(item.coolant_class)]);
-  return unique(standardValues(item).map((entry) => compact(entry.value)));
+  if (profile.kind === "industrial") {
+    const category = norm(item.category).replace(/\bсинтетические\b/g, "").trim();
+    return { key: `${profile.kind}|${category}|${grade}|${standards.join("|")}`, reason: `ISO VG ${profile.grade} + ${standardValues(item).map((entry) => `${entry.system} ${entry.value}`).join(" / ")}` };
+  }
+  if (profile.kind === "coolant") return { key: `${profile.kind}|${grade}|${standards.join("|")}`, reason: `${profile.gradeLabel} ${profile.grade} + единый ГОСТ/ТУ` };
+  return { key: `${profile.kind}|${grade}`, reason: `${profile.gradeLabel} ${profile.grade}` };
 }
 
 function equivalentProducts(item) {
-  const profile = professionalProfile(item);
-  if (!has(profile.grade)) return [];
-  const tokens = functionalTokens(item);
-  if (!tokens.length) return [];
+  const signature = equivalenceSignature(item);
+  if (!signature) return [];
   return DATA.products.map((candidate) => {
     if (candidate.id === item.id) return null;
-    const candidateProfile = professionalProfile(candidate);
-    if (candidateProfile.kind !== profile.kind || candidateProfile.grade !== profile.grade) return null;
-    const shared = functionalTokens(candidate).filter((token) => tokens.includes(token));
-    if (!shared.length) return null;
-    const otherBrand = candidate.brand !== item.brand;
+    const candidateSignature = equivalenceSignature(candidate);
+    if (!candidateSignature || candidateSignature.key !== signature.key) return null;
     return {
       item: candidate,
-      score: 70 + Math.min(24, shared.length * 6) + (otherBrand ? 5 : 0),
-      reason: `${profile.gradeLabel.replace("Вязкость ", "")} ${profile.grade} + ${shared.join("/")}`,
-      otherBrand,
+      score: 100,
+      reason: signature.reason,
+      otherBrand: candidate.brand !== item.brand,
     };
-  }).filter(Boolean).sort((a, b) => b.score - a.score || Number(b.otherBrand) - Number(a.otherBrand) || a.item.name.localeCompare(b.item.name, "ru")).slice(0, 8);
+  }).filter(Boolean).sort((a, b) => Number(b.otherBrand) - Number(a.otherBrand) || a.item.name.localeCompare(b.item.name, "ru")).slice(0, 8);
 }
 
 function analoguesSection(item) {
   const analogues = equivalentProducts(item);
   if (!analogues.length) return `<section class="drawer-section analogue-section"><div class="section-title"><h3>Аналоги продукции</h3><span>по классификации</span></div><p class="analogue-empty">Точного сопоставления по вязкости и функциональному стандарту в текущей базе нет.</p></section>`;
-  return `<section class="drawer-section analogue-section"><div class="section-title"><h3>Аналоги продукции · ${analogues.length}</h3><span>совпадение двух признаков</span></div><div class="analogue-list">${analogues.map(({ item: analogue, score, reason }) => `
+  return `<section class="drawer-section analogue-section"><div class="section-title"><h3>Аналоги продукции · ${analogues.length}</h3><span>строгое совпадение ключа</span></div><div class="analogue-list">${analogues.map(({ item: analogue, score, reason }) => `
     <button class="analogue-card" data-linked-product="${esc(analogue.id)}"><span class="analogue-score">${score}%</span><span><b>${esc(analogue.name)}</b><small>${esc(analogue.brand)} · ${esc(reason)}</small></span><i>→</i></button>`).join("")}</div><p class="analogue-disclaimer">Сопоставление справочное: перед заменой продукта проверьте допуски OEM и техническую документацию.</p></section>`;
 }
 
