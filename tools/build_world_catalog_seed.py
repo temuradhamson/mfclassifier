@@ -35,6 +35,7 @@ DRIVENTIC_DIWA_JSONL = ROOT / "data" / "driventic-diwa-approved-oils.jsonl"
 MERCEDES_DTFR_JSONL = ROOT / "data" / "mercedes-dtfr-approved-fluids.jsonl"
 MERCEDES_BEVO_JSONL = ROOT / "data" / "mercedes-bevo-approved-fluids.jsonl"
 VOLVO_GENUINE_JSONL = ROOT / "data" / "volvo-genuine-fluids.jsonl"
+MAN_SERVICE_JSONL = ROOT / "data" / "man-service-products.jsonl"
 SCHEMA_VERSION = 1
 SNAPSHOT_DATE = "2026-07-20"
 
@@ -659,6 +660,57 @@ def volvo_genuine_record(row: dict) -> dict:
     return record
 
 
+def man_service_record(row: dict) -> dict:
+    specs = row["specifications"]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Продукты из действующих рекомендаций MAN по эксплуатационным материалам",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": specs.get("sae_engine") or specs.get("sae_gear") or "",
+        "viscosity": specs.get("iso_vg", ""),
+        "grease_class": specs.get("nlgi", ""),
+        "source": "MAN_CURRENT_SERVICE_PRODUCTS",
+    }
+    record = canonical_record(generic)
+    record["manufacturer"] = row["manufacturer"]
+    record["brand"] = row["brand"]
+    record["market"] = row["market"]
+    record["source_id"] = "MAN_CURRENT_SERVICE_PRODUCTS"
+    record["source_record_id"] = row["source_record_id"]
+    record["source_row"] = None
+    record["evidence_status"] = "official_oem_service_recommendation"
+    record["lifecycle_status"] = "recommended_as_of_current_document"
+    record["snapshot_date"] = row["snapshot_date"]
+    record["specifications"].update(specs)
+    record["specifications"]["application"] = row["application"]
+    record["specifications"]["man_recommendation_document_date"] = row["document_date"]
+    record["specifications"]["man_recommendation_pages"] = row["source_pages"]
+    record["specifications"]["source_url"] = row["source_url"]
+    record["canonical_key"] += f"|man_service_record:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    return record
+
+
+def brand_tokens_overlap(left: str, right: str) -> bool:
+    left_tokens = set(normalize(left).split())
+    right_tokens = set(normalize(right).split())
+    return bool(left_tokens & right_tokens)
+
+
+def merge_man_recommendation_evidence(target: dict, raw: dict) -> None:
+    target["specifications"].setdefault("man_service_recommendations", []).append({
+        "application": raw["application"],
+        "document_date": raw["document_date"],
+        "pages": raw["source_pages"],
+        "source_url": raw["source_url"],
+        "specifications": raw["specifications"],
+    })
+
+
 def deduplicate(records: list[dict]) -> tuple[list[dict], list[dict]]:
     by_key = defaultdict(list)
     for record in records:
@@ -937,6 +989,32 @@ def main() -> None:
     volvo_genuine_source_rows = [json.loads(line) for line in VOLVO_GENUINE_JSONL.read_text(encoding="utf-8").splitlines() if line]
     volvo_genuine_records = [volvo_genuine_record(row) for row in volvo_genuine_source_rows]
     input_records.extend(volvo_genuine_records)
+    man_service_source_rows = [json.loads(line) for line in MAN_SERVICE_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    man_service_records = [man_service_record(row) for row in man_service_source_rows]
+    existing_by_name_family = defaultdict(list)
+    for row in input_records:
+        existing_by_name_family[(row["product_name_normalized"], row["family_code"])].append(row)
+    man_service_product_key = {}
+    man_service_added_rows = 0
+    man_service_matched_rows = 0
+    man_service_review_keys = []
+    for raw, source_record in zip(man_service_source_rows, man_service_records):
+        matches = [
+            row for row in existing_by_name_family[(normalize(raw["product_name"]), raw["family_code"])]
+            if brand_tokens_overlap(raw["brand"], row["brand"])
+        ]
+        if len(matches) == 1:
+            target = matches[0]
+            merge_man_recommendation_evidence(target, raw)
+            man_service_matched_rows += 1
+        else:
+            target = source_record
+            input_records.append(target)
+            existing_by_name_family[(target["product_name_normalized"], target["family_code"])].append(target)
+            man_service_added_rows += 1
+            if len(matches) > 1:
+                man_service_review_keys.append((target["canonical_key"], [row["canonical_key"] for row in matches]))
+        man_service_product_key[raw["source_record_id"]] = target["canonical_key"]
     aichilon_products, aichilon_packages, exclusions = aichilon_seed()
     existing_by_name = defaultdict(list)
     for row in input_records:
@@ -959,6 +1037,17 @@ def main() -> None:
         aichilon_product_key[int(raw["source_number"])] = target["canonical_key"]
     records, candidates = deduplicate(input_records)
     canonical_by_key = {row["canonical_key"]: row for row in records}
+    for source_key, match_keys in man_service_review_keys:
+        source_product = canonical_by_key[source_key]
+        for match_key in match_keys:
+            match_product = canonical_by_key[match_key]
+            candidates.append({
+                "product_id_a": match_product["product_id"],
+                "product_id_b": source_product["product_id"],
+                "reason": "exact_product_name_and_family_with_probable_brand_owner_alias",
+                "score": 0.99,
+                "decision": "review_brand_alias_identity",
+            })
     source_links = [{
         "product_id": row["product_id"], "source_id": row["source_id"], "source_record_id": row["source_record_id"],
         "source_row": row["source_row"], "relation": "primary_seed_record",
@@ -1073,6 +1162,17 @@ def main() -> None:
         if link_key not in source_link_keys:
             source_links.append(link)
             source_link_keys.add(link_key)
+    for raw in man_service_source_rows:
+        target = canonical_by_key[man_service_product_key[raw["source_record_id"]]]
+        link = {
+            "product_id": target["product_id"], "source_id": "MAN_CURRENT_SERVICE_PRODUCTS",
+            "source_record_id": raw["source_record_id"], "source_row": None,
+            "relation": "official_oem_service_recommendation",
+        }
+        link_key = (link["product_id"], link["source_id"], link["source_record_id"])
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     offers = []
     for package in aichilon_packages:
         canonical_key = aichilon_product_key.get(int(package["source_product_id"]))
@@ -1113,6 +1213,7 @@ def main() -> None:
         "mercedes_dtfr_input_sha256": hashlib.sha256(MERCEDES_DTFR_JSONL.read_bytes()).hexdigest(),
         "mercedes_bevo_input_sha256": hashlib.sha256(MERCEDES_BEVO_JSONL.read_bytes()).hexdigest(),
         "volvo_genuine_input_sha256": hashlib.sha256(VOLVO_GENUINE_JSONL.read_bytes()).hexdigest(),
+        "man_service_input_sha256": hashlib.sha256(MAN_SERVICE_JSONL.read_bytes()).hexdigest(),
         "canonical_rows": len(records),
         "brands": len({r["brand"] for r in records}),
         "families": dict(sorted(Counter(r["family_code"] for r in records).items())),
@@ -1126,6 +1227,7 @@ def main() -> None:
         "usda_biopreferred_source_rows": len(biopreferred_source_rows),
         "official_oem_approval_rows": sum(r["evidence_status"] == "official_oem_approval_registry" for r in records),
         "official_manufacturer_catalog_rows": sum(r["evidence_status"] == "official_manufacturer_product_catalog" for r in records),
+        "official_oem_service_recommendation_rows": sum(r["evidence_status"] == "official_oem_service_recommendation" for r in records),
         "zf_te_ml_source_rows": len(zf_source_rows),
         "allison_source_rows": len(allison_source_rows),
         "driventic_diwa_source_rows": len(driventic_source_rows),
@@ -1134,6 +1236,9 @@ def main() -> None:
         "mercedes_bevo_products_matched_to_existing": mercedes_bevo_matched_rows,
         "mercedes_bevo_products_added": mercedes_bevo_added_rows,
         "volvo_genuine_source_rows": len(volvo_genuine_source_rows),
+        "man_service_source_rows": len(man_service_source_rows),
+        "man_service_products_matched_to_existing": man_service_matched_rows,
+        "man_service_products_added": man_service_added_rows,
         "jaso_source_rows": len(jaso_source_rows),
         "jaso_unique_oil_codes": len({r["oil_code"] for r in jaso_source_rows}),
         "aichilon_source_products": len(aichilon_products) + len(exclusions),

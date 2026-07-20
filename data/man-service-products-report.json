@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-07-20",
+  "document_date": "2026-04",
+  "source_id": "MAN_CURRENT_SERVICE_PRODUCTS",
+  "source_url": "https://public.man.eu/media/service/asp/media/en/927247.pdf?filename=Maintenance+and+service+product+recommendations+for+trucks",
+  "secondary_source_url": "https://public.man.eu/portal/asp/en/partsnequip/contentnav_copy_67/3_136/article_page_703",
+  "pdf_pages": 150,
+  "pdf_sha256": "6f7f8af129db473e65021f55dd4f76525d3a86feb5498074db527841871a8547",
+  "secondary_source_sha256": "5b45168a04b54889455a9759cef8552b3231f8589f4d5abf58d0bebf274bffe1",
+  "products": 32,
+  "brands": 16,
+  "families": {
+    "C": 4,
+    "G": 14,
+    "H": 7,
+    "M": 2,
+    "S": 1,
+    "T": 3,
+    "TF": 1
+  },
+  "recommendation_occurrences": 33,
+  "normalized_output_sha256": "2fc4ce0c3d1129a99144b7067614fdea054abb4ea58c9446ec26334b47dfcb5f",
+  "excluded_non_product_standards_and_ungraded_series": [
+    "MAN 248",
+    "MAN 283 Li-P 2",
+    "MAN 284 Li-H 2",
+    "MAN 339 L1/L3",
+    "MAN 3703",
+    "generic ISO VG hydraulic grades",
+    "Chevron Ultra-Duty Greases EP series"
+  ],
+  "evidence_note": "Current MAN vehicle service recommendations are evidence of OEM recommendation/application, not a claim that every row has a formal approval letter.",
+  "publication_scope": "Derived factual product and technical fields with attribution; PDF layout and prose are not republished."
+}

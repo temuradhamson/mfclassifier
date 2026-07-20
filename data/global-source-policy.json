@@ -293,6 +293,20 @@
       "notes": "Пять официальных страниц Volvo CE и Volvo Trucks дали 32 конкретных продукта: масла, трансмиссионные и гидравлические жидкости, смазки и охлаждающие жидкости. Сохранены классы, применения, температуры, упаковки и номера деталей; три названия серий VDS без конкретной вязкости исключены, поскольку серия не является товаром-градацией."
     },
     {
+      "source_id": "MAN_CURRENT_SERVICE_PRODUCTS",
+      "title": "MAN Maintenance and Service Product Recommendations for Trucks",
+      "owner": "MAN Truck & Bus SE",
+      "source_type": "official_oem_current_service_recommendation_pdf",
+      "source_locator": "data/man-service-products.jsonl",
+      "source_url": "https://public.man.eu/media/service/asp/media/en/927247.pdf?filename=Maintenance+and+service+product+recommendations+for+trucks",
+      "source_sha256": "2fc4ce0c3d1129a99144b7067614fdea054abb4ea58c9446ec26334b47dfcb5f",
+      "access_status": "public_official_current_service_document",
+      "bulk_ingest_allowed": true,
+      "publication_status": "derived_factual_records_with_attribution",
+      "observed_count": 32,
+      "notes": "Официальная 150-страничная рекомендация MAN, выпуск апрель 2026: 32 конкретных масла, смазки, ОЖ и технические жидкости / 33 вхождения. Стандарты без коммерческого продукта, общие ISO VG-классы и серия Chevron без конкретной градации исключены. Статус строки означает текущую рекомендацию или предписание MAN для узла применения, но не подменяется утверждением о наличии отдельного формального approval letter."
+    },
+    {
       "source_id": "totalenergies-global",
       "title": "TotalEnergies Lubricants Catalog",
       "owner": "TotalEnergies Lubrifiants S.A.",
