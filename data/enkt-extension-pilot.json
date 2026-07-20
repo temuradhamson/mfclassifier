@@ -1,0 +1,3567 @@
+{
+  "schema_version": 1,
+  "version": "0.1-pilot",
+  "status": "pilot_proposed_not_official",
+  "principle": "one technical profile equals one ENKT code; brands and SKUs map many-to-one",
+  "current_enkt_reference_count": 39,
+  "current_enkt_source": "https://xarid-api-trade.uzex.uz/Lib/GetProducts/113821",
+  "current_enkt_verified_at": "2026-07-20",
+  "current_enkt_reference": [
+    {
+      "code": "19.20.29.100-00001",
+      "name_ru": "Масло нефтяное смазочное",
+      "xarid_product_id": 459991
+    },
+    {
+      "code": "19.20.29.100-00002",
+      "name_ru": "Масло смазочное отработанное",
+      "xarid_product_id": 580852
+    },
+    {
+      "code": "19.20.29.100-00003",
+      "name_ru": "Масло осевое",
+      "xarid_product_id": 653217
+    },
+    {
+      "code": "19.20.29.100-00004",
+      "name_ru": "Масло шпиндельное",
+      "xarid_product_id": 649542
+    },
+    {
+      "code": "19.20.29.110-00001",
+      "name_ru": "Масло моторное",
+      "xarid_product_id": 665526
+    },
+    {
+      "code": "19.20.29.111-00001",
+      "name_ru": "Масло универсальное",
+      "xarid_product_id": 640923
+    },
+    {
+      "code": "19.20.29.111-00002",
+      "name_ru": "Жидкость для быстрого запуска двигателя",
+      "xarid_product_id": 540374
+    },
+    {
+      "code": "19.20.29.111-00003",
+      "name_ru": "Калибровочная жидкость",
+      "xarid_product_id": 661128
+    },
+    {
+      "code": "19.20.29.111-00004",
+      "name_ru": "Масло белое минеральное",
+      "xarid_product_id": 683508
+    },
+    {
+      "code": "19.20.29.113-00001",
+      "name_ru": "Масло авиационное",
+      "xarid_product_id": 540497
+    },
+    {
+      "code": "19.20.29.114-00001",
+      "name_ru": "Масло моторное авиационное",
+      "xarid_product_id": 666674
+    },
+    {
+      "code": "19.20.29.119-00001",
+      "name_ru": "Масло двухтактное для бензопилы",
+      "xarid_product_id": 469955
+    },
+    {
+      "code": "19.20.29.120-00001",
+      "name_ru": "Масло трансмиссионное",
+      "xarid_product_id": 668672
+    },
+    {
+      "code": "19.20.29.120-00002",
+      "name_ru": "Жидкость гидроусилителя руля",
+      "xarid_product_id": 562900
+    },
+    {
+      "code": "19.20.29.130-00001",
+      "name_ru": "Масло гидравлическое",
+      "xarid_product_id": 668120
+    },
+    {
+      "code": "19.20.29.130-00002",
+      "name_ru": "Масло для вакуумных насосов",
+      "xarid_product_id": 640924
+    },
+    {
+      "code": "19.20.29.140-00001",
+      "name_ru": "Масло индустриальное",
+      "xarid_product_id": 668236
+    },
+    {
+      "code": "19.20.29.140-00002",
+      "name_ru": "Масло трансформаторное",
+      "xarid_product_id": 659371
+    },
+    {
+      "code": "19.20.29.150-00001",
+      "name_ru": "Масло компрессорное",
+      "xarid_product_id": 668528
+    },
+    {
+      "code": "19.20.29.150-00002",
+      "name_ru": "Нигрол",
+      "xarid_product_id": 519038
+    },
+    {
+      "code": "19.20.29.160-00001",
+      "name_ru": "Масло турбинное",
+      "xarid_product_id": 665449
+    },
+    {
+      "code": "19.20.29.171-00001",
+      "name_ru": "Масло антикоррозионное",
+      "xarid_product_id": 554106
+    },
+    {
+      "code": "19.20.29.172-00001",
+      "name_ru": "Масло электроизоляционное трансформаторное",
+      "xarid_product_id": 667542
+    },
+    {
+      "code": "19.20.29.180-00001",
+      "name_ru": "Солидол",
+      "xarid_product_id": 476575
+    },
+    {
+      "code": "19.20.29.180-00002",
+      "name_ru": "Фаза масляная",
+      "xarid_product_id": 657178
+    },
+    {
+      "code": "19.20.29.190-00001",
+      "name_ru": "Автол",
+      "xarid_product_id": 458138
+    },
+    {
+      "code": "19.20.29.190-00002",
+      "name_ru": "Масло-теплоноситель",
+      "xarid_product_id": 640920
+    },
+    {
+      "code": "19.20.29.190-00003",
+      "name_ru": "Масло формовочное",
+      "xarid_product_id": 640911
+    },
+    {
+      "code": "19.20.29.190-00004",
+      "name_ru": "Замазка защитная консервационная",
+      "xarid_product_id": 655413
+    },
+    {
+      "code": "19.20.29.210-00001",
+      "name_ru": "Смазка пластичная универсальная",
+      "xarid_product_id": 665652
+    },
+    {
+      "code": "19.20.29.210-00002",
+      "name_ru": "Литол",
+      "xarid_product_id": 462257
+    },
+    {
+      "code": "19.20.29.210-00003",
+      "name_ru": "Смазка Графитная",
+      "xarid_product_id": 497766
+    },
+    {
+      "code": "19.20.29.210-00004",
+      "name_ru": "Консталин",
+      "xarid_product_id": 490888
+    },
+    {
+      "code": "19.20.29.210-00005",
+      "name_ru": "Цепная высоковязкая специальная смазка",
+      "xarid_product_id": 484302
+    },
+    {
+      "code": "19.20.29.210-00006",
+      "name_ru": "Смазка железнодорожная",
+      "xarid_product_id": 628872
+    },
+    {
+      "code": "19.20.29.210-00007",
+      "name_ru": "Смазка антивибрационная",
+      "xarid_product_id": 670973
+    },
+    {
+      "code": "19.20.29.210-00008",
+      "name_ru": "Смазка противозадирочная для отбора кернов",
+      "xarid_product_id": 670977
+    },
+    {
+      "code": "19.20.29.230-00001",
+      "name_ru": "Эмульсол",
+      "xarid_product_id": 471826
+    },
+    {
+      "code": "19.20.29.230-00002",
+      "name_ru": "Смазочно-охлаждающая жидкость",
+      "xarid_product_id": 682785
+    }
+  ],
+  "pilot_profiles": 171,
+  "families": {
+    "M": [
+      "19.20.29.110",
+      "Масла моторные",
+      "SAE + API/ACEA + тип базового масла"
+    ],
+    "T": [
+      "19.20.29.120",
+      "Масла трансмиссионные",
+      "SAE J306 + API GL/OEM + тип жидкости"
+    ],
+    "H": [
+      "19.20.29.130",
+      "Масла гидравлические",
+      "ISO VG + DIN/ISO эксплуатационный класс"
+    ],
+    "I": [
+      "19.20.29.140",
+      "Масла индустриальные",
+      "ISO VG + DIN/ISO/ГОСТ + назначение"
+    ],
+    "C": [
+      "19.20.29.150",
+      "Масла компрессорные",
+      "ISO VG + DIN 51506/тип компрессора"
+    ],
+    "U": [
+      "19.20.29.160",
+      "Масла турбинные",
+      "ISO VG/ГОСТ + тип турбины"
+    ],
+    "E": [
+      "19.20.29.172",
+      "Масла электроизоляционные",
+      "IEC/ГОСТ/ASTM + тип оборудования"
+    ],
+    "G": [
+      "19.20.29.210",
+      "Смазки пластичные",
+      "загуститель + NLGI + DIN 51502 + назначение"
+    ]
+  },
+  "rows": [
+    {
+      "proposed_enkt_code": "19.20.29.150-10001",
+      "skp_code": "19.20.29.150",
+      "skp_name": "Масла компрессорные",
+      "technical_profile_id": "C-VG100-DAA-MI",
+      "standardized_name_ru": "Масла компрессорные, ISO VG 100, ASTM D4304 (компрессорные), основа: Минеральное, назначение: Поршневые средние",
+      "professional_key_rule": "ISO VG + DIN 51506/тип компрессора",
+      "category_code": "C",
+      "product_form": "Масло",
+      "application": "Поршневые средние",
+      "industry": null,
+      "specifications": [
+        "ISO VG 100",
+        "ASTM D4304 (компрессорные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.150-10002",
+      "skp_code": "19.20.29.150",
+      "skp_name": "Масла компрессорные",
+      "technical_profile_id": "C-VG100-DAG-SY",
+      "standardized_name_ru": "Масла компрессорные, ISO VG 100, ASTM D4304 (компрессорные), основа: Синтетика, назначение: Компрессоры природного газа",
+      "professional_key_rule": "ISO VG + DIN 51506/тип компрессора",
+      "category_code": "C",
+      "product_form": "Масло",
+      "application": "Компрессоры природного газа",
+      "industry": null,
+      "specifications": [
+        "ISO VG 100",
+        "ASTM D4304 (компрессорные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.150-10003",
+      "skp_code": "19.20.29.150",
+      "skp_name": "Масла компрессорные",
+      "technical_profile_id": "C-VG100-DAH-MI",
+      "standardized_name_ru": "Масла компрессорные, ISO VG 100, ASTM D4304 (компрессорные), основа: Минеральное, назначение: Винтовые минеральное",
+      "professional_key_rule": "ISO VG + DIN 51506/тип компрессора",
+      "category_code": "C",
+      "product_form": "Масло",
+      "application": "Винтовые минеральное",
+      "industry": null,
+      "specifications": [
+        "ISO VG 100",
+        "ASTM D4304 (компрессорные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.150-10004",
+      "skp_code": "19.20.29.150",
+      "skp_name": "Масла компрессорные",
+      "technical_profile_id": "C-VG100-DRA-MI",
+      "standardized_name_ru": "Масла компрессорные, ISO VG 100, ASTM D4304 (компрессорные), основа: Нафтеновое, назначение: Крупные холод. установки",
+      "professional_key_rule": "ISO VG + DIN 51506/тип компрессора",
+      "category_code": "C",
+      "product_form": "Масло",
+      "application": "Крупные холод. установки",
+      "industry": null,
+      "specifications": [
+        "ISO VG 100",
+        "ASTM D4304 (компрессорные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.150-10005",
+      "skp_code": "19.20.29.150",
+      "skp_name": "Масла компрессорные",
+      "technical_profile_id": "C-VG100-DRE-POE",
+      "standardized_name_ru": "Масла компрессорные, ISO VG 100, ASTM D4304 (компрессорные), основа: ПОЭ эфиры, назначение: Холодильные универс.",
+      "professional_key_rule": "ISO VG + DIN 51506/тип компрессора",
+      "category_code": "C",
+      "product_form": "Масло",
+      "application": "Холодильные универс.",
+      "industry": null,
+      "specifications": [
+        "ISO VG 100",
+        "ASTM D4304 (компрессорные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.150-10006",
+      "skp_code": "19.20.29.150",
+      "skp_name": "Масла компрессорные",
+      "technical_profile_id": "C-VG150-DAA-MI",
+      "standardized_name_ru": "Масла компрессорные, ISO VG 150, ASTM D4304 (компрессорные), основа: Минеральное, назначение: Тяжелонагруженные",
+      "professional_key_rule": "ISO VG + DIN 51506/тип компрессора",
+      "category_code": "C",
+      "product_form": "Масло",
+      "application": "Тяжелонагруженные",
+      "industry": null,
+      "specifications": [
+        "ISO VG 150",
+        "ASTM D4304 (компрессорные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.150-10007",
+      "skp_code": "19.20.29.150",
+      "skp_name": "Масла компрессорные",
+      "technical_profile_id": "C-VG150-DAG-SY",
+      "standardized_name_ru": "Масла компрессорные, ISO VG 150, ASTM D4304 (компрессорные), основа: Синтетика, назначение: ГПА, газовые станции",
+      "professional_key_rule": "ISO VG + DIN 51506/тип компрессора",
+      "category_code": "C",
+      "product_form": "Масло",
+      "application": "ГПА, газовые станции",
+      "industry": null,
+      "specifications": [
+        "ISO VG 150",
+        "ASTM D4304 (компрессорные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.150-10008",
+      "skp_code": "19.20.29.150",
+      "skp_name": "Масла компрессорные",
+      "technical_profile_id": "C-VG32-DAH-SY",
+      "standardized_name_ru": "Масла компрессорные, ISO VG 32, ASTM D4304 (компрессорные), основа: Синтетика, назначение: Винтовые синтетика",
+      "professional_key_rule": "ISO VG + DIN 51506/тип компрессора",
+      "category_code": "C",
+      "product_form": "Масло",
+      "application": "Винтовые синтетика",
+      "industry": null,
+      "specifications": [
+        "ISO VG 32",
+        "ASTM D4304 (компрессорные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.150-10009",
+      "skp_code": "19.20.29.150",
+      "skp_name": "Масла компрессорные",
+      "technical_profile_id": "C-VG32-DRB-SY",
+      "standardized_name_ru": "Масла компрессорные, ISO VG 32, ASTM D4304 (компрессорные), основа: Алкилбензол, назначение: Холодильные R12/R22",
+      "professional_key_rule": "ISO VG + DIN 51506/тип компрессора",
+      "category_code": "C",
+      "product_form": "Масло",
+      "application": "Холодильные R12/R22",
+      "industry": null,
+      "specifications": [
+        "ISO VG 32",
+        "ASTM D4304 (компрессорные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.150-10010",
+      "skp_code": "19.20.29.150",
+      "skp_name": "Масла компрессорные",
+      "technical_profile_id": "C-VG32-FOOD-SY",
+      "standardized_name_ru": "Масла компрессорные, ISO VG 32, ASTM D4304 (компрессорные), основа: Пищевое ПАО, назначение: Пищевое производство",
+      "professional_key_rule": "ISO VG + DIN 51506/тип компрессора",
+      "category_code": "C",
+      "product_form": "Масло",
+      "application": "Пищевое производство",
+      "industry": null,
+      "specifications": [
+        "ISO VG 32",
+        "ASTM D4304 (компрессорные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.150-10011",
+      "skp_code": "19.20.29.150",
+      "skp_name": "Масла компрессорные",
+      "technical_profile_id": "C-VG46-BIOGAS",
+      "standardized_name_ru": "Масла компрессорные, ISO VG 46, ASTM D4304 (компрессорные), основа: Синтетика, назначение: Биогазовые установки",
+      "professional_key_rule": "ISO VG + DIN 51506/тип компрессора",
+      "category_code": "C",
+      "product_form": "Масло",
+      "application": "Биогазовые установки",
+      "industry": null,
+      "specifications": [
+        "ISO VG 46",
+        "ASTM D4304 (компрессорные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.150-10012",
+      "skp_code": "19.20.29.150",
+      "skp_name": "Масла компрессорные",
+      "technical_profile_id": "C-VG46-DAH-SY",
+      "standardized_name_ru": "Масла компрессорные, ISO VG 46, ASTM D4304 (компрессорные), основа: Синтетика, назначение: Винтовые стандарт",
+      "professional_key_rule": "ISO VG + DIN 51506/тип компрессора",
+      "category_code": "C",
+      "product_form": "Масло",
+      "application": "Винтовые стандарт",
+      "industry": null,
+      "specifications": [
+        "ISO VG 46",
+        "ASTM D4304 (компрессорные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.150-10013",
+      "skp_code": "19.20.29.150",
+      "skp_name": "Масла компрессорные",
+      "technical_profile_id": "C-VG46-DENTAL",
+      "standardized_name_ru": "Масла компрессорные, ISO VG 46, ASTM D4304 (компрессорные), основа: Синтетика, назначение: Стоматологические",
+      "professional_key_rule": "ISO VG + DIN 51506/тип компрессора",
+      "category_code": "C",
+      "product_form": "Масло",
+      "application": "Стоматологические",
+      "industry": null,
+      "specifications": [
+        "ISO VG 46",
+        "ASTM D4304 (компрессорные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.150-10014",
+      "skp_code": "19.20.29.150",
+      "skp_name": "Масла компрессорные",
+      "technical_profile_id": "C-VG68-DAA-MI",
+      "standardized_name_ru": "Масла компрессорные, ISO VG 68, ASTM D4304 (компрессорные), основа: Минеральное, назначение: Поршневые возд. комп.",
+      "professional_key_rule": "ISO VG + DIN 51506/тип компрессора",
+      "category_code": "C",
+      "product_form": "Масло",
+      "application": "Поршневые возд. комп.",
+      "industry": null,
+      "specifications": [
+        "ISO VG 68",
+        "ASTM D4304 (компрессорные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.150-10015",
+      "skp_code": "19.20.29.150",
+      "skp_name": "Масла компрессорные",
+      "technical_profile_id": "C-VG68-DAH-SY",
+      "standardized_name_ru": "Масла компрессорные, ISO VG 68, ASTM D4304 (компрессорные), основа: Синтетика, назначение: Винтовые универс.",
+      "professional_key_rule": "ISO VG + DIN 51506/тип компрессора",
+      "category_code": "C",
+      "product_form": "Масло",
+      "application": "Винтовые универс.",
+      "industry": null,
+      "specifications": [
+        "ISO VG 68",
+        "ASTM D4304 (компрессорные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.150-10016",
+      "skp_code": "19.20.29.150",
+      "skp_name": "Масла компрессорные",
+      "technical_profile_id": "C-VG68-DRA-MI",
+      "standardized_name_ru": "Масла компрессорные, ISO VG 68, ASTM D4304 (компрессорные), основа: Нафтеновое, назначение: Холодильные NH₃",
+      "professional_key_rule": "ISO VG + DIN 51506/тип компрессора",
+      "category_code": "C",
+      "product_form": "Масло",
+      "application": "Холодильные NH₃",
+      "industry": null,
+      "specifications": [
+        "ISO VG 68",
+        "ASTM D4304 (компрессорные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.150-10017",
+      "skp_code": "19.20.29.150",
+      "skp_name": "Масла компрессорные",
+      "technical_profile_id": "C-VG68-DRE-POE",
+      "standardized_name_ru": "Масла компрессорные, ISO VG 68, ASTM D4304 (компрессорные), основа: ПОЭ эфиры, назначение: Холодильные R134a",
+      "professional_key_rule": "ISO VG + DIN 51506/тип компрессора",
+      "category_code": "C",
+      "product_form": "Масло",
+      "application": "Холодильные R134a",
+      "industry": null,
+      "specifications": [
+        "ISO VG 68",
+        "ASTM D4304 (компрессорные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.172-10001",
+      "skp_code": "19.20.29.172",
+      "skp_name": "Масла электроизоляционные",
+      "technical_profile_id": "E-CABLE-MI",
+      "standardized_name_ru": "Масла электроизоляционные, ASTM D3487 (трансформаторные), основа: Минеральное, назначение: Кабели высоковольтные",
+      "professional_key_rule": "IEC/ГОСТ/ASTM + тип оборудования",
+      "category_code": "E",
+      "product_form": "Масло",
+      "application": "Кабели высоковольтные",
+      "industry": null,
+      "specifications": [
+        "ASTM D3487 (трансформаторные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.172-10002",
+      "skp_code": "19.20.29.172",
+      "skp_name": "Масла электроизоляционные",
+      "technical_profile_id": "E-CABLE-SY",
+      "standardized_name_ru": "Масла электроизоляционные, ASTM D3487 (трансформаторные), основа: Синтетика, назначение: Кабели спец.",
+      "professional_key_rule": "IEC/ГОСТ/ASTM + тип оборудования",
+      "category_code": "E",
+      "product_form": "Масло",
+      "application": "Кабели спец.",
+      "industry": null,
+      "specifications": [
+        "ASTM D3487 (трансформаторные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.172-10003",
+      "skp_code": "19.20.29.172",
+      "skp_name": "Масла электроизоляционные",
+      "technical_profile_id": "E-CAP-GOST",
+      "standardized_name_ru": "Масла электроизоляционные, ASTM D3487 (трансформаторные), основа: Минеральное, назначение: Конденсаторы",
+      "professional_key_rule": "IEC/ГОСТ/ASTM + тип оборудования",
+      "category_code": "E",
+      "product_form": "Масло",
+      "application": "Конденсаторы",
+      "industry": null,
+      "specifications": [
+        "ASTM D3487 (трансформаторные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.172-10004",
+      "skp_code": "19.20.29.172",
+      "skp_name": "Масла электроизоляционные",
+      "technical_profile_id": "E-CAP-IMP-MI",
+      "standardized_name_ru": "Масла электроизоляционные, ASTM D3487 (трансформаторные), основа: Минеральное, назначение: Силовые конденсаторы",
+      "professional_key_rule": "IEC/ГОСТ/ASTM + тип оборудования",
+      "category_code": "E",
+      "product_form": "Масло",
+      "application": "Силовые конденсаторы",
+      "industry": null,
+      "specifications": [
+        "ASTM D3487 (трансформаторные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.172-10005",
+      "skp_code": "19.20.29.172",
+      "skp_name": "Масла электроизоляционные",
+      "technical_profile_id": "E-SWITCH-MI",
+      "standardized_name_ru": "Масла электроизоляционные, ASTM D3487 (трансформаторные), основа: Минеральное, назначение: Выключатели",
+      "professional_key_rule": "IEC/ГОСТ/ASTM + тип оборудования",
+      "category_code": "E",
+      "product_form": "Масло",
+      "application": "Выключатели",
+      "industry": null,
+      "specifications": [
+        "ASTM D3487 (трансформаторные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.172-10006",
+      "skp_code": "19.20.29.172",
+      "skp_name": "Масла электроизоляционные",
+      "technical_profile_id": "E-SWITCH-SY",
+      "standardized_name_ru": "Масла электроизоляционные, ASTM D3487 (трансформаторные), основа: Синтетика, назначение: Выключатели совр.",
+      "professional_key_rule": "IEC/ГОСТ/ASTM + тип оборудования",
+      "category_code": "E",
+      "product_form": "Масло",
+      "application": "Выключатели совр.",
+      "industry": null,
+      "specifications": [
+        "ASTM D3487 (трансформаторные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.172-10007",
+      "skp_code": "19.20.29.172",
+      "skp_name": "Масла электроизоляционные",
+      "technical_profile_id": "E-TR-EST-SY",
+      "standardized_name_ru": "Масла электроизоляционные, ASTM D3487 (трансформаторные), основа: Синт. эфиры, назначение: Биоразлаг. трансф.",
+      "professional_key_rule": "IEC/ГОСТ/ASTM + тип оборудования",
+      "category_code": "E",
+      "product_form": "Масло",
+      "application": "Биоразлаг. трансф.",
+      "industry": null,
+      "specifications": [
+        "ASTM D3487 (трансформаторные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.172-10008",
+      "skp_code": "19.20.29.172",
+      "skp_name": "Масла электроизоляционные",
+      "technical_profile_id": "E-TR-GOST-MI",
+      "standardized_name_ru": "Масла электроизоляционные, ASTM D3487 (трансформаторные), основа: Минеральное, назначение: Трансформаторы отеч.",
+      "professional_key_rule": "IEC/ГОСТ/ASTM + тип оборудования",
+      "category_code": "E",
+      "product_form": "Масло",
+      "application": "Трансформаторы отеч.",
+      "industry": null,
+      "specifications": [
+        "ASTM D3487 (трансформаторные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.172-10009",
+      "skp_code": "19.20.29.172",
+      "skp_name": "Масла электроизоляционные",
+      "technical_profile_id": "E-TR-HT-SY",
+      "standardized_name_ru": "Масла электроизоляционные, ASTM D3487 (трансформаторные), основа: Синтетика, назначение: Высокотемпературные",
+      "professional_key_rule": "IEC/ГОСТ/ASTM + тип оборудования",
+      "category_code": "E",
+      "product_form": "Масло",
+      "application": "Высокотемпературные",
+      "industry": null,
+      "specifications": [
+        "ASTM D3487 (трансформаторные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.172-10010",
+      "skp_code": "19.20.29.172",
+      "skp_name": "Масла электроизоляционные",
+      "technical_profile_id": "E-TR-IEC-MI-N",
+      "standardized_name_ru": "Масла электроизоляционные, ASTM D3487 (трансформаторные), основа: Нафтеновое, назначение: Трансформаторы",
+      "professional_key_rule": "IEC/ГОСТ/ASTM + тип оборудования",
+      "category_code": "E",
+      "product_form": "Масло",
+      "application": "Трансформаторы",
+      "industry": null,
+      "specifications": [
+        "ASTM D3487 (трансформаторные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.172-10011",
+      "skp_code": "19.20.29.172",
+      "skp_name": "Масла электроизоляционные",
+      "technical_profile_id": "E-TR-IEC-MI-P",
+      "standardized_name_ru": "Масла электроизоляционные, ASTM D3487 (трансформаторные), основа: Парафиновое, назначение: Трансформаторы",
+      "professional_key_rule": "IEC/ГОСТ/ASTM + тип оборудования",
+      "category_code": "E",
+      "product_form": "Масло",
+      "application": "Трансформаторы",
+      "industry": null,
+      "specifications": [
+        "ASTM D3487 (трансформаторные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.172-10012",
+      "skp_code": "19.20.29.172",
+      "skp_name": "Масла электроизоляционные",
+      "technical_profile_id": "E-TR-SIL-SY",
+      "standardized_name_ru": "Масла электроизоляционные, ASTM D3487 (трансформаторные), основа: Силиконовое, назначение: Негорючие трансф.",
+      "professional_key_rule": "IEC/ГОСТ/ASTM + тип оборудования",
+      "category_code": "E",
+      "product_form": "Масло",
+      "application": "Негорючие трансф.",
+      "industry": null,
+      "specifications": [
+        "ASTM D3487 (трансформаторные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.210-10001",
+      "skp_code": "19.20.29.210",
+      "skp_name": "Смазки пластичные",
+      "technical_profile_id": "G-NL00-CENT",
+      "standardized_name_ru": "Смазки пластичные, загуститель: Литий, NLGI 00, ASTM D4950 (пластичные смазки), назначение: Центр. системы смазки",
+      "professional_key_rule": "загуститель + NLGI + DIN 51502 + назначение",
+      "category_code": "G",
+      "product_form": "Пластичная смазка",
+      "application": "Центр. системы смазки",
+      "industry": null,
+      "specifications": [
+        "NLGI 00",
+        "ASTM D4950 (пластичные смазки)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.210-10002",
+      "skp_code": "19.20.29.210",
+      "skp_name": "Смазки пластичные",
+      "technical_profile_id": "G-NL000-FLUID",
+      "standardized_name_ru": "Смазки пластичные, загуститель: Литий, NLGI 000, ASTM D4950 (пластичные смазки), назначение: Авто центр. системы",
+      "professional_key_rule": "загуститель + NLGI + DIN 51502 + назначение",
+      "category_code": "G",
+      "product_form": "Пластичная смазка",
+      "application": "Авто центр. системы",
+      "industry": null,
+      "specifications": [
+        "NLGI 000",
+        "ASTM D4950 (пластичные смазки)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.210-10003",
+      "skp_code": "19.20.29.210",
+      "skp_name": "Смазки пластичные",
+      "technical_profile_id": "G-NL1-LI-LT",
+      "standardized_name_ru": "Смазки пластичные, загуститель: Литий, NLGI 1, ASTM D4950 (пластичные смазки), назначение: Низкие температуры",
+      "professional_key_rule": "загуститель + NLGI + DIN 51502 + назначение",
+      "category_code": "G",
+      "product_form": "Пластичная смазка",
+      "application": "Низкие температуры",
+      "industry": null,
+      "specifications": [
+        "NLGI 1",
+        "ASTM D4950 (пластичные смазки)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.210-10004",
+      "skp_code": "19.20.29.210",
+      "skp_name": "Смазки пластичные",
+      "technical_profile_id": "G-NL1-PFPE-VAC",
+      "standardized_name_ru": "Смазки пластичные, загуститель: PFPE, NLGI 1, ASTM D4950 (пластичные смазки), назначение: Космос, вакуум",
+      "professional_key_rule": "загуститель + NLGI + DIN 51502 + назначение",
+      "category_code": "G",
+      "product_form": "Пластичная смазка",
+      "application": "Космос, вакуум",
+      "industry": null,
+      "specifications": [
+        "NLGI 1",
+        "ASTM D4950 (пластичные смазки)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.210-10005",
+      "skp_code": "19.20.29.210",
+      "skp_name": "Смазки пластичные",
+      "technical_profile_id": "G-NL1-PU-FOOD",
+      "standardized_name_ru": "Смазки пластичные, загуститель: Полимочевина, NLGI 1, ASTM D4950 (пластичные смазки), назначение: Пищевое оборудов.",
+      "professional_key_rule": "загуститель + NLGI + DIN 51502 + назначение",
+      "category_code": "G",
+      "product_form": "Пластичная смазка",
+      "application": "Пищевое оборудов.",
+      "industry": null,
+      "specifications": [
+        "NLGI 1",
+        "ASTM D4950 (пластичные смазки)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.210-10006",
+      "skp_code": "19.20.29.210",
+      "skp_name": "Смазки пластичные",
+      "technical_profile_id": "G-NL1-SI-VAC",
+      "standardized_name_ru": "Смазки пластичные, загуститель: Силикон, NLGI 1, ASTM D4950 (пластичные смазки), назначение: Вакуумные системы",
+      "professional_key_rule": "загуститель + NLGI + DIN 51502 + назначение",
+      "category_code": "G",
+      "product_form": "Пластичная смазка",
+      "application": "Вакуумные системы",
+      "industry": null,
+      "specifications": [
+        "NLGI 1",
+        "ASTM D4950 (пластичные смазки)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.210-10007",
+      "skp_code": "19.20.29.210",
+      "skp_name": "Смазки пластичные",
+      "technical_profile_id": "G-NL2-AL-FOOD",
+      "standardized_name_ru": "Смазки пластичные, загуститель: Алюминий, NLGI 2, ASTM D4950 (пластичные смазки), назначение: Пищевая промышл.",
+      "professional_key_rule": "загуститель + NLGI + DIN 51502 + назначение",
+      "category_code": "G",
+      "product_form": "Пластичная смазка",
+      "application": "Пищевая промышл.",
+      "industry": null,
+      "specifications": [
+        "NLGI 2",
+        "ASTM D4950 (пластичные смазки)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.210-10008",
+      "skp_code": "19.20.29.210",
+      "skp_name": "Смазки пластичные",
+      "technical_profile_id": "G-NL2-AL-WATER",
+      "standardized_name_ru": "Смазки пластичные, загуститель: Алюминий, NLGI 2, ASTM D4950 (пластичные смазки), назначение: Влажная среда",
+      "professional_key_rule": "загуститель + NLGI + DIN 51502 + назначение",
+      "category_code": "G",
+      "product_form": "Пластичная смазка",
+      "application": "Влажная среда",
+      "industry": null,
+      "specifications": [
+        "NLGI 2",
+        "ASTM D4950 (пластичные смазки)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.210-10009",
+      "skp_code": "19.20.29.210",
+      "skp_name": "Смазки пластичные",
+      "technical_profile_id": "G-NL2-BE-ARC",
+      "standardized_name_ru": "Смазки пластичные, загуститель: Бентонит, NLGI 2, ASTM D4950 (пластичные смазки), назначение: Полярные станции",
+      "professional_key_rule": "загуститель + NLGI + DIN 51502 + назначение",
+      "category_code": "G",
+      "product_form": "Пластичная смазка",
+      "application": "Полярные станции",
+      "industry": null,
+      "specifications": [
+        "NLGI 2",
+        "ASTM D4950 (пластичные смазки)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.210-10010",
+      "skp_code": "19.20.29.210",
+      "skp_name": "Смазки пластичные",
+      "technical_profile_id": "G-NL2-BE-HT",
+      "standardized_name_ru": "Смазки пластичные, загуститель: Бентонит, NLGI 2, ASTM D4950 (пластичные смазки), назначение: Высокие температуры",
+      "professional_key_rule": "загуститель + NLGI + DIN 51502 + назначение",
+      "category_code": "G",
+      "product_form": "Пластичная смазка",
+      "application": "Высокие температуры",
+      "industry": null,
+      "specifications": [
+        "NLGI 2",
+        "ASTM D4950 (пластичные смазки)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.210-10011",
+      "skp_code": "19.20.29.210",
+      "skp_name": "Смазки пластичные",
+      "technical_profile_id": "G-NL2-BE-LT",
+      "standardized_name_ru": "Смазки пластичные, загуститель: Бентонит, NLGI 2, ASTM D4950 (пластичные смазки), назначение: Арктика, авиация",
+      "professional_key_rule": "загуститель + NLGI + DIN 51502 + назначение",
+      "category_code": "G",
+      "product_form": "Пластичная смазка",
+      "application": "Арктика, авиация",
+      "industry": null,
+      "specifications": [
+        "NLGI 2",
+        "ASTM D4950 (пластичные смазки)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.210-10012",
+      "skp_code": "19.20.29.210",
+      "skp_name": "Смазки пластичные",
+      "technical_profile_id": "G-NL2-CA-WATER",
+      "standardized_name_ru": "Смазки пластичные, загуститель: Кальций, NLGI 2, ASTM D4950 (пластичные смазки), назначение: Влажные условия",
+      "professional_key_rule": "загуститель + NLGI + DIN 51502 + назначение",
+      "category_code": "G",
+      "product_form": "Пластичная смазка",
+      "application": "Влажные условия",
+      "industry": null,
+      "specifications": [
+        "NLGI 2",
+        "ASTM D4950 (пластичные смазки)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.210-10013",
+      "skp_code": "19.20.29.210",
+      "skp_name": "Смазки пластичные",
+      "technical_profile_id": "G-NL2-CAC-WATER",
+      "standardized_name_ru": "Смазки пластичные, загуститель: Кальций компл., NLGI 2, ASTM D4950 (пластичные смазки), назначение: Морская среда",
+      "professional_key_rule": "загуститель + NLGI + DIN 51502 + назначение",
+      "category_code": "G",
+      "product_form": "Пластичная смазка",
+      "application": "Морская среда",
+      "industry": null,
+      "specifications": [
+        "NLGI 2",
+        "ASTM D4950 (пластичные смазки)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.210-10014",
+      "skp_code": "19.20.29.210",
+      "skp_name": "Смазки пластичные",
+      "technical_profile_id": "G-NL2-COPPER",
+      "standardized_name_ru": "Смазки пластичные, загуститель: Медь+литий, NLGI 2-3, ASTM D4950 (пластичные смазки), назначение: Резьбы, тормоза",
+      "professional_key_rule": "загуститель + NLGI + DIN 51502 + назначение",
+      "category_code": "G",
+      "product_form": "Пластичная смазка",
+      "application": "Резьбы, тормоза",
+      "industry": null,
+      "specifications": [
+        "NLGI 2-3",
+        "ASTM D4950 (пластичные смазки)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.210-10015",
+      "skp_code": "19.20.29.210",
+      "skp_name": "Смазки пластичные",
+      "technical_profile_id": "G-NL2-GRAPH-HT",
+      "standardized_name_ru": "Смазки пластичные, загуститель: Бентонит+графит, NLGI 2, ASTM D4950 (пластичные смазки), назначение: Высокотемп.",
+      "professional_key_rule": "загуститель + NLGI + DIN 51502 + назначение",
+      "category_code": "G",
+      "product_form": "Пластичная смазка",
+      "application": "Высокотемп.",
+      "industry": null,
+      "specifications": [
+        "NLGI 2",
+        "ASTM D4950 (пластичные смазки)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.210-10016",
+      "skp_code": "19.20.29.210",
+      "skp_name": "Смазки пластичные",
+      "technical_profile_id": "G-NL2-LI-EP",
+      "standardized_name_ru": "Смазки пластичные, загуститель: Литий, NLGI 2, ASTM D4950 (пластичные смазки), назначение: Высокие нагрузки",
+      "professional_key_rule": "загуститель + NLGI + DIN 51502 + назначение",
+      "category_code": "G",
+      "product_form": "Пластичная смазка",
+      "application": "Высокие нагрузки",
+      "industry": null,
+      "specifications": [
+        "NLGI 2",
+        "ASTM D4950 (пластичные смазки)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.210-10017",
+      "skp_code": "19.20.29.210",
+      "skp_name": "Смазки пластичные",
+      "technical_profile_id": "G-NL2-LI-MO",
+      "standardized_name_ru": "Смазки пластичные, загуститель: Литий, NLGI 2, ASTM D4950 (пластичные смазки), назначение: Экстрем. давление",
+      "professional_key_rule": "загуститель + NLGI + DIN 51502 + назначение",
+      "category_code": "G",
+      "product_form": "Пластичная смазка",
+      "application": "Экстрем. давление",
+      "industry": null,
+      "specifications": [
+        "NLGI 2",
+        "ASTM D4950 (пластичные смазки)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.210-10018",
+      "skp_code": "19.20.29.210",
+      "skp_name": "Смазки пластичные",
+      "technical_profile_id": "G-NL2-LI-STD",
+      "standardized_name_ru": "Смазки пластичные, загуститель: Литий, NLGI 2, ASTM D4950 (пластичные смазки), назначение: Универсальная",
+      "professional_key_rule": "загуститель + NLGI + DIN 51502 + назначение",
+      "category_code": "G",
+      "product_form": "Пластичная смазка",
+      "application": "Универсальная",
+      "industry": null,
+      "specifications": [
+        "NLGI 2",
+        "ASTM D4950 (пластичные смазки)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.210-10019",
+      "skp_code": "19.20.29.210",
+      "skp_name": "Смазки пластичные",
+      "technical_profile_id": "G-NL2-LIC-EP",
+      "standardized_name_ru": "Смазки пластичные, загуститель: Литий компл., NLGI 2, ASTM D4950 (пластичные смазки), назначение: Влажная среда",
+      "professional_key_rule": "загуститель + NLGI + DIN 51502 + назначение",
+      "category_code": "G",
+      "product_form": "Пластичная смазка",
+      "application": "Влажная среда",
+      "industry": null,
+      "specifications": [
+        "NLGI 2",
+        "ASTM D4950 (пластичные смазки)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.210-10020",
+      "skp_code": "19.20.29.210",
+      "skp_name": "Смазки пластичные",
+      "technical_profile_id": "G-NL2-LIC-HT",
+      "standardized_name_ru": "Смазки пластичные, загуститель: Литий компл., NLGI 2, ASTM D4950 (пластичные смазки), назначение: Высокие темп.",
+      "professional_key_rule": "загуститель + NLGI + DIN 51502 + назначение",
+      "category_code": "G",
+      "product_form": "Пластичная смазка",
+      "application": "Высокие темп.",
+      "industry": null,
+      "specifications": [
+        "NLGI 2",
+        "ASTM D4950 (пластичные смазки)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.210-10021",
+      "skp_code": "19.20.29.210",
+      "skp_name": "Смазки пластичные",
+      "technical_profile_id": "G-NL2-PFPE-CHEM",
+      "standardized_name_ru": "Смазки пластичные, загуститель: PFPE, NLGI 2, ASTM D4950 (пластичные смазки), назначение: Химия, агрессив. среды",
+      "professional_key_rule": "загуститель + NLGI + DIN 51502 + назначение",
+      "category_code": "G",
+      "product_form": "Пластичная смазка",
+      "application": "Химия, агрессив. среды",
+      "industry": null,
+      "specifications": [
+        "NLGI 2",
+        "ASTM D4950 (пластичные смазки)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.210-10022",
+      "skp_code": "19.20.29.210",
+      "skp_name": "Смазки пластичные",
+      "technical_profile_id": "G-NL2-PFPE-CRYO",
+      "standardized_name_ru": "Смазки пластичные, загуститель: PFPE, NLGI 2, ASTM D4950 (пластичные смазки), назначение: СПГ, криогеника",
+      "professional_key_rule": "загуститель + NLGI + DIN 51502 + назначение",
+      "category_code": "G",
+      "product_form": "Пластичная смазка",
+      "application": "СПГ, криогеника",
+      "industry": null,
+      "specifications": [
+        "NLGI 2",
+        "ASTM D4950 (пластичные смазки)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.210-10023",
+      "skp_code": "19.20.29.210",
+      "skp_name": "Смазки пластичные",
+      "technical_profile_id": "G-NL2-PFPE-OX",
+      "standardized_name_ru": "Смазки пластичные, загуститель: PTFE+PFPE, NLGI 2, ASTM D4950 (пластичные смазки), назначение: Кислород, LOX",
+      "professional_key_rule": "загуститель + NLGI + DIN 51502 + назначение",
+      "category_code": "G",
+      "product_form": "Пластичная смазка",
+      "application": "Кислород, LOX",
+      "industry": null,
+      "specifications": [
+        "NLGI 2",
+        "ASTM D4950 (пластичные смазки)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.210-10024",
+      "skp_code": "19.20.29.210",
+      "skp_name": "Смазки пластичные",
+      "technical_profile_id": "G-NL2-PU-HT",
+      "standardized_name_ru": "Смазки пластичные, загуститель: Полимочевина, NLGI 2, ASTM D4950 (пластичные смазки), назначение: Высокотемп. подшипн.",
+      "professional_key_rule": "загуститель + NLGI + DIN 51502 + назначение",
+      "category_code": "G",
+      "product_form": "Пластичная смазка",
+      "application": "Высокотемп. подшипн.",
+      "industry": null,
+      "specifications": [
+        "NLGI 2",
+        "ASTM D4950 (пластичные смазки)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.210-10025",
+      "skp_code": "19.20.29.210",
+      "skp_name": "Смазки пластичные",
+      "technical_profile_id": "G-NL2-PU-UHT",
+      "standardized_name_ru": "Смазки пластичные, загуститель: Полимочевина, NLGI 2, ASTM D4950 (пластичные смазки), назначение: Экстрем. температуры",
+      "professional_key_rule": "загуститель + NLGI + DIN 51502 + назначение",
+      "category_code": "G",
+      "product_form": "Пластичная смазка",
+      "application": "Экстрем. температуры",
+      "industry": null,
+      "specifications": [
+        "NLGI 2",
+        "ASTM D4950 (пластичные смазки)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.210-10026",
+      "skp_code": "19.20.29.210",
+      "skp_name": "Смазки пластичные",
+      "technical_profile_id": "G-NL2-RAIL",
+      "standardized_name_ru": "Смазки пластичные, загуститель: Литий компл., NLGI 2, ASTM D4950 (пластичные смазки), назначение: Буксы вагонов",
+      "professional_key_rule": "загуститель + NLGI + DIN 51502 + назначение",
+      "category_code": "G",
+      "product_form": "Пластичная смазка",
+      "application": "Буксы вагонов",
+      "industry": null,
+      "specifications": [
+        "NLGI 2",
+        "ASTM D4950 (пластичные смазки)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.210-10027",
+      "skp_code": "19.20.29.210",
+      "skp_name": "Смазки пластичные",
+      "technical_profile_id": "G-NL2-SI-FOOD",
+      "standardized_name_ru": "Смазки пластичные, загуститель: Силикон, NLGI 2, ASTM D4950 (пластичные смазки), назначение: Пищевое оборудов.",
+      "professional_key_rule": "загуститель + NLGI + DIN 51502 + назначение",
+      "category_code": "G",
+      "product_form": "Пластичная смазка",
+      "application": "Пищевое оборудов.",
+      "industry": null,
+      "specifications": [
+        "NLGI 2",
+        "ASTM D4950 (пластичные смазки)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.210-10028",
+      "skp_code": "19.20.29.210",
+      "skp_name": "Смазки пластичные",
+      "technical_profile_id": "G-NL2-SI-PLAST",
+      "standardized_name_ru": "Смазки пластичные, загуститель: Силикон, NLGI 2, ASTM D4950 (пластичные смазки), назначение: Пластмассы, резина",
+      "professional_key_rule": "загуститель + NLGI + DIN 51502 + назначение",
+      "category_code": "G",
+      "product_form": "Пластичная смазка",
+      "application": "Пластмассы, резина",
+      "industry": null,
+      "specifications": [
+        "NLGI 2",
+        "ASTM D4950 (пластичные смазки)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.210-10029",
+      "skp_code": "19.20.29.210",
+      "skp_name": "Смазки пластичные",
+      "technical_profile_id": "G-NL3-GRAPH",
+      "standardized_name_ru": "Смазки пластичные, загуститель: Литий+графит, NLGI 3, ASTM D4950 (пластичные смазки), назначение: Открытые передачи",
+      "professional_key_rule": "загуститель + NLGI + DIN 51502 + назначение",
+      "category_code": "G",
+      "product_form": "Пластичная смазка",
+      "application": "Открытые передачи",
+      "industry": null,
+      "specifications": [
+        "NLGI 3",
+        "ASTM D4950 (пластичные смазки)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.210-10030",
+      "skp_code": "19.20.29.210",
+      "skp_name": "Смазки пластичные",
+      "technical_profile_id": "G-NL3-LI-HT",
+      "standardized_name_ru": "Смазки пластичные, загуститель: Литий, NLGI 3, ASTM D4950 (пластичные смазки), назначение: Подшипники высокооб.",
+      "professional_key_rule": "загуститель + NLGI + DIN 51502 + назначение",
+      "category_code": "G",
+      "product_form": "Пластичная смазка",
+      "application": "Подшипники высокооб.",
+      "industry": null,
+      "specifications": [
+        "NLGI 3",
+        "ASTM D4950 (пластичные смазки)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.210-10031",
+      "skp_code": "19.20.29.210",
+      "skp_name": "Смазки пластичные",
+      "technical_profile_id": "G-NL3-LIC-MULTI",
+      "standardized_name_ru": "Смазки пластичные, загуститель: Литий компл., NLGI 3, ASTM D4950 (пластичные смазки), назначение: Многоцелевая",
+      "professional_key_rule": "загуститель + NLGI + DIN 51502 + назначение",
+      "category_code": "G",
+      "product_form": "Пластичная смазка",
+      "application": "Многоцелевая",
+      "industry": null,
+      "specifications": [
+        "NLGI 3",
+        "ASTM D4950 (пластичные смазки)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.210-10032",
+      "skp_code": "19.20.29.210",
+      "skp_name": "Смазки пластичные",
+      "technical_profile_id": "G-NL4-HARD",
+      "standardized_name_ru": "Смазки пластичные, загуститель: Литий, NLGI 4, ASTM D4950 (пластичные смазки), назначение: Открытые зубчатые",
+      "professional_key_rule": "загуститель + NLGI + DIN 51502 + назначение",
+      "category_code": "G",
+      "product_form": "Пластичная смазка",
+      "application": "Открытые зубчатые",
+      "industry": null,
+      "specifications": [
+        "NLGI 4",
+        "ASTM D4950 (пластичные смазки)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.130-10001",
+      "skp_code": "19.20.29.130",
+      "skp_name": "Масла гидравлические",
+      "technical_profile_id": "H-VG100-HLP-MI",
+      "standardized_name_ru": "Масла гидравлические, ISO VG 100, ASTM D6158 (гидравлические HM), основа: Минеральное, назначение: Пресса, тяжелые нагр.",
+      "professional_key_rule": "ISO VG + DIN/ISO эксплуатационный класс",
+      "category_code": "H",
+      "product_form": "Масло",
+      "application": "Пресса, тяжелые нагр.",
+      "industry": null,
+      "specifications": [
+        "ISO VG 100",
+        "ASTM D6158 (гидравлические HM)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.130-10002",
+      "skp_code": "19.20.29.130",
+      "skp_name": "Масла гидравлические",
+      "technical_profile_id": "H-VG15-HLP-MI",
+      "standardized_name_ru": "Масла гидравлические, ISO VG 15, ASTM D6158 (гидравлические HM), основа: Минеральное, назначение: Низкотемпературные системы",
+      "professional_key_rule": "ISO VG + DIN/ISO эксплуатационный класс",
+      "category_code": "H",
+      "product_form": "Масло",
+      "application": "Низкотемпературные системы",
+      "industry": null,
+      "specifications": [
+        "ISO VG 15",
+        "ASTM D6158 (гидравлические HM)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.130-10003",
+      "skp_code": "19.20.29.130",
+      "skp_name": "Масла гидравлические",
+      "technical_profile_id": "H-VG15-HVLP-SY",
+      "standardized_name_ru": "Масла гидравлические, ISO VG 15, ASTM D6158 (гидравлические HM), основа: Синтетика, назначение: Арктика",
+      "professional_key_rule": "ISO VG + DIN/ISO эксплуатационный класс",
+      "category_code": "H",
+      "product_form": "Масло",
+      "application": "Арктика",
+      "industry": null,
+      "specifications": [
+        "ISO VG 15",
+        "ASTM D6158 (гидравлические HM)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.130-10004",
+      "skp_code": "19.20.29.130",
+      "skp_name": "Масла гидравлические",
+      "technical_profile_id": "H-VG22-HLP-MI",
+      "standardized_name_ru": "Масла гидравлические, ISO VG 22, ASTM D6158 (гидравлические HM), основа: Минеральное, назначение: Легкие гидросистемы",
+      "professional_key_rule": "ISO VG + DIN/ISO эксплуатационный класс",
+      "category_code": "H",
+      "product_form": "Масло",
+      "application": "Легкие гидросистемы",
+      "industry": null,
+      "specifications": [
+        "ISO VG 22",
+        "ASTM D6158 (гидравлические HM)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.130-10005",
+      "skp_code": "19.20.29.130",
+      "skp_name": "Масла гидравлические",
+      "technical_profile_id": "H-VG22-HVLP-SY",
+      "standardized_name_ru": "Масла гидравлические, ISO VG 22, ASTM D6158 (гидравлические HM), основа: Синтетика, назначение: Крайний Север",
+      "professional_key_rule": "ISO VG + DIN/ISO эксплуатационный класс",
+      "category_code": "H",
+      "product_form": "Масло",
+      "application": "Крайний Север",
+      "industry": null,
+      "specifications": [
+        "ISO VG 22",
+        "ASTM D6158 (гидравлические HM)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.130-10006",
+      "skp_code": "19.20.29.130",
+      "skp_name": "Масла гидравлические",
+      "technical_profile_id": "H-VG32-ARC-SY",
+      "standardized_name_ru": "Масла гидравлические, ISO VG 32, ASTM D6158 (гидравлические HM), основа: Синтетика, назначение: Полярные станции",
+      "professional_key_rule": "ISO VG + DIN/ISO эксплуатационный класс",
+      "category_code": "H",
+      "product_form": "Масло",
+      "application": "Полярные станции",
+      "industry": null,
+      "specifications": [
+        "ISO VG 32",
+        "ASTM D6158 (гидравлические HM)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.130-10007",
+      "skp_code": "19.20.29.130",
+      "skp_name": "Масла гидравлические",
+      "technical_profile_id": "H-VG32-HLP-MI",
+      "standardized_name_ru": "Масла гидравлические, ISO VG 32, ASTM D6158 (гидравлические HM), основа: Минеральное, назначение: Станки, гидравлика",
+      "professional_key_rule": "ISO VG + DIN/ISO эксплуатационный класс",
+      "category_code": "H",
+      "product_form": "Масло",
+      "application": "Станки, гидравлика",
+      "industry": null,
+      "specifications": [
+        "ISO VG 32",
+        "ASTM D6158 (гидравлические HM)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.130-10008",
+      "skp_code": "19.20.29.130",
+      "skp_name": "Масла гидравлические",
+      "technical_profile_id": "H-VG32-HVLP-SY",
+      "standardized_name_ru": "Масла гидравлические, ISO VG 32, ASTM D6158 (гидравлические HM), основа: Синтетика, назначение: Мобильная техника",
+      "professional_key_rule": "ISO VG + DIN/ISO эксплуатационный класс",
+      "category_code": "H",
+      "product_form": "Масло",
+      "application": "Мобильная техника",
+      "industry": null,
+      "specifications": [
+        "ISO VG 32",
+        "ASTM D6158 (гидравлические HM)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.130-10009",
+      "skp_code": "19.20.29.130",
+      "skp_name": "Масла гидравлические",
+      "technical_profile_id": "H-VG32-NSF-FG",
+      "standardized_name_ru": "Масла гидравлические, ISO VG 32, ASTM D6158 (гидравлические HM), основа: Пищевое, назначение: Пищевое оборудов.",
+      "professional_key_rule": "ISO VG + DIN/ISO эксплуатационный класс",
+      "category_code": "H",
+      "product_form": "Масло",
+      "application": "Пищевое оборудов.",
+      "industry": null,
+      "specifications": [
+        "ISO VG 32",
+        "ASTM D6158 (гидравлические HM)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.130-10010",
+      "skp_code": "19.20.29.130",
+      "skp_name": "Масла гидравлические",
+      "technical_profile_id": "H-VG46-HEES-BIO",
+      "standardized_name_ru": "Масла гидравлические, ISO VG 46, ASTM D6158 (гидравлические HM), основа: Эфиры синт., назначение: Лесное хозяйство",
+      "professional_key_rule": "ISO VG + DIN/ISO эксплуатационный класс",
+      "category_code": "H",
+      "product_form": "Масло",
+      "application": "Лесное хозяйство",
+      "industry": null,
+      "specifications": [
+        "ISO VG 46",
+        "ASTM D6158 (гидравлические HM)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.130-10011",
+      "skp_code": "19.20.29.130",
+      "skp_name": "Масла гидравлические",
+      "technical_profile_id": "H-VG46-HEPG-BIO",
+      "standardized_name_ru": "Масла гидравлические, ISO VG 46, ASTM D6158 (гидравлические HM), основа: Полигликоли, назначение: Пищевая промышл.",
+      "professional_key_rule": "ISO VG + DIN/ISO эксплуатационный класс",
+      "category_code": "H",
+      "product_form": "Масло",
+      "application": "Пищевая промышл.",
+      "industry": null,
+      "specifications": [
+        "ISO VG 46",
+        "ASTM D6158 (гидравлические HM)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.130-10012",
+      "skp_code": "19.20.29.130",
+      "skp_name": "Масла гидравлические",
+      "technical_profile_id": "H-VG46-HETG-BIO",
+      "standardized_name_ru": "Масла гидравлические, ISO VG 46, ASTM D6158 (гидравлические HM), основа: Эфиры, назначение: Экологические зоны",
+      "professional_key_rule": "ISO VG + DIN/ISO эксплуатационный класс",
+      "category_code": "H",
+      "product_form": "Масло",
+      "application": "Экологические зоны",
+      "industry": null,
+      "specifications": [
+        "ISO VG 46",
+        "ASTM D6158 (гидравлические HM)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.130-10013",
+      "skp_code": "19.20.29.130",
+      "skp_name": "Масла гидравлические",
+      "technical_profile_id": "H-VG46-HFC-FIRE",
+      "standardized_name_ru": "Масла гидравлические, ISO VG 46, ASTM D6158 (гидравлические HM), основа: Водно-гликоль, назначение: Литейное произв.",
+      "professional_key_rule": "ISO VG + DIN/ISO эксплуатационный класс",
+      "category_code": "H",
+      "product_form": "Масло",
+      "application": "Литейное произв.",
+      "industry": null,
+      "specifications": [
+        "ISO VG 46",
+        "ASTM D6158 (гидравлические HM)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.130-10014",
+      "skp_code": "19.20.29.130",
+      "skp_name": "Масла гидравлические",
+      "technical_profile_id": "H-VG46-HFDR-FIRE",
+      "standardized_name_ru": "Масла гидравлические, ISO VG 46, ASTM D6158 (гидравлические HM), основа: Эфиры фосфорные, назначение: Пожароопасные зоны",
+      "professional_key_rule": "ISO VG + DIN/ISO эксплуатационный класс",
+      "category_code": "H",
+      "product_form": "Масло",
+      "application": "Пожароопасные зоны",
+      "industry": null,
+      "specifications": [
+        "ISO VG 46",
+        "ASTM D6158 (гидравлические HM)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.130-10015",
+      "skp_code": "19.20.29.130",
+      "skp_name": "Масла гидравлические",
+      "technical_profile_id": "H-VG46-HFDU-FIRE",
+      "standardized_name_ru": "Масла гидравлические, ISO VG 46, ASTM D6158 (гидравлические HM), основа: Синтетика, назначение: Высокая пожароопасн.",
+      "professional_key_rule": "ISO VG + DIN/ISO эксплуатационный класс",
+      "category_code": "H",
+      "product_form": "Масло",
+      "application": "Высокая пожароопасн.",
+      "industry": null,
+      "specifications": [
+        "ISO VG 46",
+        "ASTM D6158 (гидравлические HM)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.130-10016",
+      "skp_code": "19.20.29.130",
+      "skp_name": "Масла гидравлические",
+      "technical_profile_id": "H-VG46-HLP-MI",
+      "standardized_name_ru": "Масла гидравлические, ISO VG 46, ASTM D6158 (гидравлические HM), основа: Минеральное, назначение: Универсальное",
+      "professional_key_rule": "ISO VG + DIN/ISO эксплуатационный класс",
+      "category_code": "H",
+      "product_form": "Масло",
+      "application": "Универсальное",
+      "industry": null,
+      "specifications": [
+        "ISO VG 46",
+        "ASTM D6158 (гидравлические HM)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.130-10017",
+      "skp_code": "19.20.29.130",
+      "skp_name": "Масла гидравлические",
+      "technical_profile_id": "H-VG46-HVLP-SY",
+      "standardized_name_ru": "Масла гидравлические, ISO VG 46, ASTM D6158 (гидравлические HM), основа: Синтетика, назначение: Строительная техника",
+      "professional_key_rule": "ISO VG + DIN/ISO эксплуатационный класс",
+      "category_code": "H",
+      "product_form": "Масло",
+      "application": "Строительная техника",
+      "industry": null,
+      "specifications": [
+        "ISO VG 46",
+        "ASTM D6158 (гидравлические HM)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.130-10018",
+      "skp_code": "19.20.29.130",
+      "skp_name": "Масла гидравлические",
+      "technical_profile_id": "H-VG46-LOW-TEMP",
+      "standardized_name_ru": "Масла гидравлические, ISO VG 46, ASTM D6158 (гидравлические HM), основа: ПАО, назначение: Авиация наземная",
+      "professional_key_rule": "ISO VG + DIN/ISO эксплуатационный класс",
+      "category_code": "H",
+      "product_form": "Масло",
+      "application": "Авиация наземная",
+      "industry": null,
+      "specifications": [
+        "ISO VG 46",
+        "ASTM D6158 (гидравлические HM)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.130-10019",
+      "skp_code": "19.20.29.130",
+      "skp_name": "Масла гидравлические",
+      "technical_profile_id": "H-VG68-HLP-MI",
+      "standardized_name_ru": "Масла гидравлические, ISO VG 68, ASTM D6158 (гидравлические HM), основа: Минеральное, назначение: Высоконагруженные",
+      "professional_key_rule": "ISO VG + DIN/ISO эксплуатационный класс",
+      "category_code": "H",
+      "product_form": "Масло",
+      "application": "Высоконагруженные",
+      "industry": null,
+      "specifications": [
+        "ISO VG 68",
+        "ASTM D6158 (гидравлические HM)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.130-10020",
+      "skp_code": "19.20.29.130",
+      "skp_name": "Масла гидравлические",
+      "technical_profile_id": "H-VG68-HVLP-SS",
+      "standardized_name_ru": "Масла гидравлические, ISO VG 68, ASTM D6158 (гидравлические HM), основа: Полусинтетика, назначение: Мобильные машины",
+      "professional_key_rule": "ISO VG + DIN/ISO эксплуатационный класс",
+      "category_code": "H",
+      "product_form": "Масло",
+      "application": "Мобильные машины",
+      "industry": null,
+      "specifications": [
+        "ISO VG 68",
+        "ASTM D6158 (гидравлические HM)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.130-10021",
+      "skp_code": "19.20.29.130",
+      "skp_name": "Масла гидравлические",
+      "technical_profile_id": "H-VG68-MARINE",
+      "standardized_name_ru": "Масла гидравлические, ISO VG 68, ASTM D6158 (гидравлические HM), основа: Минеральное, назначение: Судовая гидравлика",
+      "professional_key_rule": "ISO VG + DIN/ISO эксплуатационный класс",
+      "category_code": "H",
+      "product_form": "Масло",
+      "application": "Судовая гидравлика",
+      "industry": null,
+      "specifications": [
+        "ISO VG 68",
+        "ASTM D6158 (гидравлические HM)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.140-10001",
+      "skp_code": "19.20.29.140",
+      "skp_name": "Масла индустриальные",
+      "technical_profile_id": "I-SOL-EMUL-SS",
+      "standardized_name_ru": "Масла индустриальные, ГОСТ ВМГЗ, ASTM D6158 (индустриальные), основа: Эмульсол, назначение: Эмульсия 1:20",
+      "professional_key_rule": "ISO VG + DIN/ISO/ГОСТ + назначение",
+      "category_code": "I",
+      "product_form": "Масло",
+      "application": "Эмульсия 1:20",
+      "industry": null,
+      "specifications": [
+        "ГОСТ ВМГЗ",
+        "ASTM D6158 (индустриальные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.140-10002",
+      "skp_code": "19.20.29.140",
+      "skp_name": "Масла индустриальные",
+      "technical_profile_id": "I-SOL-MH-MI",
+      "standardized_name_ru": "Масла индустриальные, ГОСТ МР-7, ASTM D6158 (индустриальные), основа: Масляная СОЖ, назначение: Токарные, фрезерные",
+      "professional_key_rule": "ISO VG + DIN/ISO/ГОСТ + назначение",
+      "category_code": "I",
+      "product_form": "Масло",
+      "application": "Токарные, фрезерные",
+      "industry": null,
+      "specifications": [
+        "ГОСТ МР-7",
+        "ASTM D6158 (индустриальные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.140-10003",
+      "skp_code": "19.20.29.140",
+      "skp_name": "Масла индустриальные",
+      "technical_profile_id": "I-SOL-SEMI-SY",
+      "standardized_name_ru": "Масла индустриальные, ГОСТ Спец.ТУ, ASTM D6158 (индустриальные), основа: Полусинтетика, назначение: Прецизионная обработка",
+      "professional_key_rule": "ISO VG + DIN/ISO/ГОСТ + назначение",
+      "category_code": "I",
+      "product_form": "Масло",
+      "application": "Прецизионная обработка",
+      "industry": null,
+      "specifications": [
+        "ГОСТ Спец.ТУ",
+        "ASTM D6158 (индустриальные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.140-10004",
+      "skp_code": "19.20.29.140",
+      "skp_name": "Масла индустриальные",
+      "technical_profile_id": "I-SOL-SYNTH-SY",
+      "standardized_name_ru": "Масла индустриальные, ГОСТ Спец.ТУ, ASTM D6158 (индустриальные), основа: Синт. СОЖ, назначение: Высокоскоростная",
+      "professional_key_rule": "ISO VG + DIN/ISO/ГОСТ + назначение",
+      "category_code": "I",
+      "product_form": "Масло",
+      "application": "Высокоскоростная",
+      "industry": null,
+      "specifications": [
+        "ГОСТ Спец.ТУ",
+        "ASTM D6158 (индустриальные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.140-10005",
+      "skp_code": "19.20.29.140",
+      "skp_name": "Масла индустриальные",
+      "technical_profile_id": "I-VG10-TEXT-MI",
+      "standardized_name_ru": "Масла индустриальные, ISO VG 10, ГОСТ И-8А, ASTM D6158 (индустриальные), основа: Текстильное, назначение: Текстильное оборудов.",
+      "professional_key_rule": "ISO VG + DIN/ISO/ГОСТ + назначение",
+      "category_code": "I",
+      "product_form": "Масло",
+      "application": "Текстильное оборудов.",
+      "industry": null,
+      "specifications": [
+        "ISO VG 10",
+        "ГОСТ И-8А",
+        "ASTM D6158 (индустриальные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.140-10006",
+      "skp_code": "19.20.29.140",
+      "skp_name": "Масла индустриальные",
+      "technical_profile_id": "I-VG100-CLP-SY",
+      "standardized_name_ru": "Масла индустриальные, ISO VG 100, ГОСТ И-Т-Д-100, ASTM D6158 (индустриальные), основа: CLP, назначение: Редукторы средние",
+      "professional_key_rule": "ISO VG + DIN/ISO/ГОСТ + назначение",
+      "category_code": "I",
+      "product_form": "Масло",
+      "application": "Редукторы средние",
+      "industry": null,
+      "specifications": [
+        "ISO VG 100",
+        "ГОСТ И-Т-Д-100",
+        "ASTM D6158 (индустриальные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.140-10007",
+      "skp_code": "19.20.29.140",
+      "skp_name": "Масла индустриальные",
+      "technical_profile_id": "I-VG100-VAC-SY",
+      "standardized_name_ru": "Масла индустриальные, ISO VG 100, ГОСТ Спец.ТУ, ASTM D6158 (индустриальные), основа: Вакуумное, назначение: Высоковакуумные",
+      "professional_key_rule": "ISO VG + DIN/ISO/ГОСТ + назначение",
+      "category_code": "I",
+      "product_form": "Масло",
+      "application": "Высоковакуумные",
+      "industry": null,
+      "specifications": [
+        "ISO VG 100",
+        "ГОСТ Спец.ТУ",
+        "ASTM D6158 (индустриальные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.140-10008",
+      "skp_code": "19.20.29.140",
+      "skp_name": "Масла индустриальные",
+      "technical_profile_id": "I-VG150-CLP-MI",
+      "standardized_name_ru": "Масла индустриальные, ISO VG 150, ГОСТ И-Т-Д-150, ASTM D6158 (индустриальные), основа: CLP, назначение: Редукторы минеральное",
+      "professional_key_rule": "ISO VG + DIN/ISO/ГОСТ + назначение",
+      "category_code": "I",
+      "product_form": "Масло",
+      "application": "Редукторы минеральное",
+      "industry": null,
+      "specifications": [
+        "ISO VG 150",
+        "ГОСТ И-Т-Д-150",
+        "ASTM D6158 (индустриальные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.140-10009",
+      "skp_code": "19.20.29.140",
+      "skp_name": "Масла индустриальные",
+      "technical_profile_id": "I-VG150-ROLLING",
+      "standardized_name_ru": "Масла индустриальные, ISO VG 150, ГОСТ Спец.ТУ, ASTM D6158 (индустриальные), основа: Rolling, назначение: Прокатка стали",
+      "professional_key_rule": "ISO VG + DIN/ISO/ГОСТ + назначение",
+      "category_code": "I",
+      "product_form": "Масло",
+      "application": "Прокатка стали",
+      "industry": null,
+      "specifications": [
+        "ISO VG 150",
+        "ГОСТ Спец.ТУ",
+        "ASTM D6158 (индустриальные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.140-10010",
+      "skp_code": "19.20.29.140",
+      "skp_name": "Масла индустриальные",
+      "technical_profile_id": "I-VG220-CGLP-MI",
+      "standardized_name_ru": "Масла индустриальные, ISO VG 220, ГОСТ И-Н-С-220, ASTM D6158 (индустриальные), основа: CGLP, назначение: Тяжелые направляющие",
+      "professional_key_rule": "ISO VG + DIN/ISO/ГОСТ + назначение",
+      "category_code": "I",
+      "product_form": "Масло",
+      "application": "Тяжелые направляющие",
+      "industry": null,
+      "specifications": [
+        "ISO VG 220",
+        "ГОСТ И-Н-С-220",
+        "ASTM D6158 (индустриальные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.140-10011",
+      "skp_code": "19.20.29.140",
+      "skp_name": "Масла индустриальные",
+      "technical_profile_id": "I-VG220-CLP-MI",
+      "standardized_name_ru": "Масла индустриальные, ISO VG 220, ГОСТ И-Т-Д-220, ASTM D6158 (индустриальные), основа: CLP, назначение: Тяжелые редукторы",
+      "professional_key_rule": "ISO VG + DIN/ISO/ГОСТ + назначение",
+      "category_code": "I",
+      "product_form": "Масло",
+      "application": "Тяжелые редукторы",
+      "industry": null,
+      "specifications": [
+        "ISO VG 220",
+        "ГОСТ И-Т-Д-220",
+        "ASTM D6158 (индустриальные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.140-10012",
+      "skp_code": "19.20.29.140",
+      "skp_name": "Масла индустриальные",
+      "technical_profile_id": "I-VG220-ROLLING",
+      "standardized_name_ru": "Масла индустриальные, ISO VG 220, ГОСТ Спец.ТУ, ASTM D6158 (индустриальные), основа: Rolling, назначение: Горячая прокатка",
+      "professional_key_rule": "ISO VG + DIN/ISO/ГОСТ + назначение",
+      "category_code": "I",
+      "product_form": "Масло",
+      "application": "Горячая прокатка",
+      "industry": null,
+      "specifications": [
+        "ISO VG 220",
+        "ГОСТ Спец.ТУ",
+        "ASTM D6158 (индустриальные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.140-10013",
+      "skp_code": "19.20.29.140",
+      "skp_name": "Масла индустриальные",
+      "technical_profile_id": "I-VG32-CGLP-MI",
+      "standardized_name_ru": "Масла индустриальные, ISO VG 32, ГОСТ И-Н-С-32, ASTM D6158 (индустриальные), основа: CGLP, назначение: Направляющие станков",
+      "professional_key_rule": "ISO VG + DIN/ISO/ГОСТ + назначение",
+      "category_code": "I",
+      "product_form": "Масло",
+      "application": "Направляющие станков",
+      "industry": null,
+      "specifications": [
+        "ISO VG 32",
+        "ГОСТ И-Н-С-32",
+        "ASTM D6158 (индустриальные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.140-10014",
+      "skp_code": "19.20.29.140",
+      "skp_name": "Масла индустриальные",
+      "technical_profile_id": "I-VG32-CKC-MI",
+      "standardized_name_ru": "Масла индустриальные, ISO VG 32, ГОСТ И-Л-С-32, ASTM D6158 (индустриальные), основа: CKC, назначение: Подшипники скольжения",
+      "professional_key_rule": "ISO VG + DIN/ISO/ГОСТ + назначение",
+      "category_code": "I",
+      "product_form": "Масло",
+      "application": "Подшипники скольжения",
+      "industry": null,
+      "specifications": [
+        "ISO VG 32",
+        "ГОСТ И-Л-С-32",
+        "ASTM D6158 (индустриальные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.140-10015",
+      "skp_code": "19.20.29.140",
+      "skp_name": "Масла индустриальные",
+      "technical_profile_id": "I-VG32-HEAT-SY",
+      "standardized_name_ru": "Масла индустриальные, ISO VG 32, ГОСТ Спец.ТУ, ASTM D6158 (индустриальные), основа: Heat Transfer, назначение: Теплоносители",
+      "professional_key_rule": "ISO VG + DIN/ISO/ГОСТ + назначение",
+      "category_code": "I",
+      "product_form": "Масло",
+      "application": "Теплоносители",
+      "industry": null,
+      "specifications": [
+        "ISO VG 32",
+        "ГОСТ Спец.ТУ",
+        "ASTM D6158 (индустриальные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.140-10016",
+      "skp_code": "19.20.29.140",
+      "skp_name": "Масла индустриальные",
+      "technical_profile_id": "I-VG320-CLP-MI",
+      "standardized_name_ru": "Масла индустриальные, ISO VG 320, ГОСТ И-Т-Д-320, ASTM D6158 (индустриальные), основа: CLP, назначение: Крупные редукторы",
+      "professional_key_rule": "ISO VG + DIN/ISO/ГОСТ + назначение",
+      "category_code": "I",
+      "product_form": "Масло",
+      "application": "Крупные редукторы",
+      "industry": null,
+      "specifications": [
+        "ISO VG 320",
+        "ГОСТ И-Т-Д-320",
+        "ASTM D6158 (индустриальные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.140-10017",
+      "skp_code": "19.20.29.140",
+      "skp_name": "Масла индустриальные",
+      "technical_profile_id": "I-VG46-CKC-MI",
+      "standardized_name_ru": "Масла индустриальные, ISO VG 46, ГОСТ И-Л-С-46, ASTM D6158 (индустриальные), основа: CKC, назначение: Циркуляц. системы",
+      "professional_key_rule": "ISO VG + DIN/ISO/ГОСТ + назначение",
+      "category_code": "I",
+      "product_form": "Масло",
+      "application": "Циркуляц. системы",
+      "industry": null,
+      "specifications": [
+        "ISO VG 46",
+        "ГОСТ И-Л-С-46",
+        "ASTM D6158 (индустриальные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.140-10018",
+      "skp_code": "19.20.29.140",
+      "skp_name": "Масла индустриальные",
+      "technical_profile_id": "I-VG46-HEAT-SY",
+      "standardized_name_ru": "Масла индустриальные, ISO VG 46, ГОСТ Спец.ТУ, ASTM D6158 (индустриальные), основа: Heat Transfer, назначение: Высокотемп. системы",
+      "professional_key_rule": "ISO VG + DIN/ISO/ГОСТ + назначение",
+      "category_code": "I",
+      "product_form": "Масло",
+      "application": "Высокотемп. системы",
+      "industry": null,
+      "specifications": [
+        "ISO VG 46",
+        "ГОСТ Спец.ТУ",
+        "ASTM D6158 (индустриальные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.140-10019",
+      "skp_code": "19.20.29.140",
+      "skp_name": "Масла индустриальные",
+      "technical_profile_id": "I-VG460-CLP-MI",
+      "standardized_name_ru": "Масла индустриальные, ISO VG 460, ГОСТ И-Т-Д-460, ASTM D6158 (индустриальные), основа: CLP, назначение: Тихоходные редукторы",
+      "professional_key_rule": "ISO VG + DIN/ISO/ГОСТ + назначение",
+      "category_code": "I",
+      "product_form": "Масло",
+      "application": "Тихоходные редукторы",
+      "industry": null,
+      "specifications": [
+        "ISO VG 460",
+        "ГОСТ И-Т-Д-460",
+        "ASTM D6158 (индустриальные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.140-10020",
+      "skp_code": "19.20.29.140",
+      "skp_name": "Масла индустриальные",
+      "technical_profile_id": "I-VG5-TEXT-MI",
+      "standardized_name_ru": "Масла индустриальные, ISO VG 5, ГОСТ И-5А, ASTM D6158 (индустриальные), основа: Текстильное, назначение: Прядильные машины",
+      "professional_key_rule": "ISO VG + DIN/ISO/ГОСТ + назначение",
+      "category_code": "I",
+      "product_form": "Масло",
+      "application": "Прядильные машины",
+      "industry": null,
+      "specifications": [
+        "ISO VG 5",
+        "ГОСТ И-5А",
+        "ASTM D6158 (индустриальные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.140-10021",
+      "skp_code": "19.20.29.140",
+      "skp_name": "Масла индустриальные",
+      "technical_profile_id": "I-VG68-CGLP-MI",
+      "standardized_name_ru": "Масла индустриальные, ISO VG 68, ГОСТ И-Н-С-68, ASTM D6158 (индустриальные), основа: CGLP, назначение: Направляющие средние",
+      "professional_key_rule": "ISO VG + DIN/ISO/ГОСТ + назначение",
+      "category_code": "I",
+      "product_form": "Масло",
+      "application": "Направляющие средние",
+      "industry": null,
+      "specifications": [
+        "ISO VG 68",
+        "ГОСТ И-Н-С-68",
+        "ASTM D6158 (индустриальные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.140-10022",
+      "skp_code": "19.20.29.140",
+      "skp_name": "Масла индустриальные",
+      "technical_profile_id": "I-VG68-CKC-MI",
+      "standardized_name_ru": "Масла индустриальные, ISO VG 68, ГОСТ И-Л-С-68, ASTM D6158 (индустриальные), основа: CKC, назначение: Подшипники средние",
+      "professional_key_rule": "ISO VG + DIN/ISO/ГОСТ + назначение",
+      "category_code": "I",
+      "product_form": "Масло",
+      "application": "Подшипники средние",
+      "industry": null,
+      "specifications": [
+        "ISO VG 68",
+        "ГОСТ И-Л-С-68",
+        "ASTM D6158 (индустриальные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.140-10023",
+      "skp_code": "19.20.29.140",
+      "skp_name": "Масла индустриальные",
+      "technical_profile_id": "I-VG68-CLP-SY",
+      "standardized_name_ru": "Масла индустриальные, ISO VG 68, ГОСТ И-Т-Д-68, ASTM D6158 (индустриальные), основа: CLP, назначение: Редукторы синтетика",
+      "professional_key_rule": "ISO VG + DIN/ISO/ГОСТ + назначение",
+      "category_code": "I",
+      "product_form": "Масло",
+      "application": "Редукторы синтетика",
+      "industry": null,
+      "specifications": [
+        "ISO VG 68",
+        "ГОСТ И-Т-Д-68",
+        "ASTM D6158 (индустриальные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.140-10024",
+      "skp_code": "19.20.29.140",
+      "skp_name": "Масла индустриальные",
+      "technical_profile_id": "I-VG68-VAC-SY",
+      "standardized_name_ru": "Масла индустриальные, ISO VG 68, ГОСТ Спец.ТУ, ASTM D6158 (индустриальные), основа: Вакуумное, назначение: Вакуумные насосы",
+      "professional_key_rule": "ISO VG + DIN/ISO/ГОСТ + назначение",
+      "category_code": "I",
+      "product_form": "Масло",
+      "application": "Вакуумные насосы",
+      "industry": null,
+      "specifications": [
+        "ISO VG 68",
+        "ГОСТ Спец.ТУ",
+        "ASTM D6158 (индустриальные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.110-10001",
+      "skp_code": "19.20.29.110",
+      "skp_name": "Масла моторные",
+      "technical_profile_id": "M-0W20-SP-SY",
+      "standardized_name_ru": "Масла моторные, SAE 0W-20, API SP, ACEA C5, ASTM D4485 (моторные масла), основа: Синтетика, назначение: Совр. бензин, Low SAPS",
+      "professional_key_rule": "SAE + API/ACEA + тип базового масла",
+      "category_code": "M",
+      "product_form": "Масло",
+      "application": "Совр. бензин, Low SAPS",
+      "industry": null,
+      "specifications": [
+        "SAE 0W-20",
+        "API SP",
+        "ACEA C5",
+        "ASTM D4485 (моторные масла)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.110-10002",
+      "skp_code": "19.20.29.110",
+      "skp_name": "Масла моторные",
+      "technical_profile_id": "M-0W30-SP-SY",
+      "standardized_name_ru": "Масла моторные, SAE 0W-30, API SP, ACEA C3, ASTM D4485 (моторные масла), основа: Синтетика, назначение: Универс. всесезонное",
+      "professional_key_rule": "SAE + API/ACEA + тип базового масла",
+      "category_code": "M",
+      "product_form": "Масло",
+      "application": "Универс. всесезонное",
+      "industry": null,
+      "specifications": [
+        "SAE 0W-30",
+        "API SP",
+        "ACEA C3",
+        "ASTM D4485 (моторные масла)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.110-10003",
+      "skp_code": "19.20.29.110",
+      "skp_name": "Масла моторные",
+      "technical_profile_id": "M-0W40-SP-SY",
+      "standardized_name_ru": "Масла моторные, SAE 0W-40, API SP, ACEA A3/B4, ASTM D4485 (моторные масла), основа: Синтетика, назначение: Спортивные двигатели",
+      "professional_key_rule": "SAE + API/ACEA + тип базового масла",
+      "category_code": "M",
+      "product_form": "Масло",
+      "application": "Спортивные двигатели",
+      "industry": null,
+      "specifications": [
+        "SAE 0W-40",
+        "API SP",
+        "ACEA A3/B4",
+        "ASTM D4485 (моторные масла)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.110-10004",
+      "skp_code": "19.20.29.110",
+      "skp_name": "Масла моторные",
+      "technical_profile_id": "M-10W30-CK-SY",
+      "standardized_name_ru": "Масла моторные, SAE 10W-30, API CK-4, ACEA E9, ASTM D4485 (моторные масла), основа: Синтетика, назначение: Грузовые Euro VI",
+      "professional_key_rule": "SAE + API/ACEA + тип базового масла",
+      "category_code": "M",
+      "product_form": "Масло",
+      "application": "Грузовые Euro VI",
+      "industry": null,
+      "specifications": [
+        "SAE 10W-30",
+        "API CK-4",
+        "ACEA E9",
+        "ASTM D4485 (моторные масла)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.110-10005",
+      "skp_code": "19.20.29.110",
+      "skp_name": "Масла моторные",
+      "technical_profile_id": "M-10W40-CI-MI",
+      "standardized_name_ru": "Масла моторные, SAE 10W-40, API CI-4, ACEA E7, ASTM D4485 (моторные масла), основа: Минеральное, назначение: Старые дизели",
+      "professional_key_rule": "SAE + API/ACEA + тип базового масла",
+      "category_code": "M",
+      "product_form": "Масло",
+      "application": "Старые дизели",
+      "industry": null,
+      "specifications": [
+        "SAE 10W-40",
+        "API CI-4",
+        "ACEA E7",
+        "ASTM D4485 (моторные масла)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.110-10006",
+      "skp_code": "19.20.29.110",
+      "skp_name": "Масла моторные",
+      "technical_profile_id": "M-10W40-CK-SS",
+      "standardized_name_ru": "Масла моторные, SAE 10W-40, API CK-4, ACEA E9, ASTM D4485 (моторные масла), основа: Полусинтетика, назначение: Грузовики Euro V-VI",
+      "professional_key_rule": "SAE + API/ACEA + тип базового масла",
+      "category_code": "M",
+      "product_form": "Масло",
+      "application": "Грузовики Euro V-VI",
+      "industry": null,
+      "specifications": [
+        "SAE 10W-40",
+        "API CK-4",
+        "ACEA E9",
+        "ASTM D4485 (моторные масла)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.110-10007",
+      "skp_code": "19.20.29.110",
+      "skp_name": "Масла моторные",
+      "technical_profile_id": "M-10W40-SN-MI",
+      "standardized_name_ru": "Масла моторные, SAE 10W-40, API SN, ACEA A3/B3, ASTM D4485 (моторные масла), основа: Минеральное, назначение: Бюджет, старые авто",
+      "professional_key_rule": "SAE + API/ACEA + тип базового масла",
+      "category_code": "M",
+      "product_form": "Масло",
+      "application": "Бюджет, старые авто",
+      "industry": null,
+      "specifications": [
+        "SAE 10W-40",
+        "API SN",
+        "ACEA A3/B3",
+        "ASTM D4485 (моторные масла)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.110-10008",
+      "skp_code": "19.20.29.110",
+      "skp_name": "Масла моторные",
+      "technical_profile_id": "M-10W40-SN-SS",
+      "standardized_name_ru": "Масла моторные, SAE 10W-40, API SN, ACEA A3/B4, ASTM D4485 (моторные масла), основа: Полусинтетика, назначение: Универсальное",
+      "professional_key_rule": "SAE + API/ACEA + тип базового масла",
+      "category_code": "M",
+      "product_form": "Масло",
+      "application": "Универсальное",
+      "industry": null,
+      "specifications": [
+        "SAE 10W-40",
+        "API SN",
+        "ACEA A3/B4",
+        "ASTM D4485 (моторные масла)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.110-10009",
+      "skp_code": "19.20.29.110",
+      "skp_name": "Масла моторные",
+      "technical_profile_id": "M-10W40-SNCF-SS",
+      "standardized_name_ru": "Масла моторные, SAE 10W-40, API SN/CF, ACEA A3/B4, ASTM D4485 (моторные масла), основа: Полусинтетика, назначение: Смешанный парк",
+      "professional_key_rule": "SAE + API/ACEA + тип базового масла",
+      "category_code": "M",
+      "product_form": "Масло",
+      "application": "Смешанный парк",
+      "industry": null,
+      "specifications": [
+        "SAE 10W-40",
+        "API SN/CF",
+        "ACEA A3/B4",
+        "ASTM D4485 (моторные масла)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.110-10010",
+      "skp_code": "19.20.29.110",
+      "skp_name": "Масла моторные",
+      "technical_profile_id": "M-15W40-CJ-MI",
+      "standardized_name_ru": "Масла моторные, SAE 15W-40, API CJ-4, ACEA E7, ASTM D4485 (моторные масла), основа: Минеральное, назначение: Грузовики Euro IV-V",
+      "professional_key_rule": "SAE + API/ACEA + тип базового масла",
+      "category_code": "M",
+      "product_form": "Масло",
+      "application": "Грузовики Euro IV-V",
+      "industry": null,
+      "specifications": [
+        "SAE 15W-40",
+        "API CJ-4",
+        "ACEA E7",
+        "ASTM D4485 (моторные масла)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.110-10011",
+      "skp_code": "19.20.29.110",
+      "skp_name": "Масла моторные",
+      "technical_profile_id": "M-15W40-CK-MI",
+      "standardized_name_ru": "Масла моторные, SAE 15W-40, API CK-4, ACEA E7, ASTM D4485 (моторные масла), основа: Минеральное, назначение: Грузовики, тяжелая техника",
+      "professional_key_rule": "SAE + API/ACEA + тип базового масла",
+      "category_code": "M",
+      "product_form": "Масло",
+      "application": "Грузовики, тяжелая техника",
+      "industry": null,
+      "specifications": [
+        "SAE 15W-40",
+        "API CK-4",
+        "ACEA E7",
+        "ASTM D4485 (моторные масла)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.110-10012",
+      "skp_code": "19.20.29.110",
+      "skp_name": "Масла моторные",
+      "technical_profile_id": "M-15W40-SN-MI",
+      "standardized_name_ru": "Масла моторные, SAE 15W-40, API SN, ACEA A3/B3, ASTM D4485 (моторные масла), основа: Минеральное, назначение: Летнее, жаркий климат",
+      "professional_key_rule": "SAE + API/ACEA + тип базового масла",
+      "category_code": "M",
+      "product_form": "Масло",
+      "application": "Летнее, жаркий климат",
+      "industry": null,
+      "specifications": [
+        "SAE 15W-40",
+        "API SN",
+        "ACEA A3/B3",
+        "ASTM D4485 (моторные масла)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.110-10013",
+      "skp_code": "19.20.29.110",
+      "skp_name": "Масла моторные",
+      "technical_profile_id": "M-15W40-SNCF-MI",
+      "standardized_name_ru": "Масла моторные, SAE 15W-40, API SN/CF, ACEA A3/B4, ASTM D4485 (моторные масла), основа: Минеральное, назначение: Универс. старые авто",
+      "professional_key_rule": "SAE + API/ACEA + тип базового масла",
+      "category_code": "M",
+      "product_form": "Масло",
+      "application": "Универс. старые авто",
+      "industry": null,
+      "specifications": [
+        "SAE 15W-40",
+        "API SN/CF",
+        "ACEA A3/B4",
+        "ASTM D4485 (моторные масла)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.110-10014",
+      "skp_code": "19.20.29.110",
+      "skp_name": "Масла моторные",
+      "technical_profile_id": "M-20W50-SN-MI",
+      "standardized_name_ru": "Масла моторные, SAE 20W-50, API SN, ASTM D4485 (моторные масла), основа: Минеральное, назначение: Старые двигатели",
+      "professional_key_rule": "SAE + API/ACEA + тип базового масла",
+      "category_code": "M",
+      "product_form": "Масло",
+      "application": "Старые двигатели",
+      "industry": null,
+      "specifications": [
+        "SAE 20W-50",
+        "API SN",
+        "ASTM D4485 (моторные масла)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.110-10015",
+      "skp_code": "19.20.29.110",
+      "skp_name": "Масла моторные",
+      "technical_profile_id": "M-5W20-SP-SY",
+      "standardized_name_ru": "Масла моторные, SAE 5W-20, API SP, ACEA C5, ASTM D4485 (моторные масла), основа: Синтетика, назначение: Японские, Ford",
+      "professional_key_rule": "SAE + API/ACEA + тип базового масла",
+      "category_code": "M",
+      "product_form": "Масло",
+      "application": "Японские, Ford",
+      "industry": null,
+      "specifications": [
+        "SAE 5W-20",
+        "API SP",
+        "ACEA C5",
+        "ASTM D4485 (моторные масла)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.110-10016",
+      "skp_code": "19.20.29.110",
+      "skp_name": "Масла моторные",
+      "technical_profile_id": "M-5W30-CK-SY",
+      "standardized_name_ru": "Масла моторные, SAE 5W-30, API CK-4, ACEA C3, ASTM D4485 (моторные масла), основа: Синтетика, назначение: Легковые дизели Euro 6",
+      "professional_key_rule": "SAE + API/ACEA + тип базового масла",
+      "category_code": "M",
+      "product_form": "Масло",
+      "application": "Легковые дизели Euro 6",
+      "industry": null,
+      "specifications": [
+        "SAE 5W-30",
+        "API CK-4",
+        "ACEA C3",
+        "ASTM D4485 (моторные масла)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.110-10017",
+      "skp_code": "19.20.29.110",
+      "skp_name": "Масла моторные",
+      "technical_profile_id": "M-5W30-SNCF-SY",
+      "standardized_name_ru": "Масла моторные, SAE 5W-30, API SN/CF, ACEA C3, ASTM D4485 (моторные масла), основа: Синтетика, назначение: Бензин+дизель",
+      "professional_key_rule": "SAE + API/ACEA + тип базового масла",
+      "category_code": "M",
+      "product_form": "Масло",
+      "application": "Бензин+дизель",
+      "industry": null,
+      "specifications": [
+        "SAE 5W-30",
+        "API SN/CF",
+        "ACEA C3",
+        "ASTM D4485 (моторные масла)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.110-10018",
+      "skp_code": "19.20.29.110",
+      "skp_name": "Масла моторные",
+      "technical_profile_id": "M-5W30-SP-SS",
+      "standardized_name_ru": "Масла моторные, SAE 5W-30, API SP, ACEA C3, ASTM D4485 (моторные масла), основа: Полусинтетика, назначение: Бюджетное универс.",
+      "professional_key_rule": "SAE + API/ACEA + тип базового масла",
+      "category_code": "M",
+      "product_form": "Масло",
+      "application": "Бюджетное универс.",
+      "industry": null,
+      "specifications": [
+        "SAE 5W-30",
+        "API SP",
+        "ACEA C3",
+        "ASTM D4485 (моторные масла)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.110-10019",
+      "skp_code": "19.20.29.110",
+      "skp_name": "Масла моторные",
+      "technical_profile_id": "M-5W30-SP-SY",
+      "standardized_name_ru": "Масла моторные, SAE 5W-30, API SP, ACEA C3, ASTM D4485 (моторные масла), основа: Синтетика, назначение: Наиболее популярное",
+      "professional_key_rule": "SAE + API/ACEA + тип базового масла",
+      "category_code": "M",
+      "product_form": "Масло",
+      "application": "Наиболее популярное",
+      "industry": null,
+      "specifications": [
+        "SAE 5W-30",
+        "API SP",
+        "ACEA C3",
+        "ASTM D4485 (моторные масла)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.110-10020",
+      "skp_code": "19.20.29.110",
+      "skp_name": "Масла моторные",
+      "technical_profile_id": "M-5W40-SP-SY",
+      "standardized_name_ru": "Масла моторные, SAE 5W-40, API SP, ACEA A3/B4, ASTM D4485 (моторные масла), основа: Синтетика, назначение: Европейские турбо",
+      "professional_key_rule": "SAE + API/ACEA + тип базового масла",
+      "category_code": "M",
+      "product_form": "Масло",
+      "application": "Европейские турбо",
+      "industry": null,
+      "specifications": [
+        "SAE 5W-40",
+        "API SP",
+        "ACEA A3/B4",
+        "ASTM D4485 (моторные масла)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.110-10021",
+      "skp_code": "19.20.29.110",
+      "skp_name": "Масла моторные",
+      "technical_profile_id": "M-AV23699-SY",
+      "standardized_name_ru": "Масла моторные, API MIL-PRF-23699, ASTM D4485 (моторные масла), основа: Синтетика, назначение: Турбореактивные",
+      "professional_key_rule": "SAE + API/ACEA + тип базового масла",
+      "category_code": "M",
+      "product_form": "Масло",
+      "application": "Турбореактивные",
+      "industry": null,
+      "specifications": [
+        "API MIL-PRF-23699",
+        "ASTM D4485 (моторные масла)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.110-10022",
+      "skp_code": "19.20.29.110",
+      "skp_name": "Масла моторные",
+      "technical_profile_id": "M-AV65-MI",
+      "standardized_name_ru": "Масла моторные, SAE 65, ASTM D4485 (моторные масла), основа: Минеральное, назначение: Поршневые авиадвиг.",
+      "professional_key_rule": "SAE + API/ACEA + тип базового масла",
+      "category_code": "M",
+      "product_form": "Масло",
+      "application": "Поршневые авиадвиг.",
+      "industry": null,
+      "specifications": [
+        "SAE 65",
+        "ASTM D4485 (моторные масла)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.110-10023",
+      "skp_code": "19.20.29.110",
+      "skp_name": "Масла моторные",
+      "technical_profile_id": "M-AV7808-SY",
+      "standardized_name_ru": "Масла моторные, API MIL-PRF-7808, ASTM D4485 (моторные масла), основа: Синтетика, назначение: ГТД, вспомогательные",
+      "professional_key_rule": "SAE + API/ACEA + тип базового масла",
+      "category_code": "M",
+      "product_form": "Масло",
+      "application": "ГТД, вспомогательные",
+      "industry": null,
+      "specifications": [
+        "API MIL-PRF-7808",
+        "ASTM D4485 (моторные масла)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.110-10024",
+      "skp_code": "19.20.29.110",
+      "skp_name": "Масла моторные",
+      "technical_profile_id": "M-GAS40-CJ-SS",
+      "standardized_name_ru": "Масла моторные, SAE 40, API CJ-4, ASTM D4485 (моторные масла), основа: Полусинтетика, назначение: Газовые двигатели",
+      "professional_key_rule": "SAE + API/ACEA + тип базового масла",
+      "category_code": "M",
+      "product_form": "Масло",
+      "application": "Газовые двигатели",
+      "industry": null,
+      "specifications": [
+        "SAE 40",
+        "API CJ-4",
+        "ASTM D4485 (моторные масла)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.110-10025",
+      "skp_code": "19.20.29.110",
+      "skp_name": "Масла моторные",
+      "technical_profile_id": "M-GAS40-CK-SY",
+      "standardized_name_ru": "Масла моторные, SAE 40, API CK-4, ASTM D4485 (моторные масла), основа: Синтетика, назначение: Газопоршневые ТЭЦ",
+      "professional_key_rule": "SAE + API/ACEA + тип базового масла",
+      "category_code": "M",
+      "product_form": "Масло",
+      "application": "Газопоршневые ТЭЦ",
+      "industry": null,
+      "specifications": [
+        "SAE 40",
+        "API CK-4",
+        "ASTM D4485 (моторные масла)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.110-10026",
+      "skp_code": "19.20.29.110",
+      "skp_name": "Масла моторные",
+      "technical_profile_id": "M-MAR30-MI",
+      "standardized_name_ru": "Масла моторные, SAE 30, ASTM D4485 (моторные масла), основа: Минеральное, назначение: Судовые среднеоборотные",
+      "professional_key_rule": "SAE + API/ACEA + тип базового масла",
+      "category_code": "M",
+      "product_form": "Масло",
+      "application": "Судовые среднеоборотные",
+      "industry": null,
+      "specifications": [
+        "SAE 30",
+        "ASTM D4485 (моторные масла)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.110-10027",
+      "skp_code": "19.20.29.110",
+      "skp_name": "Масла моторные",
+      "technical_profile_id": "M-MAR40-MI",
+      "standardized_name_ru": "Масла моторные, SAE 40, ACEA BN 40-70, ASTM D4485 (моторные масла), основа: Минеральное, назначение: Судовые тяжелое топливо",
+      "professional_key_rule": "SAE + API/ACEA + тип базового масла",
+      "category_code": "M",
+      "product_form": "Масло",
+      "application": "Судовые тяжелое топливо",
+      "industry": null,
+      "specifications": [
+        "SAE 40",
+        "ACEA BN 40-70",
+        "ASTM D4485 (моторные масла)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.110-10028",
+      "skp_code": "19.20.29.110",
+      "skp_name": "Масла моторные",
+      "technical_profile_id": "M-MOTO-2T-SS",
+      "standardized_name_ru": "Масла моторные, API TC, ACEA JASO FC, ASTM D4485 (моторные масла), основа: Полусинтетика, назначение: 2-тактные двигатели",
+      "professional_key_rule": "SAE + API/ACEA + тип базового масла",
+      "category_code": "M",
+      "product_form": "Масло",
+      "application": "2-тактные двигатели",
+      "industry": null,
+      "specifications": [
+        "API TC",
+        "ACEA JASO FC",
+        "ASTM D4485 (моторные масла)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.110-10029",
+      "skp_code": "19.20.29.110",
+      "skp_name": "Масла моторные",
+      "technical_profile_id": "M-MOTO-4T-SY",
+      "standardized_name_ru": "Масла моторные, SAE 10W-40, API SL, ACEA JASO MA2, ASTM D4485 (моторные масла), основа: Синтетика, назначение: 4-тактные мотоциклы",
+      "professional_key_rule": "SAE + API/ACEA + тип базового масла",
+      "category_code": "M",
+      "product_form": "Масло",
+      "application": "4-тактные мотоциклы",
+      "industry": null,
+      "specifications": [
+        "SAE 10W-40",
+        "API SL",
+        "ACEA JASO MA2",
+        "ASTM D4485 (моторные масла)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.120-10001",
+      "skp_code": "19.20.29.120",
+      "skp_name": "Масла трансмиссионные",
+      "technical_profile_id": "T-75W140-GL5-SY",
+      "standardized_name_ru": "Масла трансмиссионные, SAE Gear 75W-140, API GL GL-5, ASTM D2983 (трансмиссионные низкотемп.), основа: Синтетика, назначение: Спортивные дифф.",
+      "professional_key_rule": "SAE J306 + API GL/OEM + тип жидкости",
+      "category_code": "T",
+      "product_form": "Масло",
+      "application": "Спортивные дифф.",
+      "industry": null,
+      "specifications": [
+        "SAE Gear 75W-140",
+        "API GL GL-5",
+        "ASTM D2983 (трансмиссионные низкотемп.)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.120-10002",
+      "skp_code": "19.20.29.120",
+      "skp_name": "Масла трансмиссионные",
+      "technical_profile_id": "T-75W80-GL4-SY",
+      "standardized_name_ru": "Масла трансмиссионные, SAE Gear 75W-80, API GL GL-4, ASTM D2983 (трансмиссионные низкотемп.), основа: Синтетика, назначение: МКПП легковые современные",
+      "professional_key_rule": "SAE J306 + API GL/OEM + тип жидкости",
+      "category_code": "T",
+      "product_form": "Масло",
+      "application": "МКПП легковые современные",
+      "industry": null,
+      "specifications": [
+        "SAE Gear 75W-80",
+        "API GL GL-4",
+        "ASTM D2983 (трансмиссионные низкотемп.)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.120-10003",
+      "skp_code": "19.20.29.120",
+      "skp_name": "Масла трансмиссионные",
+      "technical_profile_id": "T-75W90-GL4-SS",
+      "standardized_name_ru": "Масла трансмиссионные, SAE Gear 75W-90, API GL GL-4, ASTM D2983 (трансмиссионные низкотемп.), основа: Полусинтетика, назначение: МКПП бюджет",
+      "professional_key_rule": "SAE J306 + API GL/OEM + тип жидкости",
+      "category_code": "T",
+      "product_form": "Масло",
+      "application": "МКПП бюджет",
+      "industry": null,
+      "specifications": [
+        "SAE Gear 75W-90",
+        "API GL GL-4",
+        "ASTM D2983 (трансмиссионные низкотемп.)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.120-10004",
+      "skp_code": "19.20.29.120",
+      "skp_name": "Масла трансмиссионные",
+      "technical_profile_id": "T-75W90-GL4-SY",
+      "standardized_name_ru": "Масла трансмиссионные, SAE Gear 75W-90, API GL GL-4, ASTM D2983 (трансмиссионные низкотемп.), основа: Синтетика, назначение: МКПП легковые универс.",
+      "professional_key_rule": "SAE J306 + API GL/OEM + тип жидкости",
+      "category_code": "T",
+      "product_form": "Масло",
+      "application": "МКПП легковые универс.",
+      "industry": null,
+      "specifications": [
+        "SAE Gear 75W-90",
+        "API GL GL-4",
+        "ASTM D2983 (трансмиссионные низкотемп.)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.120-10005",
+      "skp_code": "19.20.29.120",
+      "skp_name": "Масла трансмиссионные",
+      "technical_profile_id": "T-75W90-GL5-SS",
+      "standardized_name_ru": "Масла трансмиссионные, SAE Gear 75W-90, API GL GL-5, ASTM D2983 (трансмиссионные низкотемп.), основа: Полусинтетика, назначение: Мосты универс.",
+      "professional_key_rule": "SAE J306 + API GL/OEM + тип жидкости",
+      "category_code": "T",
+      "product_form": "Масло",
+      "application": "Мосты универс.",
+      "industry": null,
+      "specifications": [
+        "SAE Gear 75W-90",
+        "API GL GL-5",
+        "ASTM D2983 (трансмиссионные низкотемп.)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.120-10006",
+      "skp_code": "19.20.29.120",
+      "skp_name": "Масла трансмиссионные",
+      "technical_profile_id": "T-75W90-GL5-SY",
+      "standardized_name_ru": "Масла трансмиссионные, SAE Gear 75W-90, API GL GL-5, ASTM D2983 (трансмиссионные низкотемп.), основа: Синтетика, назначение: Мосты, дифференциалы",
+      "professional_key_rule": "SAE J306 + API GL/OEM + тип жидкости",
+      "category_code": "T",
+      "product_form": "Масло",
+      "application": "Мосты, дифференциалы",
+      "industry": null,
+      "specifications": [
+        "SAE Gear 75W-90",
+        "API GL GL-5",
+        "ASTM D2983 (трансмиссионные низкотемп.)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.120-10007",
+      "skp_code": "19.20.29.120",
+      "skp_name": "Масла трансмиссионные",
+      "technical_profile_id": "T-80W-GL4-MI",
+      "standardized_name_ru": "Масла трансмиссионные, SAE Gear 80W, API GL GL-4, ASTM D2983 (трансмиссионные низкотемп.), основа: Минеральное, назначение: МКПП старые авто",
+      "professional_key_rule": "SAE J306 + API GL/OEM + тип жидкости",
+      "category_code": "T",
+      "product_form": "Масло",
+      "application": "МКПП старые авто",
+      "industry": null,
+      "specifications": [
+        "SAE Gear 80W",
+        "API GL GL-4",
+        "ASTM D2983 (трансмиссионные низкотемп.)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.120-10008",
+      "skp_code": "19.20.29.120",
+      "skp_name": "Масла трансмиссионные",
+      "technical_profile_id": "T-80W90-GL4-MI",
+      "standardized_name_ru": "Масла трансмиссионные, SAE Gear 80W-90, API GL GL-4, ASTM D2983 (трансмиссионные низкотемп.), основа: Минеральное, назначение: МКПП грузовые",
+      "professional_key_rule": "SAE J306 + API GL/OEM + тип жидкости",
+      "category_code": "T",
+      "product_form": "Масло",
+      "application": "МКПП грузовые",
+      "industry": null,
+      "specifications": [
+        "SAE Gear 80W-90",
+        "API GL GL-4",
+        "ASTM D2983 (трансмиссионные низкотемп.)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.120-10009",
+      "skp_code": "19.20.29.120",
+      "skp_name": "Масла трансмиссионные",
+      "technical_profile_id": "T-80W90-GL5-MI",
+      "standardized_name_ru": "Масла трансмиссионные, SAE Gear 80W-90, API GL GL-5, ASTM D2983 (трансмиссионные низкотемп.), основа: Минеральное, назначение: Мосты грузовые",
+      "professional_key_rule": "SAE J306 + API GL/OEM + тип жидкости",
+      "category_code": "T",
+      "product_form": "Масло",
+      "application": "Мосты грузовые",
+      "industry": null,
+      "specifications": [
+        "SAE Gear 80W-90",
+        "API GL GL-5",
+        "ASTM D2983 (трансмиссионные низкотемп.)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.120-10010",
+      "skp_code": "19.20.29.120",
+      "skp_name": "Масла трансмиссионные",
+      "technical_profile_id": "T-85W140-GL5-MI",
+      "standardized_name_ru": "Масла трансмиссионные, SAE Gear 85W-140, API GL GL-5, ASTM D2983 (трансмиссионные низкотемп.), основа: Минеральное, назначение: Тяжелые условия",
+      "professional_key_rule": "SAE J306 + API GL/OEM + тип жидкости",
+      "category_code": "T",
+      "product_form": "Масло",
+      "application": "Тяжелые условия",
+      "industry": null,
+      "specifications": [
+        "SAE Gear 85W-140",
+        "API GL GL-5",
+        "ASTM D2983 (трансмиссионные низкотемп.)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.120-10011",
+      "skp_code": "19.20.29.120",
+      "skp_name": "Масла трансмиссионные",
+      "technical_profile_id": "T-85W90-GL5-MI",
+      "standardized_name_ru": "Масла трансмиссионные, SAE Gear 85W-90, API GL GL-5, ASTM D2983 (трансмиссионные низкотемп.), основа: Минеральное, назначение: Главные передачи",
+      "professional_key_rule": "SAE J306 + API GL/OEM + тип жидкости",
+      "category_code": "T",
+      "product_form": "Масло",
+      "application": "Главные передачи",
+      "industry": null,
+      "specifications": [
+        "SAE Gear 85W-90",
+        "API GL GL-5",
+        "ASTM D2983 (трансмиссионные низкотемп.)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.120-10012",
+      "skp_code": "19.20.29.120",
+      "skp_name": "Масла трансмиссионные",
+      "technical_profile_id": "T-ATF-CVT-NS2-SY",
+      "standardized_name_ru": "Масла трансмиссионные, API GL NS-2, ASTM D2983 (трансмиссионные низкотемп.), основа: Синтетика, назначение: CVT Nissan",
+      "professional_key_rule": "SAE J306 + API GL/OEM + тип жидкости",
+      "category_code": "T",
+      "product_form": "Масло",
+      "application": "CVT Nissan",
+      "industry": null,
+      "specifications": [
+        "API GL NS-2",
+        "ASTM D2983 (трансмиссионные низкотемп.)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.120-10013",
+      "skp_code": "19.20.29.120",
+      "skp_name": "Масла трансмиссионные",
+      "technical_profile_id": "T-ATF-CVT-SY",
+      "standardized_name_ru": "Масла трансмиссионные, API GL CVT, ASTM D2983 (трансмиссионные низкотемп.), основа: Синтетика, назначение: Вариаторы",
+      "professional_key_rule": "SAE J306 + API GL/OEM + тип жидкости",
+      "category_code": "T",
+      "product_form": "Масло",
+      "application": "Вариаторы",
+      "industry": null,
+      "specifications": [
+        "API GL CVT",
+        "ASTM D2983 (трансмиссионные низкотемп.)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.120-10014",
+      "skp_code": "19.20.29.120",
+      "skp_name": "Масла трансмиссионные",
+      "technical_profile_id": "T-ATF-DX6-SY",
+      "standardized_name_ru": "Масла трансмиссионные, API GL Dexron VI, ASTM D2983 (трансмиссионные низкотемп.), основа: Синтетика, назначение: АКПП GM, универс.",
+      "professional_key_rule": "SAE J306 + API GL/OEM + тип жидкости",
+      "category_code": "T",
+      "product_form": "Масло",
+      "application": "АКПП GM, универс.",
+      "industry": null,
+      "specifications": [
+        "API GL Dexron VI",
+        "ASTM D2983 (трансмиссионные низкотемп.)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.120-10015",
+      "skp_code": "19.20.29.120",
+      "skp_name": "Масла трансмиссионные",
+      "technical_profile_id": "T-ATF-MRLV-SY",
+      "standardized_name_ru": "Масла трансмиссионные, API GL Mercon LV, ASTM D2983 (трансмиссионные низкотемп.), основа: Синтетика, назначение: АКПП Ford",
+      "professional_key_rule": "SAE J306 + API GL/OEM + тип жидкости",
+      "category_code": "T",
+      "product_form": "Масло",
+      "application": "АКПП Ford",
+      "industry": null,
+      "specifications": [
+        "API GL Mercon LV",
+        "ASTM D2983 (трансмиссионные низкотемп.)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.120-10016",
+      "skp_code": "19.20.29.120",
+      "skp_name": "Масла трансмиссионные",
+      "technical_profile_id": "T-ATF-SP4-SY",
+      "standardized_name_ru": "Масла трансмиссионные, API GL SP-IV, ASTM D2983 (трансмиссионные низкотемп.), основа: Синтетика, назначение: АКПП Hyundai/Kia",
+      "professional_key_rule": "SAE J306 + API GL/OEM + тип жидкости",
+      "category_code": "T",
+      "product_form": "Масло",
+      "application": "АКПП Hyundai/Kia",
+      "industry": null,
+      "specifications": [
+        "API GL SP-IV",
+        "ASTM D2983 (трансмиссионные низкотемп.)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.120-10017",
+      "skp_code": "19.20.29.120",
+      "skp_name": "Масла трансмиссионные",
+      "technical_profile_id": "T-ATF-WSS-SY",
+      "standardized_name_ru": "Масла трансмиссионные, API GL WS, ASTM D2983 (трансмиссионные низкотемп.), основа: Синтетика, назначение: АКПП Toyota/Lexus",
+      "professional_key_rule": "SAE J306 + API GL/OEM + тип жидкости",
+      "category_code": "T",
+      "product_form": "Масло",
+      "application": "АКПП Toyota/Lexus",
+      "industry": null,
+      "specifications": [
+        "API GL WS",
+        "ASTM D2983 (трансмиссионные низкотемп.)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.120-10018",
+      "skp_code": "19.20.29.120",
+      "skp_name": "Масла трансмиссионные",
+      "technical_profile_id": "T-ATF-ZF8-SY",
+      "standardized_name_ru": "Масла трансмиссионные, API GL ZF Lifeguard 8, ASTM D2983 (трансмиссионные низкотемп.), основа: Синтетика, назначение: АКПП ZF 8HP",
+      "professional_key_rule": "SAE J306 + API GL/OEM + тип жидкости",
+      "category_code": "T",
+      "product_form": "Масло",
+      "application": "АКПП ZF 8HP",
+      "industry": null,
+      "specifications": [
+        "API GL ZF Lifeguard 8",
+        "ASTM D2983 (трансмиссионные низкотемп.)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.120-10019",
+      "skp_code": "19.20.29.120",
+      "skp_name": "Масла трансмиссионные",
+      "technical_profile_id": "T-DCT-FPS-SY",
+      "standardized_name_ru": "Масла трансмиссионные, API GL Ford PowerShift, ASTM D2983 (трансмиссионные низкотемп.), основа: Синтетика, назначение: Ford DCT",
+      "professional_key_rule": "SAE J306 + API GL/OEM + тип жидкости",
+      "category_code": "T",
+      "product_form": "Масло",
+      "application": "Ford DCT",
+      "industry": null,
+      "specifications": [
+        "API GL Ford PowerShift",
+        "ASTM D2983 (трансмиссионные низкотемп.)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.120-10020",
+      "skp_code": "19.20.29.120",
+      "skp_name": "Масла трансмиссионные",
+      "technical_profile_id": "T-DCT-SY",
+      "standardized_name_ru": "Масла трансмиссионные, API GL DCT, ASTM D2983 (трансмиссионные низкотемп.), основа: Синтетика, назначение: DSG, Powershift",
+      "professional_key_rule": "SAE J306 + API GL/OEM + тип жидкости",
+      "category_code": "T",
+      "product_form": "Масло",
+      "application": "DSG, Powershift",
+      "industry": null,
+      "specifications": [
+        "API GL DCT",
+        "ASTM D2983 (трансмиссионные низкотемп.)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.120-10021",
+      "skp_code": "19.20.29.120",
+      "skp_name": "Масла трансмиссионные",
+      "technical_profile_id": "T-MT1-SY",
+      "standardized_name_ru": "Масла трансмиссионные, SAE Gear SAE 50, API GL API MT-1, ASTM D2983 (трансмиссионные низкотемп.), основа: Синтетика, назначение: МКПП несинхрониз.",
+      "professional_key_rule": "SAE J306 + API GL/OEM + тип жидкости",
+      "category_code": "T",
+      "product_form": "Масло",
+      "application": "МКПП несинхрониз.",
+      "industry": null,
+      "specifications": [
+        "SAE Gear SAE 50",
+        "API GL API MT-1",
+        "ASTM D2983 (трансмиссионные низкотемп.)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.120-10022",
+      "skp_code": "19.20.29.120",
+      "skp_name": "Масла трансмиссионные",
+      "technical_profile_id": "T-PG2-SY",
+      "standardized_name_ru": "Масла трансмиссионные, SAE Gear SAE 30/40, API GL API PG-2, ASTM D2983 (трансмиссионные низкотемп.), основа: Синтетика, назначение: Планетарные передачи",
+      "professional_key_rule": "SAE J306 + API GL/OEM + тип жидкости",
+      "category_code": "T",
+      "product_form": "Масло",
+      "application": "Планетарные передачи",
+      "industry": null,
+      "specifications": [
+        "SAE Gear SAE 30/40",
+        "API GL API PG-2",
+        "ASTM D2983 (трансмиссионные низкотемп.)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.120-10023",
+      "skp_code": "19.20.29.120",
+      "skp_name": "Масла трансмиссионные",
+      "technical_profile_id": "T-TRAC-LS-SY",
+      "standardized_name_ru": "Масла трансмиссионные, SAE Gear 75W-90, API GL GL-5 LS, ASTM D2983 (трансмиссионные низкотемп.), основа: Синтетика, назначение: Самоблокирующиеся",
+      "professional_key_rule": "SAE J306 + API GL/OEM + тип жидкости",
+      "category_code": "T",
+      "product_form": "Масло",
+      "application": "Самоблокирующиеся",
+      "industry": null,
+      "specifications": [
+        "SAE Gear 75W-90",
+        "API GL GL-5 LS",
+        "ASTM D2983 (трансмиссионные низкотемп.)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.160-10001",
+      "skp_code": "19.20.29.160",
+      "skp_name": "Масла турбинные",
+      "technical_profile_id": "U-VG32-MARINE",
+      "standardized_name_ru": "Масла турбинные, ISO VG 32, ASTM D4304 (турбинные), основа: Минеральное, назначение: Судовые турбины",
+      "professional_key_rule": "ISO VG/ГОСТ + тип турбины",
+      "category_code": "U",
+      "product_form": "Масло",
+      "application": "Судовые турбины",
+      "industry": null,
+      "specifications": [
+        "ISO VG 32",
+        "ASTM D4304 (турбинные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.160-10002",
+      "skp_code": "19.20.29.160",
+      "skp_name": "Масла турбинные",
+      "technical_profile_id": "U-VG32-TGA-SY",
+      "standardized_name_ru": "Масла турбинные, ISO VG 32, ASTM D4304 (турбинные), основа: Синтетика, назначение: ГТУ современные",
+      "professional_key_rule": "ISO VG/ГОСТ + тип турбины",
+      "category_code": "U",
+      "product_form": "Масло",
+      "application": "ГТУ современные",
+      "industry": null,
+      "specifications": [
+        "ISO VG 32",
+        "ASTM D4304 (турбинные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.160-10003",
+      "skp_code": "19.20.29.160",
+      "skp_name": "Масла турбинные",
+      "technical_profile_id": "U-VG32-TGB-MI",
+      "standardized_name_ru": "Масла турбинные, ISO VG 32, ASTM D4304 (турбинные), основа: Минеральное, назначение: ГТУ минеральное",
+      "professional_key_rule": "ISO VG/ГОСТ + тип турбины",
+      "category_code": "U",
+      "product_form": "Масло",
+      "application": "ГТУ минеральное",
+      "industry": null,
+      "specifications": [
+        "ISO VG 32",
+        "ASTM D4304 (турбинные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.160-10004",
+      "skp_code": "19.20.29.160",
+      "skp_name": "Масла турбинные",
+      "technical_profile_id": "U-VG32-TGB-SY",
+      "standardized_name_ru": "Масла турбинные, ISO VG 32, ASTM D4304 (турбинные), основа: Синтетика, назначение: ГТУ стационарные",
+      "professional_key_rule": "ISO VG/ГОСТ + тип турбины",
+      "category_code": "U",
+      "product_form": "Масло",
+      "application": "ГТУ стационарные",
+      "industry": null,
+      "specifications": [
+        "ISO VG 32",
+        "ASTM D4304 (турбинные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.160-10005",
+      "skp_code": "19.20.29.160",
+      "skp_name": "Масла турбинные",
+      "technical_profile_id": "U-VG32-TSA-MI",
+      "standardized_name_ru": "Масла турбинные, ISO VG 32, ASTM D4304 (турбинные), основа: Минеральное, назначение: Паровые турбины малые",
+      "professional_key_rule": "ISO VG/ГОСТ + тип турбины",
+      "category_code": "U",
+      "product_form": "Масло",
+      "application": "Паровые турбины малые",
+      "industry": null,
+      "specifications": [
+        "ISO VG 32",
+        "ASTM D4304 (турбинные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.160-10006",
+      "skp_code": "19.20.29.160",
+      "skp_name": "Масла турбинные",
+      "technical_profile_id": "U-VG32-TSC-MI",
+      "standardized_name_ru": "Масла турбинные, ISO VG 32, ASTM D4304 (турбинные), основа: Минеральное, назначение: С противоизносными",
+      "professional_key_rule": "ISO VG/ГОСТ + тип турбины",
+      "category_code": "U",
+      "product_form": "Масло",
+      "application": "С противоизносными",
+      "industry": null,
+      "specifications": [
+        "ISO VG 32",
+        "ASTM D4304 (турбинные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.160-10007",
+      "skp_code": "19.20.29.160",
+      "skp_name": "Масла турбинные",
+      "technical_profile_id": "U-VG32-TSE-MI",
+      "standardized_name_ru": "Масла турбинные, ISO VG 32, ASTM D4304 (турбинные), основа: Минеральное, назначение: Паровые турбины",
+      "professional_key_rule": "ISO VG/ГОСТ + тип турбины",
+      "category_code": "U",
+      "product_form": "Масло",
+      "application": "Паровые турбины",
+      "industry": null,
+      "specifications": [
+        "ISO VG 32",
+        "ASTM D4304 (турбинные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.160-10008",
+      "skp_code": "19.20.29.160",
+      "skp_name": "Масла турбинные",
+      "technical_profile_id": "U-VG32-TSE-SY",
+      "standardized_name_ru": "Масла турбинные, ISO VG 32, ASTM D4304 (турбинные), основа: Синтетика, назначение: Паровые синтетика",
+      "professional_key_rule": "ISO VG/ГОСТ + тип турбины",
+      "category_code": "U",
+      "product_form": "Масло",
+      "application": "Паровые синтетика",
+      "industry": null,
+      "specifications": [
+        "ISO VG 32",
+        "ASTM D4304 (турбинные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.160-10009",
+      "skp_code": "19.20.29.160",
+      "skp_name": "Масла турбинные",
+      "technical_profile_id": "U-VG46-TGB-SY",
+      "standardized_name_ru": "Масла турбинные, ISO VG 46, ASTM D4304 (турбинные), основа: Синтетика, назначение: ГТУ энергетика",
+      "professional_key_rule": "ISO VG/ГОСТ + тип турбины",
+      "category_code": "U",
+      "product_form": "Масло",
+      "application": "ГТУ энергетика",
+      "industry": null,
+      "specifications": [
+        "ISO VG 46",
+        "ASTM D4304 (турбинные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.160-10010",
+      "skp_code": "19.20.29.160",
+      "skp_name": "Масла турбинные",
+      "technical_profile_id": "U-VG46-TH-MI",
+      "standardized_name_ru": "Масла турбинные, ISO VG 46, ASTM D4304 (турбинные), основа: Минеральное, назначение: Гидротурбины",
+      "professional_key_rule": "ISO VG/ГОСТ + тип турбины",
+      "category_code": "U",
+      "product_form": "Масло",
+      "application": "Гидротурбины",
+      "industry": null,
+      "specifications": [
+        "ISO VG 46",
+        "ASTM D4304 (турбинные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.160-10011",
+      "skp_code": "19.20.29.160",
+      "skp_name": "Масла турбинные",
+      "technical_profile_id": "U-VG46-TSC-MI",
+      "standardized_name_ru": "Масла турбинные, ISO VG 46, ASTM D4304 (турбинные), основа: Минеральное, назначение: Универсальные",
+      "professional_key_rule": "ISO VG/ГОСТ + тип турбины",
+      "category_code": "U",
+      "product_form": "Масло",
+      "application": "Универсальные",
+      "industry": null,
+      "specifications": [
+        "ISO VG 46",
+        "ASTM D4304 (турбинные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.160-10012",
+      "skp_code": "19.20.29.160",
+      "skp_name": "Масла турбинные",
+      "technical_profile_id": "U-VG46-TSE-MI",
+      "standardized_name_ru": "Масла турбинные, ISO VG 46, ASTM D4304 (турбинные), основа: Минеральное, назначение: Паровые ТЭЦ",
+      "professional_key_rule": "ISO VG/ГОСТ + тип турбины",
+      "category_code": "U",
+      "product_form": "Масло",
+      "application": "Паровые ТЭЦ",
+      "industry": null,
+      "specifications": [
+        "ISO VG 46",
+        "ASTM D4304 (турбинные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    },
+    {
+      "proposed_enkt_code": "19.20.29.160-10013",
+      "skp_code": "19.20.29.160",
+      "skp_name": "Масла турбинные",
+      "technical_profile_id": "U-VG68-TH-MI",
+      "standardized_name_ru": "Масла турбинные, ISO VG 68, ASTM D4304 (турбинные), основа: Минеральное, назначение: Гидротурбины крупные",
+      "professional_key_rule": "ISO VG/ГОСТ + тип турбины",
+      "category_code": "U",
+      "product_form": "Масло",
+      "application": "Гидротурбины крупные",
+      "industry": null,
+      "specifications": [
+        "ISO VG 68",
+        "ASTM D4304 (турбинные)"
+      ],
+      "tnved_chapter_hint": null,
+      "tnved_code_hint": null,
+      "status": "PILOT_PROPOSED_NOT_OFFICIAL"
+    }
+  ]
+}
