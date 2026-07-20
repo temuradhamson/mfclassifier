@@ -367,6 +367,21 @@
       "notes": "Из 776 встроенных строк исключена 81 локализованная строка серии/группы; пять повторных source-вхождений объединены, получено 690 конкретных продуктов. Польское дерево категорий семантически нормализовано в общие профессиональные семейства. Публикуются только факты, UID/URL и хэши, без маркетинговых описаний."
     },
     {
+      "source_id": "FUCHS_ITALY_PRODUCT_FINDER",
+      "title": "FUCHS Italy Product Finder",
+      "owner": "FUCHS LUBRIFICANTI S.P.A.",
+      "source_type": "official_manufacturer_embedded_product_catalog",
+      "source_locator": "data/fuchs-italy-products.jsonl",
+      "source_url": "https://www.fuchs.com/it/en/products/service-links/product-finder/",
+      "terms_url": "https://www.fuchs.com/it/en/imprint/",
+      "source_sha256": "c5c925c30e2c4b447066c145952566ea7bce654386f10f40640d41350a477943",
+      "access_status": "public_full_catalog_embedded_in_official_page",
+      "bulk_ingest_allowed": true,
+      "publication_status": "factual_fields_only_with_attribution_no_marketing_descriptions",
+      "observed_count": 1007,
+      "notes": "Из 1 174 встроенных строк исключены 84 серии и четыре единицы оборудования; 79 повторных source-вхождений объединены, получено 1 007 конкретных продуктов. Итальянские описательные признаки использованы только для классификации карточек без дерева групп; публикуются факты, UID/URL и хэши, без описаний."
+    },
+    {
       "source_id": "totalenergies-global",
       "title": "TotalEnergies Lubricants Catalog",
       "owner": "TotalEnergies Lubrifiants S.A.",

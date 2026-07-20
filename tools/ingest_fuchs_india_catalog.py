@@ -51,7 +51,7 @@ def flatten_groups(groups: list[dict]) -> dict[int, dict]:
 
 
 def is_series(title: str) -> bool:
-    return bool(re.search(r"\bseries\b|-series\b|\bseria\b|-seria\b|\bgrupa\b|-grupa\b", title, re.I))
+    return bool(re.search(r"\bseries\b|-series\b|\bseria\b|-seria\b|\bserie\b|-serie\b|\bgrupa\b|-grupa\b", title, re.I))
 
 
 def classify_family(title: str, paths: list[list[str]], source_text: str) -> tuple[str, str]:
@@ -59,6 +59,8 @@ def classify_family(title: str, paths: list[list[str]], source_text: str) -> tup
     text = f"{title} {source_text}".casefold()
     if "grease guns" in path_text or "application equipment" in path_text:
         return "", "excluded_equipment"
+    if re.search(r"^SILKOLENE\s+(?:PRO 4|COMP|SUPER 4)\b.*\bSAE\b", title, re.I):
+        return "M", "explicit_product_line_and_grade"
     if "lubricating greases" in path_text or "special greases" in path_text or " pastes" in path_text or "smary" in path_text or re.search(r"\bgrease\b|\bpaste\b", text):
         return "G", "product_group_or_explicit_product_form"
     if "multifunctional fluids (stou)" in path_text or "płyny wielofukcyjne (stou)" in path_text:
@@ -93,6 +95,7 @@ def classify_family(title: str, paths: list[list[str]], source_text: str) -> tup
         "środki antykorozyjne", "ciecze procesowe specjalne", "oleje do obróbki cieplnej",
         "płyny hamulcowe", "płyny chłodzące", "środki czyszczące", "produkty czyszczące",
         "czyszczenie filtrów", "ciecze robocze do hamulców",
+        "motorcycle cleaning", "motorcycle filter treatment", "motorcycle brake & clutch fluids",
     ]):
         return "TF", "technical_fluid_product_group"
     if any(token in path_text for token in ["corrosion prevent", "dry coatings", "solid film", "sprays", "fuel additives"]):
@@ -101,19 +104,19 @@ def classify_family(title: str, paths: list[list[str]], source_text: str) -> tup
         return "I", "industrial_product_group"
     if primary_brand_prefix(title) == "RENOLIT":
         return "G", "brand_line_and_explicit_application"
-    if re.search(r"\bengine oil\b|olej(?:e)? do silnik|olej silnik", text):
+    if re.search(r"\bengine oil\b|oil for [^.]{0,40}engines|olej(?:e)? do silnik|olej silnik|olio (?:per )?motor|olio motore|motori? [24][ -]?tempi", text):
         return "M", "explicit_text"
-    if primary_brand_prefix(title) in {"ECOCUT", "LUBRODAL", "VITROLIS"}:
+    if primary_brand_prefix(title) in {"ECOCUT", "LUBRODAL", "RENOFORM", "VISCOR", "VITROLIS", "WISURA"}:
         return "TF", "brand_line_and_explicit_application"
-    if re.search(r"\bhydraulic\b", text):
+    if re.search(r"\bhydraulic\b|olio idraulic|fluido idraulic", text):
         return "H", "explicit_text"
     if re.search(r"\bshock absorber\b", text):
         return "H", "explicit_text"
     if re.search(r"\bcompressor\b|\brefrigeration\b|\bvacuum pump\b", text):
         return "C", "explicit_text"
-    if re.search(r"\bgear oil\b|\btransmission\b|\batf\b|\baxle\b", text):
+    if re.search(r"\bgear oil\b|\btransmission\b|\batf\b|\baxle\b|transfer case|ripartitor[ei] di coppia", text):
         return "T", "explicit_text"
-    if re.search(r"\bcoolant\b|\bantifreeze\b|\bbrake fluid\b|\bcleaner\b|\bcutting oil\b|\bquench", text):
+    if re.search(r"\bcoolant\b|\bantifreeze\b|\bbrake (?:and clutch )?fluid\b|\bcleaner\b|\bcutting oil\b|\bquench|solvente|sgrassaggio|distaccante|stampaggio|imbutitura|calibration fluid", text):
         return "TF", "explicit_text"
     return "S", "special_product_fallback"
 
