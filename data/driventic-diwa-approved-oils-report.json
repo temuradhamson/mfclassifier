@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-07-20",
+  "source_id": "DRIVENTIC_DIWA_APPROVED_OILS",
+  "landing_url": "https://www.driventic.com/products/bus/diwa-automatic-transmission",
+  "lists": 4,
+  "approval_occurrences": 226,
+  "products": 226,
+  "marketers_brands": 98,
+  "normalized_output_sha256": "4f6c858e8e2faaf6bf3665dc4d9c8c8b9fe8b1f758894fa5c89b1ec58dfd87a5",
+  "source_files": [
+    {
+      "publication_number": "DR1026",
+      "interval_km": 60000,
+      "list_date": "2022-01-17",
+      "products": 135,
+      "metadata_url": "https://www.driventic.com/api/canto/share?key=OAPC5U8N9T&pn=DR1026",
+      "metadata_sha256": "64183e6f1d1a69747d43cb03e5aff628bd165f226d0c591fb30915008f61e96f",
+      "file_name": "Driventic_Approved-Oil-List_DIWA-60000km_26_nn_DR1026_en.pdf",
+      "source_url": "https://driventic.canto.de/rest/v/OAPC5U8N9T/binary/document/pjmgp9blu542l9dsjjscbqoj0p/download",
+      "source_sha256": "5cf41dbd78eb9810c9842da2f4f3c0979e6dbeb01fa02db2bba32f2031c85185",
+      "pages": 15
+    },
+    {
+      "publication_number": "DR1025",
+      "interval_km": 120000,
+      "list_date": "2022-01-17",
+      "products": 70,
+      "metadata_url": "https://www.driventic.com/api/canto/share?key=OAPC5U8N9T&pn=DR1025",
+      "metadata_sha256": "37f0c814e8712a442319a18d253776e1a0fdf39580b303d4ee8f2802aeef7605",
+      "file_name": "Driventic_Approved-Oil-List_DIWA-120000km_26_nn_DR1025_en.pdf",
+      "source_url": "https://driventic.canto.de/rest/v/OAPC5U8N9T/binary/document/6i6r7ii34p0sj8r0rbhhgi071g/download",
+      "source_sha256": "c3f7af16f43ee75de0cf88fed3e1becaab9b7e2c8a4e9d1860ba42b63a6b5989",
+      "pages": 12
+    },
+    {
+      "publication_number": "DR1024",
+      "interval_km": 180000,
+      "list_date": "2025-03-06",
+      "products": 20,
+      "metadata_url": "https://www.driventic.com/api/canto/share?key=OAPC5U8N9T&pn=DR1024",
+      "metadata_sha256": "c7376b843b8230d65726b9d0900c8076d0d40bd209eb0c8d04779285432b1df1",
+      "file_name": "Driventic_Approved-Oil-List_DIWA-180000km_26_nn_DR1024_en.pdf",
+      "source_url": "https://driventic.canto.de/rest/v/OAPC5U8N9T/binary/document/to6tdpluth1fj5iltjbr2hj644/download",
+      "source_sha256": "6feec7047db1555e8018c78c827f153a7f071418aa123d0b40f4da3c0affbd06",
+      "pages": 9
+    },
+    {
+      "publication_number": "DR1023",
+      "interval_km": 240000,
+      "list_date": "2025-08-20",
+      "products": 1,
+      "metadata_url": "https://www.driventic.com/api/canto/share?key=OAPC5U8N9T&pn=DR1023",
+      "metadata_sha256": "9c5a2e691d3bf5d5c872de3e08599d4acd288016cc7ce3141d99c01ba8947244",
+      "file_name": "Driventic_Approved-Oil-List_DIWA-240000km_26_nn_DR1023_en.pdf",
+      "source_url": "https://driventic.canto.de/rest/v/OAPC5U8N9T/binary/document/q6e24cf7r13arcgh3dur441e45/download",
+      "source_sha256": "d47c1fd65e74a5805699cd680b2b79c778db6b9733ce53720ca92dff1f6dd8d8",
+      "pages": 7
+    }
+  ],
+  "publication_scope": "Derived factual approval records with attribution; Driventic PDF design and full text are not republished."
+}

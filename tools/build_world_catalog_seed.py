@@ -30,6 +30,7 @@ LICENSED_JSONL = ROOT / "data" / "official-licensed-products.jsonl"
 USDA_BIOPREFERRED_JSONL = ROOT / "data" / "usda-biopreferred-products.jsonl"
 ZF_TE_ML_JSONL = ROOT / "data" / "zf-te-ml-approved-products.jsonl"
 ALLISON_JSONL = ROOT / "data" / "allison-approved-fluids.jsonl"
+DRIVENTIC_DIWA_JSONL = ROOT / "data" / "driventic-diwa-approved-oils.jsonl"
 SCHEMA_VERSION = 1
 SNAPSHOT_DATE = "2026-07-20"
 
@@ -485,6 +486,38 @@ def allison_record(row: dict) -> dict:
     return record
 
 
+def driventic_diwa_record(row: dict) -> dict:
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["marketer_brand"],
+        "name": row["product_name"],
+        "category": "Масла, одобренные для автоматических трансмиссий DIWA",
+        "category_code": "T",
+        "family": FAMILY_NAMES["T"],
+        "source": "DRIVENTIC_DIWA_APPROVED_OILS",
+    }
+    record = canonical_record(generic)
+    record["manufacturer"] = row["marketer_brand"]
+    record["brand"] = row["marketer_brand"]
+    record["market"] = "GLOBAL_DRIVENTIC_DIWA_APPROVED"
+    record["source_id"] = "DRIVENTIC_DIWA_APPROVED_OILS"
+    record["source_record_id"] = row["source_record_id"]
+    record["source_row"] = None
+    record["evidence_status"] = "official_oem_approval_registry"
+    record["lifecycle_status"] = "approved_as_of_current_published_list"
+    record["snapshot_date"] = row["snapshot_date"]
+    record["specifications"]["oem_approvals"] = ["Driventic DIWA approved oil"]
+    record["specifications"]["diwa_oil_change_intervals_km"] = [str(value) for value in row["oil_change_intervals_km"]]
+    record["specifications"]["driventic_publication_numbers"] = sorted({
+        item["publication_number"] for item in row["approval_occurrences"]
+    })
+    record["specifications"]["licensed_standard"] = "Driventic DIWA"
+    record["canonical_key"] += f"|driventic_diwa_record:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    return record
+
+
 def deduplicate(records: list[dict]) -> tuple[list[dict], list[dict]]:
     by_key = defaultdict(list)
     for record in records:
@@ -719,6 +752,9 @@ def main() -> None:
     allison_source_rows = [json.loads(line) for line in ALLISON_JSONL.read_text(encoding="utf-8").splitlines() if line]
     allison_records = [allison_record(row) for row in allison_source_rows]
     input_records.extend(allison_records)
+    driventic_source_rows = [json.loads(line) for line in DRIVENTIC_DIWA_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    driventic_records = [driventic_diwa_record(row) for row in driventic_source_rows]
+    input_records.extend(driventic_records)
     aichilon_products, aichilon_packages, exclusions = aichilon_seed()
     existing_by_name = defaultdict(list)
     for row in input_records:
@@ -811,6 +847,17 @@ def main() -> None:
         if link_key not in source_link_keys:
             source_links.append(link)
             source_link_keys.add(link_key)
+    for raw, normalized_row in zip(driventic_source_rows, driventic_records):
+        target = canonical_by_key[normalized_row["canonical_key"]]
+        link = {
+            "product_id": target["product_id"], "source_id": "DRIVENTIC_DIWA_APPROVED_OILS",
+            "source_record_id": raw["source_record_id"], "source_row": None,
+            "relation": "official_oem_approval_registry",
+        }
+        link_key = (link["product_id"], link["source_id"], link["source_record_id"])
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     offers = []
     for package in aichilon_packages:
         canonical_key = aichilon_product_key.get(int(package["source_product_id"]))
@@ -847,6 +894,7 @@ def main() -> None:
         "usda_biopreferred_input_sha256": hashlib.sha256(USDA_BIOPREFERRED_JSONL.read_bytes()).hexdigest(),
         "zf_te_ml_input_sha256": hashlib.sha256(ZF_TE_ML_JSONL.read_bytes()).hexdigest(),
         "allison_input_sha256": hashlib.sha256(ALLISON_JSONL.read_bytes()).hexdigest(),
+        "driventic_diwa_input_sha256": hashlib.sha256(DRIVENTIC_DIWA_JSONL.read_bytes()).hexdigest(),
         "canonical_rows": len(records),
         "brands": len({r["brand"] for r in records}),
         "families": dict(sorted(Counter(r["family_code"] for r in records).items())),
@@ -861,6 +909,7 @@ def main() -> None:
         "official_oem_approval_rows": sum(r["evidence_status"] == "official_oem_approval_registry" for r in records),
         "zf_te_ml_source_rows": len(zf_source_rows),
         "allison_source_rows": len(allison_source_rows),
+        "driventic_diwa_source_rows": len(driventic_source_rows),
         "jaso_source_rows": len(jaso_source_rows),
         "jaso_unique_oil_codes": len({r["oil_code"] for r in jaso_source_rows}),
         "aichilon_source_products": len(aichilon_products) + len(exclusions),

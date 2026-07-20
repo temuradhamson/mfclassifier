@@ -237,6 +237,20 @@
       "notes": "Шесть официальных списков TES содержат 104 продукта и 119 вхождений номеров одобрения (117 уникальных). Сохранены marketer/brand, product name, TES specification, approval numbers, page, дата списка, URL и хэши PDF; оформление и полный текст PDF не переиздаются."
     },
     {
+      "source_id": "DRIVENTIC_DIWA_APPROVED_OILS",
+      "title": "Driventic DIWA Approved Oil Lists",
+      "owner": "Driventic GmbH",
+      "source_type": "official_oem_approval_registry_pdfs",
+      "source_locator": "data/driventic-diwa-approved-oils.jsonl",
+      "source_url": "https://www.driventic.com/products/bus/diwa-automatic-transmission",
+      "source_sha256": "4f6c858e8e2faaf6bf3665dc4d9c8c8b9fe8b1f758894fa5c89b1ec58dfd87a5",
+      "access_status": "public_official_approval_lists",
+      "bulk_ingest_allowed": true,
+      "publication_status": "derived_factual_records_with_attribution",
+      "observed_count": 226,
+      "notes": "Четыре списка масел для DIWA с интервалами замены 60 000, 120 000, 180 000 и 240 000 км содержат 226 продуктов. Это текущие старшие версии, опубликованные на официальной странице Driventic; даты самих списков 17.01.2022, 06.03.2025 и 20.08.2025 сохранены без подмены датой страницы."
+    },
+    {
       "source_id": "totalenergies-global",
       "title": "TotalEnergies Lubricants Catalog",
       "owner": "TotalEnergies Lubrifiants S.A.",
