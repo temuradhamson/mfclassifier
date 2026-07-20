@@ -455,12 +455,10 @@ function renderReferences() {
   state.referenceRows = rows;
   const container = $("referenceContent");
   if (state.reference === "temperatures") {
-    container.innerHTML = `<div class="temperature-scale">
-      <div class="temperature-axis"><span>Общая шкала</span><div class="temperature-axis-track"><i style="left:0%">−273</i><i style="left:${temperaturePosition(0)}%">0</i><i style="left:${temperaturePosition(300)}%">300</i><b style="left:${temperaturePosition(300)}%" aria-label="разрыв шкалы">//</b><i style="left:100%">2000</i></div><small>°C</small></div>
-      ${rows.map((item) => {
+    container.innerHTML = `<div class="temperature-scale">${rows.map((item) => {
       const min = Number(item["От °C"]), max = Number(item["До °C"]);
       const left = temperaturePosition(min), right = temperaturePosition(max);
-      return `<div class="temperature-row"><div><b>${esc(item["Зона"])}</b><small>${esc(item["Код"])}</small></div><div class="temperature-range"><span style="left:${left}%;width:${Math.max(.5, right - left)}%"></span><i class="range-start" style="left:${left}%"></i><i class="range-end" style="left:${right}%"></i></div><small>${min}…${max} °C</small></div>`;
+      return `<div class="temperature-row"><div><b>${esc(item["Зона"])}</b><small>${esc(item["Код"])}</small></div><div class="temperature-range"><span style="--range-left:${left}%;--range-right:${100 - right}%"></span><i class="range-start" style="left:${left}%"></i><i class="range-end" style="left:${right}%"></i></div><small>${min}…${max} °C</small></div>`;
     }).join("")}</div>`;
     return;
   }
