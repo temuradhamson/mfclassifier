@@ -1,237 +1,187 @@
-<!DOCTYPE html>
-<html lang="ru" data-bs-theme="dark">
+<!doctype html>
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Классификатор смазочных материалов | Aniqlik</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=20260720">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Единый классификатор масел, смазок и технических жидкостей">
+  <title>MF Classifier — смазочные материалы</title>
+  <link rel="stylesheet" href="styles.css?v=3.0.0">
 </head>
 <body>
-    <header class="header">
-        <div class="header-content">
-            <div class="logo">
-                <div class="logo-icon">🛢️</div>
-                <div class="logo-text">
-                    <h1>Классификатор смазочных материалов</h1>
-                    <span class="subtitle">Единый отраслевой справочник масел, смазок и охлаждающих жидкостей</span>
-                </div>
-            </div>
-            <nav class="nav-tabs">
-                <button class="tab-btn active" data-tab="table"><i class="bi bi-table"></i> Таблица</button>
-                <button class="tab-btn" data-tab="stats"><i class="bi bi-bar-chart"></i> Статистика</button>
-                <button class="tab-btn" data-tab="export"><i class="bi bi-download"></i> Экспорт</button>
-            </nav>
-            <div class="header-actions">
-                <a href="https://mfpresent.uz/" class="header-btn" title="На главную">
-                    <i class="bi bi-house-door"></i>
-                    <span>Главная</span>
-                </a>
-                <div class="user-info" id="userInfo" style="display: none;">
-                    <i class="bi bi-person-circle"></i>
-                    <span id="userName"></span>
-                    <button class="logout-btn" onclick="logout()" title="Выйти">
-                        <i class="bi bi-box-arrow-right"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#overview" aria-label="MF Classifier">
+        <span class="brand-mark">MF</span>
+        <span><strong>Classifier</strong><small>Lubricants intelligence</small></span>
+      </a>
+      <div class="global-search">
+        <span class="search-icon">⌕</span>
+        <input id="globalSearch" type="search" placeholder="Найти продукт, класс, стандарт или код…" autocomplete="off">
+        <kbd>/</kbd>
+      </div>
+      <div class="top-actions">
+        <span class="data-status"><i></i><span id="headerDataCount">Данные загружаются</span></span>
+        <button class="icon-button" id="themeToggle" type="button" aria-label="Сменить тему">◐</button>
+      </div>
     </header>
 
-    <main class="main-content">
-        <!-- Фильтры -->
-        <section class="filters-section">
-            <div class="filters-header">
-                <h2>🔍 Фильтры</h2>
-                <button id="clearFilters" class="btn-secondary">Сбросить</button>
-            </div>
-            <div class="filters-grid">
-                <div class="filter-group">
-                    <label for="filterFamily">Семейство</label>
-                    <select id="filterFamily">
-                        <option value="">Все семейства</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label for="filterCategory">Категория</label>
-                    <select id="filterCategory">
-                        <option value="">Все категории</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label for="filterStandardType">Тип стандарта</label>
-                    <select id="filterStandardType">
-                        <option value="">Все типы</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label for="filterCertificate">Сертификат</label>
-                    <select id="filterCertificate">
-                        <option value="">Все позиции</option>
-                        <option value="valid">Действующий</option>
-                        <option value="no_expiry">Без срока действия</option>
-                        <option value="missing">Не указан</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label for="filterTnved">ТН ВЭД</label>
-                    <select id="filterTnved"><option value="">Все коды</option></select>
-                </div>
-                <div class="filter-group">
-                    <label for="filterBrand">Бренд</label>
-                    <select id="filterBrand">
-                        <option value="">Все бренды</option>
-                    </select>
-                </div>
-                <div class="filter-group filter-search">
-                    <label for="filterSearch">Поиск</label>
-                    <input type="text" id="filterSearch" placeholder="Название, ГОСТ, SAE, API, документ...">
-                </div>
-            </div>
-        </section>
+    <aside class="sidebar" aria-label="Навигация">
+      <nav id="mainNav">
+        <button class="nav-item active" data-view="overview"><span>◫</span><b>Обзор</b></button>
+        <button class="nav-item" data-view="products"><span>◉</span><b>Продукты</b><em id="navProducts">0</em></button>
+        <button class="nav-item" data-view="classes"><span>◇</span><b>Классы</b><em id="navClasses">0</em></button>
+        <button class="nav-item" data-view="references"><span>≡</span><b>Справочники</b></button>
+        <button class="nav-item accent" data-view="matcher"><span>✦</span><b>Подбор класса</b></button>
+      </nav>
+      <div class="sidebar-note">
+        <span>Версия данных</span>
+        <strong>v3.0</strong>
+        <small id="generatedAt">—</small>
+      </div>
+    </aside>
 
-        <!-- Таблица -->
-        <section id="tableSection" class="content-section active">
-            <div class="table-info">
-                <span id="resultsCount">Загрузка...</span>
+    <main class="workspace">
+      <section class="view active" id="overviewView">
+        <div class="hero">
+          <div class="hero-copy">
+            <span class="eyebrow">Единая отраслевая модель</span>
+            <h1>Смазочные материалы.<br><span>Разложены по полочкам.</span></h1>
+            <p>Товары, технические классы, международные стандарты, сертификаты и коды — в одной связанной системе.</p>
+            <div class="hero-actions">
+              <button class="primary-button" data-go="products">Открыть каталог <span>→</span></button>
+              <button class="secondary-button" data-go="matcher">Подобрать класс</button>
             </div>
-            <div class="table-container">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th data-sort="brand">Бренд <span class="sort-icon">↕</span></th>
-                            <th data-sort="category">Категория <span class="sort-icon">↕</span></th>
-                            <th data-sort="name">Наименование <span class="sort-icon">↕</span></th>
-                            <th data-sort="viscosity">Вязкость <span class="sort-icon">↕</span></th>
-                            <th>Классификация</th>
-                            <th data-sort="gost_name">Название по ГОСТ <span class="sort-icon">↕</span></th>
-                            <th data-sort="technical_document">ГОСТ / ТУ / техрегламент <span class="sort-icon">↕</span></th>
-                            <th data-sort="certificate_expires_at">Сертификат до <span class="sort-icon">↕</span></th>
-                            <th data-sort="tnved_code">ТН ВЭД <span class="sort-icon">↕</span></th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody">
-                        <!-- Данные загружаются через JS -->
-                    </tbody>
-                </table>
-            </div>
-        </section>
+          </div>
+          <div class="hero-orbit" aria-hidden="true">
+            <div class="orbit-core">MF<small>v3</small></div>
+            <span class="orbit-tag tag-api">API</span>
+            <span class="orbit-tag tag-sae">SAE</span>
+            <span class="orbit-tag tag-astm">ASTM</span>
+            <span class="orbit-tag tag-iso">ISO</span>
+            <span class="orbit-tag tag-din">DIN</span>
+          </div>
+        </div>
 
-        <!-- Статистика -->
-        <section id="statsSection" class="content-section">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">📦</div>
-                    <div class="stat-value" id="totalProducts">0</div>
-                    <div class="stat-label">Всего позиций</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">🏷️</div>
-                    <div class="stat-value" id="totalBrands">0</div>
-                    <div class="stat-label">Брендов</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">💧</div>
-                    <div class="stat-value" id="totalViscosity">0</div>
-                    <div class="stat-label">Типов классификации</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">📋</div>
-                    <div class="stat-value" id="totalStandards">0</div>
-                    <div class="stat-label">Сертификатов</div>
-                </div>
-            </div>
+        <div class="metric-grid" id="metricGrid"></div>
 
-            <div class="charts-grid">
-                <div class="chart-card">
-                    <h3>По брендам</h3>
-                    <div id="brandChart" class="chart-container"></div>
-                </div>
-                <div class="chart-card">
-                    <h3>По категориям</h3>
-                    <div id="viscosityChart" class="chart-container"></div>
-                </div>
-                <div class="chart-card">
-                    <h3>По классификациям</h3>
-                    <div id="standardChart" class="chart-container"></div>
-                </div>
-                <div class="chart-card">
-                    <h3>По ТН ВЭД</h3>
-                    <div id="containerChart" class="chart-container"></div>
-                </div>
+        <div class="overview-grid">
+          <article class="panel category-panel">
+            <div class="panel-heading">
+              <div><span class="kicker">Номенклатура</span><h2>Основные категории</h2></div>
+              <button class="text-button" data-go="products">Все продукты →</button>
             </div>
-        </section>
+            <div id="categoryBars" class="category-bars"></div>
+          </article>
+          <article class="panel coverage-panel">
+            <div class="panel-heading"><div><span class="kicker">Качество данных</span><h2>Покрытие классификацией</h2></div></div>
+            <div id="coverageGauge" class="coverage-gauge"></div>
+            <div id="coverageLegend" class="coverage-legend"></div>
+          </article>
+        </div>
 
-        <!-- Экспорт -->
-        <section id="exportSection" class="content-section">
-            <div class="export-grid">
-                <div class="export-card" id="exportCSV">
-                    <div class="export-icon">📄</div>
-                    <h3>CSV</h3>
-                    <p>Экспорт в формате CSV для Excel</p>
-                </div>
-                <div class="export-card" id="exportJSON">
-                    <div class="export-icon">📋</div>
-                    <h3>JSON</h3>
-                    <p>Экспорт в формате JSON</p>
-                </div>
-                <div class="export-card" id="exportPrint">
-                    <div class="export-icon">🖨️</div>
-                    <h3>Печать</h3>
-                    <p>Открыть окно печати</p>
-                </div>
-                <div class="export-card" id="exportCopy">
-                    <div class="export-icon">📎</div>
-                    <h3>Копировать</h3>
-                    <p>Скопировать в буфер обмена</p>
-                </div>
+        <article class="panel source-panel">
+          <div class="panel-heading">
+            <div><span class="kicker">Доказательная база</span><h2>Источники модели</h2></div>
+            <button class="text-button" data-reference="sources">Подробнее →</button>
+          </div>
+          <div class="source-strip" id="sourceStrip"></div>
+        </article>
+      </section>
+
+      <section class="view" id="productsView">
+        <div class="page-heading">
+          <div><span class="eyebrow">Коммерческая номенклатура</span><h1>Продукты</h1><p>Актуальные CHILON/UNO и сохранённая мультибрендовая база.</p></div>
+          <button class="secondary-button" id="exportProducts">Экспорт CSV</button>
+        </div>
+        <div class="filter-bar">
+          <label class="filter-search"><span>⌕</span><input id="productSearch" type="search" placeholder="Название, SAE, API, ГОСТ, код…"></label>
+          <label><span>Бренд</span><select id="productBrand"><option value="">Все бренды</option></select></label>
+          <label><span>Категория</span><select id="productCategory"><option value="">Все категории</option></select></label>
+          <label><span>Связь с классом</span><select id="productLink"><option value="">Все</option><option value="linked">Есть связь</option><option value="unlinked">Без связи</option></select></label>
+          <button class="clear-button" id="clearProductFilters" type="button">Сбросить</button>
+        </div>
+        <div class="result-meta"><strong id="productResultCount">0</strong><span>Нажмите на строку, чтобы открыть паспорт продукта</span></div>
+        <div class="data-card">
+          <div class="table-scroll">
+            <table class="product-table">
+              <thead><tr><th>Продукт</th><th>Категория</th><th>Классификация</th><th>Коды</th><th>Сертификат</th><th>Класс</th></tr></thead>
+              <tbody id="productTableBody"></tbody>
+            </table>
+          </div>
+          <div class="pagination" id="productPagination"></div>
+        </div>
+      </section>
+
+      <section class="view" id="classesView">
+        <div class="page-heading">
+          <div><span class="eyebrow">Техническая модель</span><h1>Отраслевые классы</h1><p>ISO, SAE, API, ACEA, NLGI, ASTM, DIN и ГОСТ в единой структуре.</p></div>
+        </div>
+        <div class="filter-bar class-filters">
+          <label class="filter-search"><span>⌕</span><input id="classSearch" type="search" placeholder="Код, назначение, аналог, стандарт…"></label>
+          <label><span>Категория</span><select id="classCategory"><option value="">Все категории</option></select></label>
+          <label><span>Тип</span><select id="classKind"><option value="">Все</option><option value="lubricant">Смазочные материалы</option><option value="technical_fluid">Технические жидкости</option></select></label>
+          <button class="clear-button" id="clearClassFilters" type="button">Сбросить</button>
+        </div>
+        <div class="result-meta"><strong id="classResultCount">0</strong><span>Классы являются эталонной технической моделью, а не торговыми позициями</span></div>
+        <div class="class-grid" id="classGrid"></div>
+        <div class="pagination bare" id="classPagination"></div>
+      </section>
+
+      <section class="view" id="referencesView">
+        <div class="page-heading">
+          <div><span class="eyebrow">Нормативная база</span><h1>Справочники</h1><p>Стандарты, методы испытаний, отрасли, температуры и исторические аналоги.</p></div>
+        </div>
+        <div class="reference-tabs" id="referenceTabs">
+          <button class="active" data-reference="standards">Стандарты <em>42</em></button>
+          <button data-reference="astm">ASTM <em>42</em></button>
+          <button data-reference="industries">Отрасли <em>40</em></button>
+          <button data-reference="temperatures">Температуры <em>9</em></button>
+          <button data-reference="azmol">АЗМОЛ <em>282</em></button>
+          <button data-reference="sources">Источники <em>6</em></button>
+        </div>
+        <div class="reference-toolbar"><label class="filter-search"><span>⌕</span><input id="referenceSearch" type="search" placeholder="Поиск в текущем справочнике…"></label></div>
+        <div id="referenceContent"></div>
+      </section>
+
+      <section class="view" id="matcherView">
+        <div class="matcher-layout">
+          <div class="matcher-intro">
+            <span class="eyebrow">Инженерный помощник</span>
+            <h1>Подбор отраслевого класса</h1>
+            <p>Опишите продукт известными признаками. Система покажет наиболее близкие классы и объяснит совпадения.</p>
+            <div class="notice"><strong>Важно</strong><span>Результат является технической подсказкой. ТН ВЭД подтверждается по составу, форме и документации продукта.</span></div>
+          </div>
+          <form class="matcher-form" id="matcherForm">
+            <div class="step-label"><span>01</span> Базовые признаки</div>
+            <label><span>Категория продукта</span><select id="matchCategory" required><option value="">Выберите категорию</option></select></label>
+            <div class="form-row">
+              <label><span>Класс вязкости</span><input id="matchGrade" type="text" placeholder="Например: 5W-30 или 46"></label>
+              <label><span>API / DIN / NLGI</span><input id="matchStandard" type="text" placeholder="Например: SP, HLP, NLGI 2"></label>
             </div>
-        </section>
+            <label><span>Назначение или особенности</span><textarea id="matchQuery" rows="3" placeholder="Двигатель, редуктор, высокая температура, пищевая промышленность…"></textarea></label>
+            <button class="primary-button wide" type="submit">Найти подходящие классы <span>→</span></button>
+          </form>
+        </div>
+        <div class="match-results" id="matchResults"></div>
+      </section>
     </main>
+  </div>
 
-    <!-- Модальное окно -->
-    <div id="detailModal" class="modal">
-        <div class="modal-content">
-            <span class="modal-close">&times;</span>
-            <div id="modalBody"></div>
-        </div>
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <aside class="detail-drawer" id="detailDrawer" aria-label="Детальная информация">
+    <button class="drawer-close" id="drawerClose" type="button" aria-label="Закрыть">×</button>
+    <div id="drawerContent"></div>
+  </aside>
+
+  <div class="command-palette" id="commandPalette" aria-hidden="true">
+    <div class="command-box">
+      <div class="command-input"><span>⌕</span><input id="commandInput" type="search" placeholder="Поиск по всей базе…"><kbd>Esc</kbd></div>
+      <div class="command-results" id="commandResults"></div>
     </div>
+  </div>
 
-    <!-- Toast уведомления -->
-    <div id="toast" class="toast"></div>
-
-    <footer class="footer">
-        <div class="footer-content">
-            <p>ANIQLIK · объединённый классификатор смазочных материалов</p>
-            <p class="footer-stats">
-                База данных: <span id="footerTotal">0</span> позиций |
-                Обновлено: <span id="footerDate"></span>
-            </p>
-        </div>
-    </footer>
-
-    <script src="app.js?v=20260720"></script>
-    <script>
-        const TOKEN_KEY = 'aniqlik_token';
-        const USER_KEY = 'aniqlik_user';
-
-        function logout() {
-            localStorage.removeItem(TOKEN_KEY);
-            localStorage.removeItem(USER_KEY);
-            window.location.href = '/login';
-        }
-
-        // Показать имя пользователя если авторизован
-        document.addEventListener('DOMContentLoaded', () => {
-            const token = localStorage.getItem(TOKEN_KEY);
-            const user = localStorage.getItem(USER_KEY);
-
-            if (token && user) {
-                document.getElementById('userName').textContent = user;
-                document.getElementById('userInfo').style.display = 'flex';
-            }
-        });
-    </script>
+  <div class="toast" id="toast"></div>
+  <script src="data/catalog-v3.js?v=3.0.0"></script>
+  <script src="app.js?v=3.0.0"></script>
 </body>
 </html>
