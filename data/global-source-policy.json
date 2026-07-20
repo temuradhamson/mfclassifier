@@ -265,6 +265,20 @@
       "notes": "63 продуктовых листа DTFR дали 2 102 вхождения одобрений и 1 892 уникальных внутренних product ID. Обзорные листы и листы, которые прямо отсылают к допускам другого OEM, исключены. 38 продуктов встречаются только в явно исторических листах и сохранены с историческим lifecycle."
     },
     {
+      "source_id": "MERCEDES_BENZ_BEVO_APPROVED_FLUIDS",
+      "title": "Mercedes-Benz Operating Fluids BeVo",
+      "owner": "Mercedes-Benz AG",
+      "source_type": "official_oem_approval_registry_api",
+      "source_locator": "data/mercedes-bevo-approved-fluids.jsonl",
+      "source_url": "https://operatingfluids.mercedes-benz.com/",
+      "source_sha256": "19bbc316bad9729e98eadcd893b54b55ff4c1eb96a06f736797d69e987e85434",
+      "access_status": "public_official_approval_registry_api",
+      "bulk_ingest_allowed": true,
+      "publication_status": "derived_factual_records_with_attribution",
+      "observed_count": 1913,
+      "notes": "130 листов проверены, 92 содержат продукты. 2 461 вхождение допусков объединено в 1 913 продуктов по нормализованным company + product name + family; сохранены source UUID, внутренние product ID, листы и даты. Коллизия product ID FDKAI7 у двух компаний сохранена явно; 43 продукта имеют только historical-допуски."
+    },
+    {
       "source_id": "totalenergies-global",
       "title": "TotalEnergies Lubricants Catalog",
       "owner": "TotalEnergies Lubrifiants S.A.",

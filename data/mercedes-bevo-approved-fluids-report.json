@@ -1,0 +1,1200 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-07-20",
+  "source_id": "MERCEDES_BENZ_BEVO_APPROVED_FLUIDS",
+  "landing_url": "https://operatingfluids.mercedes-benz.com/",
+  "category_api_response_sha256": "cc164c0a4128956025f1bfb2e2c8dd2f7176c98054fc256399003bf407673d2a",
+  "sheets_inspected": 130,
+  "product_sheets": 92,
+  "approval_occurrences": 2461,
+  "products": 1913,
+  "current_products": 1870,
+  "historical_only_products": 43,
+  "companies": 357,
+  "families": {
+    "C": 3,
+    "G": 72,
+    "H": 9,
+    "M": 1479,
+    "S": 2,
+    "T": 267,
+    "TF": 81
+  },
+  "bevo_product_id_collisions": {
+    "FDKAI7": 2
+  },
+  "normalized_output_sha256": "19bbc316bad9729e98eadcd893b54b55ff4c1eb96a06f736797d69e987e85434",
+  "source_sheets": [
+    {
+      "sheet_number": " 231.0",
+      "category": "Lenkgetriebeöl",
+      "title_en": "General information on gear oils",
+      "published_at": "2024-12-10T12:55:24.444121Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/ 231.0/en"
+    },
+    {
+      "sheet_number": " 231.1",
+      "category": "Lenkgetriebeöl",
+      "title_en": "Specified gear oils (cars, cross-country vehichles, vans) - overview",
+      "published_at": "2024-12-10T12:55:24.611986Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/ 231.1/en"
+    },
+    {
+      "sheet_number": "219.0",
+      "category": "Motoröl",
+      "title_en": "Special additives for lubricants (vehicles and engines)",
+      "published_at": "2025-11-06T09:44:48.161677Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/219.0/en"
+    },
+    {
+      "sheet_number": "223.2",
+      "category": "Motoröl",
+      "title_en": "Engine Oil - Specified engine oils in cars & vans (service) - overview",
+      "published_at": "2024-12-10T12:55:24.526902Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/223.2/en"
+    },
+    {
+      "sheet_number": "224.1",
+      "category": "Motoröl",
+      "title_en": "Engine Oil - Viscosity classes of engine oils (car engines)",
+      "published_at": "2024-12-10T12:55:24.437602Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/224.1/en"
+    },
+    {
+      "sheet_number": "226.5",
+      "category": "Motoröl",
+      "title_en": "Multigrade Service Engine Oils",
+      "published_at": "2026-07-09T12:32:07.887430Z",
+      "historical": false,
+      "products": 50,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/226.5/en"
+    },
+    {
+      "sheet_number": "226.51",
+      "category": "Motoröl",
+      "title_en": "Low SPAsh Multigrade Service Engine Oils",
+      "published_at": "2026-07-06T10:40:14.500670Z",
+      "historical": false,
+      "products": 31,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/226.51/en"
+    },
+    {
+      "sheet_number": "226.52",
+      "category": "Motoröl",
+      "title_en": "Low SPAsh Multigrade Service Engine Oils",
+      "published_at": "2026-07-09T12:32:07.888186Z",
+      "historical": false,
+      "products": 38,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/226.52/en"
+    },
+    {
+      "sheet_number": "228.51",
+      "category": "Motoröl",
+      "title_en": "Low SPAsh Multigrade Service Engine Oils",
+      "published_at": "2026-07-09T08:42:44.949260Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/228.51/en"
+    },
+    {
+      "sheet_number": "229.1H",
+      "category": "Motoröl",
+      "title_en": "Multigrade Service Engine Oils - Historical",
+      "published_at": "2025-02-20T13:45:57.211640Z",
+      "historical": true,
+      "products": 3,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/229.1H/en"
+    },
+    {
+      "sheet_number": "229.3",
+      "category": "Motoröl",
+      "title_en": "Multigrade Service Engine Oils",
+      "published_at": "2026-07-17T07:51:28.660222Z",
+      "historical": false,
+      "products": 196,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/229.3/en"
+    },
+    {
+      "sheet_number": "229.31",
+      "category": "Motoröl",
+      "title_en": "Low SPAsh Multigrade Service Engine Oils",
+      "published_at": "2026-07-06T10:40:14.516764Z",
+      "historical": false,
+      "products": 163,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/229.31/en"
+    },
+    {
+      "sheet_number": "229.5",
+      "category": "Motoröl",
+      "title_en": "Multigrade Service Engine Oils",
+      "published_at": "2026-07-17T07:51:28.667490Z",
+      "historical": false,
+      "products": 269,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/229.5/en"
+    },
+    {
+      "sheet_number": "229.51",
+      "category": "Motoröl",
+      "title_en": "Low SPAsh Multigrade Service Engine Oils",
+      "published_at": "2026-07-17T07:51:28.668189Z",
+      "historical": false,
+      "products": 570,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/229.51/en"
+    },
+    {
+      "sheet_number": "229.52",
+      "category": "Motoröl",
+      "title_en": "Low SPAsh Multigrade Service Engine Oils",
+      "published_at": "2026-07-17T07:51:28.672085Z",
+      "historical": false,
+      "products": 412,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/229.52/en"
+    },
+    {
+      "sheet_number": "229.6",
+      "category": "Motoröl",
+      "title_en": "Multigrade Service Engine Oils",
+      "published_at": "2026-06-25T15:00:48.551461Z",
+      "historical": false,
+      "products": 13,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/229.6/en"
+    },
+    {
+      "sheet_number": "229.61",
+      "category": "Motoröl",
+      "title_en": "Low SPAsh Multigrade Service Engine Oils",
+      "published_at": "2026-07-06T10:40:14.513785Z",
+      "historical": false,
+      "products": 29,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/229.61/en"
+    },
+    {
+      "sheet_number": "229.71",
+      "category": "Motoröl",
+      "title_en": "Low SPAsh Multigrade Service Engine Oils",
+      "published_at": "2026-07-09T12:32:07.886652Z",
+      "historical": false,
+      "products": 183,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/229.71/en"
+    },
+    {
+      "sheet_number": "229.72",
+      "category": "Motoröl",
+      "title_en": "Low SPAsh Multigrade Service Engine Oils",
+      "published_at": "2026-07-08T15:24:20.307826Z",
+      "historical": false,
+      "products": 60,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/229.72/en"
+    },
+    {
+      "sheet_number": "229.81",
+      "category": "Motoröl",
+      "title_en": "Low SPAsh Multigrade Service Engine Oils",
+      "published_at": "2024-12-10T12:55:24.447282Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/229.81/en"
+    },
+    {
+      "sheet_number": "231.0",
+      "category": "Getriebeöl",
+      "title_en": "General information on gear oils",
+      "published_at": "2024-12-10T12:55:24.523377Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/231.0/en"
+    },
+    {
+      "sheet_number": "231.1",
+      "category": "Getriebeöl",
+      "title_en": "Specified gear oils (cars, cross-country vehichles, vans) - overview",
+      "published_at": "2024-12-10T12:55:24.611658Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/231.1/en"
+    },
+    {
+      "sheet_number": "235.0H",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Hypoid Gear) - Historical",
+      "published_at": "2026-07-06T10:40:14.525555Z",
+      "historical": true,
+      "products": 42,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/235.0H/en"
+    },
+    {
+      "sheet_number": "235.1",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Steering / Manual Transmission)",
+      "published_at": "2024-12-10T12:55:24.439962Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/235.1/en"
+    },
+    {
+      "sheet_number": "235.10",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Manual Transmission)",
+      "published_at": "2025-01-16T14:29:26.461375Z",
+      "historical": false,
+      "products": 2,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/235.10/en"
+    },
+    {
+      "sheet_number": "235.11",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Transfer Case)",
+      "published_at": "2024-12-10T12:55:24.516541Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/235.11/en"
+    },
+    {
+      "sheet_number": "235.14",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Steering / Manual Transmission)",
+      "published_at": "2025-05-23T09:04:20.730911Z",
+      "historical": false,
+      "products": 7,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/235.14/en"
+    },
+    {
+      "sheet_number": "235.15",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Hypoid Gear)",
+      "published_at": "2024-12-10T12:58:07.506284Z",
+      "historical": false,
+      "products": 1,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/235.15/en"
+    },
+    {
+      "sheet_number": "235.17",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Manual Transmission)",
+      "published_at": "2024-12-10T12:58:07.506935Z",
+      "historical": false,
+      "products": 2,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/235.17/en"
+    },
+    {
+      "sheet_number": "235.20",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Hypoid Gearboxes Mineral Oil)",
+      "published_at": "2024-12-10T12:55:24.620449Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/235.20/en"
+    },
+    {
+      "sheet_number": "235.21",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Transfer Case)",
+      "published_at": "2025-01-16T14:29:26.461601Z",
+      "historical": false,
+      "products": 5,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/235.21/en"
+    },
+    {
+      "sheet_number": "235.23",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Hypoid Gearboxes Mineral Oil)",
+      "published_at": "2025-05-15T10:46:10.873555Z",
+      "historical": false,
+      "products": 4,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/235.23/en"
+    },
+    {
+      "sheet_number": "235.3",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (FE Gear Oils)",
+      "published_at": "2024-12-10T12:58:07.511163Z",
+      "historical": false,
+      "products": 1,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/235.3/en"
+    },
+    {
+      "sheet_number": "235.31",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Hypoid Gear)",
+      "published_at": "2024-12-10T12:55:24.525134Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/235.31/en"
+    },
+    {
+      "sheet_number": "235.33",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Hypoid Gear)",
+      "published_at": "2025-01-16T14:29:26.461913Z",
+      "historical": false,
+      "products": 5,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/235.33/en"
+    },
+    {
+      "sheet_number": "235.4",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Gear)",
+      "published_at": "2024-12-10T12:55:24.533333Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/235.4/en"
+    },
+    {
+      "sheet_number": "235.5",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Transfer Box)",
+      "published_at": "2024-12-10T12:55:24.524144Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/235.5/en"
+    },
+    {
+      "sheet_number": "235.61",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Hypoid Gear)",
+      "published_at": "2024-12-10T12:58:07.518017Z",
+      "historical": false,
+      "products": 1,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/235.61/en"
+    },
+    {
+      "sheet_number": "235.62",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Rear Axle Gear)",
+      "published_at": "2024-12-10T12:58:07.519038Z",
+      "historical": false,
+      "products": 2,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/235.62/en"
+    },
+    {
+      "sheet_number": "235.63",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Rear Axle Gear)",
+      "published_at": "2024-12-10T12:58:07.455455Z",
+      "historical": false,
+      "products": 1,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/235.63/en"
+    },
+    {
+      "sheet_number": "235.64",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Rear Axle Gear)",
+      "published_at": "2024-12-10T12:58:07.510798Z",
+      "historical": false,
+      "products": 2,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/235.64/en"
+    },
+    {
+      "sheet_number": "235.65",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Rear Axle Gear)",
+      "published_at": "2024-12-10T12:58:07.519945Z",
+      "historical": false,
+      "products": 2,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/235.65/en"
+    },
+    {
+      "sheet_number": "235.66",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Rear Axle Gear)",
+      "published_at": "2024-12-10T12:58:07.447711Z",
+      "historical": false,
+      "products": 1,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/235.66/en"
+    },
+    {
+      "sheet_number": "235.7",
+      "category": "Getriebeöl",
+      "title_en": " Gear Oils (Hypoid Gear)",
+      "published_at": "2025-10-30T16:23:34.264437Z",
+      "historical": false,
+      "products": 4,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/235.7/en"
+    },
+    {
+      "sheet_number": "235.71",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Automatic Shift Gear)",
+      "published_at": "2025-01-16T14:29:26.461333Z",
+      "historical": false,
+      "products": 2,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/235.71/en"
+    },
+    {
+      "sheet_number": "235.72",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Automatic Shift Gear)",
+      "published_at": "2024-12-10T12:58:07.458441Z",
+      "historical": false,
+      "products": 1,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/235.72/en"
+    },
+    {
+      "sheet_number": "235.73",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (DCT Gear)",
+      "published_at": "2024-12-10T12:58:07.451322Z",
+      "historical": false,
+      "products": 2,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/235.73/en"
+    },
+    {
+      "sheet_number": "235.74",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Front Axle)",
+      "published_at": "2025-02-20T13:45:57.218851Z",
+      "historical": false,
+      "products": 3,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/235.74/en"
+    },
+    {
+      "sheet_number": "235.75",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Front Axle)",
+      "published_at": "2025-05-05T16:17:38.002469Z",
+      "historical": false,
+      "products": 1,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/235.75/en"
+    },
+    {
+      "sheet_number": "235.8",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Hypoid Gear)",
+      "published_at": "2024-12-10T12:55:24.609643Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/235.8/en"
+    },
+    {
+      "sheet_number": "235.9",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Hypoid Gear)",
+      "published_at": "2025-02-20T13:45:57.217270Z",
+      "historical": false,
+      "products": 10,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/235.9/en"
+    },
+    {
+      "sheet_number": "236.1",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, 4/5 -Speed Automatic)",
+      "published_at": "2025-02-20T13:45:57.217702Z",
+      "historical": false,
+      "products": 27,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/236.1/en"
+    },
+    {
+      "sheet_number": "236.10",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, 5-Speed Automatic)",
+      "published_at": "2024-12-10T12:58:07.520456Z",
+      "historical": false,
+      "products": 5,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/236.10/en"
+    },
+    {
+      "sheet_number": "236.11",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, ZF/ AG4 Automatic)",
+      "published_at": "2025-01-16T14:29:26.460597Z",
+      "historical": false,
+      "products": 4,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/236.11/en"
+    },
+    {
+      "sheet_number": "236.12",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, Transfer Box)",
+      "published_at": "2025-02-20T13:45:57.218808Z",
+      "historical": false,
+      "products": 2,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/236.12/en"
+    },
+    {
+      "sheet_number": "236.13",
+      "category": "Getriebeöl",
+      "title_en": "Automatic transmission fluids (ATF, Transfer box)",
+      "published_at": "2024-12-10T12:58:07.457641Z",
+      "historical": false,
+      "products": 1,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/236.13/en"
+    },
+    {
+      "sheet_number": "236.14",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, CVT)",
+      "published_at": "2025-05-27T12:12:15.123693Z",
+      "historical": false,
+      "products": 23,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/236.14/en"
+    },
+    {
+      "sheet_number": "236.15",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, Transfer/Automatic)",
+      "published_at": "2026-07-01T09:58:08.679961Z",
+      "historical": false,
+      "products": 24,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/236.15/en"
+    },
+    {
+      "sheet_number": "236.17",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, Transfer / 9-Speed Automatic)",
+      "published_at": "2026-06-25T15:00:48.550591Z",
+      "historical": false,
+      "products": 13,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/236.17/en"
+    },
+    {
+      "sheet_number": "236.2",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, Type A Suffix A)",
+      "published_at": "2025-02-20T13:45:57.217056Z",
+      "historical": false,
+      "products": 5,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/236.2/en"
+    },
+    {
+      "sheet_number": "236.20",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, CVT)",
+      "published_at": "2025-02-20T13:45:57.217807Z",
+      "historical": false,
+      "products": 3,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/236.20/en"
+    },
+    {
+      "sheet_number": "236.21",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, 7-Speed DCT)",
+      "published_at": "2025-01-08T08:35:00.107471Z",
+      "historical": false,
+      "products": 2,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/236.21/en"
+    },
+    {
+      "sheet_number": "236.22",
+      "category": "Getriebeöl",
+      "title_en": "Automatic transmission fluids (ATF, 8F DCT transmission)",
+      "published_at": "2025-11-18T15:43:23.262609Z",
+      "historical": false,
+      "products": 4,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/236.22/en"
+    },
+    {
+      "sheet_number": "236.23",
+      "category": "Getriebeöl",
+      "title_en": "Gear oil for electric drive system front axle",
+      "published_at": "2026-06-25T15:00:48.552636Z",
+      "historical": false,
+      "products": 1,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/236.23/en"
+    },
+    {
+      "sheet_number": "236.24",
+      "category": "Getriebeöl",
+      "title_en": "Transmission  Oil (Manual Transmission, E-Drive System)",
+      "published_at": "2026-06-25T14:51:34.724819Z",
+      "historical": false,
+      "products": 3,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/236.24/en"
+    },
+    {
+      "sheet_number": "236.25",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, Hydraulic System)",
+      "published_at": "2024-12-10T12:58:07.515061Z",
+      "historical": false,
+      "products": 2,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/236.25/en"
+    },
+    {
+      "sheet_number": "236.26",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, GL-5 Hydraulic System)",
+      "published_at": "2024-12-10T12:58:07.512718Z",
+      "historical": false,
+      "products": 1,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/236.26/en"
+    },
+    {
+      "sheet_number": "236.27",
+      "category": "Getriebeöl",
+      "title_en": "Automatic transmission fluids (ATF, 8F-eDCT transmission)",
+      "published_at": "2025-11-18T15:43:23.198374Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/236.27/en"
+    },
+    {
+      "sheet_number": "236.3",
+      "category": "Lenkgetriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, Steering)",
+      "published_at": "2025-02-20T13:45:57.219043Z",
+      "historical": false,
+      "products": 11,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/236.3/en"
+    },
+    {
+      "sheet_number": "236.41",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, Hybride)",
+      "published_at": "2024-12-10T12:58:07.448882Z",
+      "historical": false,
+      "products": 2,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/236.41/en"
+    },
+    {
+      "sheet_number": "236.5H",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, Allison) - Historical",
+      "published_at": "2024-12-10T12:55:24.532833Z",
+      "historical": true,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/236.5H/en"
+    },
+    {
+      "sheet_number": "236.6H",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF) - Historical",
+      "published_at": "2024-12-10T12:55:24.527185Z",
+      "historical": true,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/236.6H/en"
+    },
+    {
+      "sheet_number": "236.7",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, Steering/Automatic)",
+      "published_at": "2025-01-16T14:29:26.460663Z",
+      "historical": false,
+      "products": 9,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/236.7/en"
+    },
+    {
+      "sheet_number": "236.8",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, Automatic)",
+      "published_at": "2025-04-16T11:35:51.914473Z",
+      "historical": false,
+      "products": 7,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/236.8/en"
+    },
+    {
+      "sheet_number": "236.81",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, Automatic)",
+      "published_at": "2024-12-10T12:58:07.448170Z",
+      "historical": false,
+      "products": 1,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/236.81/en"
+    },
+    {
+      "sheet_number": "236.82",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, ZF Gear)",
+      "published_at": "2024-12-10T12:58:07.517753Z",
+      "historical": false,
+      "products": 1,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/236.82/en"
+    },
+    {
+      "sheet_number": "236.9",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, Allison/Automatic)",
+      "published_at": "2024-12-10T12:55:24.527457Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/236.9/en"
+    },
+    {
+      "sheet_number": "236.93",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, Allison/Automatic)",
+      "published_at": "2025-02-20T13:45:57.217645Z",
+      "historical": false,
+      "products": 6,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/236.93/en"
+    },
+    {
+      "sheet_number": "237.11",
+      "category": "Getriebeöl",
+      "title_en": "Gears Oil (e-Drive)",
+      "published_at": "2024-12-10T12:58:07.511646Z",
+      "historical": false,
+      "products": 1,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/237.11/en"
+    },
+    {
+      "sheet_number": "237.12",
+      "category": "Getriebeöl",
+      "title_en": "Transmission Oils Electric Drive Modules",
+      "published_at": "2025-02-20T13:45:57.219129Z",
+      "historical": false,
+      "products": 2,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/237.12/en"
+    },
+    {
+      "sheet_number": "237.20",
+      "category": "Getriebeöl",
+      "title_en": "Transmission oils for electric drive modules",
+      "published_at": "2026-06-25T15:00:48.550782Z",
+      "historical": false,
+      "products": 2,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/237.20/en"
+    },
+    {
+      "sheet_number": "239.21",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, 7-Speed DCT Getrag 700.422)",
+      "published_at": "2024-12-10T12:58:07.449085Z",
+      "historical": false,
+      "products": 1,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/239.21/en"
+    },
+    {
+      "sheet_number": "239.22",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, 7-Speed DCT Getrag 700.423)",
+      "published_at": "2024-12-10T12:58:07.446881Z",
+      "historical": false,
+      "products": 2,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/239.22/en"
+    },
+    {
+      "sheet_number": "239.31",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Manual Transmission)",
+      "published_at": "2024-12-10T12:58:07.442195Z",
+      "historical": false,
+      "products": 1,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/239.31/en"
+    },
+    {
+      "sheet_number": "239.41",
+      "category": "Getriebeöl",
+      "title_en": "Automatic Transmission Fluids (ATF, 7-Speed DCT)",
+      "published_at": "2024-12-10T12:58:07.459477Z",
+      "historical": false,
+      "products": 3,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/239.41/en"
+    },
+    {
+      "sheet_number": "239.71",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Rear Axel)",
+      "published_at": "2025-10-30T16:23:34.261666Z",
+      "historical": false,
+      "products": 3,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/239.71/en"
+    },
+    {
+      "sheet_number": "239.72",
+      "category": "Getriebeöl",
+      "title_en": "Gear Oils (Front Axel)",
+      "published_at": "2025-10-30T16:23:34.266348Z",
+      "historical": false,
+      "products": 2,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/239.72/en"
+    },
+    {
+      "sheet_number": "239.73",
+      "category": "Getriebeöl",
+      "title_en": "Axle Oil Light Metal Rear Axle (China Localization)",
+      "published_at": "2024-12-10T12:55:24.514485Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/239.73/en"
+    },
+    {
+      "sheet_number": "239.74",
+      "category": "Getriebeöl",
+      "title_en": "Axle Oil Rear Axle",
+      "published_at": "2025-05-09T09:42:30.639341Z",
+      "historical": false,
+      "products": 1,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/239.74/en"
+    },
+    {
+      "sheet_number": "261.0",
+      "category": "Fett",
+      "title_en": "General information on Grease",
+      "published_at": "2024-12-10T12:55:24.506487Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/261.0/en"
+    },
+    {
+      "sheet_number": "264.0",
+      "category": "Fett",
+      "title_en": "Grease (NLGI Class 00/000, Liquid Grease)",
+      "published_at": "2025-02-20T13:45:57.217123Z",
+      "historical": false,
+      "products": 21,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/264.0/en"
+    },
+    {
+      "sheet_number": "265.1",
+      "category": "Fett",
+      "title_en": "Grease (NLGI class 2, High Temperature Antifriction Bearing Grease)",
+      "published_at": "2025-02-20T13:45:57.218898Z",
+      "historical": false,
+      "products": 17,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/265.1/en"
+    },
+    {
+      "sheet_number": "266.0",
+      "category": "Fett",
+      "title_en": "Grease (NLGI Class 1, Lubricating Grease)",
+      "published_at": "2025-02-20T13:45:57.218949Z",
+      "historical": false,
+      "products": 2,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/266.0/en"
+    },
+    {
+      "sheet_number": "266.2",
+      "category": "Fett",
+      "title_en": "Grease (NLGI class 2, Long-Life Grease)",
+      "published_at": "2024-12-10T12:58:07.519559Z",
+      "historical": false,
+      "products": 2,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/266.2/en"
+    },
+    {
+      "sheet_number": "267.0",
+      "category": "Fett",
+      "title_en": "Grease (NLGI Class 2, Multi Purpose Grease)",
+      "published_at": "2025-02-20T13:45:57.219172Z",
+      "historical": false,
+      "products": 23,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/267.0/en"
+    },
+    {
+      "sheet_number": "267.1",
+      "category": "Fett",
+      "title_en": "Grease (NLGI Class 2, Wheel Bearing Grease)",
+      "published_at": "2025-02-20T13:45:57.218623Z",
+      "historical": false,
+      "products": 4,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/267.1/en"
+    },
+    {
+      "sheet_number": "269.2",
+      "category": "Fett",
+      "title_en": "Grease (NLGI Class 2, Complex Grease)",
+      "published_at": "2025-02-20T13:45:57.217855Z",
+      "historical": false,
+      "products": 1,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/269.2/en"
+    },
+    {
+      "sheet_number": "310.1",
+      "category": "Korrosions- / Frostschutzmittel",
+      "title_en": "General information and specification on coolants",
+      "published_at": "2024-12-10T12:55:24.438866Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/310.1/en"
+    },
+    {
+      "sheet_number": "320.1",
+      "category": "Korrosions- / Frostschutzmittel",
+      "title_en": "Specified anticorrosion protection-antifreeze (Cars, VAN) - Overview -",
+      "published_at": "2024-12-10T12:55:24.524456Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/320.1/en"
+    },
+    {
+      "sheet_number": "325.0",
+      "category": "Korrosions- / Frostschutzmittel",
+      "title_en": "Anticorrosion/Antifreeze Agents",
+      "published_at": "2026-07-06T10:40:14.505691Z",
+      "historical": false,
+      "products": 22,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/325.0/en"
+    },
+    {
+      "sheet_number": "325.6",
+      "category": "Korrosions- / Frostschutzmittel",
+      "title_en": "Anticorrosion/Antifreeze Agents",
+      "published_at": "2026-07-08T15:24:20.308133Z",
+      "historical": false,
+      "products": 27,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/325.6/en"
+    },
+    {
+      "sheet_number": "325.7",
+      "category": "Korrosions- / Frostschutzmittel",
+      "title_en": "Anticorrosion/Antifreeze Agents",
+      "published_at": "2025-04-10T08:17:39.056779Z",
+      "historical": false,
+      "products": 4,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/325.7/en"
+    },
+    {
+      "sheet_number": "326.0",
+      "category": "Korrosions- / Frostschutzmittel",
+      "title_en": "Premixed Anticorrosion/Antifreeze Agents",
+      "published_at": "2025-05-15T10:46:10.873456Z",
+      "historical": false,
+      "products": 12,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/326.0/en"
+    },
+    {
+      "sheet_number": "326.6",
+      "category": "Korrosions- / Frostschutzmittel",
+      "title_en": "Premixed Anticorrosion/Antifreeze Agents",
+      "published_at": "2026-06-25T15:00:48.551179Z",
+      "historical": false,
+      "products": 15,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/326.6/en"
+    },
+    {
+      "sheet_number": "326.64",
+      "category": "Korrosions- / Frostschutzmittel",
+      "title_en": "Premixed Anticorrosion/Antifreeze Agents",
+      "published_at": "2024-12-10T12:58:07.506617Z",
+      "historical": false,
+      "products": 1,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/326.64/en"
+    },
+    {
+      "sheet_number": "326.7",
+      "category": "Korrosions- / Frostschutzmittel",
+      "title_en": "Premixed Anticorrosion/Antifreeze Agents",
+      "published_at": "2024-12-10T12:55:24.521677Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/326.7/en"
+    },
+    {
+      "sheet_number": "330.1",
+      "category": "Bremsflüssigkeit",
+      "title_en": "General information on brake fluid",
+      "published_at": "2024-12-10T12:55:24.531425Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/330.1/en"
+    },
+    {
+      "sheet_number": "331.0",
+      "category": "Bremsflüssigkeit",
+      "title_en": "Brake Fluid",
+      "published_at": "2024-12-10T12:58:07.513523Z",
+      "historical": false,
+      "products": 1,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/331.0/en"
+    },
+    {
+      "sheet_number": "332.0",
+      "category": "Fett",
+      "title_en": "Brake Pad Paste",
+      "published_at": "2024-12-10T12:55:24.448295Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/332.0/en"
+    },
+    {
+      "sheet_number": "340.1",
+      "category": "Hydrauliköl",
+      "title_en": "Specified hydraulic fluids) - overview",
+      "published_at": "2024-12-10T12:55:24.535239Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/340.1/en"
+    },
+    {
+      "sheet_number": "341.0",
+      "category": "Hydrauliköl",
+      "title_en": "Hydraulic Fluids (Tipper)",
+      "published_at": "2024-12-10T12:55:24.531710Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/341.0/en"
+    },
+    {
+      "sheet_number": "341.1",
+      "category": "Hydrauliköl",
+      "title_en": "Hydraulic Fluids",
+      "published_at": "2025-01-16T14:29:26.460417Z",
+      "historical": false,
+      "products": 1,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/341.1/en"
+    },
+    {
+      "sheet_number": "342.0",
+      "category": "Hydrauliköl",
+      "title_en": "Hydraulic Fluids",
+      "published_at": "2024-12-10T12:55:24.442456Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/342.0/en"
+    },
+    {
+      "sheet_number": "342.1",
+      "category": "Hydrauliköl",
+      "title_en": "Hydraulic Fluids",
+      "published_at": "2024-12-10T12:58:07.519731Z",
+      "historical": false,
+      "products": 2,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/342.1/en"
+    },
+    {
+      "sheet_number": "343.0",
+      "category": "Hydrauliköl",
+      "title_en": "Hydraulic Fluids",
+      "published_at": "2024-12-10T12:58:07.514776Z",
+      "historical": false,
+      "products": 2,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/343.0/en"
+    },
+    {
+      "sheet_number": "344.0",
+      "category": "Hydrauliköl",
+      "title_en": "Hydraulic Fluids",
+      "published_at": "2025-02-20T13:45:57.218763Z",
+      "historical": false,
+      "products": 2,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/344.0/en"
+    },
+    {
+      "sheet_number": "345.0",
+      "category": "Hydrauliköl",
+      "title_en": "Hydraulic Fluids",
+      "published_at": "2025-10-24T10:25:33.658682Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/345.0/en"
+    },
+    {
+      "sheet_number": "345.1",
+      "category": "Hydrauliköl",
+      "title_en": "Hydraulic Fluids",
+      "published_at": "2026-06-25T14:51:34.727434Z",
+      "historical": false,
+      "products": 1,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/345.1/en"
+    },
+    {
+      "sheet_number": "346.0",
+      "category": "Hydrauliköl",
+      "title_en": "Hydraulic Fluids",
+      "published_at": "2024-12-10T12:58:07.449412Z",
+      "historical": false,
+      "products": 1,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/346.0/en"
+    },
+    {
+      "sheet_number": "350.0",
+      "category": "Fett",
+      "title_en": "Lubricants for Electrical Equipment",
+      "published_at": "2024-12-10T12:58:07.520688Z",
+      "historical": false,
+      "products": 2,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/350.0/en"
+    },
+    {
+      "sheet_number": "361.0",
+      "category": "Kältemittel",
+      "title_en": "Refrigerant",
+      "published_at": "2024-12-10T12:55:24.526593Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/361.0/en"
+    },
+    {
+      "sheet_number": "361.1",
+      "category": "Kältemittel",
+      "title_en": "Refrigerant",
+      "published_at": "2024-12-10T12:55:24.534549Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/361.1/en"
+    },
+    {
+      "sheet_number": "361.3",
+      "category": "Kältemittel",
+      "title_en": "Refrigerant",
+      "published_at": "2024-12-10T12:55:24.441641Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/361.3/en"
+    },
+    {
+      "sheet_number": "362.0",
+      "category": "Kompressoröl",
+      "title_en": "Refrigerator Oils",
+      "published_at": "2024-12-10T12:55:24.514842Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/362.0/en"
+    },
+    {
+      "sheet_number": "362.1",
+      "category": "Kompressoröl",
+      "title_en": "Refrigerator Oils",
+      "published_at": "2024-12-10T12:58:07.445717Z",
+      "historical": false,
+      "products": 1,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/362.1/en"
+    },
+    {
+      "sheet_number": "362.2",
+      "category": "Kompressoröl",
+      "title_en": "Refrigerator Oils",
+      "published_at": "2024-12-10T12:55:24.533084Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/362.2/en"
+    },
+    {
+      "sheet_number": "362.3",
+      "category": "Kompressoröl",
+      "title_en": "Refrigerator Oils",
+      "published_at": "2024-12-10T12:58:07.516784Z",
+      "historical": false,
+      "products": 2,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/362.3/en"
+    },
+    {
+      "sheet_number": "363.0",
+      "category": "Kompressoröl",
+      "title_en": "Refrigerator Oils",
+      "published_at": "2024-12-10T12:55:24.531102Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/363.0/en"
+    },
+    {
+      "sheet_number": "371.0",
+      "category": "Scheibenwaschmittel-Konzentrat",
+      "title_en": "Windshield Washer Fluid Concentrate",
+      "published_at": "2024-12-10T12:58:07.450128Z",
+      "historical": false,
+      "products": 2,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/371.0/en"
+    },
+    {
+      "sheet_number": "381.0",
+      "category": "Konservierungsmittel",
+      "title_en": "Preservation instructions (Cars, VAN)",
+      "published_at": "2024-12-10T12:55:24.533657Z",
+      "historical": false,
+      "products": 0,
+      "source_url": "https://operatingfluids.mercedes-benz.com/sheet/381.0/en"
+    }
+  ],
+  "publication_scope": "Derived factual approval records with attribution; page design and explanatory text are not republished."
+}

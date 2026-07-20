@@ -10,6 +10,7 @@ import sqlite3
 import unicodedata
 from collections import Counter, defaultdict
 from datetime import date, datetime, timezone
+from itertools import combinations
 from pathlib import Path
 
 from openpyxl import Workbook
@@ -32,6 +33,7 @@ ZF_TE_ML_JSONL = ROOT / "data" / "zf-te-ml-approved-products.jsonl"
 ALLISON_JSONL = ROOT / "data" / "allison-approved-fluids.jsonl"
 DRIVENTIC_DIWA_JSONL = ROOT / "data" / "driventic-diwa-approved-oils.jsonl"
 MERCEDES_DTFR_JSONL = ROOT / "data" / "mercedes-dtfr-approved-fluids.jsonl"
+MERCEDES_BEVO_JSONL = ROOT / "data" / "mercedes-bevo-approved-fluids.jsonl"
 SCHEMA_VERSION = 1
 SNAPSHOT_DATE = "2026-07-20"
 
@@ -559,6 +561,64 @@ def mercedes_dtfr_record(row: dict) -> dict:
     return record
 
 
+def mercedes_bevo_record(row: dict) -> dict:
+    sae_class = row["sae_grades"][0] if row["sae_grades"] else ""
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["company"],
+        "name": row["product_name"],
+        "category": "Эксплуатационные жидкости с допуском Mercedes-Benz BeVo",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": sae_class,
+        "source": "MERCEDES_BENZ_BEVO_APPROVED_FLUIDS",
+    }
+    record = canonical_record(generic)
+    record["manufacturer"] = row["company"]
+    record["brand"] = row["company"]
+    record["market"] = "GLOBAL_MERCEDES_BEVO_APPROVED"
+    record["source_id"] = "MERCEDES_BENZ_BEVO_APPROVED_FLUIDS"
+    record["source_record_id"] = row["source_record_id"]
+    record["source_row"] = None
+    record["evidence_status"] = "official_oem_approval_registry"
+    record["lifecycle_status"] = "historical_approval" if row["historical_only"] else "approved_as_of_current_registry"
+    record["snapshot_date"] = row["snapshot_date"]
+    record["specifications"]["oem_approvals"] = [
+        f"Mercedes-Benz BeVo {sheet}" for sheet in row["bevo_sheets"]
+    ]
+    record["specifications"]["mercedes_bevo_sheets"] = row["bevo_sheets"]
+    record["specifications"]["sae_grades_source_reported"] = row["sae_grades"]
+    record["specifications"]["licensed_standard"] = "Mercedes-Benz BeVo"
+    record["canonical_key"] += f"|mercedes_bevo_record:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    for index, product_id in enumerate(row["bevo_product_ids"], 1):
+        record["codes"][f"mercedes_bevo_product_id_{index}"] = {
+            "system": "MERCEDES_BEVO_PRODUCT_ID",
+            "value": product_id,
+            "source_id": "MERCEDES_BENZ_BEVO_APPROVED_FLUIDS",
+            "status": "official_oem_approval_registry",
+        }
+    return record
+
+
+def merge_mercedes_bevo_evidence(target: dict, source_record: dict, raw: dict) -> None:
+    specs = target["specifications"]
+    specs["oem_approvals"] = sorted(set(specs.get("oem_approvals", [])) | {
+        f"Mercedes-Benz BeVo {sheet}" for sheet in raw["bevo_sheets"]
+    })
+    specs["mercedes_bevo_sheets"] = sorted(
+        set(specs.get("mercedes_bevo_sheets", [])) | set(raw["bevo_sheets"])
+    )
+    specs["sae_grades_source_reported"] = sorted(
+        set(specs.get("sae_grades_source_reported", [])) | set(raw["sae_grades"])
+    )
+    for key, code in source_record["codes"].items():
+        target["codes"][f"bevo_{raw['source_record_id']}_{key}"] = code
+    if not raw["historical_only"]:
+        target["lifecycle_status"] = "approved_as_of_current_registry"
+
+
 def deduplicate(records: list[dict]) -> tuple[list[dict], list[dict]]:
     by_key = defaultdict(list)
     for record in records:
@@ -577,17 +637,31 @@ def deduplicate(records: list[dict]) -> tuple[list[dict], list[dict]]:
             })
     by_name = defaultdict(list)
     for record in canonical:
-        by_name[(normalize(record["brand"]), record["product_name_normalized"])].append(record)
+        by_name[(normalize(record["brand"]), record["product_name_normalized"], record["family_code"])].append(record)
     for group in by_name.values():
         if len(group) < 2:
             continue
-        for left, right in zip(group, group[1:]):
+        by_source = defaultdict(list)
+        for record in group:
+            by_source[record["source_id"]].append(record)
+        for source_group in by_source.values():
+            for left, right in zip(source_group, source_group[1:]):
+                candidates.append({
+                    "product_id_a": left["product_id"],
+                    "product_id_b": right["product_id"],
+                    "reason": "same_brand_name_family_but_different_professional_signature_within_source",
+                    "score": 0.7,
+                    "decision": "keep_separate_specification_conflict",
+                })
+        for left, right in combinations(group, 2):
+            if left["source_id"] == right["source_id"]:
+                continue
             candidates.append({
                 "product_id_a": left["product_id"],
                 "product_id_b": right["product_id"],
-                "reason": "same_brand_and_name_but_different_professional_signature",
-                "score": 0.7,
-                "decision": "keep_separate_specification_conflict",
+                "reason": "same_company_name_family_across_sources_requires_specification_review",
+                "score": 0.9,
+                "decision": "review_cross_source_identity",
             })
     return canonical, candidates
 
@@ -799,6 +873,27 @@ def main() -> None:
     mercedes_dtfr_source_rows = [json.loads(line) for line in MERCEDES_DTFR_JSONL.read_text(encoding="utf-8").splitlines() if line]
     mercedes_dtfr_records = [mercedes_dtfr_record(row) for row in mercedes_dtfr_source_rows]
     input_records.extend(mercedes_dtfr_records)
+    mercedes_bevo_source_rows = [json.loads(line) for line in MERCEDES_BEVO_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    mercedes_bevo_records = [mercedes_bevo_record(row) for row in mercedes_bevo_source_rows]
+    existing_by_name = defaultdict(list)
+    for row in input_records:
+        existing_by_name[(normalize(row["brand"]), row["product_name_normalized"], row["family_code"])].append(row)
+    mercedes_bevo_product_key = {}
+    mercedes_bevo_added_rows = 0
+    mercedes_bevo_matched_rows = 0
+    for raw, source_record in zip(mercedes_bevo_source_rows, mercedes_bevo_records):
+        key = (normalize(raw["company"]), normalize(raw["product_name"]), raw["family_code"])
+        matches = existing_by_name.get(key, [])
+        if matches:
+            target = matches[0]
+            merge_mercedes_bevo_evidence(target, source_record, raw)
+            mercedes_bevo_matched_rows += 1
+        else:
+            target = source_record
+            input_records.append(target)
+            existing_by_name[key].append(target)
+            mercedes_bevo_added_rows += 1
+        mercedes_bevo_product_key[raw["source_record_id"]] = target["canonical_key"]
     aichilon_products, aichilon_packages, exclusions = aichilon_seed()
     existing_by_name = defaultdict(list)
     for row in input_records:
@@ -913,6 +1008,17 @@ def main() -> None:
         if link_key not in source_link_keys:
             source_links.append(link)
             source_link_keys.add(link_key)
+    for raw in mercedes_bevo_source_rows:
+        target = canonical_by_key[mercedes_bevo_product_key[raw["source_record_id"]]]
+        link = {
+            "product_id": target["product_id"], "source_id": "MERCEDES_BENZ_BEVO_APPROVED_FLUIDS",
+            "source_record_id": raw["source_record_id"], "source_row": None,
+            "relation": "official_oem_approval_registry",
+        }
+        link_key = (link["product_id"], link["source_id"], link["source_record_id"])
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     offers = []
     for package in aichilon_packages:
         canonical_key = aichilon_product_key.get(int(package["source_product_id"]))
@@ -951,6 +1057,7 @@ def main() -> None:
         "allison_input_sha256": hashlib.sha256(ALLISON_JSONL.read_bytes()).hexdigest(),
         "driventic_diwa_input_sha256": hashlib.sha256(DRIVENTIC_DIWA_JSONL.read_bytes()).hexdigest(),
         "mercedes_dtfr_input_sha256": hashlib.sha256(MERCEDES_DTFR_JSONL.read_bytes()).hexdigest(),
+        "mercedes_bevo_input_sha256": hashlib.sha256(MERCEDES_BEVO_JSONL.read_bytes()).hexdigest(),
         "canonical_rows": len(records),
         "brands": len({r["brand"] for r in records}),
         "families": dict(sorted(Counter(r["family_code"] for r in records).items())),
@@ -967,6 +1074,9 @@ def main() -> None:
         "allison_source_rows": len(allison_source_rows),
         "driventic_diwa_source_rows": len(driventic_source_rows),
         "mercedes_dtfr_source_rows": len(mercedes_dtfr_source_rows),
+        "mercedes_bevo_source_rows": len(mercedes_bevo_source_rows),
+        "mercedes_bevo_products_matched_to_existing": mercedes_bevo_matched_rows,
+        "mercedes_bevo_products_added": mercedes_bevo_added_rows,
         "jaso_source_rows": len(jaso_source_rows),
         "jaso_unique_oil_codes": len({r["oil_code"] for r in jaso_source_rows}),
         "aichilon_source_products": len(aichilon_products) + len(exclusions),
