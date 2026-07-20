@@ -322,6 +322,21 @@
       "notes": "Официальная страница содержит 1 115 source rows в одном JSON. После исключения 94 строк серий и 6 единиц оборудования, а также объединения 8 повторных source-вхождений получено 1 007 конкретных товарных строк. Публикуются только факты, допуски, рекомендации, классификация, UID/URL и хэши; маркетинговые описания не копируются. Imprint ограничивает коммерческое копирование документации, поэтому этот factual-only scope обязателен."
     },
     {
+      "source_id": "FUCHS_US_PRODUCT_FINDER",
+      "title": "FUCHS USA Product Finder",
+      "owner": "FUCHS LUBRICANTS CO.",
+      "source_type": "official_manufacturer_embedded_product_catalog",
+      "source_locator": "data/fuchs-us-products.jsonl",
+      "source_url": "https://www.fuchs.com/us/en/products/service-links/product-finder/",
+      "terms_url": "https://www.fuchs.com/us/en/imprint/",
+      "source_sha256": "1d465bc588b31b578cd819902d5131c1e750c00d38bdfb627a803db77e6909d3",
+      "access_status": "public_full_catalog_embedded_in_official_page",
+      "bulk_ingest_allowed": true,
+      "publication_status": "factual_fields_only_with_attribution_no_marketing_descriptions",
+      "observed_count": 623,
+      "notes": "Официальная страница содержит 686 source rows в одном JSON. После исключения 60 строк серий и объединения 3 повторных source-вхождений получено 623 конкретных товарных строки. Публикуются только факты, допуски, рекомендации, классификация, UID/URL и хэши; маркетинговые описания не копируются. Совпадения с FUCHS India объединяются только по точному нормализованному названию и профессиональному семейству; межрыночные конфликты семейства остаются раздельными."
+    },
+    {
       "source_id": "totalenergies-global",
       "title": "TotalEnergies Lubricants Catalog",
       "owner": "TotalEnergies Lubrifiants S.A.",

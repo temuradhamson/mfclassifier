@@ -58,9 +58,9 @@ python3 tools/build_analytics_demo.py \
 
 ## Мировой каталог и расширение ЕНКТ
 
-Отдельный provenance-aware слой содержит 14 687 канонических продуктовых строк
+Отдельный provenance-aware слой содержит 15 189 канонических продуктовых строк
 на срез 20.07.2026. В него уже входят проектные источники, AIChilon, официальные
-реестры JASO, GM dexos, NMMA, NLGI, ZF TE-ML, Allison TES, Driventic DIWA, Mercedes-Benz Trucks DTFR, Mercedes-Benz BeVo, официальные каталоги Volvo Genuine и FUCHS India, действующие рекомендации MAN, USDA BioPreferred и открытый API EU Ecolabel. Это проверенный
+реестры JASO, GM dexos, NMMA, NLGI, ZF TE-ML, Allison TES, Driventic DIWA, Mercedes-Benz Trucks DTFR, Mercedes-Benz BeVo, официальные каталоги Volvo Genuine, FUCHS India и FUCHS USA, действующие рекомендации MAN, USDA BioPreferred и открытый API EU Ecolabel. Это проверенный
 растущий seed, а не заявление о полном мировом охвате; подтверждённый мировой
 итог появится только после подключения разрешённых источников и дедупликации.
 
@@ -84,6 +84,7 @@ python3 tools/ingest_mercedes_bevo_approved_fluids.py
 python3 tools/ingest_volvo_genuine_fluids.py
 python3 tools/ingest_man_service_products.py
 python3 tools/ingest_fuchs_india_catalog.py
+python3 tools/ingest_fuchs_us_catalog.py
 python3 tools/build_world_catalog_seed.py
 python3 tools/verify_world_catalog.py
 ```
