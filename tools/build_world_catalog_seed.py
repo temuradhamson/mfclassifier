@@ -27,6 +27,8 @@ XLSX_OUT = ROOT / "deliverables" / "World_lubricants_catalog_seed.xlsx"
 AICHILON_DB = Path("/workspace/chilon/aichilon/var/chilon_seed.sqlite")
 JASO_JSONL = ROOT / "data" / "jaso-filed-oils.jsonl"
 LICENSED_JSONL = ROOT / "data" / "official-licensed-products.jsonl"
+USDA_BIOPREFERRED_JSONL = ROOT / "data" / "usda-biopreferred-products.jsonl"
+ZF_TE_ML_JSONL = ROOT / "data" / "zf-te-ml-approved-products.jsonl"
 SCHEMA_VERSION = 1
 SNAPSHOT_DATE = "2026-07-20"
 
@@ -360,6 +362,91 @@ def licensed_record(row: dict) -> dict:
     return record
 
 
+def biopreferred_record(row: dict) -> dict:
+    categories = row.get("categories", [])
+    generic = {
+        "id": f"USDA-BIOPREFERRED-{row['product_id']}",
+        "source_number": row["product_id"],
+        "brand": row["company"],
+        "name": row["product_name"],
+        "category": "; ".join(categories),
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "source": "usda-biopreferred",
+    }
+    record = canonical_record(generic)
+    record["manufacturer"] = row["company"]
+    record["brand"] = row["company"]
+    record["market"] = "US"
+    record["source_id"] = "usda-biopreferred"
+    record["source_record_id"] = row["product_id"]
+    record["source_row"] = None
+    record["evidence_status"] = "official_government_program_catalog"
+    record["lifecycle_status"] = "listed_as_of_snapshot"
+    record["snapshot_date"] = row["snapshot_date"]
+    record["specifications"]["usda_biopreferred_categories"] = categories
+    statuses = []
+    if row.get("usda_certified_biobased"):
+        statuses.append("USDA Certified Biobased")
+    if row.get("mandatory_federal_purchasing"):
+        statuses.append("USDA Mandatory Federal Purchasing category")
+    record["specifications"]["usda_biopreferred_status"] = statuses
+    record["canonical_key"] += f"|usda_biopreferred_product_id:{normalize(row['product_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    record["codes"]["usda_biopreferred_product_id"] = {
+        "value": row["product_id"],
+        "source_id": "usda-biopreferred",
+        "status": "official_government_program_catalog",
+    }
+    return record
+
+
+def zf_te_ml_record(row: dict) -> dict:
+    viscosity = ""
+    if row["family_code"] == "H":
+        match = re.search(r"\b(?:ISO\s*)?(?:VG\s*)?([0-9]{2,3})\b", row["product_name"], re.I)
+        if match:
+            viscosity = match.group(1)
+    generic = {
+        "id": f"ZF-TE-ML-{row['approval_number']}",
+        "source_number": row["approval_number"],
+        "brand": row["manufacturer"],
+        "name": row["product_name"],
+        "category": "Смазочные материалы, одобренные ZF TE-ML",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "viscosity": viscosity,
+        "source": "ZF_TE_ML",
+    }
+    record = canonical_record(generic)
+    record["manufacturer"] = row["manufacturer"]
+    record["brand"] = row["manufacturer"]
+    record["market"] = "GLOBAL_ZF_APPROVED"
+    record["source_id"] = "ZF_TE_ML"
+    record["source_record_id"] = row["approval_number"]
+    record["source_row"] = None
+    record["evidence_status"] = "official_oem_approval_registry"
+    record["lifecycle_status"] = "approved_as_of_list_date"
+    record["snapshot_date"] = row["list_date"]
+    record["specifications"]["oem_approvals"] = [
+        f"ZF {item['te_ml_sheet']} class {item['lubricant_class']}"
+        for item in row["approval_occurrences"]
+    ]
+    record["specifications"]["zf_te_ml_sheets"] = row["te_ml_sheets"]
+    record["specifications"]["zf_lubricant_classes"] = row["lubricant_classes"]
+    record["specifications"]["product_name_aliases"] = row["product_name_aliases"]
+    record["specifications"]["manufacturer_country"] = row["manufacturer_country"]
+    record["specifications"]["licensed_standard"] = "ZF TE-ML"
+    record["canonical_key"] += f"|zf_approval_number:{normalize(row['approval_number'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    record["codes"]["zf_approval_number"] = {
+        "value": row["approval_number"],
+        "source_id": "ZF_TE_ML",
+        "status": "official_oem_approval_registry",
+    }
+    return record
+
+
 def deduplicate(records: list[dict]) -> tuple[list[dict], list[dict]]:
     by_key = defaultdict(list)
     for record in records:
@@ -585,6 +672,12 @@ def main() -> None:
     licensed_source_rows = [json.loads(line) for line in LICENSED_JSONL.read_text(encoding="utf-8").splitlines() if line]
     licensed_records = [licensed_record(row) for row in licensed_source_rows]
     input_records.extend(licensed_records)
+    biopreferred_source_rows = [json.loads(line) for line in USDA_BIOPREFERRED_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    biopreferred_records = [biopreferred_record(row) for row in biopreferred_source_rows]
+    input_records.extend(biopreferred_records)
+    zf_source_rows = [json.loads(line) for line in ZF_TE_ML_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    zf_records = [zf_te_ml_record(row) for row in zf_source_rows]
+    input_records.extend(zf_records)
     aichilon_products, aichilon_packages, exclusions = aichilon_seed()
     existing_by_name = defaultdict(list)
     for row in input_records:
@@ -644,6 +737,28 @@ def main() -> None:
         if link_key not in source_link_keys:
             source_links.append(link)
             source_link_keys.add(link_key)
+    for raw, normalized_row in zip(biopreferred_source_rows, biopreferred_records):
+        target = canonical_by_key[normalized_row["canonical_key"]]
+        link = {
+            "product_id": target["product_id"], "source_id": "usda-biopreferred",
+            "source_record_id": text(raw["product_id"]), "source_row": None,
+            "relation": "official_government_program_catalog",
+        }
+        link_key = (link["product_id"], link["source_id"], link["source_record_id"])
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
+    for raw, normalized_row in zip(zf_source_rows, zf_records):
+        target = canonical_by_key[normalized_row["canonical_key"]]
+        link = {
+            "product_id": target["product_id"], "source_id": "ZF_TE_ML",
+            "source_record_id": text(raw["approval_number"]), "source_row": None,
+            "relation": "official_oem_approval_registry",
+        }
+        link_key = (link["product_id"], link["source_id"], link["source_record_id"])
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     offers = []
     for package in aichilon_packages:
         canonical_key = aichilon_product_key.get(int(package["source_product_id"]))
@@ -677,6 +792,8 @@ def main() -> None:
         "normalized_input_sha256": hashlib.sha256(CATALOG.read_bytes()).hexdigest(),
         "jaso_normalized_input_sha256": hashlib.sha256(JASO_JSONL.read_bytes()).hexdigest(),
         "official_licensed_input_sha256": hashlib.sha256(LICENSED_JSONL.read_bytes()).hexdigest(),
+        "usda_biopreferred_input_sha256": hashlib.sha256(USDA_BIOPREFERRED_JSONL.read_bytes()).hexdigest(),
+        "zf_te_ml_input_sha256": hashlib.sha256(ZF_TE_ML_JSONL.read_bytes()).hexdigest(),
         "canonical_rows": len(records),
         "brands": len({r["brand"] for r in records}),
         "families": dict(sorted(Counter(r["family_code"] for r in records).items())),
@@ -686,6 +803,10 @@ def main() -> None:
         "official_filed_registry_rows": sum(r["evidence_status"] == "official_filed_registry" for r in records),
         "official_licensed_registry_rows": sum(r["evidence_status"] == "official_licensed_registry" for r in records),
         "official_licensed_source_rows": len(licensed_source_rows),
+        "official_government_program_rows": sum(r["evidence_status"] == "official_government_program_catalog" for r in records),
+        "usda_biopreferred_source_rows": len(biopreferred_source_rows),
+        "official_oem_approval_rows": sum(r["evidence_status"] == "official_oem_approval_registry" for r in records),
+        "zf_te_ml_source_rows": len(zf_source_rows),
         "jaso_source_rows": len(jaso_source_rows),
         "jaso_unique_oil_codes": len({r["oil_code"] for r in jaso_source_rows}),
         "aichilon_source_products": len(aichilon_products) + len(exclusions),

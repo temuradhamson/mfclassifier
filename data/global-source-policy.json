@@ -199,11 +199,28 @@
       "title": "USDA BioPreferred Program Catalog",
       "owner": "United States Department of Agriculture",
       "source_type": "official_voluntary_product_catalog",
+      "source_locator": "data/usda-biopreferred-products.jsonl",
       "source_url": "https://www.biopreferred.gov/BioPreferred/faces/catalog/Catalog.xhtml",
-      "access_status": "machine_readable_feed_discovery",
-      "bulk_ingest_allowed": false,
-      "publication_status": "category_and_source_description_only_until_feed_confirmed",
-      "notes": "Каталог содержит смазки, масла, гидравлические, теплообменные, трансформаторные и металлообрабатывающие жидкости. Компании добавляют данные добровольно; воспроизводимый bulk/API endpoint пока не найден."
+      "source_sha256": "1f301afa1ca9ea8e603c4c9818b7824d166f2c7e22ef7bd23daa29e516d1802a",
+      "access_status": "public_official_catalog_full_category_response",
+      "bulk_ingest_allowed": true,
+      "publication_status": "derived_factual_records_with_attribution",
+      "observed_count": 892,
+      "notes": "Публичный интерфейс USDA возвращает полные категории без пагинации. Сохранены product ID, name, company, категории и program flags; рекламные описания не переиздаются, хранится только SHA-256 для доказательства. 1 387 вхождений категорий объединены в 892 продукта по USDA product ID."
+    },
+    {
+      "source_id": "ZF_TE_ML",
+      "title": "ZF Lists of Lubricants TE-ML",
+      "owner": "ZF Friedrichshafen AG",
+      "source_type": "official_oem_approval_registry_zip",
+      "source_locator": "data/zf-te-ml-approved-products.jsonl",
+      "source_url": "https://aftermarket.zf.com/lubricants/en/2026-07-01_en.zip",
+      "source_sha256": "b4812ab38f24e50371250ced3a555df3c85bb72344227fdb42da04b120561dfe",
+      "access_status": "public_official_approval_lists",
+      "bulk_ingest_allowed": true,
+      "publication_status": "derived_factual_records_with_attribution",
+      "observed_count": 1498,
+      "notes": "Официальный ZIP ZF от 01.07.2026 содержит 28 PDF и 4 919 вхождений одобрений. Они объединены по 1 498 уникальным ZF approval numbers; сохранены TE-ML sheet, lubricant class, page и хэши PDF, но оформление и полный текст PDF не переиздаются. SHA-256 архива: ad8bf0de338d9d18e956bcb6215d81dd578a08e72291c7565b3f5df73d911b11."
     },
     {
       "source_id": "totalenergies-global",

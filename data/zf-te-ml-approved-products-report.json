@@ -1,0 +1,191 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-07-20",
+  "list_date": "2026-07-01",
+  "source_id": "ZF_TE_ML",
+  "source_url": "https://aftermarket.zf.com/lubricants/en/2026-07-01_en.zip",
+  "archive_sha256": "ad8bf0de338d9d18e956bcb6215d81dd578a08e72291c7565b3f5df73d911b11",
+  "pdfs": 28,
+  "approval_occurrences": 4919,
+  "unique_approval_numbers": 1498,
+  "manufacturers": 134,
+  "source_name_collisions": 2,
+  "families": {
+    "G": 2,
+    "H": 14,
+    "M": 1,
+    "T": 1481
+  },
+  "normalized_output_sha256": "b4812ab38f24e50371250ced3a555df3c85bb72344227fdb42da04b120561dfe",
+  "source_files": [
+    {
+      "file": "TE-ML 01-EN.pdf",
+      "source_sha256": "849c1d08e1dc70ddf692fde23d98dc1efe6422b162e9a3cb4d521b83711e1957",
+      "pages": 5,
+      "approval_occurrences": 77
+    },
+    {
+      "file": "TE-ML 02-EN.pdf",
+      "source_sha256": "9716b08a6ddf1f884187d1e4201a16038416f09eabdc8e081c0d0e240700fc76",
+      "pages": 16,
+      "approval_occurrences": 191
+    },
+    {
+      "file": "TE-ML 03-EN.pdf",
+      "source_sha256": "687c3b87495d73a4021541765d3302e5009891c29205b3f099366d63981aa4e4",
+      "pages": 17,
+      "approval_occurrences": 364
+    },
+    {
+      "file": "TE-ML 04-EN.pdf",
+      "source_sha256": "34cb9dd29b583885b2e5b2936a5e9f34061fc50461fc5a8190f6c9cc4ba33609",
+      "pages": 18,
+      "approval_occurrences": 417
+    },
+    {
+      "file": "TE-ML 05-EN.pdf",
+      "source_sha256": "2727eb2c3adadb162f7b2623ac229874f08e7e92c10c67851a8e515c52fb1fdb",
+      "pages": 19,
+      "approval_occurrences": 525
+    },
+    {
+      "file": "TE-ML 06-EN.pdf",
+      "source_sha256": "cc640946a94961227c350de2227fdba1dee34ff5d19bd074d64acc4cface3415",
+      "pages": 22,
+      "approval_occurrences": 285
+    },
+    {
+      "file": "TE-ML 07-EN.pdf",
+      "source_sha256": "5a9ac982de3361a414de05bf0aa48439968a2aa5b1e016fd538eb10c4fcbd018",
+      "pages": 13,
+      "approval_occurrences": 169
+    },
+    {
+      "file": "TE-ML 08-EN.pdf",
+      "source_sha256": "f498b4518bff3f242e974d018e81ada552f872045e44b801e5021496fe52e334",
+      "pages": 1,
+      "approval_occurrences": 0
+    },
+    {
+      "file": "TE-ML 09-EN.pdf",
+      "source_sha256": "6b36fde8b5b03d2567230485e4906e627d364f6aca8eaac74ec67c4587c4e161",
+      "pages": 1,
+      "approval_occurrences": 0
+    },
+    {
+      "file": "TE-ML 11-EN.pdf",
+      "source_sha256": "1415d0086a234c734cbb1117ec86e3318571619943aec415689033e246659d9a",
+      "pages": 8,
+      "approval_occurrences": 28
+    },
+    {
+      "file": "TE-ML 12-EN.pdf",
+      "source_sha256": "4d2320d35306aa8a9673f0df6512062589a36d21647842388d26121e5de0462a",
+      "pages": 16,
+      "approval_occurrences": 399
+    },
+    {
+      "file": "TE-ML 13-EN.pdf",
+      "source_sha256": "81385518f31ffdaddad846b19e9022d792dacb1c2bc5ea475866b7fcd1833d4b",
+      "pages": 5,
+      "approval_occurrences": 0
+    },
+    {
+      "file": "TE-ML 14-EN.pdf",
+      "source_sha256": "095b502ffffcdddc343b9d1e447e05b6b31e51fa607dac7c90d6594913737c24",
+      "pages": 9,
+      "approval_occurrences": 210
+    },
+    {
+      "file": "TE-ML 15-EN.pdf",
+      "source_sha256": "e48fb36f3d0c4dcb762010c163768667c04db6c585aa5ae6545382da5166733e",
+      "pages": 1,
+      "approval_occurrences": 0
+    },
+    {
+      "file": "TE-ML 16-EN.pdf",
+      "source_sha256": "9130d18ae08f2fc6f180497be5a1d738e5331d9d549d3465e8689c5f3ac2ca3c",
+      "pages": 20,
+      "approval_occurrences": 585
+    },
+    {
+      "file": "TE-ML 17-EN.pdf",
+      "source_sha256": "c1c95ad6c21ba934e33264dd9c423943268374fd8ddcba2a379836c9220b39c9",
+      "pages": 19,
+      "approval_occurrences": 580
+    },
+    {
+      "file": "TE-ML 19-EN.pdf",
+      "source_sha256": "c37d94009d6f72794b2a0ebc542dd876a962d340493933f3881ad6063ccceaf8",
+      "pages": 9,
+      "approval_occurrences": 305
+    },
+    {
+      "file": "TE-ML 20-EN.pdf",
+      "source_sha256": "13c6e8e19abb38b9bb80af4d6bc995c5d138d33124e94db5a0360ea0a477b8f5",
+      "pages": 10,
+      "approval_occurrences": 78
+    },
+    {
+      "file": "TE-ML 21-EN.pdf",
+      "source_sha256": "3b28416b55dcc282019244ea4de5ee9945fe4185ebd02aa44d930d2e23a4a023",
+      "pages": 18,
+      "approval_occurrences": 603
+    },
+    {
+      "file": "TE-ML 23-EN.pdf",
+      "source_sha256": "d2604b7ae5734ec3053f669b64960b552fa3a177808511059534501854a02521",
+      "pages": 3,
+      "approval_occurrences": 11
+    },
+    {
+      "file": "TE-ML 24-EN.pdf",
+      "source_sha256": "b721283b041d0feb329a1686c6851f2a36e2ea791084b24de0fefc21f6c88e9d",
+      "pages": 5,
+      "approval_occurrences": 0
+    },
+    {
+      "file": "TE-ML 25-EN.pdf",
+      "source_sha256": "215acd00b89e93d38e3e21524fc82b414c57d9504d7c01d74691a87edb5718d6",
+      "pages": 8,
+      "approval_occurrences": 79
+    },
+    {
+      "file": "TE-ML 26-EN.pdf",
+      "source_sha256": "8f0dd1b4be577716c7dec4ad7b15ab0facbbbe2cb2220bc00ca3ac5b93da6dca",
+      "pages": 4,
+      "approval_occurrences": 6
+    },
+    {
+      "file": "TE-ML 27-EN.pdf",
+      "source_sha256": "1038dfac2b9db0c5b778a885f2891128e02a982097947c515920a0f185084660",
+      "pages": 12,
+      "approval_occurrences": 0
+    },
+    {
+      "file": "TE-ML 28-EN.pdf",
+      "source_sha256": "814ac55e0bcefcf5f1e4150a6d82b13b685197e95d30be0d380b94bcfb7e200d",
+      "pages": 6,
+      "approval_occurrences": 6
+    },
+    {
+      "file": "TE-ML 29-EN.pdf",
+      "source_sha256": "5e1cb50333dd77e86aab2d67a2edf07e0396603e06bea456ee307d127fe8e720",
+      "pages": 2,
+      "approval_occurrences": 0
+    },
+    {
+      "file": "TE-ML 30-EN.pdf",
+      "source_sha256": "16e4a6a15219ce6d99eecc3defda294e1436bd2ae14ead13dbdcbf6cc556f8eb",
+      "pages": 2,
+      "approval_occurrences": 0
+    },
+    {
+      "file": "TE-ML 31-EN.pdf",
+      "source_sha256": "823e3c3a0c53341652a90917fb95ac919a331bfaf733bd84bfe09bbef63e0cf0",
+      "pages": 4,
+      "approval_occurrences": 1
+    }
+  ],
+  "publication_scope": "Derived factual approval records with attribution; ZF PDF design and full text are not republished."
+}

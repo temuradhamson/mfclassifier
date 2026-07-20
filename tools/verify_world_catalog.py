@@ -17,6 +17,8 @@ def main() -> None:
     policy = json.loads((ROOT / "data/global-source-policy.json").read_text(encoding="utf-8"))
     jaso_report = json.loads((ROOT / "data/jaso-filed-oils-report.json").read_text(encoding="utf-8"))
     licensed_report = json.loads((ROOT / "data/official-licensed-products-report.json").read_text(encoding="utf-8"))
+    biopreferred_report = json.loads((ROOT / "data/usda-biopreferred-products-report.json").read_text(encoding="utf-8"))
+    zf_report = json.loads((ROOT / "data/zf-te-ml-approved-products-report.json").read_text(encoding="utf-8"))
     lines = [json.loads(line) for line in (ROOT / "data/world-catalog-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     assert report["status"] == "seed_only_world_catalog_incomplete"
     assert report["confirmed_world_total"] is None
@@ -36,12 +38,16 @@ def main() -> None:
     assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
     assert not db.execute("PRAGMA foreign_key_check").fetchall()
     assert db.execute("SELECT count(*) FROM products").fetchone()[0] == len(lines)
-    assert len(lines) == 7257
+    assert len(lines) == 9647
     assert report["jaso_source_rows"] == jaso_report["rows"] == 3630
     assert report["jaso_unique_oil_codes"] == jaso_report["unique_oil_codes"] == 3629
     assert report["official_filed_registry_rows"] == 3629
     assert report["official_licensed_source_rows"] == licensed_report["rows"] == 3037
     assert report["official_licensed_registry_rows"] == 3037
+    assert report["usda_biopreferred_source_rows"] == biopreferred_report["rows"] == 892
+    assert report["official_government_program_rows"] == 892
+    assert report["zf_te_ml_source_rows"] == zf_report["unique_approval_numbers"] == 1498
+    assert report["official_oem_approval_rows"] == 1498
     assert report["aichilon_products_matched_to_existing"] == 255
     assert report["aichilon_products_added"] == 60
     assert report["aichilon_rows_excluded"] == 2
@@ -49,6 +55,8 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status='active'").fetchone()[0] == report["active_offers"] == 1455
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_filed_registry'").fetchone()[0] == 3629
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_licensed_registry'").fetchone()[0] == 3037
+    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_program_catalog'").fetchone()[0] == 892
+    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_approval_registry'").fetchone()[0] == 1498
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='JASO_OIL_CODE'").fetchone()[0] == 3629
     assert db.execute("SELECT count(*) FROM sources WHERE bulk_ingest_allowed=0").fetchone()[0] == len(report["bulk_sources_blocked"])
     motor_enkt = db.execute("""
@@ -69,6 +77,14 @@ def main() -> None:
     for source in licensed_report["sources"]:
         assert policy_by_id[source["source_id"]]["source_sha256"] == source["source_sha256"]
         assert policy_by_id[source["source_id"]]["observed_count"] == source["rows"]
+    assert policy_by_id["usda-biopreferred"]["source_sha256"] == biopreferred_report["normalized_output_sha256"]
+    assert policy_by_id["usda-biopreferred"]["observed_count"] == biopreferred_report["rows"]
+    assert biopreferred_report["source_occurrences"] == 1387
+    assert biopreferred_report["duplicate_category_occurrences_merged"] == 495
+    assert policy_by_id["ZF_TE_ML"]["source_sha256"] == zf_report["normalized_output_sha256"]
+    assert policy_by_id["ZF_TE_ML"]["observed_count"] == zf_report["unique_approval_numbers"]
+    assert zf_report["approval_occurrences"] == 4919
+    assert zf_report["pdfs"] == 28
     forbidden_tables = {"users", "requests", "request_items", "prices", "oil_market_sales"}
     output_tables = {row[0] for row in db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
     assert not forbidden_tables & output_tables
