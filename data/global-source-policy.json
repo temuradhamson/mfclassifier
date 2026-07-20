@@ -100,6 +100,28 @@
       "bulk_ingest_allowed": false,
       "publication_status": "links_and_count_evidence_only",
       "notes": "Portal warns that copying is permitted only under its terms; review and permission required before bulk acquisition."
+    },
+    {
+      "source_id": "api-eolcs",
+      "title": "API EOLCS Licensee Directory",
+      "owner": "American Petroleum Institute",
+      "source_type": "official_licensing_directory",
+      "source_url": "https://www.api.org/products-and-services/engine-oil/eolcs-licensee-directory",
+      "access_status": "feed_or_access_request_required",
+      "bulk_ingest_allowed": false,
+      "publication_status": "directory_links_and_source_description_only",
+      "notes": "API calls the directory free and states that it covers active licensees and licensed products; the current directory endpoint redirects to account sign-in and no authorized bulk feed was discovered."
+    },
+    {
+      "source_id": "nsf-white-book",
+      "title": "NSF White Book Nonfood Compounds Listing Directory",
+      "owner": "NSF",
+      "source_type": "official_registration_directory",
+      "source_url": "https://info.nsf.org/USDA/psnclistings.asp",
+      "access_status": "terms_and_feed_review_required",
+      "bulk_ingest_allowed": false,
+      "publication_status": "individual_listing_links_only_until_confirmed",
+      "notes": "Public search exposes current food-grade lubricant registrations; bulk extraction rights and an official feed must be confirmed before ingestion."
     }
   ]
 }

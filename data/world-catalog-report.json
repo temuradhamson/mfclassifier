@@ -50,7 +50,9 @@
   ],
   "bulk_sources_blocked": [
     "totalenergies-global",
-    "shell-epc"
+    "shell-epc",
+    "api-eolcs",
+    "nsf-white-book"
   ],
   "confirmed_world_total": null,
   "completion_note": "The seed proves the pipeline, not worldwide coverage. Exact worldwide count remains pending licensed/authorized source ingestion."
