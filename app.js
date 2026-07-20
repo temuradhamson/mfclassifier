@@ -1,4 +1,5 @@
 const DATA = window.MF_CLASSIFIER_DATA;
+const ANALYTICS = window.MF_ANALYTICS_DEMO;
 const PAGE_SIZE = 30;
 const CLASS_PAGE_SIZE = 24;
 
@@ -8,6 +9,7 @@ const state = {
   classPage: 1,
   reference: "standards",
   referenceRows: [],
+  analyticsScenario: "engine",
   products: [],
   classes: [],
 };
@@ -40,6 +42,7 @@ function init() {
   renderProducts();
   renderClasses();
   renderReferences();
+  renderImpact();
   renderHeader();
   restoreTheme();
   navigate((location.hash || "#overview").slice(1), false);
@@ -99,6 +102,12 @@ function bindEvents() {
     const item = event.target.closest("[data-reference-item]");
     if (item) openReference(item.dataset.referenceItem);
   });
+  $("impactTabs").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-impact-scenario]");
+    if (!button) return;
+    state.analyticsScenario = button.dataset.impactScenario;
+    renderImpact();
+  });
 
   $("matcherForm").addEventListener("submit", runMatcher);
   $("matchResults").addEventListener("click", (event) => {
@@ -140,7 +149,7 @@ function renderHeader() {
 }
 
 function navigate(view, updateHash = true) {
-  const valid = ["overview", "products", "classes", "references", "matcher"];
+  const valid = ["overview", "products", "classes", "references", "impact", "matcher"];
   state.view = valid.includes(view) ? view : "overview";
   qsa(".view").forEach((section) => section.classList.toggle("active", section.id === `${state.view}View`));
   qsa(".nav-item").forEach((button) => button.classList.toggle("active", button.dataset.view === state.view));
@@ -196,6 +205,36 @@ function renderOverview() {
     <div class="legend-row"><span>Требуют экспертной разметки</span><b>${unlinked}</b></div>
     <div class="legend-row"><span>Конфликты источника</span><b>${DATA.quality.anomalies.length}</b></div>`;
   $("sourceStrip").innerHTML = DATA.sources.map((item) => `<div class="source-chip" title="${esc(item.title)}"><b>${esc(item.title)}</b><span>${esc(item.type)} · ${item.records || item.pages || "—"}</span></div>`).join("");
+}
+
+function rub(value) { return `${formatNumber(Math.round(value || 0))} сум`; }
+
+function renderImpact() {
+  if (!ANALYTICS?.scenarios?.length) {
+    $("impactComparison").innerHTML = '<div class="empty-state">Демонстрационная выборка не загружена</div>';
+    return;
+  }
+  $("impactMetrics").innerHTML = [
+    [formatNumber(ANALYTICS.methodology.production_lots_at_build), "лота в production ANIQLIK"],
+    [formatNumber(ANALYTICS.metrics.sample_lots), "случайных лота в демонстрации"],
+    [formatNumber(ANALYTICS.metrics.professional_segments), "профессиональных ценовых сегментов"],
+    [formatNumber(ANALYTICS.metrics.scenarios), "сценария классификации"],
+  ].map(([value, label]) => `<div><strong>${value}</strong><span>${esc(label)}</span></div>`).join("");
+  $("impactTabs").innerHTML = ANALYTICS.scenarios.map((item) => `<button class="${item.id === state.analyticsScenario ? "active" : ""}" data-impact-scenario="${esc(item.id)}">${esc(item.title)}<em>${item.before.lots}</em></button>`).join("");
+  const scenario = ANALYTICS.scenarios.find((item) => item.id === state.analyticsScenario) || ANALYTICS.scenarios[0];
+  const spread = scenario.after.max_segment_avg / scenario.after.min_segment_avg;
+  $("impactComparison").innerHTML = `
+    <article class="before-card"><div class="compare-top"><span>ДО КЛАССИФИКАТОРА</span><b>Старшая группа</b></div><h2>${esc(scenario.before.group)}</h2><div class="coarse-price"><strong>${rub(scenario.before.avg_price_per_kg)}</strong><span>единая средняя цена / кг</span></div><div class="dimension-list">${scenario.before.available_dimensions.map((value) => `<span>${esc(value)}</span>`).join("")}</div><p>Разные вязкости и эксплуатационные классы смешаны в одном показателе.</p></article>
+    <div class="compare-arrow"><span>→</span><b>классификатор</b></div>
+    <article class="after-card"><div class="compare-top"><span>ПОСЛЕ КЛАССИФИКАТОРА</span><b>${esc(scenario.criterion)}</b></div><h2>${scenario.after.segment_count} отдельных сегментов</h2><div class="price-range"><div><small>от</small><strong>${rub(scenario.after.min_segment_avg)}</strong></div><i>→</i><div><small>до</small><strong>${rub(scenario.after.max_segment_avg)}</strong></div></div><div class="impact-spread"><strong>${spread.toFixed(1)}×</strong><span>разница средних цен между конкретными продуктами</span></div><div class="dimension-list after">${scenario.after.available_dimensions.map((value) => `<span>${esc(value)}</span>`).join("")}</div></article>`;
+  $("impactCriterion").textContent = scenario.criterion;
+  const maxPrice = Math.max(...scenario.after.segments.map((item) => item.avg_price_per_kg));
+  $("impactSegments").innerHTML = `<div class="segment-list">${scenario.after.segments.map((item) => {
+    const delta = item.difference_from_coarse_pct;
+    return `<div class="segment-row"><div><b>${esc(item.key)}</b><small>${item.lots} ${item.lots === 1 ? "лот · малая выборка" : "лота"}</small></div><div class="segment-track"><i style="width:${Math.max(4, item.avg_price_per_kg / maxPrice * 100)}%"></i><u style="left:${scenario.before.avg_price_per_kg / maxPrice * 100}%" title="Средняя до классификатора"></u></div><strong>${rub(item.avg_price_per_kg)}</strong><span class="delta ${delta > 0 ? "up" : "down"}">${delta > 0 ? "+" : ""}${delta}%</span></div>`;
+  }).join("")}</div><div class="segment-legend"><span><i></i>Средняя конкретного продукта</span><span><u></u>Средняя старшей группы: ${rub(scenario.before.avg_price_per_kg)}</span></div>`;
+  $("impactLots").innerHTML = scenario.lots.map((item) => `<tr><td><b>${esc(item.lot_number)}</b><small>${esc(item.date)}</small></td><td><span>${esc(item.raw_product_name)}</span><small>${esc(item.raw_brand_text)}</small></td><td><span class="enriched-key">${esc(item.professional_key)}</span><small class="demo-origin">вычислено для демонстрации</small></td><td><b>${rub(item.price_per_kg)}</b></td></tr>`).join("");
+  $("impactMethod").innerHTML = `<strong>Методика и честная маркировка</strong><p>${esc(ANALYTICS.methodology.selection)} ${esc(ANALYTICS.methodology.disclosure)}</p><span>Источник: ${esc(ANALYTICS.methodology.source)} · seed ${ANALYTICS.methodology.random_seed} · контрагенты не публикуются</span>`;
 }
 
 function productSearchText(item) {

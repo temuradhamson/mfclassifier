@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Единый классификатор масел, смазок и технических жидкостей">
   <title>MF Classifier — смазочные материалы</title>
-  <link rel="stylesheet" href="styles.css?v=3.1.4">
+  <link rel="stylesheet" href="styles.css?v=3.2.0">
 </head>
 <body>
   <div class="app-shell">
@@ -31,6 +31,7 @@
         <button class="nav-item" data-view="products"><span>◉</span><b>Продукты</b><em id="navProducts">0</em></button>
         <button class="nav-item" data-view="classes"><span>◇</span><b>Классы</b><em id="navClasses">0</em></button>
         <button class="nav-item" data-view="references"><span>≡</span><b>Справочники</b></button>
+        <button class="nav-item" data-view="impact"><span>⇄</span><b>До / После</b><em>DEMO</em></button>
         <button class="nav-item accent" data-view="matcher"><span>✦</span><b>Подбор класса</b></button>
       </nav>
       <div class="sidebar-note">
@@ -152,6 +153,20 @@
         <div id="referenceContent"></div>
       </section>
 
+      <section class="view" id="impactView">
+        <div class="impact-hero">
+          <div><span class="eyebrow">Влияние на государственную аналитику</span><h1>Одна средняя цена.<br><span>Совершенно разные продукты.</span></h1><p>Сравнение одних и тех же реальных лотов ANIQLIK до и после применения профессионального классификатора.</p></div>
+          <div class="demo-seal"><strong>DEMO</strong><span>случайная выборка<br>демо-обогащение</span></div>
+        </div>
+        <div class="impact-disclosure"><strong>Что здесь настоящее?</strong><span>Номера лотов, исходные названия и цены взяты из ANIQLIK. Профессиональные признаки вычислены демонстрационно и не записаны в production-БД.</span></div>
+        <div class="impact-metrics" id="impactMetrics"></div>
+        <div class="impact-tabs" id="impactTabs"></div>
+        <div class="impact-comparison" id="impactComparison"></div>
+        <article class="panel impact-panel"><div class="panel-heading"><div><span class="kicker">Почему меняется результат</span><h2>Средняя цена после профессионального разреза</h2></div><span class="impact-criterion" id="impactCriterion"></span></div><div id="impactSegments"></div></article>
+        <article class="panel impact-panel"><div class="panel-heading"><div><span class="kicker">Проверяемая выборка</span><h2>Какие лоты были обогащены</h2></div><span class="demo-label">ДЕМО-ПОЛЯ</span></div><div class="table-scroll"><table class="impact-table"><thead><tr><th>Лот ANIQLIK</th><th>Как было</th><th>Добавленный профессиональный ключ</th><th>Цена / кг</th></tr></thead><tbody id="impactLots"></tbody></table></div></article>
+        <div class="impact-method" id="impactMethod"></div>
+      </section>
+
       <section class="view" id="matcherView">
         <div class="matcher-layout">
           <div class="matcher-intro">
@@ -190,7 +205,8 @@
   </div>
 
   <div class="toast" id="toast"></div>
-  <script src="data/catalog-v3.js?v=3.1.4"></script>
-  <script src="app.js?v=3.1.4"></script>
+  <script src="data/catalog-v3.js?v=3.2.0"></script>
+  <script src="data/analytics-demo.js?v=3.2.0"></script>
+  <script src="app.js?v=3.2.0"></script>
 </body>
 </html>
