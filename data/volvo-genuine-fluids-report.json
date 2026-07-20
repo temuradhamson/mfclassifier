@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-07-20",
+  "source_id": "VOLVO_GENUINE_FLUIDS",
+  "landing_urls": [
+    "https://www.volvoce.com/asia/en-as/parts/maintenance-parts/lubricants/",
+    "https://www.volvoce.com/asia/en-as/parts/maintenance-parts/grease/",
+    "https://www.volvoce.com/asia/en-as/parts/maintenance-parts/coolants/",
+    "https://www.volvoce.com/asia/en-as/parts/maintenance-parts/common-hydraulic-oil/",
+    "https://www.volvotrucks.us/parts-and-services/parts/material-safety-data-sheets/"
+  ],
+  "source_pages": [
+    {
+      "page_id": "ce_lubricants",
+      "source_url": "https://www.volvoce.com/asia/en-as/parts/maintenance-parts/lubricants/",
+      "source_sha256": "8f546d518f41ae5c89d060ae0ff5598ac5957ea7b6b175db9d504828cd2ba69e"
+    },
+    {
+      "page_id": "ce_grease",
+      "source_url": "https://www.volvoce.com/asia/en-as/parts/maintenance-parts/grease/",
+      "source_sha256": "f47f4047f768e6556a8d36c0169fc88a76cf4189cfcc296d930c16a97ba50916"
+    },
+    {
+      "page_id": "ce_coolants",
+      "source_url": "https://www.volvoce.com/asia/en-as/parts/maintenance-parts/coolants/",
+      "source_sha256": "1adc3999001513712d634a57df173ce629e89a675049cb3de09c825585369a99"
+    },
+    {
+      "page_id": "ce_ho103",
+      "source_url": "https://www.volvoce.com/asia/en-as/parts/maintenance-parts/common-hydraulic-oil/",
+      "source_sha256": "0c1990f57a06d9f5ff800ef1b9c08996f35ce42f732702a7071af21180519f8d"
+    },
+    {
+      "page_id": "trucks_us_sds",
+      "source_url": "https://www.volvotrucks.us/parts-and-services/parts/material-safety-data-sheets/",
+      "source_sha256": "546022133ad48445476aa5995e359100d13fe941299964f9955fbc5ac3c68e40"
+    }
+  ],
+  "products": 32,
+  "families": {
+    "G": 6,
+    "H": 5,
+    "M": 3,
+    "T": 13,
+    "TF": 5
+  },
+  "excluded_ungraded_engine_oil_series": [
+    "Volvo Engine Oil VDS-3",
+    "Volvo Engine Oil VDS-4",
+    "Volvo Engine Oil VDS-4.5"
+  ],
+  "normalized_output_sha256": "73126dcac3d249ecfb384da6e30097f337aa18167c6b5f825636df6896317064",
+  "publication_scope": "Derived factual product and technical fields with attribution; page design and marketing prose are not republished."
+}

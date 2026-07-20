@@ -34,6 +34,7 @@ ALLISON_JSONL = ROOT / "data" / "allison-approved-fluids.jsonl"
 DRIVENTIC_DIWA_JSONL = ROOT / "data" / "driventic-diwa-approved-oils.jsonl"
 MERCEDES_DTFR_JSONL = ROOT / "data" / "mercedes-dtfr-approved-fluids.jsonl"
 MERCEDES_BEVO_JSONL = ROOT / "data" / "mercedes-bevo-approved-fluids.jsonl"
+VOLVO_GENUINE_JSONL = ROOT / "data" / "volvo-genuine-fluids.jsonl"
 SCHEMA_VERSION = 1
 SNAPSHOT_DATE = "2026-07-20"
 
@@ -619,6 +620,45 @@ def merge_mercedes_bevo_evidence(target: dict, source_record: dict, raw: dict) -
         target["lifecycle_status"] = "approved_as_of_current_registry"
 
 
+def volvo_genuine_record(row: dict) -> dict:
+    specs = row["specifications"]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Оригинальные эксплуатационные жидкости Volvo",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": specs.get("sae_engine") or specs.get("sae_gear") or "",
+        "api_class": f"API {specs['api_gl']}" if specs.get("api_gl") else "",
+        "grease_class": specs.get("nlgi", ""),
+        "source": "VOLVO_GENUINE_FLUIDS",
+    }
+    record = canonical_record(generic)
+    record["manufacturer"] = row["manufacturer"]
+    record["brand"] = row["brand"]
+    record["market"] = row["market"]
+    record["source_id"] = "VOLVO_GENUINE_FLUIDS"
+    record["source_record_id"] = row["source_record_id"]
+    record["source_row"] = None
+    record["evidence_status"] = "official_manufacturer_product_catalog"
+    record["lifecycle_status"] = "current_official_catalog"
+    record["snapshot_date"] = row["snapshot_date"]
+    record["specifications"].update(specs)
+    record["specifications"]["source_url"] = row["source_url"]
+    record["canonical_key"] += f"|volvo_genuine_record:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    for index, part_number in enumerate(specs.get("part_numbers", []), 1):
+        record["codes"][f"volvo_part_number_{index}"] = {
+            "system": "VOLVO_PART_NUMBER",
+            "value": part_number,
+            "source_id": "VOLVO_GENUINE_FLUIDS",
+            "status": "official_manufacturer_product_catalog",
+        }
+    return record
+
+
 def deduplicate(records: list[dict]) -> tuple[list[dict], list[dict]]:
     by_key = defaultdict(list)
     for record in records:
@@ -894,6 +934,9 @@ def main() -> None:
             existing_by_name[key].append(target)
             mercedes_bevo_added_rows += 1
         mercedes_bevo_product_key[raw["source_record_id"]] = target["canonical_key"]
+    volvo_genuine_source_rows = [json.loads(line) for line in VOLVO_GENUINE_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    volvo_genuine_records = [volvo_genuine_record(row) for row in volvo_genuine_source_rows]
+    input_records.extend(volvo_genuine_records)
     aichilon_products, aichilon_packages, exclusions = aichilon_seed()
     existing_by_name = defaultdict(list)
     for row in input_records:
@@ -1019,6 +1062,17 @@ def main() -> None:
         if link_key not in source_link_keys:
             source_links.append(link)
             source_link_keys.add(link_key)
+    for raw, normalized_row in zip(volvo_genuine_source_rows, volvo_genuine_records):
+        target = canonical_by_key[normalized_row["canonical_key"]]
+        link = {
+            "product_id": target["product_id"], "source_id": "VOLVO_GENUINE_FLUIDS",
+            "source_record_id": raw["source_record_id"], "source_row": None,
+            "relation": "official_manufacturer_product_catalog",
+        }
+        link_key = (link["product_id"], link["source_id"], link["source_record_id"])
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     offers = []
     for package in aichilon_packages:
         canonical_key = aichilon_product_key.get(int(package["source_product_id"]))
@@ -1058,6 +1112,7 @@ def main() -> None:
         "driventic_diwa_input_sha256": hashlib.sha256(DRIVENTIC_DIWA_JSONL.read_bytes()).hexdigest(),
         "mercedes_dtfr_input_sha256": hashlib.sha256(MERCEDES_DTFR_JSONL.read_bytes()).hexdigest(),
         "mercedes_bevo_input_sha256": hashlib.sha256(MERCEDES_BEVO_JSONL.read_bytes()).hexdigest(),
+        "volvo_genuine_input_sha256": hashlib.sha256(VOLVO_GENUINE_JSONL.read_bytes()).hexdigest(),
         "canonical_rows": len(records),
         "brands": len({r["brand"] for r in records}),
         "families": dict(sorted(Counter(r["family_code"] for r in records).items())),
@@ -1070,6 +1125,7 @@ def main() -> None:
         "official_government_program_rows": sum(r["evidence_status"] == "official_government_program_catalog" for r in records),
         "usda_biopreferred_source_rows": len(biopreferred_source_rows),
         "official_oem_approval_rows": sum(r["evidence_status"] == "official_oem_approval_registry" for r in records),
+        "official_manufacturer_catalog_rows": sum(r["evidence_status"] == "official_manufacturer_product_catalog" for r in records),
         "zf_te_ml_source_rows": len(zf_source_rows),
         "allison_source_rows": len(allison_source_rows),
         "driventic_diwa_source_rows": len(driventic_source_rows),
@@ -1077,6 +1133,7 @@ def main() -> None:
         "mercedes_bevo_source_rows": len(mercedes_bevo_source_rows),
         "mercedes_bevo_products_matched_to_existing": mercedes_bevo_matched_rows,
         "mercedes_bevo_products_added": mercedes_bevo_added_rows,
+        "volvo_genuine_source_rows": len(volvo_genuine_source_rows),
         "jaso_source_rows": len(jaso_source_rows),
         "jaso_unique_oil_codes": len({r["oil_code"] for r in jaso_source_rows}),
         "aichilon_source_products": len(aichilon_products) + len(exclusions),

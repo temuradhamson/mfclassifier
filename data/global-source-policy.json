@@ -279,6 +279,20 @@
       "notes": "130 листов проверены, 92 содержат продукты. 2 461 вхождение допусков объединено в 1 913 продуктов по нормализованным company + product name + family; сохранены source UUID, внутренние product ID, листы и даты. Коллизия product ID FDKAI7 у двух компаний сохранена явно; 43 продукта имеют только historical-допуски."
     },
     {
+      "source_id": "VOLVO_GENUINE_FLUIDS",
+      "title": "Volvo Genuine Lubricants, Greases and Coolants",
+      "owner": "Volvo Group",
+      "source_type": "official_manufacturer_product_catalog_webpages",
+      "source_locator": "data/volvo-genuine-fluids.jsonl",
+      "source_url": "https://www.volvoce.com/asia/en-as/parts/maintenance-parts/lubricants/",
+      "source_sha256": "73126dcac3d249ecfb384da6e30097f337aa18167c6b5f825636df6896317064",
+      "access_status": "public_official_product_catalog",
+      "bulk_ingest_allowed": true,
+      "publication_status": "derived_factual_records_with_attribution",
+      "observed_count": 32,
+      "notes": "Пять официальных страниц Volvo CE и Volvo Trucks дали 32 конкретных продукта: масла, трансмиссионные и гидравлические жидкости, смазки и охлаждающие жидкости. Сохранены классы, применения, температуры, упаковки и номера деталей; три названия серий VDS без конкретной вязкости исключены, поскольку серия не является товаром-градацией."
+    },
+    {
       "source_id": "totalenergies-global",
       "title": "TotalEnergies Lubricants Catalog",
       "owner": "TotalEnergies Lubrifiants S.A.",
