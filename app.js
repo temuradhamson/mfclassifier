@@ -460,7 +460,7 @@ function renderReferences() {
       ${rows.map((item) => {
       const min = Number(item["От °C"]), max = Number(item["До °C"]);
       const left = temperaturePosition(min), right = temperaturePosition(max);
-      return `<div class="temperature-row"><div><b>${esc(item["Зона"])}</b><small>${esc(item["Код"])}</small></div><div class="temperature-range"><span style="left:${left}%;width:${Math.max(.5, right - left)}%"></span><i class="range-start" style="left:${left}%"></i><i class="range-end" style="left:${right}%"></i>${max > 300 ? `<b class="range-break" style="left:${temperaturePosition(300)}%">//</b>` : ""}</div><small>${min}…${max} °C</small></div>`;
+      return `<div class="temperature-row"><div><b>${esc(item["Зона"])}</b><small>${esc(item["Код"])}</small></div><div class="temperature-range"><span style="left:${left}%;width:${Math.max(.5, right - left)}%"></span><i class="range-start" style="left:${left}%"></i><i class="range-end" style="left:${right}%"></i></div><small>${min}…${max} °C</small></div>`;
     }).join("")}</div>`;
     return;
   }
