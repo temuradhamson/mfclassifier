@@ -16,6 +16,9 @@ OUTPUT = ROOT / "deliverables" / "Global_lubricants_catalog_registry.xlsx"
 
 
 SOURCES = [
+    ("JASO 4T filed oils", "Global filed list", "Official PDF registry", "https://www.jalos.or.jp/onfile/pdf/4T_EV_LIST.pdf", 2612, "filed rows", "List dated 2026-07-01; 2,611 unique oil codes", "ingested_and_verified"),
+    ("JASO diesel filed oils", "Global filed list", "Official PDF registry", "https://www.jalos.or.jp/onfile/pdf/DEO_EV_LIST.pdf", 419, "filed rows", "List dated 2026-07-01; 419 unique oil codes", "ingested_and_verified"),
+    ("JASO 2T filed oils", "Global filed list", "Official PDF registry", "https://www.jalos.or.jp/onfile/pdf/2T_EV_LIST.pdf", 599, "filed rows", "List dated 2026-07-01; 599 unique oil codes", "ingested_and_verified"),
     ("TotalEnergies", "Global", "Product catalog", "https://lubricants.catalog.totalenergies.com/corporate/en_UK", 1246, "products", "Count observed 2026-07-20; GTCU 4.3 prohibits substantial database extraction/reuse", "written_permission_required"),
     ("Shell", "Global / market-specific", "EPC product catalog", "https://www.epc.shell.com/?lang=eng", None, None, "TDS/SDS by market; copying is restricted by site terms", "permission_or_permitted_access_required"),
     ("Mobil", "Global / market-specific", "Industrial product search", "https://www.mobil.com/en/lubricants/for-businesses/industrial/lubricants/search", None, None, "Search by product, specification, application and equipment builder", "ready_for_technical_review"),

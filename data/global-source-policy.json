@@ -39,6 +39,45 @@
       "notes": "Внутренний справочник продуктов и упаковок; клиентские, пользовательские, заявочные и ценовые таблицы в мировой seed не переносятся."
     },
     {
+      "source_id": "JASO_4T",
+      "title": "JASO Filed Motorcycle Four Cycle Gasoline Engine Oil List",
+      "owner": "JASO Engine Oil Standards Implementation Panel",
+      "source_type": "official_filed_registry_pdf",
+      "source_url": "https://www.jalos.or.jp/onfile/pdf/4T_EV_LIST.pdf",
+      "source_sha256": "72ffc194e481a3b573b09c0f4721471bf11a6b186f33520c043f8d72fb6e8ee6",
+      "access_status": "public_filed_registry",
+      "bulk_ingest_allowed": true,
+      "publication_status": "derived_factual_records_with_attribution",
+      "observed_count": 2612,
+      "notes": "Список от 01.07.2026; сохраняются фактические строки и атрибуция, но не переиздаётся оформление PDF."
+    },
+    {
+      "source_id": "JASO_DEO",
+      "title": "JASO Filed Diesel Engine Oil List",
+      "owner": "JASO Engine Oil Standards Implementation Panel",
+      "source_type": "official_filed_registry_pdf",
+      "source_url": "https://www.jalos.or.jp/onfile/pdf/DEO_EV_LIST.pdf",
+      "source_sha256": "52152259b58cc07a82b8d6d3bffc113fab01341d2da9749cd88e3fe93ef300d8",
+      "access_status": "public_filed_registry",
+      "bulk_ingest_allowed": true,
+      "publication_status": "derived_factual_records_with_attribution",
+      "observed_count": 419,
+      "notes": "Список от 01.07.2026; сохраняются фактические строки и атрибуция, но не переиздаётся оформление PDF."
+    },
+    {
+      "source_id": "JASO_2T",
+      "title": "JASO Filed Two Cycle Gasoline Engine Oil List",
+      "owner": "JASO Engine Oil Standards Implementation Panel",
+      "source_type": "official_filed_registry_pdf",
+      "source_url": "https://www.jalos.or.jp/onfile/pdf/2T_EV_LIST.pdf",
+      "source_sha256": "b28c364a994e54304612dcd6dcfe71f696a826cdf8359edec94a5ad2799710a4",
+      "access_status": "public_filed_registry",
+      "bulk_ingest_allowed": true,
+      "publication_status": "derived_factual_records_with_attribution",
+      "observed_count": 599,
+      "notes": "Список от 01.07.2026; сохраняются фактические строки и атрибуция, но не переиздаётся оформление PDF."
+    },
+    {
       "source_id": "totalenergies-global",
       "title": "TotalEnergies Lubricants Catalog",
       "owner": "TotalEnergies Lubrifiants S.A.",

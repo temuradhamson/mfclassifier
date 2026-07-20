@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "status": "official_filed_lists_parsed",
+  "retrieved_at": "2026-07-20T21:47:30+00:00",
+  "rows": 3630,
+  "unique_oil_codes": 3629,
+  "duplicate_oil_codes": [
+    {
+      "oil_code": "M091HML025",
+      "rows": 2
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "JASO_4T",
+      "source_url": "https://www.jalos.or.jp/onfile/pdf/4T_EV_LIST.pdf",
+      "source_sha256": "72ffc194e481a3b573b09c0f4721471bf11a6b186f33520c043f8d72fb6e8ee6",
+      "list_date": "1 July 2026",
+      "rows": 2612,
+      "unique_oil_codes": 2611
+    },
+    {
+      "source_id": "JASO_DEO",
+      "source_url": "https://www.jalos.or.jp/onfile/pdf/DEO_EV_LIST.pdf",
+      "source_sha256": "52152259b58cc07a82b8d6d3bffc113fab01341d2da9749cd88e3fe93ef300d8",
+      "list_date": "1 July 2026",
+      "rows": 419,
+      "unique_oil_codes": 419
+    },
+    {
+      "source_id": "JASO_2T",
+      "source_url": "https://www.jalos.or.jp/onfile/pdf/2T_EV_LIST.pdf",
+      "source_sha256": "b28c364a994e54304612dcd6dcfe71f696a826cdf8359edec94a5ad2799710a4",
+      "list_date": "1 July 2026",
+      "rows": 599,
+      "unique_oil_codes": 599
+    }
+  ],
+  "rights_note": "Derived factual registry rows with attribution; original PDF layout and document text are not republished."
+}

@@ -25,6 +25,7 @@ REPORT_OUT = ROOT / "data" / "world-catalog-report.json"
 SQLITE_OUT = ROOT / "data" / "world-catalog.sqlite3"
 XLSX_OUT = ROOT / "deliverables" / "World_lubricants_catalog_seed.xlsx"
 AICHILON_DB = Path("/workspace/chilon/aichilon/var/chilon_seed.sqlite")
+JASO_JSONL = ROOT / "data" / "jaso-filed-oils.jsonl"
 SCHEMA_VERSION = 1
 SNAPSHOT_DATE = "2026-07-20"
 
@@ -70,6 +71,8 @@ def source_for(row: dict) -> str:
         return "legacy-mfclassifier"
     if source == "aichilon_internal":
         return "aichilon-internal"
+    if source.startswith("JASO_"):
+        return source
     if "+" in source:
         return "user-supplied-chilon-2026"
     return "legacy-mfclassifier"
@@ -270,6 +273,41 @@ def aichilon_seed() -> tuple[list[dict], list[dict], list[dict]]:
     return products, packages, exclusions
 
 
+def jaso_record(row: dict) -> dict:
+    generic = {
+        "id": f"{row['source_id']}-{row['source_row_number']}",
+        "source_number": row["source_row_number"],
+        "brand": row["submitter"],
+        "name": row["product_name"],
+        "category": {
+            "JASO_4T": "Моторные масла для четырёхтактных мотоциклов",
+            "JASO_DEO": "Дизельные моторные масла",
+            "JASO_2T": "Масла для двухтактных двигателей",
+        }[row["source_id"]],
+        "category_code": "M",
+        "family": "Моторные масла",
+        "sae_class": row.get("sae_viscosity", ""),
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record["manufacturer"] = row["submitter"]
+    record["brand"] = row["submitter"]
+    record["market"] = "GLOBAL_JASO_FILED"
+    record["evidence_status"] = "official_filed_registry"
+    record["lifecycle_status"] = "filed_as_of_list_date"
+    record["snapshot_date"] = row["list_date"]
+    record["specifications"]["jaso"] = row["jaso_classification"].split(",")
+    record["specifications"]["jaso_family_detail"] = row["family_detail"]
+    record["canonical_key"] += f"|jaso_oil_code:{normalize(row['oil_code'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    record["codes"]["jaso_oil_code"] = {
+        "value": row["oil_code"],
+        "source_id": row["source_id"],
+        "status": "official_filed_registry",
+    }
+    return record
+
+
 def deduplicate(records: list[dict]) -> tuple[list[dict], list[dict]]:
     by_key = defaultdict(list)
     for record in records:
@@ -322,10 +360,11 @@ def quality_issues(records: list[dict]) -> list[dict]:
         specs = row["specifications"]
         missing = []
         if row["family_code"] == "M":
-            if not specs["sae_engine"]:
+            is_jaso_two_cycle = specs.get("jaso_family_detail") == "two_cycle_gasoline_engine_oil"
+            if not specs["sae_engine"] and not is_jaso_two_cycle:
                 missing.append("SAE")
-            if not specs["api"] and not specs["acea"] and not specs["ilsac"]:
-                missing.append("API/ACEA/ILSAC")
+            if not specs["api"] and not specs["acea"] and not specs["ilsac"] and not specs.get("jaso"):
+                missing.append("API/ACEA/ILSAC/JASO")
         elif row["family_code"] in {"H", "I", "C", "U"} and not specs["iso_vg"]:
             missing.append("ISO VG")
         if missing:
@@ -440,12 +479,12 @@ def build_workbook(records: list[dict], candidates: list[dict], issues: list[dic
         ("Активных offer/SKU упаковок", report["active_offers"]),
         ("Подтверждённый мировой итог", "НЕ ОПРЕДЕЛЁН: подключён только проектный seed"),
     ])
-    headers = ["Product ID", "Бренд", "Исходное название", "Рынок", "Семейство", "Категория", "SAE", "SAE Gear", "ISO VG", "API", "API GL", "ACEA", "ILSAC", "Кандидат техпрофиля", "Уверенность", "Источник", "Строка источника", "Статус доказательства"]
+    headers = ["Product ID", "Производитель/заявитель", "Бренд", "Исходное название", "Рынок", "Семейство", "Категория", "SAE", "SAE Gear", "ISO VG", "API", "API GL", "ACEA", "ILSAC", "JASO", "Кандидат техпрофиля", "Уверенность", "Источник", "Строка источника", "Статус доказательства"]
     add_sheet(wb, "02_Продукты", headers, [[
-        r["product_id"], r["brand"], r["product_name_raw"], r["market"], r["family"], r["category"],
+        r["product_id"], r["manufacturer"], r["brand"], r["product_name_raw"], r["market"], r["family"], r["category"],
         r["specifications"]["sae_engine"], r["specifications"]["sae_gear"], r["specifications"]["iso_vg"],
         "; ".join(r["specifications"]["api"]), "; ".join(r["specifications"]["api_gl"]),
-        "; ".join(r["specifications"]["acea"]), "; ".join(r["specifications"]["ilsac"]),
+        "; ".join(r["specifications"]["acea"]), "; ".join(r["specifications"]["ilsac"]), "; ".join(r["specifications"].get("jaso", [])),
         r["candidate_technical_profile_id"], r["profile_match_confidence"], r["source_id"], r["source_row"], r["evidence_status"],
     ] for r in records])
     add_sheet(wb, "03_Источники_и_права", ["Source ID", "Название", "Владелец", "URL/файл", "SHA-256", "Статус доступа", "Bulk ingest", "Публикация", "Примечание"], [[
@@ -487,6 +526,9 @@ def main() -> None:
     source = json.loads(CATALOG.read_text(encoding="utf-8"))
     policies = json.loads(POLICY.read_text(encoding="utf-8"))
     input_records = [canonical_record(row) for row in source["products"]]
+    jaso_source_rows = [json.loads(line) for line in JASO_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    jaso_records = [jaso_record(row) for row in jaso_source_rows]
+    input_records.extend(jaso_records)
     aichilon_products, aichilon_packages, exclusions = aichilon_seed()
     existing_by_name = defaultdict(list)
     for row in input_records:
@@ -524,6 +566,17 @@ def main() -> None:
         if link_key not in source_link_keys:
             source_links.append(link)
             source_link_keys.add(link_key)
+    for raw, normalized_row in zip(jaso_source_rows, jaso_records):
+        target = canonical_by_key[normalized_row["canonical_key"]]
+        link = {
+            "product_id": target["product_id"], "source_id": raw["source_id"],
+            "source_record_id": text(raw["source_row_number"]), "source_row": raw["source_row_number"],
+            "relation": "official_filed_registry",
+        }
+        link_key = (link["product_id"], link["source_id"], link["source_record_id"])
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     offers = []
     for package in aichilon_packages:
         canonical_key = aichilon_product_key.get(int(package["source_product_id"]))
@@ -555,12 +608,16 @@ def main() -> None:
         "status": "seed_only_world_catalog_incomplete",
         "input_rows": len(input_records),
         "normalized_input_sha256": hashlib.sha256(CATALOG.read_bytes()).hexdigest(),
+        "jaso_normalized_input_sha256": hashlib.sha256(JASO_JSONL.read_bytes()).hexdigest(),
         "canonical_rows": len(records),
         "brands": len({r["brand"] for r in records}),
         "families": dict(sorted(Counter(r["family_code"] for r in records).items())),
         "project_source_rows": sum(r["evidence_status"] == "project_source_row" for r in records),
         "legacy_rows_needing_evidence": sum(r["evidence_status"] == "legacy_needs_official_tds" for r in records),
         "internal_master_rows": sum(r["evidence_status"] == "internal_product_master" for r in records),
+        "official_filed_registry_rows": sum(r["evidence_status"] == "official_filed_registry" for r in records),
+        "jaso_source_rows": len(jaso_source_rows),
+        "jaso_unique_oil_codes": len({r["oil_code"] for r in jaso_source_rows}),
         "aichilon_source_products": len(aichilon_products) + len(exclusions),
         "aichilon_products_matched_to_existing": aichilon_matched_rows,
         "aichilon_products_added": aichilon_new_rows,
