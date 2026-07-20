@@ -307,6 +307,21 @@
       "notes": "Официальная 150-страничная рекомендация MAN, выпуск апрель 2026: 32 конкретных масла, смазки, ОЖ и технические жидкости / 33 вхождения. Стандарты без коммерческого продукта, общие ISO VG-классы и серия Chevron без конкретной градации исключены. Статус строки означает текущую рекомендацию или предписание MAN для узла применения, но не подменяется утверждением о наличии отдельного формального approval letter."
     },
     {
+      "source_id": "FUCHS_INDIA_PRODUCT_FINDER",
+      "title": "FUCHS India Product Finder",
+      "owner": "FUCHS LUBRICANTS (INDIA) PVT. LTD.",
+      "source_type": "official_manufacturer_embedded_product_catalog",
+      "source_locator": "data/fuchs-india-products.jsonl",
+      "source_url": "https://www.fuchs.com/in/en/products/service-links/product-finder/",
+      "terms_url": "https://www.fuchs.com/in/en/imprint/",
+      "source_sha256": "156d97af5c72385cf8e33dbdcebfccc82354624f395956a9451b4788b28fad49",
+      "access_status": "public_full_catalog_embedded_in_official_page",
+      "bulk_ingest_allowed": true,
+      "publication_status": "factual_fields_only_with_attribution_no_marketing_descriptions",
+      "observed_count": 1007,
+      "notes": "Официальная страница содержит 1 115 source rows в одном JSON. После исключения 94 строк серий и 6 единиц оборудования, а также объединения 8 повторных source-вхождений получено 1 007 конкретных товарных строк. Публикуются только факты, допуски, рекомендации, классификация, UID/URL и хэши; маркетинговые описания не копируются. Imprint ограничивает коммерческое копирование документации, поэтому этот factual-only scope обязателен."
+    },
+    {
       "source_id": "totalenergies-global",
       "title": "TotalEnergies Lubricants Catalog",
       "owner": "TotalEnergies Lubrifiants S.A.",
