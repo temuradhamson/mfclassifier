@@ -28,14 +28,18 @@ IMPRINT_URL = "https://www.fuchs.com/us/en/imprint/"
 SNAPSHOT_DATE = "2026-07-20"
 
 
-def main() -> None:
-    payload = fetch(SOURCE_URL)
-    imprint_payload = fetch(IMPRINT_URL)
+def ingest_catalog(
+    *, out: Path, report_path: Path, source_url: str, imprint_url: str,
+    source_id: str, record_prefix: str, manufacturer: str, market: str,
+    expected_embedded: int, expected_products: int,
+) -> dict:
+    payload = fetch(source_url)
+    imprint_payload = fetch(imprint_url)
     page = payload.decode("utf-8", errors="replace")
     match = re.search(r"var FuchsProductRawData = (\{.*?\});\s*</script>", page, re.S)
     assert match, "embedded FuchsProductRawData not found"
     source = json.loads(match.group(1))
-    assert len(source["products"]) == 686
+    assert len(source["products"]) == expected_embedded
     group_index = flatten_groups(source["productGroups"])
     brand_index = {row["uid"]: row["title"] for row in source["brands"]}
     industry_index = {row["uid"]: row["title"] for row in source["industries"]}
@@ -74,16 +78,16 @@ def main() -> None:
             continue
         technical = extract_technical(source_text, family)
         records.append({
-            "source_id": "FUCHS_US_PRODUCT_FINDER",
-            "source_record_id": f"FUCHS-US-{uids[0]}",
+            "source_id": source_id,
+            "source_record_id": f"{record_prefix}-{uids[0]}",
             "source_uids": uids,
-            "manufacturer": "FUCHS LUBRICANTS CO.",
+            "manufacturer": manufacturer,
             "brand": brands[0] if brands else "FUCHS",
             "brand_lines": brands,
             "product_name": primary["title"].strip(),
             "family_code": family,
             "classification_basis": basis,
-            "market": "US",
+            "market": market,
             "product_group_paths": [list(path) for path in paths],
             "industries": industries,
             "specifications": specifications,
@@ -98,22 +102,22 @@ def main() -> None:
             "source_product_dates": sorted({row.get("date", "") for row in rows if row.get("date")}),
             "source_description_sha256": sorted({hashlib.sha256((row.get("description") or "").encode()).hexdigest() for row in rows}),
             "source_urls": ["https://www.fuchs.com" + row["url"] for row in rows],
-            "source_url": SOURCE_URL,
+            "source_url": source_url,
             "snapshot_date": SNAPSHOT_DATE,
             "grain_warning": "compound_designation_review" if "/" in primary["title"] else "",
         })
 
     records.sort(key=lambda row: (normalized(row["product_name"]), row["source_record_id"]))
-    assert len(records) == 623
+    assert len(records) == expected_products
     assert len({row["source_record_id"] for row in records}) == len(records)
     assert len({normalized(row["product_name"]) for row in records}) == len(records)
-    OUT.write_text("".join(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n" for row in records), encoding="utf-8")
+    out.write_text("".join(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n" for row in records), encoding="utf-8")
     report = {
         "schema_version": 1,
         "snapshot_date": SNAPSHOT_DATE,
-        "source_id": "FUCHS_US_PRODUCT_FINDER",
-        "source_url": SOURCE_URL,
-        "imprint_url": IMPRINT_URL,
+        "source_id": source_id,
+        "source_url": source_url,
+        "imprint_url": imprint_url,
         "source_html_sha256": hashlib.sha256(payload).hexdigest(),
         "imprint_html_sha256": hashlib.sha256(imprint_payload).hexdigest(),
         "embedded_source_rows": len(source["products"]),
@@ -125,11 +129,21 @@ def main() -> None:
         "brand_lines": len({brand for row in records for brand in row["brand_lines"]}),
         "compound_designation_review_rows": sum(bool(row["grain_warning"]) for row in records),
         "classification_basis": dict(sorted(Counter(row["classification_basis"] for row in records).items())),
-        "normalized_output_sha256": hashlib.sha256(OUT.read_bytes()).hexdigest(),
-        "rights_review": "Only factual fields are republished with attribution. Marketing descriptions are excluded and represented only by SHA-256 evidence hashes; the US imprint limits copying of documentation for commercial use.",
+        "normalized_output_sha256": hashlib.sha256(out.read_bytes()).hexdigest(),
+        "rights_review": "Only factual fields are republished with attribution. Marketing descriptions are excluded and represented only by SHA-256 evidence hashes; the applicable imprint limits copying of documentation for commercial use.",
         "publication_scope": "Product identity, region, group, specifications, approvals, recommendations and derived technical fields; no marketing descriptions or page layout.",
     }
-    REPORT.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return report
+
+
+def main() -> None:
+    report = ingest_catalog(
+        out=OUT, report_path=REPORT, source_url=SOURCE_URL, imprint_url=IMPRINT_URL,
+        source_id="FUCHS_US_PRODUCT_FINDER", record_prefix="FUCHS-US",
+        manufacturer="FUCHS LUBRICANTS CO.", market="US",
+        expected_embedded=686, expected_products=623,
+    )
     print(json.dumps(report, ensure_ascii=False))
 
 
