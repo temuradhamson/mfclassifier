@@ -16,6 +16,7 @@ def main() -> None:
     report = json.loads((ROOT / "data/world-catalog-report.json").read_text(encoding="utf-8"))
     policy = json.loads((ROOT / "data/global-source-policy.json").read_text(encoding="utf-8"))
     jaso_report = json.loads((ROOT / "data/jaso-filed-oils-report.json").read_text(encoding="utf-8"))
+    licensed_report = json.loads((ROOT / "data/official-licensed-products-report.json").read_text(encoding="utf-8"))
     lines = [json.loads(line) for line in (ROOT / "data/world-catalog-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     assert report["status"] == "seed_only_world_catalog_incomplete"
     assert report["confirmed_world_total"] is None
@@ -35,16 +36,19 @@ def main() -> None:
     assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
     assert not db.execute("PRAGMA foreign_key_check").fetchall()
     assert db.execute("SELECT count(*) FROM products").fetchone()[0] == len(lines)
-    assert len(lines) == 4220
+    assert len(lines) == 7257
     assert report["jaso_source_rows"] == jaso_report["rows"] == 3630
     assert report["jaso_unique_oil_codes"] == jaso_report["unique_oil_codes"] == 3629
     assert report["official_filed_registry_rows"] == 3629
+    assert report["official_licensed_source_rows"] == licensed_report["rows"] == 3037
+    assert report["official_licensed_registry_rows"] == 3037
     assert report["aichilon_products_matched_to_existing"] == 255
     assert report["aichilon_products_added"] == 60
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 2874
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status='active'").fetchone()[0] == report["active_offers"] == 1455
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_filed_registry'").fetchone()[0] == 3629
+    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_licensed_registry'").fetchone()[0] == 3037
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='JASO_OIL_CODE'").fetchone()[0] == 3629
     assert db.execute("SELECT count(*) FROM sources WHERE bulk_ingest_allowed=0").fetchone()[0] == len(report["bulk_sources_blocked"])
     motor_enkt = db.execute("""
@@ -60,6 +64,9 @@ def main() -> None:
     assert motor_enkt == flagged_motor_enkt == 107
     policy_by_id = {source["source_id"]: source for source in policy["sources"]}
     for source in jaso_report["sources"]:
+        assert policy_by_id[source["source_id"]]["source_sha256"] == source["source_sha256"]
+        assert policy_by_id[source["source_id"]]["observed_count"] == source["rows"]
+    for source in licensed_report["sources"]:
         assert policy_by_id[source["source_id"]]["source_sha256"] == source["source_sha256"]
         assert policy_by_id[source["source_id"]]["observed_count"] == source["rows"]
     forbidden_tables = {"users", "requests", "request_items", "prices", "oil_market_sales"}

@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-07-20",
+  "rows": 3037,
+  "manufacturers": 484,
+  "unique_product_records": 3037,
+  "unique_registry_ids": 3036,
+  "registry_id_collisions": 1,
+  "sources": [
+    {
+      "source_id": "NMMA_TCW3",
+      "source_url": "https://www.nmma.org/certification/oil/tc-w3",
+      "source_sha256": "4da5b34bdc18184d42f712a411ad6c61c04a4249bde0aa3709e45c5d715df6c9",
+      "hash_basis": "normalized_extracted_factual_rows",
+      "rows": 137
+    },
+    {
+      "source_id": "NMMA_FCW",
+      "source_url": "https://www.nmma.org/certification/oil/fc-w",
+      "source_sha256": "394becb73c2a36b6db11e24e232007e7af4d2e1ccc12682931086c7ed7c98cfd",
+      "hash_basis": "normalized_extracted_factual_rows",
+      "rows": 35
+    },
+    {
+      "source_id": "NMMA_FCW_CAT",
+      "source_url": "https://www.nmma.org/certification/oil/fc-wcat",
+      "source_sha256": "bcf4dd8826fcb9c674a4b3859224a372e02d8a0d2769f6ecd32d411b516d5539",
+      "hash_basis": "normalized_extracted_factual_rows",
+      "rows": 3
+    },
+    {
+      "source_id": "GM_DEXOS1_GEN3",
+      "source_url": "https://www.gmdexos.com/brands/dexos1_3/index.html",
+      "source_sha256": "a2bfdc3a43968f5b394742ed24f82aefb55d7eaff7ea38455a0fc8c5fefaccd1",
+      "hash_basis": "normalized_extracted_factual_rows",
+      "rows": 1575
+    },
+    {
+      "source_id": "GM_DEXOS2",
+      "source_url": "https://www.gmdexos.com/brands/dexos2/index.html",
+      "source_sha256": "46c6c38e66c89fb8b15fb34ccbaa976bf1f590c0d1c861ae5b3973639bab69e5",
+      "hash_basis": "normalized_extracted_factual_rows",
+      "rows": 81
+    },
+    {
+      "source_id": "GM_DEXOSD",
+      "source_url": "https://www.gmdexos.com/brands/dexosd/index.html",
+      "source_sha256": "31fefeccc241627b7c8f92fa4cec77c31e99cbe7a232e69b33750851869db73e",
+      "hash_basis": "normalized_extracted_factual_rows",
+      "rows": 41
+    },
+    {
+      "source_id": "GM_DEXOSR",
+      "source_url": "https://www.gmdexos.com/brands/dexosr/index.html",
+      "source_sha256": "c920d87f9ee8ea5c59a0b7095a0120ccd078a7948d59dbdcbfc5fa775147c8a9",
+      "hash_basis": "normalized_extracted_factual_rows",
+      "rows": 8
+    },
+    {
+      "source_id": "NLGI_CERTIFIED",
+      "source_url": "https://www.nlgi.org/about-us/high-performance-multiuse-grease/",
+      "source_sha256": "23bcdf47b31e97733ab49fd24050b6fe65ab0c2a4879818de1e8dbc2f8047e98",
+      "hash_basis": "normalized_extracted_factual_rows",
+      "rows": 279
+    },
+    {
+      "source_id": "EU_ECOLABEL_LUBRICANTS",
+      "source_url": "https://apps.data.env.service.ec.europa.eu/dataquery/v2/ecolabel/products?group_id__eq=57&limit=1000",
+      "source_sha256": "02211c13f220fbda386c0872ffd10e0486874bbef26c87424fadedf640caf0ba",
+      "hash_basis": "normalized_extracted_factual_rows",
+      "rows": 878
+    }
+  ],
+  "normalized_output_sha256": "533183ffbc755268ef12b54a556d1f3ea78db4fc80b564e12c391a10a8e2075e"
+}

@@ -56,6 +56,29 @@ python3 tools/build_analytics_demo.py \
 Справочный каталог передайте через `--reference-pdf`; сгенерированные данные уже включены в
 репозиторий.
 
+## Мировой каталог и расширение ЕНКТ
+
+Отдельный provenance-aware слой содержит 7 257 канонических продуктовых строк
+на срез 20.07.2026. В него уже входят проектные источники, AIChilon, официальные
+реестры JASO, GM dexos, NMMA, NLGI и открытый API EU Ecolabel. Это проверенный
+растущий seed, а не заявление о полном мировом охвате; подтверждённый мировой
+итог появится только после подключения разрешённых источников и дедупликации.
+
+- `data/world-catalog.sqlite3` — нормализованные продукты, спецификации, коды,
+  источники, упаковки, решения дедупликации и проблемы качества;
+- `deliverables/World_lubricants_catalog_seed.xlsx` — проверяемая выгрузка;
+- `deliverables/Global_lubricants_catalog_registry.xlsx` — реестр 35 источников
+  и статусы допуска;
+- `deliverables/ENKT_GSM_extension_pilot.xlsx` — 171 пилотный технический
+  профиль и предложение по пятизначному суффиксу ЕНКТ.
+
+```bash
+python3 tools/ingest_jaso_filed_oils.py
+python3 tools/ingest_official_licensed_products.py
+python3 tools/build_world_catalog_seed.py
+python3 tools/verify_world_catalog.py
+```
+
 ## Локальный запуск
 
 ```bash
