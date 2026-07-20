@@ -2,6 +2,7 @@ const DATA = window.MF_CLASSIFIER_DATA;
 const ANALYTICS = window.MF_ANALYTICS_DEMO;
 const PAGE_SIZE = 30;
 const CLASS_PAGE_SIZE = 24;
+const IMPACT_PAGE_SIZE = 24;
 
 const state = {
   view: "overview",
@@ -10,6 +11,8 @@ const state = {
   reference: "standards",
   referenceRows: [],
   analyticsScenario: "engine",
+  impactLotPage: 1,
+  impactLotQuery: "",
   products: [],
   classes: [],
 };
@@ -106,7 +109,24 @@ function bindEvents() {
     const button = event.target.closest("[data-impact-scenario]");
     if (!button) return;
     state.analyticsScenario = button.dataset.impactScenario;
+    state.impactLotPage = 1;
+    state.impactLotQuery = "";
+    $("impactLotSearch").value = "";
     renderImpact();
+  });
+  let impactTimer;
+  $("impactLotSearch").addEventListener("input", () => {
+    clearTimeout(impactTimer);
+    impactTimer = setTimeout(() => {
+      state.impactLotQuery = $("impactLotSearch").value;
+      state.impactLotPage = 1;
+      renderImpactLots();
+    }, 120);
+  });
+  $("impactLots").addEventListener("click", (event) => {
+    if (event.target.closest("a")) return;
+    const row = event.target.closest("[data-impact-lot]");
+    if (row) openImpactLot(row.dataset.impactLot);
   });
 
   $("matcherForm").addEventListener("submit", runMatcher);
@@ -208,6 +228,7 @@ function renderOverview() {
 }
 
 function rub(value) { return `${formatNumber(Math.round(value || 0))} сум`; }
+function compactRub(value) { return `${formatNumber(Math.round(value || 0))}`; }
 
 function renderImpact() {
   if (!ANALYTICS?.scenarios?.length) {
@@ -216,9 +237,9 @@ function renderImpact() {
   }
   $("impactMetrics").innerHTML = [
     [formatNumber(ANALYTICS.methodology.production_lots_at_build), "лота в production ANIQLIK"],
-    [formatNumber(ANALYTICS.metrics.sample_lots), "случайных лота в демонстрации"],
+    [formatNumber(ANALYTICS.metrics.sample_lots), "реальных лотов в расширенной выборке"],
     [formatNumber(ANALYTICS.metrics.professional_segments), "профессиональных ценовых сегментов"],
-    [formatNumber(ANALYTICS.metrics.scenarios), "сценария классификации"],
+    [formatNumber(ANALYTICS.metrics.linked_original_lots), "проверяемых ссылок на оригинал"],
   ].map(([value, label]) => `<div><strong>${value}</strong><span>${esc(label)}</span></div>`).join("");
   $("impactTabs").innerHTML = ANALYTICS.scenarios.map((item) => `<button class="${item.id === state.analyticsScenario ? "active" : ""}" data-impact-scenario="${esc(item.id)}">${esc(item.title)}<em>${item.before.lots}</em></button>`).join("");
   const scenario = ANALYTICS.scenarios.find((item) => item.id === state.analyticsScenario) || ANALYTICS.scenarios[0];
@@ -233,8 +254,80 @@ function renderImpact() {
     const delta = item.difference_from_coarse_pct;
     return `<div class="segment-row"><div><b>${esc(item.key)}</b><small>${item.lots} ${item.lots === 1 ? "лот · малая выборка" : "лота"}</small></div><div class="segment-track"><i style="width:${Math.max(4, item.avg_price_per_kg / maxPrice * 100)}%"></i><u style="left:${scenario.before.avg_price_per_kg / maxPrice * 100}%" title="Средняя до классификатора"></u></div><strong>${rub(item.avg_price_per_kg)}</strong><span class="delta ${delta > 0 ? "up" : "down"}">${delta > 0 ? "+" : ""}${delta}%</span></div>`;
   }).join("")}</div><div class="segment-legend"><span><i></i>Средняя конкретного продукта</span><span><u></u>Средняя старшей группы: ${rub(scenario.before.avg_price_per_kg)}</span></div>`;
-  $("impactLots").innerHTML = scenario.lots.map((item) => `<tr><td><b>${esc(item.lot_number)}</b><small>${esc(item.date)}</small></td><td><span>${esc(item.raw_product_name)}</span><small>${esc(item.raw_brand_text)}</small></td><td><span class="enriched-key">${esc(item.professional_key)}</span><small class="demo-origin">вычислено для демонстрации</small></td><td><b>${rub(item.price_per_kg)}</b></td></tr>`).join("");
+  renderImpactCharts(scenario);
+  renderImpactLots();
   $("impactMethod").innerHTML = `<strong>Методика и честная маркировка</strong><p>${esc(ANALYTICS.methodology.selection)} ${esc(ANALYTICS.methodology.disclosure)}</p><span>Источник: ${esc(ANALYTICS.methodology.source)} · seed ${ANALYTICS.methodology.random_seed} · контрагенты не публикуются</span>`;
+}
+
+function renderImpactCharts(scenario) {
+  const histogram = scenario.price_histogram || [];
+  const maxBin = Math.max(1, ...histogram.map((item) => item.count));
+  $("impactHistogram").innerHTML = `<div class="histogram">${histogram.map((item) => `<div class="histogram-bin"><b>${item.count}</b><i style="height:${Math.max(5, item.count / maxBin * 100)}%"></i><span>${compactRub(item.from)}</span></div>`).join("")}</div><div class="chart-note"><span>Минимум ${rub(histogram[0]?.from)}</span><b>Общая средняя ${rub(scenario.before.avg_price_per_kg)}</b><span>Максимум ${rub(histogram.at(-1)?.to)}</span></div>`;
+
+  const palette = ["#3d73e6", "#38a8b8", "#6f64d9", "#e7a23c", "#e26464", "#58a46b", "#a366c2"];
+  const top = scenario.after.segments.slice().sort((a, b) => b.lots - a.lots).slice(0, 6);
+  const used = top.reduce((sum, item) => sum + item.lots, 0);
+  const composition = [...top, ...(used < scenario.before.lots ? [{ key: "Другие сегменты", lots: scenario.before.lots - used }] : [])];
+  let offset = 0;
+  const stops = composition.map((item, index) => {
+    const start = offset;
+    offset += item.lots / scenario.before.lots * 100;
+    return `${palette[index % palette.length]} ${start}% ${offset}%`;
+  }).join(",");
+  $("impactComposition").innerHTML = `<div class="composition-chart"><div class="composition-donut" style="background:conic-gradient(${stops})"><div><strong>${scenario.after.segment_count}</strong><span>сегментов</span></div></div><div class="composition-legend">${composition.map((item, index) => `<div><i style="background:${palette[index % palette.length]}"></i><span>${esc(item.key)}</span><b>${Math.round(item.lots / scenario.before.lots * 100)}%</b></div>`).join("")}</div></div>`;
+
+  const trend = scenario.monthly_prices || [];
+  if (trend.length < 2) {
+    $("impactTrend").innerHTML = '<div class="chart-empty">Недостаточно месяцев для динамики</div>';
+  } else {
+    const values = trend.flatMap((item) => [item.avg, item.median]);
+    const min = Math.min(...values) * .94;
+    const max = Math.max(...values) * 1.06;
+    const x = (index) => 34 + index * (712 / Math.max(1, trend.length - 1));
+    const y = (value) => 18 + (max - value) / Math.max(1, max - min) * 150;
+    const points = (field) => trend.map((item, index) => `${x(index)},${y(item[field])}`).join(" ");
+    $("impactTrend").innerHTML = `<svg class="trend-chart" viewBox="0 0 780 215" role="img" aria-label="Динамика средней и медианной цены"><line x1="34" y1="168" x2="746" y2="168" class="axis-line"></line><polyline points="${points("avg")}" class="trend-line avg"></polyline><polyline points="${points("median")}" class="trend-line median"></polyline>${trend.map((item, index) => `<circle cx="${x(index)}" cy="${y(item.avg)}" r="3" class="trend-dot avg"><title>${esc(item.month)} · средняя ${rub(item.avg)} · ${item.lots} лотов</title></circle><text x="${x(index)}" y="194" text-anchor="middle">${esc(item.month.slice(2))}</text>`).join("")}</svg><div class="trend-legend"><span><i class="avg"></i>Средняя цена</span><span><i class="median"></i>Медианная цена</span></div>`;
+  }
+
+  const ranges = scenario.after.segments.slice().sort((a, b) => b.lots - a.lots).slice(0, 8);
+  const rangeMin = Math.min(...ranges.map((item) => item.min_price_per_kg));
+  const rangeMax = Math.max(...ranges.map((item) => item.max_price_per_kg));
+  const pos = (value) => (value - rangeMin) / Math.max(1, rangeMax - rangeMin) * 100;
+  $("impactRanges").innerHTML = `<div class="range-chart">${ranges.map((item) => `<div class="range-row"><div><b>${esc(item.key)}</b><small>${item.lots} лотов</small></div><div class="range-track"><i style="left:${pos(item.min_price_per_kg)}%;width:${Math.max(1.2, pos(item.max_price_per_kg) - pos(item.min_price_per_kg))}%"></i><u style="left:${pos(item.median_price_per_kg)}%" title="Медиана ${rub(item.median_price_per_kg)}"></u></div><span>${rub(item.min_price_per_kg)} — ${rub(item.max_price_per_kg)}</span></div>`).join("")}</div>`;
+}
+
+function currentImpactScenario() {
+  return ANALYTICS.scenarios.find((item) => item.id === state.analyticsScenario) || ANALYTICS.scenarios[0];
+}
+
+function renderImpactLots() {
+  const scenario = currentImpactScenario();
+  if (!scenario) return;
+  const query = norm(state.impactLotQuery);
+  const lots = scenario.lots.filter((item) => !query || norm([item.lot_number, item.raw_product_name, item.raw_brand_text, item.professional_key, item.manufacturer].join(" ")).includes(query));
+  const pages = Math.max(1, Math.ceil(lots.length / IMPACT_PAGE_SIZE));
+  state.impactLotPage = Math.min(state.impactLotPage, pages);
+  const slice = lots.slice((state.impactLotPage - 1) * IMPACT_PAGE_SIZE, state.impactLotPage * IMPACT_PAGE_SIZE);
+  $("impactLotCount").textContent = `${formatNumber(lots.length)} из ${formatNumber(scenario.lots.length)} лотов`;
+  $("impactLots").innerHTML = slice.length ? slice.map((item) => `<tr data-impact-lot="${esc(item.source_row_id)}"><td>${item.original_url ? `<a class="lot-source-link" href="${esc(item.original_url)}" target="_blank" rel="noopener noreferrer"><b>${esc(item.lot_number)}</b><i>↗</i></a>` : `<b>${esc(item.lot_number)}</b>`}<small>${esc(formatDate(item.date))}${item.lot_id ? ` · ID ${esc(item.lot_id)}` : ""}</small></td><td><span>${esc(item.raw_product_name)}</span><small>${esc(item.raw_brand_text)}</small></td><td><span class="enriched-key">${esc(item.professional_key)}</span><small class="demo-origin">вычислено для демонстрации</small></td><td><b>${rub(item.price_per_kg)}</b><small>${item.quantity ? `${formatNumber(item.quantity)} ${esc(item.measure)}` : ""}</small></td></tr>`).join("") : '<tr><td colspan="4" class="empty-state">Лоты не найдены</td></tr>';
+  renderPagination("impactLotPagination", state.impactLotPage, pages, (page) => { state.impactLotPage = page; renderImpactLots(); });
+}
+
+function openImpactLot(sourceRowId) {
+  const lot = currentImpactScenario()?.lots.find((item) => String(item.source_row_id) === String(sourceRowId));
+  if (!lot) return;
+  const sourceRows = [
+    ["Номер лота", lot.lot_number], ["Публичный lot_id", lot.lot_id], ["Дата начала", formatDate(lot.date)],
+    ["Исходное наименование", lot.raw_product_name], ["Бренд / марка", lot.raw_brand_text],
+    ["Количество", lot.quantity ? `${formatNumber(lot.quantity)} ${lot.measure}` : null],
+    ["Эквивалент массы", lot.quantity_kg ? `${formatNumber(lot.quantity_kg)} кг` : null],
+    ["Стартовая цена за единицу", lot.start_price_unit ? rub(lot.start_price_unit) : null],
+    ["Итоговая цена за единицу", lot.final_price_unit ? rub(lot.final_price_unit) : null],
+    ["Цена в пересчёте на кг", rub(lot.price_per_kg)], ["Статус", lot.status],
+    ["Производитель", lot.manufacturer], ["Страна", lot.country],
+  ].filter(([, value]) => has(value));
+  const inferredRows = Object.entries(lot.enriched_fields || {});
+  openDrawer(`<div class="drawer-hero impact-drawer-hero"><span class="eyebrow">ANIQLIK · реальный лот</span><h2>${esc(lot.lot_number)}</h2><p>${esc(lot.raw_brand_text || lot.raw_product_name)}</p><div class="drawer-chips"><span>${esc(lot.professional_key)}</span><span>DEMO-ОБОГАЩЕНИЕ</span></div></div><div class="drawer-body">${lot.original_url ? `<a class="original-lot-button" href="${esc(lot.original_url)}" target="_blank" rel="noopener noreferrer">Открыть оригинальный лот на cooperation.uz <b>↗</b></a>` : ""}<div class="drawer-note"><strong>Разделение источников</strong><br>Коммерческие сведения взяты из ANIQLIK. Профессиональные поля ниже вычислены демонстрационно и не записаны в исходную БД.</div>${detailSection("Исходные данные лота", sourceRows)}${detailSection("Профессиональное обогащение", inferredRows)}${lot.technical_specs ? `<section class="drawer-section"><h3>Технические характеристики</h3><p class="lot-long-text">${esc(lot.technical_specs)}</p></section>` : ""}${lot.functional_characteristics ? `<section class="drawer-section"><h3>Функциональные характеристики</h3><p class="lot-long-text">${esc(lot.functional_characteristics)}</p></section>` : ""}</div>`);
 }
 
 function productSearchText(item) {
