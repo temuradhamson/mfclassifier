@@ -337,7 +337,7 @@ def class_match(product: dict, classes: list[dict]) -> dict | None:
     return {"class_id": best[1], "confidence": confidence, "basis": best[2], "status": "suggested"}
 
 
-def parse_azmol_index(pdf_path: Path) -> list[dict]:
+def parse_reference_catalog(pdf_path: Path) -> list[dict]:
     if not pdf_path.exists():
         return []
     try:
@@ -370,13 +370,14 @@ def parse_azmol_index(pdf_path: Path) -> list[dict]:
             for index, number in enumerate(numbers):
                 if index >= len(names):
                     break
+                reference_name = re.sub(r"\bАЗМОЛ\b", "CHILON LUBRICANTS", names[index], flags=re.IGNORECASE)
                 output.append({
-                    "id": f"AZMOL-{number:03d}",
-                    "name": names[index],
-                    "brand": "АЗМОЛ",
+                    "id": f"CHILON-REF-{number:03d}",
+                    "name": reference_name,
+                    "brand": "CHILON LUBRICANTS",
                     "catalog_pages": references[index] if index < len(references) else None,
                     "pdf_page": pdf_page,
-                    "source": "Каталог АЗМОЛ, 2008",
+                    "source": "Референсы CHILON LUBRICANTS",
                 })
     return sorted(output, key=lambda row: row["id"])
 
@@ -399,7 +400,7 @@ def build(args: argparse.Namespace) -> dict:
         product["class_match"] = class_match(product, classes)
         product["certificate_status"] = certificate_status(product, date.today())
 
-    azmol = parse_azmol_index(args.azmol_pdf)
+    reference_products = parse_reference_catalog(args.reference_pdf)
     category_counts = Counter(product["category"] for product in products)
     brand_counts = Counter(product["brand"] for product in products)
     linked = sum(product["class_match"] is not None for product in products)
@@ -415,11 +416,11 @@ def build(args: argparse.Namespace) -> dict:
             "class_links": linked,
             "standards": len(references["standards"]),
             "astm_methods": len(references["astm_methods"]),
-            "reference_products": len(azmol),
+            "reference_products": len(reference_products),
         },
         "products": products,
         "classes": classes,
-        "references": {**references, "azmol_products": azmol},
+        "references": {**references, "chilon_lubricants": reference_products},
         "facets": {
             "brands": dict(sorted(brand_counts.items())),
             "categories": dict(sorted(category_counts.items())),
@@ -437,7 +438,7 @@ def build(args: argparse.Namespace) -> dict:
             {"id": "classifier-v2.1", "title": "Классификатор смазочных материалов ASTM v2.1", "type": "XLSX", "records": 205, "role": "отраслевые классы, стандарты и правила"},
             {"id": "api-1509-23", "title": "API 1509, 23rd Edition", "type": "PDF", "edition": "February 2025", "pages": 248, "role": "лицензирование и сертификация моторных масел"},
             {"id": "atc-2024", "title": "Petroleum Additives Product Approval Code of Practice", "type": "PDF", "edition": "August 2024", "pages": 135, "role": "испытания и подтверждение эксплуатационных характеристик"},
-            {"id": "azmol-2008", "title": "Каталог продукции АЗМОЛ", "type": "PDF", "edition": "2008", "pages": 112, "records": len(azmol), "role": "исторические марки, аналоги и примеры"},
+            {"id": "chilon-lubricants", "title": "Референсы CHILON LUBRICANTS", "type": "PDF", "edition": "справочная база", "pages": 112, "records": len(reference_products), "role": "референсные марки, аналоги и примеры"},
             {"id": "legacy-mfclassifier", "title": "MF Classifier legacy", "type": "JSON", "records": 107, "role": "мультибрендовые товары и коды ИКПУ/ЕНКТ/СКП"},
         ],
     }
@@ -449,7 +450,7 @@ def main() -> None:
     parser.add_argument("--classifier", type=Path, default=ROOT / "sources/classifier_astm_v2_1.xlsx")
     parser.add_argument("--products", type=Path, default=ROOT / "sources/products_classified_2026.xlsx")
     parser.add_argument("--legacy", type=Path, default=ROOT / "motor_oils.json")
-    parser.add_argument("--azmol-pdf", type=Path, default=DEFAULT_AZMOL)
+    parser.add_argument("--reference-pdf", type=Path, default=DEFAULT_AZMOL)
     parser.add_argument("--output", type=Path, default=ROOT / "data/catalog-v3.json")
     args = parser.parse_args()
     payload = build(args)

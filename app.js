@@ -62,9 +62,10 @@ function bindEvents() {
     clearTimeout(productTimer);
     productTimer = setTimeout(() => { state.productPage = 1; renderProducts(); }, 140);
   });
-  ["productBrand", "productCategory", "productLink"].forEach((id) => $(id).addEventListener("change", () => {
-    state.productPage = 1; renderProducts();
+  ["productFamily", "productCategory", "productGrade", "productSystem", "productSpecification", "productBrand"].forEach((id) => $(id).addEventListener("change", () => {
+    state.productPage = 1; updateProductCascade(); renderProducts();
   }));
+  $("productLink").addEventListener("change", () => { state.productPage = 1; renderProducts(); });
   $("clearProductFilters").addEventListener("click", clearProductFilters);
   $("productTableBody").addEventListener("click", (event) => {
     const row = event.target.closest("[data-product-id]");
@@ -161,8 +162,7 @@ function fillSelect(id, values, label = (value) => value) {
 }
 
 function populateFilters() {
-  fillSelect("productBrand", unique(DATA.products.map((item) => item.brand)));
-  fillSelect("productCategory", unique(DATA.products.map((item) => item.category)));
+  updateProductCascade();
   fillSelect("classCategory", unique(DATA.classes.map((item) => item.category)));
   const categoryMap = new Map();
   DATA.classes.forEach((item) => categoryMap.set(item.category_code, item.category_code === "TF" ? "Технические жидкости" : item.category));
@@ -174,7 +174,7 @@ function renderOverview() {
     ["◉", "Продукты", DATA.metrics.products, `${DATA.metrics.brands} бренд`],
     ["◇", "Отраслевые классы", DATA.metrics.classes, `${DATA.metrics.class_links} связей с товарами`],
     ["≡", "Стандарты и ASTM", DATA.metrics.standards + DATA.metrics.astm_methods, "нормативных записей"],
-    ["⌁", "Референсы АЗМОЛ", DATA.metrics.reference_products, "исторических марок"],
+    ["⌁", "CHILON LUBRICANTS", DATA.metrics.reference_products, "референсных позиций"],
   ];
   $("metricGrid").innerHTML = metrics.map(([icon, label, value, note]) => `
     <article class="metric-card"><div class="metric-top"><span>${esc(label)}</span><i>${icon}</i></div><strong>${formatNumber(value)}</strong><small>${esc(note)}</small></article>
@@ -204,14 +204,122 @@ function productSearchText(item) {
     item.certificate_number, item.technical_document, item.tnved_code, item.ikpu, item.enkt, item.skp].join(" "));
 }
 
+function cleanStandard(value, prefix) {
+  return String(value || "").trim().replace(new RegExp(`^${prefix}\\s*`, "i"), "").trim();
+}
+
+function normalizeSae(value) {
+  const grade = cleanStandard(value, "SAE[-\\s]*").toUpperCase().replaceAll(" ", "").replace(/^-/, "");
+  return /^\d{1,2}W\d{2}$/.test(grade) ? grade.replace("W", "W-") : grade;
+}
+
+function normalizeIsoVg(value) {
+  return String(value || "").trim().replace(/^(?:ISO\s*)?VG\s*/i, "").trim();
+}
+
+function professionalProfile(item) {
+  const category = norm(item.category);
+  if (category.includes("моторн")) return { kind: "engine", gradeLabel: "Вязкость SAE", grade: normalizeSae(item.sae_class) };
+  if (category.includes("трансмиссион")) return { kind: "gear", gradeLabel: "Вязкость SAE", grade: normalizeSae(item.sae_class) };
+  if (category.includes("смазк")) return { kind: "grease", gradeLabel: "Класс DIN 51502", grade: cleanStandard(item.grease_class, "Смазка пластичная") };
+  if (item.category_code === "TF" || category.includes("охлаждающ")) return { kind: "coolant", gradeLabel: "Класс охлаждающей жидкости", grade: item.coolant_class };
+  return { kind: "industrial", gradeLabel: "Вязкость ISO VG", grade: normalizeIsoVg(item.viscosity) };
+}
+
+function aceaValue(item) {
+  const match = String(item.technical_document || "").match(/ACEA\s+([^,;]+)/i);
+  return match ? match[1].trim() : "";
+}
+
+function apiValue(item) {
+  const documented = String(item.technical_document || "").match(/API\s+(.+?)(?=,\s*ACEA|;|$)/i);
+  return cleanStandard(documented?.[1] || item.api_class, "API");
+}
+
+function standardValues(item) {
+  const profile = professionalProfile(item);
+  const values = [];
+  const add = (system, value) => { if (has(value)) values.push({ system, value: String(value).trim() }); };
+  if (profile.kind === "engine") {
+    add("API", apiValue(item)); add("ACEA", aceaValue(item)); add("ГОСТ", item.gost_name);
+  } else if (profile.kind === "gear") {
+    add("API GL", apiValue(item)); add("ГОСТ", item.gost_name);
+  } else if (profile.kind === "coolant") {
+    add("ГОСТ / ТУ", /ГОСТ|GOST|ТУ|TS\s/i.test(item.technical_document || "") ? item.technical_document : "");
+  } else if (profile.kind === "grease") {
+    add("DIN 51502", item.grease_class); add("ГОСТ", item.gost_name);
+  } else {
+    add("DIN / ISO", item.din_gost_class); add("ГОСТ", item.gost_name);
+  }
+  return values;
+}
+
+function selectValue(id) { return $(id).value; }
+function setCascadeOptions(id, values, placeholder, label = (value) => value) {
+  const select = $(id);
+  const current = select.value;
+  select.innerHTML = `<option value="">${esc(placeholder)}</option>` + values.map((value) => `<option value="${esc(value)}">${esc(label(value))}</option>`).join("");
+  if (values.includes(current)) select.value = current;
+}
+
+function matchesProfessional(item, filters, through = "brand") {
+  const order = ["family", "category", "grade", "system", "specification", "brand"];
+  const limit = order.indexOf(through);
+  const profile = professionalProfile(item);
+  if (limit >= 0 && filters.family && item.family !== filters.family) return false;
+  if (limit >= 1 && filters.category && item.category !== filters.category) return false;
+  if (limit >= 2 && filters.grade && profile.grade !== filters.grade) return false;
+  if (limit >= 3 && filters.system && !standardValues(item).some((entry) => entry.system === filters.system)) return false;
+  if (limit >= 4 && filters.specification && !standardValues(item).some((entry) => entry.system === filters.system && entry.value === filters.specification)) return false;
+  if (limit >= 5 && filters.brand && item.brand !== filters.brand) return false;
+  return true;
+}
+
+function productFilters() {
+  return {
+    family: selectValue("productFamily"), category: selectValue("productCategory"), grade: selectValue("productGrade"),
+    system: selectValue("productSystem"), specification: selectValue("productSpecification"), brand: selectValue("productBrand"),
+  };
+}
+
+function updateProductCascade() {
+  let filters = productFilters();
+  setCascadeOptions("productFamily", unique(DATA.products.map((item) => item.family)), "Все семейства", (value) => value === "Масла" ? "Смазочные материалы" : value);
+  filters = productFilters();
+  let base = DATA.products.filter((item) => matchesProfessional(item, filters, "family"));
+  setCascadeOptions("productCategory", unique(base.map((item) => item.category)), "Все категории");
+  filters = productFilters();
+  base = DATA.products.filter((item) => matchesProfessional(item, filters, "category"));
+  const profiles = base.map(professionalProfile);
+  const labels = unique(profiles.map((profile) => profile.gradeLabel));
+  $("productGradeLabel").textContent = labels.length === 1 ? labels[0] : "Вязкость / класс";
+  setCascadeOptions("productGrade", unique(profiles.map((profile) => profile.grade)), "Все значения");
+  filters = productFilters();
+  base = DATA.products.filter((item) => matchesProfessional(item, filters, "grade"));
+  const systemOrder = ["API", "API GL", "ACEA", "DIN / ISO", "DIN 51502", "ГОСТ", "ГОСТ / ТУ"];
+  const systems = unique(base.flatMap((item) => standardValues(item).map((entry) => entry.system))).sort((a, b) => systemOrder.indexOf(a) - systemOrder.indexOf(b));
+  setCascadeOptions("productSystem", systems, "Все системы");
+  filters = productFilters();
+  base = DATA.products.filter((item) => matchesProfessional(item, filters, "system"));
+  setCascadeOptions("productSpecification", unique(base.flatMap((item) => standardValues(item).filter((entry) => !filters.system || entry.system === filters.system).map((entry) => entry.value))), "Все спецификации");
+  filters = productFilters();
+  base = DATA.products.filter((item) => matchesProfessional(item, filters, "specification"));
+  setCascadeOptions("productBrand", unique(base.map((item) => item.brand)), "Все бренды");
+  filters = productFilters();
+  $("productGrade").disabled = !filters.category;
+  $("productSystem").disabled = !filters.category;
+  $("productSpecification").disabled = !filters.system;
+  $("selectorHint").textContent = filters.category
+    ? `${$("productGradeLabel").textContent} → функциональный стандарт → спецификация → доступный бренд.`
+    : "Выберите категорию — следующие списки перестроятся под её профессиональную классификацию.";
+}
+
 function filteredProducts() {
   const query = norm($("productSearch").value).split(/\s+/).filter(Boolean);
-  const brand = $("productBrand").value;
-  const category = $("productCategory").value;
+  const filters = productFilters();
   const link = $("productLink").value;
   return DATA.products.filter((item) => {
-    if (brand && item.brand !== brand) return false;
-    if (category && item.category !== category) return false;
+    if (!matchesProfessional(item, filters)) return false;
     if (link === "linked" && !item.class_match) return false;
     if (link === "unlinked" && item.class_match) return false;
     const haystack = productSearchText(item);
@@ -251,8 +359,8 @@ function renderProducts() {
 }
 
 function clearProductFilters() {
-  ["productSearch", "productBrand", "productCategory", "productLink"].forEach((id) => $(id).value = "");
-  state.productPage = 1; renderProducts();
+  ["productSearch", "productFamily", "productCategory", "productGrade", "productSystem", "productSpecification", "productBrand", "productLink"].forEach((id) => $(id).value = "");
+  state.productPage = 1; updateProductCascade(); renderProducts();
 }
 
 function classSearchText(item) {
@@ -331,7 +439,7 @@ function referenceDataset() {
     astm: refs.astm_methods,
     industries: refs.industries,
     temperatures: refs.temperature_zones,
-    azmol: refs.azmol_products,
+    chilon: refs.chilon_lubricants,
     sources: DATA.sources,
   }[state.reference] || refs.standards;
 }
@@ -383,6 +491,45 @@ function detailSection(title, fields) {
   return `<section class="drawer-section"><h3>${esc(title)}</h3><dl class="detail-list">${rows.map(([label, value]) => `<div><dt>${esc(label)}</dt><dd>${esc(Array.isArray(value) ? value.join("; ") : value)}</dd></div>`).join("")}</dl></section>`;
 }
 
+function functionalTokens(item) {
+  const profile = professionalProfile(item);
+  const raw = `${apiValue(item)} ${aceaValue(item)} ${item.din_gost_class || ""} ${item.gost_name || ""} ${item.grease_class || ""}`
+    .toUpperCase().replaceAll("С", "C").replaceAll("Н", "H");
+  if (["engine", "gear"].includes(profile.kind)) {
+    return unique(raw.match(/\b(?:S[ABCDEFGHJKLMNP]|C[A-HJKN](?:-\d)?|F[AP]|GL-?[1-6])\b/g) || []);
+  }
+  if (profile.kind === "coolant") return unique([compact(item.coolant_class)]);
+  return unique(standardValues(item).map((entry) => compact(entry.value)));
+}
+
+function equivalentProducts(item) {
+  const profile = professionalProfile(item);
+  if (!has(profile.grade)) return [];
+  const tokens = functionalTokens(item);
+  if (!tokens.length) return [];
+  return DATA.products.map((candidate) => {
+    if (candidate.id === item.id) return null;
+    const candidateProfile = professionalProfile(candidate);
+    if (candidateProfile.kind !== profile.kind || candidateProfile.grade !== profile.grade) return null;
+    const shared = functionalTokens(candidate).filter((token) => tokens.includes(token));
+    if (!shared.length) return null;
+    const otherBrand = candidate.brand !== item.brand;
+    return {
+      item: candidate,
+      score: 70 + Math.min(24, shared.length * 6) + (otherBrand ? 5 : 0),
+      reason: `${profile.gradeLabel.replace("Вязкость ", "")} ${profile.grade} + ${shared.join("/")}`,
+      otherBrand,
+    };
+  }).filter(Boolean).sort((a, b) => b.score - a.score || Number(b.otherBrand) - Number(a.otherBrand) || a.item.name.localeCompare(b.item.name, "ru")).slice(0, 8);
+}
+
+function analoguesSection(item) {
+  const analogues = equivalentProducts(item);
+  if (!analogues.length) return `<section class="drawer-section analogue-section"><div class="section-title"><h3>Аналоги продукции</h3><span>по классификации</span></div><p class="analogue-empty">Точного сопоставления по вязкости и функциональному стандарту в текущей базе нет.</p></section>`;
+  return `<section class="drawer-section analogue-section"><div class="section-title"><h3>Аналоги продукции · ${analogues.length}</h3><span>совпадение двух признаков</span></div><div class="analogue-list">${analogues.map(({ item: analogue, score, reason }) => `
+    <button class="analogue-card" data-linked-product="${esc(analogue.id)}"><span class="analogue-score">${score}%</span><span><b>${esc(analogue.name)}</b><small>${esc(analogue.brand)} · ${esc(reason)}</small></span><i>→</i></button>`).join("")}</div><p class="analogue-disclaimer">Сопоставление справочное: перед заменой продукта проверьте допуски OEM и техническую документацию.</p></section>`;
+}
+
 function openProduct(id) {
   const item = DATA.products.find((product) => product.id === id);
   if (!item) return;
@@ -391,6 +538,7 @@ function openProduct(id) {
     <div class="drawer-hero"><span class="eyebrow">${esc(item.brand)} · ${esc(item.category)}</span><h2>${esc(item.name)}</h2><p>${esc(item.family)}</p><div class="drawer-chips">${productSpecs(item).map((value) => `<span>${esc(value)}</span>`).join("")}</div></div>
     <div class="drawer-body">
       ${linkedClass ? `<div class="drawer-note" data-linked-class="${esc(linkedClass.id)}"><strong>Предлагаемый класс ${esc(linkedClass.id)}</strong><br>${item.class_match.confidence}% · признаки: ${esc(item.class_match.basis.join(", "))}. Нажмите, чтобы открыть класс.</div>` : '<div class="drawer-note">Отраслевой класс пока не назначен: недостаточно однозначных признаков.</div>'}
+      ${analoguesSection(item)}
       ${detailSection("Классификация", [field("ISO VG", item.viscosity), field("DIN / ГОСТ", item.din_gost_class), field("SAE", item.sae_class), field("API", item.api_class), field("Название по ГОСТ", item.gost_name), field("Класс ОЖ", item.coolant_class), field("Класс смазки", item.grease_class)])}
       ${detailSection("Документы и сертификаты", [field("Сертификат", item.certificate_number), field("Выдан", formatDate(item.certificate_issued_at)), field("Действует до", formatDate(item.certificate_expires_at)), field("Локальный производитель", item.local_producer_certificate), field("ГОСТ / ТУ / регламент", item.technical_document)])}
       ${detailSection("Коды классификаторов", [field("ТН ВЭД", item.tnved_code), field("ИКПУ", item.ikpu), field("ЕНКТ", item.enkt), field("СКП", item.skp)])}

@@ -93,12 +93,21 @@
           <div><span class="eyebrow">Коммерческая номенклатура</span><h1>Продукты</h1><p>Актуальные CHILON/UNO и сохранённая мультибрендовая база.</p></div>
           <button class="secondary-button" id="exportProducts">Экспорт CSV</button>
         </div>
-        <div class="filter-bar">
-          <label class="filter-search"><span>⌕</span><input id="productSearch" type="search" placeholder="Название, SAE, API, ГОСТ, код…"></label>
-          <label><span>Бренд</span><select id="productBrand"><option value="">Все бренды</option></select></label>
-          <label><span>Категория</span><select id="productCategory"><option value="">Все категории</option></select></label>
-          <label><span>Связь с классом</span><select id="productLink"><option value="">Все</option><option value="linked">Есть связь</option><option value="unlinked">Без связи</option></select></label>
-          <button class="clear-button" id="clearProductFilters" type="button">Сбросить</button>
+        <div class="product-selector">
+          <div class="selector-heading"><div><span class="kicker">Профессиональный отбор</span><h2>Каскад классификации</h2></div><p id="selectorHint">Каждый следующий список содержит только применимые значения.</p></div>
+          <div class="filter-bar product-cascade">
+            <label><span><i>1</i> Семейство</span><select id="productFamily"><option value="">Все семейства</option></select></label>
+            <label><span><i>2</i> Категория</span><select id="productCategory"><option value="">Все категории</option></select></label>
+            <label id="productGradeField"><span><i>3</i> <b id="productGradeLabel">Класс вязкости</b></span><select id="productGrade"><option value="">Все значения</option></select></label>
+            <label id="productSystemField"><span><i>4</i> Система стандарта</span><select id="productSystem"><option value="">Все системы</option></select></label>
+            <label id="productSpecField"><span><i>5</i> Спецификация</span><select id="productSpecification"><option value="">Все спецификации</option></select></label>
+            <label><span><i>6</i> Бренд</span><select id="productBrand"><option value="">Все бренды</option></select></label>
+          </div>
+          <div class="selector-tools">
+            <label class="filter-search"><span>⌕</span><input id="productSearch" type="search" placeholder="Название, SAE, API, ГОСТ, код…"></label>
+            <label><span>Связь с классом</span><select id="productLink"><option value="">Все позиции</option><option value="linked">Есть связь</option><option value="unlinked">Без связи</option></select></label>
+            <button class="clear-button" id="clearProductFilters" type="button">Сбросить всё</button>
+          </div>
         </div>
         <div class="result-meta"><strong id="productResultCount">0</strong><span>Нажмите на строку, чтобы открыть паспорт продукта</span></div>
         <div class="data-card">
@@ -136,7 +145,7 @@
           <button data-reference="astm">ASTM <em>42</em></button>
           <button data-reference="industries">Отрасли <em>40</em></button>
           <button data-reference="temperatures">Температуры <em>9</em></button>
-          <button data-reference="azmol">АЗМОЛ <em>282</em></button>
+          <button data-reference="chilon">CHILON LUBRICANTS <em>282</em></button>
           <button data-reference="sources">Источники <em>6</em></button>
         </div>
         <div class="reference-toolbar"><label class="filter-search"><span>⌕</span><input id="referenceSearch" type="search" placeholder="Поиск в текущем справочнике…"></label></div>
