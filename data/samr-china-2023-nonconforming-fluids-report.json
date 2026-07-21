@@ -1,0 +1,151 @@
+{
+  "status": "official_china_2023_nonconforming_fluid_product_observations_normalized",
+  "source_id": "SAMR_CHINA_2023_NONCONFORMING_FLUIDS",
+  "source_url": "https://www.shandan.gov.cn/zfxxgk/fdzdgknr/ssjygkhjdjc_5883/202310/t20231020_1128402.html",
+  "attachment_url": "https://www.shandan.gov.cn/zfxxgk/fdzdgknr/ssjygkhjdjc_5883/202310/P020231020329120054720.xlsx",
+  "snapshot_date": "2026-07-21",
+  "report_date": "2023-10-20",
+  "source_xlsx_sha256": "6eff7f988cba8b51e04ac3e7735affa790431cb9e51aec21eb9087928d38d45b",
+  "source_relevant_rows": 136,
+  "normalized_product_observations": 126,
+  "excluded_suspected_counterfeit_rows": 10,
+  "excluded_source_rows": [
+    {
+      "source_row": 2,
+      "product_kind_source_reported": "机动车辆制动液",
+      "producer": "天津市祥通润滑油脂厂",
+      "product_name_source_reported": "高级合成制动液",
+      "model_specification_source_reported": "500克/瓶 HZY3",
+      "production_date_or_batch_source_reported": "2023.02.08",
+      "nonconforming_items_source_reported": "运动黏度（-40℃）*,pH值*",
+      "source_note": "涉嫌假冒",
+      "exclusion_reason": "suspected_counterfeit_nominal_producer_attribution_unreliable"
+    },
+    {
+      "source_row": 6,
+      "product_kind_source_reported": "机动车辆制动液",
+      "producer": "哈尔滨市新联邦汽车液品有限公司",
+      "product_name_source_reported": "汽车制动液（机动车辆制动液）",
+      "model_specification_source_reported": "800g/瓶HZY3",
+      "production_date_or_batch_source_reported": "2022.02.20",
+      "nonconforming_items_source_reported": "运动黏度（-40℃）*,运动黏度（100℃）*,平衡回流沸点（ERBP）*,湿平衡回流沸点（WERBP）*,蒸发性能*",
+      "source_note": "涉嫌假冒",
+      "exclusion_reason": "suspected_counterfeit_nominal_producer_attribution_unreliable"
+    },
+    {
+      "source_row": 9,
+      "product_kind_source_reported": "机动车辆制动液",
+      "producer": "无锡中石油润滑脂有限责任公司",
+      "product_name_source_reported": "719 制动液",
+      "model_specification_source_reported": "4Kg/桶 DOT3 HZY3",
+      "production_date_or_batch_source_reported": "2022-08-17/2022-08-18",
+      "nonconforming_items_source_reported": "运动黏度（-40℃）*,平衡回流沸点（ERBP）*,pH值*,蒸发性能*",
+      "source_note": "涉嫌假冒",
+      "exclusion_reason": "suspected_counterfeit_nominal_producer_attribution_unreliable"
+    },
+    {
+      "source_row": 72,
+      "product_kind_source_reported": "车用尿素水溶液",
+      "producer": "山东蓝源环保科技有限公司",
+      "product_name_source_reported": "节畅车用尿素溶液",
+      "model_specification_source_reported": "10kg/桶",
+      "production_date_or_batch_source_reported": "2023/02/06",
+      "nonconforming_items_source_reported": "尿素含量,密度,折光率",
+      "source_note": "涉嫌假冒",
+      "exclusion_reason": "suspected_counterfeit_nominal_producer_attribution_unreliable"
+    },
+    {
+      "source_row": 85,
+      "product_kind_source_reported": "车用尿素水溶液",
+      "producer": "湖北宜化化工股份有限公司",
+      "product_name_source_reported": "车用尿素溶液（车用尿素水溶液）",
+      "model_specification_source_reported": "10kg/桶",
+      "production_date_or_batch_source_reported": "2023/04/27",
+      "nonconforming_items_source_reported": "杂质含量(钠)",
+      "source_note": "涉嫌假冒",
+      "exclusion_reason": "suspected_counterfeit_nominal_producer_attribution_unreliable"
+    },
+    {
+      "source_row": 103,
+      "product_kind_source_reported": "机动车发动机冷却液",
+      "producer": "江西车仆实业有限公司",
+      "product_name_source_reported": "长效防冻液（机动车发动机冷却液）",
+      "model_specification_source_reported": "4kg/桶 LEC-II-15",
+      "production_date_or_batch_source_reported": "20210621",
+      "nonconforming_items_source_reported": "冰点,沸点",
+      "source_note": "涉嫌假冒",
+      "exclusion_reason": "suspected_counterfeit_nominal_producer_attribution_unreliable"
+    },
+    {
+      "source_row": 122,
+      "product_kind_source_reported": "机动车发动机润滑油",
+      "producer": "东营澳润石油化工有限公司",
+      "product_name_source_reported": "合成型汽油机油",
+      "model_specification_source_reported": "4L/桶 SL 5W-40",
+      "production_date_or_batch_source_reported": "2023/02/10",
+      "nonconforming_items_source_reported": "低温动力黏度",
+      "source_note": "涉嫌假冒",
+      "exclusion_reason": "suspected_counterfeit_nominal_producer_attribution_unreliable"
+    },
+    {
+      "source_row": 124,
+      "product_kind_source_reported": "机动车发动机润滑油",
+      "producer": "贵州美孚特润滑油有限公司",
+      "product_name_source_reported": "柴油机油",
+      "model_specification_source_reported": "3.5L/桶 CD 20W-50",
+      "production_date_or_batch_source_reported": "2022/03/28",
+      "nonconforming_items_source_reported": "低温动力黏度,运动黏度（100℃）,高温高剪切黏度",
+      "source_note": "涉嫌假冒",
+      "exclusion_reason": "suspected_counterfeit_nominal_producer_attribution_unreliable"
+    },
+    {
+      "source_row": 138,
+      "product_kind_source_reported": "车用汽油清净剂",
+      "producer": "统一石油化工有限公司",
+      "product_name_source_reported": "汽油清净剂",
+      "model_specification_source_reported": "60ml/瓶",
+      "production_date_or_batch_source_reported": "2021.01.18",
+      "nonconforming_items_source_reported": "氯含量,模拟进气阀沉积物质量",
+      "source_note": "复检仍不合格，涉嫌假冒",
+      "exclusion_reason": "suspected_counterfeit_nominal_producer_attribution_unreliable"
+    },
+    {
+      "source_row": 158,
+      "product_kind_source_reported": "车用汽油清净剂",
+      "producer": "青岛索顿进出口有限公司",
+      "product_name_source_reported": "燃油系统速效清洗剂（汽油清净剂）",
+      "model_specification_source_reported": "355ml/瓶",
+      "production_date_or_batch_source_reported": "20211127/20211127AQ",
+      "nonconforming_items_source_reported": "闪点（闭口）*,模拟进气阀沉积物质量",
+      "source_note": "涉嫌假冒",
+      "exclusion_reason": "suspected_counterfeit_nominal_producer_attribution_unreliable"
+    }
+  ],
+  "rows_by_source_product_kind": {
+    "机动车发动机冷却液": 6,
+    "机动车发动机润滑油": 15,
+    "机动车辆制动液": 13,
+    "汽车风窗玻璃清洗液": 8,
+    "车用尿素水溶液": 44,
+    "车用汽油清净剂": 40
+  },
+  "families": {
+    "M": 15,
+    "S": 40,
+    "TF": 71
+  },
+  "rows_with_api": 15,
+  "rows_with_sae": 15,
+  "rows_with_dot": 8,
+  "rows_with_hzy": 13,
+  "rows_with_coolant_class": 6,
+  "rows_with_washer_class": 8,
+  "rows_with_aus32": 4,
+  "retest_confirmed_nonconforming_rows": 17,
+  "normalized_output_sha256": "1f6fe207ebdae86354e40650a63084d8a8af1fd98abe75d34b35cb71073fc99b",
+  "grain_note": "One row is one exact nominal producer + reported product name + model/specification identity observed as nonconforming in the 2023 national inspection.",
+  "lifecycle_note": "These are historical regulatory observations, never approval, recommendation or evidence of current sale.",
+  "counterfeit_note": "Ten attachment rows explicitly marked suspected counterfeit are audit-only. The narrative also reports one unidentified counterfeit washer-fluid sample; because the attachment does not identify it, all eight washer rows remain with an explicit uncertainty flag.",
+  "provenance_note": "Complete SAMR national-report XLSX mirrored verbatim by the Shandan County government portal.",
+  "privacy_note": "Retailers, testing laboratories and producer locations are excluded; only company-level nominal producer and product facts required for identity and regulatory provenance are retained."
+}

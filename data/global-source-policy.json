@@ -1911,6 +1911,21 @@
       "notes": "The official current TIS 1040-2541 search exposes ten manufacturing licences across nine exact company holders. The linked data.go.th dataset is published under Creative Commons Attribution. Each normalized row remains a licence-holder certification scope, not a marketed brand, grade or SKU; no SAE/API value or current-validity claim is inferred."
     },
     {
+      "source_id": "SAMR_CHINA_2023_NONCONFORMING_FLUIDS",
+      "title": "China SAMR 2023 national inspection — nonconforming automotive fluids",
+      "owner": "State Administration for Market Regulation of the People's Republic of China (SAMR), mirrored by Shandan County government",
+      "source_type": "official_government_national_product_quality_inspection_xlsx_mirrored_by_local_government",
+      "source_locator": "data/samr-china-2023-nonconforming-fluids.jsonl",
+      "source_url": "https://www.shandan.gov.cn/zfxxgk/fdzdgknr/ssjygkhjdjc_5883/202310/t20231020_1128402.html",
+      "terms_url": "https://www.shandan.gov.cn/",
+      "source_sha256": "1f6fe207ebdae86354e40650a63084d8a8af1fd98abe75d34b35cb71073fc99b",
+      "access_status": "public_official_government_information_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_document_redistribution",
+      "observed_count": 126,
+      "notes": "The complete national-inspection XLSX preserved on a local-government portal contains 136 relevant failed batches. 126 exact nominal producer + product name + model/specification observations are normalized across brake fluid, aqueous urea, coolant, engine oil, washer fluid and gasoline detergent additives. Ten rows explicitly marked suspected counterfeit remain report-only. The narrative says one washer-fluid counterfeit is present but the attachment does not identify it, so all eight washer rows retain an explicit uncertainty flag. Historical failed-inspection evidence is never presented as approval or current sale."
+    },
+    {
       "source_id": "SAMR_CHINA_2025_NONCONFORMING_FLUIDS",
       "title": "China SAMR 2025 national inspection — nonconforming automotive fluids",
       "owner": "State Administration for Market Regulation of the People's Republic of China (SAMR)",
