@@ -40,6 +40,7 @@ DRIVENTIC_DIWA_JSONL = ROOT / "data" / "driventic-diwa-approved-oils.jsonl"
 MERCEDES_DTFR_JSONL = ROOT / "data" / "mercedes-dtfr-approved-fluids.jsonl"
 MERCEDES_BEVO_JSONL = ROOT / "data" / "mercedes-bevo-approved-fluids.jsonl"
 VOLVO_GENUINE_JSONL = ROOT / "data" / "volvo-genuine-fluids.jsonl"
+MACK_GENUINE_JSONL = ROOT / "data" / "mack-genuine-fluids.jsonl"
 SCANIA_GENUINE_JSONL = ROOT / "data" / "scania-genuine-oils.jsonl"
 BRAVA_OFFICIAL_JSONL = ROOT / "data" / "brava-official-products.jsonl"
 CEYPETCO_JSONL = ROOT / "data" / "ceypetco-lubricant-products.jsonl"
@@ -720,6 +721,73 @@ def volvo_genuine_record(row: dict) -> dict:
             "value": part_number,
             "source_id": "VOLVO_GENUINE_FLUIDS",
             "status": "official_manufacturer_product_catalog",
+        }
+    return record
+
+
+def mack_genuine_record(row: dict) -> dict:
+    specs = row["specifications"]
+    strict_mack_standards = [
+        value for value in specs.get("mack_standards", []) if value != "37319"
+    ]
+    performance = []
+    if specs.get("api"):
+        performance.append(f"API {'/'.join(specs['api'])}")
+    if specs.get("mack_standard"):
+        performance.append(f"Mack {specs['mack_standard']}")
+    if strict_mack_standards:
+        performance.append(f"Mack {'/'.join(strict_mack_standards)}")
+    if specs.get("mack_product_class"):
+        performance.append(f"Mack {specs['mack_product_class']}")
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Оригинальные эксплуатационные жидкости Mack",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": specs.get("sae_engine") or specs.get("sae_gear") or "",
+        "api_class": " ".join(performance),
+        "viscosity": specs.get("iso_vg", ""),
+        "source": "MACK_GENUINE_FLUIDS",
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": "MACK_GENUINE_FLUIDS",
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": "official_manufacturer_product_catalog",
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update(specs)
+    record["specifications"].update({
+        "source_url": row["source_url"],
+        "product_overview_url": row["product_overview_url"],
+        "engine_oil_standard_evidence_url": row["engine_oil_standard_evidence_url"],
+        "safety_document_url_source_reported": row["safety_document_url_source_reported"],
+        "source_quality_flags": row["source_quality_flags"],
+        "product_sheet_part_numbers": row["product_sheet_part_numbers"],
+        "product_sheet_url": row["product_sheet_url"],
+    })
+    if performance:
+        record["canonical_key"] += f"|mack_professional_performance:{normalize('|'.join(performance))}"
+    record["canonical_key"] += f"|mack_genuine_record:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    all_part_numbers = [package["part_number"] for package in row["packages"]]
+    all_part_numbers.extend(
+        number for number in row["product_sheet_part_numbers"] if number not in all_part_numbers
+    )
+    for index, part_number in enumerate(all_part_numbers, 1):
+        record["codes"][f"mack_part_number_{index}"] = {
+            "system": "MACK_PART_NUMBER",
+            "value": part_number,
+            "source_id": "MACK_GENUINE_FLUIDS",
+            "status": "current_official_catalog",
         }
     return record
 
@@ -2925,6 +2993,9 @@ def main() -> None:
     volvo_genuine_source_rows = [json.loads(line) for line in VOLVO_GENUINE_JSONL.read_text(encoding="utf-8").splitlines() if line]
     volvo_genuine_records = [volvo_genuine_record(row) for row in volvo_genuine_source_rows]
     input_records.extend(volvo_genuine_records)
+    mack_genuine_source_rows = [json.loads(line) for line in MACK_GENUINE_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    mack_genuine_records = [mack_genuine_record(row) for row in mack_genuine_source_rows]
+    input_records.extend(mack_genuine_records)
     scania_genuine_source_rows = [json.loads(line) for line in SCANIA_GENUINE_JSONL.read_text(encoding="utf-8").splitlines() if line]
     scania_genuine_records = [scania_genuine_record(row) for row in scania_genuine_source_rows]
     input_records.extend(scania_genuine_records)
@@ -4124,6 +4195,17 @@ def main() -> None:
         if link_key not in source_link_keys:
             source_links.append(link)
             source_link_keys.add(link_key)
+    for raw, normalized_row in zip(mack_genuine_source_rows, mack_genuine_records):
+        target = canonical_by_key[normalized_row["canonical_key"]]
+        link = {
+            "product_id": target["product_id"], "source_id": "MACK_GENUINE_FLUIDS",
+            "source_record_id": raw["source_record_id"], "source_row": None,
+            "relation": "official_manufacturer_product_catalog",
+        }
+        link_key = (link["product_id"], link["source_id"], link["source_record_id"])
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     for raw, normalized_row in zip(scania_genuine_source_rows, scania_genuine_records):
         target = canonical_by_key[normalized_row["canonical_key"]]
         link = {
@@ -4405,6 +4487,31 @@ def main() -> None:
                 "source_id": "BRAVA_LUBRICANTS_OFFICIAL_CATALOG",
                 "source_record_id": package["part_number"],
             })
+    for raw, normalized_row in zip(mack_genuine_source_rows, mack_genuine_records):
+        target = canonical_by_key[normalized_row["canonical_key"]]
+        for package in raw["packages"]:
+            package_name = package["package_name"]
+            quantity = None
+            unit = "package"
+            package_match = re.match(r"([0-9]+(?:[.,][0-9]+)?)\s*(Gallon|Oz|kg)\b", package_name, flags=re.I)
+            if package_match:
+                quantity = float(package_match.group(1).replace(",", "."))
+                unit = {"gallon": "gal", "oz": "oz", "kg": "kg"}[package_match.group(2).lower()]
+            offers.append({
+                "offer_id": f"MACK-{raw['source_record_id']}-{hashlib.sha256(package['part_number'].encode()).hexdigest()[:16]}",
+                "product_id": target["product_id"],
+                "market": "BAHAMAS_EN_MACK",
+                "package_name": package_name,
+                "unit": unit,
+                "quantity_per_package": quantity,
+                "weight_kg": quantity if unit == "kg" else None,
+                "density_kg_per_l": None,
+                "lifecycle_status": "listed_current_catalog",
+                "archive_type": "",
+                "archive_reason": "",
+                "source_id": "MACK_GENUINE_FLUIDS",
+                "source_record_id": package["part_number"],
+            })
     issues = quality_issues(records)
     issues.extend({
         "product_id": row["product_id"],
@@ -4472,6 +4579,26 @@ def main() -> None:
                 "expected": expected,
                 "action": action,
             })
+    mack_issue_meta = {
+        "source_part_number_contains_embedded_formatting_spaces_retained_verbatim": ("medium", "PART_NUMBER", "A consistently formatted manufacturer part number", "Retain the exact catalog value, but do not silently remove embedded spaces or use it as a cross-market identity without confirmation."),
+        "source_sds_link_target_name_mismatch_not_used_as_technical_evidence": ("high", "SDS_URL", "An SDS whose target document identifies the same product", "Keep the official catalog product and part numbers, but exclude the mismatched SDS link from technical-composition evidence."),
+        "official_regional_part_number_variants_preserved_separately": ("low", "PART_NUMBER", "Market-specific manufacturer part-number evidence", "Preserve both official regional variants and do not collapse them into one code without a manufacturer cross-reference."),
+        "source_mack_standard_37319_retained_verbatim_not_silently_corrected": ("medium", "OEM_SPECIFICATION", "A confirmed current Mack transmission-fluid standard", "Retain 37319 exactly as printed on the official page, but exclude it from asserted equivalence until Mack confirms or corrects the notation."),
+    }
+    for row in records:
+        if row["source_id"] != "MACK_GENUINE_FLUIDS":
+            continue
+        for flag in row["specifications"].get("source_quality_flags", []):
+            severity, field, expected, action = mack_issue_meta[flag]
+            issues.append({
+                "product_id": row["product_id"],
+                "issue_code": f"mack_{flag}",
+                "severity": severity,
+                "field": field,
+                "value": flag,
+                "expected": expected,
+                "action": action,
+            })
     issues.extend({
         "product_id": row["product_id"],
         "issue_code": "dla_qpd_lifecycle_restriction",
@@ -4516,6 +4643,7 @@ def main() -> None:
         "mercedes_dtfr_input_sha256": hashlib.sha256(MERCEDES_DTFR_JSONL.read_bytes()).hexdigest(),
         "mercedes_bevo_input_sha256": hashlib.sha256(MERCEDES_BEVO_JSONL.read_bytes()).hexdigest(),
         "volvo_genuine_input_sha256": hashlib.sha256(VOLVO_GENUINE_JSONL.read_bytes()).hexdigest(),
+        "mack_genuine_input_sha256": hashlib.sha256(MACK_GENUINE_JSONL.read_bytes()).hexdigest(),
         "scania_genuine_input_sha256": hashlib.sha256(SCANIA_GENUINE_JSONL.read_bytes()).hexdigest(),
         "brava_official_input_sha256": hashlib.sha256(BRAVA_OFFICIAL_JSONL.read_bytes()).hexdigest(),
         "ceypetco_input_sha256": hashlib.sha256(CEYPETCO_JSONL.read_bytes()).hexdigest(),
@@ -4620,6 +4748,7 @@ def main() -> None:
         "mercedes_bevo_products_matched_to_existing": mercedes_bevo_matched_rows,
         "mercedes_bevo_products_added": mercedes_bevo_added_rows,
         "volvo_genuine_source_rows": len(volvo_genuine_source_rows),
+        "mack_genuine_source_rows": len(mack_genuine_source_rows),
         "scania_genuine_source_rows": len(scania_genuine_source_rows),
         "brava_official_source_rows": len(brava_official_source_rows),
         "ceypetco_source_rows": len(ceypetco_source_rows),

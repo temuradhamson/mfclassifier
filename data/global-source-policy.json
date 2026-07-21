@@ -1607,6 +1607,20 @@
       "publication_status": "derived_factual_product_grade_records_with_attribution",
       "observed_count": 69,
       "notes": "Thirty current official product pages expose 69 distinct product-grade cards across engine, transmission, hydraulic, industrial, turbine and technical fluids. Only factual names, grades, explicitly listed standards/approvals, document links, 94 package occurrences and 93 concrete part-number values are retained. Marketing descriptions, images, logos and page design are excluded. Robots.txt explicitly allows crawling; the site publishes no separate content-republication terms beyond an all-rights-reserved footer, so the normalized output is limited to attributed non-expressive facts. One nonstandard ACEA A4/B4 claim is retained verbatim and flagged; two placeholder part numbers and one vague 'and more' statement are excluded from strict data. Part number BRA-119-D is assigned by the source to both Ignis 5W-20 and Aurum 5W-20; both assignments remain separate and flagged."
+    },
+    {
+      "source_id": "MACK_GENUINE_FLUIDS",
+      "title": "Mack Genuine Lubricants, Coolants and Technical Fluids",
+      "owner": "Mack Trucks, Inc. / Volvo Group",
+      "source_type": "official_manufacturer_product_catalog_webpage_and_product_sheets",
+      "source_locator": "data/mack-genuine-fluids.jsonl",
+      "source_url": "https://bahamas.macktrucks.com/parts-and-services/parts/mack-parts/material-safety-data-sheets",
+      "source_sha256": "adb0f78992eb50d601f0670d20c60a6d3be86f47fbce8ff2901d6526f0c2e519",
+      "access_status": "public_official_product_catalog_factual_fields_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "derived_factual_product_grade_records_with_attribution",
+      "observed_count": 15,
+      "notes": "Current official Mack SDS catalog and product overview expose 15 product-grade rows and 32 package/part-number offers across engine oils, gear and transmission fluids, grease, hydraulic oil and coolants. Six additional regional part-number variants from six hashed official product sheets produce 38 unique official part numbers. Engine-oil EOS/API mappings come from the December 2023 Mack body-builder manual; mDRIVE standards and VCS2 POAT chemistry come from the current official overview. Source-reported mDRIVE part numbers retain unusual embedded spaces and are flagged. The printed standard 37319 is retained verbatim but flagged and excluded from asserted equivalence until confirmed. Two catalog SDS links point to differently named products and are retained only as source anomalies, not technical evidence. Only attributed non-expressive facts are published; marketing prose, images and page design are excluded."
     }
   ]
 }

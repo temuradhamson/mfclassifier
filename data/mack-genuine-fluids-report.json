@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-07-21",
+  "source_id": "MACK_GENUINE_FLUIDS",
+  "landing_urls": [
+    "https://bahamas.macktrucks.com/parts-and-services/parts/mack-parts/material-safety-data-sheets",
+    "https://www.macktrucks.com/parts-and-services/parts/mack-parts/engine/",
+    "https://www.macktrucks.com/media/documents/mack-hd-sec-1-oil-filter-final.pdf"
+  ],
+  "source_pages": [
+    {
+      "source_url": "https://bahamas.macktrucks.com/parts-and-services/parts/mack-parts/material-safety-data-sheets",
+      "source_sha256": "5c4dec18203ec826f3a36d9837be3e0e32d046d6d65a3a19db829f4b35259b58"
+    },
+    {
+      "source_url": "https://www.macktrucks.com/parts-and-services/parts/mack-parts/engine/",
+      "source_sha256": "1436765bb1c4486a3bb5e8d0d9af96dbb6fb7beca711b45fec979740976978dd"
+    },
+    {
+      "source_url": "https://www.macktrucks.com/media/documents/mack-hd-sec-1-oil-filter-final.pdf",
+      "source_sha256": "91c0506c709d6bbffddb49f629ec0fffc879e975478256688c8eac063914cebe"
+    },
+    {
+      "source_url": "https://www.macktrucks.com/media/files/parts-and-service/engine/2021/pv960-m-111821-pure-mack-vds-45-engine-oil.pdf",
+      "source_sha256": "97e52eb71c9fa88d560b87d9d96b72e44c8c7b715ac358c07982160fd6da8327"
+    },
+    {
+      "source_url": "https://www.macktrucks.com/media/files/parts-and-service/engine/2022/75w-80-mdrive-transmission-fluid-1.pdf",
+      "source_sha256": "12d163b850448125313cf7e389842e4bb880d510abbae468ddd92dabee2624db"
+    },
+    {
+      "source_url": "https://www.macktrucks.com/media/files/parts-and-service/engine/2022/75w-90-mdrive-transmission-fluid-1.pdf",
+      "source_sha256": "6c4af86ae9bed99103b18d47c0d075a6e6e4369925fbc5a2833577ed24a0bd3d"
+    },
+    {
+      "source_url": "https://www.macktrucks.com/media/files/parts-and-service/engine/2022/mack-premium-hydraulic-oil-product-sheet.pdf",
+      "source_sha256": "6bc8967a30cf8d15dd3633bbc0961f2332d6f0a496d84f34ccd90c82090476cf"
+    },
+    {
+      "source_url": "https://www.macktrucks.com/media/files/parts-and-service/engine/2022/pure-mack-grease-product-sheet.pdf",
+      "source_sha256": "7c6c43f849a9ba304ce48f4521c438b7568908e59348665540729942a9a4e5b3"
+    },
+    {
+      "source_url": "https://www.macktrucks.com/media/files/parts-and-service/engine/pv960-m-051321-pure-mack-eos-5-engine-oil.pdf",
+      "source_sha256": "7d31afe582c09ca1004d5b3fa9e55497c0e8bf70635a966e0d7841719cbb8c49"
+    }
+  ],
+  "products": 15,
+  "families": {
+    "G": 2,
+    "H": 1,
+    "M": 3,
+    "T": 6,
+    "TF": 3
+  },
+  "package_occurrences": 32,
+  "sds_catalog_part_numbers": 32,
+  "unique_part_numbers_all_official_pages": 38,
+  "source_quality_flags": {
+    "official_regional_part_number_variants_preserved_separately": 4,
+    "source_mack_standard_37319_retained_verbatim_not_silently_corrected": 1,
+    "source_part_number_contains_embedded_formatting_spaces_retained_verbatim": 2,
+    "source_sds_link_target_name_mismatch_not_used_as_technical_evidence": 2
+  },
+  "normalized_output_sha256": "adb0f78992eb50d601f0670d20c60a6d3be86f47fbce8ff2901d6526f0c2e519",
+  "publication_scope": "Derived factual product, grade, standard, package and part-number fields with attribution; page design, images and marketing prose are not republished."
+}

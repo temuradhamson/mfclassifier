@@ -56,6 +56,8 @@ def main() -> None:
     mercedes_report = json.loads((ROOT / "data/mercedes-dtfr-approved-fluids-report.json").read_text(encoding="utf-8"))
     mercedes_bevo_report = json.loads((ROOT / "data/mercedes-bevo-approved-fluids-report.json").read_text(encoding="utf-8"))
     volvo_report = json.loads((ROOT / "data/volvo-genuine-fluids-report.json").read_text(encoding="utf-8"))
+    mack_report = json.loads((ROOT / "data/mack-genuine-fluids-report.json").read_text(encoding="utf-8"))
+    mack_rows = [json.loads(line) for line in (ROOT / "data/mack-genuine-fluids.jsonl").read_text(encoding="utf-8").splitlines() if line]
     scania_report = json.loads((ROOT / "data/scania-genuine-oils-report.json").read_text(encoding="utf-8"))
     scania_rows = [json.loads(line) for line in (ROOT / "data/scania-genuine-oils.jsonl").read_text(encoding="utf-8").splitlines() if line]
     brava_report = json.loads((ROOT / "data/brava-official-products-report.json").read_text(encoding="utf-8"))
@@ -197,7 +199,7 @@ def main() -> None:
     assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
     assert not db.execute("PRAGMA foreign_key_check").fetchall()
     assert db.execute("SELECT count(*) FROM products").fetchone()[0] == len(lines)
-    assert len(lines) == 98137
+    assert len(lines) == 98152
     assert report["jaso_source_rows"] == jaso_report["rows"] == 3630
     assert report["jaso_unique_oil_codes"] == jaso_report["unique_oil_codes"] == 3629
     assert report["official_filed_registry_rows"] == 3629
@@ -246,6 +248,24 @@ def main() -> None:
     assert all(row["manufacturer"] == "Olein Refinery Corp." for row in brava_rows)
     assert all(not ({"description", "image", "logo", "marketing_text"} & set(row)) for row in brava_rows)
     assert sum("nonstandard_acea_class_source_reported_verbatim" in row["source_quality_flags"] for row in brava_rows) == 1
+    assert report["mack_genuine_source_rows"] == mack_report["products"] == len(mack_rows) == 15
+    assert report["mack_genuine_input_sha256"] == mack_report["normalized_output_sha256"]
+    assert policy_by_id["MACK_GENUINE_FLUIDS"]["source_sha256"] == mack_report["normalized_output_sha256"]
+    assert policy_by_id["MACK_GENUINE_FLUIDS"]["observed_count"] == 15
+    assert mack_report["families"] == {"G": 2, "H": 1, "M": 3, "T": 6, "TF": 3}
+    assert mack_report["package_occurrences"] == 32
+    assert mack_report["sds_catalog_part_numbers"] == 32
+    assert mack_report["unique_part_numbers_all_official_pages"] == 38
+    assert sum("source_sds_link_target_name_mismatch_not_used_as_technical_evidence" in row["source_quality_flags"] for row in mack_rows) == 2
+    assert sum("source_part_number_contains_embedded_formatting_spaces_retained_verbatim" in row["source_quality_flags"] for row in mack_rows) == 2
+    assert sum("source_mack_standard_37319_retained_verbatim_not_silently_corrected" in row["source_quality_flags"] for row in mack_rows) == 1
+    assert mack_report["source_quality_flags"] == {
+        "official_regional_part_number_variants_preserved_separately": 4,
+        "source_mack_standard_37319_retained_verbatim_not_silently_corrected": 1,
+        "source_part_number_contains_embedded_formatting_spaces_retained_verbatim": 2,
+        "source_sds_link_target_name_mismatch_not_used_as_technical_evidence": 2,
+    }
+    assert all(not ({"description", "image", "logo", "marketing_text"} & set(row)) for row in mack_rows)
     assert report["korea_ecolabel_source_rows"] == korea_ecolabel_report["normalized_products"] == len(korea_ecolabel_rows) == 20
     assert report["korea_ecolabel_products_matched_to_existing"] == 0
     assert report["korea_ecolabel_products_added"] == 20
@@ -330,7 +350,7 @@ def main() -> None:
     assert dla_report["plant_rows_without_product_designation_excluded"] == 766
     assert report["zf_te_ml_source_rows"] == zf_report["unique_approval_numbers"] == 1498
     assert report["official_oem_approval_rows"] == 5475
-    assert report["official_manufacturer_catalog_rows"] == 5610
+    assert report["official_manufacturer_catalog_rows"] == 5625
     assert report["official_oem_service_recommendation_rows"] == 30
     assert report["allison_source_rows"] == allison_report["products"] == 104
     assert report["driventic_diwa_source_rows"] == driventic_report["products"] == 226
@@ -460,9 +480,9 @@ def main() -> None:
     assert report["aichilon_products_matched_to_existing"] == 255
     assert report["aichilon_products_added"] == 60
     assert report["aichilon_rows_excluded"] == 2
-    assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 3953
-    assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 2534
-    assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status='listed_current_catalog'").fetchone()[0] == report["current_catalog_listed_offers"] == 1079
+    assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 3985
+    assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 2566
+    assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status='listed_current_catalog'").fetchone()[0] == report["current_catalog_listed_offers"] == 1111
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_filed_registry'").fetchone()[0] == 3629
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_licensed_registry'").fetchone()[0] == 3037
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_ecolabel_product_registry'").fetchone()[0] == 127
@@ -474,12 +494,24 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_registry_source_data_issue'").fetchone()[0] == 51
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_qualified_product_registry'").fetchone()[0] == 456
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_approval_registry'").fetchone()[0] == 5475
-    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_manufacturer_product_catalog'").fetchone()[0] == 5610
+    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_manufacturer_product_catalog'").fetchone()[0] == 5625
     assert db.execute("SELECT count(*) FROM products WHERE source_id='BRAVA_LUBRICANTS_OFFICIAL_CATALOG'").fetchone()[0] == 69
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='BRAVA_LUBRICANTS_OFFICIAL_CATALOG'").fetchone()[0] == 69
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='BRAVA_PART_NUMBER'").fetchone()[0] == 94
     assert db.execute("SELECT count(DISTINCT code_value) FROM external_codes WHERE code_system='BRAVA_PART_NUMBER'").fetchone()[0] == 93
     assert db.execute("SELECT count(*) FROM product_offers WHERE source_id='BRAVA_LUBRICANTS_OFFICIAL_CATALOG'").fetchone()[0] == 94
+    assert db.execute("SELECT count(*) FROM products WHERE source_id='MACK_GENUINE_FLUIDS'").fetchone()[0] == 15
+    assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='MACK_GENUINE_FLUIDS'").fetchone()[0] == 15
+    assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='MACK_PART_NUMBER'").fetchone()[0] == 38
+    assert db.execute("SELECT count(DISTINCT code_value) FROM external_codes WHERE code_system='MACK_PART_NUMBER'").fetchone()[0] == 38
+    assert db.execute("SELECT count(*) FROM product_offers WHERE source_id='MACK_GENUINE_FLUIDS'").fetchone()[0] == 32
+    eos5_key = db.execute("SELECT canonical_key FROM products WHERE source_id='MACK_GENUINE_FLUIDS' AND product_name_raw='Mack Engine Oil EOS-5 5W-30'").fetchone()[0]
+    mdrive_7580_key = db.execute("SELECT canonical_key FROM products WHERE source_id='MACK_GENUINE_FLUIDS' AND product_name_raw='Mack mDRIVE Transmission Fluid 75W-80'").fetchone()[0]
+    mdrive_7590_key = db.execute("SELECT canonical_key FROM products WHERE source_id='MACK_GENUINE_FLUIDS' AND product_name_raw='Mack mDRIVE Transmission Fluid 75W-90'").fetchone()[0]
+    assert "mack_professional_performance:api fa 4 mack eos 5" in eos5_key
+    assert "mack_professional_performance:mack 97307 97318" in mdrive_7580_key
+    assert "mack_professional_performance:mack 97315" in mdrive_7590_key
+    assert "37319" not in mdrive_7590_key
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_service_recommendation'").fetchone()[0] == 30
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='ALLISON_APPROVAL_NUMBER'").fetchone()[0] == 119
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='MERCEDES_DTFR_PRODUCT_ID'").fetchone()[0] == 1892
@@ -872,6 +904,8 @@ def main() -> None:
     assert volvo_report["families"] == {"G": 6, "H": 5, "M": 3, "T": 13, "TF": 5}
     assert len(volvo_report["source_pages"]) == 5
     assert len(volvo_report["excluded_ungraded_engine_oil_series"]) == 3
+    assert policy_by_id["MACK_GENUINE_FLUIDS"]["source_sha256"] == mack_report["normalized_output_sha256"]
+    assert policy_by_id["MACK_GENUINE_FLUIDS"]["observed_count"] == mack_report["products"]
     assert policy_by_id["CEYPETCO_OFFICIAL_LUBRICANT_CATALOG"]["source_sha256"] == ceypetco_report["normalized_output_sha256"]
     assert policy_by_id["CEYPETCO_OFFICIAL_LUBRICANT_CATALOG"]["observed_count"] == len(ceypetco_rows) == 47
     assert report["ceypetco_input_sha256"] == hashlib.sha256((ROOT / "data/ceypetco-lubricant-products.jsonl").read_bytes()).hexdigest()
