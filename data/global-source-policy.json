@@ -1745,6 +1745,34 @@
       "publication_status": "metadata_only_pending_written_permission_or_official_feed",
       "observed_count": 0,
       "notes": "The July 2024 official guide contains useful approved transmission and axle lubricant tables. Eaton's general website terms limit downloads to personal non-commercial use, while the PDF grants free copying only in its entirety and printed format. No normalized product rows are imported pending written permission or an official licensed feed."
+    },
+    {
+      "source_id": "BOSCH_REXROTH_RDE_90245_FLUID_RATINGS",
+      "title": "Bosch Rexroth RDE 90245 positive fluid rating list",
+      "owner": "Bosch Rexroth AG",
+      "source_type": "official_current_oem_positive_fluid_rating_pdf",
+      "source_url": "https://www.boschrexroth.com/media/89377363-ace1-4912-83b7-3937603c6b73",
+      "source_context_url": "https://www.boschrexroth.com/en/au/service-and-support/hydraulic-fluids/",
+      "terms_url": "https://www.boschrexroth.com/en/gb/legal-notice/",
+      "source_document_sha256": "ca9264a742f618cde6b25d073ed2344ed9034d5f526c272f3e0135fccd73c14b",
+      "access_status": "public_browse_only_reproduction_editing_and_distribution_rights_reserved",
+      "bulk_ingest_allowed": false,
+      "publication_status": "metadata_and_aggregate_count_only_pending_written_permission_or_official_feed",
+      "observed_count": 217,
+      "notes": "The official current RDE 90245/2026-06-19 PDF replaces the 2026-03-27 edition and exposes 217 positive fluid ratings across mineral hydraulic fluids, environmentally acceptable fluids and four UTTO rows. Exact ISO VG 32/46/68, HLP/HVLP/HEES/HEPR/UTTO category, zinc or zinc-free / saturated-ester attributes and valid-until year are available. Page 7 permits lubricant manufacturers to cite their own positive rating, but page 8 expressly reserves exploitation, reproduction, editing and distribution rights; Bosch Rexroth's legal notice also prohibits commercial copying or dissemination. No normalized product rows are imported pending written permission or an official licensed feed."
+    },
+    {
+      "source_id": "EGYPT_EOS_QUALITY_MARK_LUBRICANT_SCOPE_REVIEW",
+      "title": "Egyptian EOS Quality Mark certified products — lubricant scope review",
+      "owner": "Egyptian Organization for Standardization and Quality (EOS)",
+      "source_type": "official_government_product_certification_directory",
+      "source_url": "https://www.eos.org.eg/ar/products?mark_type=1",
+      "terms_url": "https://www.eos.org.eg/ar/context/4",
+      "access_status": "public_official_certification_directory_robots_allows_crawling",
+      "bulk_ingest_allowed": true,
+      "publication_status": "reviewed_zero_relevant_product_rows",
+      "observed_count": 0,
+      "notes": "The full current Quality Mark directory was reviewed on 2026-07-21: eight listing pages exposed 143 unique certificate-holder pages and 238 current product rows. A strict Arabic lubricant, grease, hydraulic-fluid, brake-fluid, coolant and engine-oil scope produced two initial keyword candidates, both limestone-cement false positives caused by the Arabic substring for gear occurring inside limestone. No professional lubricant or technical-fluid product row remained, so nothing is added to the canonical catalog."
     }
   ]
 }

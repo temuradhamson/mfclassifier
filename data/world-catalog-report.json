@@ -432,7 +432,8 @@
     "TAIWAN_CPC_CURRENT_LUBRICANT_CATALOG",
     "VOLVO_GROUP_WEBSDS_CHANGE_ARCHIVE",
     "MEXICO_CONUEE_CERTIFIED_PRODUCTS_LUBRICANT_SCOPE_REVIEW",
-    "PARKER_DENISON_CURRENT_FLUID_RATINGS"
+    "PARKER_DENISON_CURRENT_FLUID_RATINGS",
+    "EGYPT_EOS_QUALITY_MARK_LUBRICANT_SCOPE_REVIEW"
   ],
   "bulk_sources_blocked": [
     "fuchs-benelux",
@@ -457,7 +458,8 @@
     "INDIANOIL_SERVO_PRODUCT_CATALOG",
     "CUMMINS_CURRENT_OIL_REGISTRATION_LIST",
     "REPSOL_LUBRICANTS_PRODUCT_CATALOG",
-    "EATON_APPROVED_LUBRICANTS_TCMT0020"
+    "EATON_APPROVED_LUBRICANTS_TCMT0020",
+    "BOSCH_REXROTH_RDE_90245_FLUID_RATINGS"
   ],
   "confirmed_world_total": null,
   "completion_note": "The seed proves the pipeline, not worldwide coverage. Exact worldwide count remains pending licensed/authorized source ingestion.",
