@@ -60,6 +60,21 @@ def main() -> None:
     fuchs_norway_rows = [json.loads(line) for line in (ROOT / "data/fuchs-norway-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     fuchs_hungary_report = json.loads((ROOT / "data/fuchs-hungary-products-report.json").read_text(encoding="utf-8"))
     fuchs_hungary_rows = [json.loads(line) for line in (ROOT / "data/fuchs-hungary-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    additional_fuchs_specs = {
+        "denmark": ("FUCHS_DENMARK_PRODUCT_FINDER", 641, 640, 1, 0, 0, 20, 613, 27, 638, 1, {"C": 35, "E": 1, "G": 137, "H": 66, "I": 65, "M": 66, "S": 47, "T": 93, "TF": 122, "U": 8}),
+        "finland": ("FUCHS_FINLAND_PRODUCT_FINDER", 639, 599, 38, 0, 2, 5, 554, 45, 581, 0, {"C": 33, "E": 2, "G": 133, "H": 63, "I": 37, "M": 79, "S": 33, "T": 85, "TF": 128, "U": 6}),
+        "portugal": ("FUCHS_PORTUGAL_PRODUCT_FINDER", 529, 484, 42, 2, 1, 2, 443, 41, 460, 10, {"C": 19, "E": 1, "G": 137, "H": 35, "I": 30, "M": 79, "S": 54, "T": 66, "TF": 62, "U": 1}),
+        "romania": ("FUCHS_ROMANIA_PRODUCT_FINDER", 794, 691, 91, 1, 11, 1, 679, 12, 690, 1, {"C": 19, "E": 3, "G": 176, "H": 42, "I": 29, "M": 76, "S": 56, "T": 85, "TF": 204, "U": 1}),
+        "austria": ("FUCHS_AUSTRIA_PRODUCT_FINDER", 1057, 952, 94, 6, 5, 0, 937, 15, 952, 0, {"C": 23, "E": 3, "G": 237, "H": 54, "I": 53, "M": 78, "S": 75, "T": 95, "TF": 333, "U": 1}),
+        "greece": ("FUCHS_GREECE_PRODUCT_FINDER", 1074, 966, 97, 6, 5, 0, 951, 15, 966, 0, {"C": 23, "E": 3, "G": 237, "H": 55, "I": 57, "M": 84, "S": 75, "T": 96, "TF": 335, "U": 1}),
+    }
+    additional_fuchs = {
+        slug: {
+            "report": json.loads((ROOT / f"data/fuchs-{slug}-products-report.json").read_text(encoding="utf-8")),
+            "rows": [json.loads(line) for line in (ROOT / f"data/fuchs-{slug}-products.jsonl").read_text(encoding="utf-8").splitlines() if line],
+        }
+        for slug in additional_fuchs_specs
+    }
     liqui_moly_report = json.loads((ROOT / "data/liqui-moly-2020-products-report.json").read_text(encoding="utf-8"))
     liqui_moly_rows = [json.loads(line) for line in (ROOT / "data/liqui-moly-2020-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     liqui_moly_current_report = json.loads((ROOT / "data/liqui-moly-current-products-report.json").read_text(encoding="utf-8"))
@@ -116,7 +131,7 @@ def main() -> None:
     assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
     assert not db.execute("PRAGMA foreign_key_check").fetchall()
     assert db.execute("SELECT count(*) FROM products").fetchone()[0] == len(lines)
-    assert len(lines) == 48170
+    assert len(lines) == 48325
     assert report["jaso_source_rows"] == jaso_report["rows"] == 3630
     assert report["jaso_unique_oil_codes"] == jaso_report["unique_oil_codes"] == 3629
     assert report["official_filed_registry_rows"] == 3629
@@ -169,7 +184,7 @@ def main() -> None:
     assert dla_report["plant_rows_without_product_designation_excluded"] == 766
     assert report["zf_te_ml_source_rows"] == zf_report["unique_approval_numbers"] == 1498
     assert report["official_oem_approval_rows"] == 5475
-    assert report["official_manufacturer_catalog_rows"] == 5176
+    assert report["official_manufacturer_catalog_rows"] == 5331
     assert report["official_oem_service_recommendation_rows"] == 30
     assert report["allison_source_rows"] == allison_report["products"] == 104
     assert report["driventic_diwa_source_rows"] == driventic_report["products"] == 226
@@ -264,6 +279,13 @@ def main() -> None:
     assert report["fuchs_hungary_products_added"] == 154
     assert report["fuchs_hungary_cross_market_exact_name_family_rows"] == 369
     assert report["fuchs_hungary_cross_market_family_conflict_rows"] == 15
+    for slug, spec in additional_fuchs_specs.items():
+        _, _, products, _, _, _, _, matched, added, exact, conflicts, _ = spec
+        assert report[f"fuchs_{slug}_source_rows"] == products
+        assert report[f"fuchs_{slug}_products_matched_to_existing"] == matched
+        assert report[f"fuchs_{slug}_products_added"] == added
+        assert report[f"fuchs_{slug}_cross_market_exact_name_family_rows"] == exact
+        assert report[f"fuchs_{slug}_cross_market_family_conflict_rows"] == conflicts
     assert report["liqui_moly_2020_source_rows"] == liqui_moly_report["products"] == 419
     assert report["liqui_moly_2020_products_matched_to_existing"] == 13
     assert report["liqui_moly_2020_products_added"] == 406
@@ -271,13 +293,13 @@ def main() -> None:
     assert report["liqui_moly_current_products_matched_to_2020"] == 295
     assert report["liqui_moly_current_products_added"] == 152
     assert report["liqui_moly_current_article_skus"] == liqui_moly_current_report["unique_article_skus"] == 985
-    assert report["duplicate_decisions"]["review_cross_source_identity"] == 1838
+    assert report["duplicate_decisions"]["review_cross_source_identity"] == 3206
     assert report["duplicate_decisions"]["keep_separate_blue_angel_family_conflict"] == 34
     assert report["duplicate_decisions"]["review_brand_alias_identity"] == 2
     assert report["duplicate_decisions"]["review_liqui_moly_multi_registry_identity"] == 49
     assert report["duplicate_decisions"]["review_liqui_moly_current_multiple_historical_candidates"] == 4
-    assert report["duplicate_decisions"]["review_fuchs_multi_registry_identity"] == 2685
-    assert report["duplicate_decisions"]["keep_separate_fuchs_market_family_conflict"] == 404
+    assert report["duplicate_decisions"]["review_fuchs_multi_registry_identity"] == 4451
+    assert report["duplicate_decisions"]["keep_separate_fuchs_market_family_conflict"] == 502
     assert report["aichilon_products_matched_to_existing"] == 255
     assert report["aichilon_products_added"] == 60
     assert report["aichilon_rows_excluded"] == 2
@@ -294,7 +316,7 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_registry_source_data_issue'").fetchone()[0] == 51
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_qualified_product_registry'").fetchone()[0] == 456
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_approval_registry'").fetchone()[0] == 5475
-    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_manufacturer_product_catalog'").fetchone()[0] == 5176
+    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_manufacturer_product_catalog'").fetchone()[0] == 5331
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_service_recommendation'").fetchone()[0] == 30
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='ALLISON_APPROVAL_NUMBER'").fetchone()[0] == 119
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='MERCEDES_DTFR_PRODUCT_ID'").fetchone()[0] == 1892
@@ -321,6 +343,8 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='FUCHS_BRAZIL_PRODUCT_FINDER'").fetchone()[0] == 182
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='FUCHS_NORWAY_PRODUCT_FINDER'").fetchone()[0] == 649
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='FUCHS_HUNGARY_PRODUCT_FINDER'").fetchone()[0] == 506
+    for source_id, _, products, *_ in additional_fuchs_specs.values():
+        assert db.execute("SELECT count(*) FROM product_sources WHERE source_id=?", (source_id,)).fetchone()[0] == products
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='LIQUI_MOLY_2020_PRODUCT_CATALOG'").fetchone()[0] == 419
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='LIQUI_MOLY_CURRENT_OPENAPI'").fetchone()[0] == 447
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='LIQUI_MOLY_PART_NUMBER'").fetchone()[0] == 1482
@@ -350,7 +374,7 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='TBS_STANDARDS_MARK_LICENSE'").fetchone()[0] == 182
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='DLA_QPL_NUMBER'").fetchone()[0] == 457
     assert db.execute("SELECT count(*) FROM quality_issues WHERE issue_code='dla_qpd_lifecycle_restriction'").fetchone()[0] == 93
-    assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='FUCHS_PRODUCT_UID'").fetchone()[0] == 11944
+    assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='FUCHS_PRODUCT_UID'").fetchone()[0] == 16300
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='JASO_OIL_CODE'").fetchone()[0] == 3629
     assert db.execute("SELECT count(*) FROM sources WHERE bulk_ingest_allowed=0").fetchone()[0] == len(report["bulk_sources_blocked"])
     motor_enkt = db.execute("""
@@ -676,6 +700,20 @@ def main() -> None:
         assert source_report["embedded_source_rows"] == embedded
         assert source_report["source_series_rows_excluded"] == series
         assert source_report["equipment_rows_excluded"] == 0
+        assert source_report["placeholder_rows_excluded"] == 0
+        assert source_report["duplicate_source_occurrences_merged"] == duplicates
+        assert source_report["families"] == families
+        assert source_report["classification_basis"].get("special_product_fallback", 0) == fallback
+        assert all(not ({"description", "subtitle", "components"} & set(row)) for row in source_rows)
+    for slug, spec in additional_fuchs_specs.items():
+        source_id, embedded, products, series, equipment, duplicates, fallback, _, _, _, _, families = spec
+        source_report = additional_fuchs[slug]["report"]
+        source_rows = additional_fuchs[slug]["rows"]
+        assert policy_by_id[source_id]["source_sha256"] == source_report["normalized_output_sha256"]
+        assert policy_by_id[source_id]["observed_count"] == source_report["products"] == len(source_rows) == products
+        assert source_report["embedded_source_rows"] == embedded
+        assert source_report["source_series_rows_excluded"] == series
+        assert source_report["equipment_rows_excluded"] == equipment
         assert source_report["placeholder_rows_excluded"] == 0
         assert source_report["duplicate_source_occurrences_merged"] == duplicates
         assert source_report["families"] == families

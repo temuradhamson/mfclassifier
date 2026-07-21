@@ -71,6 +71,14 @@ FUCHS_SOUTH_AFRICA_JSONL = ROOT / "data" / "fuchs-south-africa-products.jsonl"
 FUCHS_BRAZIL_JSONL = ROOT / "data" / "fuchs-brazil-products.jsonl"
 FUCHS_NORWAY_JSONL = ROOT / "data" / "fuchs-norway-products.jsonl"
 FUCHS_HUNGARY_JSONL = ROOT / "data" / "fuchs-hungary-products.jsonl"
+FUCHS_ADDITIONAL_EUROPE = [
+    ("denmark", ROOT / "data" / "fuchs-denmark-products.jsonl", "FUCHS_DENMARK_PRODUCT_FINDER", "Denmark"),
+    ("finland", ROOT / "data" / "fuchs-finland-products.jsonl", "FUCHS_FINLAND_PRODUCT_FINDER", "Finland"),
+    ("portugal", ROOT / "data" / "fuchs-portugal-products.jsonl", "FUCHS_PORTUGAL_PRODUCT_FINDER", "Portugal"),
+    ("romania", ROOT / "data" / "fuchs-romania-products.jsonl", "FUCHS_ROMANIA_PRODUCT_FINDER", "Romania"),
+    ("austria", ROOT / "data" / "fuchs-austria-products.jsonl", "FUCHS_AUSTRIA_PRODUCT_FINDER", "Austria"),
+    ("greece", ROOT / "data" / "fuchs-greece-products.jsonl", "FUCHS_GREECE_PRODUCT_FINDER", "Greece"),
+]
 SCHEMA_VERSION = 1
 SNAPSHOT_DATE = "2026-07-21"
 
@@ -1659,6 +1667,12 @@ def fuchs_catalog_record(row: dict, source_id: str, market_name: str) -> dict:
         "FUCHS_BRAZIL_PRODUCT_FINDER": "fuchs_brazil_record",
         "FUCHS_NORWAY_PRODUCT_FINDER": "fuchs_norway_record",
         "FUCHS_HUNGARY_PRODUCT_FINDER": "fuchs_hungary_record",
+        "FUCHS_DENMARK_PRODUCT_FINDER": "fuchs_denmark_record",
+        "FUCHS_FINLAND_PRODUCT_FINDER": "fuchs_finland_record",
+        "FUCHS_PORTUGAL_PRODUCT_FINDER": "fuchs_portugal_record",
+        "FUCHS_ROMANIA_PRODUCT_FINDER": "fuchs_romania_record",
+        "FUCHS_AUSTRIA_PRODUCT_FINDER": "fuchs_austria_record",
+        "FUCHS_GREECE_PRODUCT_FINDER": "fuchs_greece_record",
     }[source_id]
     record["canonical_key"] += f"|{source_key}:{normalize(row['source_record_id'])}"
     record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
@@ -2743,6 +2757,13 @@ def main() -> None:
     fuchs_hungary_added_rows, fuchs_hungary_matched_rows = fuchs_hungary["added"], fuchs_hungary["matched"]
     fuchs_hungary_review_keys, fuchs_hungary_family_conflict_keys = fuchs_hungary["review_keys"], fuchs_hungary["family_conflict_keys"]
     fuchs_hungary_cross_market_exact_name_family_rows, fuchs_hungary_cross_market_family_conflict_rows = fuchs_hungary["exact"], fuchs_hungary["conflicts"]
+    additional_fuchs = {}
+    additional_prior_rows = prior_fuchs_rows + fuchs_mexico_source_rows + fuchs_south_africa_source_rows + fuchs_brazil_source_rows + fuchs_norway_source_rows + fuchs_hungary_source_rows
+    for slug, source_path, source_id, market_name in FUCHS_ADDITIONAL_EUROPE:
+        source_rows = [json.loads(line) for line in source_path.read_text(encoding="utf-8").splitlines() if line]
+        integration = integrate_fuchs_market(input_records, source_rows, source_id, market_name, additional_prior_rows)
+        additional_fuchs[slug] = {"source_path": source_path, "source_id": source_id, "source_rows": source_rows, **integration}
+        additional_prior_rows += source_rows
     aichilon_products, aichilon_packages, exclusions = aichilon_seed()
     existing_by_name = defaultdict(list)
     for row in input_records:
@@ -3061,7 +3082,7 @@ def main() -> None:
         ("brazil", fuchs_brazil_review_keys, fuchs_brazil_family_conflict_keys),
         ("norway", fuchs_norway_review_keys, fuchs_norway_family_conflict_keys),
         ("hungary", fuchs_hungary_review_keys, fuchs_hungary_family_conflict_keys),
-    ]:
+    ] + [(slug, data["review_keys"], data["family_conflict_keys"]) for slug, data in additional_fuchs.items()]:
         for source_key, match_keys in review_keys:
             source_product = canonical_by_key[source_key]
             for match_key in match_keys:
@@ -3384,7 +3405,7 @@ def main() -> None:
         (fuchs_brazil_source_rows, fuchs_brazil_product_key, "FUCHS_BRAZIL_PRODUCT_FINDER"),
         (fuchs_norway_source_rows, fuchs_norway_product_key, "FUCHS_NORWAY_PRODUCT_FINDER"),
         (fuchs_hungary_source_rows, fuchs_hungary_product_key, "FUCHS_HUNGARY_PRODUCT_FINDER"),
-    ]:
+    ] + [(data["source_rows"], data["product_key"], data["source_id"]) for data in additional_fuchs.values()]:
         for raw in source_rows:
             target = canonical_by_key[product_key[raw["source_record_id"]]]
             link = {"product_id": target["product_id"], "source_id": source_id, "source_record_id": raw["source_record_id"], "source_row": None, "relation": "official_manufacturer_product_catalog"}
@@ -3671,6 +3692,15 @@ def main() -> None:
         "confirmed_world_total": None,
         "completion_note": "The seed proves the pipeline, not worldwide coverage. Exact worldwide count remains pending licensed/authorized source ingestion.",
     }
+    for slug, data in additional_fuchs.items():
+        report.update({
+            f"fuchs_{slug}_input_sha256": hashlib.sha256(data["source_path"].read_bytes()).hexdigest(),
+            f"fuchs_{slug}_source_rows": len(data["source_rows"]),
+            f"fuchs_{slug}_products_matched_to_existing": data["matched"],
+            f"fuchs_{slug}_products_added": data["added"],
+            f"fuchs_{slug}_cross_market_exact_name_family_rows": data["exact"],
+            f"fuchs_{slug}_cross_market_family_conflict_rows": data["conflicts"],
+        })
     REPORT_OUT.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     build_sqlite(records, candidates, issues, source_links, offers, policies, run_id)
     compress_sqlite()
