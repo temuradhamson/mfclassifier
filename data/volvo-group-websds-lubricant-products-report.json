@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-07-21",
+  "source_id": "VOLVO_GROUP_WEBSDS_CHANGE_ARCHIVE",
+  "source_url": "https://websds.volvo.com/websds/sdsNews",
+  "source_documents": 50,
+  "source_document_formats": {
+    "pdf": 49,
+    "xlsx": 1
+  },
+  "source_table_rows": 833,
+  "lubricant_scope_occurrences": 537,
+  "normalized_product_part_identities": 144,
+  "unique_part_numbers": 394,
+  "brands": {
+    "Renault Trucks": 28,
+    "Volvo": 116
+  },
+  "families": {
+    "C": 6,
+    "G": 24,
+    "H": 13,
+    "I": 7,
+    "M": 13,
+    "T": 61,
+    "TF": 20
+  },
+  "source_quality_flags": {
+    "generic_source_product_name_kept_part_number_specific": 59,
+    "source_g0102_notation_normalized_to_go102_for_identity_only": 1
+  },
+  "news_page_sha256": "a63a2aacbb4c73bd25cfaa9759ca71cef34975ac9c83b794d4865c07ea2a7a76",
+  "source_documents_aggregate_sha256": "366e7a0ad0225eebc808a78f6aa68ef877efd87cbffae09ef771df068431f99c",
+  "normalized_output_sha256": "83729b531618da758e9ddee12eb2ba0e44c5cce1b3d2825a7c5cb7f4d2eddd7a",
+  "publication_scope": "Attributed non-expressive SDS change-list facts only: product names, part numbers, dates, change types and derived technical grades. Full SDS text, hazard content, images and document layout are not republished.",
+  "lifecycle_note": "A WebSDS change-list observation proves that an official SDS/transport record was created or updated on the stated date; it does not by itself prove current market availability."
+}

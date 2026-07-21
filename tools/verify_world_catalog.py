@@ -64,6 +64,8 @@ def main() -> None:
     cummins_valvoline_rows = [json.loads(line) for line in (ROOT / "data/cummins-valvoline-2022-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     taiwan_cpc_report = json.loads((ROOT / "data/taiwan-cpc-lubricant-products-report.json").read_text(encoding="utf-8"))
     taiwan_cpc_rows = [json.loads(line) for line in (ROOT / "data/taiwan-cpc-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    volvo_websds_report = json.loads((ROOT / "data/volvo-group-websds-lubricant-products-report.json").read_text(encoding="utf-8"))
+    volvo_websds_rows = [json.loads(line) for line in (ROOT / "data/volvo-group-websds-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     scania_report = json.loads((ROOT / "data/scania-genuine-oils-report.json").read_text(encoding="utf-8"))
     scania_rows = [json.loads(line) for line in (ROOT / "data/scania-genuine-oils.jsonl").read_text(encoding="utf-8").splitlines() if line]
     brava_report = json.loads((ROOT / "data/brava-official-products-report.json").read_text(encoding="utf-8"))
@@ -205,7 +207,7 @@ def main() -> None:
     assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
     assert not db.execute("PRAGMA foreign_key_check").fetchall()
     assert db.execute("SELECT count(*) FROM products").fetchone()[0] == len(lines)
-    assert len(lines) == 99345
+    assert len(lines) == 99489
     assert report["jaso_source_rows"] == jaso_report["rows"] == 3630
     assert report["jaso_unique_oil_codes"] == jaso_report["unique_oil_codes"] == 3629
     assert report["official_filed_registry_rows"] == 3629
@@ -316,6 +318,23 @@ def main() -> None:
     assert all(row["lifecycle_status"] == "listed_on_current_official_product_sheet_directory" for row in taiwan_cpc_rows)
     assert all(row["packages"] for row in taiwan_cpc_rows)
     assert all(not ({"description", "image", "logo", "marketing_text"} & set(row)) for row in taiwan_cpc_rows)
+    assert report["volvo_websds_source_rows"] == volvo_websds_report["normalized_product_part_identities"] == len(volvo_websds_rows) == 144
+    assert report["volvo_websds_unique_part_numbers"] == volvo_websds_report["unique_part_numbers"] == 394
+    assert report["volvo_websds_input_sha256"] == volvo_websds_report["normalized_output_sha256"]
+    assert policy_by_id["VOLVO_GROUP_WEBSDS_CHANGE_ARCHIVE"]["source_sha256"] == volvo_websds_report["normalized_output_sha256"]
+    assert policy_by_id["VOLVO_GROUP_WEBSDS_CHANGE_ARCHIVE"]["observed_count"] == 144
+    assert volvo_websds_report["source_documents"] == 50
+    assert volvo_websds_report["source_document_formats"] == {"pdf": 49, "xlsx": 1}
+    assert volvo_websds_report["source_table_rows"] == 833
+    assert volvo_websds_report["lubricant_scope_occurrences"] == 537
+    assert volvo_websds_report["brands"] == {"Renault Trucks": 28, "Volvo": 116}
+    assert volvo_websds_report["families"] == {"C": 6, "G": 24, "H": 13, "I": 7, "M": 13, "T": 61, "TF": 20}
+    assert sum(len(row["source_occurrences"]) for row in volvo_websds_rows) == 537
+    assert all(row["lifecycle_status"] == "official_sds_change_observation_2023_09_to_2026_06_current_availability_unverified" for row in volvo_websds_rows)
+    assert all(not ({"description", "hazard_text", "image", "logo", "marketing_text"} & set(row)) for row in volvo_websds_rows)
+    assert policy_by_id["REPSOL_LUBRICANTS_PRODUCT_CATALOG"]["bulk_ingest_allowed"] is False
+    assert policy_by_id["REPSOL_LUBRICANTS_PRODUCT_CATALOG"]["observed_count"] == 0
+    assert policy_by_id["MEXICO_CONUEE_CERTIFIED_PRODUCTS_LUBRICANT_SCOPE_REVIEW"]["observed_count"] == 0
     assert sum(len(row["source_occurrences"]) for row in mack_2014_rows) == 806
     assert all(row["lifecycle_status"] == "historical_approval_as_published_2014_04_current_status_unverified" for row in mack_2014_rows)
     assert report["korea_ecolabel_source_rows"] == korea_ecolabel_report["normalized_products"] == len(korea_ecolabel_rows) == 20
@@ -512,7 +531,15 @@ def main() -> None:
     assert report["liqui_moly_current_products_matched_to_2020"] == 295
     assert report["liqui_moly_current_products_added"] == 152
     assert report["liqui_moly_current_article_skus"] == liqui_moly_current_report["unique_article_skus"] == 985
-    assert report["duplicate_decisions"]["review_cross_source_identity"] == 5039
+    assert report["duplicate_decisions"]["review_cross_source_identity"] == 5049
+    assert db.execute("""
+        SELECT count(*) FROM duplicate_decisions d
+        JOIN products a ON a.product_id=d.product_id_a
+        JOIN products b ON b.product_id=d.product_id_b
+        WHERE d.decision='review_cross_source_identity'
+          AND (a.source_id='VOLVO_GROUP_WEBSDS_CHANGE_ARCHIVE'
+               OR b.source_id='VOLVO_GROUP_WEBSDS_CHANGE_ARCHIVE')
+    """).fetchone()[0] == 10
     assert db.execute("""
         SELECT count(*) FROM duplicate_decisions d
         JOIN products a ON a.product_id=d.product_id_a
@@ -584,6 +611,12 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM product_offers WHERE source_id='TAIWAN_CPC_CURRENT_LUBRICANT_CATALOG' AND lifecycle_status='listed_current_catalog'").fetchone()[0] == 478
     assert db.execute("SELECT count(*) FROM products WHERE source_id='TAIWAN_CPC_CURRENT_LUBRICANT_CATALOG' AND lifecycle_status='listed_on_current_official_product_sheet_directory'").fetchone()[0] == 224
     assert db.execute("SELECT count(*) FROM quality_issues WHERE issue_code='source_multigrade_table_not_safely_aligned_to_listing_title'").fetchone()[0] == 27
+    assert db.execute("SELECT count(*) FROM products WHERE source_id='VOLVO_GROUP_WEBSDS_CHANGE_ARCHIVE'").fetchone()[0] == 144
+    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_manufacturer_sds_change_observation'").fetchone()[0] == 144
+    assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='VOLVO_GROUP_WEBSDS_CHANGE_ARCHIVE'").fetchone()[0] == 144
+    assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='VOLVO_GROUP_WEBSDS_PART_NUMBER'").fetchone()[0] == 394
+    assert db.execute("SELECT count(DISTINCT code_value) FROM external_codes WHERE code_system='VOLVO_GROUP_WEBSDS_PART_NUMBER'").fetchone()[0] == 394
+    assert db.execute("SELECT count(*) FROM product_offers WHERE source_id='VOLVO_GROUP_WEBSDS_CHANGE_ARCHIVE'").fetchone()[0] == 0
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_service_recommendation'").fetchone()[0] == 30
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='ALLISON_APPROVAL_NUMBER'").fetchone()[0] == 119
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='MERCEDES_DTFR_PRODUCT_ID'").fetchone()[0] == 1892

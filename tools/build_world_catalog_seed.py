@@ -44,6 +44,7 @@ MACK_GENUINE_JSONL = ROOT / "data" / "mack-genuine-fluids.jsonl"
 MACK_2014_APPROVED_JSONL = ROOT / "data" / "mack-2014-approved-oils.jsonl"
 CUMMINS_VALVOLINE_2022_JSONL = ROOT / "data" / "cummins-valvoline-2022-products.jsonl"
 TAIWAN_CPC_JSONL = ROOT / "data" / "taiwan-cpc-lubricant-products.jsonl"
+VOLVO_WEBSDS_JSONL = ROOT / "data" / "volvo-group-websds-lubricant-products.jsonl"
 SCANIA_GENUINE_JSONL = ROOT / "data" / "scania-genuine-oils.jsonl"
 BRAVA_OFFICIAL_JSONL = ROOT / "data" / "brava-official-products.jsonl"
 CEYPETCO_JSONL = ROOT / "data" / "ceypetco-lubricant-products.jsonl"
@@ -944,6 +945,60 @@ def taiwan_cpc_record(row: dict) -> dict:
         "source_id": "TAIWAN_CPC_CURRENT_LUBRICANT_CATALOG",
         "status": "current_official_catalog",
     }
+    return record
+
+
+def volvo_websds_record(row: dict) -> dict:
+    """Convert one conservative product/part identity from Volvo Group WebSDS news."""
+    specs = row["specifications"]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Official Volvo Group SDS change-list observation",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": specs.get("sae_engine") or specs.get("sae_gear") or "",
+        "api_class": "; ".join(
+            specs.get("volvo_standards_source_reported", [])
+            + specs.get("renault_trucks_standards_source_reported", [])
+        ),
+        "viscosity": specs.get("iso_vg", ""),
+        "source": "VOLVO_GROUP_WEBSDS_CHANGE_ARCHIVE",
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": "official_manufacturer_sds_change_observation",
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update(specs)
+    record["specifications"].update({
+        "source_url": row["source_url"],
+        "first_observed_sds_date": row["first_observed_sds_date"],
+        "last_observed_sds_date": row["last_observed_sds_date"],
+        "change_types_source_reported": row["change_types_source_reported"],
+        "product_name_source_aliases": row["product_name_source_aliases"],
+        "supplier_organizations": row["supplier_organizations"],
+        "source_occurrences": row["source_occurrences"],
+        "source_quality_flags": row["source_quality_flags"],
+    })
+    record["canonical_key"] += f"|volvo_websds_record:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    for index, part_number in enumerate(row["part_numbers"], 1):
+        record["codes"][f"volvo_group_websds_part_number_{index}"] = {
+            "system": "VOLVO_GROUP_WEBSDS_PART_NUMBER",
+            "value": part_number,
+            "source_id": row["source_id"],
+            "status": "official_sds_change_observation_current_availability_unverified",
+        }
     return record
 
 
@@ -3160,6 +3215,9 @@ def main() -> None:
     taiwan_cpc_source_rows = [json.loads(line) for line in TAIWAN_CPC_JSONL.read_text(encoding="utf-8").splitlines() if line]
     taiwan_cpc_records = [taiwan_cpc_record(row) for row in taiwan_cpc_source_rows]
     input_records.extend(taiwan_cpc_records)
+    volvo_websds_source_rows = [json.loads(line) for line in VOLVO_WEBSDS_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    volvo_websds_records = [volvo_websds_record(row) for row in volvo_websds_source_rows]
+    input_records.extend(volvo_websds_records)
     ceypetco_source_rows = [json.loads(line) for line in CEYPETCO_JSONL.read_text(encoding="utf-8").splitlines() if line]
     ceypetco_records = [ceypetco_record(row) for row in ceypetco_source_rows]
     input_records.extend(ceypetco_records)
@@ -4419,6 +4477,19 @@ def main() -> None:
         if link_key not in source_link_keys:
             source_links.append(link)
             source_link_keys.add(link_key)
+    for raw, normalized_row in zip(volvo_websds_source_rows, volvo_websds_records):
+        target = canonical_by_key[normalized_row["canonical_key"]]
+        link = {
+            "product_id": target["product_id"],
+            "source_id": "VOLVO_GROUP_WEBSDS_CHANGE_ARCHIVE",
+            "source_record_id": raw["source_record_id"],
+            "source_row": None,
+            "relation": "official_manufacturer_sds_change_observation",
+        }
+        link_key = (link["product_id"], link["source_id"], link["source_record_id"])
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     for raw, normalized_row in zip(ceypetco_source_rows, ceypetco_records):
         target = canonical_by_key[normalized_row["canonical_key"]]
         link = {
@@ -4946,6 +5017,7 @@ def main() -> None:
         "mack_2014_approved_input_sha256": hashlib.sha256(MACK_2014_APPROVED_JSONL.read_bytes()).hexdigest(),
         "cummins_valvoline_2022_input_sha256": hashlib.sha256(CUMMINS_VALVOLINE_2022_JSONL.read_bytes()).hexdigest(),
         "taiwan_cpc_input_sha256": hashlib.sha256(TAIWAN_CPC_JSONL.read_bytes()).hexdigest(),
+        "volvo_websds_input_sha256": hashlib.sha256(VOLVO_WEBSDS_JSONL.read_bytes()).hexdigest(),
         "scania_genuine_input_sha256": hashlib.sha256(SCANIA_GENUINE_JSONL.read_bytes()).hexdigest(),
         "brava_official_input_sha256": hashlib.sha256(BRAVA_OFFICIAL_JSONL.read_bytes()).hexdigest(),
         "ceypetco_input_sha256": hashlib.sha256(CEYPETCO_JSONL.read_bytes()).hexdigest(),
@@ -5041,6 +5113,7 @@ def main() -> None:
         "official_government_registry_source_data_issue_rows": sum(r["evidence_status"] == "official_government_registry_source_data_issue" for r in records),
         "official_oem_approval_rows": sum(r["evidence_status"] == "official_oem_approval_registry" for r in records),
         "official_manufacturer_catalog_rows": sum(r["evidence_status"] == "official_manufacturer_product_catalog" for r in records),
+        "official_manufacturer_sds_change_observation_rows": sum(r["evidence_status"] == "official_manufacturer_sds_change_observation" for r in records),
         "official_oem_service_recommendation_rows": sum(r["evidence_status"] == "official_oem_service_recommendation" for r in records),
         "zf_te_ml_source_rows": len(zf_source_rows),
         "allison_source_rows": len(allison_source_rows),
@@ -5054,6 +5127,8 @@ def main() -> None:
         "mack_2014_approved_source_rows": len(mack_2014_source_rows),
         "cummins_valvoline_2022_source_rows": len(cummins_valvoline_2022_source_rows),
         "taiwan_cpc_source_rows": len(taiwan_cpc_source_rows),
+        "volvo_websds_source_rows": len(volvo_websds_source_rows),
+        "volvo_websds_unique_part_numbers": len({part for row in volvo_websds_source_rows for part in row["part_numbers"]}),
         "taiwan_cpc_structured_package_offers": sum(len(row["packages"]) for row in taiwan_cpc_source_rows),
         "scania_genuine_source_rows": len(scania_genuine_source_rows),
         "brava_official_source_rows": len(brava_official_source_rows),

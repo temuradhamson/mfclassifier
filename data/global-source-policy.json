@@ -1678,6 +1678,46 @@
       "publication_status": "derived_factual_product_grade_and_package_records_with_attribution",
       "observed_count": 224,
       "notes": "Seven current official directory categories expose 224 unique CPC manufacturer product codes and product-sheet cards. Derived output retains product identity, code, update date, technical grades and standards, 478 structured package facts, evidence URLs and hashes. Descriptive prose, images and layout are excluded. Twenty-seven cards contain multi-grade ISO VG tables that cannot be attributed to the exact listing safely; those products remain present without a guessed ISO VG and carry explicit quality flags. The ingestion uses normal certificate verification with the official TWCA intermediate pinned by SHA-256; no TLS verification bypass is used."
+    },
+    {
+      "source_id": "VOLVO_GROUP_WEBSDS_CHANGE_ARCHIVE",
+      "title": "Volvo Group WebSDS public SDS change archive",
+      "owner": "Volvo Group / Volvo Cars / Renault Trucks",
+      "source_type": "official_public_sds_change_lists_pdf_and_xlsx",
+      "source_locator": "data/volvo-group-websds-lubricant-products.jsonl",
+      "source_url": "https://websds.volvo.com/websds/sdsNews",
+      "source_sha256": "83729b531618da758e9ddee12eb2ba0e44c5cce1b3d2825a7c5cb7f4d2eddd7a",
+      "access_status": "public_official_change_archive_factual_fields_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_non_expressive_product_part_and_change_facts",
+      "observed_count": 144,
+      "notes": "Fifty current archive documents (49 PDF and one XLSX) contain 833 table rows; 537 lubricant, coolant and technical-fluid occurrences normalize conservatively to 144 product/part identities and 394 unique part numbers. Generic names remain part-number-specific. An SDS change observation proves an official record existed or changed on the stated date, not current market availability. Full SDS text, hazards, images and layout are not republished."
+    },
+    {
+      "source_id": "REPSOL_LUBRICANTS_PRODUCT_CATALOG",
+      "title": "Repsol Lubricants public product catalog",
+      "owner": "Repsol, S.A.",
+      "source_type": "official_manufacturer_product_catalog",
+      "source_url": "https://lubricants.repsol.com/es/productos/",
+      "terms_url": "https://www.repsol.com/es/pie-de-pagina/aviso-legal/index.cshtml",
+      "access_status": "public_browse_only_reproduction_and_transformation_restricted",
+      "bulk_ingest_allowed": false,
+      "publication_status": "metadata_only_pending_written_permission_or_official_feed",
+      "observed_count": 0,
+      "notes": "Official pages expose product cards and technical documents, but Repsol's legal notice restricts reproduction, copying, distribution and transformation without authorization or a legal exception. No product rows are imported; request a licensed feed or written permission."
+    },
+    {
+      "source_id": "MEXICO_CONUEE_CERTIFIED_PRODUCTS_LUBRICANT_SCOPE_REVIEW",
+      "title": "Mexico CONUEE Buscador de Productos Certificados — lubricant-scope review",
+      "owner": "Comisión Nacional para el Uso Eficiente de la Energía / Gobierno de México",
+      "source_type": "official_open_government_csv",
+      "source_url": "https://www.datos.gob.mx/dataset/buscador_productos_certificados",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "access_status": "public_open_government_data_cc_by_4_0",
+      "bulk_ingest_allowed": true,
+      "publication_status": "reviewed_zero_relevant_rows_no_product_ingest",
+      "observed_count": 0,
+      "notes": "The March 2026 downloadable CSV contains 7,835 energy-efficiency certified-product rows. A strict lubricant/coolant/technical-fluid scope review found zero relevant product rows, so this source is retained as a documented zero-coverage result rather than padded into the catalog."
     }
   ]
 }
