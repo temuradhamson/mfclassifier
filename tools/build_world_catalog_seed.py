@@ -6,6 +6,7 @@ from __future__ import annotations
 import hashlib
 import gzip
 import json
+import lzma
 import re
 import shutil
 import sqlite3
@@ -27,7 +28,7 @@ JSONL_OUT = ROOT / "data" / "world-catalog-products.jsonl"
 JSONL_GZ_OUT = ROOT / "data" / "world-catalog-products.jsonl.gz"
 REPORT_OUT = ROOT / "data" / "world-catalog-report.json"
 SQLITE_OUT = ROOT / "data" / "world-catalog.sqlite3"
-SQLITE_GZ_OUT = ROOT / "data" / "world-catalog.sqlite3.gz"
+SQLITE_XZ_OUT = ROOT / "data" / "world-catalog.sqlite3.xz"
 XLSX_OUT = ROOT / "deliverables" / "World_lubricants_catalog_seed.xlsx"
 AICHILON_DB = Path("/workspace/chilon/aichilon/var/chilon_seed.sqlite")
 JASO_JSONL = ROOT / "data" / "jaso-filed-oils.jsonl"
@@ -54,6 +55,7 @@ GREEN_CHOICE_PHILIPPINES_JSONL = ROOT / "data" / "green-choice-philippines-lubri
 UAE_MOIAT_JSONL = ROOT / "data" / "uae-moiat-conformity-products.jsonl"
 EAEU_CONFORMITY_JSONL = ROOT / "data" / "eaeu-conformity-lubricant-products.jsonl"
 EPA_SAFER_CHOICE_JSONL = ROOT / "data" / "epa-safer-choice-lubricants.jsonl"
+EPA_CHEMEXPO_JSONL = ROOT / "data" / "epa-chemexpo-lubricants.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
 SON_MANCAP_JSONL = ROOT / "data" / "son-mancap-chemical-lubricant-products.jsonl"
@@ -1574,6 +1576,85 @@ def epa_safer_choice_record(row: dict) -> dict:
     return record
 
 
+def epa_chemexpo_record(row: dict) -> dict:
+    """Convert one conservative EPA ChemExpo/CPDat product identity."""
+    technical = row["technical"]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "US EPA ChemExpo/CPDat product-use evidence",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": technical["sae"][0] if technical["sae"] else "",
+        "api_class": "; ".join(f"API {value}" for value in technical["api"]),
+        "viscosity": technical["iso_vg"][0] if technical["iso_vg"] else "",
+        "grease_class": technical["nlgi"][0] if technical["nlgi"] else "",
+        "coolant_class": technical["brake_fluid_class"][0] if technical["brake_fluid_class"] else "",
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": row["evidence_status"],
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["dataset_snapshot_date"],
+    })
+    record["specifications"].update({
+        "epa_chemexpo_puc_evidence": row["puc_evidence"],
+        "epa_chemexpo_source_product_names": row["source_product_names"],
+        "epa_chemexpo_package_and_source_name_variants": row["package_and_source_name_variants"],
+        "epa_chemexpo_brand_source_reported": row["brand_source_reported"],
+        "epa_chemexpo_brand_basis": row["brand_basis"],
+        "epa_chemexpo_source_quality_flags": row["source_quality_flags"],
+        "epa_chemexpo_source_occurrence_count": row["source_occurrence_count"],
+        "sae_source_reported_in_name": technical["sae"],
+        "api_source_reported_in_name": technical["api"],
+        "iso_vg_source_reported_in_name": technical["iso_vg"],
+        "nlgi_source_reported_in_name": technical["nlgi"],
+        "brake_fluid_class_source_reported_in_name": technical["brake_fluid_class"],
+        "atf_specifications_source_reported_in_name": technical["atf"],
+        "source_url": row["source_page_url"],
+        "source_get_data_url": row["source_get_data_url"],
+        "source_puc_urls": row["source_puc_urls"],
+        "source_product_urls": row["source_product_urls"],
+    })
+    for index, product_id in enumerate(row["source_product_ids"], 1):
+        record["codes"][f"epa_chemexpo_product_id_{index}"] = {
+            "system": "EPA_CHEMEXPO_PRODUCT_ID",
+            "value": product_id,
+            "source_id": row["source_id"],
+            "status": row["lifecycle_status"],
+        }
+    record["canonical_key"] += f"|epa_chemexpo_record:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    return record
+
+
+def merge_epa_chemexpo_evidence(target: dict, source_record: dict, raw: dict) -> None:
+    target["specifications"].setdefault("epa_chemexpo_cpdat_evidence", []).append({
+        "source_record_id": raw["source_record_id"],
+        "source_product_ids": raw["source_product_ids"],
+        "source_product_names": raw["source_product_names"],
+        "puc_evidence": raw["puc_evidence"],
+        "source_product_urls": raw["source_product_urls"],
+        "dataset_snapshot_date": raw["dataset_snapshot_date"],
+        "lifecycle_status": raw["lifecycle_status"],
+    })
+    existing_codes = {(code.get("system", key).upper(), code["value"]) for key, code in target["codes"].items()}
+    for key, code in source_record["codes"].items():
+        identity = (code.get("system", key).upper(), code["value"])
+        if identity not in existing_codes:
+            target["codes"][f"epa_chemexpo_{raw['source_record_id']}_{key}"] = code
+            existing_codes.add(identity)
+
+
 def kebs_smark_record(row: dict) -> dict:
     """Convert one normalized product identity from the public KEBS S-Mark directory."""
     technical = row["technical"]
@@ -1848,6 +1929,34 @@ def brand_tokens_overlap(left: str, right: str) -> bool:
     left_tokens = set(normalize(left).split())
     right_tokens = set(normalize(right).split())
     return bool(left_tokens & right_tokens)
+
+
+CHEMEXPO_OWNER_STOP_TOKENS = {
+    "and", "co", "company", "corp", "corporation", "division", "group", "inc",
+    "international", "intl", "limited", "llc", "ltd", "lubricant", "lubricants",
+    "marketing", "of", "oil", "oils", "petroleum", "plc", "product", "products",
+    "pte", "public", "subsidiary", "the", "us", "usa",
+}
+
+
+def chemexpo_owner_tokens_overlap(left: str, right: str) -> bool:
+    """Require a meaningful owner/brand root, not a shared legal-form token."""
+    left_tokens = {
+        token for token in normalize(left).split()
+        if len(token) >= 3 and token not in CHEMEXPO_OWNER_STOP_TOKENS
+    }
+    right_tokens = {
+        token for token in normalize(right).split()
+        if len(token) >= 3 and token not in CHEMEXPO_OWNER_STOP_TOKENS
+    }
+    return any(
+        left_token == right_token
+        or (len(left_token) >= 4 and len(right_token) >= 4 and (
+            left_token in right_token or right_token in left_token
+        ))
+        for left_token in left_tokens
+        for right_token in right_tokens
+    )
 
 
 def merge_man_recommendation_evidence(target: dict, raw: dict) -> None:
@@ -2157,9 +2266,10 @@ def build_sqlite(records: list[dict], candidates: list[dict], issues: list[dict]
 
 def compress_sqlite() -> None:
     """Create a deterministic repository-safe copy of the generated SQLite database."""
-    with SQLITE_OUT.open("rb") as source, SQLITE_GZ_OUT.open("wb") as target:
-        with gzip.GzipFile(filename="", mode="wb", fileobj=target, compresslevel=9, mtime=0) as archive:
-            shutil.copyfileobj(source, archive, length=1024 * 1024)
+    with SQLITE_OUT.open("rb") as source, lzma.open(
+        SQLITE_XZ_OUT, "wb", format=lzma.FORMAT_XZ, preset=9 | lzma.PRESET_EXTREME
+    ) as archive:
+        shutil.copyfileobj(source, archive, length=1024 * 1024)
 
 
 def compress_jsonl() -> None:
@@ -2363,6 +2473,8 @@ def main() -> None:
     epa_safer_choice_source_rows = [json.loads(line) for line in EPA_SAFER_CHOICE_JSONL.read_text(encoding="utf-8").splitlines() if line]
     epa_safer_choice_records = [epa_safer_choice_record(row) for row in epa_safer_choice_source_rows]
     input_records.extend(epa_safer_choice_records)
+    epa_chemexpo_source_rows = [json.loads(line) for line in EPA_CHEMEXPO_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    epa_chemexpo_records = [epa_chemexpo_record(row) for row in epa_chemexpo_source_rows]
     kebs_smark_source_rows = [json.loads(line) for line in KEBS_SMARK_JSONL.read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_records = [kebs_smark_record(row) for row in kebs_smark_source_rows]
     input_records.extend(kebs_smark_records)
@@ -3041,6 +3153,36 @@ def main() -> None:
         integration = integrate_fuchs_market(input_records, source_rows, source_id, market_name, additional_prior_rows)
         additional_fuchs[slug] = {"source_path": source_path, "source_id": source_id, "source_rows": source_rows, **integration}
         additional_prior_rows += source_rows
+    chemexpo_by_name_family = defaultdict(list)
+    for existing in input_records:
+        chemexpo_by_name_family[(existing["product_name_normalized"], existing["family_code"])].append(existing)
+    epa_chemexpo_product_key = {}
+    epa_chemexpo_added_rows = 0
+    epa_chemexpo_matched_rows = 0
+    epa_chemexpo_review_keys = []
+    for raw, source_record in zip(epa_chemexpo_source_rows, epa_chemexpo_records):
+        name = normalize(raw["product_name"])
+        candidates_for_name = chemexpo_by_name_family[(name, raw["family_code"])]
+        raw_owner = " ".join(value for value in [raw["brand_source_reported"], raw["manufacturer"]] if value)
+        strong_matches = []
+        for candidate in candidates_for_name:
+            candidate_owner = " ".join(value for value in [candidate["brand"], candidate["manufacturer"]] if value)
+            candidate_brand = normalize(candidate["brand"])
+            name_supports_candidate_brand = bool(candidate_brand and len(candidate_brand) >= 4 and candidate_brand in name)
+            if chemexpo_owner_tokens_overlap(raw_owner, candidate_owner) or name_supports_candidate_brand:
+                strong_matches.append(candidate)
+        if len(strong_matches) == 1:
+            target = strong_matches[0]
+            merge_epa_chemexpo_evidence(target, source_record, raw)
+            epa_chemexpo_matched_rows += 1
+        else:
+            target = source_record
+            input_records.append(target)
+            chemexpo_by_name_family[(name, raw["family_code"])].append(target)
+            epa_chemexpo_added_rows += 1
+            if len(strong_matches) > 1:
+                epa_chemexpo_review_keys.append((target["canonical_key"], [row["canonical_key"] for row in strong_matches]))
+        epa_chemexpo_product_key[raw["source_record_id"]] = target["canonical_key"]
     aichilon_products, aichilon_packages, exclusions = aichilon_seed()
     existing_by_name = defaultdict(list)
     for row in input_records:
@@ -3371,6 +3513,17 @@ def main() -> None:
             for match_key in match_keys:
                 match_product = canonical_by_key[match_key]
                 candidates.append({"product_id_a": match_product["product_id"], "product_id_b": source_product["product_id"], "reason": "same_fuchs_product_name_but_conflicting_professional_family_across_markets", "score": 0.70, "decision": "keep_separate_fuchs_market_family_conflict"})
+    for source_key, match_keys in epa_chemexpo_review_keys:
+        source_product = canonical_by_key[source_key]
+        for match_key in match_keys:
+            match_product = canonical_by_key[match_key]
+            candidates.append({
+                "product_id_a": match_product["product_id"],
+                "product_id_b": source_product["product_id"],
+                "reason": "epa_chemexpo_exact_product_name_and_family_with_multiple_owner_supported_existing_records",
+                "score": 0.99,
+                "decision": "review_chemexpo_multi_registry_identity",
+            })
     source_links = [{
         "product_id": row["product_id"], "source_id": row["source_id"], "source_record_id": row["source_record_id"],
         "source_row": row["source_row"], "relation": "primary_seed_record",
@@ -3449,6 +3602,19 @@ def main() -> None:
             "source_record_id": raw["source_record_id"],
             "source_row": raw["source_row_number"],
             "relation": "official_government_ecolabel_registry",
+        }
+        link_key = (link["product_id"], link["source_id"], link["source_record_id"])
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
+    for raw in epa_chemexpo_source_rows:
+        target = canonical_by_key[epa_chemexpo_product_key[raw["source_record_id"]]]
+        link = {
+            "product_id": target["product_id"],
+            "source_id": raw["source_id"],
+            "source_record_id": raw["source_record_id"],
+            "source_row": None,
+            "relation": "official_government_compiled_product_database",
         }
         link_key = (link["product_id"], link["source_id"], link["source_record_id"])
         if link_key not in source_link_keys:
@@ -3837,6 +4003,7 @@ def main() -> None:
         "uae_moiat_input_sha256": hashlib.sha256(UAE_MOIAT_JSONL.read_bytes()).hexdigest(),
         "eaeu_conformity_input_sha256": hashlib.sha256(EAEU_CONFORMITY_JSONL.read_bytes()).hexdigest(),
         "epa_safer_choice_input_sha256": hashlib.sha256(EPA_SAFER_CHOICE_JSONL.read_bytes()).hexdigest(),
+        "epa_chemexpo_input_sha256": hashlib.sha256(EPA_CHEMEXPO_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "son_mancap_input_sha256": hashlib.sha256(SON_MANCAP_JSONL.read_bytes()).hexdigest(),
@@ -3900,6 +4067,10 @@ def main() -> None:
         "eaeu_conformity_explicit_brand_rows": sum(row["brand_basis"] == "explicit_source_trademark" for row in eaeu_conformity_source_rows),
         "eaeu_conformity_manufacturer_holder_fallback_rows": sum(row["brand_basis"] == "manufacturer_holder_fallback" for row in eaeu_conformity_source_rows),
         "epa_safer_choice_source_rows": len(epa_safer_choice_source_rows),
+        "epa_chemexpo_source_rows": len(epa_chemexpo_source_rows),
+        "epa_chemexpo_source_product_occurrences": sum(row["source_occurrence_count"] for row in epa_chemexpo_source_rows),
+        "epa_chemexpo_products_matched_to_existing": epa_chemexpo_matched_rows,
+        "epa_chemexpo_products_added": epa_chemexpo_added_rows,
         "kebs_smark_source_rows": len(kebs_smark_source_rows),
         "east_africa_certified_source_rows": len(east_africa_certified_source_rows),
         "east_africa_certified_source_rows_by_source": dict(sorted(Counter(row["source_id"] for row in east_africa_certified_source_rows).items())),
@@ -3908,6 +4079,7 @@ def main() -> None:
         "official_government_product_conformity_registry_rows": sum(r["evidence_status"] == "official_government_product_conformity_registry" for r in records),
         "official_government_product_certification_registry_rows": sum(r["evidence_status"] == "official_government_product_certification_registry" for r in records),
         "official_government_program_rows": sum(r["evidence_status"] == "official_government_program_catalog" for r in records),
+        "official_government_compiled_product_database_rows": sum(r["evidence_status"] == "official_government_compiled_product_database" for r in records),
         "official_government_regulatory_registry_rows": sum(r["evidence_status"] == "official_government_regulatory_registry" for r in records),
         "official_government_qualified_product_registry_rows": sum(r["evidence_status"] == "official_government_qualified_product_registry" for r in records),
         "usda_biopreferred_source_rows": len(biopreferred_source_rows),

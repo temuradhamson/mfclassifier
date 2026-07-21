@@ -1104,6 +1104,21 @@
       "notes": "The official 4,786-row bulk CSV contains 12 occurrences whose product name explicitly contains the standalone word lubricant. UPC/GTIN/MPN repetitions are merged into two medical-instrument lubricant products from two companies. Degreasers, grease-trap cleaners and unrelated oils are excluded; city and state are not republished."
     },
     {
+      "source_id": "EPA_CHEMEXPO_CPDAT_LUBRICANTS",
+      "title": "US EPA ChemExpo / CPDat — lubricant and technical-fluid products",
+      "owner": "United States Environmental Protection Agency",
+      "source_type": "official_government_compiled_product_database_public_api_and_bulk_download",
+      "source_locator": "data/epa-chemexpo-lubricants.jsonl",
+      "source_url": "https://comptox.epa.gov/chemexpo/",
+      "terms_url": "https://epa.figshare.com/articles/dataset/The_Chemical_and_Products_Database_CPDat_MySQL_Data_File/5352997",
+      "source_sha256": "febed70610c64160f620df2d04de32e34dd37db00986c931bcca57fb5fef3ecd",
+      "access_status": "public_official_government_cc0_bulk_download_and_product_api",
+      "bulk_ingest_allowed": true,
+      "publication_status": "normalized_factual_product_and_puc_evidence_with_attribution",
+      "observed_count": 5714,
+      "notes": "CPDat 4.1 is published under CC0 and ChemExpo exposes direct product cards plus downloadable PUC metadata and bulk composition data. Exact lubricant, hydraulic-fluid, metalworking-fluid, motor-oil, antifreeze, deicer and anti-seize PUCs are retained; broader automotive, marine, windshield, clipper and aviation categories use explicit inclusion and fuel/cleaner exclusion rules. Package-only suffixes and repeated EPA product records are merged while every source product ID remains linked. CPDat mixes historical and current public documents, EPA states that the compiled data are not reviewed by EPA, and current market availability is therefore never inferred."
+    },
+    {
       "source_id": "KEBS_SMARK_LUBRICANT_PRODUCTS",
       "title": "Kenya Bureau of Standards — S-Mark lubricant and technical-fluid products",
       "owner": "Kenya Bureau of Standards (KEBS)",

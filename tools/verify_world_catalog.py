@@ -6,6 +6,7 @@ from __future__ import annotations
 import hashlib
 import gzip
 import json
+import lzma
 import sqlite3
 from pathlib import Path
 
@@ -143,6 +144,8 @@ def main() -> None:
     eaeu_conformity_rows = [json.loads(line) for line in (ROOT / "data/eaeu-conformity-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     epa_safer_choice_report = json.loads((ROOT / "data/epa-safer-choice-lubricants-report.json").read_text(encoding="utf-8"))
     epa_safer_choice_rows = [json.loads(line) for line in (ROOT / "data/epa-safer-choice-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    epa_chemexpo_report = json.loads((ROOT / "data/epa-chemexpo-lubricants-report.json").read_text(encoding="utf-8"))
+    epa_chemexpo_rows = [json.loads(line) for line in (ROOT / "data/epa-chemexpo-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_report = json.loads((ROOT / "data/kebs-smark-lubricant-products-report.json").read_text(encoding="utf-8"))
     kebs_smark_rows = [json.loads(line) for line in (ROOT / "data/kebs-smark-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     east_africa_report = json.loads((ROOT / "data/east-africa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -177,12 +180,12 @@ def main() -> None:
             assert source["source_id"] in report["bulk_sources_blocked"]
 
     db = sqlite3.connect(ROOT / "data/world-catalog.sqlite3")
-    with (ROOT / "data/world-catalog.sqlite3").open("rb") as plain, gzip.open(ROOT / "data/world-catalog.sqlite3.gz", "rb") as packed:
+    with (ROOT / "data/world-catalog.sqlite3").open("rb") as plain, lzma.open(ROOT / "data/world-catalog.sqlite3.xz", "rb") as packed:
         assert hashlib.sha256(plain.read()).digest() == hashlib.sha256(packed.read()).digest()
     assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
     assert not db.execute("PRAGMA foreign_key_check").fetchall()
     assert db.execute("SELECT count(*) FROM products").fetchone()[0] == len(lines)
-    assert len(lines) == 92464
+    assert len(lines) == 97910
     assert report["jaso_source_rows"] == jaso_report["rows"] == 3630
     assert report["jaso_unique_oil_codes"] == jaso_report["unique_oil_codes"] == 3629
     assert report["official_filed_registry_rows"] == 3629
@@ -224,6 +227,10 @@ def main() -> None:
     assert len({row["source_record_id"] for row in eaeu_conformity_rows}) == len(eaeu_conformity_rows)
     assert all(row["source_url"].startswith("https://tech.eaeunion.org/tech/registers/35-1/ru/registryList/conformityDocs/view/") for row in eaeu_conformity_rows)
     assert report["epa_safer_choice_source_rows"] == epa_safer_choice_report["normalized_products"] == len(epa_safer_choice_rows) == 2
+    assert report["epa_chemexpo_source_rows"] == epa_chemexpo_report["normalized_products"] == len(epa_chemexpo_rows)
+    assert report["epa_chemexpo_source_product_occurrences"] == epa_chemexpo_report["kept_product_occurrences"]
+    assert report["epa_chemexpo_products_added"] + report["epa_chemexpo_products_matched_to_existing"] == len(epa_chemexpo_rows)
+    assert report["official_government_compiled_product_database_rows"] == report["epa_chemexpo_products_added"]
     assert report["kebs_smark_source_rows"] == kebs_smark_report["normalized_products"] == len(kebs_smark_rows) == 750
     assert report["east_africa_certified_source_rows"] == east_africa_report["normalized_products"] == len(east_africa_rows) == 229
     assert report["east_africa_certified_source_rows_by_source"] == east_africa_report["normalized_products_by_source"] == {
@@ -450,6 +457,16 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='EAEU_CONFORMITY_LUBRICANT_PRODUCTS'").fetchone()[0] == 38444
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='EPA_SAFER_CHOICE_LUBRICANTS'").fetchone()[0] == 2
     assert db.execute("SELECT count(*) FROM external_codes WHERE source_id='EPA_SAFER_CHOICE_LUBRICANTS'").fetchone()[0] == 12
+    assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='EPA_CHEMEXPO_CPDAT_LUBRICANTS'").fetchone()[0] == len(epa_chemexpo_rows)
+    assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='EPA_CHEMEXPO_PRODUCT_ID'").fetchone()[0] == epa_chemexpo_report["kept_product_occurrences"]
+    assert db.execute("""
+        SELECT count(*)
+        FROM product_sources ps
+        JOIN products p ON p.product_id = ps.product_id
+        WHERE ps.source_id='EPA_CHEMEXPO_CPDAT_LUBRICANTS'
+          AND ps.source_record_id='EPA-CHEMEXPO-22FC008D410855F6'
+          AND p.source_id='KEBS_SMARK_LUBRICANT_PRODUCTS'
+    """).fetchone()[0] == 0
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='KEBS_SMARK_LUBRICANT_PRODUCTS'").fetchone()[0] == 750
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='KEBS_SMARK_PERMIT'").fetchone()[0] == 775
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='UNBS_CERTIFIED_LUBRICANT_PRODUCTS'").fetchone()[0] == 46
@@ -526,6 +543,29 @@ def main() -> None:
     assert epa_safer_choice_report["duplicate_identifier_occurrences_merged"] == 10
     assert epa_safer_choice_report["families"] == {"S": 2}
     assert all(not ({"city", "state", "address", "phone", "email"} & set(row)) for row in epa_safer_choice_rows)
+    assert policy_by_id["EPA_CHEMEXPO_CPDAT_LUBRICANTS"]["source_sha256"] == epa_chemexpo_report["normalized_output_sha256"]
+    assert policy_by_id["EPA_CHEMEXPO_CPDAT_LUBRICANTS"]["observed_count"] == epa_chemexpo_report["normalized_products"]
+    assert epa_chemexpo_report["source_category_product_occurrences"] == 10019
+    assert epa_chemexpo_report["kept_product_occurrences"] == 7217
+    assert epa_chemexpo_report["excluded_product_occurrences"] == 2802
+    assert len(epa_chemexpo_rows) == 5714
+    assert report["epa_chemexpo_products_matched_to_existing"] == 268
+    assert report["epa_chemexpo_products_added"] == 5446
+    assert epa_chemexpo_report["kept_product_occurrences"] + epa_chemexpo_report["excluded_product_occurrences"] == 10019
+    assert epa_chemexpo_report["within_source_occurrences_merged"] == epa_chemexpo_report["kept_product_occurrences"] - len(epa_chemexpo_rows)
+    assert epa_chemexpo_report["licence"] == "CC0"
+    assert epa_chemexpo_report["cpdat_release"] == "4.1 (May 2025)"
+    assert len({row["source_record_id"] for row in epa_chemexpo_rows}) == len(epa_chemexpo_rows)
+    chemexpo_product_ids = [product_id for row in epa_chemexpo_rows for product_id in row["source_product_ids"]]
+    assert len(chemexpo_product_ids) == len(set(chemexpo_product_ids)) == epa_chemexpo_report["kept_product_occurrences"]
+    assert all(row["lifecycle_status"] == "historical_or_current_status_not_reported" for row in epa_chemexpo_rows)
+    assert all(row["source_product_urls"] == [f"https://comptox.epa.gov/chemexpo/product/{value}/" for value in row["source_product_ids"]] for row in epa_chemexpo_rows)
+    assert all(not ({"address", "phone", "email", "source_document_text", "chemical_composition"} & set(row)) for row in epa_chemexpo_rows)
+    chemexpo_names = {row["product_name"].casefold() for row in epa_chemexpo_rows}
+    assert "soilax grease cutter" not in chemexpo_names
+    assert "carburetor & choke cleaner" not in chemexpo_names
+    assert "t1f270 flatting & reducing compound" not in chemexpo_names
+    assert "crown gasoline dryer & antifreeze" not in chemexpo_names
     assert policy_by_id["KEBS_SMARK_LUBRICANT_PRODUCTS"]["source_sha256"] == kebs_smark_report["normalized_output_sha256"]
     assert policy_by_id["KEBS_SMARK_LUBRICANT_PRODUCTS"]["observed_count"] == kebs_smark_report["normalized_products"]
     assert kebs_smark_report["directory_total_smarks"] == 42358

@@ -1,0 +1,366 @@
+{
+  "status": "official_us_epa_chemexpo_cpdat_lubricants_normalized",
+  "source_id": "EPA_CHEMEXPO_CPDAT_LUBRICANTS",
+  "source_page_url": "https://comptox.epa.gov/chemexpo/",
+  "source_get_data_url": "https://comptox.epa.gov/chemexpo/get_data/",
+  "source_puc_csv_url": "https://comptox.epa.gov/chemexpo/dl_pucs/",
+  "snapshot_date": "2026-07-21",
+  "cpdat_release": "4.1 (May 2025)",
+  "licence": "CC0",
+  "puc_metadata_sha256": "de9414f410e15253868828affd9ec9cdcfe2020de5c309d4d42fa486122835d6",
+  "api_pages_manifest_sha256": "347ca9f6e38a581575009fdaf6e3e2c492708d8b3340e837b1ab5e4d34925fee",
+  "source_category_product_occurrences": 10019,
+  "kept_product_occurrences": 7217,
+  "excluded_product_occurrences": 2802,
+  "normalized_products": 5714,
+  "within_source_occurrences_merged": 1503,
+  "manufacturers_reported": 1722,
+  "brands_reported": 18,
+  "owner_not_reported_products": 64,
+  "families": {
+    "C": 13,
+    "E": 1,
+    "G": 371,
+    "H": 301,
+    "I": 863,
+    "M": 702,
+    "S": 2628,
+    "T": 135,
+    "TF": 665,
+    "U": 35
+  },
+  "categories": {
+    "91": {
+      "general_category": "Home maintenance",
+      "product_family": "lock deicer",
+      "product_type": "",
+      "scope_rule": "direct",
+      "source_products": 2,
+      "kept_occurrences": 2,
+      "excluded_occurrences": 0,
+      "api_page_sha256": [
+        "e36ec8b45a95501dcf834b023dae907d4b4ea8baf69c91e79f4d3ac7f09746e8"
+      ]
+    },
+    "92": {
+      "general_category": "Home maintenance",
+      "product_family": "lubricant",
+      "product_type": "",
+      "scope_rule": "direct",
+      "source_products": 364,
+      "kept_occurrences": 362,
+      "excluded_occurrences": 2,
+      "api_page_sha256": [
+        "d8b08417e39740fea214e7f91c7f703e1fe4ddf5e0d4bf67330233e6f28eeb2f",
+        "43389d69d6aeacf3f2f3b8c30cb766ffa34964c7244b22fce0a435cdbda3cc8d",
+        "f5bc77b112910b94ff8a44d6c93bedce6fadda1026633394c9310415751e9693",
+        "b2244dc6e3c8101d80fd76d1deeabd90210d7f356e264e18c1fe6d8c15bd4ed4"
+      ]
+    },
+    "123": {
+      "general_category": "Landscape/yard",
+      "product_family": "lawnmower",
+      "product_type": "lawnmower fluids",
+      "scope_rule": "direct",
+      "source_products": 9,
+      "kept_occurrences": 9,
+      "excluded_occurrences": 0,
+      "api_page_sha256": [
+        "5ef71c37f1d531848f546275e12e44a8431678207e43f9f9eb8df2652f15b139"
+      ]
+    },
+    "238": {
+      "general_category": "Personal care",
+      "product_family": "shaving and hair removal",
+      "product_type": "clipper lubricant/cleaner",
+      "scope_rule": "filtered_clipper",
+      "source_products": 9,
+      "kept_occurrences": 1,
+      "excluded_occurrences": 8,
+      "api_page_sha256": [
+        "bc9dab22209e4a50701633b3d518655c25faf8e8a9f59167aefc5773a8761e62"
+      ]
+    },
+    "277": {
+      "general_category": "Vehicle",
+      "product_family": "auto body work",
+      "product_type": "windows/windshield",
+      "scope_rule": "filtered_windshield",
+      "source_products": 163,
+      "kept_occurrences": 106,
+      "excluded_occurrences": 57,
+      "api_page_sha256": [
+        "a9dbd8d099a1782a1e836a27cf910fa4e5f57b9c2b888b6b8b2af141310386af",
+        "959301a15c8665496249d04692752bedc0910f860e5dbf46a82108b61c7dcfd0"
+      ]
+    },
+    "282": {
+      "general_category": "Vehicle",
+      "product_family": "boat care and maintenance",
+      "product_type": "boat engine fluids",
+      "scope_rule": "filtered_boat",
+      "source_products": 56,
+      "kept_occurrences": 20,
+      "excluded_occurrences": 36,
+      "api_page_sha256": [
+        "c81dc209c61b4e2accb600ad9eb19640a4b1985b50854aa9f9f65b93d41b5395"
+      ]
+    },
+    "291": {
+      "general_category": "Vehicle",
+      "product_family": "engine maintenance",
+      "product_type": "antifreeze",
+      "scope_rule": "direct",
+      "source_products": 366,
+      "kept_occurrences": 365,
+      "excluded_occurrences": 1,
+      "api_page_sha256": [
+        "ca55752cb37c6cef802918b128e0eb28f5834eec2751d23483267953a8ea1ffd",
+        "893ae3be0c080028afd50a9ee6b76601a016a9b5baec6e3b26b5955ba717bb11",
+        "e77e416d3bfafa3446e4ab5b0064a95dd434c4b5feb109d1d740c431be3beb38",
+        "29f4e34f153a78624fed2c335ff85e3151a57cbff5792678ace65bf7896d7ad7"
+      ]
+    },
+    "292": {
+      "general_category": "Vehicle",
+      "product_family": "engine maintenance",
+      "product_type": "auto fluids and additives",
+      "scope_rule": "filtered_auto_fluids",
+      "source_products": 1934,
+      "kept_occurrences": 344,
+      "excluded_occurrences": 1590,
+      "api_page_sha256": [
+        "55780d515a9455dc8a941affed9cac1cba1c098a12ef4bcbf6e8b4cb9493b1fc",
+        "af3e7fc83fa833de91295c80ef074422a99cf2978c5116e1d2508917ecbc3b96",
+        "683cea60a6cd9a258decc3d32cccb6f7526d34f618d8779da867e4444d7288b2",
+        "386f8e222b09845c87bbcf5da14155514d7a7964b406615c8d138ef1d5f4f5ea",
+        "6d5f1b3e520c4180628d291b70e2fb66b8e6c6c70058ce24a1205e89419366f0",
+        "6430f45e1a247dc6507d6d910c14e674944d265592e628195d33b8840fe67cc9",
+        "ed220330c5d89948b5d00ece19961ca99fbd1f49e8063e91772d67fe506a16f6",
+        "0806cf590c45e8e614c3ed0e4528704304ce15e80c8a50394a8cdb5afff814ee",
+        "b5acd8c55deb28de72667d83aefd758b06f96106d8f194c052b86b58c14036a2",
+        "d62b111c957c59e8444fd039437f0cecef9244f00dc2579b9d9d0e8930bc6dfa",
+        "71931f91bdc637114549aaf8e1d82c2a5a8746264fb13ea87390eacc0996c038",
+        "9dff3094be0a96cb0611463bee3fc292da5dc1aceb2cdbda1c0addc15a957e5c",
+        "68040beb2abd61adc0b83339710865355177c3228c51084d49d1d53ef308b99a",
+        "5aeeda6a96a932a407cafeff04f71de20e8eb295bf5369582d359efff2fc2cd8",
+        "22d4d2709295381d11ecce87b7d5964135e1acd2d203cb04053fe9c7cf53bbdb",
+        "3116489f3378858aef5959f9b0ad64720ebc86f3cb51e08029eb94e13be424f2",
+        "e6cbea2ca62efba33482f19bce597b86cc64c10f8f779a2ffa9e4de8c51c0b82",
+        "4a5bfaa7cb3a65ceab7e5930a29e6e4a22fcbd829ed08124121bddc81a8757fc",
+        "3369cfaf4170cf32eab5e7bafd7fcafca21d96293793fceec170f1a7d5ecd512",
+        "46592fb8ef02db19f0d8713ad569b56cc35dd940a3cb1d0deefc17ca6378ed23"
+      ]
+    },
+    "293": {
+      "general_category": "Vehicle",
+      "product_family": "engine maintenance",
+      "product_type": "auto lubricant",
+      "scope_rule": "direct",
+      "source_products": 803,
+      "kept_occurrences": 792,
+      "excluded_occurrences": 11,
+      "api_page_sha256": [
+        "99e1bf1fec20b807fd643bb84e483df26c139d9186dd6509fc67385c506e5ad4",
+        "16fce878d0b47f6366bbe669a58056d2bb31253109e02b5a7ae3f935fdbcfae2",
+        "50a74813286aa6b074b14892811a29a8622cd77c10b7289562627b573e6717f0",
+        "6e17e4528ed7bce695105a83c9fc842ad670cd67af19d3432037c367c2e36155",
+        "eef83c252301ab1bc7bf847ad55e2eb035c9342e056ee19cadca287bceb00145",
+        "62980fe20c4145a064d9e82a315dd9f6d1ed1bf91009bacee51030760edd27b2",
+        "df1858083e3a41b9e2526ee8ab29d35c96b96bb20aae88f6de7911e53a4b1b15",
+        "32a82c43d94403dd029b2d099a641859fd57d6fb7bcfd0f40ce2d9aa1e9e025b",
+        "acee1e4db4e0185c83718f465fe3b60682822d10ea8bcd1c0bef62171be97dd1"
+      ]
+    },
+    "295": {
+      "general_category": "Vehicle",
+      "product_family": "engine maintenance",
+      "product_type": "motor oil",
+      "scope_rule": "direct",
+      "source_products": 853,
+      "kept_occurrences": 851,
+      "excluded_occurrences": 2,
+      "api_page_sha256": [
+        "6a547b3b977357722e0f0f2917d5489ab652e33bb21e6debaaa69a756787696f",
+        "da70ef2fb6653233c4d0dd89b30c8174d0ecefe5b064526b36154c459b48c64a",
+        "7de41d7df9732bf16b5855370655d5d385b2c48a78e356123e75d8bb84428b8c",
+        "e2bfe0953878a3314494f367bd68f5c1c879ac81ddda2169bdf3ea06fba5ad50",
+        "1df807f5eb2ea6b8e52c33b875b6328c5a0b790de99fe04d6be930d849382318",
+        "3b6d21edba4783372a6279470fcbee59b6f8b5e69da16f3d02cbf9cb98736fd8",
+        "a6cae5a5299121bab3961731b31a685238df11f1002453d475b5f97a450895fb",
+        "7e28501cca09e5b34302dddfac2f30145c805646b5f63ebce8befdeb28c77f86",
+        "585db8027d3039f541eec20987d462a0ab5748bf9994782d67bf6439298b47eb"
+      ]
+    },
+    "358": {
+      "general_category": "Industrial products",
+      "product_family": "metalworking fluid",
+      "product_type": "",
+      "scope_rule": "filtered_metalworking_quality",
+      "source_products": 1211,
+      "kept_occurrences": 986,
+      "excluded_occurrences": 225,
+      "api_page_sha256": [
+        "602feb654790f3bdfedda1cac920664c7b62a6b2314f07ca6de68bd288557fce",
+        "49ae030d796bea61d2c71360402c0358f9107df70ea47fd9b5d3bf342d4f1748",
+        "159e79c37ddcba5d910e67062f2effe1226a6d65e23e4f5361beb88dbbcfd16f",
+        "656bb90f351100de254330ac6a4b6ea57dd9e6041717f272c12b6a6f7c862e4f",
+        "3c60c700c2563842e862edbd448fc811c5f2e32a39d4350f594ab08beffcc70f",
+        "342fd9c39d86d2ad30c506bd8b83311da8a6b0bd0b8c4234b53850541891c90e",
+        "27269dc55d831fc6832c931983648dc01d601996fed62ed4c48646224ceb85e4",
+        "fb210734ef4f5d5bf63c72e7d0585cf4cfd93c59e72c22320047d9cf8c75c213",
+        "aebc1fe42ed66cd311b437bebb74037de122d8881dee9e36d53c16b1990eee09",
+        "2ac1324fe4e5046b89b28d5d3287afdb32252745b32642cfe8cb0fe1bfc06217",
+        "8a83353018e5fd57a0e7c9d06d96c4e8c63af2e7c0929fe07027bd0b31d1f03c",
+        "dd9cf70e091e196e6724fd394c0ae4625c1ba8433683ad3f2bbb05942154e539",
+        "0877fee64eab120b7b9eb9e87f29beb08e43eab44f8f465d20204328dc52bde5"
+      ]
+    },
+    "378": {
+      "general_category": "Specialty occupational products",
+      "product_family": "aviation",
+      "product_type": "aircraft fluids and additives",
+      "scope_rule": "filtered_aviation",
+      "source_products": 991,
+      "kept_occurrences": 131,
+      "excluded_occurrences": 860,
+      "api_page_sha256": [
+        "8e2ac4202092544c2f9c6bd8365a2b82b85dd1b2739a59bad81fc77e4e491d70",
+        "b5c89bed7718d2dabfa283ab47d0ece8400e551d1b5f208ce8f1506e8d944e02",
+        "0420a1d039196cacab6b98a711b78654a0d05c60ccc919f5c7ceae8a6296de00",
+        "3d967a6db70459fbddba6abaa20016f172d547af922eaf434d729b79558297b4",
+        "7684c90b251bd6dd45625e7693ea36fec4a61388454a34a3aacaa24fef481449",
+        "9ad118778f83dda32cc3fdae6f8cea254b1c24b083f71124e542094c10799003",
+        "52c0e039a8c19b05b62b39043d960e7ea270b0056ae9e571f45c4ecaaaa7e7ec",
+        "63c3c739088d36bd35e57e52e7a930970bd9b4682e5c152574b008ca579524d7",
+        "e19ec3b77e59a397d345d32aff6a594e3c5c8a11ee42a6365d97857efc02a721",
+        "584c7508c7af5ba9169072e1748b9043e15de32f20d93bddc98539ca3d86dbb6"
+      ]
+    },
+    "379": {
+      "general_category": "Industrial products",
+      "product_family": "industrial lubricants",
+      "product_type": "",
+      "scope_rule": "direct",
+      "source_products": 2265,
+      "kept_occurrences": 2258,
+      "excluded_occurrences": 7,
+      "api_page_sha256": [
+        "755a7c039bf7c3673680a7376c48acdf8371444df7d8069d089b2efb898625e7",
+        "ea6a31c135a59cb23e5fbc25b209edc84081e31eeb00ab9d273f6e82acf1a9db",
+        "268f5bfdd7db92db8b2a86f4570bf9844e8f0f471b7d269430ce57772ff4a738",
+        "21efff96c659e0e24f22ff01e0ff26e77d1f4080904e580588041d27ef31f089",
+        "76ada416c7c47c073f1d590bf83255a42218e610ae0e9d37d7dd0bbabe0ed405",
+        "fdb13baf980d2d9bfc04c4caf854d5d6727ad56ca0be402ab7c1ba814c789c12",
+        "aa50174cdf05c58ecbbc8178efe813e0f1b50cb5149e8683c0557c039c57148e",
+        "ad4111c9682a17b5353d7c6582a27b751342b36ec20acc92208ba9cdf33ce8ec",
+        "6859ce752ea5b323e6dca88bf86b84ee3596f4eb3e6c0f3e7a1fe8f9e5c7c054",
+        "2fa540c7e908642717c70f6bdf9f481deb02f33fedd292f8afb75ae9f2549172",
+        "ce81cb3e18bf0b8bf38dad78ae1c9f4b2c03d9ab7c0cbe5732f5091062cdbd5d",
+        "419bef94c34a8f74c0d513ba3c62b67a1a77d9abbae51174996deb5f43345535",
+        "8db79fc60f2802414cb91cf1d2cd918830c9f7ba572dd9c9c4e5afcb46bf69d2",
+        "ce60c6e68cebaf59c10102c9a1b59d069a9740b48dca7016a746bc3096f1427f",
+        "c8365ab9d06c2ba8ab83043331ef11dabd0a78a980596c5b88a443e5d57493ec",
+        "cd36fd73703776b803a2fb48cac1e90a16f753b6841f2eaa193e299baf4cf9c0",
+        "306008e1d967a811d66e5b7ebe01738de63956e426d5195009ef8a435d78a7c8",
+        "5f306577ae5d48cfd4bca54939a8eff1901c6a76eaeb62d6546f3cbb2df922ed",
+        "74c0db4fb698418728cb906a8ea96b81e08c8380cf9003cc026896bae9e547bd",
+        "17152c353bc1c477cd7ca6fe2950b5bfc2d0c528228a66fec02bcd51194de461",
+        "31c7de39ed510282f472da831e6fa11fb443271ab244c61a3a25bed3a613d488",
+        "36a0a34dbb2e476e8d98701bc0a512f5254ea5d4f68e428041d33ada3e91b97d",
+        "9378e0d253083570bbeb133b11522dfdec07b9d8794cfb94a5268ef8ced2be4f"
+      ]
+    },
+    "381": {
+      "general_category": "Industrial products",
+      "product_family": "hydraulic fluid",
+      "product_type": "",
+      "scope_rule": "direct",
+      "source_products": 274,
+      "kept_occurrences": 274,
+      "excluded_occurrences": 0,
+      "api_page_sha256": [
+        "8d0972d1adc0ac7c15f23e64dd7a21eaa60db6d0eafd547d058fce818bb01cd9",
+        "9305b24665e8b0ecfddb417fe681f1219da957ac373e8a48c49b75b687782c35",
+        "79686c655963cde47d749a1f90b1736df77dcb7669518c67a60effa3bd0d409e"
+      ]
+    },
+    "385": {
+      "general_category": "Industrial products",
+      "product_family": "hydraulic fluid",
+      "product_type": "tractor hydraulic fluid",
+      "scope_rule": "direct",
+      "source_products": 50,
+      "kept_occurrences": 50,
+      "excluded_occurrences": 0,
+      "api_page_sha256": [
+        "64b9a2408a4c534d7956f1a74fbcbc1e872c33e6252538ab5d7b6e444aec4b93"
+      ]
+    },
+    "386": {
+      "general_category": "Industrial products",
+      "product_family": "penetrating oil",
+      "product_type": "",
+      "scope_rule": "direct",
+      "source_products": 199,
+      "kept_occurrences": 199,
+      "excluded_occurrences": 0,
+      "api_page_sha256": [
+        "9ca2e634d4ebb537253b8af8fc9b48c498ba54f5020fe91b9dd060927be6df40",
+        "d086db087e5610c6f079daa5918d01054a3b5faeff053db0b8e5411c73b84fc6"
+      ]
+    },
+    "396": {
+      "general_category": "Specialty occupational products",
+      "product_family": "aviation",
+      "product_type": "aircraft deicer",
+      "scope_rule": "direct",
+      "source_products": 75,
+      "kept_occurrences": 74,
+      "excluded_occurrences": 1,
+      "api_page_sha256": [
+        "401579263fbfc10e5798fed73666aaf6f10dda6ac6c79adf041114e6274bdab4"
+      ]
+    },
+    "398": {
+      "general_category": "Industrial products",
+      "product_family": "anti-seize",
+      "product_type": "",
+      "scope_rule": "direct",
+      "source_products": 395,
+      "kept_occurrences": 393,
+      "excluded_occurrences": 2,
+      "api_page_sha256": [
+        "835c29bcb9573ff8bd5a739ab12fdd708696476d4a734500e9616cc21a477c00",
+        "32d695562749cde072f6a6cd6433a484e11462b3c729e2de75f01c49fcfd878a",
+        "6e80b784b6982888759086ce7d525db01eb602b6f939e0ff9799b9492873d768",
+        "07ba51e9a1ddb908857fadb2bed2b91f2e4e245bf331149482fe43b425245896"
+      ]
+    }
+  },
+  "exclusions": {
+    "puc_238_strict_name_filter_within_clipper_cleaner_lubricant_puc": 8,
+    "puc_277_strict_name_filter_within_windshield_products_puc": 57,
+    "puc_282_strict_name_filter_within_broad_boat_fluids_puc": 36,
+    "puc_291_gasoline_fuel_additive_not_coolant_excluded": 1,
+    "puc_292_gasoline_fuel_additive_not_coolant_excluded": 1,
+    "puc_292_strict_name_filter_within_broad_auto_fluids_and_additives_puc": 1589,
+    "puc_293_battery_terminal_coating_not_lubricant_excluded": 9,
+    "puc_293_cleaner_without_lubricant_or_technical_fluid_context_excluded": 2,
+    "puc_295_obvious_fuel_product_excluded_despite_puc_assignment": 2,
+    "puc_358_cleaner_without_lubricant_or_technical_fluid_context_excluded": 3,
+    "puc_358_metalworking_puc_opaque_name": 204,
+    "puc_358_metalworking_puc_paint_reducer_misclassification_excluded": 11,
+    "puc_358_obvious_non_lubricant_material_excluded_despite_puc_assignment": 7,
+    "puc_378_strict_name_filter_excluding_fuels_from_aviation_fluids_puc": 860,
+    "puc_379_obvious_fuel_product_excluded_despite_puc_assignment": 1,
+    "puc_379_obvious_non_lubricant_material_excluded_despite_puc_assignment": 6,
+    "puc_396_obvious_non_lubricant_material_excluded_despite_puc_assignment": 1,
+    "puc_398_obvious_non_lubricant_material_excluded_despite_puc_assignment": 2,
+    "puc_92_cleaner_without_lubricant_or_technical_fluid_context_excluded": 2
+  },
+  "normalized_output_sha256": "febed70610c64160f620df2d04de32e34dd37db00986c931bcca57fb5fef3ecd",
+  "grain_note": "One row is a conservative manufacturer/brand + formulation name + professional family identity; package suffixes and exact repeated EPA product records are merged with all EPA product IDs retained.",
+  "lifecycle_note": "CPDat mixes historical and current source documents and does not assert current market availability. No row is promoted to an active offer.",
+  "quality_note": "EPA states that ChemExpo data are compiled from public sources and are not reviewed by EPA. Exact PUC evidence, curation method and direct product cards are retained; broad categories use explicit inclusion filters."
+}
