@@ -487,6 +487,36 @@
       "notes": "Из 1 253 embedded rows исключены 98 серий и 6 единиц оборудования; три повторных source-вхождения объединены. Получено 1 146 конкретных продуктов без fallback-классификаций. Спорные межрыночные семейства не склеиваются автоматически."
     },
     {
+      "source_id": "FUCHS_MEXICO_PRODUCT_FINDER",
+      "title": "FUCHS Mexico Product Finder",
+      "owner": "LUBRICANTES FUCHS DE MEXICO SA DE CV",
+      "source_type": "official_manufacturer_embedded_product_catalog",
+      "source_locator": "data/fuchs-mexico-products.jsonl",
+      "source_url": "https://www.fuchs.com/mx/en/products/service-links/product-finder/",
+      "terms_url": "https://www.fuchs.com/mx/en/imprint/",
+      "source_sha256": "1e0b40f59b811e28e52742cf6636eda5e89bb326fea60b55f903c76095772ff8",
+      "access_status": "public_full_catalog_embedded_in_official_page",
+      "bulk_ingest_allowed": true,
+      "publication_status": "informational_factual_fields_only_with_attribution_no_marketing_descriptions",
+      "observed_count": 314,
+      "notes": "Из 364 embedded rows исключены 50 серий; получено 314 конкретных продуктов без fallback-классификаций и повторных source-вхождений."
+    },
+    {
+      "source_id": "FUCHS_SOUTH_AFRICA_PRODUCT_FINDER",
+      "title": "FUCHS South Africa Product Finder",
+      "owner": "FUCHS LUBRICANTS SOUTH AFRICA",
+      "source_type": "official_manufacturer_embedded_product_catalog",
+      "source_locator": "data/fuchs-south-africa-products.jsonl",
+      "source_url": "https://www.fuchs.com/za/en/products/service-links/product-finder/",
+      "terms_url": "https://www.fuchs.com/za/en/imprint/",
+      "source_sha256": "fe9dd647609f1e93e516a93ff9afc7dbfc2f65965e773409bdd752b5cd0a1f6d",
+      "access_status": "public_full_catalog_embedded_in_official_page",
+      "bulk_ingest_allowed": true,
+      "publication_status": "informational_factual_fields_only_with_attribution_no_marketing_descriptions",
+      "observed_count": 756,
+      "notes": "Из 864 embedded rows исключены 94 серии и 6 единиц оборудования; 8 повторных source-вхождений объединены. Получено 756 конкретных продуктов без fallback-классификаций."
+    },
+    {
       "source_id": "totalenergies-global",
       "title": "TotalEnergies Lubricants Catalog",
       "owner": "TotalEnergies Lubrifiants S.A.",

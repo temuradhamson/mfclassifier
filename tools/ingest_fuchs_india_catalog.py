@@ -71,6 +71,12 @@ def classify_family(title: str, paths: list[list[str]], source_text: str) -> tup
         return "M", "explicit_product_line_and_application"
     if re.search(r"^CASSIDA\s+SILICONE FLUID\b", title, re.I):
         return "I", "explicit_product_line_and_application"
+    if re.search(r"^RENOLIN\s+LUBRENE CORE FLUID\b", title, re.I):
+        return "TF", "explicit_product_line_and_application"
+    if re.search(r"^RENOLIN\s+ROCKDRILL OILS\b", title, re.I):
+        return "I", "explicit_product_line_and_application"
+    if re.search(r"^TITAN\s+FFL-7 A\b", title, re.I):
+        return "T", "explicit_product_line_and_application"
     if re.search(r"^RENOLIN\s+MR\b", title, re.I):
         return "H", "explicit_product_line_and_application"
     if primary_brand_prefix(title) == "RENOCLEAN":
