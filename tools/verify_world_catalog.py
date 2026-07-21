@@ -59,6 +59,8 @@ def main() -> None:
     liqui_moly_current_report = json.loads((ROOT / "data/liqui-moly-current-products-report.json").read_text(encoding="utf-8"))
     liqui_moly_current_rows = [json.loads(line) for line in (ROOT / "data/liqui-moly-current-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     liqui_moly_lifecycle_rows = [json.loads(line) for line in (ROOT / "data/liqui-moly-2020-2026-lifecycle.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    anp_report = json.loads((ROOT / "data/anp-brazil-lubricant-products-report.json").read_text(encoding="utf-8"))
+    anp_rows = [json.loads(line) for line in (ROOT / "data/anp-brazil-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     lines = [json.loads(line) for line in (ROOT / "data/world-catalog-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     assert report["status"] == "seed_only_world_catalog_incomplete"
     assert report["confirmed_world_total"] is None
@@ -80,7 +82,7 @@ def main() -> None:
     assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
     assert not db.execute("PRAGMA foreign_key_check").fetchall()
     assert db.execute("SELECT count(*) FROM products").fetchone()[0] == len(lines)
-    assert len(lines) == 18504
+    assert len(lines) == 31289
     assert report["jaso_source_rows"] == jaso_report["rows"] == 3630
     assert report["jaso_unique_oil_codes"] == jaso_report["unique_oil_codes"] == 3629
     assert report["official_filed_registry_rows"] == 3629
@@ -88,9 +90,11 @@ def main() -> None:
     assert report["official_licensed_registry_rows"] == 3037
     assert report["usda_biopreferred_source_rows"] == biopreferred_report["rows"] == 892
     assert report["official_government_program_rows"] == 892
+    assert report["anp_brazil_source_rows"] == anp_report["normalized_product_grade_rows"] == len(anp_rows) == 12664
+    assert report["official_government_regulatory_registry_rows"] == 12664
     assert report["zf_te_ml_source_rows"] == zf_report["unique_approval_numbers"] == 1498
     assert report["official_oem_approval_rows"] == 5475
-    assert report["official_manufacturer_catalog_rows"] == 4850
+    assert report["official_manufacturer_catalog_rows"] == 4971
     assert report["official_oem_service_recommendation_rows"] == 30
     assert report["allison_source_rows"] == allison_report["products"] == 104
     assert report["driventic_diwa_source_rows"] == driventic_report["products"] == 226
@@ -103,71 +107,71 @@ def main() -> None:
     assert report["man_service_products_matched_to_existing"] == 2
     assert report["man_service_products_added"] == 30
     assert report["fuchs_india_source_rows"] == fuchs_report["products"] == 1007
-    assert report["fuchs_india_products_matched_to_existing"] == 6
-    assert report["fuchs_india_products_added"] == 1001
+    assert report["fuchs_india_products_matched_to_existing"] == 22
+    assert report["fuchs_india_products_added"] == 985
     assert report["fuchs_us_source_rows"] == fuchs_us_report["products"] == 623
-    assert report["fuchs_us_products_matched_to_existing"] == 121
-    assert report["fuchs_us_products_added"] == 502
+    assert report["fuchs_us_products_matched_to_existing"] == 124
+    assert report["fuchs_us_products_added"] == 499
     assert report["fuchs_cross_market_exact_name_family_rows"] == 118
     assert report["fuchs_cross_market_family_conflict_rows"] == 4
     assert report["fuchs_germany_source_rows"] == fuchs_germany_report["products"] == 1464
-    assert report["fuchs_germany_products_matched_to_existing"] == 452
-    assert report["fuchs_germany_products_added"] == 1012
+    assert report["fuchs_germany_products_matched_to_existing"] == 447
+    assert report["fuchs_germany_products_added"] == 1017
     assert report["fuchs_germany_cross_market_exact_name_family_rows"] == 441
     assert report["fuchs_germany_cross_market_family_conflict_rows"] == 79
     assert report["fuchs_poland_source_rows"] == fuchs_poland_report["products"] == 690
-    assert report["fuchs_poland_products_matched_to_existing"] == 553
-    assert report["fuchs_poland_products_added"] == 137
+    assert report["fuchs_poland_products_matched_to_existing"] == 540
+    assert report["fuchs_poland_products_added"] == 150
     assert report["fuchs_poland_cross_market_exact_name_family_rows"] == 560
     assert report["fuchs_poland_cross_market_family_conflict_rows"] == 59
     assert report["fuchs_italy_source_rows"] == fuchs_italy_report["products"] == 1007
-    assert report["fuchs_italy_products_matched_to_existing"] == 652
-    assert report["fuchs_italy_products_added"] == 355
+    assert report["fuchs_italy_products_matched_to_existing"] == 637
+    assert report["fuchs_italy_products_added"] == 370
     assert report["fuchs_italy_cross_market_exact_name_family_rows"] == 657
     assert report["fuchs_italy_cross_market_family_conflict_rows"] == 28
     assert report["fuchs_sweden_source_rows"] == fuchs_sweden_report["products"] == 675
-    assert report["fuchs_sweden_products_matched_to_existing"] == 376
-    assert report["fuchs_sweden_products_added"] == 299
+    assert report["fuchs_sweden_products_matched_to_existing"] == 358
+    assert report["fuchs_sweden_products_added"] == 317
     assert report["fuchs_sweden_cross_market_exact_name_family_rows"] == 379
     assert report["fuchs_sweden_cross_market_family_conflict_rows"] == 17
     assert report["fuchs_spain_source_rows"] == fuchs_spain_report["products"] == 938
-    assert report["fuchs_spain_products_matched_to_existing"] == 736
-    assert report["fuchs_spain_products_added"] == 202
+    assert report["fuchs_spain_products_matched_to_existing"] == 719
+    assert report["fuchs_spain_products_added"] == 219
     assert report["fuchs_spain_cross_market_exact_name_family_rows"] == 743
     assert report["fuchs_spain_cross_market_family_conflict_rows"] == 19
     assert report["fuchs_france_source_rows"] == fuchs_france_report["products"] == 705
-    assert report["fuchs_france_products_matched_to_existing"] == 517
-    assert report["fuchs_france_products_added"] == 188
+    assert report["fuchs_france_products_matched_to_existing"] == 499
+    assert report["fuchs_france_products_added"] == 206
     assert report["fuchs_france_cross_market_exact_name_family_rows"] == 532
     assert report["fuchs_france_cross_market_family_conflict_rows"] == 12
     assert report["fuchs_turkey_source_rows"] == fuchs_turkey_report["products"] == 583
-    assert report["fuchs_turkey_products_matched_to_existing"] == 420
-    assert report["fuchs_turkey_products_added"] == 163
+    assert report["fuchs_turkey_products_matched_to_existing"] == 414
+    assert report["fuchs_turkey_products_added"] == 169
     assert report["fuchs_turkey_cross_market_exact_name_family_rows"] == 423
     assert report["fuchs_turkey_cross_market_family_conflict_rows"] == 5
     assert report["fuchs_canada_source_rows"] == fuchs_canada_report["products"] == 289
-    assert report["fuchs_canada_products_matched_to_existing"] == 148
-    assert report["fuchs_canada_products_added"] == 141
+    assert report["fuchs_canada_products_matched_to_existing"] == 138
+    assert report["fuchs_canada_products_added"] == 151
     assert report["fuchs_canada_cross_market_exact_name_family_rows"] == 152
     assert report["fuchs_canada_cross_market_family_conflict_rows"] == 5
     assert report["fuchs_china_source_rows"] == fuchs_china_report["products"] == 278
-    assert report["fuchs_china_products_matched_to_existing"] == 200
-    assert report["fuchs_china_products_added"] == 78
+    assert report["fuchs_china_products_matched_to_existing"] == 198
+    assert report["fuchs_china_products_added"] == 80
     assert report["fuchs_china_cross_market_exact_name_family_rows"] == 202
     assert report["fuchs_china_cross_market_family_conflict_rows"] == 0
     assert report["fuchs_czech_source_rows"] == fuchs_czech_report["products"] == 1146
-    assert report["fuchs_czech_products_matched_to_existing"] == 1056
-    assert report["fuchs_czech_products_added"] == 90
+    assert report["fuchs_czech_products_matched_to_existing"] == 1035
+    assert report["fuchs_czech_products_added"] == 111
     assert report["fuchs_czech_cross_market_exact_name_family_rows"] == 1063
     assert report["fuchs_czech_cross_market_family_conflict_rows"] == 19
     assert report["fuchs_mexico_source_rows"] == fuchs_mexico_report["products"] == 314
-    assert report["fuchs_mexico_products_matched_to_existing"] == 255
-    assert report["fuchs_mexico_products_added"] == 59
+    assert report["fuchs_mexico_products_matched_to_existing"] == 251
+    assert report["fuchs_mexico_products_added"] == 63
     assert report["fuchs_mexico_cross_market_exact_name_family_rows"] == 258
     assert report["fuchs_mexico_cross_market_family_conflict_rows"] == 3
     assert report["fuchs_south_africa_source_rows"] == fuchs_south_africa_report["products"] == 756
-    assert report["fuchs_south_africa_products_matched_to_existing"] == 723
-    assert report["fuchs_south_africa_products_added"] == 33
+    assert report["fuchs_south_africa_products_matched_to_existing"] == 712
+    assert report["fuchs_south_africa_products_added"] == 44
     assert report["fuchs_south_africa_cross_market_exact_name_family_rows"] == 725
     assert report["fuchs_south_africa_cross_market_family_conflict_rows"] == 2
     assert report["liqui_moly_2020_source_rows"] == liqui_moly_report["products"] == 419
@@ -177,12 +181,12 @@ def main() -> None:
     assert report["liqui_moly_current_products_matched_to_2020"] == 295
     assert report["liqui_moly_current_products_added"] == 152
     assert report["liqui_moly_current_article_skus"] == liqui_moly_current_report["unique_article_skus"] == 985
-    assert report["duplicate_decisions"]["review_cross_source_identity"] == 622
+    assert report["duplicate_decisions"]["review_cross_source_identity"] == 1382
     assert report["duplicate_decisions"]["review_brand_alias_identity"] == 2
     assert report["duplicate_decisions"]["review_liqui_moly_multi_registry_identity"] == 49
     assert report["duplicate_decisions"]["review_liqui_moly_current_multiple_historical_candidates"] == 4
-    assert report["duplicate_decisions"]["review_fuchs_multi_registry_identity"] == 734
-    assert report["duplicate_decisions"]["keep_separate_fuchs_market_family_conflict"] == 335
+    assert report["duplicate_decisions"]["review_fuchs_multi_registry_identity"] == 2049
+    assert report["duplicate_decisions"]["keep_separate_fuchs_market_family_conflict"] == 354
     assert report["aichilon_products_matched_to_existing"] == 255
     assert report["aichilon_products_added"] == 60
     assert report["aichilon_rows_excluded"] == 2
@@ -191,8 +195,9 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_filed_registry'").fetchone()[0] == 3629
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_licensed_registry'").fetchone()[0] == 3037
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_program_catalog'").fetchone()[0] == 892
+    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_regulatory_registry'").fetchone()[0] == 12664
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_approval_registry'").fetchone()[0] == 5475
-    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_manufacturer_product_catalog'").fetchone()[0] == 4850
+    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_manufacturer_product_catalog'").fetchone()[0] == 4971
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_service_recommendation'").fetchone()[0] == 30
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='ALLISON_APPROVAL_NUMBER'").fetchone()[0] == 119
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='MERCEDES_DTFR_PRODUCT_ID'").fetchone()[0] == 1892
@@ -219,6 +224,7 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='LIQUI_MOLY_PART_NUMBER'").fetchone()[0] == 1482
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='LIQUI_MOLY_MASTER_SKU'").fetchone()[0] == 447
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='LIQUI_MOLY_ARTICLE_SKU'").fetchone()[0] == 985
+    assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='ANP_BRAZIL_REGISTRATION_NUMBER'").fetchone()[0] == 12664
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='FUCHS_PRODUCT_UID'").fetchone()[0] == 10605
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='JASO_OIL_CODE'").fetchone()[0] == 3629
     assert db.execute("SELECT count(*) FROM sources WHERE bulk_ingest_allowed=0").fetchone()[0] == len(report["bulk_sources_blocked"])
@@ -446,6 +452,16 @@ def main() -> None:
     assert liqui_moly_current_report["lifecycle_rows"] == len(liqui_moly_lifecycle_rows) == 572
     assert liqui_moly_current_report["lifecycle_output_sha256"] == hashlib.sha256((ROOT / "data/liqui-moly-2020-2026-lifecycle.jsonl").read_bytes()).hexdigest()
     assert all(not ({"description", "image", "subtitle", "components"} & set(row)) for row in liqui_moly_current_rows)
+    assert policy_by_id["ANP_BRAZIL_LUBRICANT_REGISTRY"]["source_sha256"] == anp_report["normalized_output_sha256"]
+    assert policy_by_id["ANP_BRAZIL_LUBRICANT_REGISTRY"]["observed_count"] == len(anp_rows) == 12664
+    assert report["anp_brazil_input_sha256"] == hashlib.sha256((ROOT / "data/anp-brazil-lubricant-products.jsonl").read_bytes()).hexdigest()
+    assert anp_report["csv_rows"] == 14960
+    assert anp_report["duplicate_source_occurrences_merged"] == 2296
+    assert anp_report["unique_registration_numbers"] == 8193
+    assert anp_report["families"] == {"G": 345, "H": 206, "I": 725, "M": 7263, "S": 119, "T": 4006}
+    assert all(row["registration_status"] == "ATIVO" for row in anp_rows)
+    assert all("source_row_numbers" in row and "packages" in row for row in anp_rows)
+    assert all("observation" not in row and "OBS." not in row for row in anp_rows)
     forbidden_tables = {"users", "requests", "request_items", "prices", "oil_market_sales"}
     output_tables = {row[0] for row in db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
     assert not forbidden_tables & output_tables

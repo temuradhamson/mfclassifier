@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-07-20",
+  "checked_at": "2026-07-21",
   "sources": [
     {
       "source_id": "user-supplied-chilon-2026",
@@ -605,6 +605,73 @@
       "bulk_ingest_allowed": false,
       "publication_status": "directory_links_and_source_description_only",
       "notes": "API calls the directory free and states that it covers active licensees and licensed products; the current directory endpoint redirects to account sign-in and no authorized bulk feed was discovered."
+    },
+    {
+      "source_id": "ANP_BRAZIL_LUBRICANT_REGISTRY",
+      "title": "ANP Brazil Registry of Lubricating Oils and Greases",
+      "owner": "Agência Nacional do Petróleo, Gás Natural e Biocombustíveis",
+      "source_type": "official_open_government_csv",
+      "source_locator": "data/anp-brazil-lubricant-products.jsonl",
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/dados-abertos/arquivos/arquivos-registro/dados-abertos-registro-produtos.csv",
+      "terms_url": "https://www.gov.br/pt-br/termos-de-uso",
+      "source_sha256": "7b9774a63691395ca4fe472f9e6d199ba6931cc8a5bcf53adcc41cbbca50add2",
+      "access_status": "public_open_government_data",
+      "bulk_ingest_allowed": true,
+      "publication_status": "normalized_factual_records_with_attribution",
+      "observed_count": 12664,
+      "notes": "Еженедельный государственный CSV. 14 960 исходных строк сведены к 12 664 строкам продукта-класса-вязкости; 2 296 повторных вхождений объединены. Сохранены регистрация, держатель, производитель, назначение, SAE/ISO/NLGI, уровень свойств, состав и фасовки; narrative OBS не переиздаётся."
+    },
+    {
+      "source_id": "deutz-dqc-release-lists",
+      "title": "DEUTZ DQC Oil and Coolant Release Lists",
+      "owner": "DEUTZ AG",
+      "source_type": "official_oem_approval_registry_pdfs",
+      "source_url": "https://www.deutz.com/germany/en/parts-service/operating-liquids/technical-information/",
+      "terms_url": "https://www.deutz.com/germany/en/imprint/",
+      "access_status": "written_permission_or_licensed_feed_required",
+      "bulk_ingest_allowed": false,
+      "publication_status": "source_links_and_version_evidence_only",
+      "observed_count": null,
+      "notes": "Официальная страница публикует списки масел и охлаждающих жидкостей DQC выпуска 07/2026, но copyright notice разрешает копирование материалов только без изменений и не для коммерческих целей. Массовая нормализация отложена до письменного разрешения."
+    },
+    {
+      "source_id": "klueber-global",
+      "title": "Klüber Lubrication Product Catalog",
+      "owner": "Klüber Lubrication München GmbH & Co. KG",
+      "source_type": "manufacturer_website_database",
+      "source_url": "https://www.klueber.com/global/en/products-service/products/",
+      "terms_url": "https://www.klueber.com/ecoma/files/ToU_EN_20210930.pdf?download=1",
+      "access_status": "written_permission_or_licensed_feed_required",
+      "bulk_ingest_allowed": false,
+      "publication_status": "discovery_only_until_permission",
+      "observed_count": null,
+      "notes": "Terms of Use прямо запрещают data mining, robots, scraper и offline reader. Автоматическая выгрузка не выполняется."
+    },
+    {
+      "source_id": "petro-canada-lubricants",
+      "title": "Petro-Canada Lubricants Product Catalog",
+      "owner": "Suncor Energy Inc.",
+      "source_type": "manufacturer_website_database",
+      "source_url": "https://lubricants.petro-canada.com/en-ca/products",
+      "terms_url": "https://www.petro-canada.ca/en/legal-privacy",
+      "access_status": "written_permission_or_licensed_feed_required",
+      "bulk_ingest_allowed": false,
+      "publication_status": "discovery_only_until_permission",
+      "observed_count": null,
+      "notes": "Условия сайта запрещают screen scraping без явного разрешения. Нужен официальный feed или письменное разрешение."
+    },
+    {
+      "source_id": "motul-product-catalog",
+      "title": "Motul Product Catalog",
+      "owner": "Motul",
+      "source_type": "manufacturer_catalog_pdf_and_website",
+      "source_url": "https://cms.motul.com/images/MOTUL_Katalog_2025_EN_Single_Pages_48d8b654c3.pdf",
+      "terms_url": "https://www.motul.com/en-GB/information/privacy_policy",
+      "access_status": "written_permission_or_licensed_feed_required",
+      "bulk_ingest_allowed": false,
+      "publication_status": "count_evidence_only_until_permission",
+      "observed_count": 19000,
+      "notes": "Корпоративное раскрытие сообщает более 19 000 активных references и более 400 formulations; это не нормализованные продуктовые строки. Условия ограничивают копирование и воспроизведение материалов, поэтому массовый импорт каталога не выполняется без разрешения."
     },
     {
       "source_id": "nsf-white-book",

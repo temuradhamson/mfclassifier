@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "status": "official_open_government_registry_normalized",
+  "snapshot_date": "2026-07-21",
+  "source_page_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/dados-abertos/registro-de-oleos-e-graxas-lubrificantes",
+  "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/dados-abertos/arquivos/arquivos-registro/dados-abertos-registro-produtos.csv",
+  "metadata_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/dados-abertos/arquivos/arquivos-registro/metadados-registro-produtos.pdf",
+  "terms_url": "https://www.gov.br/pt-br/termos-de-uso",
+  "source_sha256": "bed60169830c557cf4b79e37f8c0bbd41ff3525455b06fb1bff8de2ce6815099",
+  "normalized_output_sha256": "7b9774a63691395ca4fe472f9e6d199ba6931cc8a5bcf53adcc41cbbca50add2",
+  "csv_rows": 14960,
+  "normalized_product_grade_rows": 12664,
+  "duplicate_source_occurrences_merged": 2296,
+  "unique_registration_numbers": 8193,
+  "unique_commercial_names": 8114,
+  "registration_holders": 303,
+  "families": {
+    "G": 345,
+    "H": 206,
+    "I": 725,
+    "M": 7263,
+    "S": 119,
+    "T": 4006
+  },
+  "product_types": {
+    "GRAXA LUBRIFICANTE": 345,
+    "ÓLEO LUBRIFICANTE": 12319
+  },
+  "classification_basis": {
+    "anp_aviation_gear_or_transmission_application": 3,
+    "anp_aviation_piston_engine_application": 42,
+    "anp_biodegradable_or_unresolved_special_oil": 71,
+    "anp_incidental_food_contact_industrial_oil": 725,
+    "anp_mixed_aviation_hydraulic_turbine_application": 48,
+    "anp_regulatory_purpose_engine": 7221,
+    "anp_regulatory_purpose_power_steering_hydraulic": 206,
+    "anp_regulatory_purpose_transmission_or_multifunctional_drivetrain": 4003,
+    "source_product_type_grease": 345
+  },
+  "rights_note": "ANP publishes this weekly file as open data. Only normalized factual fields are republished with attribution; narrative observations and source document layout are omitted.",
+  "grain_note": "One row is a distinct ANP registration + commercial name + holder + application + technical grade/performance combination. Package-only and exact repeated occurrences are merged."
+}

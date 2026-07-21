@@ -41,6 +41,7 @@ VOLVO_GENUINE_JSONL = ROOT / "data" / "volvo-genuine-fluids.jsonl"
 MAN_SERVICE_JSONL = ROOT / "data" / "man-service-products.jsonl"
 LIQUI_MOLY_2020_JSONL = ROOT / "data" / "liqui-moly-2020-products.jsonl"
 LIQUI_MOLY_CURRENT_JSONL = ROOT / "data" / "liqui-moly-current-products.jsonl"
+ANP_BRAZIL_JSONL = ROOT / "data" / "anp-brazil-lubricant-products.jsonl"
 FUCHS_INDIA_JSONL = ROOT / "data" / "fuchs-india-products.jsonl"
 FUCHS_US_JSONL = ROOT / "data" / "fuchs-us-products.jsonl"
 FUCHS_GERMANY_JSONL = ROOT / "data" / "fuchs-germany-products.jsonl"
@@ -838,6 +839,66 @@ def merge_liqui_moly_current_evidence(target: dict, source_record: dict, raw: di
             existing_codes.add((code["system"], code["value"]))
 
 
+def anp_brazil_record(row: dict) -> dict:
+    """Convert one normalized ANP regulatory product-grade row to catalog form."""
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["registration_holder"],
+        "name": row["product_name"],
+        "category": "Действующий государственный реестр масел и смазок ANP Бразилии",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": row["sae"],
+        "api_class": row["performance_level"],
+        "viscosity": row["iso_vg"],
+        "grease_class": row["nlgi"],
+        "source": "ANP_BRAZIL_LUBRICANT_REGISTRY",
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["producer"] or row["registration_holder"],
+        "brand": row["registration_holder"],
+        "market": row["market"],
+        "source_id": "ANP_BRAZIL_LUBRICANT_REGISTRY",
+        "source_record_id": row["source_record_id"],
+        "source_row": row["source_row_numbers"][0],
+        "evidence_status": "official_government_regulatory_registry",
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update({
+        "anp_registration_status": row["registration_status"],
+        "anp_registration_holder": row["registration_holder"],
+        "anp_registration_holder_cnpj": row["registration_holder_cnpj"],
+        "anp_company_type": row["company_type"],
+        "anp_producer": row["producer"],
+        "anp_origin": row["origin"],
+        "anp_product_type": row["product_type"],
+        "anp_regulatory_purpose": row["regulatory_purpose"],
+        "application": row["application"],
+        "base_oil_composition": row["base_oil_composition"],
+        "performance_raw": row["performance_level"],
+        "anp_process_numbers": row["process_numbers"],
+        "anp_registration_years": row["registration_years"],
+        "packages": row["packages"],
+        "classification_basis": row["classification_basis"],
+        "source_occurrence_count": row["source_occurrence_count"],
+        "source_row_numbers": row["source_row_numbers"],
+        "source_url": row["source_url"],
+        "metadata_url": row["metadata_url"],
+    })
+    record["canonical_key"] += f"|anp_brazil_record:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    record["codes"]["anp_registration_number"] = {
+        "system": "ANP_BRAZIL_REGISTRATION_NUMBER",
+        "value": row["registration_number"],
+        "source_id": "ANP_BRAZIL_LUBRICANT_REGISTRY",
+        "status": "active_in_current_anp_snapshot",
+    }
+    return record
+
+
 def liqui_moly_identity_name(value: str) -> str:
     return re.sub(r"^liqui moly(?: gmbh)?\s+", "", normalize(value)).strip()
 
@@ -1353,6 +1414,9 @@ def main() -> None:
             if candidate_keys:
                 liqui_moly_current_review_keys.append((target["canonical_key"], candidate_keys))
         liqui_moly_current_product_key[raw["source_record_id"]] = target["canonical_key"]
+    anp_brazil_source_rows = [json.loads(line) for line in ANP_BRAZIL_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    anp_brazil_records = [anp_brazil_record(row) for row in anp_brazil_source_rows]
+    input_records.extend(anp_brazil_records)
     fuchs_india_source_rows = [json.loads(line) for line in FUCHS_INDIA_JSONL.read_text(encoding="utf-8").splitlines() if line]
     fuchs_india_records = [fuchs_catalog_record(row, "FUCHS_INDIA_PRODUCT_FINDER", "India") for row in fuchs_india_source_rows]
     existing_by_name_family = defaultdict(list)
@@ -2499,6 +2563,7 @@ def main() -> None:
         "man_service_input_sha256": hashlib.sha256(MAN_SERVICE_JSONL.read_bytes()).hexdigest(),
         "liqui_moly_2020_input_sha256": hashlib.sha256(LIQUI_MOLY_2020_JSONL.read_bytes()).hexdigest(),
         "liqui_moly_current_input_sha256": hashlib.sha256(LIQUI_MOLY_CURRENT_JSONL.read_bytes()).hexdigest(),
+        "anp_brazil_input_sha256": hashlib.sha256(ANP_BRAZIL_JSONL.read_bytes()).hexdigest(),
         "fuchs_india_input_sha256": hashlib.sha256(FUCHS_INDIA_JSONL.read_bytes()).hexdigest(),
         "fuchs_us_input_sha256": hashlib.sha256(FUCHS_US_JSONL.read_bytes()).hexdigest(),
         "fuchs_germany_input_sha256": hashlib.sha256(FUCHS_GERMANY_JSONL.read_bytes()).hexdigest(),
@@ -2523,7 +2588,9 @@ def main() -> None:
         "official_licensed_registry_rows": sum(r["evidence_status"] == "official_licensed_registry" for r in records),
         "official_licensed_source_rows": len(licensed_source_rows),
         "official_government_program_rows": sum(r["evidence_status"] == "official_government_program_catalog" for r in records),
+        "official_government_regulatory_registry_rows": sum(r["evidence_status"] == "official_government_regulatory_registry" for r in records),
         "usda_biopreferred_source_rows": len(biopreferred_source_rows),
+        "anp_brazil_source_rows": len(anp_brazil_source_rows),
         "official_oem_approval_rows": sum(r["evidence_status"] == "official_oem_approval_registry" for r in records),
         "official_manufacturer_catalog_rows": sum(r["evidence_status"] == "official_manufacturer_product_catalog" for r in records),
         "official_oem_service_recommendation_rows": sum(r["evidence_status"] == "official_oem_service_recommendation" for r in records),
