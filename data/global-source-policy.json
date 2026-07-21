@@ -427,6 +427,21 @@
       "notes": "Из 765 embedded rows исключены 42 серии и одна единица оборудования; 17 повторных source-вхождений объединены. Получено 705 конкретных продуктов; французские факты использованы для классификации карточек без групп, описания не публикуются."
     },
     {
+      "source_id": "FUCHS_TURKEY_PRODUCT_FINDER",
+      "title": "FUCHS Turkey Product Finder",
+      "owner": "OPET FUCHS MADENI YAĞ SAN. TIC. A.Ş.",
+      "source_type": "official_manufacturer_embedded_product_catalog",
+      "source_locator": "data/fuchs-turkey-products.jsonl",
+      "source_url": "https://www.fuchs.com/tr/en/products/service-links/product-finder/",
+      "terms_url": "https://www.fuchs.com/tr/en/company/policies-and-approvals/terms-conditions-and-policies/",
+      "source_sha256": "4d826d9461d623a7532acb5b8c1f3b713fa001fde171bc9e11904e0b7301066a",
+      "access_status": "public_full_catalog_embedded_in_official_page_no_general_website_imprint",
+      "bulk_ingest_allowed": true,
+      "publication_status": "conservative_factual_fields_only_with_attribution_no_marketing_descriptions",
+      "observed_count": 583,
+      "notes": "Из 632 embedded rows исключены 44 серии и две единицы оборудования; три повторных source-вхождения объединены. Получено 583 конкретных продукта. Общий website-use imprint не найден, поэтому публикация ограничена атрибутированными фактическими полями, UID/URL и хэшами без описаний."
+    },
+    {
       "source_id": "totalenergies-global",
       "title": "TotalEnergies Lubricants Catalog",
       "owner": "TotalEnergies Lubrifiants S.A.",

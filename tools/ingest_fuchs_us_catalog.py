@@ -33,6 +33,7 @@ def ingest_catalog(
     *, out: Path, report_path: Path, source_url: str, imprint_url: str,
     source_id: str, record_prefix: str, manufacturer: str, market: str,
     expected_embedded: int, expected_products: int,
+    rights_review: str = "Only factual fields are republished with attribution. Marketing descriptions are excluded and represented only by SHA-256 evidence hashes; the applicable imprint limits copying of documentation for commercial use.",
 ) -> dict:
     payload = fetch(source_url)
     imprint_payload = fetch(imprint_url)
@@ -135,7 +136,7 @@ def ingest_catalog(
         "compound_designation_review_rows": sum(bool(row["grain_warning"]) for row in records),
         "classification_basis": dict(sorted(Counter(row["classification_basis"] for row in records).items())),
         "normalized_output_sha256": hashlib.sha256(out.read_bytes()).hexdigest(),
-        "rights_review": "Only factual fields are republished with attribution. Marketing descriptions are excluded and represented only by SHA-256 evidence hashes; the applicable imprint limits copying of documentation for commercial use.",
+        "rights_review": rights_review,
         "publication_scope": "Product identity, region, group, specifications, approvals, recommendations and derived technical fields; no marketing descriptions or page layout.",
     }
     report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

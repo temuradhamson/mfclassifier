@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-07-20",
+  "source_id": "FUCHS_TURKEY_PRODUCT_FINDER",
+  "source_url": "https://www.fuchs.com/tr/en/products/service-links/product-finder/",
+  "imprint_url": "https://www.fuchs.com/tr/en/company/policies-and-approvals/terms-conditions-and-policies/",
+  "source_html_sha256": "5fce0c8e0ff7c1aa2f8fe6907201d5532f41a1e6104909bca251b9ba6c97380a",
+  "imprint_html_sha256": "7573596dfc30ccf3417d52786960015fde33b5686188501e0f2c56b4191964de",
+  "embedded_source_rows": 632,
+  "products": 583,
+  "source_series_rows_excluded": 44,
+  "equipment_rows_excluded": 2,
+  "placeholder_rows_excluded": 0,
+  "duplicate_source_occurrences_merged": 3,
+  "families": {
+    "C": 15,
+    "E": 1,
+    "G": 138,
+    "H": 28,
+    "I": 37,
+    "M": 31,
+    "S": 37,
+    "T": 43,
+    "TF": 253
+  },
+  "brand_lines": 31,
+  "compound_designation_review_rows": 24,
+  "classification_basis": {
+    "brand_line_and_explicit_application": 65,
+    "explicit_text": 22,
+    "industrial_product_group": 34,
+    "multifunctional_product_groups": 12,
+    "product_group": 102,
+    "product_group_or_explicit_product_form": 138,
+    "special_product_fallback": 11,
+    "special_product_group": 14,
+    "technical_fluid_product_group": 185
+  },
+  "normalized_output_sha256": "4d826d9461d623a7532acb5b8c1f3b713fa001fde171bc9e11904e0b7301066a",
+  "rights_review": "The official Turkey site provides no general website-use imprint. Publication is conservatively limited to attributed factual identity, classification, specification, UID/URL and hash fields; marketing descriptions and page layout are excluded.",
+  "publication_scope": "Product identity, region, group, specifications, approvals, recommendations and derived technical fields; no marketing descriptions or page layout."
+}
