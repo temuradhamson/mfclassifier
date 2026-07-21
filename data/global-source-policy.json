@@ -412,6 +412,21 @@
       "notes": "Из 1 017 embedded rows исключены 69 серий, 6 единиц оборудования и одна явная тестовая placeholder-карточка; три повторных source-вхождения объединены. Получено 938 конкретных продуктов, публикуются только факты, UID/URL и хэши."
     },
     {
+      "source_id": "FUCHS_FRANCE_PRODUCT_FINDER",
+      "title": "FUCHS France Product Finder",
+      "owner": "FUCHS LUBRIFIANT FRANCE S.A.",
+      "source_type": "official_manufacturer_embedded_product_catalog",
+      "source_locator": "data/fuchs-france-products.jsonl",
+      "source_url": "https://www.fuchs.com/fr/en/products/service-links/product-finder/",
+      "terms_url": "https://www.fuchs.com/fr/en/imprint/",
+      "source_sha256": "4a5b8846dd98a84decb9a7f995ef85d3f33ab336aa63a844425ebd5e5d0f45fb",
+      "access_status": "public_full_catalog_embedded_in_official_page",
+      "bulk_ingest_allowed": true,
+      "publication_status": "factual_fields_only_with_attribution_no_marketing_descriptions",
+      "observed_count": 705,
+      "notes": "Из 765 embedded rows исключены 42 серии и одна единица оборудования; 17 повторных source-вхождений объединены. Получено 705 конкретных продуктов; французские факты использованы для классификации карточек без групп, описания не публикуются."
+    },
+    {
       "source_id": "totalenergies-global",
       "title": "TotalEnergies Lubricants Catalog",
       "owner": "TotalEnergies Lubrifiants S.A.",

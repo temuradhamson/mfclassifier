@@ -3,7 +3,7 @@
   "run_id": "seed-2026-07-20",
   "snapshot_date": "2026-07-20",
   "status": "seed_only_world_catalog_incomplete",
-  "input_rows": 17195,
+  "input_rows": 17383,
   "normalized_input_sha256": "819d11779ffccddf9683a9b18a70e39bd5a1b8d72d9811fb5bb46d136b0f8073",
   "jaso_normalized_input_sha256": "b664fea5aee78de7303c33bf13d3c9ac26c8779b78beac24c54295b4d58603d3",
   "official_licensed_input_sha256": "533183ffbc755268ef12b54a556d1f3ea78db4fc80b564e12c391a10a8e2075e",
@@ -22,18 +22,19 @@
   "fuchs_italy_input_sha256": "c5c925c30e2c4b447066c145952566ea7bce654386f10f40640d41350a477943",
   "fuchs_sweden_input_sha256": "965d55eb9464233dadf86ce086e6115cf4b091dd52ab70fc1403c882c91c586a",
   "fuchs_spain_input_sha256": "1849b4e9f95b14dea8a1efb8e51895ddcdbcacde5b87ce29e657d19e6448f717",
-  "canonical_rows": 17194,
+  "fuchs_france_input_sha256": "4a5b8846dd98a84decb9a7f995ef85d3f33ab336aa63a844425ebd5e5d0f45fb",
+  "canonical_rows": 17382,
   "brands": 1768,
   "families": {
-    "C": 111,
+    "C": 113,
     "E": 10,
-    "G": 1253,
-    "H": 608,
-    "I": 265,
-    "M": 8790,
-    "S": 1684,
-    "T": 2750,
-    "TF": 1690,
+    "G": 1284,
+    "H": 620,
+    "I": 277,
+    "M": 8817,
+    "S": 1687,
+    "T": 2761,
+    "TF": 1780,
     "U": 33
   },
   "project_source_rows": 443,
@@ -45,7 +46,7 @@
   "official_government_program_rows": 892,
   "usda_biopreferred_source_rows": 892,
   "official_oem_approval_rows": 5475,
-  "official_manufacturer_catalog_rows": 3540,
+  "official_manufacturer_catalog_rows": 3728,
   "official_oem_service_recommendation_rows": 30,
   "zf_te_ml_source_rows": 1498,
   "allison_source_rows": 104,
@@ -91,6 +92,11 @@
   "fuchs_spain_products_added": 202,
   "fuchs_spain_cross_market_exact_name_family_rows": 743,
   "fuchs_spain_cross_market_family_conflict_rows": 19,
+  "fuchs_france_source_rows": 705,
+  "fuchs_france_products_matched_to_existing": 517,
+  "fuchs_france_products_added": 188,
+  "fuchs_france_cross_market_exact_name_family_rows": 532,
+  "fuchs_france_cross_market_family_conflict_rows": 12,
   "jaso_source_rows": 3630,
   "jaso_unique_oil_codes": 3629,
   "aichilon_source_products": 317,
@@ -103,13 +109,13 @@
   "duplicate_decisions": {
     "merged": 1,
     "keep_separate_specification_conflict": 2433,
-    "review_cross_source_identity": 404,
+    "review_cross_source_identity": 444,
     "review_brand_alias_identity": 2,
-    "review_fuchs_multi_registry_identity": 348,
-    "keep_separate_fuchs_market_family_conflict": 269
+    "review_fuchs_multi_registry_identity": 443,
+    "keep_separate_fuchs_market_family_conflict": 289
   },
   "quality_issues": {
-    "professional_key_incomplete": 909,
+    "professional_key_incomplete": 930,
     "classification_family_conflict": 214
   },
   "bulk_sources_allowed": [
@@ -142,7 +148,8 @@
     "FUCHS_POLAND_PRODUCT_FINDER",
     "FUCHS_ITALY_PRODUCT_FINDER",
     "FUCHS_SWEDEN_PRODUCT_FINDER",
-    "FUCHS_SPAIN_PRODUCT_FINDER"
+    "FUCHS_SPAIN_PRODUCT_FINDER",
+    "FUCHS_FRANCE_PRODUCT_FINDER"
   ],
   "bulk_sources_blocked": [
     "totalenergies-global",

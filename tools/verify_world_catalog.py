@@ -40,6 +40,8 @@ def main() -> None:
     fuchs_sweden_rows = [json.loads(line) for line in (ROOT / "data/fuchs-sweden-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     fuchs_spain_report = json.loads((ROOT / "data/fuchs-spain-products-report.json").read_text(encoding="utf-8"))
     fuchs_spain_rows = [json.loads(line) for line in (ROOT / "data/fuchs-spain-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    fuchs_france_report = json.loads((ROOT / "data/fuchs-france-products-report.json").read_text(encoding="utf-8"))
+    fuchs_france_rows = [json.loads(line) for line in (ROOT / "data/fuchs-france-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     lines = [json.loads(line) for line in (ROOT / "data/world-catalog-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     assert report["status"] == "seed_only_world_catalog_incomplete"
     assert report["confirmed_world_total"] is None
@@ -61,7 +63,7 @@ def main() -> None:
     assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
     assert not db.execute("PRAGMA foreign_key_check").fetchall()
     assert db.execute("SELECT count(*) FROM products").fetchone()[0] == len(lines)
-    assert len(lines) == 17194
+    assert len(lines) == 17382
     assert report["jaso_source_rows"] == jaso_report["rows"] == 3630
     assert report["jaso_unique_oil_codes"] == jaso_report["unique_oil_codes"] == 3629
     assert report["official_filed_registry_rows"] == 3629
@@ -71,7 +73,7 @@ def main() -> None:
     assert report["official_government_program_rows"] == 892
     assert report["zf_te_ml_source_rows"] == zf_report["unique_approval_numbers"] == 1498
     assert report["official_oem_approval_rows"] == 5475
-    assert report["official_manufacturer_catalog_rows"] == 3540
+    assert report["official_manufacturer_catalog_rows"] == 3728
     assert report["official_oem_service_recommendation_rows"] == 30
     assert report["allison_source_rows"] == allison_report["products"] == 104
     assert report["driventic_diwa_source_rows"] == driventic_report["products"] == 226
@@ -116,10 +118,15 @@ def main() -> None:
     assert report["fuchs_spain_products_added"] == 202
     assert report["fuchs_spain_cross_market_exact_name_family_rows"] == 743
     assert report["fuchs_spain_cross_market_family_conflict_rows"] == 19
-    assert report["duplicate_decisions"]["review_cross_source_identity"] == 404
+    assert report["fuchs_france_source_rows"] == fuchs_france_report["products"] == 705
+    assert report["fuchs_france_products_matched_to_existing"] == 517
+    assert report["fuchs_france_products_added"] == 188
+    assert report["fuchs_france_cross_market_exact_name_family_rows"] == 532
+    assert report["fuchs_france_cross_market_family_conflict_rows"] == 12
+    assert report["duplicate_decisions"]["review_cross_source_identity"] == 444
     assert report["duplicate_decisions"]["review_brand_alias_identity"] == 2
-    assert report["duplicate_decisions"]["review_fuchs_multi_registry_identity"] == 348
-    assert report["duplicate_decisions"]["keep_separate_fuchs_market_family_conflict"] == 269
+    assert report["duplicate_decisions"]["review_fuchs_multi_registry_identity"] == 443
+    assert report["duplicate_decisions"]["keep_separate_fuchs_market_family_conflict"] == 289
     assert report["aichilon_products_matched_to_existing"] == 255
     assert report["aichilon_products_added"] == 60
     assert report["aichilon_rows_excluded"] == 2
@@ -129,7 +136,7 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_licensed_registry'").fetchone()[0] == 3037
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_program_catalog'").fetchone()[0] == 892
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_approval_registry'").fetchone()[0] == 5475
-    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_manufacturer_product_catalog'").fetchone()[0] == 3540
+    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_manufacturer_product_catalog'").fetchone()[0] == 3728
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_service_recommendation'").fetchone()[0] == 30
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='ALLISON_APPROVAL_NUMBER'").fetchone()[0] == 119
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='MERCEDES_DTFR_PRODUCT_ID'").fetchone()[0] == 1892
@@ -144,7 +151,8 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='FUCHS_ITALY_PRODUCT_FINDER'").fetchone()[0] == 1007
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='FUCHS_SWEDEN_PRODUCT_FINDER'").fetchone()[0] == 675
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='FUCHS_SPAIN_PRODUCT_FINDER'").fetchone()[0] == 938
-    assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='FUCHS_PRODUCT_UID'").fetchone()[0] == 6502
+    assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='FUCHS_FRANCE_PRODUCT_FINDER'").fetchone()[0] == 705
+    assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='FUCHS_PRODUCT_UID'").fetchone()[0] == 7224
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='JASO_OIL_CODE'").fetchone()[0] == 3629
     assert db.execute("SELECT count(*) FROM sources WHERE bulk_ingest_allowed=0").fetchone()[0] == len(report["bulk_sources_blocked"])
     motor_enkt = db.execute("""
@@ -274,6 +282,17 @@ def main() -> None:
     assert fuchs_spain_report["families"] == {"C": 20, "G": 213, "H": 112, "I": 40, "M": 106, "S": 68, "T": 118, "TF": 260, "U": 1}
     assert len(fuchs_spain_rows) == 938
     assert all(not ({"description", "subtitle", "components"} & set(row)) for row in fuchs_spain_rows)
+    assert policy_by_id["FUCHS_FRANCE_PRODUCT_FINDER"]["source_sha256"] == fuchs_france_report["normalized_output_sha256"]
+    assert policy_by_id["FUCHS_FRANCE_PRODUCT_FINDER"]["observed_count"] == fuchs_france_report["products"]
+    assert fuchs_france_report["embedded_source_rows"] == 765
+    assert fuchs_france_report["source_series_rows_excluded"] == 42
+    assert fuchs_france_report["equipment_rows_excluded"] == 1
+    assert fuchs_france_report["placeholder_rows_excluded"] == 0
+    assert fuchs_france_report["duplicate_source_occurrences_merged"] == 17
+    assert fuchs_france_report["families"] == {"C": 12, "G": 170, "H": 22, "I": 27, "M": 118, "S": 25, "T": 99, "TF": 232}
+    assert fuchs_france_report["classification_basis"]["special_product_fallback"] == 3
+    assert len(fuchs_france_rows) == 705
+    assert all(not ({"description", "subtitle", "components"} & set(row)) for row in fuchs_france_rows)
     forbidden_tables = {"users", "requests", "request_items", "prices", "oil_market_sales"}
     output_tables = {row[0] for row in db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
     assert not forbidden_tables & output_tables
