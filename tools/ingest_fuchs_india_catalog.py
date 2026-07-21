@@ -125,7 +125,7 @@ def classify_family(title: str, paths: list[list[str]], source_text: str) -> tup
         return "G", "brand_line_and_explicit_application"
     if re.search(r"\bengine oil\b|(?:oil|lubricant) for [^.]{0,40}engines|olej(?:e)? do silnik|olej silnik|olio (?:per )?motor|olio motore|motori? [24][ -]?tempi|lubrifiant (?:pour )?moteur|moteurs? [24][ -]?temps", text):
         return "M", "explicit_text"
-    if primary_brand_prefix(title) in {"ECOCOOL", "ECOCUT", "FERROFORM", "LUBRODAL", "NEUTRAFILM", "PLANTOCUT", "PLANTOFORM", "RATAK", "RENOCAST", "RENOFORM", "SAWBAND", "SILKUT", "SOLCENIC", "THERMISOL", "VISCOR", "VITROLIS", "WISURA"}:
+    if primary_brand_prefix(title) in {"ECOCOOL", "ECOCUT", "FERROFORM", "LUBRODAL", "NEUTRAFILM", "PLANTOCUT", "PLANTOFORM", "RATAK", "RENOCAST", "RENOCLEAN", "RENOFORM", "SAWBAND", "SILKUT", "SOLCENIC", "THERMISOL", "VISCOR", "VITROLIS", "WISURA"}:
         return "TF", "brand_line_and_explicit_application"
     if re.search(r"\bchain (?:oil|lube|lubricant)\b|\brope lubricant\b", text):
         return "I", "explicit_text"
@@ -133,7 +133,7 @@ def classify_family(title: str, paths: list[list[str]], source_text: str) -> tup
         return "H", "explicit_text"
     if re.search(r"\bshock absorber\b", text):
         return "H", "explicit_text"
-    if re.search(r"\bcompressor\b|\brefrigeration\b|\bvacuum pump\b", text):
+    if re.search(r"\bcompressor\b|\brefrigeration\b|\bvacuum pump\b|\bairline lubric", text):
         return "C", "explicit_text"
     if re.search(r"\bgear oil\b|\btransmission\b|\batf\b|\baxle\b|transfer case|ripartitor[ei] di coppia", text):
         return "T", "explicit_text"

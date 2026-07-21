@@ -442,6 +442,21 @@
       "notes": "Из 632 embedded rows исключены 44 серии и две единицы оборудования; три повторных source-вхождения объединены. Получено 583 конкретных продукта. Общий website-use imprint не найден, поэтому публикация ограничена атрибутированными фактическими полями, UID/URL и хэшами без описаний."
     },
     {
+      "source_id": "FUCHS_CANADA_PRODUCT_FINDER",
+      "title": "FUCHS Canada Product Finder",
+      "owner": "FUCHS LUBRICANTS CANADA LTD.",
+      "source_type": "official_manufacturer_embedded_product_catalog",
+      "source_locator": "data/fuchs-canada-products.jsonl",
+      "source_url": "https://www.fuchs.com/ca/en/products/service-links/product-finder/",
+      "terms_url": "https://www.fuchs.com/ca/en/imprint/",
+      "source_sha256": "262921ad9a11571377dc878e252ecfd7c0ecea78b29914f5085571eab5c48e36",
+      "access_status": "public_full_catalog_embedded_in_official_page",
+      "bulk_ingest_allowed": true,
+      "publication_status": "factual_fields_only_with_attribution_no_marketing_descriptions",
+      "observed_count": 289,
+      "notes": "Из 323 embedded rows исключены 34 серии; остальные 289 строк являются конкретными продуктами без оборудования и повторных source-вхождений. Две карточки без групп классифицированы по официальному назначению; описания не публикуются."
+    },
+    {
       "source_id": "totalenergies-global",
       "title": "TotalEnergies Lubricants Catalog",
       "owner": "TotalEnergies Lubrifiants S.A.",

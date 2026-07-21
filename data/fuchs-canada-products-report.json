@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-07-20",
+  "source_id": "FUCHS_CANADA_PRODUCT_FINDER",
+  "source_url": "https://www.fuchs.com/ca/en/products/service-links/product-finder/",
+  "imprint_url": "https://www.fuchs.com/ca/en/imprint/",
+  "source_html_sha256": "2ace42d6d406e44c854824712861c559d4222d2a22806e319f79e07f44563763",
+  "imprint_html_sha256": "f1e4c1bd91e1795159c2177a67f2e4ea76fdf465f47190e3be37fadf1c47bce0",
+  "embedded_source_rows": 323,
+  "products": 289,
+  "source_series_rows_excluded": 34,
+  "equipment_rows_excluded": 0,
+  "placeholder_rows_excluded": 0,
+  "duplicate_source_occurrences_merged": 0,
+  "families": {
+    "C": 7,
+    "G": 36,
+    "H": 10,
+    "I": 29,
+    "M": 21,
+    "S": 11,
+    "T": 33,
+    "TF": 142
+  },
+  "brand_lines": 22,
+  "compound_designation_review_rows": 2,
+  "classification_basis": {
+    "brand_line_and_explicit_application": 1,
+    "chain_lubricant_product_group": 1,
+    "explicit_product_line_and_application": 3,
+    "explicit_text": 4,
+    "industrial_product_group": 25,
+    "multifunctional_product_groups": 7,
+    "product_group": 69,
+    "product_group_or_explicit_product_form": 36,
+    "special_product_group": 4,
+    "technical_fluid_product_group": 139
+  },
+  "normalized_output_sha256": "262921ad9a11571377dc878e252ecfd7c0ecea78b29914f5085571eab5c48e36",
+  "rights_review": "Only factual fields are republished with attribution. Marketing descriptions are excluded and represented only by SHA-256 evidence hashes; the applicable imprint limits copying of documentation for commercial use.",
+  "publication_scope": "Product identity, region, group, specifications, approvals, recommendations and derived technical fields; no marketing descriptions or page layout."
+}
