@@ -1,0 +1,31 @@
+{
+  "dataset_snapshot_date": "2026-01-31",
+  "duplicate_package_occurrences_merged": 1,
+  "families": {
+    "H": 18,
+    "I": 2
+  },
+  "grain_note": "One row is certificate + manufacturer + normalized product identity. One package-specific 20-Liter row is merged into its base product while provenance is retained.",
+  "manufacturers": 6,
+  "normalized_output_sha256": "50196124cfaee2de152ae9aec9c710f2720a9c5e439151a3c4fe13a4cc748e5c",
+  "normalized_products": 20,
+  "official_uses": {
+    "기계유": 1,
+    "유압 작동유": 15,
+    "유압 작동유(ISO VG 32)": 1,
+    "유압 작동유(ISO VG 46)": 1,
+    "유압 작동유(ISO VG 68)": 1,
+    "절삭유제(비수용성 절삭유, 2종, 4호)": 1
+  },
+  "portal_metadata_rows_reported": 99602,
+  "privacy_note": "Business registration numbers, headquarters/factory locations and factory identifiers are excluded from the normalized output.",
+  "rights_note": "The official Korean Public Data Portal marks the file as free of use restrictions and available without login.",
+  "schema_version": 1,
+  "source_EL611_rows": 21,
+  "source_count_discrepancy_note": "The portal metadata reports 99,602 rows, while the downloaded 2026-01-31 CSV contains 240,695 data rows; the parser records the observed file count and filters only exact EL611 category rows.",
+  "source_csv_rows_observed": 240695,
+  "source_download_url": "https://www.data.go.kr/cmm/cmm/fileDownload.do?atchFileId=FILE_000000003599199&fileDetailSn=1&insertDataPrcus=N",
+  "source_file_sha256": "dede842165f1b527b18619732d1ade379d8d3db6ec2d084e151f82f805fb508c",
+  "source_page_url": "https://www.data.go.kr/data/15043624/fileData.do",
+  "status": "official_open_government_ecolabel_lubricants_normalized"
+}

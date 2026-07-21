@@ -715,6 +715,34 @@
       "notes": "Официальная страница DE-UZ 178 показывает 149 product cards и прямо предлагает XLS-Datei. 149 export-строк нормализованы в 148 identities manufacturer + product; одна точная дублирующая identity объединена с сохранением обеих product-page ссылок. Семь официальных категорий дали 159 category occurrences. Адреса, телефоны, email, изображения и маркетинговые описания не переносятся."
     },
     {
+      "source_id": "KOREA_ECOLABEL_EL611",
+      "title": "Korea Eco-Label certification records — EL611 Lubricants",
+      "owner": "Korea Environmental Industry & Technology Institute (KEITI)",
+      "source_type": "official_open_government_ecolabel_csv",
+      "source_locator": "data/korea-ecolabel-el611-lubricants.jsonl",
+      "source_url": "https://www.data.go.kr/data/15043624/fileData.do",
+      "terms_url": "https://www.data.go.kr/data/15043624/fileData.do",
+      "source_sha256": "50196124cfaee2de152ae9aec9c710f2720a9c5e439151a3c4fe13a4cc748e5c",
+      "access_status": "public_official_csv_no_login_use_restrictions_none",
+      "bulk_ingest_allowed": true,
+      "publication_status": "normalized_factual_certification_records_with_attribution",
+      "observed_count": 20,
+      "notes": "The 2026-01-31 official CSV contains 240,695 observed data rows although portal metadata reports 99,602. Exact category EL611 selects 21 lubricant rows, normalized to 20 product identities after merging one 20-Liter package occurrence. Business registration numbers, locations and factory identifiers are excluded."
+    },
+    {
+      "source_id": "JAPAN_ECOMARK_CATEGORY_110",
+      "title": "Japan Eco Mark Category 110 Biodegradable Lubricating Oil",
+      "owner": "Japan Environment Association Eco Mark Office",
+      "source_type": "official_ecolabel_product_search",
+      "source_url": "https://www.ecomark.jp/search/op_item_list.php?rkw=1&ruigata=1102",
+      "terms_url": "https://www.ecomark.jp/policy/",
+      "access_status": "public_search_but_republication_and_modified_use_restricted",
+      "bulk_ingest_allowed": false,
+      "publication_status": "count_and_source_link_only_pending_written_permission",
+      "observed_count": 124,
+      "notes": "Live official search on 2026-07-21 reports 124 certified Category 110 entries. The site policy says that reproduction, redistribution and processed/modified use are generally not permitted without authorization, so product rows are not ingested. Direct links are allowed."
+    },
+    {
       "source_id": "DLA_QPD_FSC_9150",
       "title": "US Defense Logistics Agency Qualified Products Database — FSC 9150",
       "owner": "US Defense Logistics Agency",

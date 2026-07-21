@@ -46,6 +46,7 @@ ANP_BRAZIL_JSONL = ROOT / "data" / "anp-brazil-lubricant-products.jsonl"
 INDONESIA_NPT_JSONL = ROOT / "data" / "indonesia-npt-lubricant-products.jsonl"
 DLA_QPD_JSONL = ROOT / "data" / "dla-qpd-lubricant-products.jsonl"
 BLUE_ANGEL_JSONL = ROOT / "data" / "blue-angel-de-uz-178-products.jsonl"
+KOREA_ECOLABEL_JSONL = ROOT / "data" / "korea-ecolabel-el611-lubricants.jsonl"
 FUCHS_INDIA_JSONL = ROOT / "data" / "fuchs-india-products.jsonl"
 FUCHS_US_JSONL = ROOT / "data" / "fuchs-us-products.jsonl"
 FUCHS_GERMANY_JSONL = ROOT / "data" / "fuchs-germany-products.jsonl"
@@ -1107,6 +1108,76 @@ def merge_blue_angel_evidence(target: dict, source_record: dict, raw: dict) -> N
             existing_codes.add(identity)
 
 
+def korea_ecolabel_record(row: dict) -> dict:
+    """Convert one official Korea Eco-Label EL611 product to catalog form."""
+    technical = row["technical"]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["certificate_number"],
+        "brand": row["manufacturer"],
+        "name": row["product_name"],
+        "category": f"Korea Eco-Label {row['official_category_code']}: {row['official_use']}",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": technical["sae"][0] if technical["sae"] else "",
+        "viscosity": technical["iso_vg"][0] if technical["iso_vg"] else "",
+        "grease_class": technical["nlgi"][0] if technical["nlgi"] else "",
+        "source": "KOREA_ECOLABEL_EL611",
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["manufacturer"],
+        "market": row["market"],
+        "source_id": "KOREA_ECOLABEL_EL611",
+        "source_record_id": row["source_record_id"],
+        "source_row": row["source_row_numbers"][0],
+        "evidence_status": "official_government_ecolabel_registry",
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["dataset_snapshot_date"],
+    })
+    record["specifications"].update({
+        "korea_ecolabel_category_code": row["official_category_code"],
+        "korea_ecolabel_category_name": row["official_category_name"],
+        "korea_ecolabel_official_use": row["official_use"],
+        "korea_ecolabel_initial_certification_date": row["initial_certification_date"],
+        "korea_ecolabel_certification_start_date": row["certification_start_date"],
+        "korea_ecolabel_certification_end_date": row["certification_end_date"],
+        "source_product_names": row["source_product_names"],
+        "classification_basis": row["classification_basis"],
+        "iso_vg_source_reported_or_name_explicit": technical["iso_vg"],
+        "source_occurrence_count": row["source_occurrence_count"],
+        "source_row_numbers": row["source_row_numbers"],
+        "packages": row["packages"],
+        "source_url": row["source_url"],
+    })
+    record["codes"]["korea_ecolabel_certificate"] = {
+        "system": "KOREA_ECOLABEL_CERTIFICATE",
+        "value": row["certificate_number"],
+        "source_id": "KOREA_ECOLABEL_EL611",
+        "status": row["lifecycle_status"],
+    }
+    record["canonical_key"] += f"|korea_ecolabel_record:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    return record
+
+
+def merge_korea_ecolabel_evidence(target: dict, source_record: dict, raw: dict) -> None:
+    target["specifications"].setdefault("korea_ecolabel_el611", []).append({
+        "source_record_id": raw["source_record_id"],
+        "certificate_number": raw["certificate_number"],
+        "official_use": raw["official_use"],
+        "certification_end_date": raw["certification_end_date"],
+        "dataset_snapshot_date": raw["dataset_snapshot_date"],
+    })
+    existing_codes = {(code.get("system", key).upper(), code["value"]) for key, code in target["codes"].items()}
+    for key, code in source_record["codes"].items():
+        identity = (code.get("system", key).upper(), code["value"])
+        if identity not in existing_codes:
+            target["codes"][f"korea_ecolabel_{raw['source_record_id']}_{key}"] = code
+            existing_codes.add(identity)
+
+
 def liqui_moly_identity_name(value: str) -> str:
     return re.sub(r"^liqui moly(?: gmbh)?\s+", "", normalize(value)).strip()
 
@@ -1546,6 +1617,38 @@ def main() -> None:
             if other_family_matches:
                 blue_angel_family_conflict_keys.append((target["canonical_key"], [row["canonical_key"] for row in other_family_matches]))
         blue_angel_product_key[raw["source_record_id"]] = target["canonical_key"]
+    korea_ecolabel_source_rows = [json.loads(line) for line in KOREA_ECOLABEL_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    korea_ecolabel_records = [korea_ecolabel_record(row) for row in korea_ecolabel_source_rows]
+    korea_ecolabel_product_key = {}
+    korea_ecolabel_added_rows = 0
+    korea_ecolabel_matched_rows = 0
+    korea_ecolabel_review_keys = []
+    korea_ecolabel_family_conflict_keys = []
+    for raw, source_record in zip(korea_ecolabel_source_rows, korea_ecolabel_records):
+        name = normalize(raw["product_name"])
+        matches = [
+            row for row in existing_by_name_family[(name, raw["family_code"])]
+            if brand_tokens_overlap(raw["manufacturer"], row["brand"])
+        ]
+        if len(matches) == 1:
+            target = matches[0]
+            merge_korea_ecolabel_evidence(target, source_record, raw)
+            korea_ecolabel_matched_rows += 1
+        else:
+            target = source_record
+            input_records.append(target)
+            existing_by_name_family[(name, raw["family_code"])].append(target)
+            other_family_matches = [
+                row for row in existing_by_name[name]
+                if row["family_code"] != raw["family_code"] and brand_tokens_overlap(raw["manufacturer"], row["brand"])
+            ]
+            existing_by_name[name].append(target)
+            korea_ecolabel_added_rows += 1
+            if len(matches) > 1:
+                korea_ecolabel_review_keys.append((target["canonical_key"], [row["canonical_key"] for row in matches]))
+            if other_family_matches:
+                korea_ecolabel_family_conflict_keys.append((target["canonical_key"], [row["canonical_key"] for row in other_family_matches]))
+        korea_ecolabel_product_key[raw["source_record_id"]] = target["canonical_key"]
     biopreferred_source_rows = [json.loads(line) for line in USDA_BIOPREFERRED_JSONL.read_text(encoding="utf-8").splitlines() if line]
     biopreferred_records = [biopreferred_record(row) for row in biopreferred_source_rows]
     input_records.extend(biopreferred_records)
@@ -2227,6 +2330,24 @@ def main() -> None:
                 "reason": "same_blue_angel_product_name_but_conflicting_professional_family_across_registries",
                 "score": 0.75, "decision": "keep_separate_blue_angel_family_conflict",
             })
+    for source_key, match_keys in korea_ecolabel_review_keys:
+        source_product = canonical_by_key[source_key]
+        for match_key in match_keys:
+            match_product = canonical_by_key[match_key]
+            candidates.append({
+                "product_id_a": match_product["product_id"], "product_id_b": source_product["product_id"],
+                "reason": "korea_ecolabel_exact_product_name_and_family_with_multiple_existing_registry_records",
+                "score": 0.995, "decision": "review_korea_ecolabel_multi_registry_identity",
+            })
+    for source_key, match_keys in korea_ecolabel_family_conflict_keys:
+        source_product = canonical_by_key[source_key]
+        for match_key in match_keys:
+            match_product = canonical_by_key[match_key]
+            candidates.append({
+                "product_id_a": match_product["product_id"], "product_id_b": source_product["product_id"],
+                "reason": "same_korea_ecolabel_product_name_but_conflicting_professional_family_across_registries",
+                "score": 0.75, "decision": "keep_separate_korea_ecolabel_family_conflict",
+            })
     for source_key, match_keys in man_service_review_keys:
         source_product = canonical_by_key[source_key]
         for match_key in match_keys:
@@ -2533,6 +2654,17 @@ def main() -> None:
             "product_id": target["product_id"], "source_id": "BLUE_ANGEL_DE_UZ_178",
             "source_record_id": raw["source_record_id"], "source_row": raw["source_row_numbers"][0],
             "relation": "official_ecolabel_product_registry",
+        }
+        link_key = (link["product_id"], link["source_id"], link["source_record_id"])
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
+    for raw in korea_ecolabel_source_rows:
+        target = canonical_by_key[korea_ecolabel_product_key[raw["source_record_id"]]]
+        link = {
+            "product_id": target["product_id"], "source_id": "KOREA_ECOLABEL_EL611",
+            "source_record_id": raw["source_record_id"], "source_row": raw["source_row_numbers"][0],
+            "relation": "official_government_ecolabel_registry",
         }
         link_key = (link["product_id"], link["source_id"], link["source_record_id"])
         if link_key not in source_link_keys:
@@ -2864,6 +2996,7 @@ def main() -> None:
         "jaso_normalized_input_sha256": hashlib.sha256(JASO_JSONL.read_bytes()).hexdigest(),
         "official_licensed_input_sha256": hashlib.sha256(LICENSED_JSONL.read_bytes()).hexdigest(),
         "blue_angel_input_sha256": hashlib.sha256(BLUE_ANGEL_JSONL.read_bytes()).hexdigest(),
+        "korea_ecolabel_input_sha256": hashlib.sha256(KOREA_ECOLABEL_JSONL.read_bytes()).hexdigest(),
         "usda_biopreferred_input_sha256": hashlib.sha256(USDA_BIOPREFERRED_JSONL.read_bytes()).hexdigest(),
         "zf_te_ml_input_sha256": hashlib.sha256(ZF_TE_ML_JSONL.read_bytes()).hexdigest(),
         "allison_input_sha256": hashlib.sha256(ALLISON_JSONL.read_bytes()).hexdigest(),
@@ -2904,6 +3037,10 @@ def main() -> None:
         "blue_angel_products_matched_to_existing": blue_angel_matched_rows,
         "blue_angel_products_added": blue_angel_added_rows,
         "official_ecolabel_product_registry_rows": sum(r["evidence_status"] == "official_ecolabel_product_registry" for r in records),
+        "korea_ecolabel_source_rows": len(korea_ecolabel_source_rows),
+        "korea_ecolabel_products_matched_to_existing": korea_ecolabel_matched_rows,
+        "korea_ecolabel_products_added": korea_ecolabel_added_rows,
+        "official_government_ecolabel_registry_rows": sum(r["evidence_status"] == "official_government_ecolabel_registry" for r in records),
         "official_government_program_rows": sum(r["evidence_status"] == "official_government_program_catalog" for r in records),
         "official_government_regulatory_registry_rows": sum(r["evidence_status"] == "official_government_regulatory_registry" for r in records),
         "official_government_qualified_product_registry_rows": sum(r["evidence_status"] == "official_government_qualified_product_registry" for r in records),
