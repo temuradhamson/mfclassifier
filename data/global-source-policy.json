@@ -1636,6 +1636,33 @@
       "publication_status": "derived_historical_factual_approval_records_with_attribution",
       "observed_count": 803,
       "notes": "Official 29-page bulletin dated April 2014. The parser retains 806 approval occurrences, 805 section-level product-grade rows and 803 normalized supplier-product-grade identities across EO-O Premium Plus, EO-N Premium Plus, mDRIVE, TO-A Plus, GO-J and GO-J Plus. One exact duplicate source row and two cross-section/grade-notation identities are merged with all page/row evidence preserved. Every row is historical_approval with current status explicitly unverified; it is not current-market or current-approval evidence. Only attributed non-expressive table facts are published."
+    },
+    {
+      "source_id": "CUMMINS_VALVOLINE_EU_2022_CATALOG",
+      "title": "Valvoline Product Catalogue Europe — Cummins-hosted April 2022 edition",
+      "owner": "Valvoline / Cummins Inc.",
+      "source_type": "official_historical_manufacturer_oem_corporate_catalog_pdf",
+      "source_locator": "data/cummins-valvoline-2022-products.jsonl",
+      "source_url": "https://www.cummins.com/sites/default/files/Europe/2204606-valvoline-eu-cummins-product-catalog-apr22.pdf",
+      "source_sha256": "65daf2907d9bc323cc517d1ca892cd4654f5891abde4a999779da9fa14eb06eb",
+      "source_document_sha256": "aad161c366c35e74fcd331771bb4d6194470e26099f970f878b2d96d2b3cc401",
+      "access_status": "public_official_historical_catalog_factual_fields_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "derived_historical_factual_product_grade_and_package_records_with_attribution",
+      "observed_count": 166,
+      "notes": "Official Cummins-hosted 11-page April 2022 European Valvoline catalog. Spatial parsing preserves 166 product cards, 510 exact package/article assignments and 502 unique article numbers across engine, driveline, coolant, grease, hydraulic, compressor, turbine and industrial families. Eight article numbers are printed against more than one product; all assignments are retained and flagged rather than treated as unique identities. Every row is a dated historical catalog observation with current status explicitly unverified. Only attributed non-expressive facts are published; marketing prose, images and design are excluded."
+    },
+    {
+      "source_id": "CUMMINS_CURRENT_OIL_REGISTRATION_LIST",
+      "title": "Cummins current registered oil lists in QuickServe Online",
+      "owner": "Cummins Inc.",
+      "source_type": "official_current_oem_registration_registry_authentication_required",
+      "source_url": "https://quickserve.cummins.com/info/qsol/news/oil_registration.html",
+      "access_status": "quickserve_login_required_no_authorized_bulk_access_available",
+      "bulk_ingest_allowed": false,
+      "publication_status": "metadata_only_blocked_pending_authorized_access",
+      "observed_count": 0,
+      "notes": "Cummins documents the current oil-registration lists under QuickServe Online > Service > Service Tools, but the product tables require an authenticated Limited Owners Plan or other authorized account. No authentication was bypassed and no current registry product row is claimed. The public 2022 corporate catalog is tracked separately and must not be presented as the current Cummins registration list."
     }
   ]
 }

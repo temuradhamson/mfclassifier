@@ -42,6 +42,7 @@ MERCEDES_BEVO_JSONL = ROOT / "data" / "mercedes-bevo-approved-fluids.jsonl"
 VOLVO_GENUINE_JSONL = ROOT / "data" / "volvo-genuine-fluids.jsonl"
 MACK_GENUINE_JSONL = ROOT / "data" / "mack-genuine-fluids.jsonl"
 MACK_2014_APPROVED_JSONL = ROOT / "data" / "mack-2014-approved-oils.jsonl"
+CUMMINS_VALVOLINE_2022_JSONL = ROOT / "data" / "cummins-valvoline-2022-products.jsonl"
 SCANIA_GENUINE_JSONL = ROOT / "data" / "scania-genuine-oils.jsonl"
 BRAVA_OFFICIAL_JSONL = ROOT / "data" / "brava-official-products.jsonl"
 CEYPETCO_JSONL = ROOT / "data" / "ceypetco-lubricant-products.jsonl"
@@ -832,6 +833,61 @@ def mack_2014_approved_record(row: dict) -> dict:
     record["canonical_key"] += f"|mack_historical_approval:{normalize(sections)}"
     record["canonical_key"] += f"|mack_2014_record:{normalize(row['source_record_id'])}"
     record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    return record
+
+
+def cummins_valvoline_2022_record(row: dict) -> dict:
+    specs = row["specifications"]
+    performance = []
+    if specs.get("api"):
+        performance.append(f"API {'/'.join(specs['api'])}")
+    if specs.get("acea"):
+        performance.append(f"ACEA {'/'.join(specs['acea'])}")
+    if specs.get("cummins_ces_source_reported"):
+        performance.append(f"Cummins CES {'/'.join(specs['cummins_ces_source_reported'])}")
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Исторический официальный каталог Valvoline–Cummins Europe 2022",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": specs.get("sae_engine") or specs.get("sae_gear") or "",
+        "api_class": "; ".join(performance),
+        "viscosity": specs.get("iso_vg", ""),
+        "grease_class": specs.get("nlgi", ""),
+        "source": "CUMMINS_VALVOLINE_EU_2022_CATALOG",
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": "CUMMINS_VALVOLINE_EU_2022_CATALOG",
+        "source_record_id": row["source_record_id"],
+        "source_row": row["source_page"],
+        "evidence_status": "official_manufacturer_product_catalog",
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update(specs)
+    record["specifications"].update({
+        "source_url": row["source_url"],
+        "source_document": row["source_document"],
+        "source_document_date": row["source_document_date"],
+        "source_page": row["source_page"],
+        "source_quality_flags": row["source_quality_flags"],
+    })
+    record["canonical_key"] += f"|cummins_valvoline_2022_record:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    for index, package in enumerate(row["packages"], 1):
+        record["codes"][f"valvoline_article_number_{index}"] = {
+            "system": "VALVOLINE_ARTICLE_NUMBER",
+            "value": package["article_number"],
+            "source_id": "CUMMINS_VALVOLINE_EU_2022_CATALOG",
+            "status": "historical_official_catalog_2022_current_status_unverified",
+        }
     return record
 
 
@@ -3735,6 +3791,12 @@ def main() -> None:
     mack_2014_source_rows = [json.loads(line) for line in MACK_2014_APPROVED_JSONL.read_text(encoding="utf-8").splitlines() if line]
     mack_2014_records = [mack_2014_approved_record(row) for row in mack_2014_source_rows]
     input_records.extend(mack_2014_records)
+    # This is a dated corporate catalog, not the login-gated current Cummins
+    # registration list. Append it after all current matching passes so its
+    # historical lifecycle can never overwrite a current product identity.
+    cummins_valvoline_2022_source_rows = [json.loads(line) for line in CUMMINS_VALVOLINE_2022_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    cummins_valvoline_2022_records = [cummins_valvoline_2022_record(row) for row in cummins_valvoline_2022_source_rows]
+    input_records.extend(cummins_valvoline_2022_records)
     records, candidates = deduplicate(input_records)
     canonical_by_key = {row["canonical_key"]: row for row in records}
     for source_key, match_keys in blue_angel_review_keys:
@@ -4265,6 +4327,17 @@ def main() -> None:
         if link_key not in source_link_keys:
             source_links.append(link)
             source_link_keys.add(link_key)
+    for raw, normalized_row in zip(cummins_valvoline_2022_source_rows, cummins_valvoline_2022_records):
+        target = canonical_by_key[normalized_row["canonical_key"]]
+        link = {
+            "product_id": target["product_id"], "source_id": "CUMMINS_VALVOLINE_EU_2022_CATALOG",
+            "source_record_id": raw["source_record_id"], "source_row": raw["source_page"],
+            "relation": "historical_official_manufacturer_oem_corporate_catalog",
+        }
+        link_key = (link["product_id"], link["source_id"], link["source_record_id"])
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     for raw, normalized_row in zip(scania_genuine_source_rows, scania_genuine_records):
         target = canonical_by_key[normalized_row["canonical_key"]]
         link = {
@@ -4571,6 +4644,27 @@ def main() -> None:
                 "source_id": "MACK_GENUINE_FLUIDS",
                 "source_record_id": package["part_number"],
             })
+    for raw, normalized_row in zip(cummins_valvoline_2022_source_rows, cummins_valvoline_2022_records):
+        target = canonical_by_key[normalized_row["canonical_key"]]
+        for package in raw["packages"]:
+            offer_identity = "|".join([
+                raw["source_record_id"], package["article_number"], package["variant"], package["package_name"]
+            ])
+            offers.append({
+                "offer_id": "CUMMINS-VALVOLINE-2022-" + hashlib.sha256(offer_identity.encode()).hexdigest()[:20],
+                "product_id": target["product_id"],
+                "market": raw["market"],
+                "package_name": " / ".join([package["package_name"], package["variant"]]),
+                "unit": "catalog_package",
+                "quantity_per_package": None,
+                "weight_kg": None,
+                "density_kg_per_l": None,
+                "lifecycle_status": "historical_catalog_current_status_unverified",
+                "archive_type": "dated_catalog_snapshot",
+                "archive_reason": "Current availability is not established by the April 2022 catalog.",
+                "source_id": "CUMMINS_VALVOLINE_EU_2022_CATALOG",
+                "source_record_id": package["article_number"],
+            })
     issues = quality_issues(records)
     issues.extend({
         "product_id": row["product_id"],
@@ -4679,6 +4773,25 @@ def main() -> None:
                 "expected": expected,
                 "action": action,
             })
+    cummins_valvoline_issue_meta = {
+        "source_product_title_missing_viscosity_grade": ("medium", "ISO_VG", "A product title carrying an explicit viscosity grade", "Retain the source title without guessing a grade; exclude it from strict ISO VG equivalence until another official document confirms the value."),
+        "source_product_title_hlvp_notation_retained_verbatim": ("medium", "PRODUCT_NAME", "Consistent HVLP notation", "Retain HLVP exactly as printed in the catalog title; do not silently normalize it to HVLP for product identity."),
+        "source_article_number_cross_product_collision_retained_verbatim": ("high", "ARTICLE_NUMBER", "One product identity per manufacturer article number", "Preserve every printed assignment, but do not use the colliding article number alone as a cross-product identity without current manufacturer confirmation."),
+    }
+    for row in records:
+        if row["source_id"] != "CUMMINS_VALVOLINE_EU_2022_CATALOG":
+            continue
+        for flag in row["specifications"].get("source_quality_flags", []):
+            severity, field, expected, action = cummins_valvoline_issue_meta[flag]
+            issues.append({
+                "product_id": row["product_id"],
+                "issue_code": f"cummins_valvoline_2022_{flag}",
+                "severity": severity,
+                "field": field,
+                "value": flag,
+                "expected": expected,
+                "action": action,
+            })
     issues.extend({
         "product_id": row["product_id"],
         "issue_code": "dla_qpd_lifecycle_restriction",
@@ -4725,6 +4838,7 @@ def main() -> None:
         "volvo_genuine_input_sha256": hashlib.sha256(VOLVO_GENUINE_JSONL.read_bytes()).hexdigest(),
         "mack_genuine_input_sha256": hashlib.sha256(MACK_GENUINE_JSONL.read_bytes()).hexdigest(),
         "mack_2014_approved_input_sha256": hashlib.sha256(MACK_2014_APPROVED_JSONL.read_bytes()).hexdigest(),
+        "cummins_valvoline_2022_input_sha256": hashlib.sha256(CUMMINS_VALVOLINE_2022_JSONL.read_bytes()).hexdigest(),
         "scania_genuine_input_sha256": hashlib.sha256(SCANIA_GENUINE_JSONL.read_bytes()).hexdigest(),
         "brava_official_input_sha256": hashlib.sha256(BRAVA_OFFICIAL_JSONL.read_bytes()).hexdigest(),
         "ceypetco_input_sha256": hashlib.sha256(CEYPETCO_JSONL.read_bytes()).hexdigest(),
@@ -4831,6 +4945,7 @@ def main() -> None:
         "volvo_genuine_source_rows": len(volvo_genuine_source_rows),
         "mack_genuine_source_rows": len(mack_genuine_source_rows),
         "mack_2014_approved_source_rows": len(mack_2014_source_rows),
+        "cummins_valvoline_2022_source_rows": len(cummins_valvoline_2022_source_rows),
         "scania_genuine_source_rows": len(scania_genuine_source_rows),
         "brava_official_source_rows": len(brava_official_source_rows),
         "ceypetco_source_rows": len(ceypetco_source_rows),

@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-07-21",
+  "document_date": "2022-04",
+  "source_id": "CUMMINS_VALVOLINE_EU_2022_CATALOG",
+  "source_url": "https://www.cummins.com/sites/default/files/Europe/2204606-valvoline-eu-cummins-product-catalog-apr22.pdf",
+  "current_cummins_registration_registry_url": "https://quickserve.cummins.com/info/qsol/news/oil_registration.html",
+  "source_pdf_sha256": "aad161c366c35e74fcd331771bb4d6194470e26099f970f878b2d96d2b3cc401",
+  "pdf_pages": 11,
+  "normalized_products": 166,
+  "families": {
+    "C": 8,
+    "G": 33,
+    "H": 33,
+    "I": 26,
+    "M": 30,
+    "S": 3,
+    "T": 19,
+    "TF": 6,
+    "U": 8
+  },
+  "package_offer_occurrences": 510,
+  "unique_article_numbers": 502,
+  "cross_product_colliding_article_numbers": 8,
+  "rows_with_sae": 32,
+  "rows_with_iso_vg": 67,
+  "rows_with_nlgi": 33,
+  "rows_with_api": 34,
+  "rows_with_cummins_ces": 17,
+  "source_quality_flags": {
+    "source_article_number_cross_product_collision_retained_verbatim": 6,
+    "source_product_title_hlvp_notation_retained_verbatim": 2,
+    "source_product_title_missing_viscosity_grade": 1
+  },
+  "normalized_output_sha256": "65daf2907d9bc323cc517d1ca892cd4654f5891abde4a999779da9fa14eb06eb",
+  "publication_scope": "Attributed non-expressive product, grade, standard, package and article-number facts only; marketing prose, images and catalog design are excluded."
+}

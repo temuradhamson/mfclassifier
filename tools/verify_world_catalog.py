@@ -60,6 +60,8 @@ def main() -> None:
     mack_rows = [json.loads(line) for line in (ROOT / "data/mack-genuine-fluids.jsonl").read_text(encoding="utf-8").splitlines() if line]
     mack_2014_report = json.loads((ROOT / "data/mack-2014-approved-oils-report.json").read_text(encoding="utf-8"))
     mack_2014_rows = [json.loads(line) for line in (ROOT / "data/mack-2014-approved-oils.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    cummins_valvoline_report = json.loads((ROOT / "data/cummins-valvoline-2022-products-report.json").read_text(encoding="utf-8"))
+    cummins_valvoline_rows = [json.loads(line) for line in (ROOT / "data/cummins-valvoline-2022-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     scania_report = json.loads((ROOT / "data/scania-genuine-oils-report.json").read_text(encoding="utf-8"))
     scania_rows = [json.loads(line) for line in (ROOT / "data/scania-genuine-oils.jsonl").read_text(encoding="utf-8").splitlines() if line]
     brava_report = json.loads((ROOT / "data/brava-official-products-report.json").read_text(encoding="utf-8"))
@@ -201,7 +203,7 @@ def main() -> None:
     assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
     assert not db.execute("PRAGMA foreign_key_check").fetchall()
     assert db.execute("SELECT count(*) FROM products").fetchone()[0] == len(lines)
-    assert len(lines) == 98955
+    assert len(lines) == 99121
     assert report["jaso_source_rows"] == jaso_report["rows"] == 3630
     assert report["jaso_unique_oil_codes"] == jaso_report["unique_oil_codes"] == 3629
     assert report["official_filed_registry_rows"] == 3629
@@ -286,6 +288,18 @@ def main() -> None:
         "source_name_grade_notation_variants_merged": 1,
         "viscosity_inferred_from_product_name_due_empty_table_cell": 1,
     }
+    assert report["cummins_valvoline_2022_source_rows"] == cummins_valvoline_report["normalized_products"] == len(cummins_valvoline_rows) == 166
+    assert report["cummins_valvoline_2022_input_sha256"] == cummins_valvoline_report["normalized_output_sha256"]
+    assert policy_by_id["CUMMINS_VALVOLINE_EU_2022_CATALOG"]["source_sha256"] == cummins_valvoline_report["normalized_output_sha256"]
+    assert policy_by_id["CUMMINS_VALVOLINE_EU_2022_CATALOG"]["observed_count"] == 166
+    assert policy_by_id["CUMMINS_CURRENT_OIL_REGISTRATION_LIST"]["bulk_ingest_allowed"] is False
+    assert cummins_valvoline_report["source_pdf_sha256"] == "aad161c366c35e74fcd331771bb4d6194470e26099f970f878b2d96d2b3cc401"
+    assert cummins_valvoline_report["families"] == {"C": 8, "G": 33, "H": 33, "I": 26, "M": 30, "S": 3, "T": 19, "TF": 6, "U": 8}
+    assert cummins_valvoline_report["package_offer_occurrences"] == 510
+    assert cummins_valvoline_report["unique_article_numbers"] == 502
+    assert cummins_valvoline_report["cross_product_colliding_article_numbers"] == 8
+    assert all(row["lifecycle_status"] == "historical_catalog_as_published_2022_04_current_status_unverified" for row in cummins_valvoline_rows)
+    assert all(not ({"description", "image", "logo", "marketing_text"} & set(row)) for row in cummins_valvoline_rows)
     assert sum(len(row["source_occurrences"]) for row in mack_2014_rows) == 806
     assert all(row["lifecycle_status"] == "historical_approval_as_published_2014_04_current_status_unverified" for row in mack_2014_rows)
     assert report["korea_ecolabel_source_rows"] == korea_ecolabel_report["normalized_products"] == len(korea_ecolabel_rows) == 20
@@ -372,7 +386,7 @@ def main() -> None:
     assert dla_report["plant_rows_without_product_designation_excluded"] == 766
     assert report["zf_te_ml_source_rows"] == zf_report["unique_approval_numbers"] == 1498
     assert report["official_oem_approval_rows"] == 6278
-    assert report["official_manufacturer_catalog_rows"] == 5625
+    assert report["official_manufacturer_catalog_rows"] == 5791
     assert report["official_oem_service_recommendation_rows"] == 30
     assert report["allison_source_rows"] == allison_report["products"] == 104
     assert report["driventic_diwa_source_rows"] == driventic_report["products"] == 226
@@ -502,7 +516,7 @@ def main() -> None:
     assert report["aichilon_products_matched_to_existing"] == 255
     assert report["aichilon_products_added"] == 60
     assert report["aichilon_rows_excluded"] == 2
-    assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 3985
+    assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 4495
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 2566
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status='listed_current_catalog'").fetchone()[0] == report["current_catalog_listed_offers"] == 1111
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_filed_registry'").fetchone()[0] == 3629
@@ -516,7 +530,7 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_registry_source_data_issue'").fetchone()[0] == 51
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_qualified_product_registry'").fetchone()[0] == 456
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_approval_registry'").fetchone()[0] == 6278
-    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_manufacturer_product_catalog'").fetchone()[0] == 5625
+    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_manufacturer_product_catalog'").fetchone()[0] == 5791
     assert db.execute("SELECT count(*) FROM products WHERE source_id='BRAVA_LUBRICANTS_OFFICIAL_CATALOG'").fetchone()[0] == 69
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='BRAVA_LUBRICANTS_OFFICIAL_CATALOG'").fetchone()[0] == 69
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='BRAVA_PART_NUMBER'").fetchone()[0] == 94
@@ -539,6 +553,13 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM product_offers WHERE source_id='MACK_2014_APPROVED_OILS'").fetchone()[0] == 0
     assert db.execute("SELECT count(*) FROM products WHERE source_id='MACK_2014_APPROVED_OILS' AND lifecycle_status='historical_approval_as_published_2014_04_current_status_unverified'").fetchone()[0] == 803
     assert db.execute("SELECT count(*) FROM quality_issues WHERE issue_code LIKE 'mack_2014_%'").fetchone()[0] == 6
+    assert db.execute("SELECT count(*) FROM products WHERE source_id='CUMMINS_VALVOLINE_EU_2022_CATALOG'").fetchone()[0] == 166
+    assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='CUMMINS_VALVOLINE_EU_2022_CATALOG'").fetchone()[0] == 166
+    assert db.execute("SELECT count(*) FROM product_offers WHERE source_id='CUMMINS_VALVOLINE_EU_2022_CATALOG'").fetchone()[0] == 510
+    assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='VALVOLINE_ARTICLE_NUMBER'").fetchone()[0] == 510
+    assert db.execute("SELECT count(DISTINCT code_value) FROM external_codes WHERE code_system='VALVOLINE_ARTICLE_NUMBER'").fetchone()[0] == 502
+    assert db.execute("SELECT count(*) FROM products WHERE source_id='CUMMINS_VALVOLINE_EU_2022_CATALOG' AND lifecycle_status='historical_catalog_as_published_2022_04_current_status_unverified'").fetchone()[0] == 166
+    assert db.execute("SELECT count(*) FROM quality_issues WHERE issue_code LIKE 'cummins_valvoline_2022_%'").fetchone()[0] == 9
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_service_recommendation'").fetchone()[0] == 30
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='ALLISON_APPROVAL_NUMBER'").fetchone()[0] == 119
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='MERCEDES_DTFR_PRODUCT_ID'").fetchone()[0] == 1892

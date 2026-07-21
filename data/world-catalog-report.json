@@ -3,7 +3,7 @@
   "run_id": "seed-2026-07-21",
   "snapshot_date": "2026-07-21",
   "status": "seed_only_world_catalog_incomplete",
-  "input_rows": 98956,
+  "input_rows": 99122,
   "normalized_input_sha256": "819d11779ffccddf9683a9b18a70e39bd5a1b8d72d9811fb5bb46d136b0f8073",
   "jaso_normalized_input_sha256": "b664fea5aee78de7303c33bf13d3c9ac26c8779b78beac24c54295b4d58603d3",
   "official_licensed_input_sha256": "533183ffbc755268ef12b54a556d1f3ea78db4fc80b564e12c391a10a8e2075e",
@@ -32,6 +32,7 @@
   "volvo_genuine_input_sha256": "73126dcac3d249ecfb384da6e30097f337aa18167c6b5f825636df6896317064",
   "mack_genuine_input_sha256": "adb0f78992eb50d601f0670d20c60a6d3be86f47fbce8ff2901d6526f0c2e519",
   "mack_2014_approved_input_sha256": "953b50cba4ba6f15e429b05d1698ab4f6bc30f98e915bb0f18e75907a746d96b",
+  "cummins_valvoline_2022_input_sha256": "65daf2907d9bc323cc517d1ca892cd4654f5891abde4a999779da9fa14eb06eb",
   "scania_genuine_input_sha256": "bed1b35c1e61f17604726845a2326a3b928f178ae38d5f75919d55814d3e210f",
   "brava_official_input_sha256": "fbb7e87b61bd55d51bb3f0925366f6b16985412089ba736cea2fea0e95f5fc28",
   "ceypetco_input_sha256": "df35372735310aa2251d10bbe1d4ded683a678d063bf77f9265205e6056ffcc3",
@@ -59,19 +60,19 @@
   "fuchs_brazil_input_sha256": "4554ef1b651617a4a810d945bc519bed1e809ace1cda4246d6b63c7fff99affc",
   "fuchs_norway_input_sha256": "7ef62a3216e7f497ed96512202b7d386673fd01a4c6273ae1cc8fff6e026801a",
   "fuchs_hungary_input_sha256": "8a82b90335bc58ab44734be7541daaad051707258b5fbcb5346f8c2a2bf66ed4",
-  "canonical_rows": 98955,
+  "canonical_rows": 99121,
   "brands": 13851,
   "families": {
-    "C": 2439,
+    "C": 2447,
     "E": 147,
-    "G": 10959,
-    "H": 5472,
-    "I": 4252,
-    "M": 43082,
-    "S": 7441,
-    "T": 17208,
-    "TF": 7231,
-    "U": 724
+    "G": 10992,
+    "H": 5505,
+    "I": 4278,
+    "M": 43112,
+    "S": 7444,
+    "T": 17227,
+    "TF": 7237,
+    "U": 732
   },
   "project_source_rows": 443,
   "legacy_rows_needing_evidence": 88,
@@ -150,7 +151,7 @@
   },
   "official_government_registry_source_data_issue_rows": 51,
   "official_oem_approval_rows": 6278,
-  "official_manufacturer_catalog_rows": 5625,
+  "official_manufacturer_catalog_rows": 5791,
   "official_oem_service_recommendation_rows": 30,
   "zf_te_ml_source_rows": 1498,
   "allison_source_rows": 104,
@@ -162,6 +163,7 @@
   "volvo_genuine_source_rows": 32,
   "mack_genuine_source_rows": 15,
   "mack_2014_approved_source_rows": 803,
+  "cummins_valvoline_2022_source_rows": 166,
   "scania_genuine_source_rows": 4,
   "brava_official_source_rows": 69,
   "ceypetco_source_rows": 47,
@@ -270,13 +272,13 @@
   "aichilon_products_matched_to_existing": 255,
   "aichilon_products_added": 60,
   "aichilon_rows_excluded": 2,
-  "offers": 3985,
+  "offers": 4495,
   "active_offers": 2566,
   "current_catalog_listed_offers": 1111,
   "archived_offers": 1419,
   "duplicate_decisions": {
     "merged": 1,
-    "keep_separate_specification_conflict": 10149,
+    "keep_separate_specification_conflict": 10150,
     "review_cross_source_identity": 5039,
     "keep_separate_blue_angel_family_conflict": 34,
     "review_brand_alias_identity": 2,
@@ -286,7 +288,7 @@
     "keep_separate_fuchs_market_family_conflict": 529
   },
   "quality_issues": {
-    "professional_key_incomplete": 28636,
+    "professional_key_incomplete": 28656,
     "classification_family_conflict": 214,
     "source_registration_number_missing": 51,
     "thailand_doeb_registration_number_collision": 6,
@@ -307,6 +309,9 @@
     "mack_2014_source_name_grade_notation_variants_merged": 1,
     "mack_2014_viscosity_inferred_from_product_name_due_empty_table_cell": 1,
     "mack_2014_source_multi_grade_approval_row_split": 2,
+    "cummins_valvoline_2022_source_article_number_cross_product_collision_retained_verbatim": 6,
+    "cummins_valvoline_2022_source_product_title_missing_viscosity_grade": 1,
+    "cummins_valvoline_2022_source_product_title_hlvp_notation_retained_verbatim": 2,
     "dla_qpd_lifecycle_restriction": 93
   },
   "bulk_sources_allowed": [
@@ -406,7 +411,8 @@
     "NAMIBIA_NSI_CERTIFIED_PRODUCTS_LUBRICANT_REVIEW",
     "BRAVA_LUBRICANTS_OFFICIAL_CATALOG",
     "MACK_GENUINE_FLUIDS",
-    "MACK_2014_APPROVED_OILS"
+    "MACK_2014_APPROVED_OILS",
+    "CUMMINS_VALVOLINE_EU_2022_CATALOG"
   ],
   "bulk_sources_blocked": [
     "fuchs-benelux",
@@ -428,7 +434,8 @@
     "wolf-lubricants-official-catalog",
     "champion-lubricants-official-catalog",
     "MALAYSIA_SIRIM_ENGINE_OIL_DIRECTORY_REVIEW",
-    "INDIANOIL_SERVO_PRODUCT_CATALOG"
+    "INDIANOIL_SERVO_PRODUCT_CATALOG",
+    "CUMMINS_CURRENT_OIL_REGISTRATION_LIST"
   ],
   "confirmed_world_total": null,
   "completion_note": "The seed proves the pipeline, not worldwide coverage. Exact worldwide count remains pending licensed/authorized source ingestion.",
