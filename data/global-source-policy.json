@@ -1465,6 +1465,69 @@
       "publication_status": "reviewed_zero_lubricant_product_standards",
       "observed_count": 0,
       "notes": "The current scheme publishes 58 standards across nine top-level categories and more than 1,100 active listings, but no lubricant, grease, coolant or automotive-fluid product standard is present. No product rows were ingested."
+    },
+    {
+      "source_id": "AUSTRIAN_ECOLABEL_UZ14_LUBRICANTS",
+      "title": "Austrian Ecolabel UZ 14 — lubricants",
+      "owner": "Austrian Federal Ministry of Agriculture and Forestry, Climate and Environmental Protection, Regions and Water Management (BMLUK)",
+      "source_type": "official_government_ecolabel_licensee_export_and_product_cards",
+      "source_locator": "data/austrian-ecolabel-uz14-products.jsonl",
+      "source_url": "https://www.umweltzeichen.at/de/produkte/garten-gr%C3%BCnraum",
+      "terms_url": "https://www.umweltzeichen.at/de/zertifizierung/impressum",
+      "source_sha256": "d3ba965e16e335f2a77f130ac7cde8476382b2905f75be900d872ddc459e6889",
+      "access_status": "public_official_directory_reproduction_with_attribution_for_noncommercial_use",
+      "bulk_ingest_allowed": true,
+      "publication_status": "normalized_factual_product_and_certificate_fields_with_attribution_noncommercial_use",
+      "observed_count": 11,
+      "notes": "The current official UZ 14 XLSX lists five licensees; their product cards expose 11 exact lubricants. Only product identity, holder, certificate, country, family assertion and source links are retained. Addresses, contacts, descriptions, images and marks are excluded. BMLUK permits reproduction with attribution except for commercial purposes; commercial republication requires separate permission. Ten rows attach as independent evidence to existing identities and one adds a new canonical product."
+    },
+    {
+      "source_id": "THAILAND_GREEN_LABEL_TGL20_LUBRICANT_REVIEW",
+      "title": "Thailand Green Label TGL-20 lubricant product review",
+      "owner": "Thailand Environment Institute",
+      "source_type": "official_type_1_ecolabel_monthly_product_list_archives",
+      "source_url": "https://greenlabel.tei.or.th/en/list-of-products-certified-with-green-labels/",
+      "access_status": "public_official_certification_lists",
+      "bulk_ingest_allowed": true,
+      "publication_status": "reviewed_zero_relevant_product_rows",
+      "observed_count": 0,
+      "notes": "TGL-20 lubricant criteria remain published, but the June 2026 current list and year-end official list snapshots for 2017-2025 contain no TGL-20 certified product section or lubricant product row. The only TGL-20 mentions are in the criteria index."
+    },
+    {
+      "source_id": "NZ_ECO_CHOICE_LUBRICANT_SCOPE_REVIEW",
+      "title": "Eco Choice Aotearoa product directory — lubricant scope review",
+      "owner": "Eco Choice Aotearoa",
+      "source_type": "official_type_1_ecolabel_product_directory",
+      "source_url": "https://environmentalchoice.org.nz/tools-resources/products/",
+      "access_status": "public_official_certification_directory",
+      "bulk_ingest_allowed": true,
+      "publication_status": "reviewed_zero_lubricant_product_standards",
+      "observed_count": 0,
+      "notes": "The current public directory reports 816 certified products, but its published standards and product filters contain no lubricant, grease, coolant or automotive-fluid standard. No product rows were ingested."
+    },
+    {
+      "source_id": "GECA_AUSTRALIA_LUBRICANT_SCOPE_REVIEW",
+      "title": "GECA Australia certified product directory — lubricant scope review",
+      "owner": "Good Environmental Choice Australia",
+      "source_type": "official_type_1_ecolabel_product_directory",
+      "source_url": "https://www.geca.eco/products",
+      "access_status": "public_official_certification_directory",
+      "bulk_ingest_allowed": true,
+      "publication_status": "reviewed_zero_lubricant_product_standards",
+      "observed_count": 0,
+      "notes": "The current directory reports more than 2,000 certified products, but the published standards and directory categories contain no lubricant, grease, coolant or automotive-fluid scope. No product rows were ingested."
+    },
+    {
+      "source_id": "HONG_KONG_GREEN_LABEL_LUBRICANT_SCOPE_REVIEW",
+      "title": "Hong Kong Green Label Scheme certified products — lubricant scope review",
+      "owner": "Green Council",
+      "source_type": "official_type_1_ecolabel_product_directory",
+      "source_url": "https://www.greencouncil.org/hkgls4",
+      "access_status": "public_official_certification_directory",
+      "bulk_ingest_allowed": true,
+      "publication_status": "reviewed_zero_lubricant_product_categories",
+      "observed_count": 0,
+      "notes": "The current certified-products page exposes building-material, mineral, fibre-reinforced home-decor and paint categories, with no lubricant, grease, coolant or automotive-fluid category. No product rows were ingested."
     }
   ]
 }

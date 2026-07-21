@@ -132,6 +132,8 @@ def main() -> None:
     dla_rows = [json.loads(line) for line in (ROOT / "data/dla-qpd-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     blue_angel_report = json.loads((ROOT / "data/blue-angel-de-uz-178-products-report.json").read_text(encoding="utf-8"))
     blue_angel_rows = [json.loads(line) for line in (ROOT / "data/blue-angel-de-uz-178-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    austrian_uz14_report = json.loads((ROOT / "data/austrian-ecolabel-uz14-products-report.json").read_text(encoding="utf-8"))
+    austrian_uz14_rows = [json.loads(line) for line in (ROOT / "data/austrian-ecolabel-uz14-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     korea_ecolabel_report = json.loads((ROOT / "data/korea-ecolabel-el611-lubricants-report.json").read_text(encoding="utf-8"))
     korea_ecolabel_rows = [json.loads(line) for line in (ROOT / "data/korea-ecolabel-el611-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     korea_el509_report = json.loads((ROOT / "data/korea-ecolabel-el509-washer-fluids-report.json").read_text(encoding="utf-8"))
@@ -191,7 +193,7 @@ def main() -> None:
     assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
     assert not db.execute("PRAGMA foreign_key_check").fetchall()
     assert db.execute("SELECT count(*) FROM products").fetchone()[0] == len(lines)
-    assert len(lines) == 98063
+    assert len(lines) == 98064
     assert report["jaso_source_rows"] == jaso_report["rows"] == 3630
     assert report["jaso_unique_oil_codes"] == jaso_report["unique_oil_codes"] == 3629
     assert report["official_filed_registry_rows"] == 3629
@@ -200,6 +202,10 @@ def main() -> None:
     assert report["blue_angel_source_rows"] == blue_angel_report["normalized_products"] == len(blue_angel_rows) == 148
     assert report["blue_angel_products_matched_to_existing"] == 21
     assert report["blue_angel_products_added"] == report["official_ecolabel_product_registry_rows"] == 127
+    assert report["austrian_ecolabel_uz14_source_rows"] == austrian_uz14_report["normalized_products"] == len(austrian_uz14_rows) == 11
+    assert report["austrian_ecolabel_uz14_products_matched_to_existing"] == 10
+    assert report["austrian_ecolabel_uz14_cross_family_evidence_matches"] == 3
+    assert report["austrian_ecolabel_uz14_products_added"] == 1
     assert report["korea_ecolabel_source_rows"] == korea_ecolabel_report["normalized_products"] == len(korea_ecolabel_rows) == 20
     assert report["korea_ecolabel_products_matched_to_existing"] == 0
     assert report["korea_ecolabel_products_added"] == 20
@@ -208,7 +214,7 @@ def main() -> None:
     assert report["korea_ecolabel_el509_products_added"] == 9
     assert report["green_choice_philippines_source_rows"] == green_choice_philippines_report["normalized_products"] == len(green_choice_philippines_rows) == 3
     assert report["green_choice_philippines_expired_rows"] == 3
-    assert report["official_government_ecolabel_registry_rows"] == 32
+    assert report["official_government_ecolabel_registry_rows"] == 33
     assert green_choice_philippines_report["source_table_rows"] == {"active": 34, "expired": 35, "ongoing_renewal": 7}
     assert green_choice_philippines_report["source_quality_flags"] == {"nonstandard_sae_notation_retained_verbatim": 1}
     assert all(row["lifecycle_status"] == "ecolabel_certificate_expired" for row in green_choice_philippines_rows)
@@ -419,7 +425,7 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_filed_registry'").fetchone()[0] == 3629
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_licensed_registry'").fetchone()[0] == 3037
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_ecolabel_product_registry'").fetchone()[0] == 127
-    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_ecolabel_registry'").fetchone()[0] == 32
+    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_ecolabel_registry'").fetchone()[0] == 33
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_product_conformity_registry'").fetchone()[0] == 40284
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_product_certification_registry'").fetchone()[0] == 1612
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_program_catalog'").fetchone()[0] == 894
@@ -433,6 +439,7 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='MERCEDES_DTFR_PRODUCT_ID'").fetchone()[0] == 1892
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='MERCEDES_BEVO_PRODUCT_ID'").fetchone()[0] == 1914
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='BLUE_ANGEL_PRODUCT_PAGE'").fetchone()[0] == 149
+    assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='AUSTRIAN_ECOLABEL_UZ14_CERTIFICATE'").fetchone()[0] == 11
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='KOREA_ECOLABEL_CERTIFICATE'").fetchone()[0] == 29
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='VOLVO_PART_NUMBER'").fetchone()[0] == 20
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='VOLVO_GENUINE_FLUIDS'").fetchone()[0] == 32
@@ -473,6 +480,7 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='DLA_QPD_FSC_9150'").fetchone()[0] == 431
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='DLA_QPD_FSC_6850_LUBRICANT_SCOPE'").fetchone()[0] == 25
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='BLUE_ANGEL_DE_UZ_178'").fetchone()[0] == 148
+    assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='AUSTRIAN_ECOLABEL_UZ14_LUBRICANTS'").fetchone()[0] == 11
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='KOREA_ECOLABEL_EL611'").fetchone()[0] == 20
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='KOREA_ECOLABEL_EL509'").fetchone()[0] == 9
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='UAE_MOIAT_PRODUCT_CONFORMITY'").fetchone()[0] == 1840
@@ -569,6 +577,13 @@ def main() -> None:
     assert blue_angel_report["category_occurrences"] == 159
     assert blue_angel_report["families"] == {"G": 7, "H": 33, "I": 86, "S": 19, "T": 3}
     assert all(not ({"address", "phone", "email", "image", "description"} & set(row)) for row in blue_angel_rows)
+    assert policy_by_id["AUSTRIAN_ECOLABEL_UZ14_LUBRICANTS"]["source_sha256"] == austrian_uz14_report["normalized_output_sha256"]
+    assert policy_by_id["AUSTRIAN_ECOLABEL_UZ14_LUBRICANTS"]["observed_count"] == austrian_uz14_report["normalized_products"]
+    assert austrian_uz14_report["licensees"] == 5
+    assert austrian_uz14_report["products_by_family"] == {"H": 4, "I": 7}
+    assert len({row["source_record_id"] for row in austrian_uz14_rows}) == 11
+    assert all(row["lifecycle_status"] == "listed_in_current_uz14_directory_status_not_individually_dated" for row in austrian_uz14_rows)
+    assert all(not ({"address", "postal_code", "phone", "email", "description", "image", "logo"} & set(row)) for row in austrian_uz14_rows)
     assert policy_by_id["KOREA_ECOLABEL_EL611"]["source_sha256"] == korea_ecolabel_report["normalized_output_sha256"]
     assert policy_by_id["KOREA_ECOLABEL_EL611"]["observed_count"] == korea_ecolabel_report["normalized_products"]
     assert korea_ecolabel_report["source_csv_rows_observed"] == 240695
@@ -738,6 +753,10 @@ def main() -> None:
     assert policy_by_id["MALAYSIA_SIRIM_ENGINE_OIL_DIRECTORY_REVIEW"]["bulk_ingest_allowed"] is False
     assert policy_by_id["INDIANOIL_SERVO_PRODUCT_CATALOG"]["observed_count"] == 1600
     assert policy_by_id["SINGAPORE_GREEN_LABEL_LUBRICANT_SCOPE_REVIEW"]["observed_count"] == 0
+    assert policy_by_id["THAILAND_GREEN_LABEL_TGL20_LUBRICANT_REVIEW"]["observed_count"] == 0
+    assert policy_by_id["NZ_ECO_CHOICE_LUBRICANT_SCOPE_REVIEW"]["observed_count"] == 0
+    assert policy_by_id["GECA_AUSTRALIA_LUBRICANT_SCOPE_REVIEW"]["observed_count"] == 0
+    assert policy_by_id["HONG_KONG_GREEN_LABEL_LUBRICANT_SCOPE_REVIEW"]["observed_count"] == 0
     assert biopreferred_report["source_occurrences"] == 1387
     assert biopreferred_report["duplicate_category_occurrences_merged"] == 495
     assert policy_by_id["INDONESIA_NPT_LUBRICANT_REGISTRY"]["source_sha256"] == indonesia_report["normalized_output_sha256"]

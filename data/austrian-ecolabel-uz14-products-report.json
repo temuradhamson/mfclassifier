@@ -1,0 +1,34 @@
+{
+  "category_page_sha256": "fc1637a71f4f572771fa2c06aa53721b00f30448e3bf99a7ffa77244b767b32b",
+  "excluded_fields": [
+    "postal address",
+    "telephone",
+    "email",
+    "marketing descriptions",
+    "images",
+    "logo artwork"
+  ],
+  "imprint_page_sha256": "2cecf222fb64e44bee79dd2cd1fc14b8a6fff753c432dd19ea1314deac3402c5",
+  "imprint_url": "https://www.umweltzeichen.at/de/zertifizierung/impressum",
+  "licensee_export_sha256": "7c5b0e6abc3d1b985b7b44ff2b03c85f07a48a51c219fd40d5ec6a55d51f9af4",
+  "licensee_export_url": "https://www.umweltzeichen.at/uz-export/umweltzeichen-lizenznehmerinnen-UZ%2014.xlsx",
+  "licensees": 5,
+  "normalized_output_sha256": "d3ba965e16e335f2a77f130ac7cde8476382b2905f75be900d872ddc459e6889",
+  "normalized_products": 11,
+  "product_page_sha256": {
+    "UW 006": "d40572b52c1b975715953d74c13dba126902e46307ddeb8353a2519b7db8e518",
+    "UW 1205": "59ce6657794a1ad59c34522b87cc0f9f9a1a41a7579c55c44cf8c79c171f454a",
+    "UW 1226": "f9cdbf43f49291a632166766e0bfd6657e3aef03c657916874d2d140586973ac",
+    "UW 1384": "ee3aa14b71bf4d8ae27140d1703dd22807a57845c28627b320528bfbbb923fd8",
+    "UW 997": "2eb0b1bf8b401ea7b9ae48e16866ccd0bfcdd7f66a3ca9ab8efd97ae2e3eeb90"
+  },
+  "products_by_family": {
+    "H": 4,
+    "I": 7
+  },
+  "rights_note": "BMLUK copyright permits reproduction with attribution except for commercial purposes; only factual product identity and certification fields are retained.",
+  "schema_version": 1,
+  "snapshot_date": "2026-07-21",
+  "source_id": "AUSTRIAN_ECOLABEL_UZ14_LUBRICANTS",
+  "source_url": "https://www.umweltzeichen.at/de/produkte/garten-gr%C3%BCnraum"
+}
