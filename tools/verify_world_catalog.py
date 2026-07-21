@@ -77,6 +77,8 @@ def main() -> None:
     epa_safer_choice_rows = [json.loads(line) for line in (ROOT / "data/epa-safer-choice-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_report = json.loads((ROOT / "data/kebs-smark-lubricant-products-report.json").read_text(encoding="utf-8"))
     kebs_smark_rows = [json.loads(line) for line in (ROOT / "data/kebs-smark-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    east_africa_report = json.loads((ROOT / "data/east-africa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
+    east_africa_rows = [json.loads(line) for line in (ROOT / "data/east-africa-certified-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     jsonl_gz_path = ROOT / "data/world-catalog-products.jsonl.gz"
     with gzip.open(jsonl_gz_path, "rt", encoding="utf-8") as stream:
         lines = [json.loads(line) for line in stream if line.strip()]
@@ -104,7 +106,7 @@ def main() -> None:
     assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
     assert not db.execute("PRAGMA foreign_key_check").fetchall()
     assert db.execute("SELECT count(*) FROM products").fetchone()[0] == len(lines)
-    assert len(lines) == 47119
+    assert len(lines) == 47348
     assert report["jaso_source_rows"] == jaso_report["rows"] == 3630
     assert report["jaso_unique_oil_codes"] == jaso_report["unique_oil_codes"] == 3629
     assert report["official_filed_registry_rows"] == 3629
@@ -124,7 +126,12 @@ def main() -> None:
     assert report["official_government_product_conformity_registry_rows"] == 1840
     assert report["epa_safer_choice_source_rows"] == epa_safer_choice_report["normalized_products"] == len(epa_safer_choice_rows) == 2
     assert report["kebs_smark_source_rows"] == kebs_smark_report["normalized_products"] == len(kebs_smark_rows) == 750
-    assert report["official_government_product_certification_registry_rows"] == 750
+    assert report["east_africa_certified_source_rows"] == east_africa_report["normalized_products"] == len(east_africa_rows) == 229
+    assert report["east_africa_certified_source_rows_by_source"] == east_africa_report["normalized_products_by_source"] == {
+        "TBS_CERTIFIED_LUBRICANT_PRODUCTS": 183,
+        "UNBS_CERTIFIED_LUBRICANT_PRODUCTS": 46,
+    }
+    assert report["official_government_product_certification_registry_rows"] == 979
     assert report["usda_biopreferred_source_rows"] == biopreferred_report["rows"] == 892
     assert report["official_government_program_rows"] == 894
     assert report["anp_brazil_source_rows"] == anp_report["normalized_product_grade_rows"] == len(anp_rows) == 12664
@@ -302,6 +309,10 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM external_codes WHERE source_id='EPA_SAFER_CHOICE_LUBRICANTS'").fetchone()[0] == 12
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='KEBS_SMARK_LUBRICANT_PRODUCTS'").fetchone()[0] == 750
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='KEBS_SMARK_PERMIT'").fetchone()[0] == 775
+    assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='UNBS_CERTIFIED_LUBRICANT_PRODUCTS'").fetchone()[0] == 46
+    assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='TBS_CERTIFIED_LUBRICANT_PRODUCTS'").fetchone()[0] == 183
+    assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='UNBS_QMARK_PERMIT'").fetchone()[0] == 47
+    assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='TBS_STANDARDS_MARK_LICENSE'").fetchone()[0] == 182
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='DLA_QPL_NUMBER'").fetchone()[0] == 457
     assert db.execute("SELECT count(*) FROM quality_issues WHERE issue_code='dla_qpd_lifecycle_restriction'").fetchone()[0] == 93
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='FUCHS_PRODUCT_UID'").fetchone()[0] == 10605
@@ -378,6 +389,25 @@ def main() -> None:
     assert kebs_smark_report["duplicate_or_renewal_permits_merged"] == 25
     assert kebs_smark_report["families"] == {"C": 6, "E": 2, "G": 17, "H": 98, "I": 22, "M": 316, "T": 205, "TF": 81, "U": 3}
     assert all(not ({"address", "phone", "email", "contact"} & set(row)) for row in kebs_smark_rows)
+    for source_id, expected in (("UNBS_CERTIFIED_LUBRICANT_PRODUCTS", 46), ("TBS_CERTIFIED_LUBRICANT_PRODUCTS", 183)):
+        assert policy_by_id[source_id]["source_sha256"] == east_africa_report["normalized_output_sha256"]
+        assert policy_by_id[source_id]["observed_count"] == expected
+    assert east_africa_report["source_directory_rows"] == {
+        "UNBS_CERTIFIED_LUBRICANT_PRODUCTS": 13091,
+        "TBS_CERTIFIED_LUBRICANT_PRODUCTS": 2642,
+    }
+    assert east_africa_report["lubricant_scope_certificate_rows"] == {
+        "UNBS_CERTIFIED_LUBRICANT_PRODUCTS": 47,
+        "TBS_CERTIFIED_LUBRICANT_PRODUCTS": 70,
+    }
+    assert east_africa_report["product_designation_occurrences"] == {
+        "TBS_CERTIFIED_LUBRICANT_PRODUCTS": 184,
+        "UNBS_CERTIFIED_LUBRICANT_PRODUCTS": 47,
+    }
+    assert east_africa_report["certificate_renewal_or_duplicate_occurrences_merged"] == 2
+    assert east_africa_report["tbs_lifecycle_method"].startswith("Computed from the official issue/expiry dates")
+    assert east_africa_report["families"] == {"C": 7, "G": 7, "H": 30, "I": 2, "M": 116, "T": 56, "TF": 9, "U": 2}
+    assert all(not ({"location", "district", "address", "phone", "email", "contact"} & set(row)) for row in east_africa_rows)
     assert policy_by_id["api-eolcs"]["observed_count"] == 35174
     assert policy_by_id["NORDIC_SWAN_EU_ECOLABEL_LUBRICANTS_CROSSCHECK"]["observed_count"] == 60
     assert biopreferred_report["source_occurrences"] == 1387

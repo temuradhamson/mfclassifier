@@ -805,6 +805,36 @@
       "notes": "The public directory reported 42,358 S-Marks at the 2026-07-21 snapshot. Twenty-five broad and professional search slices exposed 4,276 visible cards; 4,271 cards parsed to 2,897 unique permits. A strict lubricant/technical-fluid scope retained 775 permits and merged 25 renewal or duplicate permits into 750 product identities from 64 manufacturers. Only factual product, brand, company, permit lifecycle and standard designation/title evidence is retained; addresses, contacts and Kenya Standard body text are excluded. Search totals and visible-card counts are reported separately because KEBS pagination does not render every result counted by its backend."
     },
     {
+      "source_id": "UNBS_CERTIFIED_LUBRICANT_PRODUCTS",
+      "title": "Uganda National Bureau of Standards — certified lubricant products",
+      "owner": "Uganda National Bureau of Standards (UNBS)",
+      "source_type": "official_government_product_certification_directory_curated_scope",
+      "source_locator": "data/east-africa-certified-lubricant-products.jsonl",
+      "source_url": "https://cims.unbs.go.ug/api/website/",
+      "terms_url": "https://unbs.go.ug/content.php?pg=content&src=product-certification",
+      "source_sha256": "fa272e24f17a96b732c6edcf09914de0bbd4a245ccd94a33cab415213cf164ab",
+      "access_status": "public_official_government_product_verification_directory",
+      "bulk_ingest_allowed": true,
+      "publication_status": "normalized_factual_certification_records_with_attribution",
+      "observed_count": 46,
+      "notes": "The public UNBS register exposed 13,091 certification rows at the 2026-07-21 snapshot. Exact professional product types retained 47 lubricant/brake-fluid permit occurrences, normalized to 46 product identities after one historical permit renewal merge. The UNBS certification agreement states that permit particulars are entered in a public directory/register. Only company, marketed product designation, product type, permit lifecycle and standard designation are retained; district/location, contacts and standard body text are excluded."
+    },
+    {
+      "source_id": "TBS_CERTIFIED_LUBRICANT_PRODUCTS",
+      "title": "Tanzania Bureau of Standards — certified lubricant products",
+      "owner": "Tanzania Bureau of Standards (TBS)",
+      "source_type": "official_government_product_certification_directory_curated_scope",
+      "source_locator": "data/east-africa-certified-lubricant-products.jsonl",
+      "source_url": "https://www.tbs.go.tz/index.php/companies",
+      "terms_url": "https://www.tbs.go.tz/pages/certification",
+      "source_sha256": "fa272e24f17a96b732c6edcf09914de0bbd4a245ccd94a33cab415213cf164ab",
+      "access_status": "public_official_government_product_verification_directory",
+      "bulk_ingest_allowed": true,
+      "publication_status": "normalized_factual_certification_records_with_attribution",
+      "observed_count": 183,
+      "notes": "The public TBS register exposed 2,642 certification rows at the 2026-07-21 snapshot. Seventy exact lubricant/coolant/brake-fluid certificate rows contain 184 comma-separated marketed product-designation occurrences; they normalize to 183 product identities after one repeated current certification occurrence is merged. TBS lifecycle is explicitly computed from official issue/expiry dates because the table has no separate live status flag. Only company, marketed product designation, product type, licence lifecycle and standard designation are retained. Location/contact fields and standard body text are excluded; the registered TBS mark itself is not reproduced."
+    },
+    {
       "source_id": "JAPAN_ECOMARK_CATEGORY_110",
       "title": "Japan Eco Mark Category 110 Biodegradable Lubricating Oil",
       "owner": "Japan Environment Association Eco Mark Office",

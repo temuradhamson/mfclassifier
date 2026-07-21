@@ -1,0 +1,64 @@
+{
+  "status": "official_public_government_product_certification_directories_normalized",
+  "snapshot_date": "2026-07-21",
+  "source_directory_rows": {
+    "UNBS_CERTIFIED_LUBRICANT_PRODUCTS": 13091,
+    "TBS_CERTIFIED_LUBRICANT_PRODUCTS": 2642
+  },
+  "lubricant_scope_certificate_rows": {
+    "UNBS_CERTIFIED_LUBRICANT_PRODUCTS": 47,
+    "TBS_CERTIFIED_LUBRICANT_PRODUCTS": 70
+  },
+  "product_designation_occurrences": {
+    "TBS_CERTIFIED_LUBRICANT_PRODUCTS": 184,
+    "UNBS_CERTIFIED_LUBRICANT_PRODUCTS": 47
+  },
+  "normalized_products": 229,
+  "normalized_products_by_source": {
+    "TBS_CERTIFIED_LUBRICANT_PRODUCTS": 183,
+    "UNBS_CERTIFIED_LUBRICANT_PRODUCTS": 46
+  },
+  "certificate_renewal_or_duplicate_occurrences_merged": 2,
+  "manufacturers": 30,
+  "lifecycle_statuses": {
+    "historical_expired_certification_permit": 33,
+    "valid_certification_permit": 196
+  },
+  "families": {
+    "C": 7,
+    "G": 7,
+    "H": 30,
+    "I": 2,
+    "M": 116,
+    "T": 56,
+    "TF": 9,
+    "U": 2
+  },
+  "families_by_source": {
+    "UNBS_CERTIFIED_LUBRICANT_PRODUCTS": {
+      "M": 43,
+      "TF": 3
+    },
+    "TBS_CERTIFIED_LUBRICANT_PRODUCTS": {
+      "C": 7,
+      "G": 7,
+      "H": 30,
+      "I": 2,
+      "M": 73,
+      "T": 56,
+      "TF": 6,
+      "U": 2
+    }
+  },
+  "tbs_in_scope_rows_without_product_designation": 0,
+  "tbs_lifecycle_method": "Computed from the official issue/expiry dates at the snapshot; the TBS table does not publish a separate live status flag.",
+  "normalized_output_sha256": "fa272e24f17a96b732c6edcf09914de0bbd4a245ccd94a33cab415213cf164ab",
+  "rights_note": "Public certification-directory facts only. Locations/districts, contacts and standards body text are excluded; standard designations are retained as certification evidence.",
+  "excluded_fields": [
+    "location",
+    "district",
+    "address",
+    "contacts",
+    "standard_body_text"
+  ]
+}

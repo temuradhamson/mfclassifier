@@ -51,6 +51,7 @@ KOREA_ECOLABEL_EL509_JSONL = ROOT / "data" / "korea-ecolabel-el509-washer-fluids
 UAE_MOIAT_JSONL = ROOT / "data" / "uae-moiat-conformity-products.jsonl"
 EPA_SAFER_CHOICE_JSONL = ROOT / "data" / "epa-safer-choice-lubricants.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
+EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
 FUCHS_INDIA_JSONL = ROOT / "data" / "fuchs-india-products.jsonl"
 FUCHS_US_JSONL = ROOT / "data" / "fuchs-us-products.jsonl"
 FUCHS_GERMANY_JSONL = ROOT / "data" / "fuchs-germany-products.jsonl"
@@ -1365,6 +1366,80 @@ def kebs_smark_record(row: dict) -> dict:
     return record
 
 
+def east_africa_certified_record(row: dict) -> dict:
+    """Convert one normalized UNBS or TBS public certification identity."""
+    technical = row["technical"]
+    sae_candidates = (
+        technical["sae_gear"] + technical["sae"] + technical["sae_monograde"]
+        if row["family_code"] == "T"
+        else technical["sae"] + technical["sae_monograde"] + technical["sae_gear"]
+    )
+    iso_vg = (technical["iso_vg_explicit"] + technical["iso_vg_designation_inferred"] + [""])[0]
+    performance = [f"API {value}" for value in technical["api"]] + technical["api_gl"]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": f"{row['certification_authority']} certified product",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": (sae_candidates + [""])[0],
+        "api_class": "; ".join(performance),
+        "viscosity": iso_vg,
+        "grease_class": "",
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": "official_government_product_certification_registry",
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["dataset_snapshot_date"],
+    })
+    if iso_vg:
+        record["specifications"]["iso_vg"] = iso_vg
+    record["specifications"].update({
+        "sae_source_reported": technical["sae"],
+        "sae_monograde_source_reported": technical["sae_monograde"],
+        "sae_gear_source_reported": technical["sae_gear"],
+        "api_source_reported": technical["api"],
+        "api_gl_source_reported": technical["api_gl"],
+        "iso_vg_explicit_source_reported": technical["iso_vg_explicit"],
+        "iso_vg_product_designation_inferred": technical["iso_vg_designation_inferred"],
+        "dot_source_reported": technical["dot"],
+        "temperature_c_source_reported": technical["temperature_c"],
+        "classification_basis": row["classification_basis"],
+        "source_product_type": row["source_product_type"],
+        "certification_authority": row["certification_authority"],
+        "certification_standards_source_reported": row["standards"],
+        "certification_permits": row["permit_entries"],
+        "source_occurrence_count": row["source_occurrence_count"],
+        "source_url": row["source_url"],
+        "source_context_url": row["source_context_url"],
+    })
+    code_system = "UNBS_QMARK_PERMIT" if row["market"] == "UG" else "TBS_STANDARDS_MARK_LICENSE"
+    seen_permit_values = set()
+    for index, permit in enumerate(row["permit_entries"], 1):
+        if not permit["permit_number"] or permit["permit_number"] in seen_permit_values:
+            continue
+        seen_permit_values.add(permit["permit_number"])
+        record["codes"][f"east_africa_certification_{index}"] = {
+            "system": code_system,
+            "value": permit["permit_number"],
+            "source_id": row["source_id"],
+            "status": permit["status"] or row["lifecycle_status"],
+        }
+    record["canonical_key"] += f"|east_africa_certified_record:{normalize(row['source_id'])}:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    return record
+
+
 def liqui_moly_identity_name(value: str) -> str:
     return re.sub(r"^liqui moly(?: gmbh)?\s+", "", normalize(value)).strip()
 
@@ -1867,6 +1942,9 @@ def main() -> None:
     kebs_smark_source_rows = [json.loads(line) for line in KEBS_SMARK_JSONL.read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_records = [kebs_smark_record(row) for row in kebs_smark_source_rows]
     input_records.extend(kebs_smark_records)
+    east_africa_certified_source_rows = [json.loads(line) for line in EAST_AFRICA_CERTIFIED_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    east_africa_certified_records = [east_africa_certified_record(row) for row in east_africa_certified_source_rows]
+    input_records.extend(east_africa_certified_records)
     biopreferred_source_rows = [json.loads(line) for line in USDA_BIOPREFERRED_JSONL.read_text(encoding="utf-8").splitlines() if line]
     biopreferred_records = [biopreferred_record(row) for row in biopreferred_source_rows]
     input_records.extend(biopreferred_records)
@@ -3230,6 +3308,7 @@ def main() -> None:
         "uae_moiat_input_sha256": hashlib.sha256(UAE_MOIAT_JSONL.read_bytes()).hexdigest(),
         "epa_safer_choice_input_sha256": hashlib.sha256(EPA_SAFER_CHOICE_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
+        "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "usda_biopreferred_input_sha256": hashlib.sha256(USDA_BIOPREFERRED_JSONL.read_bytes()).hexdigest(),
         "zf_te_ml_input_sha256": hashlib.sha256(ZF_TE_ML_JSONL.read_bytes()).hexdigest(),
         "allison_input_sha256": hashlib.sha256(ALLISON_JSONL.read_bytes()).hexdigest(),
@@ -3280,6 +3359,8 @@ def main() -> None:
         "uae_moiat_source_rows": len(uae_moiat_source_rows),
         "epa_safer_choice_source_rows": len(epa_safer_choice_source_rows),
         "kebs_smark_source_rows": len(kebs_smark_source_rows),
+        "east_africa_certified_source_rows": len(east_africa_certified_source_rows),
+        "east_africa_certified_source_rows_by_source": dict(sorted(Counter(row["source_id"] for row in east_africa_certified_source_rows).items())),
         "official_government_product_conformity_registry_rows": sum(r["evidence_status"] == "official_government_product_conformity_registry" for r in records),
         "official_government_product_certification_registry_rows": sum(r["evidence_status"] == "official_government_product_certification_registry" for r in records),
         "official_government_program_rows": sum(r["evidence_status"] == "official_government_program_catalog" for r in records),

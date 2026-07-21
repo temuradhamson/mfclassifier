@@ -58,7 +58,7 @@ python3 tools/build_analytics_demo.py \
 
 ## Мировой каталог и расширение ЕНКТ
 
-Отдельный provenance-aware слой содержит 47 119 канонических продуктовых строк
+Отдельный provenance-aware слой содержит 47 348 канонических продуктовых строк
 на срез 21.07.2026. В него уже входят проектные источники, AIChilon, официальные
 реестры JASO, GM dexos, NMMA, NLGI, ZF TE-ML, Allison TES, Driventic DIWA,
 Mercedes-Benz Trucks DTFR, Mercedes-Benz BeVo, официальные каталоги Volvo
@@ -85,6 +85,10 @@ CSV отдельно подтвердил 60 уже имеющихся EU Ecolab
 объединены по товарной identity, а 25 продлений/дублей не раздувают число строк.
 В публикацию включены только факты сертификации и обозначения стандартов, без
 адресов, контактов и текста Kenya Standards.
+Публичные государственные реестры UNBS Уганды и TBS Танзании добавили ещё 229
+товарных identity: 46 и 183 соответственно. В TBS перечисления внутри одной
+лицензии разделены на конкретные продукты; повторные сроки одной лицензии
+сохраняются как история, но не создают дубли продукта или внешнего кода.
 Публичный API EOLCS на 21.07.2026 показывает 35 174 лицензированных продукта от
 883 компаний, но строки не импортируются: условия API требуют письменного
 разрешения на массовое копирование и переиздание. Это проверенный растущий seed,
@@ -116,8 +120,10 @@ CSV отдельно подтвердил 60 уже имеющихся EU Ecolab
   открытого CSV EPA с объединёнными UPC, GTIN и MPN;
 - `data/kebs-smark-lubricant-products.jsonl` — 750 продуктов из публичного
   реестра S-Mark KEBS с 775 разрешениями, сроками и обозначениями стандартов;
+- `data/east-africa-certified-lubricant-products.jsonl` — 229 продуктов из
+  публичных сертификационных реестров UNBS и TBS с permit/licence lifecycle;
 - `deliverables/World_lubricants_catalog_seed.xlsx` — проверяемая выгрузка;
-- `deliverables/Global_lubricants_catalog_registry.xlsx` — реестр 69 источников
+- `deliverables/Global_lubricants_catalog_registry.xlsx` — реестр 71 источника
   и статусы допуска;
 - `deliverables/ENKT_GSM_extension_pilot.xlsx` — 171 пилотный технический
   профиль и предложение по пятизначному суффиксу ЕНКТ.
@@ -141,6 +147,7 @@ python3 tools/ingest_korea_ecolabel_lubricants.py
 python3 tools/ingest_uae_moiat_conformity_products.py
 python3 tools/ingest_epa_safer_choice_lubricants.py
 python3 tools/ingest_kebs_smark_lubricants.py
+python3 tools/ingest_east_africa_certified_lubricants.py
 python3 tools/ingest_fuchs_india_catalog.py
 python3 tools/ingest_fuchs_us_catalog.py
 python3 tools/ingest_fuchs_germany_catalog.py
