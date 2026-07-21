@@ -1819,6 +1819,32 @@
       "notes": "The official current site exposes indexed product pages with viscosity, industry specifications, OEM approvals, applications and manufacturer FG codes, but its CloudFront edge returns HTTP 403 from the current research environment for the product catalog, individual PDF routes, sitemap and robots.txt. Search-visible pages state that rights are reserved, and no machine-readable feed or product-data reuse permission was located. No protection is bypassed and no rows are imported from search-engine caches. Request an official feed or written permission and an allowlisted retrieval route."
     },
     {
+      "source_id": "VALVOLINE_GLOBAL_CURRENT_PRODUCT_CATALOG",
+      "title": "Valvoline Global current product catalog",
+      "owner": "Valvoline Global Operations",
+      "source_type": "official_manufacturer_current_product_catalog",
+      "source_url": "https://www.valvolineglobal.com/en/products/",
+      "terms_url": "https://www.valvolineglobal.com/en-au/terms-of-use/",
+      "access_status": "public_browse_personal_noncommercial_or_nonprofit_educational_use_only",
+      "bulk_ingest_allowed": false,
+      "publication_status": "metadata_only_pending_written_permission_or_official_feed",
+      "observed_count": null,
+      "notes": "Current market pages expose product names, grades and performance specifications. The published Terms of Use state that site information may not be copied, reproduced or sold except for personal, non-commercial or non-profit educational use. The existing Cummins-hosted Valvoline Europe 2022 catalog remains separate historical evidence; no current-site product rows are imported without written permission or a licensed feed."
+    },
+    {
+      "source_id": "LUBRAX_CURRENT_PRODUCT_CATALOG",
+      "title": "Lubrax current official product catalog",
+      "owner": "Vibra Energia S.A.",
+      "source_type": "official_manufacturer_current_product_catalog_and_technical_documents",
+      "source_url": "https://www.lubrax.com.br/produtos",
+      "terms_url": "https://www.lubrax.com.br/politica-de-privacidade-e-termos-de-uso",
+      "access_status": "public_browse_personal_use_only_written_authorization_required",
+      "bulk_ingest_allowed": false,
+      "publication_status": "aggregate_metadata_only_pending_written_permission_or_official_feed",
+      "observed_count": 149,
+      "notes": "The current official portfolio exposed 149 technical data sheets and 824 safety data sheets at the 2026-07-21 review. Published terms prohibit reproduction or distribution except for personal use without written authorization. No product or technical-document rows are imported. Brazilian ANP registration evidence, including Lubrax registrations where present, remains an independent open-government source."
+    },
+    {
       "source_id": "GULF_OIL_INTERNATIONAL_PDS_CATALOG",
       "title": "Gulf Oil International current Product Data Sheet catalog",
       "owner": "Gulf Oil International Limited",
@@ -1856,6 +1882,18 @@
       "publication_status": "reviewed_zero_relevant_product_rows",
       "observed_count": 0,
       "notes": "The full current Quality Mark directory was reviewed on 2026-07-21: eight listing pages exposed 143 unique certificate-holder pages and 238 current product rows. A strict Arabic lubricant, grease, hydraulic-fluid, brake-fluid, coolant and engine-oil scope produced two initial keyword candidates, both limestone-cement false positives caused by the Arabic substring for gear occurring inside limestone. No professional lubricant or technical-fluid product row remained, so nothing is added to the canonical catalog."
+    },
+    {
+      "source_id": "SASO_SAUDI_QUALITY_MARK_LUBRICANT_SCOPE_REVIEW",
+      "title": "SASO Saudi Quality Mark certified products — lubricant scope review",
+      "owner": "Saudi Standards, Metrology and Quality Organization (SASO)",
+      "source_type": "official_government_product_certification_directory",
+      "source_url": "https://www.saso.gov.sa/en/qualitysign/pages/companies-products.aspx",
+      "access_status": "public_official_certification_directory_robots_allows_crawling",
+      "bulk_ingest_allowed": true,
+      "publication_status": "reviewed_zero_relevant_product_rows",
+      "observed_count": 0,
+      "notes": "The complete current Chemical and Mechanical category scopes were reviewed through the site's ordinary public ASP.NET WebForms workflow on 2026-07-21. Four Chemical-category companies exposed 95 product cards: paints, butane and household cleaning or personal-care products. Two Mechanical-category companies exposed 69 product cards: commercial cooking equipment and cable systems. No lubricant, oil, grease, coolant, antifreeze, hydraulic fluid, transmission fluid or brake-fluid product remained, so nothing is added to the canonical catalog."
     },
     {
       "source_id": "FUCHS_SAUDI_ARABIA_PRODUCT_FINDER",
