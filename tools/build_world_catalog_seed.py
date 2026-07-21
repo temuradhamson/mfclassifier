@@ -39,6 +39,7 @@ DRIVENTIC_DIWA_JSONL = ROOT / "data" / "driventic-diwa-approved-oils.jsonl"
 MERCEDES_DTFR_JSONL = ROOT / "data" / "mercedes-dtfr-approved-fluids.jsonl"
 MERCEDES_BEVO_JSONL = ROOT / "data" / "mercedes-bevo-approved-fluids.jsonl"
 VOLVO_GENUINE_JSONL = ROOT / "data" / "volvo-genuine-fluids.jsonl"
+CEYPETCO_JSONL = ROOT / "data" / "ceypetco-lubricant-products.jsonl"
 MAN_SERVICE_JSONL = ROOT / "data" / "man-service-products.jsonl"
 LIQUI_MOLY_2020_JSONL = ROOT / "data" / "liqui-moly-2020-products.jsonl"
 LIQUI_MOLY_CURRENT_JSONL = ROOT / "data" / "liqui-moly-current-products.jsonl"
@@ -710,6 +711,58 @@ def volvo_genuine_record(row: dict) -> dict:
             "source_id": "VOLVO_GENUINE_FLUIDS",
             "status": "official_manufacturer_product_catalog",
         }
+    return record
+
+
+def ceypetco_record(row: dict) -> dict:
+    """Convert one current official Ceypetco product-grade row."""
+    specs = row["specifications"]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Official Ceypetco lubricant and technical-fluid catalog",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": specs.get("sae_engine") or specs.get("sae_gear") or "",
+        "api_class": " ".join(
+            [f"API {'/'.join(specs.get('api', []))}" if specs.get("api") else ""]
+            + [f"API {'/'.join(specs.get('api_gl', []))}" if specs.get("api_gl") else ""]
+            + [f"ACEA {'/'.join(specs.get('acea', []))}" if specs.get("acea") else ""]
+            + [f"ILSAC {'/'.join(specs.get('ilsac', []))}" if specs.get("ilsac") else ""]
+        ).strip(),
+        "viscosity": specs.get("iso_vg", ""),
+        "grease_class": specs.get("nlgi", ""),
+        "coolant_class": specs.get("brake_fluid_class", ""),
+        "source": "CEYPETCO_OFFICIAL_LUBRICANT_CATALOG",
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": "CEYPETCO_OFFICIAL_LUBRICANT_CATALOG",
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": "official_manufacturer_product_catalog",
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update(specs)
+    record["specifications"].update({
+        "source_url": row["source_url"],
+        "technical_document_url": row["technical_document_url"],
+        "technical_document_sha256": row["technical_document_sha256"],
+        "technical_document_issuer": row["technical_document_issuer"],
+    })
+    # These source conflicts must never leak into strict equivalence through a
+    # guessed SAE or color value.
+    if "conflicting_sae_within_current_tds" in specs.get("source_quality_flags", []):
+        record["specifications"]["sae_engine"] = ""
+        record["specifications"]["sae_gear"] = ""
+    record["canonical_key"] += f"|ceypetco_record:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
     return record
 
 
@@ -2231,6 +2284,9 @@ def main() -> None:
     volvo_genuine_source_rows = [json.loads(line) for line in VOLVO_GENUINE_JSONL.read_text(encoding="utf-8").splitlines() if line]
     volvo_genuine_records = [volvo_genuine_record(row) for row in volvo_genuine_source_rows]
     input_records.extend(volvo_genuine_records)
+    ceypetco_source_rows = [json.loads(line) for line in CEYPETCO_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    ceypetco_records = [ceypetco_record(row) for row in ceypetco_source_rows]
+    input_records.extend(ceypetco_records)
     man_service_source_rows = [json.loads(line) for line in MAN_SERVICE_JSONL.read_text(encoding="utf-8").splitlines() if line]
     man_service_records = [man_service_record(row) for row in man_service_source_rows]
     existing_by_name_family = defaultdict(list)
@@ -3332,6 +3388,17 @@ def main() -> None:
         if link_key not in source_link_keys:
             source_links.append(link)
             source_link_keys.add(link_key)
+    for raw, normalized_row in zip(ceypetco_source_rows, ceypetco_records):
+        target = canonical_by_key[normalized_row["canonical_key"]]
+        link = {
+            "product_id": target["product_id"], "source_id": "CEYPETCO_OFFICIAL_LUBRICANT_CATALOG",
+            "source_record_id": raw["source_record_id"], "source_row": None,
+            "relation": "official_state_owned_supplier_product_catalog",
+        }
+        link_key = (link["product_id"], link["source_id"], link["source_record_id"])
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     for raw in man_service_source_rows:
         target = canonical_by_key[man_service_product_key[raw["source_record_id"]]]
         link = {
@@ -3580,6 +3647,25 @@ def main() -> None:
         "expected": "Recognized SAE J300 viscosity notation",
         "action": "Retain the source value but exclude it from strict SAE equivalence until the authority or an official TDS confirms the grade.",
     } for row in records if row["source_id"] == "THAILAND_DOEB_LUBRICANT_REGISTRY" and "nonstandard_sae_notation" in row["specifications"]["source_quality_flags"])
+    ceypetco_issue_meta = {
+        "conflicting_sae_within_current_tds": ("high", "SAE", "One unambiguous SAE grade in the current TDS", "Retain both source values but keep SAE empty in strict equivalence until Ceypetco publishes a corrected TDS."),
+        "tds_color_table_conflicts_with_product_variant": ("medium", "COOLANT_COLOR", "Color consistent with the TDS title and product variant", "Retain the Red product identity and flag the contradictory Green property cell for supplier clarification."),
+        "nonstandard_oem_notation_retained_verbatim": ("medium", "OEM_SPECIFICATION", "Recognized OEM specification notation", "Retain the printed value verbatim and do not normalize it to a guessed Ford code without corrected source evidence."),
+    }
+    for row in records:
+        if row["source_id"] != "CEYPETCO_OFFICIAL_LUBRICANT_CATALOG":
+            continue
+        for flag in row["specifications"].get("source_quality_flags", []):
+            severity, field, expected, action = ceypetco_issue_meta[flag]
+            issues.append({
+                "product_id": row["product_id"],
+                "issue_code": f"ceypetco_{flag}",
+                "severity": severity,
+                "field": field,
+                "value": row["specifications"].get("source_conflict_note", flag),
+                "expected": expected,
+                "action": action,
+            })
     issues.extend({
         "product_id": row["product_id"],
         "issue_code": "dla_qpd_lifecycle_restriction",
@@ -3617,6 +3703,7 @@ def main() -> None:
         "mercedes_dtfr_input_sha256": hashlib.sha256(MERCEDES_DTFR_JSONL.read_bytes()).hexdigest(),
         "mercedes_bevo_input_sha256": hashlib.sha256(MERCEDES_BEVO_JSONL.read_bytes()).hexdigest(),
         "volvo_genuine_input_sha256": hashlib.sha256(VOLVO_GENUINE_JSONL.read_bytes()).hexdigest(),
+        "ceypetco_input_sha256": hashlib.sha256(CEYPETCO_JSONL.read_bytes()).hexdigest(),
         "man_service_input_sha256": hashlib.sha256(MAN_SERVICE_JSONL.read_bytes()).hexdigest(),
         "liqui_moly_2020_input_sha256": hashlib.sha256(LIQUI_MOLY_2020_JSONL.read_bytes()).hexdigest(),
         "liqui_moly_current_input_sha256": hashlib.sha256(LIQUI_MOLY_CURRENT_JSONL.read_bytes()).hexdigest(),
@@ -3698,6 +3785,7 @@ def main() -> None:
         "mercedes_bevo_products_matched_to_existing": mercedes_bevo_matched_rows,
         "mercedes_bevo_products_added": mercedes_bevo_added_rows,
         "volvo_genuine_source_rows": len(volvo_genuine_source_rows),
+        "ceypetco_source_rows": len(ceypetco_source_rows),
         "man_service_source_rows": len(man_service_source_rows),
         "man_service_products_matched_to_existing": man_service_matched_rows,
         "man_service_products_added": man_service_added_rows,

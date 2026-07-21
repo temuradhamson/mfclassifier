@@ -1202,6 +1202,20 @@
       "notes": "Live official search on 2026-07-21 reports 124 certified Category 110 entries. The site policy says that reproduction, redistribution and processed/modified use are generally not permitted without authorization, so product rows are not ingested. Direct links are allowed."
     },
     {
+      "source_id": "CEYPETCO_OFFICIAL_LUBRICANT_CATALOG",
+      "title": "Ceylon Petroleum Corporation — Ceypetco lubricants catalog",
+      "owner": "Ceylon Petroleum Corporation",
+      "source_type": "official_state_owned_supplier_product_catalog_and_tds",
+      "source_locator": "data/ceypetco-lubricant-products.jsonl",
+      "source_url": "https://ceypetco.gov.lk/ceypetco-lubricants/",
+      "source_sha256": "df35372735310aa2251d10bbe1d4ded683a678d063bf77f9265205e6056ffcc3",
+      "access_status": "public_official_catalog_and_public_tds",
+      "bulk_ingest_allowed": true,
+      "publication_status": "normalized_factual_product_grade_fields_with_attribution",
+      "observed_count": 47,
+      "notes": "The official catalog of Sri Lanka's state-owned petroleum corporation exposes 23 product lines and current TDS links. Forty-seven factual product-grade/color rows are normalized from the landing page and 22 TDS files. Marketing prose, artwork and document layout are excluded. Two internal TDS conflicts (Scooter SAE and Red-coolant color) are retained as quality flags and are not resolved by guessing."
+    },
+    {
       "source_id": "DLA_QPD_FSC_9150",
       "title": "US Defense Logistics Agency Qualified Products Database — FSC 9150",
       "owner": "US Defense Logistics Agency",

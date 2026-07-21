@@ -1,0 +1,145 @@
+{
+  "documents": [
+    {
+      "filename": "TDS-Ceypetco-2T-JASO-FC.pdf",
+      "source_sha256": "198d08d48ad72b9ef19903b762e9b4969c6f8c6766393f9c3fd88068383d56de",
+      "source_url": "https://ceypetco.gov.lk/wp-content/uploads/2025/11/TDS-Ceypetco-2T-JASO-FC.pdf"
+    },
+    {
+      "filename": "TDS-Ceypetco-4T-JASO-MA2.pdf",
+      "source_sha256": "9b11655d09fe7c7c6630da39671b3bb4252a26d3fa6aade0aa706e3f90ccb1a7",
+      "source_url": "https://ceypetco.gov.lk/wp-content/uploads/2025/11/TDS-Ceypetco-4T-JASO-MA2.pdf"
+    },
+    {
+      "filename": "TDS-Ceypetco-4T-Scooter-JASO-MB.pdf",
+      "source_sha256": "7fbbcd3540b57b1549f7af0dba4b001f1c4a4f46bcc149abd38d07cb1b5a117f",
+      "source_url": "https://ceypetco.gov.lk/wp-content/uploads/2025/11/TDS-Ceypetco-4T-Scooter-JASO-MB.pdf"
+    },
+    {
+      "filename": "TDS-Ceypetco-ATF-Dexron-III.pdf",
+      "source_sha256": "a54f03a5e04f2ad43cfece00347320d74f7af5d12108bf958b1f81f63f29b3c1",
+      "source_url": "https://ceypetco.gov.lk/wp-content/uploads/2025/11/TDS-Ceypetco-ATF-Dexron-III.pdf"
+    },
+    {
+      "filename": "TDS-Ceypetco-Brake-Fluid-DOT3.pdf",
+      "source_sha256": "305fe0564014a7779c8e55f0b02b852df665293a33b2a82233c394a77a069eab",
+      "source_url": "https://ceypetco.gov.lk/wp-content/uploads/2025/11/TDS-Ceypetco-Brake-Fluid-DOT3.pdf"
+    },
+    {
+      "filename": "TDS-Ceypetco-Brake-Fluid-DOT4.pdf",
+      "source_sha256": "4a1ffff1ce41861c8b4fdcd090d55f3f2d5d19750a3cb038222f0481fa075636",
+      "source_url": "https://ceypetco.gov.lk/wp-content/uploads/2025/11/TDS-Ceypetco-Brake-Fluid-DOT4.pdf"
+    },
+    {
+      "filename": "TDS-Ceypetco-EP-Grease.pdf",
+      "source_sha256": "c2e04ba2cda206e87bb995a82833fb1e9b3fc57614a43f88619356cff0780d46",
+      "source_url": "https://ceypetco.gov.lk/wp-content/uploads/2025/11/TDS-Ceypetco-EP-Grease.pdf"
+    },
+    {
+      "filename": "TDS-Ceypetco-Enduro-15W40.pdf",
+      "source_sha256": "93762dd306efb680489d59639c72b614d7339c994eeae82505b9467e84aab46f",
+      "source_url": "https://ceypetco.gov.lk/wp-content/uploads/2025/11/TDS-Ceypetco-Enduro-15W40.pdf"
+    },
+    {
+      "filename": "TDS-Ceypetco-Gear-Oil-GL-4.pdf",
+      "source_sha256": "0cf29ddb5e405ea9284b560cd29026b4274835d7280d77a23fa7a0c6d946a721",
+      "source_url": "https://ceypetco.gov.lk/wp-content/uploads/2025/11/TDS-Ceypetco-Gear-Oil-GL-4.pdf"
+    },
+    {
+      "filename": "TDS-Ceypetco-Gear-Oil-GL-5.pdf",
+      "source_sha256": "c5550d255762f4cded94f5dddd2ac3f834f09c58d21eafd0a92ab6da60131380",
+      "source_url": "https://ceypetco.gov.lk/wp-content/uploads/2025/11/TDS-Ceypetco-Gear-Oil-GL-5.pdf"
+    },
+    {
+      "filename": "TDS-Ceypetco-Hydra.pdf",
+      "source_sha256": "f0d76ff817f9553552aa5500675f7fe979e116ed8ad22ea0a59196c60ef035a2",
+      "source_url": "https://ceypetco.gov.lk/wp-content/uploads/2025/11/TDS-Ceypetco-Hydra.pdf"
+    },
+    {
+      "filename": "TDS-Ceypetco-Hypertrans-IEC-60296.pdf",
+      "source_sha256": "d8e19d6fba6ad6a72f42c53b139c1fab1c6a4719ed8415b5703e969abe4a6ed1",
+      "source_url": "https://ceypetco.gov.lk/wp-content/uploads/2025/11/TDS-Ceypetco-Hypertrans-IEC-60296.pdf"
+    },
+    {
+      "filename": "TDS-Ceypetco-MP-Grease.pdf",
+      "source_sha256": "383ae37c4ee2e8657e9ae30487f31e47f7cbde77f2d39a8d18fb637b413a6dee",
+      "source_url": "https://ceypetco.gov.lk/wp-content/uploads/2025/11/TDS-Ceypetco-MP-Grease.pdf"
+    },
+    {
+      "filename": "TDS-Ceypetco-MTF-80W-90-GL-4.pdf",
+      "source_sha256": "9398f188279cef6d82a648f4d6a29a7b9a3476dde1a27d1f2e9b1ce16bcf909e",
+      "source_url": "https://ceypetco.gov.lk/wp-content/uploads/2025/11/TDS-Ceypetco-MTF-80W-90-GL-4.pdf"
+    },
+    {
+      "filename": "TDS-Ceypetco-Penetrating-Oil.pdf",
+      "source_sha256": "0ca6c32aa6b8db7cf3e1da733a55fe68c27e1e604c7ef8d4f27714b2a7114b10",
+      "source_url": "https://ceypetco.gov.lk/wp-content/uploads/2025/11/TDS-Ceypetco-Penetrating-Oil.pdf"
+    },
+    {
+      "filename": "TDS-Ceypetco-Platineum-0W-20-1.pdf",
+      "source_sha256": "87fe186e36f542408e309c5628e1c48ad4adab7ee5a7ad6eb1803f8a4e5aa631",
+      "source_url": "https://ceypetco.gov.lk/wp-content/uploads/2025/11/TDS-Ceypetco-Platineum-0W-20-1.pdf"
+    },
+    {
+      "filename": "TDS-Ceypetco-Power-Steering-Oil.pdf",
+      "source_sha256": "75422e4bff6602f87212ac29028c342e954bcc54d26cfd11ddba0ddeb5972c6c",
+      "source_url": "https://ceypetco.gov.lk/wp-content/uploads/2025/11/TDS-Ceypetco-Power-Steering-Oil.pdf"
+    },
+    {
+      "filename": "TDS-Ceypetco-Radiator-Coolant-Red.pdf",
+      "source_sha256": "e5ff6ef4c145b5851b59743837f6e40faeb5183071aa52459be57f52f551a6b8",
+      "source_url": "https://ceypetco.gov.lk/wp-content/uploads/2025/11/TDS-Ceypetco-Radiator-Coolant-Red.pdf"
+    },
+    {
+      "filename": "TDS-Ceypetco-Rodeo-Xtra.pdf",
+      "source_sha256": "6703dc5f8976b5af8110ba143f42e89ccfe24ec459232fdeb71cff331636eeaa",
+      "source_url": "https://ceypetco.gov.lk/wp-content/uploads/2025/11/TDS-Ceypetco-Rodeo-Xtra.pdf"
+    },
+    {
+      "filename": "TDS-Ceypetco-Supra.pdf",
+      "source_sha256": "a9291aefe91cc5f13ba42230fced61126320193cec9d0ae04ac3a88d796e0d99",
+      "source_url": "https://ceypetco.gov.lk/wp-content/uploads/2025/11/TDS-Ceypetco-Supra.pdf"
+    },
+    {
+      "filename": "TDS-Ceypetco-Supreme-XHD.pdf",
+      "source_sha256": "77e647529628f8d1d52afb7aa9c34603006490864cfe3b72b0a4b8043c5e4437",
+      "source_url": "https://ceypetco.gov.lk/wp-content/uploads/2025/11/TDS-Ceypetco-Supreme-XHD.pdf"
+    },
+    {
+      "filename": "TDS-Ceypetco-Universal-Tractor-Fluid.pdf",
+      "source_sha256": "c96c8bdb14c15fffe3c9892c61af53a63d858693b7dfca1d04c3f63612d7279e",
+      "source_url": "https://ceypetco.gov.lk/wp-content/uploads/2025/11/TDS-Ceypetco-Universal-Tractor-Fluid.pdf"
+    }
+  ],
+  "families": {
+    "E": 1,
+    "G": 10,
+    "H": 4,
+    "I": 1,
+    "M": 17,
+    "S": 1,
+    "T": 8,
+    "TF": 5
+  },
+  "grain_note": "One row is a factual product-grade or explicitly marketed color variant. Package-only variants are not separate rows.",
+  "known_source_conflicts": [
+    "The current 4T Scooter TDS says SAE 10W-40 in the description and SAE 10W-30 in the property table.",
+    "The current Red coolant TDS identifies Red in its title/description but Green in the color property row."
+  ],
+  "normalized_output_sha256": "df35372735310aa2251d10bbe1d4ded683a678d063bf77f9265205e6056ffcc3",
+  "normalized_product_grade_rows": 47,
+  "publication_scope": "Factual product names, grade/specification fields, evidence URLs and hashes only; document prose, layout and artwork are excluded.",
+  "quality_flags": {
+    "conflicting_sae_within_current_tds": 1,
+    "nonstandard_oem_notation_retained_verbatim": 1,
+    "tds_color_table_conflicts_with_product_variant": 1
+  },
+  "schema_version": 1,
+  "snapshot_date": "2026-07-21",
+  "source_id": "CEYPETCO_OFFICIAL_LUBRICANT_CATALOG",
+  "source_page_sha256": "ecbd15bb55f3b69c65cf411db83b8ec311b80f57db634b8a6b90805d2966429b",
+  "source_product_lines": 23,
+  "source_url": "https://ceypetco.gov.lk/ceypetco-lubricants/",
+  "status": "official_state_owned_supplier_catalog_normalized",
+  "technical_documents": 22
+}

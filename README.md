@@ -58,11 +58,12 @@ python3 tools/build_analytics_demo.py \
 
 ## Мировой каталог и расширение ЕНКТ
 
-Отдельный provenance-aware слой содержит 53 970 канонических продуктовых строк
+Отдельный provenance-aware слой содержит 54 017 канонических продуктовых строк
 на срез 21.07.2026. В него уже входят проектные источники, AIChilon, официальные
 реестры JASO, GM dexos, NMMA, NLGI, ZF TE-ML, Allison TES, Driventic DIWA,
 Mercedes-Benz Trucks DTFR, Mercedes-Benz BeVo, официальные каталоги Volvo
-Genuine и тридцати двух рынков FUCHS, исторический каталог LIQUI MOLY 2020 и
+Genuine, государственной Ceylon Petroleum Corporation (Ceypetco) и тридцати
+двух рынков FUCHS, исторический каталог LIQUI MOLY 2020 и
 текущий LIQUI MOLY OpenAPI 2026, действующие рекомендации MAN, USDA BioPreferred
 и открытый API EU Ecolabel. Слой также включает 12 664 строки
 продукта-класса-вязкости из еженедельного
@@ -109,6 +110,11 @@ CSV отдельно подтвердил 60 уже имеющихся EU Ecolab
 API/экспорта его строки не копируются. Аналогично каталог BPCL MAK учитывается
 только агрегатно: официальный сайт заявляет 400+ grades, а его условия требуют
 письменного разрешения на воспроизведение материалов.
+Официальный каталог Ceypetco добавил 47 продуктовых града/цветовых исполнения
+из 23 линий и 22 актуальных TDS. Профессиональные варианты разнесены по SAE,
+ISO VG и NLGI. Два противоречия внутри TDS (SAE 10W-30/10W-40 у Scooter и
+Red/Green у охлаждающей жидкости), а также нестандартная печать Ford-кода у
+жидкости ГУР сохранены как quality issues и не исправляются догадкой.
 Публичный API EOLCS на 21.07.2026 показывает 35 174 лицензированных продукта от
 883 компаний, но строки не импортируются: условия API требуют письменного
 разрешения на массовое копирование и переиздание. Это проверенный растущий seed,
@@ -147,8 +153,10 @@ API/экспорта его строки не копируются. Аналог
   и точной ссылкой на строку и страницу исходного PDF;
 - `data/rsb-smark-lubricant-products.jsonl` — девять действующих продуктов из
   публичного S-Mark directory Rwanda Standards Board;
+- `data/ceypetco-lubricant-products.jsonl` — 47 продуктовых града/цветовых
+  исполнения официального каталога Ceypetco со ссылками и SHA-256 22 TDS;
 - `deliverables/World_lubricants_catalog_seed.xlsx` — проверяемая выгрузка;
-- `deliverables/Global_lubricants_catalog_registry.xlsx` — реестр 75 источников
+- `deliverables/Global_lubricants_catalog_registry.xlsx` — реестр 100 источников
   и статусы допуска;
 - `deliverables/ENKT_GSM_extension_pilot.xlsx` — 171 пилотный технический
   профиль и предложение по пятизначному суффиксу ЕНКТ.
@@ -163,6 +171,7 @@ python3 tools/ingest_driventic_diwa_approved_oils.py
 python3 tools/ingest_mercedes_dtfr_approved_fluids.py
 python3 tools/ingest_mercedes_bevo_approved_fluids.py
 python3 tools/ingest_volvo_genuine_fluids.py
+python3 tools/ingest_ceypetco_lubricants.py
 python3 tools/ingest_man_service_products.py
 python3 tools/ingest_anp_lubricant_registry.py
 python3 tools/ingest_indonesia_npt_registry.py

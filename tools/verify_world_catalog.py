@@ -25,6 +25,8 @@ def main() -> None:
     mercedes_report = json.loads((ROOT / "data/mercedes-dtfr-approved-fluids-report.json").read_text(encoding="utf-8"))
     mercedes_bevo_report = json.loads((ROOT / "data/mercedes-bevo-approved-fluids-report.json").read_text(encoding="utf-8"))
     volvo_report = json.loads((ROOT / "data/volvo-genuine-fluids-report.json").read_text(encoding="utf-8"))
+    ceypetco_report = json.loads((ROOT / "data/ceypetco-lubricant-products-report.json").read_text(encoding="utf-8"))
+    ceypetco_rows = [json.loads(line) for line in (ROOT / "data/ceypetco-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     man_report = json.loads((ROOT / "data/man-service-products-report.json").read_text(encoding="utf-8"))
     fuchs_report = json.loads((ROOT / "data/fuchs-india-products-report.json").read_text(encoding="utf-8"))
     fuchs_rows = [json.loads(line) for line in (ROOT / "data/fuchs-india-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
@@ -142,7 +144,7 @@ def main() -> None:
     assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
     assert not db.execute("PRAGMA foreign_key_check").fetchall()
     assert db.execute("SELECT count(*) FROM products").fetchone()[0] == len(lines)
-    assert len(lines) == 53970
+    assert len(lines) == 54017
     assert report["jaso_source_rows"] == jaso_report["rows"] == 3630
     assert report["jaso_unique_oil_codes"] == jaso_report["unique_oil_codes"] == 3629
     assert report["official_filed_registry_rows"] == 3629
@@ -202,7 +204,7 @@ def main() -> None:
     assert dla_report["plant_rows_without_product_designation_excluded"] == 766
     assert report["zf_te_ml_source_rows"] == zf_report["unique_approval_numbers"] == 1498
     assert report["official_oem_approval_rows"] == 5475
-    assert report["official_manufacturer_catalog_rows"] == 5490
+    assert report["official_manufacturer_catalog_rows"] == 5537
     assert report["official_oem_service_recommendation_rows"] == 30
     assert report["allison_source_rows"] == allison_report["products"] == 104
     assert report["driventic_diwa_source_rows"] == driventic_report["products"] == 226
@@ -211,6 +213,7 @@ def main() -> None:
     assert report["mercedes_bevo_products_matched_to_existing"] == 158
     assert report["mercedes_bevo_products_added"] == 1755
     assert report["volvo_genuine_source_rows"] == volvo_report["products"] == 32
+    assert report["ceypetco_source_rows"] == ceypetco_report["normalized_product_grade_rows"] == len(ceypetco_rows) == 47
     assert report["man_service_source_rows"] == man_report["products"] == 32
     assert report["man_service_products_matched_to_existing"] == 2
     assert report["man_service_products_added"] == 30
@@ -334,7 +337,7 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_registry_source_data_issue'").fetchone()[0] == 51
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_qualified_product_registry'").fetchone()[0] == 456
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_approval_registry'").fetchone()[0] == 5475
-    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_manufacturer_product_catalog'").fetchone()[0] == 5490
+    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_manufacturer_product_catalog'").fetchone()[0] == 5537
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_service_recommendation'").fetchone()[0] == 30
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='ALLISON_APPROVAL_NUMBER'").fetchone()[0] == 119
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='MERCEDES_DTFR_PRODUCT_ID'").fetchone()[0] == 1892
@@ -343,6 +346,7 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='KOREA_ECOLABEL_CERTIFICATE'").fetchone()[0] == 29
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='VOLVO_PART_NUMBER'").fetchone()[0] == 20
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='VOLVO_GENUINE_FLUIDS'").fetchone()[0] == 32
+    assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='CEYPETCO_OFFICIAL_LUBRICANT_CATALOG'").fetchone()[0] == 47
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='MAN_CURRENT_SERVICE_PRODUCTS'").fetchone()[0] == 32
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='FUCHS_INDIA_PRODUCT_FINDER'").fetchone()[0] == 1007
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='FUCHS_US_PRODUCT_FINDER'").fetchone()[0] == 623
@@ -581,6 +585,14 @@ def main() -> None:
     assert volvo_report["families"] == {"G": 6, "H": 5, "M": 3, "T": 13, "TF": 5}
     assert len(volvo_report["source_pages"]) == 5
     assert len(volvo_report["excluded_ungraded_engine_oil_series"]) == 3
+    assert policy_by_id["CEYPETCO_OFFICIAL_LUBRICANT_CATALOG"]["source_sha256"] == ceypetco_report["normalized_output_sha256"]
+    assert policy_by_id["CEYPETCO_OFFICIAL_LUBRICANT_CATALOG"]["observed_count"] == len(ceypetco_rows) == 47
+    assert report["ceypetco_input_sha256"] == hashlib.sha256((ROOT / "data/ceypetco-lubricant-products.jsonl").read_bytes()).hexdigest()
+    assert ceypetco_report["source_product_lines"] == 23
+    assert ceypetco_report["technical_documents"] == 22
+    assert ceypetco_report["families"] == {"E": 1, "G": 10, "H": 4, "I": 1, "M": 17, "S": 1, "T": 8, "TF": 5}
+    assert ceypetco_report["quality_flags"] == {"conflicting_sae_within_current_tds": 1, "nonstandard_oem_notation_retained_verbatim": 1, "tds_color_table_conflicts_with_product_variant": 1}
+    assert all(not ({"description", "marketing_text", "document_text", "artwork", "image"} & set(row)) for row in ceypetco_rows)
     assert policy_by_id["MAN_CURRENT_SERVICE_PRODUCTS"]["source_sha256"] == man_report["normalized_output_sha256"]
     assert policy_by_id["MAN_CURRENT_SERVICE_PRODUCTS"]["observed_count"] == man_report["products"]
     assert man_report["document_date"] == "2026-04"
