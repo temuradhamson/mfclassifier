@@ -58,7 +58,7 @@ python3 tools/build_analytics_demo.py \
 
 ## Мировой каталог и расширение ЕНКТ
 
-Отдельный provenance-aware слой содержит 43 915 канонических продуктовых строк
+Отдельный provenance-aware слой содержит 46 367 канонических продуктовых строк
 на срез 21.07.2026. В него уже входят проектные источники, AIChilon, официальные
 реестры JASO, GM dexos, NMMA, NLGI, ZF TE-ML, Allison TES, Driventic DIWA,
 Mercedes-Benz Trucks DTFR, Mercedes-Benz BeVo, официальные каталоги Volvo
@@ -73,7 +73,11 @@ Genuine и четырнадцати рынков FUCHS, исторический
 не выдаётся за подтверждённую регистрацию. Один
 регистрационный номер ANP может соответствовать нескольким вязкостным или
 эксплуатационным исполнениям, поэтому они не схлопываются в одну строку.
-Это проверенный растущий seed, а не заявление о полном мировом охвате;
+Подключены также официальные реестры DLA QPD, Blue Angel, Korea Eco-Label и
+открытые Product Conformity Data MOIAT ОАЭ. Из 1 236 сертификатов MOIAT извлечено
+3 176 товарных вхождений, нормализованных в 1 840 продуктов/моделей; фасовки и
+продления сертификатов не раздувают число формул. Это проверенный растущий seed,
+а не заявление о полном мировом охвате;
 подтверждённый мировой
 итог появится только после подключения разрешённых источников и дедупликации.
 
@@ -94,8 +98,11 @@ Genuine и четырнадцати рынков FUCHS, исторический
   строк NPT с компанией, товаром, сроком, страницей, техническими признаками и
   отдельными статусами качества источника; active/expired является вычисленной
   оценкой по месяцу окончания, а не live-подтверждением;
+- `data/uae-moiat-conformity-products.jsonl` — 1 840 нормализованных
+  сертифицированных продукта/модели ОАЭ с брендом, SAE/API/ACEA/JASO/DOT,
+  сертификатами, сроками, штрихкодами и отделёнными фасовками;
 - `deliverables/World_lubricants_catalog_seed.xlsx` — проверяемая выгрузка;
-- `deliverables/Global_lubricants_catalog_registry.xlsx` — реестр 58 источников
+- `deliverables/Global_lubricants_catalog_registry.xlsx` — реестр 66 источников
   и статусы допуска;
 - `deliverables/ENKT_GSM_extension_pilot.xlsx` — 171 пилотный технический
   профиль и предложение по пятизначному суффиксу ЕНКТ.
@@ -113,6 +120,10 @@ python3 tools/ingest_volvo_genuine_fluids.py
 python3 tools/ingest_man_service_products.py
 python3 tools/ingest_anp_lubricant_registry.py
 python3 tools/ingest_indonesia_npt_registry.py
+python3 tools/ingest_dla_qpd_lubricants.py
+python3 tools/ingest_blue_angel_lubricants.py
+python3 tools/ingest_korea_ecolabel_lubricants.py
+python3 tools/ingest_uae_moiat_conformity_products.py
 python3 tools/ingest_fuchs_india_catalog.py
 python3 tools/ingest_fuchs_us_catalog.py
 python3 tools/ingest_fuchs_germany_catalog.py

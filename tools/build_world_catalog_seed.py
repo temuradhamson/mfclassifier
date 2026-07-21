@@ -48,6 +48,7 @@ DLA_QPD_JSONL = ROOT / "data" / "dla-qpd-lubricant-products.jsonl"
 BLUE_ANGEL_JSONL = ROOT / "data" / "blue-angel-de-uz-178-products.jsonl"
 KOREA_ECOLABEL_JSONL = ROOT / "data" / "korea-ecolabel-el611-lubricants.jsonl"
 KOREA_ECOLABEL_EL509_JSONL = ROOT / "data" / "korea-ecolabel-el509-washer-fluids.jsonl"
+UAE_MOIAT_JSONL = ROOT / "data" / "uae-moiat-conformity-products.jsonl"
 FUCHS_INDIA_JSONL = ROOT / "data" / "fuchs-india-products.jsonl"
 FUCHS_US_JSONL = ROOT / "data" / "fuchs-us-products.jsonl"
 FUCHS_GERMANY_JSONL = ROOT / "data" / "fuchs-germany-products.jsonl"
@@ -1181,6 +1182,73 @@ def merge_korea_ecolabel_evidence(target: dict, source_record: dict, raw: dict) 
             existing_codes.add(identity)
 
 
+def uae_moiat_record(row: dict) -> dict:
+    """Convert one normalized UAE MOIAT product-conformity identity."""
+    technical = row["technical"]
+    performance = "; ".join(technical["api"] + technical["api_gl"] + technical["acea"] + technical["jaso"])
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "UAE MOIAT Product Conformity",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": technical["sae"][0] if technical["sae"] else (technical["sae_gear"][0] if technical["sae_gear"] else ""),
+        "api_class": performance,
+        "viscosity": technical["iso_vg"][0] if technical["iso_vg"] else "",
+        "grease_class": technical["nlgi"][0] if technical["nlgi"] else "",
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": "AE",
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": "official_government_product_conformity_registry",
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["dataset_snapshot_date"],
+    })
+    record["specifications"].update({
+        "sae_source_reported": technical["sae"],
+        "sae_gear_source_reported": technical["sae_gear"],
+        "api_source_reported": technical["api"],
+        "api_gl_source_reported": technical["api_gl"],
+        "acea_source_reported": technical["acea"],
+        "jaso_source_reported": technical["jaso"],
+        "iso_vg_source_reported": technical["iso_vg"],
+        "nlgi_source_reported": technical["nlgi"],
+        "dot_source_reported": technical["dot"],
+        "classification_basis": row["classification_basis"],
+        "source_models": row["source_models"],
+        "source_descriptions": row["source_descriptions"],
+        "barcodes": row["barcodes"],
+        "packages": row["packages"],
+        "certificate_entries": row["certificate_entries"],
+        "source_occurrence_count": row["source_occurrence_count"],
+        "source_url": row["source_url"],
+        "source_rights_url": row["source_rights_url"],
+    })
+    seen_certificate_values = set()
+    for index, certificate in enumerate(row["certificate_entries"], 1):
+        certificate_value = certificate["certificate_number"] or certificate["certificate_id"]
+        if certificate_value in seen_certificate_values:
+            continue
+        seen_certificate_values.add(certificate_value)
+        record["codes"][f"uae_moiat_certificate_{index}"] = {
+            "system": "UAE_MOIAT_CERTIFICATE",
+            "value": certificate_value,
+            "source_id": row["source_id"],
+            "status": row["lifecycle_status"],
+        }
+    record["canonical_key"] += f"|uae_moiat_record:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    return record
+
+
 def liqui_moly_identity_name(value: str) -> str:
     return re.sub(r"^liqui moly(?: gmbh)?\s+", "", normalize(value)).strip()
 
@@ -1674,6 +1742,9 @@ def main() -> None:
             existing_by_name[name].append(target)
             korea_el509_added_rows += 1
         korea_el509_product_key[raw["source_record_id"]] = target["canonical_key"]
+    uae_moiat_source_rows = [json.loads(line) for line in UAE_MOIAT_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    uae_moiat_records = [uae_moiat_record(row) for row in uae_moiat_source_rows]
+    input_records.extend(uae_moiat_records)
     biopreferred_source_rows = [json.loads(line) for line in USDA_BIOPREFERRED_JSONL.read_text(encoding="utf-8").splitlines() if line]
     biopreferred_records = [biopreferred_record(row) for row in biopreferred_source_rows]
     input_records.extend(biopreferred_records)
@@ -3034,6 +3105,7 @@ def main() -> None:
         "blue_angel_input_sha256": hashlib.sha256(BLUE_ANGEL_JSONL.read_bytes()).hexdigest(),
         "korea_ecolabel_input_sha256": hashlib.sha256(KOREA_ECOLABEL_JSONL.read_bytes()).hexdigest(),
         "korea_ecolabel_el509_input_sha256": hashlib.sha256(KOREA_ECOLABEL_EL509_JSONL.read_bytes()).hexdigest(),
+        "uae_moiat_input_sha256": hashlib.sha256(UAE_MOIAT_JSONL.read_bytes()).hexdigest(),
         "usda_biopreferred_input_sha256": hashlib.sha256(USDA_BIOPREFERRED_JSONL.read_bytes()).hexdigest(),
         "zf_te_ml_input_sha256": hashlib.sha256(ZF_TE_ML_JSONL.read_bytes()).hexdigest(),
         "allison_input_sha256": hashlib.sha256(ALLISON_JSONL.read_bytes()).hexdigest(),
@@ -3081,6 +3153,8 @@ def main() -> None:
         "korea_ecolabel_el509_source_rows": len(korea_el509_source_rows),
         "korea_ecolabel_el509_products_matched_to_existing": korea_el509_matched_rows,
         "korea_ecolabel_el509_products_added": korea_el509_added_rows,
+        "uae_moiat_source_rows": len(uae_moiat_source_rows),
+        "official_government_product_conformity_registry_rows": sum(r["evidence_status"] == "official_government_product_conformity_registry" for r in records),
         "official_government_program_rows": sum(r["evidence_status"] == "official_government_program_catalog" for r in records),
         "official_government_regulatory_registry_rows": sum(r["evidence_status"] == "official_government_regulatory_registry" for r in records),
         "official_government_qualified_product_registry_rows": sum(r["evidence_status"] == "official_government_qualified_product_registry" for r in records),
