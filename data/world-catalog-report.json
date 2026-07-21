@@ -3,7 +3,7 @@
   "run_id": "seed-2026-07-21",
   "snapshot_date": "2026-07-21",
   "status": "seed_only_world_catalog_incomplete",
-  "input_rows": 99828,
+  "input_rows": 99990,
   "normalized_input_sha256": "819d11779ffccddf9683a9b18a70e39bd5a1b8d72d9811fb5bb46d136b0f8073",
   "jaso_normalized_input_sha256": "b664fea5aee78de7303c33bf13d3c9ac26c8779b78beac24c54295b4d58603d3",
   "official_licensed_input_sha256": "533183ffbc755268ef12b54a556d1f3ea78db4fc80b564e12c391a10a8e2075e",
@@ -40,6 +40,7 @@
   "brava_official_input_sha256": "fbb7e87b61bd55d51bb3f0925366f6b16985412089ba736cea2fea0e95f5fc28",
   "ceypetco_input_sha256": "df35372735310aa2251d10bbe1d4ded683a678d063bf77f9265205e6056ffcc3",
   "pso_official_input_sha256": "7aa4303a280971a2e62c40f02e7c0ac8fbedfa229bc36e73d1d75991a1b0eafa",
+  "pertamina_official_input_sha256": "5eff9a3a0eb2c2f6085a823dbab3fa891602f473ec642ff23bbf4d95e9324f37",
   "man_service_input_sha256": "2fc4ce0c3d1129a99144b7067614fdea054abb4ea58c9446ec26334b47dfcb5f",
   "liqui_moly_2020_input_sha256": "784ea162ebb0981415b285237c7dfbf7a8af92cb5c04f08ae98e98d354714c03",
   "liqui_moly_current_input_sha256": "3203df17a7a098ecc0ebafbcba05c808b92ff4d1fd5af3bfa35a33cdebb94ca6",
@@ -64,19 +65,19 @@
   "fuchs_brazil_input_sha256": "4554ef1b651617a4a810d945bc519bed1e809ace1cda4246d6b63c7fff99affc",
   "fuchs_norway_input_sha256": "7ef62a3216e7f497ed96512202b7d386673fd01a4c6273ae1cc8fff6e026801a",
   "fuchs_hungary_input_sha256": "8a82b90335bc58ab44734be7541daaad051707258b5fbcb5346f8c2a2bf66ed4",
-  "canonical_rows": 99827,
-  "brands": 13925,
+  "canonical_rows": 99989,
+  "brands": 13926,
   "families": {
-    "C": 2470,
-    "E": 149,
-    "G": 11046,
-    "H": 5762,
-    "I": 4389,
-    "M": 43225,
-    "S": 7465,
-    "T": 17316,
-    "TF": 7264,
-    "U": 741
+    "C": 2486,
+    "E": 151,
+    "G": 11057,
+    "H": 5783,
+    "I": 4427,
+    "M": 43248,
+    "S": 7466,
+    "T": 17349,
+    "TF": 7272,
+    "U": 750
   },
   "project_source_rows": 443,
   "legacy_rows_needing_evidence": 88,
@@ -155,7 +156,7 @@
   },
   "official_government_registry_source_data_issue_rows": 51,
   "official_oem_approval_rows": 6495,
-  "official_manufacturer_catalog_rows": 6136,
+  "official_manufacturer_catalog_rows": 6298,
   "official_manufacturer_sds_change_observation_rows": 144,
   "official_oem_service_recommendation_rows": 30,
   "zf_te_ml_source_rows": 1498,
@@ -185,6 +186,55 @@
   "pso_official_source_rows": 124,
   "pso_official_products_matched_to_existing": 1,
   "pso_official_products_added": 123,
+  "pertamina_official_source_rows": 250,
+  "pertamina_official_products_exact_matched_to_existing": 77,
+  "pertamina_official_products_blank_npt_fallback_matched": 11,
+  "pertamina_official_products_added": 162,
+  "pertamina_official_ambiguous_rows_added_separately": 8,
+  "pertamina_official_cross_family_corrections": [
+    {
+      "source_record_id": "PERTAMINA-2237A067E36A9F27",
+      "product_name": "Trafolube A",
+      "previous_family_code": "C",
+      "current_official_family_code": "E",
+      "target_source_id": "INDONESIA_NPT_LUBRICANT_REGISTRY"
+    },
+    {
+      "source_record_id": "PERTAMINA-D86EE909C367CF49",
+      "product_name": "Maxcool WS 01",
+      "previous_family_code": "H",
+      "current_official_family_code": "I",
+      "target_source_id": "INDONESIA_NPT_LUBRICANT_REGISTRY"
+    },
+    {
+      "source_record_id": "PERTAMINA-102D8BE0870AD6B7",
+      "product_name": "Maxcool WS 01 EP",
+      "previous_family_code": "H",
+      "current_official_family_code": "I",
+      "target_source_id": "INDONESIA_NPT_LUBRICANT_REGISTRY"
+    },
+    {
+      "source_record_id": "PERTAMINA-877E751F6ED6E39C",
+      "product_name": "Sebana HP",
+      "previous_family_code": "T",
+      "current_official_family_code": "I",
+      "target_source_id": "INDONESIA_NPT_LUBRICANT_REGISTRY"
+    },
+    {
+      "source_record_id": "PERTAMINA-467085563B7B9629",
+      "product_name": "TERMO 150",
+      "previous_family_code": "C",
+      "current_official_family_code": "I",
+      "target_source_id": "INDONESIA_NPT_LUBRICANT_REGISTRY"
+    },
+    {
+      "source_record_id": "PERTAMINA-714C27DE59E4702A",
+      "product_name": "PERTAMINA FG-GO ISO VG 150",
+      "previous_family_code": "C",
+      "current_official_family_code": "T",
+      "target_source_id": "INDONESIA_NPT_LUBRICANT_REGISTRY"
+    }
+  ],
   "man_service_source_rows": 32,
   "man_service_products_matched_to_existing": 2,
   "man_service_products_added": 30,
@@ -306,7 +356,7 @@
     "keep_separate_fuchs_market_family_conflict": 529
   },
   "quality_issues": {
-    "professional_key_incomplete": 28997,
+    "professional_key_incomplete": 28999,
     "classification_family_conflict": 214,
     "source_multigrade_table_not_safely_aligned_to_listing_title": 27,
     "source_registration_number_missing": 51,
@@ -320,6 +370,8 @@
     "pso_current_page_ow_20_typo_resolved_by_linked_pds_0w_20": 1,
     "pso_current_page_title_break_typo_resolved_by_linked_pds_brake": 2,
     "pso_dot_4_table_grade_without_separate_dot_4_performance_bullet": 1,
+    "pertamina_linked_pds_title_conflicts_with_current_product_card": 1,
+    "pertamina_current_official_family_corrects_prior_registry_family": 6,
     "brava_source_part_number_cross_product_collision": 2,
     "brava_nonstandard_acea_class_source_reported_verbatim": 1,
     "brava_source_part_number_placeholder_excluded": 2,
@@ -443,6 +495,7 @@
     "MEXICO_CONUEE_CERTIFIED_PRODUCTS_LUBRICANT_SCOPE_REVIEW",
     "PARKER_DENISON_CURRENT_FLUID_RATINGS",
     "PAKISTAN_STATE_OIL_OFFICIAL_CATALOG",
+    "PERTAMINA_LUBRICANTS_OFFICIAL_CATALOG",
     "EGYPT_EOS_QUALITY_MARK_LUBRICANT_SCOPE_REVIEW"
   ],
   "bulk_sources_blocked": [

@@ -1777,6 +1777,21 @@
       "notes": "Forty-three current product-series pages and their 43 linked PDS documents normalize to 124 series-grade facts. Two current webpage grades absent from the linked PDS are retained with lower evidence; source conflicts and typos remain explicit. Series-level package lists are retained as evidence but are not expanded into grade-specific offers. One exact PSO DEO 8000 SAE 15W-40 identity reconciles to existing Mercedes-Benz DTFR evidence. Descriptions, images, layout and marketing copy are excluded. Reuse is limited to noncommercial informational purposes with attribution under the official copyright notice."
     },
     {
+      "source_id": "PERTAMINA_LUBRICANTS_OFFICIAL_CATALOG",
+      "title": "Pertamina Lubricants current official product catalog",
+      "owner": "PT Pertamina Lubricants",
+      "source_type": "official_state_owned_manufacturer_current_product_catalog_and_pds",
+      "source_locator": "data/pertamina-official-lubricant-products.jsonl",
+      "source_url": "https://www.pertaminalubricants.com/industry/industry_produk",
+      "terms_url": "https://www.pertaminalubricants.com/page/detail/policy",
+      "source_sha256": "5eff9a3a0eb2c2f6085a823dbab3fa891602f473ec642ff23bbf4d95e9324f37",
+      "access_status": "public_official_catalog_crawling_allowed_no_product_data_reuse_terms_found_at_snapshot",
+      "bulk_ingest_allowed": true,
+      "publication_status": "derived_attributed_nonexpressive_factual_fields_only",
+      "observed_count": 250,
+      "notes": "The current official industrial API exposes 104 product cards and 104 linked PDS documents; four current automotive pages expose 22 cards. PDS grade tables expand the source to 252 product occurrences and 250 normalized product-grade rows after two exact within-source repeats are merged. One ungraded MEDITRAN SX automotive series card is excluded because current graded industrial products are present. The industrial API's viscosity field is not treated as grade authority because it sometimes concatenates table columns and sometimes labels ISO VG values as SAE; linked PDS tables are authoritative. The Rusguard Lube 10 card links to a PDS titled Rusguard Lube X, so that document is retained as provenance but excluded from technical evidence for Lube 10. No package offers are inferred. Only attributed non-expressive factual fields are published; descriptions, images, artwork, layout and marketing prose are excluded. Robots permits crawling and no product-data reuse terms were located on the published privacy page at the 2026-07-21 snapshot."
+    },
+    {
       "source_id": "EGYPT_EOS_QUALITY_MARK_LUBRICANT_SCOPE_REVIEW",
       "title": "Egyptian EOS Quality Mark certified products — lubricant scope review",
       "owner": "Egyptian Organization for Standardization and Quality (EOS)",

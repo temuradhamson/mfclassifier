@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-07-21",
+  "source_id": "PERTAMINA_LUBRICANTS_OFFICIAL_CATALOG",
+  "robots_url": "https://www.pertaminalubricants.com/robots.txt",
+  "privacy_url": "https://www.pertaminalubricants.com/page/detail/policy",
+  "industry_url": "https://www.pertaminalubricants.com/industry/industry_produk",
+  "robots_text_sha256": "27f6ecb9e91eb662114b49530a0ba6cf4ce7c2dd6ae8f4b140a1361428d4f1a3",
+  "privacy_text_sha256": "3ce05b78f33f59b8dd5db623c684930a0a5f00e29f37e12a422cd6c365d3f54c",
+  "source_industrial_cards": 104,
+  "source_industrial_pds_documents": 104,
+  "industrial_endpoint_factual_projection_sha256": "d80b618dffaf5c489f5bb574bd05a9a2021543539d3e9f7b8ee24511ce168051",
+  "industrial_pds_aggregate_sha256": "75fe3bebfea09292b7b545a2d2584a398df30efccfe308492d7b09407ef16935",
+  "industrial_product_grade_occurrences": 231,
+  "source_automotive_cards": 22,
+  "automotive_product_occurrences_retained": 21,
+  "automotive_series_cards_excluded": [
+    {
+      "source_url": "https://www.pertaminalubricants.com/automotive/detail_pelumas/5",
+      "product_name": "MEDITRAN SX",
+      "reason": "ungraded_series_card_with_current_graded_industrial_products"
+    }
+  ],
+  "automotive_page_factual_projection_sha256": "9d757fbec4abfac1aa9f45c41d5f582ded52bd01ac71d4ed4e0fad5ca6be0276",
+  "source_product_occurrences_retained": 252,
+  "normalized_product_grade_rows": 250,
+  "within_source_repeat_occurrences_merged": 2,
+  "families": {
+    "C": 21,
+    "E": 2,
+    "G": 14,
+    "H": 34,
+    "I": 43,
+    "M": 79,
+    "S": 2,
+    "T": 38,
+    "TF": 8,
+    "U": 9
+  },
+  "grade_kinds": {
+    "iso_vg": 114,
+    "nlgi": 13,
+    "sae_engine": 84,
+    "sae_gear": 6,
+    "source_variant": 6,
+    "ungraded": 27
+  },
+  "output_sha256": "5eff9a3a0eb2c2f6085a823dbab3fa891602f473ec642ff23bbf4d95e9324f37",
+  "rights_posture": "public_official_catalog_no_product_data_reuse_terms_located_at_snapshot_attributed_nonexpressive_factual_fields_only"
+}

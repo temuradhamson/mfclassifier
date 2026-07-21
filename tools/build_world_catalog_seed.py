@@ -50,6 +50,7 @@ SCANIA_GENUINE_JSONL = ROOT / "data" / "scania-genuine-oils.jsonl"
 BRAVA_OFFICIAL_JSONL = ROOT / "data" / "brava-official-products.jsonl"
 CEYPETCO_JSONL = ROOT / "data" / "ceypetco-lubricant-products.jsonl"
 PSO_OFFICIAL_JSONL = ROOT / "data" / "pso-official-lubricant-products.jsonl"
+PERTAMINA_OFFICIAL_JSONL = ROOT / "data" / "pertamina-official-lubricant-products.jsonl"
 MAN_SERVICE_JSONL = ROOT / "data" / "man-service-products.jsonl"
 LIQUI_MOLY_2020_JSONL = ROOT / "data" / "liqui-moly-2020-products.jsonl"
 LIQUI_MOLY_CURRENT_JSONL = ROOT / "data" / "liqui-moly-current-products.jsonl"
@@ -1258,6 +1259,112 @@ def merge_pso_catalog_evidence(target: dict, source_record: dict) -> None:
     ):
         if key in source_specs:
             target_specs[f"pso_{key}"] = source_specs[key]
+
+
+def pertamina_official_record(row: dict) -> dict:
+    """Convert one current Pertamina product-grade fact without inventing a SKU."""
+    specs = row["specifications"]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Official Pertamina Lubricants current product catalog",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": specs.get("sae_engine") or specs.get("sae_gear") or "",
+        "api_class": " ".join(
+            [f"API {'/'.join(specs.get('api', []))}" if specs.get("api") else ""]
+            + [f"API {'/'.join(specs.get('api_gl', []))}" if specs.get("api_gl") else ""]
+            + [f"ACEA {'/'.join(specs.get('acea', []))}" if specs.get("acea") else ""]
+            + [f"JASO {'/'.join(specs.get('jaso', []))}" if specs.get("jaso") else ""]
+            + [f"ILSAC {'/'.join(specs.get('ilsac', []))}" if specs.get("ilsac") else ""]
+        ).strip(),
+        "viscosity": specs.get("iso_vg", ""),
+        "grease_class": specs.get("nlgi", ""),
+        "coolant_class": specs.get("brake_fluid_class", ""),
+        "source": "PERTAMINA_LUBRICANTS_OFFICIAL_CATALOG",
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": "PERTAMINA_LUBRICANTS_OFFICIAL_CATALOG",
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": "official_manufacturer_product_catalog",
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update(specs)
+    record["specifications"].update({
+        "source_grade": row["source_grade"],
+        "source_grade_kind": row["source_grade_kind"],
+        "source_product_names": row["source_product_names"],
+        "source_occurrence_count": row["source_occurrence_count"],
+        "source_occurrences": row["source_occurrences"],
+        "source_quality_flags": row["source_quality_flags"],
+        "access_status": row["access_status"],
+    })
+    record["canonical_key"] += f"|pertamina_official_record:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    return record
+
+
+def pertamina_grade_value(value) -> str:
+    return re.sub(r"^(?:sae|iso vg|nlgi)\s+", "", normalize(value))
+
+
+def pertamina_grade_signature(record: dict) -> tuple[str, ...]:
+    specs = record["specifications"]
+    return tuple(pertamina_grade_value(specs.get(key, "")) for key in (
+        "sae_engine", "sae_gear", "iso_vg", "nlgi",
+    )) + (normalize(specs.get("brake_fluid_class") or specs.get("coolant_class", "")),)
+
+
+def pertamina_identity_surface(product_name: str) -> str:
+    """Normalize labels while retaining the grade encoded in the source name."""
+    value = normalize(product_name)
+    value = re.split(r"\b(?:api|acea|jaso|ilsac)\b", value, maxsplit=1)[0]
+    value = re.sub(r"\b(?:sae|iso vg|nlgi)\b", " ", value)
+    # NPT occasionally prints the same grade on both sides of `ISO VG`.
+    value = re.sub(r"\b(\d{1,4})\s+\1\b", r"\1", value)
+    return re.sub(r"\s+", " ", value).strip()
+
+
+def pertamina_identity_core(record: dict) -> str:
+    value = pertamina_identity_surface(record["product_name_raw"])
+    for grade in pertamina_grade_signature(record)[:4]:
+        if grade and (value == grade or value.endswith(f" {grade}")):
+            value = value[:-len(grade)].strip()
+    return value
+
+
+def is_pertamina_affiliated(record: dict) -> bool:
+    return "pertamina" in normalize(record.get("manufacturer")) or "pertamina" in normalize(record.get("brand"))
+
+
+def merge_pertamina_catalog_evidence(target: dict, source_record: dict, match_basis: str) -> None:
+    """Attach current manufacturer facts to one unambiguous affiliated identity."""
+    target_specs = target["specifications"]
+    source_specs = source_record["specifications"]
+    for key in ("api", "api_gl", "acea", "jaso", "ilsac", "oem_approvals"):
+        target_specs[key] = sorted(set(target_specs.get(key, [])) | set(source_specs.get(key, [])))
+    for key in ("sae_engine", "sae_gear", "iso_vg", "nlgi", "coolant_class"):
+        if not target_specs.get(key) and source_specs.get(key):
+            target_specs[key] = source_specs[key]
+    for key in (
+        "source_grade", "source_grade_kind", "source_product_names",
+        "source_occurrence_count", "source_occurrences", "source_quality_flags",
+        "standards_and_approvals_source_reported", "base_oil_source_reported",
+        "access_status", "brake_fluid_class",
+    ):
+        if key in source_specs:
+            target_specs[f"pertamina_{key}"] = source_specs[key]
+    target_specs["pertamina_cross_source_match_basis"] = match_basis
+    target["lifecycle_status"] = "listed_on_current_official_catalog"
+    target["snapshot_date"] = SNAPSHOT_DATE
 
 
 def man_service_record(row: dict) -> dict:
@@ -4044,6 +4151,74 @@ def main() -> None:
     # consolidation. Cross-source identities remain review candidates and cannot
     # perturb already established manufacturer-market deduplication decisions.
     input_records.extend(indonesia_npt_records)
+    pertamina_source_rows = [json.loads(line) for line in PERTAMINA_OFFICIAL_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    pertamina_records = [pertamina_official_record(row) for row in pertamina_source_rows]
+    pertamina_product_key = {}
+    pertamina_added_rows = 0
+    pertamina_exact_matched_rows = 0
+    pertamina_blank_npt_fallback_matched_rows = 0
+    pertamina_ambiguous_rows_added = 0
+    pertamina_cross_family_corrections = []
+    for raw, source_record in zip(pertamina_source_rows, pertamina_records):
+        affiliated = [
+            row for row in input_records
+            if row["source_id"] != "PERTAMINA_LUBRICANTS_OFFICIAL_CATALOG"
+            and is_pertamina_affiliated(row)
+        ]
+        core = pertamina_identity_core(source_record)
+        signature = pertamina_grade_signature(source_record)
+        core_matches = [row for row in affiliated if pertamina_identity_core(row) == core]
+        exact_matches = [row for row in core_matches if pertamina_grade_signature(row) == signature]
+        exact_npt = [row for row in exact_matches if row["source_id"] == "INDONESIA_NPT_LUBRICANT_REGISTRY"]
+        match_basis = ""
+        if len(exact_matches) == 1:
+            target = exact_matches[0]
+            match_basis = "exact_affiliated_name_core_and_professional_grade_signature"
+        elif len(exact_npt) == 1:
+            target = exact_npt[0]
+            match_basis = "exact_signature_unique_indonesia_npt_target_among_repeated_approval_evidence"
+        else:
+            blank_npt = [
+                row for row in core_matches
+                if row["source_id"] == "INDONESIA_NPT_LUBRICANT_REGISTRY"
+                and not any(pertamina_grade_signature(row))
+            ]
+            graded_npt = [
+                row for row in core_matches
+                if row["source_id"] == "INDONESIA_NPT_LUBRICANT_REGISTRY"
+                and any(pertamina_grade_signature(row))
+            ]
+            if len(blank_npt) == 1 and not graded_npt:
+                target = blank_npt[0]
+                match_basis = "unique_blank_spec_indonesia_npt_identity_enriched_by_current_official_pds"
+            else:
+                target = source_record
+                input_records.append(target)
+                pertamina_added_rows += 1
+                pertamina_ambiguous_rows_added += bool(exact_matches or len(blank_npt) > 1)
+        if match_basis:
+            old_family = target["family_code"]
+            merge_pertamina_catalog_evidence(target, source_record, match_basis)
+            if match_basis.startswith("unique_blank_spec"):
+                pertamina_blank_npt_fallback_matched_rows += 1
+            else:
+                pertamina_exact_matched_rows += 1
+            if old_family != raw["family_code"]:
+                target["family_code"] = raw["family_code"]
+                target["family"] = FAMILY_NAMES[raw["family_code"]]
+                target["category"] = source_record["category"]
+                target["specifications"]["pertamina_official_family_correction"] = {
+                    "previous_family_code": old_family,
+                    "current_official_family_code": raw["family_code"],
+                }
+                pertamina_cross_family_corrections.append({
+                    "source_record_id": raw["source_record_id"],
+                    "product_name": raw["product_name"],
+                    "previous_family_code": old_family,
+                    "current_official_family_code": raw["family_code"],
+                    "target_source_id": target["source_id"],
+                })
+        pertamina_product_key[raw["source_record_id"]] = target["canonical_key"]
     input_records.extend(thailand_doeb_records)
     input_records.extend(dla_qpd_records)
     # Historical Mack approvals are appended only after every current-catalog
@@ -4670,6 +4845,19 @@ def main() -> None:
         if link_key not in source_link_keys:
             source_links.append(link)
             source_link_keys.add(link_key)
+    for raw in pertamina_source_rows:
+        target = canonical_by_key[pertamina_product_key[raw["source_record_id"]]]
+        link = {
+            "product_id": target["product_id"],
+            "source_id": "PERTAMINA_LUBRICANTS_OFFICIAL_CATALOG",
+            "source_record_id": raw["source_record_id"],
+            "source_row": None,
+            "relation": "official_state_owned_manufacturer_current_product_catalog",
+        }
+        link_key = (link["product_id"], link["source_id"], link["source_record_id"])
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     for raw in man_service_source_rows:
         target = canonical_by_key[man_service_product_key[raw["source_record_id"]]]
         link = {
@@ -5078,6 +5266,29 @@ def main() -> None:
                 "expected": expected,
                 "action": action,
             })
+    for raw in pertamina_source_rows:
+        target = canonical_by_key[pertamina_product_key[raw["source_record_id"]]]
+        if "linked_pds_title_conflicts_with_current_product_card" in raw["source_quality_flags"]:
+            issues.append({
+                "product_id": target["product_id"],
+                "issue_code": "pertamina_linked_pds_title_conflicts_with_current_product_card",
+                "severity": "high",
+                "field": "TECHNICAL_DOCUMENT",
+                "value": "Rusguard Lube 10 card links to a PDS titled Rusguard Lube X",
+                "expected": "A linked PDS identifying the same current catalog product",
+                "action": "Retain the official product card and link as provenance, but exclude the mismatched PDF from technical evidence for Rusguard Lube 10.",
+            })
+    for correction in pertamina_cross_family_corrections:
+        target = canonical_by_key[pertamina_product_key[correction["source_record_id"]]]
+        issues.append({
+            "product_id": target["product_id"],
+            "issue_code": "pertamina_current_official_family_corrects_prior_registry_family",
+            "severity": "medium",
+            "field": "FAMILY_CODE",
+            "value": correction["previous_family_code"],
+            "expected": correction["current_official_family_code"],
+            "action": "Use the current manufacturer catalog family for professional analytics and retain the previous registry family as auditable source history.",
+        })
     brava_issue_meta = {
         "nonstandard_acea_class_source_reported_verbatim": ("medium", "ACEA", "A recognized published ACEA class", "Retain A4/B4 verbatim but exclude it from strict equivalence until the manufacturer publishes a corrected class."),
         "source_part_number_placeholder_excluded": ("low", "PART_NUMBER", "A concrete manufacturer part number", "Keep the product-grade row but do not create an offer/code from the source placeholder."),
@@ -5221,6 +5432,7 @@ def main() -> None:
         "brava_official_input_sha256": hashlib.sha256(BRAVA_OFFICIAL_JSONL.read_bytes()).hexdigest(),
         "ceypetco_input_sha256": hashlib.sha256(CEYPETCO_JSONL.read_bytes()).hexdigest(),
         "pso_official_input_sha256": hashlib.sha256(PSO_OFFICIAL_JSONL.read_bytes()).hexdigest(),
+        "pertamina_official_input_sha256": hashlib.sha256(PERTAMINA_OFFICIAL_JSONL.read_bytes()).hexdigest(),
         "man_service_input_sha256": hashlib.sha256(MAN_SERVICE_JSONL.read_bytes()).hexdigest(),
         "liqui_moly_2020_input_sha256": hashlib.sha256(LIQUI_MOLY_2020_JSONL.read_bytes()).hexdigest(),
         "liqui_moly_current_input_sha256": hashlib.sha256(LIQUI_MOLY_CURRENT_JSONL.read_bytes()).hexdigest(),
@@ -5338,6 +5550,12 @@ def main() -> None:
         "pso_official_source_rows": len(pso_source_rows),
         "pso_official_products_matched_to_existing": pso_matched_rows,
         "pso_official_products_added": pso_added_rows,
+        "pertamina_official_source_rows": len(pertamina_source_rows),
+        "pertamina_official_products_exact_matched_to_existing": pertamina_exact_matched_rows,
+        "pertamina_official_products_blank_npt_fallback_matched": pertamina_blank_npt_fallback_matched_rows,
+        "pertamina_official_products_added": pertamina_added_rows,
+        "pertamina_official_ambiguous_rows_added_separately": pertamina_ambiguous_rows_added,
+        "pertamina_official_cross_family_corrections": pertamina_cross_family_corrections,
         "man_service_source_rows": len(man_service_source_rows),
         "man_service_products_matched_to_existing": man_service_matched_rows,
         "man_service_products_added": man_service_added_rows,

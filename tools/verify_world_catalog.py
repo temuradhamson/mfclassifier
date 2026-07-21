@@ -76,6 +76,8 @@ def main() -> None:
     ceypetco_rows = [json.loads(line) for line in (ROOT / "data/ceypetco-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     pso_report = json.loads((ROOT / "data/pso-official-lubricant-products-report.json").read_text(encoding="utf-8"))
     pso_rows = [json.loads(line) for line in (ROOT / "data/pso-official-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    pertamina_report = json.loads((ROOT / "data/pertamina-official-lubricant-products-report.json").read_text(encoding="utf-8"))
+    pertamina_rows = [json.loads(line) for line in (ROOT / "data/pertamina-official-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     man_report = json.loads((ROOT / "data/man-service-products-report.json").read_text(encoding="utf-8"))
     fuchs_report = json.loads((ROOT / "data/fuchs-india-products-report.json").read_text(encoding="utf-8"))
     fuchs_rows = [json.loads(line) for line in (ROOT / "data/fuchs-india-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
@@ -211,7 +213,7 @@ def main() -> None:
     assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
     assert not db.execute("PRAGMA foreign_key_check").fetchall()
     assert db.execute("SELECT count(*) FROM products").fetchone()[0] == len(lines)
-    assert len(lines) == 99827
+    assert len(lines) == 99989
     assert report["jaso_source_rows"] == jaso_report["rows"] == 3630
     assert report["jaso_unique_oil_codes"] == jaso_report["unique_oil_codes"] == 3629
     assert report["official_filed_registry_rows"] == 3629
@@ -274,6 +276,25 @@ def main() -> None:
     assert pso_report["families"] == {"C": 8, "E": 1, "G": 9, "H": 14, "I": 33, "M": 25, "S": 10, "T": 17, "TF": 3, "U": 4}
     assert all(row["publication_restriction"] == "noncommercial_informational_use_with_attribution" for row in pso_rows)
     assert all(not ({"description", "marketing_text", "document_text", "artwork", "image"} & set(row)) for row in pso_rows)
+    assert report["pertamina_official_source_rows"] == pertamina_report["normalized_product_grade_rows"] == len(pertamina_rows) == 250
+    assert report["pertamina_official_products_exact_matched_to_existing"] == 77
+    assert report["pertamina_official_products_blank_npt_fallback_matched"] == 11
+    assert report["pertamina_official_products_added"] == 162
+    assert report["pertamina_official_ambiguous_rows_added_separately"] == 8
+    assert len(report["pertamina_official_cross_family_corrections"]) == 6
+    assert report["pertamina_official_input_sha256"] == pertamina_report["output_sha256"]
+    assert policy_by_id["PERTAMINA_LUBRICANTS_OFFICIAL_CATALOG"]["source_sha256"] == pertamina_report["output_sha256"]
+    assert policy_by_id["PERTAMINA_LUBRICANTS_OFFICIAL_CATALOG"]["observed_count"] == 250
+    assert pertamina_report["source_industrial_cards"] == pertamina_report["source_industrial_pds_documents"] == 104
+    assert pertamina_report["industrial_product_grade_occurrences"] == 231
+    assert pertamina_report["source_automotive_cards"] == 22
+    assert pertamina_report["automotive_product_occurrences_retained"] == 21
+    assert pertamina_report["source_product_occurrences_retained"] == 252
+    assert pertamina_report["within_source_repeat_occurrences_merged"] == 2
+    assert pertamina_report["families"] == {"C": 21, "E": 2, "G": 14, "H": 34, "I": 43, "M": 79, "S": 2, "T": 38, "TF": 8, "U": 9}
+    assert pertamina_report["grade_kinds"] == {"iso_vg": 114, "nlgi": 13, "sae_engine": 84, "sae_gear": 6, "source_variant": 6, "ungraded": 27}
+    assert sum("linked_pds_title_conflicts_with_current_product_card" in row["source_quality_flags"] for row in pertamina_rows) == 1
+    assert all(not ({"description", "marketing_text", "document_text", "artwork", "image"} & set(row)) for row in pertamina_rows)
     assert report["mack_genuine_source_rows"] == mack_report["products"] == len(mack_rows) == 15
     assert report["mack_genuine_input_sha256"] == mack_report["normalized_output_sha256"]
     assert policy_by_id["MACK_GENUINE_FLUIDS"]["source_sha256"] == mack_report["normalized_output_sha256"]
@@ -457,7 +478,7 @@ def main() -> None:
     assert dla_report["plant_rows_without_product_designation_excluded"] == 766
     assert report["zf_te_ml_source_rows"] == zf_report["unique_approval_numbers"] == 1498
     assert report["official_oem_approval_rows"] == 6495
-    assert report["official_manufacturer_catalog_rows"] == 6136
+    assert report["official_manufacturer_catalog_rows"] == 6298
     assert report["official_oem_service_recommendation_rows"] == 30
     assert report["allison_source_rows"] == allison_report["products"] == 104
     assert report["driventic_diwa_source_rows"] == driventic_report["products"] == 226
@@ -609,7 +630,7 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_registry_source_data_issue'").fetchone()[0] == 51
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_qualified_product_registry'").fetchone()[0] == 456
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_approval_registry'").fetchone()[0] == 6495
-    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_manufacturer_product_catalog'").fetchone()[0] == 6136
+    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_manufacturer_product_catalog'").fetchone()[0] == 6298
     assert db.execute("SELECT count(*) FROM products WHERE source_id='BRAVA_LUBRICANTS_OFFICIAL_CATALOG'").fetchone()[0] == 69
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='BRAVA_LUBRICANTS_OFFICIAL_CATALOG'").fetchone()[0] == 69
     assert db.execute("SELECT count(*) FROM products WHERE source_id='PAKISTAN_STATE_OIL_OFFICIAL_CATALOG'").fetchone()[0] == 123
@@ -628,6 +649,11 @@ def main() -> None:
                 AND sp.spec_type='pso_technical_document_url'
           )
     """).fetchone()[0] == 1
+    assert db.execute("SELECT count(*) FROM products WHERE source_id='PERTAMINA_LUBRICANTS_OFFICIAL_CATALOG'").fetchone()[0] == 162
+    assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='PERTAMINA_LUBRICANTS_OFFICIAL_CATALOG'").fetchone()[0] == 250
+    assert db.execute("SELECT count(*) FROM product_offers WHERE source_id='PERTAMINA_LUBRICANTS_OFFICIAL_CATALOG'").fetchone()[0] == 0
+    assert db.execute("SELECT count(*) FROM quality_issues WHERE issue_code='pertamina_linked_pds_title_conflicts_with_current_product_card'").fetchone()[0] == 1
+    assert db.execute("SELECT count(*) FROM quality_issues WHERE issue_code='pertamina_current_official_family_corrects_prior_registry_family'").fetchone()[0] == 6
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='BRAVA_PART_NUMBER'").fetchone()[0] == 94
     assert db.execute("SELECT count(DISTINCT code_value) FROM external_codes WHERE code_system='BRAVA_PART_NUMBER'").fetchone()[0] == 93
     assert db.execute("SELECT count(*) FROM product_offers WHERE source_id='BRAVA_LUBRICANTS_OFFICIAL_CATALOG'").fetchone()[0] == 94
