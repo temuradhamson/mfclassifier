@@ -58,17 +58,22 @@ python3 tools/build_analytics_demo.py \
 
 ## Мировой каталог и расширение ЕНКТ
 
-Отдельный provenance-aware слой содержит 18 352 канонические продуктовые строки
-на срез 20.07.2026. В него уже входят проектные источники, AIChilon, официальные
-реестры JASO, GM dexos, NMMA, NLGI, ZF TE-ML, Allison TES, Driventic DIWA, Mercedes-Benz Trucks DTFR, Mercedes-Benz BeVo, официальные каталоги Volvo Genuine и четырнадцати рынков FUCHS, исторический официальный каталог LIQUI MOLY 2020, действующие рекомендации MAN, USDA BioPreferred и открытый API EU Ecolabel. Это проверенный
+Отдельный provenance-aware слой содержит 18 504 канонические продуктовые строки
+на срез 21.07.2026. В него уже входят проектные источники, AIChilon, официальные
+реестры JASO, GM dexos, NMMA, NLGI, ZF TE-ML, Allison TES, Driventic DIWA, Mercedes-Benz Trucks DTFR, Mercedes-Benz BeVo, официальные каталоги Volvo Genuine и четырнадцати рынков FUCHS, исторический каталог LIQUI MOLY 2020 и текущий LIQUI MOLY OpenAPI 2026, действующие рекомендации MAN, USDA BioPreferred и открытый API EU Ecolabel. Это проверенный
 растущий seed, а не заявление о полном мировом охвате; подтверждённый мировой
 итог появится только после подключения разрешённых источников и дедупликации.
 
 - `data/world-catalog.sqlite3.gz` — детерминированно сжатая SQLite-база с
   продуктами, спецификациями, кодами, источниками, упаковками и решениями
   дедупликации; команда сборки создаёт рядом локальную `world-catalog.sqlite3`;
+- `data/liqui-moly-current-products.jsonl` — 447 текущих master-products LIQUI
+  MOLY и 985 артикулов/фасовок из официальных sitemap + OpenAPI;
+- `data/liqui-moly-2020-2026-lifecycle.jsonl` — доказательное сопоставление
+  текущих карточек с каталогом 2020 без автоматического объявления отсутствующих
+  позиций снятыми с производства;
 - `deliverables/World_lubricants_catalog_seed.xlsx` — проверяемая выгрузка;
-- `deliverables/Global_lubricants_catalog_registry.xlsx` — реестр 54 источников
+- `deliverables/Global_lubricants_catalog_registry.xlsx` — реестр 55 источников
   и статусы допуска;
 - `deliverables/ENKT_GSM_extension_pilot.xlsx` — 171 пилотный технический
   профиль и предложение по пятизначному суффиксу ЕНКТ.
@@ -99,6 +104,7 @@ python3 tools/ingest_fuchs_czech_catalog.py
 python3 tools/ingest_fuchs_mexico_catalog.py
 python3 tools/ingest_fuchs_south_africa_catalog.py
 python3 tools/ingest_liqui_moly_2020_catalog.py
+python3 tools/ingest_liqui_moly_current_catalog.py
 python3 tools/build_world_catalog_seed.py
 python3 tools/verify_world_catalog.py
 ```

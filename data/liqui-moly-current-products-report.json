@@ -1,0 +1,1622 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-07-21",
+  "source_id": "LIQUI_MOLY_CURRENT_OPENAPI",
+  "landing_url": "https://www.liqui-moly.com/en/gb/oils.html",
+  "sitemap_url": "https://www.liqui-moly.com/sitemap/www.liqui-moly.com/sitemap_gb_en.xml",
+  "api_base_url": "https://openapi.liqui-moly.com/api/v2/search/limo_com_en_gb/magento2_product_13/GBR/ENG/",
+  "landing_sha256": "83da9e1a9423a0d4f2c56c398b146d7348655e059ba2fdcbd8837130884d7bc4",
+  "sitemap_sha256": "2afc528110c0d3950e7e803d9db0738cb0fc4980516d0abb913587cf36f92588",
+  "sitemap_master_products": 759,
+  "api_master_products_fetched": 742,
+  "sitemap_products_unresolved_by_api": 17,
+  "lubricant_and_technical_fluid_products": 447,
+  "excluded_non_scope_products": 312,
+  "families": {
+    "C": 8,
+    "G": 34,
+    "H": 13,
+    "I": 19,
+    "M": 136,
+    "S": 65,
+    "T": 69,
+    "TF": 103
+  },
+  "classification_basis": {
+    "current_title_cooling_or_technical_fluid": 9,
+    "current_title_engine_sae_grade": 6,
+    "current_title_fuel_or_service_additive": 26,
+    "current_title_grease_or_paste": 7,
+    "current_title_hydraulic_fluid": 2,
+    "current_title_industrial_oil": 3,
+    "current_title_lubricant_additive": 10,
+    "current_title_lubricating_specialty": 1,
+    "current_title_or_fact_engine_oil": 17,
+    "current_title_or_fact_transmission_oil": 9,
+    "current_title_refrigeration_oil": 5,
+    "current_title_specialty_lubricant": 12,
+    "current_title_technical_cleaner_or_flush": 41,
+    "current_title_transmission_product": 2,
+    "exact_historical_product_name": 201,
+    "historical_article_sku_overlap": 96
+  },
+  "unique_article_skus": 985,
+  "products_with_articles": 447,
+  "exact_name_overlap_with_2020": 197,
+  "historical_names_not_in_current_scope": 222,
+  "current_names_not_in_2020": 244,
+  "lifecycle_assessments": {
+    "current_exact_name_continuity_from_2020": 199,
+    "current_not_observed_in_2020_catalog": 150,
+    "current_possible_rename_or_reformulation_shared_article_sku": 96,
+    "review_multiple_historical_candidates": 2
+  },
+  "historical_products_linked_to_current": 294,
+  "historical_products_not_observed_current": 125,
+  "lifecycle_rows": 572,
+  "lifecycle_output_sha256": "1828426fd93d26899833669faea185d48b1956550006ba622b49682c5cad79fc",
+  "excluded_products": [
+    {
+      "master_sku": "P000426",
+      "product_name": "3/4\" Ball Drain Faucet",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004166",
+      "product_name": "Acid-resistant pump-spray bottle",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001111",
+      "product_name": "Acid Rim Cleaner",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004919",
+      "product_name": "Active Foam Cleaner",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001426",
+      "product_name": "Adhesive Body Spray",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002879",
+      "product_name": "Advertising Board Logo (800 x 500 mm)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002624",
+      "product_name": "Advertising Board \"Motor­bike\" (594 x 745 mm)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000581",
+      "product_name": "Air Conditioner Cleaning Set",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005725",
+      "product_name": "Air Freshener berry bubblegum",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005539",
+      "product_name": "Air Freshener cherry",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005538",
+      "product_name": "Air Freshener new car",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005540",
+      "product_name": "Air Freshener ocean",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005726",
+      "product_name": "Air Freshener tropical shower",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005537",
+      "product_name": "Air Freshener vanilla",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001479",
+      "product_name": "Applicator/Wool Wiper",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002838",
+      "product_name": "Ball pen",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002804",
+      "product_name": "Banner Additives (100 x 230 cm)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002803",
+      "product_name": "Banner Image (100 x 230 cm)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005172",
+      "product_name": "Banner Motor­bike (400 x 100 cm)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002805",
+      "product_name": "Banner Motor Oils (100 x 230 cm)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004550",
+      "product_name": "Barrel stool (Seat cushion + 60 litre drum)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002835",
+      "product_name": "Baseball cap",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003941",
+      "product_name": "Beach flag logo top (300 cm)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005302",
+      "product_name": "Beachflag base",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005376",
+      "product_name": "Beachflag Motor­bike top (300 cm)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003245",
+      "product_name": "Bike Cleaner",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003244",
+      "product_name": "Bike Gloss Spray Wax",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003248",
+      "product_name": "Bike Tire Fix",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005351",
+      "product_name": "Brochure box with two adhesive pads",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003948",
+      "product_name": "Brochure Diesel Stabilizer",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002384",
+      "product_name": "Brochure folder LIQUI MOLY",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003802",
+      "product_name": "Brochure Harley Products",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004149",
+      "product_name": "Brochure Oil Change Packages Motor­bike",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003352",
+      "product_name": "Brochure Pro-Line Service Products",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003815",
+      "product_name": "Brochure Products for Motor­bike/Beta",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001087",
+      "product_name": "Car Washing Sponge",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002695",
+      "product_name": "Catalog Marine",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002612",
+      "product_name": "Catalog Motor­bike",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002697",
+      "product_name": "Catalog Pro-Line",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003474",
+      "product_name": "Cavity Protection, light brown",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001444",
+      "product_name": "Cavity Protection, light brown (Spray)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003475",
+      "product_name": "Cavity Protection, transparent",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001445",
+      "product_name": "Cavity Protection, transparent (Spray)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001498",
+      "product_name": "Cavity Seal Spray Probe",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000466",
+      "product_name": "Chemical cabinet for workshop products",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001077",
+      "product_name": "Chrome Polish",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001055",
+      "product_name": "Cockpit Shine",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004243",
+      "product_name": "Cockpit Spray citrus",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001059",
+      "product_name": "Cockpit Spray vanilla",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001502",
+      "product_name": "Compressed Air Can Gun",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005646",
+      "product_name": "Counter Display Air Freshener",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001222",
+      "product_name": "Counter Display LIQUI MOLY*",
+      "reason": "sitemap_product_not_resolved_by_current_api"
+    },
+    {
+      "master_sku": "P002858",
+      "product_name": "Decoration Girl",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002872",
+      "product_name": "Decorative Collapsible Wall (185 x 185 cm)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003894",
+      "product_name": "Desk pad made of paper",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000554",
+      "product_name": "Dispenser for Liquid Hand Cleaner",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003905",
+      "product_name": "Display base for tubes",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003231",
+      "product_name": "Display, folding*",
+      "reason": "sitemap_product_not_resolved_by_current_api"
+    },
+    {
+      "master_sku": "P000076",
+      "product_name": "DPF Pressurized Tank Spray Gun",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000582",
+      "product_name": "DPF-Probe with 5 interchangeable tips",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003762",
+      "product_name": "DPF Spray Probe, long (30 cm)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000425",
+      "product_name": "Drain cock 3/4\"a",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000435",
+      "product_name": "Drain cock DIN 61 with disposable seal",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000427",
+      "product_name": "Drain cock for canisters with thread DIN 61",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000428",
+      "product_name": "Drain Cock in Brass",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000459",
+      "product_name": "Drum Fill Level Indicator",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000475",
+      "product_name": "Drum Packet D",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000447",
+      "product_name": "Drum Rack",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000442",
+      "product_name": "Drum Rack for 2 x 60 L Drums",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003912",
+      "product_name": "Drum table large rollable",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005071",
+      "product_name": "Easy Clean",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002231",
+      "product_name": "Embroidered logo, self-adhesive",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002681",
+      "product_name": "End User Brochure Additives",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002691",
+      "product_name": "End User Brochure Garden Products",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005152",
+      "product_name": "End User Brochure GUNTEC",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003972",
+      "product_name": "End User Brochure Molygen New Generation",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002694",
+      "product_name": "End User Brochure Motor­bike",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002720",
+      "product_name": "End User Brochure Motor Oils",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002684",
+      "product_name": "End User Brochure Vehicle Care",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001424",
+      "product_name": "Epoxy Adhesive",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000572",
+      "product_name": "Exhaust Bandage",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001107",
+      "product_name": "Fabric Care & Protect",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001056",
+      "product_name": "Fabric Foam Cleaner",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001073",
+      "product_name": "Fix-clear Rain Repellent",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005255",
+      "product_name": "Flag Motor­bike (150 x 360 cm)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002808",
+      "product_name": "Flag slogan (150 x 360 cm)*",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001225",
+      "product_name": "Futura-Plastic-Rack*",
+      "reason": "sitemap_product_not_resolved_by_current_api"
+    },
+    {
+      "master_sku": "P005272",
+      "product_name": "Gear Tronic Adapter 001 for Audi",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004607",
+      "product_name": "Gear Tronic Adapter 001 for BMW",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005070",
+      "product_name": "Gear Tronic Adapter 001 for Ford",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005398",
+      "product_name": "Gear Tronic Adapter 001 for LR/Jeep",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005562",
+      "product_name": "Gear Tronic Adapter 001 for PSA",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005499",
+      "product_name": "Gear Tronic Adapter 001 for Toyota",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004606",
+      "product_name": "Gear Tronic Adapter 001 for Volvo",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005500",
+      "product_name": "Gear Tronic Adapter 002 for Toyota",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005561",
+      "product_name": "Gear Tronic Adapter 002 for Volvo",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005606",
+      "product_name": "Gear Tronic Adapter 003 for BMW",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005602",
+      "product_name": "Gear Tronic Adapter 003 for Volvo",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003763",
+      "product_name": "Gear Tronic Adapter for Audi A8",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004138",
+      "product_name": "Gear Tronic Adapter for BMW07/VAG13",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004546",
+      "product_name": "Gear Tronic Adapter for Citroën DS",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004140",
+      "product_name": "Gear Tronic adapter for DSG",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003997",
+      "product_name": "Gear Tronic Adapter for Jatco/Aisin",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003996",
+      "product_name": "Gear Tronic Adapter for MB 7G",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005563",
+      "product_name": "Gear Tronic Adapter for MB 9G",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003766",
+      "product_name": "Gear Tronic Adapter for PSA",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004124",
+      "product_name": "Gear Tronic Adapter for Renault/Nissan",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004145",
+      "product_name": "Gear Tronic Adapter for Saab/Opel",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004338",
+      "product_name": "Gear Tronic Adapter for VAG TF-60SN/VW09G",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003765",
+      "product_name": "Gear Tronic Adapter for Volvo/Ford Power Shift",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004144",
+      "product_name": "Gear Tronic Adapter for Volvo/Ford/PSA",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004142",
+      "product_name": "Gear Tronic Adapter Kit for BMW",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004143",
+      "product_name": "Gear Tronic Adapter Kit for VAG",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004141",
+      "product_name": "Gear Tronic Adapter Kit Standard 01",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004146",
+      "product_name": "Gear Tronic Adapter Kit Standard 02",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004045",
+      "product_name": "Gear Tronic Cover",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005333",
+      "product_name": "Gear Tronic III",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003636",
+      "product_name": "Gear Tronic Reference Sample Set",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003736",
+      "product_name": "Gear Tronic Test Strip",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001459",
+      "product_name": "Glass Sealing Compound; can be dapped off",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000560",
+      "product_name": "Hand Care Cream",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000454",
+      "product_name": "Hose reel, open",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002814",
+      "product_name": "Illuminated outside sign \"Motor Oils, Additives, Car Care\" (80 x 80 cm)*",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002812",
+      "product_name": "Illuminated vertical sign \"Motor Oils, Additives, Car Care\" (80 x 80 cm)*",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001071",
+      "product_name": "Insect Removal Sponge",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001070",
+      "product_name": "Insect Remover",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001419",
+      "product_name": "Instant Glue",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001057",
+      "product_name": "Interior Cleaner",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000553",
+      "product_name": "Invisible Glove",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000088",
+      "product_name": "JetClean Adapter set 1-32 M1",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004502",
+      "product_name": "JetClean Adapter set M2",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004549",
+      "product_name": "JetClean Adapter set M3",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004503",
+      "product_name": "JetClean Adapter set P1",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000081",
+      "product_name": "JetClean Plus",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003592",
+      "product_name": "JetClean Plus Expansion Adapter Kit",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000080",
+      "product_name": "JetClean Plus Universal Adapter Kit",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004458",
+      "product_name": "JetClean Tronic II TD ASR with compressed air connection",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005664",
+      "product_name": "JetClean Tronic III",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003837",
+      "product_name": "Job cards pad for workshops",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003922",
+      "product_name": "Key chain canister",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003846",
+      "product_name": "Key Tag Logo",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004816",
+      "product_name": "Klima Refresh",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001504",
+      "product_name": "Laminated Glass Repair System Case",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000480",
+      "product_name": "Laminated Glass Repair System Case, Truck/Car",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003891",
+      "product_name": "Lanyard Keychain",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001058",
+      "product_name": "Leather Care",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000563",
+      "product_name": "Liquid Hand Cleaner",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001427",
+      "product_name": "Liquid Metal",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001451",
+      "product_name": "Liquifast 1502",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001454",
+      "product_name": "Liquifast 1502 (Bag-set)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001452",
+      "product_name": "Liquifast 1502 (Cartridge-set)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001456",
+      "product_name": "Liquifast 9000",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003257",
+      "product_name": "Liquifast 9000 (Bag-set)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004851",
+      "product_name": "Liquimate 2C Superglue",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001448",
+      "product_name": "Liquimate 7700 Mini cartridge",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004592",
+      "product_name": "Liquimate 8100 1K-PUR black",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001432",
+      "product_name": "Liquimate 8100 1K-PUR gray",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004593",
+      "product_name": "Liquimate 8100 1K-PUR white",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001433",
+      "product_name": "Liquimate 8200 MS Polymer black",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004594",
+      "product_name": "Liquimate 8200 MS Polymer white",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004595",
+      "product_name": "Liquimate 8300 Seam Sealant black",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001434",
+      "product_name": "Liquimate 8300 Seam Sealant gray",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001422",
+      "product_name": "Liquimate Super Adhesive 8050 MS",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005378",
+      "product_name": "LM Banner Logo (400 x 100 cm)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005377",
+      "product_name": "LM Banner Marine (400 x 100 cm)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005379",
+      "product_name": "LM Flag Marine (150 x 360 cm)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002353",
+      "product_name": "LM logo patch",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003887",
+      "product_name": "LM Pin",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000515",
+      "product_name": "Lock Care & De-Icer",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002660",
+      "product_name": "Locking feet",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002873",
+      "product_name": "Logo Exterior Signboard Alu",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003936",
+      "product_name": "Magnetic table top",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000460",
+      "product_name": "Manual Measuring Syringe 1,000 ml",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005074",
+      "product_name": "Marine Anti-Limescale",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001051",
+      "product_name": "Marten Spray",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000432",
+      "product_name": "Measuring cup set",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003058",
+      "product_name": "Measuring cup transparent",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004570",
+      "product_name": "Measuring cup with flexible outlet pipe 3 l",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005018",
+      "product_name": "Men's softshell vest blue 2020",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001425",
+      "product_name": "Metal Putty",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001062",
+      "product_name": "Microfiber Cloth",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005345",
+      "product_name": "Motor­bike Detailer",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000499",
+      "product_name": "Motor­bike Helmet Interior Cleaner",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000497",
+      "product_name": "Motor­bike Leather Suit Care",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000467",
+      "product_name": "Motor­bike oil cabinet",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000495",
+      "product_name": "Motor­bike Tire Inflator and Sealer",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000494",
+      "product_name": "Motor­bike Visor Cleaner",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004244",
+      "product_name": "Motorbike Shooter 4our/6ix Box",
+      "reason": "sitemap_product_not_resolved_by_current_api"
+    },
+    {
+      "master_sku": "P003851",
+      "product_name": "Multi cloth",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001092",
+      "product_name": "Natural Car Cleaning Leather",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000465",
+      "product_name": "Oil Cabinet",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000430",
+      "product_name": "Oil Change Canister",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000444",
+      "product_name": "Oil Drip Pan",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000464",
+      "product_name": "Oil Filling Unit for Transmissions",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000434",
+      "product_name": "Oil Funnel, plastic",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000546",
+      "product_name": "Oil Spot Remover",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005484",
+      "product_name": "Paint Restorer",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005503",
+      "product_name": "Paintwork Microfiber Cloth",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003886",
+      "product_name": "Paper cube",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003471",
+      "product_name": "Parasol",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003845",
+      "product_name": "Pavilion 300 x 300cm",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003925",
+      "product_name": "Perforated wall product carrier",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001104",
+      "product_name": "Plastic Deep Treatment Lotion",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000458",
+      "product_name": "Plastic Hand Pump",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001103",
+      "product_name": "Plastic Restorer",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005605",
+      "product_name": "Plastic Restorer Exterior",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005488",
+      "product_name": "Polish & Wax",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004044",
+      "product_name": "Polo-Shirt Export Navy",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005040",
+      "product_name": "Poster “Air Conditioning System” (DIN A2)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004257",
+      "product_name": "Poster Marine outboard engine (DIN A3)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003591",
+      "product_name": "Poster problem solver additives (DIN A1)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005662",
+      "product_name": "Premium Rim Cleaner",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003678",
+      "product_name": "Pro-Line Injector and Glow Plug Dismantling Aid",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003343",
+      "product_name": "Pro-Line Rapid Rust Solvent",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000068",
+      "product_name": "Pro-Line Visco-Plus",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002680",
+      "product_name": "Product Catalog",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002659",
+      "product_name": "Product divider",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003884",
+      "product_name": "Protective seat covers with logo (250 pcs./roll)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000565",
+      "product_name": "Pump Spray Bottle",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002860",
+      "product_name": "Rack for poster DIN A1",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001428",
+      "product_name": "Rearview Mirror Adhesive Set",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001108",
+      "product_name": "Rim Cleaner",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001220",
+      "product_name": "Round display for products*",
+      "reason": "sitemap_product_not_resolved_by_current_api"
+    },
+    {
+      "master_sku": "P001132",
+      "product_name": "Rubber Care",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005490",
+      "product_name": "Rubber Care Stick",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003468",
+      "product_name": "Rust Protection Wax brown",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001438",
+      "product_name": "Rust Protection Wax brown (Spray)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005493",
+      "product_name": "Scratch Remover",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005217",
+      "product_name": "Screen Cleaner",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001418",
+      "product_name": "Screw-Retainer High Strength",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001417",
+      "product_name": "Screw-Retainer Medium Strength",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004942",
+      "product_name": "Sealing rings (4 pieces)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001469",
+      "product_name": "Seam Scraper",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001491",
+      "product_name": "Seam Sealant Gun",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004350",
+      "product_name": "Seat cushion 60 litre drum",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002546",
+      "product_name": "Seating group (1 table, 2 stools)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002656",
+      "product_name": "Shelf rail FH white/insert",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005482",
+      "product_name": "Shine Polish",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005620",
+      "product_name": "Side sections for Futura-Plastic-Rack Marine (2 pieces)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005619",
+      "product_name": "Side sections for Futura-Plastic-Rack Molygen (2 pieces)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005621",
+      "product_name": "Side sections for Futura-Plastic-Rack Motor­bike (2 pieces)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003317",
+      "product_name": "Side sections for Futura-Plastic-Rack Standard (2 pieces)",
+      "reason": "sitemap_product_not_resolved_by_current_api"
+    },
+    {
+      "master_sku": "P001435",
+      "product_name": "Silicone Sealing Compound, black",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003597",
+      "product_name": "Silicone Sealing Compound, transparent",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001072",
+      "product_name": "Silicone & Wax Remover",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003856",
+      "product_name": "Single-use key fob",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001106",
+      "product_name": "Soft Top Cleaner",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001063",
+      "product_name": "Speed Air Freshener lemon",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002618",
+      "product_name": "Sticker Classic",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002235",
+      "product_name": "Sticker for store window color stripe (990 x 230 mm)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004500",
+      "product_name": "Sticker \"I LM my car\"",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003832",
+      "product_name": "Sticker \"I love LIQUI MOLY\"",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002246",
+      "product_name": "Sticker LM Logo",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004158",
+      "product_name": "Sticker Molygen",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002592",
+      "product_name": "Sticker Motor­bike",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002323",
+      "product_name": "Sticker Oil Change Motor­bike",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003470",
+      "product_name": "Stoneguard, black",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001440",
+      "product_name": "Stoneguard, black (Spray)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003469",
+      "product_name": "Stoneguard, gray",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001439",
+      "product_name": "Stoneguard, gray (Spray)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P004043",
+      "product_name": "T-Shirt Export Navy",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005013",
+      "product_name": "T-Shirt men grey 2020",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001093",
+      "product_name": "Tar Remover",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001241",
+      "product_name": "Tego-Metal-Rack, white*",
+      "reason": "sitemap_product_not_resolved_by_current_api"
+    },
+    {
+      "master_sku": "P001109",
+      "product_name": "Tire Shine",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001472",
+      "product_name": "Toolset for Glass Repairs",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003840",
+      "product_name": "Top-up oil bag",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005370",
+      "product_name": "Topper Counter Display „GUNTEC“",
+      "reason": "sitemap_product_not_resolved_by_current_api"
+    },
+    {
+      "master_sku": "P001221",
+      "product_name": "Topper Counter Display \"Logo\"",
+      "reason": "sitemap_product_not_resolved_by_current_api"
+    },
+    {
+      "master_sku": "P005387",
+      "product_name": "Topper Counter Display \"Marine\"",
+      "reason": "sitemap_product_not_resolved_by_current_api"
+    },
+    {
+      "master_sku": "P003573",
+      "product_name": "Topper Counter Display \"Motorbike\"",
+      "reason": "sitemap_product_not_resolved_by_current_api"
+    },
+    {
+      "master_sku": "P001224",
+      "product_name": "Topper Futura-Plastic-Rack \"Logo\"",
+      "reason": "sitemap_product_not_resolved_by_current_api"
+    },
+    {
+      "master_sku": "P003557",
+      "product_name": "Topper Futura-Plastic-Rack \"Marine\"",
+      "reason": "sitemap_product_not_resolved_by_current_api"
+    },
+    {
+      "master_sku": "P003746",
+      "product_name": "Topper Futura-Plastic-Rack \"Molygen\"",
+      "reason": "sitemap_product_not_resolved_by_current_api"
+    },
+    {
+      "master_sku": "P002623",
+      "product_name": "Topper Futura-Plastic-Rack \"Motorbike\"",
+      "reason": "sitemap_product_not_resolved_by_current_api"
+    },
+    {
+      "master_sku": "P002652",
+      "product_name": "Topper Tego-Metal-Rack \"Logo\"",
+      "reason": "sitemap_product_not_resolved_by_current_api"
+    },
+    {
+      "master_sku": "P003198",
+      "product_name": "Topper Tego-Metal-Rack \"Motorbike\"",
+      "reason": "sitemap_product_not_resolved_by_current_api"
+    },
+    {
+      "master_sku": "P004575",
+      "product_name": "Tornador Gun",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000456",
+      "product_name": "Trolleys for Containers/Drums",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003871",
+      "product_name": "Umbrella",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003472",
+      "product_name": "Underseal Bitumen, black",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001441",
+      "product_name": "Underseal Bitumen, black (Spray)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003473",
+      "product_name": "Underseal, black",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001442",
+      "product_name": "Underseal, black (Spray)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001443",
+      "product_name": "Underseal Spreadable, black",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000041",
+      "product_name": "Valve Clean",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000552",
+      "product_name": "Wall Bracket for Liquid Hand Cleaner",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001085",
+      "product_name": "Wash & Protect",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001084",
+      "product_name": "Wash & Wax",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000462",
+      "product_name": "Waste Oil Collection and Suction Device",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005175",
+      "product_name": "Waterless Detailer",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005483",
+      "product_name": "Wax",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P000600",
+      "product_name": "Wax Coating",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P003463",
+      "product_name": "Wax Underseal, anthracite/black",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001437",
+      "product_name": "Wax Underseal, anthracite/black (Spray)",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001068",
+      "product_name": "Windshield Cleaner citrus",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005344",
+      "product_name": "Windshield Cleaner ocean",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001114",
+      "product_name": "Windshield De-Icer",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001067",
+      "product_name": "Windshield Foam Cleaner",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001118",
+      "product_name": "Windshield Frost Guard Concentrate -60 °C",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005341",
+      "product_name": "Windshield Super-Concentrated Cleaner cherry",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P001069",
+      "product_name": "Windshield Super-Concentrated Cleaner citrus",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005342",
+      "product_name": "Windshield Super-Concentrated Cleaner ocean",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002840",
+      "product_name": "Workshop clock",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P002696",
+      "product_name": "Workshop Solutions",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005583",
+      "product_name": "Workwear Fleece jacket men",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005584",
+      "product_name": "Workwear Hoody men",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005582",
+      "product_name": "Workwear pants long men",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005585",
+      "product_name": "Workwear pants short men",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005581",
+      "product_name": "Workwear Polo-Shirt men",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005587",
+      "product_name": "Workwear T-Shirt men",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    },
+    {
+      "master_sku": "P005586",
+      "product_name": "Workwear Workshop dungarees men",
+      "reason": "outside_lubricants_and_technical_fluids_scope"
+    }
+  ],
+  "normalized_output_sha256": "3203df17a7a098ecc0ebafbcba05c808b92ff4d1fd5af3bfa35a33cdebb94ca6",
+  "publication_scope": "Current product identity, family, approvals, recommendations, master/article SKUs and package facts; marketing descriptions and images are not republished."
+}

@@ -322,6 +322,20 @@
       "notes": "Официальный 204-страничный англоязычный каталог создан 23.04.2020. Из 72 релевантных страниц получено 419 продуктов, 1 482 уникальных part number и 413 продуктов с фасовочными строками. Текущий lifecycle не предполагается: каждая позиция помечена historical_catalog_current_status_unverified."
     },
     {
+      "source_id": "LIQUI_MOLY_CURRENT_OPENAPI",
+      "title": "LIQUI MOLY current GB/English public OpenAPI catalog",
+      "owner": "LIQUI MOLY GmbH",
+      "source_type": "official_manufacturer_public_search_api_and_xml_sitemap",
+      "source_locator": "data/liqui-moly-current-products.jsonl",
+      "source_url": "https://www.liqui-moly.com/sitemap/www.liqui-moly.com/sitemap_gb_en.xml",
+      "source_sha256": "3203df17a7a098ecc0ebafbcba05c808b92ff4d1fd5af3bfa35a33cdebb94ca6",
+      "access_status": "public_official_api_contract_embedded_in_product_page",
+      "bulk_ingest_allowed": true,
+      "publication_status": "current_factual_fields_only_with_attribution_no_marketing_descriptions_or_images",
+      "observed_count": 447,
+      "notes": "Официальная XML-карта содержит 759 master-product URL; публичный OpenAPI разрешил 742. В профессиональный scope вошли 447 масел, смазок, присадок, ОЖ и технических жидкостей с 985 article SKU. Ещё 17 sitemap-записей не разрешились API и оказались торговым оборудованием/материалами. Lifecycle 2020→2026 строится отдельно: отсутствие в британском текущем каталоге не объявляется снятием с производства."
+    },
+    {
       "source_id": "FUCHS_INDIA_PRODUCT_FINDER",
       "title": "FUCHS India Product Finder",
       "owner": "FUCHS LUBRICANTS (INDIA) PVT. LTD.",
