@@ -1762,6 +1762,21 @@
       "notes": "The official current RDE 90245/2026-06-19 PDF replaces the 2026-03-27 edition and exposes 217 positive fluid ratings across mineral hydraulic fluids, environmentally acceptable fluids and four UTTO rows. Exact ISO VG 32/46/68, HLP/HVLP/HEES/HEPR/UTTO category, zinc or zinc-free / saturated-ester attributes and valid-until year are available. Page 7 permits lubricant manufacturers to cite their own positive rating, but page 8 expressly reserves exploitation, reproduction, editing and distribution rights; Bosch Rexroth's legal notice also prohibits commercial copying or dissemination. No normalized product rows are imported pending written permission or an official licensed feed."
     },
     {
+      "source_id": "PAKISTAN_STATE_OIL_OFFICIAL_CATALOG",
+      "title": "Pakistan State Oil current lubricant and technical-fluid catalog",
+      "owner": "Pakistan State Oil Company Limited",
+      "source_type": "official_state_owned_manufacturer_product_pages_and_pds",
+      "source_locator": "data/pso-official-lubricant-products.jsonl",
+      "source_url": "https://psopk.com/en/lubricants",
+      "terms_url": "https://psopk.com/en/copyright",
+      "source_sha256": "7aa4303a280971a2e62c40f02e7c0ac8fbedfa229bc36e73d1d75991a1b0eafa",
+      "access_status": "public_official_catalog_noncommercial_informational_use_with_attribution",
+      "bulk_ingest_allowed": true,
+      "publication_status": "derived_nonexpressive_factual_fields_noncommercial_with_attribution",
+      "observed_count": 124,
+      "notes": "Forty-three current product-series pages and their 43 linked PDS documents normalize to 124 series-grade facts. Two current webpage grades absent from the linked PDS are retained with lower evidence; source conflicts and typos remain explicit. Series-level package lists are retained as evidence but are not expanded into grade-specific offers. One exact PSO DEO 8000 SAE 15W-40 identity reconciles to existing Mercedes-Benz DTFR evidence. Descriptions, images, layout and marketing copy are excluded. Reuse is limited to noncommercial informational purposes with attribution under the official copyright notice."
+    },
+    {
       "source_id": "EGYPT_EOS_QUALITY_MARK_LUBRICANT_SCOPE_REVIEW",
       "title": "Egyptian EOS Quality Mark certified products — lubricant scope review",
       "owner": "Egyptian Organization for Standardization and Quality (EOS)",

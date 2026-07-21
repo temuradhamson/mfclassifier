@@ -49,6 +49,7 @@ PARKER_DENISON_JSONL = ROOT / "data" / "parker-denison-fluid-ratings.jsonl"
 SCANIA_GENUINE_JSONL = ROOT / "data" / "scania-genuine-oils.jsonl"
 BRAVA_OFFICIAL_JSONL = ROOT / "data" / "brava-official-products.jsonl"
 CEYPETCO_JSONL = ROOT / "data" / "ceypetco-lubricant-products.jsonl"
+PSO_OFFICIAL_JSONL = ROOT / "data" / "pso-official-lubricant-products.jsonl"
 MAN_SERVICE_JSONL = ROOT / "data" / "man-service-products.jsonl"
 LIQUI_MOLY_2020_JSONL = ROOT / "data" / "liqui-moly-2020-products.jsonl"
 LIQUI_MOLY_CURRENT_JSONL = ROOT / "data" / "liqui-moly-current-products.jsonl"
@@ -1185,6 +1186,78 @@ def ceypetco_record(row: dict) -> dict:
     record["canonical_key"] += f"|ceypetco_record:{normalize(row['source_record_id'])}"
     record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
     return record
+
+
+def pso_official_record(row: dict) -> dict:
+    """Convert one current PSO series-grade fact row without inventing SKUs."""
+    specs = row["specifications"]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Official Pakistan State Oil lubricant and technical-fluid catalog",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": specs.get("sae_engine") or specs.get("sae_gear") or "",
+        "api_class": " ".join(
+            [f"API {'/'.join(specs.get('api', []))}" if specs.get("api") else ""]
+            + [f"API {'/'.join(specs.get('api_gl', []))}" if specs.get("api_gl") else ""]
+            + [f"ACEA {'/'.join(specs.get('acea', []))}" if specs.get("acea") else ""]
+            + [f"JASO {'/'.join(specs.get('jaso', []))}" if specs.get("jaso") else ""]
+            + [f"ILSAC {'/'.join(specs.get('ilsac', []))}" if specs.get("ilsac") else ""]
+        ).strip(),
+        "viscosity": specs.get("iso_vg", ""),
+        "grease_class": specs.get("nlgi", ""),
+        "coolant_class": specs.get("brake_fluid_class", ""),
+        "source": "PAKISTAN_STATE_OIL_OFFICIAL_CATALOG",
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": "PAKISTAN_STATE_OIL_OFFICIAL_CATALOG",
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": "official_manufacturer_product_catalog",
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update(specs)
+    record["specifications"].update({
+        "source_url": row["source_url"],
+        "technical_document_url": row["technical_document_url"],
+        "technical_document_sha256": row["technical_document_sha256"],
+        "safety_document_url": row["safety_document_url"],
+        "source_series": row["source_series"],
+        "source_grade": row["source_grade"],
+        "source_grade_evidence": row["source_grade_evidence"],
+        "source_grade_kind": row["source_grade_kind"],
+        "source_quality_flags": row["source_quality_flags"],
+        "packages_source_reported_at_series_level": row["packages_source_reported_at_series_level"],
+        "publication_restriction": row["publication_restriction"],
+    })
+    record["canonical_key"] += f"|pso_official_record:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    return record
+
+
+def merge_pso_catalog_evidence(target: dict, source_record: dict) -> None:
+    """Attach exact manufacturer facts to the pre-existing DTFR identity."""
+    target_specs = target["specifications"]
+    source_specs = source_record["specifications"]
+    for key in ("api", "api_gl", "acea", "jaso", "ilsac", "dexron", "oem_approvals"):
+        target_specs[key] = sorted(set(target_specs.get(key, [])) | set(source_specs.get(key, [])))
+    for key in (
+        "source_url", "technical_document_url", "technical_document_sha256",
+        "safety_document_url", "source_series", "source_grade",
+        "source_grade_evidence", "source_grade_kind", "source_quality_flags",
+        "packages_source_reported_at_series_level", "publication_restriction",
+        "standards_and_approvals_source_reported",
+    ):
+        if key in source_specs:
+            target_specs[f"pso_{key}"] = source_specs[key]
 
 
 def man_service_record(row: dict) -> dict:
@@ -3268,6 +3341,29 @@ def main() -> None:
     ceypetco_source_rows = [json.loads(line) for line in CEYPETCO_JSONL.read_text(encoding="utf-8").splitlines() if line]
     ceypetco_records = [ceypetco_record(row) for row in ceypetco_source_rows]
     input_records.extend(ceypetco_records)
+    pso_source_rows = [json.loads(line) for line in PSO_OFFICIAL_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    pso_records = [pso_official_record(row) for row in pso_source_rows]
+    pso_product_key = {}
+    pso_added_rows = 0
+    pso_matched_rows = 0
+    for raw, source_record in zip(pso_source_rows, pso_records):
+        matches = [
+            row for row in input_records
+            if row["family_code"] == raw["family_code"]
+            and row["product_name_normalized"] == normalize(raw["source_series"])
+            and row["specifications"].get("sae_engine", "") == raw["specifications"].get("sae_engine", "")
+            and "pakistan state oil" in normalize(row["manufacturer"])
+        ]
+        if len(matches) == 1:
+            target = matches[0]
+            merge_pso_catalog_evidence(target, source_record)
+            pso_matched_rows += 1
+        else:
+            assert not matches, (raw["source_record_id"], len(matches))
+            target = source_record
+            input_records.append(target)
+            pso_added_rows += 1
+        pso_product_key[raw["source_record_id"]] = target["canonical_key"]
     man_service_source_rows = [json.loads(line) for line in MAN_SERVICE_JSONL.read_text(encoding="utf-8").splitlines() if line]
     man_service_records = [man_service_record(row) for row in man_service_source_rows]
     existing_by_name_family = defaultdict(list)
@@ -4561,6 +4657,19 @@ def main() -> None:
         if link_key not in source_link_keys:
             source_links.append(link)
             source_link_keys.add(link_key)
+    for raw in pso_source_rows:
+        target = canonical_by_key[pso_product_key[raw["source_record_id"]]]
+        link = {
+            "product_id": target["product_id"],
+            "source_id": "PAKISTAN_STATE_OIL_OFFICIAL_CATALOG",
+            "source_record_id": raw["source_record_id"],
+            "source_row": None,
+            "relation": "official_state_owned_manufacturer_product_catalog_noncommercial_attribution",
+        }
+        link_key = (link["product_id"], link["source_id"], link["source_record_id"])
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     for raw in man_service_source_rows:
         target = canonical_by_key[man_service_product_key[raw["source_record_id"]]]
         link = {
@@ -4949,6 +5058,26 @@ def main() -> None:
                 "expected": expected,
                 "action": action,
             })
+    pso_issue_meta = {
+        "current_page_grade_not_observed_in_linked_pds": ("medium", "GRADE", "A grade confirmed by the linked current PDS", "Retain the current page grade with lower evidence and exclude it from PDS-confirmed claims until PSO updates the document."),
+        "linked_pds_grade_not_listed_in_current_page_grade_summary": ("low", "GRADE", "Consistent grade lists on the current page and linked PDS", "Retain the PDS-confirmed grade and record the page-summary omission."),
+        "current_page_ow_20_typo_resolved_by_linked_pds_0w_20": ("medium", "SAE", "Recognized SAE 0W-20 notation", "Use 0W-20 from the linked PDS and retain the webpage typo only as a provenance flag."),
+        "current_page_title_break_typo_resolved_by_linked_pds_brake": ("low", "PRODUCT_NAME", "Hydraulic Brake Fluid", "Use the product name proven by the linked PDS and retain the webpage title typo as a provenance flag."),
+        "dot_4_table_grade_without_separate_dot_4_performance_bullet": ("high", "BRAKE_FLUID_CLASS", "A product-specific DOT 4 performance statement", "Retain the DOT 4 table grade, but do not infer FMVSS 116 DOT 4 compliance from the separate DOT 3 performance bullet."),
+    }
+    for raw in pso_source_rows:
+        target = canonical_by_key[pso_product_key[raw["source_record_id"]]]
+        for flag in raw["source_quality_flags"]:
+            severity, field, expected, action = pso_issue_meta[flag]
+            issues.append({
+                "product_id": target["product_id"],
+                "issue_code": f"pso_{flag}",
+                "severity": severity,
+                "field": field,
+                "value": flag,
+                "expected": expected,
+                "action": action,
+            })
     brava_issue_meta = {
         "nonstandard_acea_class_source_reported_verbatim": ("medium", "ACEA", "A recognized published ACEA class", "Retain A4/B4 verbatim but exclude it from strict equivalence until the manufacturer publishes a corrected class."),
         "source_part_number_placeholder_excluded": ("low", "PART_NUMBER", "A concrete manufacturer part number", "Keep the product-grade row but do not create an offer/code from the source placeholder."),
@@ -5091,6 +5220,7 @@ def main() -> None:
         "scania_genuine_input_sha256": hashlib.sha256(SCANIA_GENUINE_JSONL.read_bytes()).hexdigest(),
         "brava_official_input_sha256": hashlib.sha256(BRAVA_OFFICIAL_JSONL.read_bytes()).hexdigest(),
         "ceypetco_input_sha256": hashlib.sha256(CEYPETCO_JSONL.read_bytes()).hexdigest(),
+        "pso_official_input_sha256": hashlib.sha256(PSO_OFFICIAL_JSONL.read_bytes()).hexdigest(),
         "man_service_input_sha256": hashlib.sha256(MAN_SERVICE_JSONL.read_bytes()).hexdigest(),
         "liqui_moly_2020_input_sha256": hashlib.sha256(LIQUI_MOLY_2020_JSONL.read_bytes()).hexdigest(),
         "liqui_moly_current_input_sha256": hashlib.sha256(LIQUI_MOLY_CURRENT_JSONL.read_bytes()).hexdigest(),
@@ -5205,6 +5335,9 @@ def main() -> None:
         "scania_genuine_source_rows": len(scania_genuine_source_rows),
         "brava_official_source_rows": len(brava_official_source_rows),
         "ceypetco_source_rows": len(ceypetco_source_rows),
+        "pso_official_source_rows": len(pso_source_rows),
+        "pso_official_products_matched_to_existing": pso_matched_rows,
+        "pso_official_products_added": pso_added_rows,
         "man_service_source_rows": len(man_service_source_rows),
         "man_service_products_matched_to_existing": man_service_matched_rows,
         "man_service_products_added": man_service_added_rows,

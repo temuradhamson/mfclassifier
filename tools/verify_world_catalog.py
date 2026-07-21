@@ -74,6 +74,8 @@ def main() -> None:
     brava_rows = [json.loads(line) for line in (ROOT / "data/brava-official-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     ceypetco_report = json.loads((ROOT / "data/ceypetco-lubricant-products-report.json").read_text(encoding="utf-8"))
     ceypetco_rows = [json.loads(line) for line in (ROOT / "data/ceypetco-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    pso_report = json.loads((ROOT / "data/pso-official-lubricant-products-report.json").read_text(encoding="utf-8"))
+    pso_rows = [json.loads(line) for line in (ROOT / "data/pso-official-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     man_report = json.loads((ROOT / "data/man-service-products-report.json").read_text(encoding="utf-8"))
     fuchs_report = json.loads((ROOT / "data/fuchs-india-products-report.json").read_text(encoding="utf-8"))
     fuchs_rows = [json.loads(line) for line in (ROOT / "data/fuchs-india-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
@@ -209,7 +211,7 @@ def main() -> None:
     assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
     assert not db.execute("PRAGMA foreign_key_check").fetchall()
     assert db.execute("SELECT count(*) FROM products").fetchone()[0] == len(lines)
-    assert len(lines) == 99704
+    assert len(lines) == 99827
     assert report["jaso_source_rows"] == jaso_report["rows"] == 3630
     assert report["jaso_unique_oil_codes"] == jaso_report["unique_oil_codes"] == 3629
     assert report["official_filed_registry_rows"] == 3629
@@ -258,6 +260,20 @@ def main() -> None:
     assert all(row["manufacturer"] == "Olein Refinery Corp." for row in brava_rows)
     assert all(not ({"description", "image", "logo", "marketing_text"} & set(row)) for row in brava_rows)
     assert sum("nonstandard_acea_class_source_reported_verbatim" in row["source_quality_flags"] for row in brava_rows) == 1
+    assert report["pso_official_source_rows"] == pso_report["normalized_product_grade_rows"] == len(pso_rows) == 124
+    assert report["pso_official_products_matched_to_existing"] == 1
+    assert report["pso_official_products_added"] == 123
+    assert report["pso_official_input_sha256"] == pso_report["output_sha256"]
+    assert policy_by_id["PAKISTAN_STATE_OIL_OFFICIAL_CATALOG"]["source_sha256"] == pso_report["output_sha256"]
+    assert policy_by_id["PAKISTAN_STATE_OIL_OFFICIAL_CATALOG"]["observed_count"] == 124
+    assert pso_report["source_product_series_pages"] == pso_report["source_pds_documents"] == 43
+    assert pso_report["grade_evidence"] == {
+        "current_product_page_only_not_observed_in_linked_pds": 2,
+        "linked_current_product_data_sheet": 122,
+    }
+    assert pso_report["families"] == {"C": 8, "E": 1, "G": 9, "H": 14, "I": 33, "M": 25, "S": 10, "T": 17, "TF": 3, "U": 4}
+    assert all(row["publication_restriction"] == "noncommercial_informational_use_with_attribution" for row in pso_rows)
+    assert all(not ({"description", "marketing_text", "document_text", "artwork", "image"} & set(row)) for row in pso_rows)
     assert report["mack_genuine_source_rows"] == mack_report["products"] == len(mack_rows) == 15
     assert report["mack_genuine_input_sha256"] == mack_report["normalized_output_sha256"]
     assert policy_by_id["MACK_GENUINE_FLUIDS"]["source_sha256"] == mack_report["normalized_output_sha256"]
@@ -441,7 +457,7 @@ def main() -> None:
     assert dla_report["plant_rows_without_product_designation_excluded"] == 766
     assert report["zf_te_ml_source_rows"] == zf_report["unique_approval_numbers"] == 1498
     assert report["official_oem_approval_rows"] == 6495
-    assert report["official_manufacturer_catalog_rows"] == 6013
+    assert report["official_manufacturer_catalog_rows"] == 6136
     assert report["official_oem_service_recommendation_rows"] == 30
     assert report["allison_source_rows"] == allison_report["products"] == 104
     assert report["driventic_diwa_source_rows"] == driventic_report["products"] == 226
@@ -593,9 +609,25 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_registry_source_data_issue'").fetchone()[0] == 51
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_qualified_product_registry'").fetchone()[0] == 456
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_approval_registry'").fetchone()[0] == 6495
-    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_manufacturer_product_catalog'").fetchone()[0] == 6013
+    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_manufacturer_product_catalog'").fetchone()[0] == 6136
     assert db.execute("SELECT count(*) FROM products WHERE source_id='BRAVA_LUBRICANTS_OFFICIAL_CATALOG'").fetchone()[0] == 69
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='BRAVA_LUBRICANTS_OFFICIAL_CATALOG'").fetchone()[0] == 69
+    assert db.execute("SELECT count(*) FROM products WHERE source_id='PAKISTAN_STATE_OIL_OFFICIAL_CATALOG'").fetchone()[0] == 123
+    assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='PAKISTAN_STATE_OIL_OFFICIAL_CATALOG'").fetchone()[0] == 124
+    assert db.execute("SELECT count(*) FROM product_offers WHERE source_id='PAKISTAN_STATE_OIL_OFFICIAL_CATALOG'").fetchone()[0] == 0
+    assert db.execute("SELECT count(*) FROM quality_issues WHERE issue_code LIKE 'pso_%'").fetchone()[0] == 8
+    assert db.execute("""
+        SELECT count(*) FROM products p
+        JOIN product_sources s ON s.product_id=p.product_id
+        WHERE p.source_id='MERCEDES_DTFR_APPROVED_FLUIDS'
+          AND p.product_name_raw='PSO DEO 8000'
+          AND s.source_id='PAKISTAN_STATE_OIL_OFFICIAL_CATALOG'
+          AND EXISTS (
+              SELECT 1 FROM specifications sp
+              WHERE sp.product_id=p.product_id
+                AND sp.spec_type='pso_technical_document_url'
+          )
+    """).fetchone()[0] == 1
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='BRAVA_PART_NUMBER'").fetchone()[0] == 94
     assert db.execute("SELECT count(DISTINCT code_value) FROM external_codes WHERE code_system='BRAVA_PART_NUMBER'").fetchone()[0] == 93
     assert db.execute("SELECT count(*) FROM product_offers WHERE source_id='BRAVA_LUBRICANTS_OFFICIAL_CATALOG'").fetchone()[0] == 94

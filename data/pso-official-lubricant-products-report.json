@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-07-21",
+  "source_id": "PAKISTAN_STATE_OIL_OFFICIAL_CATALOG",
+  "sitemap_url": "https://psopk.com/sitemap.xml",
+  "robots_url": "https://psopk.com/robots.txt",
+  "copyright_url": "https://psopk.com/en/copyright",
+  "sitemap_url_set_sha256": "ba02beb14b36549c954dd49bc124f99e4fea115383be49af01fe8717b87d7d69",
+  "robots_text_sha256": "68cfd83bcac4b12e0a5cce3d51960ebb472f39442d18704486758c05dbe2d41c",
+  "copyright_text_sha256": "53dae0c16443d6920b63a79e825e903300e363a61eb88ee8938cca003da14113",
+  "source_product_series_pages": 43,
+  "source_pds_documents": 43,
+  "source_pds_aggregate_sha256": "093694faaaa71f6dd09557687d180d8187374abaeb5497bf8a686d2517a4112d",
+  "normalized_product_grade_rows": 124,
+  "families": {
+    "C": 8,
+    "E": 1,
+    "G": 9,
+    "H": 14,
+    "I": 33,
+    "M": 25,
+    "S": 10,
+    "T": 17,
+    "TF": 3,
+    "U": 4
+  },
+  "grade_evidence": {
+    "current_product_page_only_not_observed_in_linked_pds": 2,
+    "linked_current_product_data_sheet": 122
+  },
+  "rows_with_source_quality_flags": 7,
+  "rows_with_series_level_packages": 124,
+  "output_sha256": "7aa4303a280971a2e62c40f02e7c0ac8fbedfa229bc36e73d1d75991a1b0eafa",
+  "publication_restriction": "noncommercial_informational_use_with_attribution"
+}
