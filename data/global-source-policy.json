@@ -1299,6 +1299,84 @@
       "publication_status": "aggregate_count_and_source_links_only_pending_written_permission",
       "observed_count": 431,
       "notes": "Official daily product sitemaps expose exactly 431 Champion product identities (ID suffix -02) in 27 locale/host variants at the 2026-07-21 snapshot. Product IDs can share a formulation number with Wolf while remaining separate branded products. Wolf Oil Corporation's database-reuse restriction applies, so no individual Champion rows are imported without prior written consent."
+    },
+    {
+      "source_id": "GREEN_CHOICE_PHILIPPINES_ENGINE_OILS",
+      "title": "Green Choice Philippines — GCP 2008032 Automotive Engine Oil",
+      "owner": "Philippine Center for Environmental Protection and Sustainable Development, Inc. / National Ecolabelling Programme",
+      "source_type": "official_national_ecolabel_public_licence_checker",
+      "source_locator": "data/green-choice-philippines-lubricants.jsonl",
+      "source_url": "https://pcepsdi.org.ph/check-gcp-seal/",
+      "terms_url": "https://pcepsdi.org.ph/programme/green-choice-philippines/faqs/",
+      "source_sha256": "a7aeaf84931e6a1f5c07b33da5f1f1a8669b16c94b0b4521ef8e384eb585a2b3",
+      "access_status": "public_national_ecolabel_verification_register",
+      "bulk_ingest_allowed": true,
+      "publication_status": "normalized_historical_factual_certification_records_with_attribution",
+      "observed_count": 3,
+      "notes": "The public checker exposes 34 active, 35 expired and seven renewal rows. Exact criterion GCP 2008032 yields three named engine oils, all only in the expired table. Product, holder, licence, criterion and lifecycle facts are retained; the source typo SW-40 remains verbatim and is not guessed into a valid SAE grade."
+    },
+    {
+      "source_id": "TAIWAN_MOENV_ECOLABEL_PRODUCTS_LUBRICANT_REVIEW",
+      "title": "Taiwan MOENV environmental label products — lubricant scope review",
+      "owner": "Taiwan Ministry of Environment",
+      "source_type": "official_open_government_ecolabel_api",
+      "source_url": "https://data.moenv.gov.tw/dataset/detail/GP_P_02",
+      "terms_url": "https://data.gov.tw/license",
+      "access_status": "open_government_data_licence_version_1_0",
+      "bulk_ingest_allowed": true,
+      "publication_status": "reviewed_zero_relevant_product_rows",
+      "observed_count": 0,
+      "notes": "All 26,488 API records were reviewed on 2026-07-21. No lubricant, grease, coolant or technical-fluid product was present. Thirty-two keyword hits were digital-copying ink and were rejected as false positives."
+    },
+    {
+      "source_id": "BANGLADESH_BSTI_CM_LUBRICANT_LICENCE_REVIEW",
+      "title": "Bangladesh BSTI CM licence lists — lubricant scope review",
+      "owner": "Bangladesh Standards and Testing Institution",
+      "source_type": "official_government_regional_certification_pdf_lists",
+      "source_url": "https://bsti.gov.bd/site/page/fae2ce93-b2cd-49c4-af5b-d2e9733d6211/List-of-companies-licensed-from-BSTI",
+      "access_status": "public_official_certification_lists",
+      "bulk_ingest_allowed": true,
+      "publication_status": "reviewed_no_marketed_product_sku_rows",
+      "observed_count": 9,
+      "notes": "Twenty-one regional PDF registers were reviewed. Nine relevant licence-class rows name a holder and a generic standard scope such as internal-combustion-engine crankcase oil, but do not publish marketed brand, grade or product designation. They are not promoted to canonical product rows. Public record verification requires reCAPTCHA and was not automated or bypassed."
+    },
+    {
+      "source_id": "MALAYSIA_SIRIM_ENGINE_OIL_DIRECTORY_REVIEW",
+      "title": "Malaysia SIRIM certified-products directory — engine-oil review",
+      "owner": "SIRIM QAS International Sdn. Bhd.",
+      "source_type": "official_certified_product_directory",
+      "source_url": "https://www.malaysiancertified.com.my/",
+      "access_status": "product_search_requires_member_login",
+      "bulk_ingest_allowed": false,
+      "publication_status": "source_link_only_pending_authorized_data_access",
+      "observed_count": null,
+      "notes": "The official directory describes product, company, scheme, category and scope fields, but the current search flow requires member authentication. No account was created and no access control was bypassed."
+    },
+    {
+      "source_id": "INDIANOIL_SERVO_PRODUCT_CATALOG",
+      "title": "IndianOil SERVO lubricants and greases",
+      "owner": "Indian Oil Corporation Limited",
+      "source_type": "official_state_owned_manufacturer_catalog",
+      "source_url": "https://iocl.com/pages/servo-lubes-and-greases-overview",
+      "terms_url": "https://iocl.com/right-to-information",
+      "access_status": "public_catalog_but_republication_requires_prior_written_permission",
+      "bulk_ingest_allowed": false,
+      "publication_status": "aggregate_count_and_source_links_only_pending_written_permission",
+      "observed_count": 1600,
+      "notes": "IndianOil officially reports about 1,600 marketed lubricant grades, more than 5,200 formulations and over 1,700 active SKUs. Its terms prohibit copying, reproduction, republication or distribution without prior written permission, so individual SERVO rows are not imported."
+    },
+    {
+      "source_id": "SINGAPORE_GREEN_LABEL_LUBRICANT_SCOPE_REVIEW",
+      "title": "Singapore Green Labelling Scheme — lubricant scope review",
+      "owner": "Singapore Environment Council",
+      "source_type": "official_type_1_ecolabel_directory",
+      "source_url": "https://sgls.sec.org.sg/product-categories/",
+      "terms_url": "https://sgls.sec.org.sg/terms-of-use/",
+      "access_status": "public_certification_directory",
+      "bulk_ingest_allowed": true,
+      "publication_status": "reviewed_zero_lubricant_product_standards",
+      "observed_count": 0,
+      "notes": "The current scheme publishes 58 standards across nine top-level categories and more than 1,100 active listings, but no lubricant, grease, coolant or automotive-fluid product standard is present. No product rows were ingested."
     }
   ]
 }

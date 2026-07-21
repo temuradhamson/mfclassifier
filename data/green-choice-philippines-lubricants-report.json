@@ -1,0 +1,33 @@
+{
+  "criteria_url": "https://pcepsdi.org.ph/programme/green-choice-philippines/gcp-criteria/",
+  "grain_note": "One row is one published GCP licence number and named automotive engine-oil product.",
+  "lifecycle_note": "All three lubricant records occur only in the official Expired table. They are historical product evidence and must not be represented as currently certified or currently marketed products.",
+  "lifecycle_statuses": {
+    "ecolabel_certificate_expired": 3
+  },
+  "manufacturers": 1,
+  "normalized_output_sha256": "a7aeaf84931e6a1f5c07b33da5f1f1a8669b16c94b0b4521ef8e384eb585a2b3",
+  "normalized_products": 3,
+  "program_url": "https://pcepsdi.org.ph/programme/green-choice-philippines/",
+  "quality_note": "The source spelling 'SW-40' is retained verbatim and flagged as non-standard. It is not silently corrected to a guessed SAE grade.",
+  "rights_note": "The national Green Choice Philippines programme publishes the licence checker as its public verification register. Only factual licence, holder, product, criterion and lifecycle fields are normalized with attribution; page design, logos, addresses and narrative content are omitted.",
+  "schema_version": 1,
+  "snapshot_date": "2026-07-21",
+  "source_ajax_url": "https://pcepsdi.org.ph/wp-admin/admin-ajax.php",
+  "source_page_sha256": "c2b8ff5b522252bfa8d6abe7d647f049b54bc6da46af2177e8758dccbbf86b6f",
+  "source_page_url": "https://pcepsdi.org.ph/check-gcp-seal/",
+  "source_quality_flags": {
+    "nonstandard_sae_notation_retained_verbatim": 1
+  },
+  "source_table_response_sha256": {
+    "active": "4d15c6233bc72f3578df6cd0d7181e855636a5dc0b9070c8f5aa9b10676738be",
+    "expired": "b8aeff31976f4b1dfda95acfe7a90cc4a620ab4a48eb1f9406baee23b952b9d2",
+    "ongoing_renewal": "03af9896ffda62f8327d8723f806d7409e7fbd641df05a59af1c90d973bfe043"
+  },
+  "source_table_rows": {
+    "active": 34,
+    "expired": 35,
+    "ongoing_renewal": 7
+  },
+  "status": "official_national_ecolabel_historical_engine_oils_normalized"
+}

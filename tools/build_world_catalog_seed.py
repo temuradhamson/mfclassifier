@@ -50,6 +50,7 @@ DLA_QPD_JSONL = ROOT / "data" / "dla-qpd-lubricant-products.jsonl"
 BLUE_ANGEL_JSONL = ROOT / "data" / "blue-angel-de-uz-178-products.jsonl"
 KOREA_ECOLABEL_JSONL = ROOT / "data" / "korea-ecolabel-el611-lubricants.jsonl"
 KOREA_ECOLABEL_EL509_JSONL = ROOT / "data" / "korea-ecolabel-el509-washer-fluids.jsonl"
+GREEN_CHOICE_PHILIPPINES_JSONL = ROOT / "data" / "green-choice-philippines-lubricants.jsonl"
 UAE_MOIAT_JSONL = ROOT / "data" / "uae-moiat-conformity-products.jsonl"
 EAEU_CONFORMITY_JSONL = ROOT / "data" / "eaeu-conformity-lubricant-products.jsonl"
 EPA_SAFER_CHOICE_JSONL = ROOT / "data" / "epa-safer-choice-lubricants.jsonl"
@@ -1332,6 +1333,54 @@ def merge_korea_ecolabel_evidence(target: dict, source_record: dict, raw: dict) 
             existing_codes.add(identity)
 
 
+def green_choice_philippines_record(row: dict) -> dict:
+    """Convert one historical Green Choice Philippines engine-oil licence."""
+    technical = row["technical"]
+    validated_sae = technical["sae_validated"]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["certificate_number"],
+        "brand": row["manufacturer"],
+        "name": row["product_name"],
+        "category": row["official_criterion"],
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": validated_sae[0] if validated_sae else "",
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["manufacturer"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": row["source_row_number"],
+        "evidence_status": "official_government_ecolabel_registry",
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update({
+        "green_choice_philippines_criterion": row["official_criterion"],
+        "green_choice_philippines_criterion_code": row["official_criterion_code"],
+        "green_choice_philippines_sector": row["official_sector"],
+        "sae_source_reported": technical["sae_source_reported"],
+        "sae_source_validated": validated_sae,
+        "source_quality_flags": technical["source_quality_flags"],
+        "classification_basis": row["classification_basis"],
+        "source_url": row["source_url"],
+        "program_url": row["program_url"],
+        "criteria_url": row["criteria_url"],
+    })
+    record["codes"]["green_choice_philippines_licence"] = {
+        "system": "GREEN_CHOICE_PHILIPPINES_LICENCE",
+        "value": row["certificate_number"],
+        "source_id": row["source_id"],
+        "status": row["lifecycle_status"],
+    }
+    return record
+
+
 def uae_moiat_record(row: dict) -> dict:
     """Convert one normalized UAE MOIAT product-conformity identity."""
     technical = row["technical"]
@@ -2302,6 +2351,9 @@ def main() -> None:
             existing_by_name[name].append(target)
             korea_el509_added_rows += 1
         korea_el509_product_key[raw["source_record_id"]] = target["canonical_key"]
+    green_choice_philippines_source_rows = [json.loads(line) for line in GREEN_CHOICE_PHILIPPINES_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    green_choice_philippines_records = [green_choice_philippines_record(row) for row in green_choice_philippines_source_rows]
+    input_records.extend(green_choice_philippines_records)
     uae_moiat_source_rows = [json.loads(line) for line in UAE_MOIAT_JSONL.read_text(encoding="utf-8").splitlines() if line]
     uae_moiat_records = [uae_moiat_record(row) for row in uae_moiat_source_rows]
     input_records.extend(uae_moiat_records)
@@ -3389,6 +3441,19 @@ def main() -> None:
         if link_key not in source_link_keys:
             source_links.append(link)
             source_link_keys.add(link_key)
+    for raw, normalized_row in zip(green_choice_philippines_source_rows, green_choice_philippines_records):
+        target = canonical_by_key[normalized_row["canonical_key"]]
+        link = {
+            "product_id": target["product_id"],
+            "source_id": raw["source_id"],
+            "source_record_id": raw["source_record_id"],
+            "source_row": raw["source_row_number"],
+            "relation": "official_government_ecolabel_registry",
+        }
+        link_key = (link["product_id"], link["source_id"], link["source_record_id"])
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     for raw, normalized_row in zip(biopreferred_source_rows, biopreferred_records):
         target = canonical_by_key[normalized_row["canonical_key"]]
         link = {
@@ -3768,6 +3833,7 @@ def main() -> None:
         "blue_angel_input_sha256": hashlib.sha256(BLUE_ANGEL_JSONL.read_bytes()).hexdigest(),
         "korea_ecolabel_input_sha256": hashlib.sha256(KOREA_ECOLABEL_JSONL.read_bytes()).hexdigest(),
         "korea_ecolabel_el509_input_sha256": hashlib.sha256(KOREA_ECOLABEL_EL509_JSONL.read_bytes()).hexdigest(),
+        "green_choice_philippines_input_sha256": hashlib.sha256(GREEN_CHOICE_PHILIPPINES_JSONL.read_bytes()).hexdigest(),
         "uae_moiat_input_sha256": hashlib.sha256(UAE_MOIAT_JSONL.read_bytes()).hexdigest(),
         "eaeu_conformity_input_sha256": hashlib.sha256(EAEU_CONFORMITY_JSONL.read_bytes()).hexdigest(),
         "epa_safer_choice_input_sha256": hashlib.sha256(EPA_SAFER_CHOICE_JSONL.read_bytes()).hexdigest(),
@@ -3827,6 +3893,8 @@ def main() -> None:
         "korea_ecolabel_el509_source_rows": len(korea_el509_source_rows),
         "korea_ecolabel_el509_products_matched_to_existing": korea_el509_matched_rows,
         "korea_ecolabel_el509_products_added": korea_el509_added_rows,
+        "green_choice_philippines_source_rows": len(green_choice_philippines_source_rows),
+        "green_choice_philippines_expired_rows": sum(row["lifecycle_status"] == "ecolabel_certificate_expired" for row in green_choice_philippines_source_rows),
         "uae_moiat_source_rows": len(uae_moiat_source_rows),
         "eaeu_conformity_source_rows": len(eaeu_conformity_source_rows),
         "eaeu_conformity_explicit_brand_rows": sum(row["brand_basis"] == "explicit_source_trademark" for row in eaeu_conformity_source_rows),
