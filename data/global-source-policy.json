@@ -850,6 +850,47 @@
       "notes": "The official 2024-2029 Chemical Sector PDF contains 2,011 consecutively numbered certification rows across 233 pages. A strict lubricant, grease, coolant and technical-fluid scope retains 286 certificate rows and 613 marketed product-designation occurrences, normalized to 608 identities after five exact notation or repeated-row duplicates are merged. Only factual company, product, technical designation, source row/page and list-period evidence is published. Addresses, state, contacts, certification-mark artwork, the PDF itself and non-scope chemicals are excluded."
     },
     {
+      "source_id": "RSB_SMARK_LUBRICANT_PRODUCTS",
+      "title": "Rwanda Standards Board — S-Mark lubricant products",
+      "owner": "Rwanda Standards Board (RSB)",
+      "source_type": "official_government_product_certification_directory_curated_scope",
+      "source_locator": "data/rsb-smark-lubricant-products.jsonl",
+      "source_url": "https://www.rsb.gov.rw/certifications/directories/products-with-s-marks-1",
+      "terms_url": "https://www.rsb.gov.rw/certifications/product-certification",
+      "source_sha256": "e646373e2b29586e68414495588f5386becfbdefc70734aac1578203707ed74e",
+      "access_status": "public_official_government_product_certification_directory",
+      "bulk_ingest_allowed": true,
+      "publication_status": "normalized_factual_certification_records_with_attribution",
+      "observed_count": 9,
+      "notes": "The public directory exposed 1,843 rows numbered through 1,846 at the 2026-07-21 snapshot; source serials 1,764-1,766 are absent from the page itself. Exact professional product names and lubricant standards RS EAS 159 / RS 234-1 retain nine currently valid products: eight engine oils and one food-grade lubricant. Only company, product/brand designation, licence, standard designation, source status, expiry and source serial are retained. Location, telephone, email, standard body text and certification-mark artwork are excluded."
+    },
+    {
+      "source_id": "BIS_PRODUCT_CERTIFICATION_LUBRICANT_LICENCES",
+      "title": "Bureau of Indian Standards — lubricant product-certification licences",
+      "owner": "Bureau of Indian Standards (BIS)",
+      "source_type": "official_government_interactive_product_certification_directory",
+      "source_url": "https://www.manakonline.in/MANAK/ApplicationLicenceRelatedrpt",
+      "terms_url": "https://www.bis.gov.in/product-certification/product-certification-process/",
+      "access_status": "public_interactive_report_protected_by_captcha",
+      "bulk_ingest_allowed": false,
+      "publication_status": "source_link_and_schema_evidence_only_pending_official_feed",
+      "observed_count": null,
+      "notes": "The official report schema exposes licence number, manufacturer, Indian Standard, validity/status, certified variety and brand names, including lubricant standards such as IS 13656. Report generation is protected by CAPTCHA; no attempt is made to bypass it. Product rows require an official export/API or written feed agreement before reproducible bulk ingestion."
+    },
+    {
+      "source_id": "BPCL_MAK_PRODUCT_CATALOG",
+      "title": "Bharat Petroleum MAK Lubricants product catalog",
+      "owner": "Bharat Petroleum Corporation Limited (BPCL)",
+      "source_type": "official_manufacturer_product_catalog",
+      "source_url": "https://www.bharatpetroleum.in/our-businesses/mak-lubricants/about-mak-lubricants",
+      "terms_url": "https://www.bharatpetroleum.in/terms-of-use.aspx",
+      "access_status": "public_catalog_but_reproduction_requires_prior_written_permission",
+      "bulk_ingest_allowed": false,
+      "publication_status": "aggregate_count_and_source_links_only_pending_written_permission",
+      "observed_count": 400,
+      "notes": "The current official catalog states that the MAK range contains 400+ grades across automotive and industrial segments. BPCL terms reserve website content and require prior written permission for copying or republication, so individual product rows, descriptions and PDS content are not imported. The observed count is a conservative lower bound, not an exact catalog total."
+    },
+    {
       "source_id": "JAPAN_ECOMARK_CATEGORY_110",
       "title": "Japan Eco Mark Category 110 Biodegradable Lubricating Oil",
       "owner": "Japan Environment Association Eco Mark Office",

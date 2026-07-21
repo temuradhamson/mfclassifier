@@ -53,6 +53,7 @@ EPA_SAFER_CHOICE_JSONL = ROOT / "data" / "epa-safer-choice-lubricants.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
 SON_MANCAP_JSONL = ROOT / "data" / "son-mancap-chemical-lubricant-products.jsonl"
+RSB_SMARK_JSONL = ROOT / "data" / "rsb-smark-lubricant-products.jsonl"
 FUCHS_INDIA_JSONL = ROOT / "data" / "fuchs-india-products.jsonl"
 FUCHS_US_JSONL = ROOT / "data" / "fuchs-us-products.jsonl"
 FUCHS_GERMANY_JSONL = ROOT / "data" / "fuchs-germany-products.jsonl"
@@ -1514,6 +1515,63 @@ def son_mancap_record(row: dict) -> dict:
     return record
 
 
+def rsb_smark_record(row: dict) -> dict:
+    """Convert one normalized Rwanda RSB public S-Mark product."""
+    technical = row["technical"]
+    sae_candidates = technical["sae"] + technical["sae_monograde"]
+    performance = [f"API {value}" for value in technical["api"]] + technical["api_gl"]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Rwanda RSB S-Mark certified product",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": (sae_candidates + [""])[0],
+        "api_class": "; ".join(performance),
+        "viscosity": (technical["iso_vg"] + [""])[0],
+        "grease_class": (technical["nlgi"] + [""])[0],
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": row["source_number"],
+        "evidence_status": "official_government_product_certification_registry",
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["dataset_snapshot_date"],
+    })
+    record["specifications"].update({
+        "sae_source_reported": technical["sae"],
+        "sae_monograde_source_reported": technical["sae_monograde"],
+        "api_source_reported": technical["api"],
+        "api_gl_source_reported": technical["api_gl"],
+        "classification_basis": row["classification_basis"],
+        "brand_basis": row["brand_basis"],
+        "certification_authority": row["certification_authority"],
+        "certification_standard_source_reported": row["standard"],
+        "certification_licence_source_reported": row["licence_number"],
+        "certification_source_status": row["source_status"],
+        "certification_expiry_date": row["expiry_date"],
+        "source_url": row["source_url"],
+        "source_context_url": row["source_context_url"],
+    })
+    record["codes"]["rsb_smark_licence"] = {
+        "system": "RSB_SMARK_LICENCE",
+        "value": row["licence_number"],
+        "source_id": row["source_id"],
+        "status": row["lifecycle_status"],
+    }
+    record["canonical_key"] += f"|rsb_smark_record:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    return record
+
+
 def liqui_moly_identity_name(value: str) -> str:
     return re.sub(r"^liqui moly(?: gmbh)?\s+", "", normalize(value)).strip()
 
@@ -2022,6 +2080,9 @@ def main() -> None:
     son_mancap_source_rows = [json.loads(line) for line in SON_MANCAP_JSONL.read_text(encoding="utf-8").splitlines() if line]
     son_mancap_records = [son_mancap_record(row) for row in son_mancap_source_rows]
     input_records.extend(son_mancap_records)
+    rsb_smark_source_rows = [json.loads(line) for line in RSB_SMARK_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    rsb_smark_records = [rsb_smark_record(row) for row in rsb_smark_source_rows]
+    input_records.extend(rsb_smark_records)
     biopreferred_source_rows = [json.loads(line) for line in USDA_BIOPREFERRED_JSONL.read_text(encoding="utf-8").splitlines() if line]
     biopreferred_records = [biopreferred_record(row) for row in biopreferred_source_rows]
     input_records.extend(biopreferred_records)
@@ -3387,6 +3448,7 @@ def main() -> None:
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "son_mancap_input_sha256": hashlib.sha256(SON_MANCAP_JSONL.read_bytes()).hexdigest(),
+        "rsb_smark_input_sha256": hashlib.sha256(RSB_SMARK_JSONL.read_bytes()).hexdigest(),
         "usda_biopreferred_input_sha256": hashlib.sha256(USDA_BIOPREFERRED_JSONL.read_bytes()).hexdigest(),
         "zf_te_ml_input_sha256": hashlib.sha256(ZF_TE_ML_JSONL.read_bytes()).hexdigest(),
         "allison_input_sha256": hashlib.sha256(ALLISON_JSONL.read_bytes()).hexdigest(),
@@ -3440,6 +3502,7 @@ def main() -> None:
         "east_africa_certified_source_rows": len(east_africa_certified_source_rows),
         "east_africa_certified_source_rows_by_source": dict(sorted(Counter(row["source_id"] for row in east_africa_certified_source_rows).items())),
         "son_mancap_source_rows": len(son_mancap_source_rows),
+        "rsb_smark_source_rows": len(rsb_smark_source_rows),
         "official_government_product_conformity_registry_rows": sum(r["evidence_status"] == "official_government_product_conformity_registry" for r in records),
         "official_government_product_certification_registry_rows": sum(r["evidence_status"] == "official_government_product_certification_registry" for r in records),
         "official_government_program_rows": sum(r["evidence_status"] == "official_government_program_catalog" for r in records),

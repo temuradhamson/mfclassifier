@@ -3,7 +3,7 @@
   "run_id": "seed-2026-07-21",
   "snapshot_date": "2026-07-21",
   "status": "seed_only_world_catalog_incomplete",
-  "input_rows": 47957,
+  "input_rows": 47966,
   "normalized_input_sha256": "819d11779ffccddf9683a9b18a70e39bd5a1b8d72d9811fb5bb46d136b0f8073",
   "jaso_normalized_input_sha256": "b664fea5aee78de7303c33bf13d3c9ac26c8779b78beac24c54295b4d58603d3",
   "official_licensed_input_sha256": "533183ffbc755268ef12b54a556d1f3ea78db4fc80b564e12c391a10a8e2075e",
@@ -15,6 +15,7 @@
   "kebs_smark_input_sha256": "629656be992d2fd2969db6839d22ff57c59017a36f8b402dd40b74702cb25df8",
   "east_africa_certified_input_sha256": "fa272e24f17a96b732c6edcf09914de0bbd4a245ccd94a33cab415213cf164ab",
   "son_mancap_input_sha256": "3728be0200a766f1a862f3c2bd0cf6b92bc6bf9b4d78e832e7c117a2d3a1ec36",
+  "rsb_smark_input_sha256": "e646373e2b29586e68414495588f5386becfbdefc70734aac1578203707ed74e",
   "usda_biopreferred_input_sha256": "1f301afa1ca9ea8e603c4c9818b7824d166f2c7e22ef7bd23daa29e516d1802a",
   "zf_te_ml_input_sha256": "b4812ab38f24e50371250ced3a555df3c85bb72344227fdb42da04b120561dfe",
   "allison_input_sha256": "f937834a441233ae38dee923865db175e23ac65c631669e060a70cd72a8aabfb",
@@ -42,16 +43,16 @@
   "fuchs_czech_input_sha256": "01a9bb43179907ea0fd9a633f9642bbe672b91247a0854bad14aa9fd3d9dfc97",
   "fuchs_mexico_input_sha256": "1e0b40f59b811e28e52742cf6636eda5e89bb326fea60b55f903c76095772ff8",
   "fuchs_south_africa_input_sha256": "fe9dd647609f1e93e516a93ff9afc7dbfc2f65965e773409bdd752b5cd0a1f6d",
-  "canonical_rows": 47956,
-  "brands": 3482,
+  "canonical_rows": 47965,
+  "brands": 3486,
   "families": {
     "C": 1179,
     "E": 26,
     "G": 3728,
     "H": 2271,
     "I": 2285,
-    "M": 23088,
-    "S": 2430,
+    "M": 23096,
+    "S": 2431,
     "T": 10179,
     "TF": 2453,
     "U": 317
@@ -82,8 +83,9 @@
     "UNBS_CERTIFIED_LUBRICANT_PRODUCTS": 46
   },
   "son_mancap_source_rows": 608,
+  "rsb_smark_source_rows": 9,
   "official_government_product_conformity_registry_rows": 1840,
-  "official_government_product_certification_registry_rows": 1587,
+  "official_government_product_certification_registry_rows": 1596,
   "official_government_program_rows": 894,
   "official_government_regulatory_registry_rows": 25239,
   "official_government_qualified_product_registry_rows": 456,
@@ -222,7 +224,7 @@
     "keep_separate_fuchs_market_family_conflict": 354
   },
   "quality_issues": {
-    "professional_key_incomplete": 9579,
+    "professional_key_incomplete": 9580,
     "classification_family_conflict": 214,
     "source_registration_number_missing": 51,
     "dla_qpd_lifecycle_restriction": 93
@@ -279,6 +281,7 @@
     "UNBS_CERTIFIED_LUBRICANT_PRODUCTS",
     "TBS_CERTIFIED_LUBRICANT_PRODUCTS",
     "SON_MANCAP_CHEMICAL_LUBRICANT_PRODUCTS",
+    "RSB_SMARK_LUBRICANT_PRODUCTS",
     "DLA_QPD_FSC_9150",
     "DLA_QPD_FSC_6850_LUBRICANT_SCOPE"
   ],
@@ -293,6 +296,8 @@
     "petro-canada-lubricants",
     "motul-product-catalog",
     "nsf-white-book",
+    "BIS_PRODUCT_CERTIFICATION_LUBRICANT_LICENCES",
+    "BPCL_MAK_PRODUCT_CATALOG",
     "JAPAN_ECOMARK_CATEGORY_110",
     "detroit-dfs-approved-fluids"
   ],

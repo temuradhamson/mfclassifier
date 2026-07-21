@@ -1,0 +1,41 @@
+{
+  "status": "official_public_government_product_certification_directory_normalized",
+  "source_id": "RSB_SMARK_LUBRICANT_PRODUCTS",
+  "source_url": "https://www.rsb.gov.rw/certifications/directories/products-with-s-marks-1",
+  "source_context_url": "https://www.rsb.gov.rw/certifications/product-certification",
+  "snapshot_date": "2026-07-21",
+  "source_html_sha256": "abe7c3d174e65b45fc5a0f90393e5d4d8ad997db3c9059c1da525f51cf747f6c",
+  "source_directory_rows": 1843,
+  "source_last_serial_number": 1846,
+  "source_missing_serial_numbers": [
+    1764,
+    1765,
+    1766
+  ],
+  "lubricant_scope_rows": 9,
+  "normalized_products": 9,
+  "manufacturers": 2,
+  "brands": 4,
+  "lifecycle_statuses": {
+    "source_reported_valid": 9
+  },
+  "families": {
+    "M": 8,
+    "S": 1
+  },
+  "technical_coverage": {
+    "api": 7,
+    "sae": 6,
+    "sae_monograde": 3
+  },
+  "normalized_output_sha256": "e646373e2b29586e68414495588f5386becfbdefc70734aac1578203707ed74e",
+  "rights_note": "Public S-Mark certification facts only. Location, telephone and email are excluded; Rwanda Standard body text and certification-mark artwork are not republished.",
+  "excluded_fields": [
+    "location",
+    "telephone",
+    "email",
+    "contacts",
+    "standard_body_text",
+    "certification_mark_artwork"
+  ]
+}

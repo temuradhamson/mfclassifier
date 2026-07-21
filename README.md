@@ -58,7 +58,7 @@ python3 tools/build_analytics_demo.py \
 
 ## Мировой каталог и расширение ЕНКТ
 
-Отдельный provenance-aware слой содержит 47 956 канонических продуктовых строк
+Отдельный provenance-aware слой содержит 47 965 канонических продуктовых строк
 на срез 21.07.2026. В него уже входят проектные источники, AIChilon, официальные
 реестры JASO, GM dexos, NMMA, NLGI, ZF TE-ML, Allison TES, Driventic DIWA,
 Mercedes-Benz Trucks DTFR, Mercedes-Benz BeVo, официальные каталоги Volvo
@@ -95,6 +95,14 @@ CSV отдельно подтвердил 60 уже имеющихся EU Ecolab
 608 identity, а пять повторов с разной пунктуацией API или повторной строкой не
 раздувают каталог. Адреса, штат, графика знака и несвязанные химические продукты
 не публикуются.
+Публичный S-Mark directory Rwanda Standards Board добавил девять действующих
+товаров: восемь моторных масел и один пищевой смазочный материал. Из 1 843
+строк каталога сохраняются только продукт, производитель, лицензия, обозначение
+стандарта, статус и срок; адреса и контакты исключены. Индийский BIS включён в
+план источников, но массовый отчёт защищён CAPTCHA, поэтому без официального
+API/экспорта его строки не копируются. Аналогично каталог BPCL MAK учитывается
+только агрегатно: официальный сайт заявляет 400+ grades, а его условия требуют
+письменного разрешения на воспроизведение материалов.
 Публичный API EOLCS на 21.07.2026 показывает 35 174 лицензированных продукта от
 883 компаний, но строки не импортируются: условия API требуют письменного
 разрешения на массовое копирование и переиздание. Это проверенный растущий seed,
@@ -131,8 +139,10 @@ CSV отдельно подтвердил 60 уже имеющихся EU Ecolab
 - `data/son-mancap-chemical-lubricant-products.jsonl` — 608 продуктов из
   официального перечня SON MANCAP Chemical Sector с техническими обозначениями
   и точной ссылкой на строку и страницу исходного PDF;
+- `data/rsb-smark-lubricant-products.jsonl` — девять действующих продуктов из
+  публичного S-Mark directory Rwanda Standards Board;
 - `deliverables/World_lubricants_catalog_seed.xlsx` — проверяемая выгрузка;
-- `deliverables/Global_lubricants_catalog_registry.xlsx` — реестр 72 источников
+- `deliverables/Global_lubricants_catalog_registry.xlsx` — реестр 75 источников
   и статусы допуска;
 - `deliverables/ENKT_GSM_extension_pilot.xlsx` — 171 пилотный технический
   профиль и предложение по пятизначному суффиксу ЕНКТ.
@@ -158,6 +168,7 @@ python3 tools/ingest_epa_safer_choice_lubricants.py
 python3 tools/ingest_kebs_smark_lubricants.py
 python3 tools/ingest_east_africa_certified_lubricants.py
 python3 tools/ingest_son_mancap_lubricants.py
+python3 tools/ingest_rsb_smark_lubricants.py
 python3 tools/ingest_fuchs_india_catalog.py
 python3 tools/ingest_fuchs_us_catalog.py
 python3 tools/ingest_fuchs_germany_catalog.py
