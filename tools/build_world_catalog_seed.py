@@ -58,6 +58,7 @@ EPA_SAFER_CHOICE_JSONL = ROOT / "data" / "epa-safer-choice-lubricants.jsonl"
 EPA_CHEMEXPO_JSONL = ROOT / "data" / "epa-chemexpo-lubricants.jsonl"
 PSQCA_ENGINE_OIL_JSONL = ROOT / "data" / "psqca-engine-oil-licences.jsonl"
 PHILIPPINES_BPS_BRAKE_FLUID_JSONL = ROOT / "data" / "philippines-bps-brake-fluid-products.jsonl"
+GHANA_GSA_CERTIFIED_JSONL = ROOT / "data" / "ghana-gsa-certified-lubricant-products.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
 SON_MANCAP_JSONL = ROOT / "data" / "son-mancap-chemical-lubricant-products.jsonl"
@@ -1788,6 +1789,71 @@ def philippines_bps_brake_fluid_record(row: dict) -> dict:
     return record
 
 
+def ghana_gsa_certified_record(row: dict) -> dict:
+    """Convert one Ghana GSA product-certification licence row."""
+    technical = row["technical"]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["licence_number"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Ghana GSA certified lubricant or coolant",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": technical["sae"][0] if technical["sae"] else "",
+        "api_class": "; ".join(f"API {value}" for value in technical["api"]),
+        "viscosity": "",
+        "grease_class": "",
+        "coolant_class": "",
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer_or_certificate_holder"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": row["source_item_number"],
+        "evidence_status": row["evidence_status"],
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["dataset_snapshot_date"],
+        "certificate_status": row["lifecycle_status"],
+    })
+    record["specifications"].update({
+        "ghana_gsa_certified_standard": technical["certified_standard"],
+        "ghana_gsa_source_product_field": row["source_product_field"],
+        "ghana_gsa_source_pdf_page_index": row["source_pdf_page_index"],
+        "ghana_gsa_source_item_number": row["source_item_number"],
+        "ghana_gsa_holder_licence_number": row["holder_licence_number"],
+        "ghana_gsa_source_quality_flags": row["source_quality_flags"],
+        "sae_source_reported": technical["sae"],
+        "api_source_reported": technical["api"],
+        "source_url": row["source_url"],
+        "source_landing_url": row["source_landing_url"],
+        "source_facts_sha256": row["source_facts_sha256"],
+    })
+    if technical.get("coolant_standard"):
+        record["specifications"]["coolant_standard_source_reported"] = technical["coolant_standard"]
+    record["codes"]["ghana_gsa_product_licence"] = {
+        "system": "GHANA_GSA_PRODUCT_LICENCE",
+        "value": row["licence_number"],
+        "source_id": row["source_id"],
+        "status": row["lifecycle_status"],
+    }
+    record["certificate"].update({
+        "number": row["licence_number"],
+        "issued_at": row["issued_at"],
+        "expires_at": row["expires_at"],
+        "technical_document": "; ".join(technical["certified_standard"]),
+    })
+    # Licence rows are evidence scopes. Do not merge them across holders or
+    # certificates merely because a short brand/product string is identical.
+    record["canonical_key"] += f"|ghana_gsa_licence:{normalize(row['licence_number'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    return record
+
+
 def kebs_smark_record(row: dict) -> dict:
     """Convert one normalized product identity from the public KEBS S-Mark directory."""
     technical = row["technical"]
@@ -2614,6 +2680,9 @@ def main() -> None:
     philippines_bps_brake_fluid_source_rows = [json.loads(line) for line in PHILIPPINES_BPS_BRAKE_FLUID_JSONL.read_text(encoding="utf-8").splitlines() if line]
     philippines_bps_brake_fluid_records = [philippines_bps_brake_fluid_record(row) for row in philippines_bps_brake_fluid_source_rows]
     input_records.extend(philippines_bps_brake_fluid_records)
+    ghana_gsa_source_rows = [json.loads(line) for line in GHANA_GSA_CERTIFIED_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    ghana_gsa_records = [ghana_gsa_certified_record(row) for row in ghana_gsa_source_rows]
+    input_records.extend(ghana_gsa_records)
     kebs_smark_source_rows = [json.loads(line) for line in KEBS_SMARK_JSONL.read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_records = [kebs_smark_record(row) for row in kebs_smark_source_rows]
     input_records.extend(kebs_smark_records)
@@ -4147,6 +4216,7 @@ def main() -> None:
         "epa_chemexpo_input_sha256": hashlib.sha256(EPA_CHEMEXPO_JSONL.read_bytes()).hexdigest(),
         "psqca_engine_oil_input_sha256": hashlib.sha256(PSQCA_ENGINE_OIL_JSONL.read_bytes()).hexdigest(),
         "philippines_bps_brake_fluid_input_sha256": hashlib.sha256(PHILIPPINES_BPS_BRAKE_FLUID_JSONL.read_bytes()).hexdigest(),
+        "ghana_gsa_certified_input_sha256": hashlib.sha256(GHANA_GSA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "son_mancap_input_sha256": hashlib.sha256(SON_MANCAP_JSONL.read_bytes()).hexdigest(),
@@ -4219,6 +4289,7 @@ def main() -> None:
         "philippines_bps_brake_fluid_source_rows": len(philippines_bps_brake_fluid_source_rows),
         "philippines_bps_ps_brake_fluid_rows": sum(r["source_id"] == "PHILIPPINES_BPS_PS_BRAKE_FLUID_LICENCES" for r in records),
         "philippines_bps_icc_brake_fluid_rows": sum(r["source_id"] == "PHILIPPINES_BPS_ICC_BRAKE_FLUID_CERTIFICATES" for r in records),
+        "ghana_gsa_certified_source_rows": len(ghana_gsa_source_rows),
         "kebs_smark_source_rows": len(kebs_smark_source_rows),
         "east_africa_certified_source_rows": len(east_africa_certified_source_rows),
         "east_africa_certified_source_rows_by_source": dict(sorted(Counter(row["source_id"] for row in east_africa_certified_source_rows).items())),

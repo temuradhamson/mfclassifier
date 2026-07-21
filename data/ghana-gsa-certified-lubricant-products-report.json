@@ -1,0 +1,23 @@
+{
+  "audited_relevant_source_rows": 16,
+  "dataset_snapshot_date": "2026-07-21",
+  "families": {
+    "M": 13,
+    "T": 2,
+    "TF": 1
+  },
+  "lifecycle_statuses": {
+    "certification_expired_before_catalog_snapshot": 1,
+    "certification_valid_as_of_catalog_snapshot": 15
+  },
+  "method": "audited transcription pinned to the official PDF SHA-256; exact page index, item, licence, standard and dates retained",
+  "normalized_output_sha256": "dc05bde08b4463061e2a8cc97c816f19ace16eb4b1b137e653327e6001dc768f",
+  "normalized_products": 16,
+  "rows_with_api": 12,
+  "rows_with_sae": 15,
+  "source_pdf_pages": 112,
+  "source_pdf_sha256": "8085170f9bdff86278d07c43b0375cd77727e6dde84f4320cc8403d7d7bd7bc2",
+  "source_period": "January-September 2025",
+  "source_url": "https://gsa.gov.gh/wp-content/uploads/2018/04/2025-CERTIFIED-LIST-JAN.-SEP.pdf",
+  "status": "official_ghana_gsa_2025_product_certification_evidence_normalized"
+}

@@ -1165,6 +1165,21 @@
       "notes": "The official BPS page directly links a live ICC-holder spreadsheet. Its 2026-04-30 snapshot contains 19,461 rows; 114 exact Motor Vehicle Brake Fluid rows expand to 129 class occurrences and normalize to 34 holder + product-label + brake-fluid-class identities after repeated ICC sticker ranges are merged. One false ceramic-tile row containing brake-fluid text is excluded. Category typos, inconsistent standards and tyre-like type values remain explicit quality flags. ICC evidence is not treated as a current commercial offer."
     },
     {
+      "source_id": "GSA_GHANA_2025_CERTIFIED_LUBRICANT_PRODUCTS",
+      "title": "Ghana Standards Authority — certified lubricant and coolant products, January-September 2025",
+      "owner": "Ghana Standards Authority (GSA)",
+      "source_type": "official_government_product_certification_pdf_curated_scope",
+      "source_locator": "data/ghana-gsa-certified-lubricant-products.jsonl",
+      "source_url": "https://gsa.gov.gh/wp-content/uploads/2018/04/2025-CERTIFIED-LIST-JAN.-SEP.pdf",
+      "terms_url": "https://gsa.gov.gh/product-certification/",
+      "source_sha256": "dc05bde08b4463061e2a8cc97c816f19ace16eb4b1b137e653327e6001dc768f",
+      "access_status": "public_official_government_product_certification_pdf",
+      "bulk_ingest_allowed": true,
+      "publication_status": "normalized_factual_product_certification_evidence_with_attribution",
+      "observed_count": 16,
+      "notes": "The official 112-page decision register contains 16 exact professional-scope rows: 13 engine oils, two gear oils and one radiator coolant. Product/brand, holder, SAE, API where stated, certified standard, product licence, issue/expiry dates, PDF page index and printed item number are retained. One January licence had expired by the catalog snapshot; 15 remained within the published validity period. The audited transcription is pinned to the official PDF SHA-256 and creates no commercial offer or price observation."
+    },
+    {
       "source_id": "FLENDER_T7300_APPROVED_LUBRICANTS",
       "title": "Flender T7300 approved lubricants",
       "owner": "Flender GmbH",

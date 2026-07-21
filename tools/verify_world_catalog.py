@@ -150,6 +150,8 @@ def main() -> None:
     psqca_rows = [json.loads(line) for line in (ROOT / "data/psqca-engine-oil-licences.jsonl").read_text(encoding="utf-8").splitlines() if line]
     philippines_bps_report = json.loads((ROOT / "data/philippines-bps-brake-fluid-products-report.json").read_text(encoding="utf-8"))
     philippines_bps_rows = [json.loads(line) for line in (ROOT / "data/philippines-bps-brake-fluid-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    ghana_gsa_report = json.loads((ROOT / "data/ghana-gsa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
+    ghana_gsa_rows = [json.loads(line) for line in (ROOT / "data/ghana-gsa-certified-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_report = json.loads((ROOT / "data/kebs-smark-lubricant-products-report.json").read_text(encoding="utf-8"))
     kebs_smark_rows = [json.loads(line) for line in (ROOT / "data/kebs-smark-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     east_africa_report = json.loads((ROOT / "data/east-africa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -189,7 +191,7 @@ def main() -> None:
     assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
     assert not db.execute("PRAGMA foreign_key_check").fetchall()
     assert db.execute("SELECT count(*) FROM products").fetchone()[0] == len(lines)
-    assert len(lines) == 98047
+    assert len(lines) == 98063
     assert report["jaso_source_rows"] == jaso_report["rows"] == 3630
     assert report["jaso_unique_oil_codes"] == jaso_report["unique_oil_codes"] == 3629
     assert report["official_filed_registry_rows"] == 3629
@@ -240,6 +242,7 @@ def main() -> None:
     assert report["philippines_bps_brake_fluid_source_rows"] == philippines_bps_report["normalized_products_or_brand_grade_scopes"] == len(philippines_bps_rows) == 123
     assert report["philippines_bps_ps_brake_fluid_rows"] == philippines_bps_report["rows_by_source"]["PHILIPPINES_BPS_PS_BRAKE_FLUID_LICENCES"] == 89
     assert report["philippines_bps_icc_brake_fluid_rows"] == philippines_bps_report["rows_by_source"]["PHILIPPINES_BPS_ICC_BRAKE_FLUID_CERTIFICATES"] == 34
+    assert report["ghana_gsa_certified_source_rows"] == ghana_gsa_report["normalized_products"] == len(ghana_gsa_rows) == 16
     assert report["kebs_smark_source_rows"] == kebs_smark_report["normalized_products"] == len(kebs_smark_rows) == 750
     assert report["east_africa_certified_source_rows"] == east_africa_report["normalized_products"] == len(east_africa_rows) == 229
     assert report["east_africa_certified_source_rows_by_source"] == east_africa_report["normalized_products_by_source"] == {
@@ -248,7 +251,7 @@ def main() -> None:
     }
     assert report["son_mancap_source_rows"] == son_mancap_report["normalized_products"] == len(son_mancap_rows) == 608
     assert report["rsb_smark_source_rows"] == rsb_smark_report["normalized_products"] == len(rsb_smark_rows) == 9
-    assert report["official_government_product_certification_registry_rows"] == 1596
+    assert report["official_government_product_certification_registry_rows"] == 1612
     assert report["usda_biopreferred_source_rows"] == biopreferred_report["rows"] == 892
     assert report["official_government_program_rows"] == 894
     assert report["anp_brazil_source_rows"] == anp_report["normalized_product_grade_rows"] == len(anp_rows) == 12664
@@ -418,7 +421,7 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_ecolabel_product_registry'").fetchone()[0] == 127
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_ecolabel_registry'").fetchone()[0] == 32
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_product_conformity_registry'").fetchone()[0] == 40284
-    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_product_certification_registry'").fetchone()[0] == 1596
+    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_product_certification_registry'").fetchone()[0] == 1612
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_program_catalog'").fetchone()[0] == 894
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_regulatory_registry'").fetchone()[0] == 30725
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_registry_source_data_issue'").fetchone()[0] == 51
@@ -484,6 +487,9 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='PHILIPPINES_BPS_ICC_BRAKE_FLUID_CERTIFICATES'").fetchone()[0] == 34
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='PHILIPPINES_BPS_PS_LICENCE'").fetchone()[0] == 89
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='PHILIPPINES_BPS_ICC_CERTIFICATE'").fetchone()[0] == 68
+    assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='GSA_GHANA_2025_CERTIFIED_LUBRICANT_PRODUCTS'").fetchone()[0] == 16
+    assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='GHANA_GSA_PRODUCT_LICENCE'").fetchone()[0] == 16
+    assert db.execute("SELECT count(*) FROM product_offers WHERE source_id='GSA_GHANA_2025_CERTIFIED_LUBRICANT_PRODUCTS'").fetchone()[0] == 0
     assert db.execute("""
         SELECT count(*) FROM certificates c JOIN products p ON p.product_id=c.product_id
         WHERE p.source_id LIKE 'PHILIPPINES_BPS_%'
@@ -652,6 +658,18 @@ def main() -> None:
     for source_id, expected in (("PHILIPPINES_BPS_PS_BRAKE_FLUID_LICENCES", 89), ("PHILIPPINES_BPS_ICC_BRAKE_FLUID_CERTIFICATES", 34)):
         assert policy_by_id[source_id]["source_sha256"] == philippines_bps_report["normalized_output_sha256"]
         assert policy_by_id[source_id]["observed_count"] == expected
+    assert ghana_gsa_report["source_pdf_sha256"] == "8085170f9bdff86278d07c43b0375cd77727e6dde84f4320cc8403d7d7bd7bc2"
+    assert ghana_gsa_report["families"] == {"M": 13, "T": 2, "TF": 1}
+    assert ghana_gsa_report["lifecycle_statuses"] == {
+        "certification_expired_before_catalog_snapshot": 1,
+        "certification_valid_as_of_catalog_snapshot": 15,
+    }
+    assert ghana_gsa_report["rows_with_sae"] == 15
+    assert ghana_gsa_report["rows_with_api"] == 12
+    assert len({row["licence_number"] for row in ghana_gsa_rows}) == 16
+    assert all(not ({"address", "phone", "email", "contact_person"} & set(row)) for row in ghana_gsa_rows)
+    assert policy_by_id["GSA_GHANA_2025_CERTIFIED_LUBRICANT_PRODUCTS"]["source_sha256"] == ghana_gsa_report["normalized_output_sha256"]
+    assert policy_by_id["GSA_GHANA_2025_CERTIFIED_LUBRICANT_PRODUCTS"]["observed_count"] == 16
     assert policy_by_id["nsf-white-book"]["bulk_ingest_allowed"] is False
     assert policy_by_id["FLENDER_T7300_APPROVED_LUBRICANTS"]["bulk_ingest_allowed"] is False
     chemexpo_names = {row["product_name"].casefold() for row in epa_chemexpo_rows}
