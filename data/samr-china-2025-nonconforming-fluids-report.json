@@ -1,0 +1,67 @@
+{
+  "status": "official_china_2025_nonconforming_fluid_product_observations_normalized",
+  "source_id": "SAMR_CHINA_2025_NONCONFORMING_FLUIDS",
+  "source_url": "https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/zljds/art/2026/art_2edd988c928c47ff92cdaa2941bbe013.html",
+  "attachment_url": "https://www.samr.gov.cn/cms_files/filemanager/1647978232/attach/20261/5ced9b6ecebe48d1a6842dad0bbc6873.xlsx",
+  "rights_url": "https://www.samr.gov.cn/jg/wzsm/art/2021/art_c30de52ec3264bd29886479e5471dc72.html",
+  "snapshot_date": "2026-07-21",
+  "report_date": "2026-01-13",
+  "source_xlsx_sha256": "0042e67b52973d78660f2c137f912cac2ceb785ff56132467f5eb24248c0f801",
+  "source_relevant_rows": 28,
+  "normalized_product_observations": 25,
+  "excluded_counterfeit_rows_without_producer": 3,
+  "excluded_source_rows": [
+    {
+      "source_row": 11,
+      "product_kind_source_reported": "机动车辆制动液",
+      "producer": "",
+      "product_name_source_reported": "制动液",
+      "model_specification_source_reported": "HZY4（DOT4）",
+      "production_date_or_batch_source_reported": "2025.02.06",
+      "nonconforming_items_source_reported": "运动黏度（-40℃）*,平衡回流沸点（ERBP）*,pH值*",
+      "source_note": "假冒",
+      "exclusion_reason": "counterfeit_row_without_reported_producer"
+    },
+    {
+      "source_row": 29,
+      "product_kind_source_reported": "车用尿素水溶液",
+      "producer": "",
+      "product_name_source_reported": "国六车用尿素溶液（车用尿素水溶液）",
+      "model_specification_source_reported": "10kg/桶",
+      "production_date_or_batch_source_reported": "2025/08/17",
+      "nonconforming_items_source_reported": "尿素含量,密度（20℃）,折光率,杂质含量（钠）",
+      "source_note": "假冒",
+      "exclusion_reason": "counterfeit_row_without_reported_producer"
+    },
+    {
+      "source_row": 36,
+      "product_kind_source_reported": "发动机润滑油",
+      "producer": "",
+      "product_name_source_reported": "宗申三轮车适用机油（汽油机油）",
+      "model_specification_source_reported": "SL 20W-50",
+      "production_date_or_batch_source_reported": "2025/08/02",
+      "nonconforming_items_source_reported": "运动黏度（100℃）,泡沫性,蒸发损失,闪点（开口）",
+      "source_note": "假冒",
+      "exclusion_reason": "counterfeit_row_without_reported_producer"
+    }
+  ],
+  "rows_by_source_product_kind": {
+    "发动机润滑油": 6,
+    "机动车辆制动液": 9,
+    "车用尿素水溶液": 10
+  },
+  "families": {
+    "M": 6,
+    "TF": 19
+  },
+  "rows_with_api": 6,
+  "rows_with_sae": 6,
+  "rows_with_dot": 5,
+  "rows_with_hzy": 9,
+  "normalized_output_sha256": "c416c378853fea40da0cd4125b1136559f815fd22947ed9b7f86ccd70922f5d4",
+  "grain_note": "One row is one exact nominal producer + reported product name + model/specification identity observed as nonconforming in the 2025 national inspection.",
+  "lifecycle_note": "All retained rows failed one or more inspection items. They are historical regulatory observations and are never presented as approved, recommended or currently marketed products.",
+  "counterfeit_note": "Three counterfeit rows without a reported producer are retained only in this audit report and do not inflate the canonical product total.",
+  "rights_note": "SAMR reserves website copyright and prohibits commercial verbatim republication. The source XLSX is not redistributed; only attributed, non-expressive factual product and inspection fields are normalized.",
+  "privacy_note": "Retailers, platform names, testing laboratories and producer locations are excluded. Only company-level nominal producer and product facts needed for product identity and regulatory provenance are retained."
+}

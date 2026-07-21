@@ -174,6 +174,8 @@ def main() -> None:
     psqca_rows = [json.loads(line) for line in (ROOT / "data/psqca-engine-oil-licences.jsonl").read_text(encoding="utf-8").splitlines() if line]
     tisi_report = json.loads((ROOT / "data/tisi-two-stroke-oil-licences-report.json").read_text(encoding="utf-8"))
     tisi_rows = [json.loads(line) for line in (ROOT / "data/tisi-two-stroke-oil-licences.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    samr_china_report = json.loads((ROOT / "data/samr-china-2025-nonconforming-fluids-report.json").read_text(encoding="utf-8"))
+    samr_china_rows = [json.loads(line) for line in (ROOT / "data/samr-china-2025-nonconforming-fluids.jsonl").read_text(encoding="utf-8").splitlines() if line]
     philippines_bps_report = json.loads((ROOT / "data/philippines-bps-brake-fluid-products-report.json").read_text(encoding="utf-8"))
     philippines_bps_rows = [json.loads(line) for line in (ROOT / "data/philippines-bps-brake-fluid-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     ghana_gsa_report = json.loads((ROOT / "data/ghana-gsa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -198,6 +200,8 @@ def main() -> None:
     assert len(lines) == report["canonical_rows"]
     assert len({row["product_id"] for row in lines}) == len(lines)
     assert len({row["canonical_key"] for row in lines}) == len(lines)
+    assert all(row["product_name_normalized"] for row in lines)
+    assert all(row["canonical_key"].split("|", 1)[0] for row in lines)
     assert report["normalized_input_sha256"] == hashlib.sha256((ROOT / "data/catalog-v3.json").read_bytes()).hexdigest()
 
     for source in policy["sources"]:
@@ -217,7 +221,7 @@ def main() -> None:
     assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
     assert not db.execute("PRAGMA foreign_key_check").fetchall()
     assert db.execute("SELECT count(*) FROM products").fetchone()[0] == len(lines)
-    assert len(lines) == 100400
+    assert len(lines) == 100425
     assert report["jaso_source_rows"] == jaso_report["rows"] == 3630
     assert report["jaso_unique_oil_codes"] == jaso_report["unique_oil_codes"] == 3629
     assert report["official_filed_registry_rows"] == 3629
@@ -439,6 +443,8 @@ def main() -> None:
     assert report["official_government_product_certification_brand_scope_rows"] == 14
     assert report["tisi_two_stroke_oil_source_rows"] == tisi_report["normalized_licence_holder_scopes"] == len(tisi_rows) == 10
     assert report["official_government_product_certification_holder_scope_rows"] == 10
+    assert report["samr_china_2025_source_rows"] == samr_china_report["normalized_product_observations"] == len(samr_china_rows) == 25
+    assert report["official_government_nonconforming_product_inspection_observation_rows"] == 25
     assert report["philippines_bps_brake_fluid_source_rows"] == philippines_bps_report["normalized_products_or_brand_grade_scopes"] == len(philippines_bps_rows) == 123
     assert report["philippines_bps_ps_brake_fluid_rows"] == philippines_bps_report["rows_by_source"]["PHILIPPINES_BPS_PS_BRAKE_FLUID_LICENCES"] == 89
     assert report["philippines_bps_icc_brake_fluid_rows"] == philippines_bps_report["rows_by_source"]["PHILIPPINES_BPS_ICC_BRAKE_FLUID_CERTIFICATES"] == 34
@@ -597,6 +603,7 @@ def main() -> None:
     assert report["liqui_moly_current_products_added"] == 152
     assert report["liqui_moly_current_article_skus"] == liqui_moly_current_report["unique_article_skus"] == 985
     assert report["duplicate_decisions"]["review_cross_source_identity"] == 5518
+    assert report["duplicate_decisions"]["keep_separate_specification_conflict"] == 10109
     assert db.execute("""
         SELECT count(*) FROM duplicate_decisions d
         JOIN products a ON a.product_id=d.product_id_a
@@ -773,6 +780,16 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='PSQCA_CM_LICENCE'").fetchone()[0] == 14
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='TISI_TWO_STROKE_OIL_LICENCES'").fetchone()[0] == 10
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='TISI_MANUFACTURING_LICENCE'").fetchone()[0] == 10
+    assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='SAMR_CHINA_2025_NONCONFORMING_FLUIDS'").fetchone()[0] == 25
+    assert db.execute("SELECT count(*) FROM product_offers WHERE source_id='SAMR_CHINA_2025_NONCONFORMING_FLUIDS'").fetchone()[0] == 0
+    assert db.execute("""
+        SELECT count(*) FROM duplicate_decisions d
+        JOIN products a ON a.product_id=d.product_id_a
+        JOIN products b ON b.product_id=d.product_id_b
+        WHERE d.decision='review_cross_source_identity'
+          AND (a.source_id='SAMR_CHINA_2025_NONCONFORMING_FLUIDS'
+               OR b.source_id='SAMR_CHINA_2025_NONCONFORMING_FLUIDS')
+    """).fetchone()[0] == 0
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='PHILIPPINES_BPS_PS_BRAKE_FLUID_LICENCES'").fetchone()[0] == 89
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='PHILIPPINES_BPS_ICC_BRAKE_FLUID_CERTIFICATES'").fetchone()[0] == 34
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='PHILIPPINES_BPS_PS_LICENCE'").fetchone()[0] == 89
@@ -968,6 +985,40 @@ def main() -> None:
     assert all(row["product_name_basis"] == "source_reported_certified_holder_scope_not_individual_brand_grade_or_sku" for row in tisi_rows)
     assert all(row["lifecycle_status"] == "published_in_current_tisi_licence_search_current_validity_not_independently_stated" for row in tisi_rows)
     assert all(not ({"address", "tax_id", "phone", "email", "contact_person"} & set(row)) for row in tisi_rows)
+    assert report["samr_china_2025_input_sha256"] == samr_china_report["normalized_output_sha256"]
+    assert policy_by_id["SAMR_CHINA_2025_NONCONFORMING_FLUIDS"]["source_sha256"] == samr_china_report["normalized_output_sha256"]
+    assert policy_by_id["SAMR_CHINA_2025_NONCONFORMING_FLUIDS"]["observed_count"] == 25
+    assert samr_china_report["source_xlsx_sha256"] == "0042e67b52973d78660f2c137f912cac2ceb785ff56132467f5eb24248c0f801"
+    assert samr_china_report["source_relevant_rows"] == 28
+    assert samr_china_report["excluded_counterfeit_rows_without_producer"] == 3
+    assert {row["source_row"] for row in samr_china_report["excluded_source_rows"]} == {11, 29, 36}
+    assert samr_china_report["rows_by_source_product_kind"] == {"发动机润滑油": 6, "机动车辆制动液": 9, "车用尿素水溶液": 10}
+    assert samr_china_report["families"] == {"M": 6, "TF": 19}
+    assert samr_china_report["rows_with_api"] == samr_china_report["rows_with_sae"] == 6
+    assert samr_china_report["rows_with_dot"] == 5
+    assert samr_china_report["rows_with_hzy"] == 9
+    assert len({row["source_record_id"] for row in samr_china_rows}) == 25
+    assert all(row["inspection_outcome"] == "nonconforming" for row in samr_china_rows)
+    assert all(row["lifecycle_status"] == "official_2025_national_inspection_nonconforming_current_market_status_unverified" for row in samr_china_rows)
+    assert all(row["manufacturer"] and row["source_note"] != "假冒" for row in samr_china_rows)
+    assert all(not ({"retailer", "seller", "platform", "testing_laboratory", "producer_location", "address", "phone", "email"} & set(row)) for row in samr_china_rows)
+    assert db.execute("""
+        SELECT count(*) FROM products
+        WHERE source_id='SAMR_CHINA_2025_NONCONFORMING_FLUIDS'
+          AND lifecycle_status='official_2025_national_inspection_nonconforming_current_market_status_unverified'
+    """).fetchone()[0] == 25
+    assert db.execute("""
+        SELECT count(DISTINCT p.product_id)
+        FROM products p JOIN specifications s ON s.product_id=p.product_id
+        WHERE p.source_id='SAMR_CHINA_2025_NONCONFORMING_FLUIDS'
+          AND p.family_code='M' AND s.spec_type='sae_engine'
+    """).fetchone()[0] == 6
+    assert db.execute("""
+        SELECT count(DISTINCT p.product_id)
+        FROM products p JOIN specifications s ON s.product_id=p.product_id
+        WHERE p.source_id='SAMR_CHINA_2025_NONCONFORMING_FLUIDS'
+          AND p.family_code='M' AND s.spec_type='api'
+    """).fetchone()[0] == 6
     assert philippines_bps_report["source_reports"]["PHILIPPINES_BPS_PS_BRAKE_FLUID_LICENCES"] == {
         "source_rows": 3558,
         "relevant_source_rows": 13,

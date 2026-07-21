@@ -1911,6 +1911,21 @@
       "notes": "The official current TIS 1040-2541 search exposes ten manufacturing licences across nine exact company holders. The linked data.go.th dataset is published under Creative Commons Attribution. Each normalized row remains a licence-holder certification scope, not a marketed brand, grade or SKU; no SAE/API value or current-validity claim is inferred."
     },
     {
+      "source_id": "SAMR_CHINA_2025_NONCONFORMING_FLUIDS",
+      "title": "China SAMR 2025 national inspection — nonconforming automotive fluids",
+      "owner": "State Administration for Market Regulation of the People's Republic of China (SAMR)",
+      "source_type": "official_government_national_product_quality_inspection_xlsx",
+      "source_locator": "data/samr-china-2025-nonconforming-fluids.jsonl",
+      "source_url": "https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/zljds/art/2026/art_2edd988c928c47ff92cdaa2941bbe013.html",
+      "terms_url": "https://www.samr.gov.cn/jg/wzsm/art/2021/art_c30de52ec3264bd29886479e5471dc72.html",
+      "source_sha256": "c416c378853fea40da0cd4125b1136559f815fd22947ed9b7f86ccd70922f5d4",
+      "access_status": "public_official_government_information_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_document_redistribution",
+      "observed_count": 25,
+      "notes": "The official 2025 national-inspection XLSX contains 28 relevant failed batches. Twenty-five exact nominal producer + product name + model/specification observations are normalized: nine brake fluids, ten automotive aqueous-urea products and six engine oils. Three rows explicitly marked counterfeit have no reported producer and remain report-only. SAMR reserves website copyright and prohibits commercial verbatim republication; the XLSX is not redistributed, narrative content is omitted, and only attributed non-expressive facts are retained. Every row remains explicitly nonconforming historical evidence and is never presented as approved or currently marketed."
+    },
+    {
       "source_id": "FUCHS_SAUDI_ARABIA_PRODUCT_FINDER",
       "title": "FUCHS Saudi Arabia Product Finder",
       "owner": "Alhamrani-Fuchs Petroleum Saudi Arabia Limited",

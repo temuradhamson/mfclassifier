@@ -69,6 +69,7 @@ EPA_SAFER_CHOICE_JSONL = ROOT / "data" / "epa-safer-choice-lubricants.jsonl"
 EPA_CHEMEXPO_JSONL = ROOT / "data" / "epa-chemexpo-lubricants.jsonl"
 PSQCA_ENGINE_OIL_JSONL = ROOT / "data" / "psqca-engine-oil-licences.jsonl"
 TISI_TWO_STROKE_OIL_JSONL = ROOT / "data" / "tisi-two-stroke-oil-licences.jsonl"
+SAMR_CHINA_2025_JSONL = ROOT / "data" / "samr-china-2025-nonconforming-fluids.jsonl"
 PHILIPPINES_BPS_BRAKE_FLUID_JSONL = ROOT / "data" / "philippines-bps-brake-fluid-products.jsonl"
 GHANA_GSA_CERTIFIED_JSONL = ROOT / "data" / "ghana-gsa-certified-lubricant-products.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
@@ -145,7 +146,15 @@ def text(value) -> str:
 
 def normalize(value) -> str:
     value = unicodedata.normalize("NFKC", text(value)).casefold().replace("ё", "е")
-    return re.sub(r"[^0-9a-zа-я]+", " ", value).strip()
+    # Preserve letters, numbers and combining marks from every script.  The old
+    # Latin/Cyrillic-only expression collapsed Thai, Chinese and Korean company
+    # names to an empty identity, generating thousands of false cross-source
+    # duplicate candidates.
+    normalized = "".join(
+        character if unicodedata.category(character)[0] in {"L", "M", "N"} else " "
+        for character in value
+    )
+    return re.sub(r"\s+", " ", normalized).strip()
 
 
 def source_for(row: dict) -> str:
@@ -2446,6 +2455,68 @@ def tisi_two_stroke_oil_record(row: dict) -> dict:
     return record
 
 
+def samr_china_2025_record(row: dict) -> dict:
+    """Convert one historical SAMR nonconforming-product observation."""
+    technical = row["technical"]
+    api = technical["api_source_reported"]
+    sae = technical["sae_source_reported"]
+    brake_classes = technical["brake_fluid_dot_source_reported"] or technical["brake_fluid_hzy_source_reported"]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": f"China SAMR 2025 nonconforming {row['product_kind_english']} observation",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": "; ".join(sae),
+        "api_class": "; ".join(f"API {value}" for value in api),
+        "viscosity": "",
+        "grease_class": "",
+        "coolant_class": brake_classes[0] if brake_classes else "",
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": row["evidence_status"],
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update({
+        "brand_basis": row["brand_basis"],
+        "samr_product_name_basis": row["product_name_basis"],
+        "samr_product_kind_source_reported": row["product_kind_source_reported"],
+        "samr_product_kind_english": row["product_kind_english"],
+        "samr_model_specification_source_reported": row["model_specification_source_reported"],
+        "samr_production_date_or_batch_source_reported": row["production_date_or_batch_source_reported"],
+        "samr_inspection_outcome": row["inspection_outcome"],
+        "samr_nonconforming_items": row["nonconforming_items"],
+        "samr_nonconforming_items_source_reported": row["nonconforming_items_source_reported"],
+        "samr_source_note": row["source_note"],
+        "samr_source_quality_flags": row["source_quality_flags"],
+        "api_source_reported": api,
+        "sae_engine_source_reported": sae,
+        "brake_fluid_dot_source_reported": technical["brake_fluid_dot_source_reported"],
+        "brake_fluid_hzy_source_reported": technical["brake_fluid_hzy_source_reported"],
+        "source_url": row["source_url"],
+        "attachment_url": row["attachment_url"],
+        "rights_url": row["rights_url"],
+        "report_date": row["report_date"],
+        "source_facts_sha256": row["source_facts_sha256"],
+    })
+    # A failed inspection batch is historical regulatory evidence. Keep it
+    # separate from approved/current commercial identities even when names match.
+    record["canonical_key"] += f"|samr_inspection_record:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    return record
+
+
 def philippines_bps_brake_fluid_record(row: dict) -> dict:
     """Convert one conservative Philippine BPS brake-fluid evidence identity."""
     brake_classes = row["technical"]["brake_fluid_class"]
@@ -3440,6 +3511,9 @@ def main() -> None:
     tisi_two_stroke_oil_source_rows = [json.loads(line) for line in TISI_TWO_STROKE_OIL_JSONL.read_text(encoding="utf-8").splitlines() if line]
     tisi_two_stroke_oil_records = [tisi_two_stroke_oil_record(row) for row in tisi_two_stroke_oil_source_rows]
     input_records.extend(tisi_two_stroke_oil_records)
+    samr_china_2025_source_rows = [json.loads(line) for line in SAMR_CHINA_2025_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    samr_china_2025_records = [samr_china_2025_record(row) for row in samr_china_2025_source_rows]
+    input_records.extend(samr_china_2025_records)
     philippines_bps_brake_fluid_source_rows = [json.loads(line) for line in PHILIPPINES_BPS_BRAKE_FLUID_JSONL.read_text(encoding="utf-8").splitlines() if line]
     philippines_bps_brake_fluid_records = [philippines_bps_brake_fluid_record(row) for row in philippines_bps_brake_fluid_source_rows]
     input_records.extend(philippines_bps_brake_fluid_records)
@@ -5483,6 +5557,7 @@ def main() -> None:
         "epa_chemexpo_input_sha256": hashlib.sha256(EPA_CHEMEXPO_JSONL.read_bytes()).hexdigest(),
         "psqca_engine_oil_input_sha256": hashlib.sha256(PSQCA_ENGINE_OIL_JSONL.read_bytes()).hexdigest(),
         "tisi_two_stroke_oil_input_sha256": hashlib.sha256(TISI_TWO_STROKE_OIL_JSONL.read_bytes()).hexdigest(),
+        "samr_china_2025_input_sha256": hashlib.sha256(SAMR_CHINA_2025_JSONL.read_bytes()).hexdigest(),
         "philippines_bps_brake_fluid_input_sha256": hashlib.sha256(PHILIPPINES_BPS_BRAKE_FLUID_JSONL.read_bytes()).hexdigest(),
         "ghana_gsa_certified_input_sha256": hashlib.sha256(GHANA_GSA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
@@ -5570,6 +5645,8 @@ def main() -> None:
         "official_government_product_certification_brand_scope_rows": sum(r["evidence_status"] == "official_government_product_certification_brand_scope" for r in records),
         "tisi_two_stroke_oil_source_rows": len(tisi_two_stroke_oil_source_rows),
         "official_government_product_certification_holder_scope_rows": sum(r["evidence_status"] == "official_government_product_certification_holder_scope" for r in records),
+        "samr_china_2025_source_rows": len(samr_china_2025_source_rows),
+        "official_government_nonconforming_product_inspection_observation_rows": sum(r["evidence_status"] == "official_government_nonconforming_product_inspection_observation" for r in records),
         "philippines_bps_brake_fluid_source_rows": len(philippines_bps_brake_fluid_source_rows),
         "philippines_bps_ps_brake_fluid_rows": sum(r["source_id"] == "PHILIPPINES_BPS_PS_BRAKE_FLUID_LICENCES" for r in records),
         "philippines_bps_icc_brake_fluid_rows": sum(r["source_id"] == "PHILIPPINES_BPS_ICC_BRAKE_FLUID_CERTIFICATES" for r in records),
