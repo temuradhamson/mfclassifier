@@ -1,18 +1,18 @@
 {
-  "active_qpls_in_scope": 62,
+  "active_qpls_in_scope": 65,
   "certified_statuses_by_occurrence": {
-    "GREEN": 398,
+    "GREEN": 488,
     "RED": 57,
     "YELLOW": 25
   },
-  "duplicate_qualification_occurrences_merged": 24,
+  "duplicate_qualification_occurrences_merged": 34,
   "families": {
     "C": 1,
-    "G": 65,
+    "G": 69,
     "H": 52,
     "I": 12,
     "M": 203,
-    "S": 86,
+    "S": 162,
     "T": 13,
     "TF": 15,
     "U": 9
@@ -37,30 +37,44 @@
     "QPL-AMS2644": "inspection penetrant",
     "QPL-P-C-444": "grease-emulsifying cleaning compound, not a lubricant"
   },
+  "fsc_8030_excluded_search_qpls": {
+    "QPL-11796": "inactive historical petrolatum corrosion-preventive QPL",
+    "QPL-19565": "thermal-insulation coating compound",
+    "QPL-23586": "electrical silicone-rubber sealing compound",
+    "QPL-24176": "epoxy metal-repair cement",
+    "QPL-6799": "strippable protective coating",
+    "QPL-81733": "corrosion-inhibitive sealing and coating compound",
+    "QPL-81904": "thermal-insulation coating compound",
+    "QPL-8516": "electrical-system sealing compound",
+    "QPL-85334": "fuel-tank sealing compound",
+    "QPL-AMS-S-4383": "fuel-tank sealing compound"
+  },
   "fsc_scope": [
     "9150",
-    "6850 (lubricant/lubricity subset only)"
+    "6850 (lubricant/lubricity subset only)",
+    "8030 (anti-seize/corrosion-preventive subset only)"
   ],
-  "government_designations": 118,
+  "government_designations": 139,
   "grain_note": "One normalized row is company + manufacturer designation + professional family. Multiple government designations and QPL occurrences are retained as qualifications on that row.",
   "help_url": "https://qpldocs.dla.mil/help/default.aspx",
   "lifecycle_statuses": {
     "mixed_qualification_lifecycle_review": 1,
     "qualification_overdue_contact_qa": 46,
-    "qualified_source_certified": 363,
+    "qualified_source_certified": 440,
     "qualified_source_due_for_certification": 23,
-    "sam_inactive_source_review": 21,
+    "sam_inactive_source_review": 24,
     "stop_ship": 2
   },
-  "normalized_output_sha256": "edf5866ed5564323a1eff49042b6f2ffd53faf341a555bfac218a54d6ddefe35",
-  "normalized_products": 456,
+  "normalized_output_sha256": "a5a4faa62fdf49bf120ac8b4a835b64d7d1c2a41287ef860590de5c44a3dabdd",
+  "normalized_products": 536,
   "normalized_products_by_source": {
     "DLA_QPD_FSC_6850_LUBRICANT_SCOPE": 25,
+    "DLA_QPD_FSC_8030_LUBRICANT_SCOPE": 80,
     "DLA_QPD_FSC_9150": 431
   },
-  "plant_rows_without_product_designation_excluded": 766,
+  "plant_rows_without_product_designation_excluded": 861,
   "privacy_and_scope_note": "Addresses, telephone numbers, websites, test references, notes and page presentation are deliberately omitted. Plant rows without a manufacturer designation are not products and are excluded.",
-  "published_manufacturer_product_occurrences": 480,
+  "published_manufacturer_product_occurrences": 570,
   "qpl_metadata": {
     "10924": {
       "document_date": "09/30/2008",
@@ -91,6 +105,16 @@
       "qpl_status": "Active",
       "qualifying_activity": "SH",
       "title": "Lubricating Grease (High-Temperature, Electric Motor, Ball and Roller Bearings)"
+    },
+    "16173": {
+      "document_date": "01/06/1993",
+      "document_id": "MIL-PRF-16173E",
+      "fsc": "8030",
+      "qpd_update_date": "04/07/2026",
+      "qpl_number": "QPL-16173",
+      "qpl_status": "Active",
+      "qualifying_activity": "SH",
+      "title": "Corrosion Preventive Compound, Solvent Cutback, Cold-Application"
     },
     "17331": {
       "document_date": "02/05/2025",
@@ -522,6 +546,16 @@
       "qualifying_activity": "68",
       "title": "Lubricating Oil: General Purpose, Low Temperature (NATO O-142)"
     },
+    "81309": {
+      "document_date": "07/18/2018",
+      "document_id": "MIL-PRF-81309H",
+      "fsc": "8030",
+      "qpd_update_date": "06/10/2026",
+      "qpl_number": "QPL-81309",
+      "qpl_status": "Active",
+      "qualifying_activity": "AS",
+      "title": "Corrosion Preventive Compounds, Water Displacing, Ultra-Thin Film"
+    },
     "81322": {
       "document_date": "01/24/2005",
       "document_id": "MIL-PRF-81322G",
@@ -621,6 +655,16 @@
       "qpl_status": "Active",
       "qualifying_activity": "SH",
       "title": "Lubricating Oil, Shipboard Internal Combustion Engine, High-Output Diesel"
+    },
+    "907": {
+      "document_date": "04/07/2020",
+      "document_id": "MIL-PRF-907H",
+      "fsc": "8030",
+      "qpd_update_date": "02/25/2026",
+      "qpl_number": "QPL-907",
+      "qpl_status": "Active",
+      "qualifying_activity": "SH",
+      "title": "Antiseize Thread Compound, High Temperature"
     },
     "AMS-G-4343": {
       "document_date": "09/10/1999",
@@ -745,23 +789,27 @@
     "QPL-AS8660",
     "QPL-25017",
     "QPL-29608",
-    "QPL-32490"
+    "QPL-32490",
+    "QPL-907",
+    "QPL-16173",
+    "QPL-81309"
   ],
   "qpls_by_fsc": {
     "6850_lubricant_scope": 6,
+    "8030_lubricant_scope": 3,
     "9150": 56
   },
   "rights_note": "DLA QPD publishes official qualification data for sourcing decisions; QPL public-release documents state distribution is unlimited. Only factual product and qualification fields are retained with attribution.",
   "schema_version": 1,
-  "scope_note": "All active FSC 9150 QPLs are included. From FSC 6850 only QPL-6529, 8188, AS8660, 25017, 29608 and 32490 are included because their governing titles explicitly establish an oil, silicone compound, cleaning-lubricating compound, corrosion/lubricity inhibitor or lubricity-improver function; pure cleaners, solvents and unrelated chemicals are excluded.",
+  "scope_note": "All active FSC 9150 QPLs are included. From FSC 6850 only QPL-6529, 8188, AS8660, 25017, 29608 and 32490 are included because their governing titles explicitly establish an oil, silicone compound, cleaning-lubricating compound, corrosion/lubricity inhibitor or lubricity-improver function. From FSC 8030 only active QPL-907, 16173 and 81309 are included because their titles explicitly establish anti-seize or corrosion-preventive compound functions; sealants, cements, insulation/protective coatings and inactive QPL-11796 are excluded.",
   "snapshot_date": "2026-07-21",
-  "source_fact_pages": 118,
-  "source_facts_manifest_sha256": "cc243e32a0668eb065cabc3d0f17e994e79cf24dbec759912171828453c84098",
+  "source_fact_pages": 139,
+  "source_facts_manifest_sha256": "2707d439c2be1b64c92ed4d2cfeeec204515bdcde0e4e13dea756461e8ee0c5e",
   "source_url": "https://qpldocs.dla.mil/search/default.aspx",
   "status": "official_government_qualified_product_registry_normalized",
   "status_note": "GREEN, YELLOW, RED, SAM status and Stop Ship remain distinct lifecycle evidence. Publication in QPD is not flattened into a generic active-product claim.",
   "stop_ship_by_occurrence": {
-    "NO": 478,
+    "NO": 568,
     "YES": 2
   }
 }

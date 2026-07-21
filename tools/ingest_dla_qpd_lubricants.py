@@ -30,8 +30,9 @@ SEARCH_URL = "https://qpldocs.dla.mil/search/default.aspx"
 HELP_URL = "https://qpldocs.dla.mil/help/default.aspx"
 USER_AGENT = "MFClassifierResearch/1.0 (public-government-qualification-data research)"
 
-# Active QPLs returned by the official FSC 9150 and FSC 6850 searches on
-# 2026-07-21. FSC 6850 is deliberately narrowed to products whose governing
+# Active QPLs returned by the official FSC 9150, FSC 6850 and FSC 8030 searches
+# on 2026-07-21. FSC 6850 and FSC 8030 are deliberately narrowed to products
+# whose governing
 # specification itself establishes lubrication, lubricity improvement or an
 # oil/compound function; pure cleaners, solvents, desiccants and process
 # chemicals remain out of scope.
@@ -53,6 +54,8 @@ QPL_SCOPE = {
     # FSC 6850 professional lubricant / lubricity subset.
     "6529": "S", "8188": "S", "AS8660": "S", "25017": "S",
     "29608": "S", "32490": "S",
+    # FSC 8030 anti-seize and corrosion-preventive lubricant-adjacent subset.
+    "907": "G", "16173": "S", "81309": "S",
 }
 
 FSC_6850_QPLS = {"6529", "8188", "AS8660", "25017", "29608", "32490"}
@@ -75,6 +78,19 @@ FSC_6850_EXCLUDED_QPLS = {
     "85570": "aircraft exterior cleaner",
     "85704": "turbine-engine gas-path cleaner",
     "87937": "aerospace-equipment cleaner",
+}
+FSC_8030_QPLS = {"907", "16173", "81309"}
+FSC_8030_EXCLUDED_QPLS = {
+    "AMS-S-4383": "fuel-tank sealing compound",
+    "6799": "strippable protective coating",
+    "8516": "electrical-system sealing compound",
+    "11796": "inactive historical petrolatum corrosion-preventive QPL",
+    "19565": "thermal-insulation coating compound",
+    "23586": "electrical silicone-rubber sealing compound",
+    "24176": "epoxy metal-repair cement",
+    "81733": "corrosion-inhibitive sealing and coating compound",
+    "81904": "thermal-insulation coating compound",
+    "85334": "fuel-tank sealing compound",
 }
 DESIGNATION_QUALIFIER_RE = re.compile(
     r"\s+\((?=(?:SEE NOTES|MINIMUM EFFECTIVE|A REBRAND|REBRAND|A REBLEND|REBLEND|"
@@ -274,7 +290,7 @@ def lifecycle(row: dict) -> str:
 
 
 def main() -> None:
-    assert len(QPL_SCOPE) == 62
+    assert len(QPL_SCOPE) == 65
     client = Client()
     occurrences = []
     qpl_headers = {}
@@ -307,7 +323,12 @@ def main() -> None:
                 qpl_headers[qpl] = header
                 for product in products:
                     product["family_code"] = family
-                    product["source_id"] = "DLA_QPD_FSC_6850_LUBRICANT_SCOPE" if qpl in FSC_6850_QPLS else "DLA_QPD_FSC_9150"
+                    if qpl in FSC_6850_QPLS:
+                        product["source_id"] = "DLA_QPD_FSC_6850_LUBRICANT_SCOPE"
+                    elif qpl in FSC_8030_QPLS:
+                        product["source_id"] = "DLA_QPD_FSC_8030_LUBRICANT_SCOPE"
+                    else:
+                        product["source_id"] = "DLA_QPD_FSC_9150"
                     occurrences.append(product)
         print(f"[{index:02d}/{len(QPL_SCOPE)}] QPL-{qpl}: {sum(r['qpl_number'].upper() == ('QPL-' + qpl).upper() for r in occurrences)} product occurrences", flush=True)
 
@@ -361,10 +382,11 @@ def main() -> None:
         "snapshot_date": date.today().isoformat(),
         "source_url": SEARCH_URL,
         "help_url": HELP_URL,
-        "fsc_scope": ["9150", "6850 (lubricant/lubricity subset only)"],
+        "fsc_scope": ["9150", "6850 (lubricant/lubricity subset only)", "8030 (anti-seize/corrosion-preventive subset only)"],
         "fsc_6850_excluded_active_qpls": {f"QPL-{qpl}": reason for qpl, reason in FSC_6850_EXCLUDED_QPLS.items()},
+        "fsc_8030_excluded_search_qpls": {f"QPL-{qpl}": reason for qpl, reason in FSC_8030_EXCLUDED_QPLS.items()},
         "active_qpls_in_scope": len(QPL_SCOPE),
-        "qpls_by_fsc": {"9150": 56, "6850_lubricant_scope": len(FSC_6850_QPLS)},
+        "qpls_by_fsc": {"9150": 56, "6850_lubricant_scope": len(FSC_6850_QPLS), "8030_lubricant_scope": len(FSC_8030_QPLS)},
         "qpl_numbers": [f"QPL-{qpl}" for qpl in QPL_SCOPE],
         "government_designations": government_parts,
         "published_manufacturer_product_occurrences": len(occurrences),
@@ -381,7 +403,7 @@ def main() -> None:
         "normalized_output_sha256": hashlib.sha256(output_text.encode()).hexdigest(),
         "qpl_metadata": qpl_headers,
         "rights_note": "DLA QPD publishes official qualification data for sourcing decisions; QPL public-release documents state distribution is unlimited. Only factual product and qualification fields are retained with attribution.",
-        "scope_note": "All active FSC 9150 QPLs are included. From FSC 6850 only QPL-6529, 8188, AS8660, 25017, 29608 and 32490 are included because their governing titles explicitly establish an oil, silicone compound, cleaning-lubricating compound, corrosion/lubricity inhibitor or lubricity-improver function; pure cleaners, solvents and unrelated chemicals are excluded.",
+        "scope_note": "All active FSC 9150 QPLs are included. From FSC 6850 only QPL-6529, 8188, AS8660, 25017, 29608 and 32490 are included because their governing titles explicitly establish an oil, silicone compound, cleaning-lubricating compound, corrosion/lubricity inhibitor or lubricity-improver function. From FSC 8030 only active QPL-907, 16173 and 81309 are included because their titles explicitly establish anti-seize or corrosion-preventive compound functions; sealants, cements, insulation/protective coatings and inactive QPL-11796 are excluded.",
         "privacy_and_scope_note": "Addresses, telephone numbers, websites, test references, notes and page presentation are deliberately omitted. Plant rows without a manufacturer designation are not products and are excluded.",
         "status_note": "GREEN, YELLOW, RED, SAM status and Stop Ship remain distinct lifecycle evidence. Publication in QPD is not flattened into a generic active-product claim.",
         "grain_note": "One normalized row is company + manufacturer designation + professional family. Multiple government designations and QPL occurrences are retained as qualifications on that row.",

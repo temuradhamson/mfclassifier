@@ -215,7 +215,7 @@ def main() -> None:
     assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
     assert not db.execute("PRAGMA foreign_key_check").fetchall()
     assert db.execute("SELECT count(*) FROM products").fetchone()[0] == len(lines)
-    assert len(lines) == 100310
+    assert len(lines) == 100390
     assert report["jaso_source_rows"] == jaso_report["rows"] == 3630
     assert report["jaso_unique_oil_codes"] == jaso_report["unique_oil_codes"] == 3629
     assert report["official_filed_registry_rows"] == 3629
@@ -465,19 +465,21 @@ def main() -> None:
     assert report["thailand_doeb_published_end_date_not_expired_products"] == thailand_doeb_report["lifecycle_assessments"]["not_expired_by_published_end_date_as_of_catalog_snapshot"] == 1492
     assert report["official_government_regulatory_registry_rows"] == 30725
     assert report["official_government_registry_source_data_issue_rows"] == 51
-    assert report["dla_qpd_source_rows"] == dla_report["normalized_products"] == len(dla_rows) == 456
-    assert report["official_government_qualified_product_registry_rows"] == 456
+    assert report["dla_qpd_source_rows"] == dla_report["normalized_products"] == len(dla_rows) == 536
+    assert report["official_government_qualified_product_registry_rows"] == 536
     assert report["dla_qpd_source_rows_by_source"] == dla_report["normalized_products_by_source"] == {
         "DLA_QPD_FSC_6850_LUBRICANT_SCOPE": 25,
+        "DLA_QPD_FSC_8030_LUBRICANT_SCOPE": 80,
         "DLA_QPD_FSC_9150": 431,
     }
-    assert dla_report["active_qpls_in_scope"] == 62
-    assert dla_report["qpls_by_fsc"] == {"6850_lubricant_scope": 6, "9150": 56}
+    assert dla_report["active_qpls_in_scope"] == 65
+    assert dla_report["qpls_by_fsc"] == {"6850_lubricant_scope": 6, "8030_lubricant_scope": 3, "9150": 56}
     assert len(dla_report["fsc_6850_excluded_active_qpls"]) == 18
     assert not ({q.removeprefix("QPL-") for q in dla_report["fsc_6850_excluded_active_qpls"]} & {"6529", "8188", "AS8660", "25017", "29608", "32490"})
-    assert dla_report["government_designations"] == 118
-    assert dla_report["published_manufacturer_product_occurrences"] == 480
-    assert dla_report["plant_rows_without_product_designation_excluded"] == 766
+    assert len(dla_report["fsc_8030_excluded_search_qpls"]) == 10
+    assert dla_report["government_designations"] == 139
+    assert dla_report["published_manufacturer_product_occurrences"] == 570
+    assert dla_report["plant_rows_without_product_designation_excluded"] == 861
     assert report["zf_te_ml_source_rows"] == zf_report["unique_approval_numbers"] == 1498
     assert report["official_oem_approval_rows"] == 6495
     assert report["official_manufacturer_catalog_rows"] == 6425
@@ -630,7 +632,7 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_program_catalog'").fetchone()[0] == 894
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_regulatory_registry'").fetchone()[0] == 30725
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_registry_source_data_issue'").fetchone()[0] == 51
-    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_qualified_product_registry'").fetchone()[0] == 456
+    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_qualified_product_registry'").fetchone()[0] == 536
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_approval_registry'").fetchone()[0] == 6495
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_manufacturer_product_catalog'").fetchone()[0] == 6425
     assert db.execute("SELECT count(*) FROM products WHERE source_id='BRAVA_LUBRICANTS_OFFICIAL_CATALOG'").fetchone()[0] == 69
@@ -752,6 +754,7 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM quality_issues WHERE issue_code='thailand_doeb_nonstandard_sae_notation'").fetchone()[0] == 1
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='DLA_QPD_FSC_9150'").fetchone()[0] == 431
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='DLA_QPD_FSC_6850_LUBRICANT_SCOPE'").fetchone()[0] == 25
+    assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='DLA_QPD_FSC_8030_LUBRICANT_SCOPE'").fetchone()[0] == 80
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='BLUE_ANGEL_DE_UZ_178'").fetchone()[0] == 148
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='AUSTRIAN_ECOLABEL_UZ14_LUBRICANTS'").fetchone()[0] == 11
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='KOREA_ECOLABEL_EL611'").fetchone()[0] == 20
@@ -818,8 +821,8 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='RSB_SMARK_LICENCE'").fetchone()[0] == 9
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='UNBS_QMARK_PERMIT'").fetchone()[0] == 47
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='TBS_STANDARDS_MARK_LICENSE'").fetchone()[0] == 182
-    assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='DLA_QPL_NUMBER'").fetchone()[0] == 457
-    assert db.execute("SELECT count(*) FROM quality_issues WHERE issue_code='dla_qpd_lifecycle_restriction'").fetchone()[0] == 93
+    assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='DLA_QPL_NUMBER'").fetchone()[0] == 537
+    assert db.execute("SELECT count(*) FROM quality_issues WHERE issue_code='dla_qpd_lifecycle_restriction'").fetchone()[0] == 96
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='FUCHS_PRODUCT_UID'").fetchone()[0] == 23587
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='JASO_OIL_CODE'").fetchone()[0] == 3629
     assert db.execute("SELECT count(*) FROM sources WHERE bulk_ingest_allowed=0").fetchone()[0] == len(report["bulk_sources_blocked"])
@@ -1075,12 +1078,14 @@ def main() -> None:
     assert policy_by_id["DLA_QPD_FSC_9150"]["observed_count"] == dla_report["normalized_products_by_source"]["DLA_QPD_FSC_9150"]
     assert policy_by_id["DLA_QPD_FSC_6850_LUBRICANT_SCOPE"]["source_sha256"] == dla_report["normalized_output_sha256"]
     assert policy_by_id["DLA_QPD_FSC_6850_LUBRICANT_SCOPE"]["observed_count"] == dla_report["normalized_products_by_source"]["DLA_QPD_FSC_6850_LUBRICANT_SCOPE"]
+    assert policy_by_id["DLA_QPD_FSC_8030_LUBRICANT_SCOPE"]["source_sha256"] == dla_report["normalized_output_sha256"]
+    assert policy_by_id["DLA_QPD_FSC_8030_LUBRICANT_SCOPE"]["observed_count"] == dla_report["normalized_products_by_source"]["DLA_QPD_FSC_8030_LUBRICANT_SCOPE"]
     assert dla_report["lifecycle_statuses"] == {
         "mixed_qualification_lifecycle_review": 1,
         "qualification_overdue_contact_qa": 46,
-        "qualified_source_certified": 363,
+        "qualified_source_certified": 440,
         "qualified_source_due_for_certification": 23,
-        "sam_inactive_source_review": 21,
+        "sam_inactive_source_review": 24,
         "stop_ship": 2,
     }
     assert policy_by_id["ZF_TE_ML"]["source_sha256"] == zf_report["normalized_output_sha256"]

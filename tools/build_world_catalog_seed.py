@@ -1741,7 +1741,7 @@ def dla_qpd_record(row: dict) -> dict:
         "source_number": row["source_record_id"],
         "brand": row["company"],
         "name": row["product_name"],
-        "category": "Официальный реестр квалифицированной продукции DLA, FSC 9150",
+        "category": f"Официальный реестр квалифицированной продукции DLA, {source_id.replace('DLA_QPD_FSC_', 'FSC ').replace('_LUBRICANT_SCOPE', ' (отобранный профильный сегмент)')}",
         "category_code": row["family_code"],
         "family": FAMILY_NAMES[row["family_code"]],
         "sae_class": technical["sae"][0] if technical["sae"] else "",
