@@ -69,6 +69,8 @@ FUCHS_CZECH_JSONL = ROOT / "data" / "fuchs-czech-products.jsonl"
 FUCHS_MEXICO_JSONL = ROOT / "data" / "fuchs-mexico-products.jsonl"
 FUCHS_SOUTH_AFRICA_JSONL = ROOT / "data" / "fuchs-south-africa-products.jsonl"
 FUCHS_BRAZIL_JSONL = ROOT / "data" / "fuchs-brazil-products.jsonl"
+FUCHS_NORWAY_JSONL = ROOT / "data" / "fuchs-norway-products.jsonl"
+FUCHS_HUNGARY_JSONL = ROOT / "data" / "fuchs-hungary-products.jsonl"
 SCHEMA_VERSION = 1
 SNAPSHOT_DATE = "2026-07-21"
 
@@ -1655,6 +1657,8 @@ def fuchs_catalog_record(row: dict, source_id: str, market_name: str) -> dict:
         "FUCHS_MEXICO_PRODUCT_FINDER": "fuchs_mexico_record",
         "FUCHS_SOUTH_AFRICA_PRODUCT_FINDER": "fuchs_south_africa_record",
         "FUCHS_BRAZIL_PRODUCT_FINDER": "fuchs_brazil_record",
+        "FUCHS_NORWAY_PRODUCT_FINDER": "fuchs_norway_record",
+        "FUCHS_HUNGARY_PRODUCT_FINDER": "fuchs_hungary_record",
     }[source_id]
     record["canonical_key"] += f"|{source_key}:{normalize(row['source_record_id'])}"
     record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
@@ -2727,6 +2731,18 @@ def main() -> None:
     fuchs_brazil_added_rows, fuchs_brazil_matched_rows = fuchs_brazil["added"], fuchs_brazil["matched"]
     fuchs_brazil_review_keys, fuchs_brazil_family_conflict_keys = fuchs_brazil["review_keys"], fuchs_brazil["family_conflict_keys"]
     fuchs_brazil_cross_market_exact_name_family_rows, fuchs_brazil_cross_market_family_conflict_rows = fuchs_brazil["exact"], fuchs_brazil["conflicts"]
+    fuchs_norway_source_rows = [json.loads(line) for line in FUCHS_NORWAY_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    fuchs_norway = integrate_fuchs_market(input_records, fuchs_norway_source_rows, "FUCHS_NORWAY_PRODUCT_FINDER", "Norway", prior_fuchs_rows + fuchs_mexico_source_rows + fuchs_south_africa_source_rows + fuchs_brazil_source_rows)
+    fuchs_norway_product_key = fuchs_norway["product_key"]
+    fuchs_norway_added_rows, fuchs_norway_matched_rows = fuchs_norway["added"], fuchs_norway["matched"]
+    fuchs_norway_review_keys, fuchs_norway_family_conflict_keys = fuchs_norway["review_keys"], fuchs_norway["family_conflict_keys"]
+    fuchs_norway_cross_market_exact_name_family_rows, fuchs_norway_cross_market_family_conflict_rows = fuchs_norway["exact"], fuchs_norway["conflicts"]
+    fuchs_hungary_source_rows = [json.loads(line) for line in FUCHS_HUNGARY_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    fuchs_hungary = integrate_fuchs_market(input_records, fuchs_hungary_source_rows, "FUCHS_HUNGARY_PRODUCT_FINDER", "Hungary", prior_fuchs_rows + fuchs_mexico_source_rows + fuchs_south_africa_source_rows + fuchs_brazil_source_rows + fuchs_norway_source_rows)
+    fuchs_hungary_product_key = fuchs_hungary["product_key"]
+    fuchs_hungary_added_rows, fuchs_hungary_matched_rows = fuchs_hungary["added"], fuchs_hungary["matched"]
+    fuchs_hungary_review_keys, fuchs_hungary_family_conflict_keys = fuchs_hungary["review_keys"], fuchs_hungary["family_conflict_keys"]
+    fuchs_hungary_cross_market_exact_name_family_rows, fuchs_hungary_cross_market_family_conflict_rows = fuchs_hungary["exact"], fuchs_hungary["conflicts"]
     aichilon_products, aichilon_packages, exclusions = aichilon_seed()
     existing_by_name = defaultdict(list)
     for row in input_records:
@@ -3043,6 +3059,8 @@ def main() -> None:
         ("mexico", fuchs_mexico_review_keys, fuchs_mexico_family_conflict_keys),
         ("south_africa", fuchs_south_africa_review_keys, fuchs_south_africa_family_conflict_keys),
         ("brazil", fuchs_brazil_review_keys, fuchs_brazil_family_conflict_keys),
+        ("norway", fuchs_norway_review_keys, fuchs_norway_family_conflict_keys),
+        ("hungary", fuchs_hungary_review_keys, fuchs_hungary_family_conflict_keys),
     ]:
         for source_key, match_keys in review_keys:
             source_product = canonical_by_key[source_key]
@@ -3364,6 +3382,8 @@ def main() -> None:
         (fuchs_mexico_source_rows, fuchs_mexico_product_key, "FUCHS_MEXICO_PRODUCT_FINDER"),
         (fuchs_south_africa_source_rows, fuchs_south_africa_product_key, "FUCHS_SOUTH_AFRICA_PRODUCT_FINDER"),
         (fuchs_brazil_source_rows, fuchs_brazil_product_key, "FUCHS_BRAZIL_PRODUCT_FINDER"),
+        (fuchs_norway_source_rows, fuchs_norway_product_key, "FUCHS_NORWAY_PRODUCT_FINDER"),
+        (fuchs_hungary_source_rows, fuchs_hungary_product_key, "FUCHS_HUNGARY_PRODUCT_FINDER"),
     ]:
         for raw in source_rows:
             target = canonical_by_key[product_key[raw["source_record_id"]]]
@@ -3487,6 +3507,8 @@ def main() -> None:
         "fuchs_mexico_input_sha256": hashlib.sha256(FUCHS_MEXICO_JSONL.read_bytes()).hexdigest(),
         "fuchs_south_africa_input_sha256": hashlib.sha256(FUCHS_SOUTH_AFRICA_JSONL.read_bytes()).hexdigest(),
         "fuchs_brazil_input_sha256": hashlib.sha256(FUCHS_BRAZIL_JSONL.read_bytes()).hexdigest(),
+        "fuchs_norway_input_sha256": hashlib.sha256(FUCHS_NORWAY_JSONL.read_bytes()).hexdigest(),
+        "fuchs_hungary_input_sha256": hashlib.sha256(FUCHS_HUNGARY_JSONL.read_bytes()).hexdigest(),
         "canonical_rows": len(records),
         "brands": len({r["brand"] for r in records}),
         "families": dict(sorted(Counter(r["family_code"] for r in records).items())),
@@ -3623,6 +3645,16 @@ def main() -> None:
         "fuchs_brazil_products_added": fuchs_brazil_added_rows,
         "fuchs_brazil_cross_market_exact_name_family_rows": fuchs_brazil_cross_market_exact_name_family_rows,
         "fuchs_brazil_cross_market_family_conflict_rows": fuchs_brazil_cross_market_family_conflict_rows,
+        "fuchs_norway_source_rows": len(fuchs_norway_source_rows),
+        "fuchs_norway_products_matched_to_existing": fuchs_norway_matched_rows,
+        "fuchs_norway_products_added": fuchs_norway_added_rows,
+        "fuchs_norway_cross_market_exact_name_family_rows": fuchs_norway_cross_market_exact_name_family_rows,
+        "fuchs_norway_cross_market_family_conflict_rows": fuchs_norway_cross_market_family_conflict_rows,
+        "fuchs_hungary_source_rows": len(fuchs_hungary_source_rows),
+        "fuchs_hungary_products_matched_to_existing": fuchs_hungary_matched_rows,
+        "fuchs_hungary_products_added": fuchs_hungary_added_rows,
+        "fuchs_hungary_cross_market_exact_name_family_rows": fuchs_hungary_cross_market_exact_name_family_rows,
+        "fuchs_hungary_cross_market_family_conflict_rows": fuchs_hungary_cross_market_family_conflict_rows,
         "jaso_source_rows": len(jaso_source_rows),
         "jaso_unique_oil_codes": len({r["oil_code"] for r in jaso_source_rows}),
         "aichilon_source_products": len(aichilon_products) + len(exclusions),

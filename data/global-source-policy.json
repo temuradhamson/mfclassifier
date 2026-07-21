@@ -574,6 +574,36 @@
       "notes": "Из 213 embedded rows исключены 30 строк серий и объединено одно повторное source-вхождение. Получено 182 конкретных продукта. Официальный imprint разрешает использование, копирование и распространение документации для информационных целей внутри организации при сохранении copyright notice и запрещает коммерческое использование; описания не публикуются."
     },
     {
+      "source_id": "FUCHS_NORWAY_PRODUCT_FINDER",
+      "title": "FUCHS Norway Product Finder",
+      "owner": "FUCHS LUBRICANTS NORWAY AS",
+      "source_type": "official_manufacturer_embedded_product_catalog",
+      "source_locator": "data/fuchs-norway-products.jsonl",
+      "source_url": "https://www.fuchs.com/no/en/products/service-links/product-finder/",
+      "terms_url": "https://www.fuchs.com/no/en/imprint/",
+      "source_sha256": "7ef62a3216e7f497ed96512202b7d386673fd01a4c6273ae1cc8fff6e026801a",
+      "access_status": "public_full_catalog_embedded_in_official_page",
+      "bulk_ingest_allowed": true,
+      "publication_status": "informational_factual_fields_only_with_attribution_no_marketing_descriptions",
+      "observed_count": 649,
+      "notes": "Из 650 embedded rows исключена одна строка серии; 649 конкретных продуктов не содержат повторных source-вхождений. Официальный imprint разрешает информационное использование, копирование и распространение внутри организации при сохранении copyright notice и запрещает коммерческое использование; описания не публикуются."
+    },
+    {
+      "source_id": "FUCHS_HUNGARY_PRODUCT_FINDER",
+      "title": "FUCHS Hungary Product Finder",
+      "owner": "FUCHS OIL HUNGÁRIA KFT.",
+      "source_type": "official_manufacturer_embedded_product_catalog",
+      "source_locator": "data/fuchs-hungary-products.jsonl",
+      "source_url": "https://www.fuchs.com/hu/en/products/service-links/product-finder/",
+      "terms_url": "https://www.fuchs.com/hu/en/imprint/",
+      "source_sha256": "8a82b90335bc58ab44734be7541daaad051707258b5fbcb5346f8c2a2bf66ed4",
+      "access_status": "public_full_catalog_embedded_in_official_page",
+      "bulk_ingest_allowed": true,
+      "publication_status": "informational_factual_fields_only_with_attribution_no_marketing_descriptions",
+      "observed_count": 506,
+      "notes": "Из 544 embedded rows исключены 37 строк серий и объединено одно повторное source-вхождение. Получено 506 конкретных продуктов. Официальный imprint разрешает информационное использование, копирование и распространение внутри организации при сохранении copyright notice и запрещает коммерческое использование; описания не публикуются."
+    },
+    {
       "source_id": "fuchs-benelux",
       "title": "FUCHS Belgium / Benelux Product Finder",
       "owner": "FUCHS LUBRICANTS BENELUX NV/SA",
