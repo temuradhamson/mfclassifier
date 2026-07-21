@@ -45,6 +45,7 @@ LIQUI_MOLY_CURRENT_JSONL = ROOT / "data" / "liqui-moly-current-products.jsonl"
 ANP_BRAZIL_JSONL = ROOT / "data" / "anp-brazil-lubricant-products.jsonl"
 INDONESIA_NPT_JSONL = ROOT / "data" / "indonesia-npt-lubricant-products.jsonl"
 DLA_QPD_JSONL = ROOT / "data" / "dla-qpd-lubricant-products.jsonl"
+BLUE_ANGEL_JSONL = ROOT / "data" / "blue-angel-de-uz-178-products.jsonl"
 FUCHS_INDIA_JSONL = ROOT / "data" / "fuchs-india-products.jsonl"
 FUCHS_US_JSONL = ROOT / "data" / "fuchs-us-products.jsonl"
 FUCHS_GERMANY_JSONL = ROOT / "data" / "fuchs-germany-products.jsonl"
@@ -1035,6 +1036,77 @@ def dla_qpd_record(row: dict) -> dict:
     return record
 
 
+def blue_angel_record(row: dict) -> dict:
+    """Convert one current Blue Angel DE-UZ 178 product to catalog form."""
+    technical = row["technical"]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["manufacturer"],
+        "name": row["product_name"],
+        "category": "Blue Angel DE-UZ 178: " + "; ".join(row["official_categories"]),
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": technical["sae"][0] if technical["sae"] else "",
+        "viscosity": technical["iso_vg"][0] if technical["iso_vg"] else "",
+        "grease_class": technical["nlgi"][0] if technical["nlgi"] else "",
+        "source": "BLUE_ANGEL_DE_UZ_178",
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["manufacturer"],
+        "market": row["market"],
+        "source_id": "BLUE_ANGEL_DE_UZ_178",
+        "source_record_id": row["source_record_id"],
+        "source_row": row["source_row_numbers"][0],
+        "evidence_status": "official_ecolabel_product_registry",
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update({
+        "blue_angel_standard": row["certification_standard"],
+        "blue_angel_categories": row["official_categories"],
+        "blue_angel_product_page_urls": row["product_page_urls"],
+        "product_external_urls": row["product_external_urls"],
+        "classification_basis": row["classification_basis"],
+        "iso_vg_source_reported": technical["iso_vg"],
+        "nlgi_source_reported": technical["nlgi"],
+        "sae_source_reported": technical["sae"],
+        "source_occurrence_count": row["source_occurrence_count"],
+        "source_row_numbers": row["source_row_numbers"],
+        "source_export_facts_sha256": row["source_export_facts_sha256"],
+        "source_page_facts_sha256": row["source_page_facts_sha256"],
+        "category_page_sha256": row["category_page_sha256"],
+        "criteria_url": row["criteria_url"],
+    })
+    record["canonical_key"] += f"|blue_angel_record:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    for index, url in enumerate(row["product_page_urls"]):
+        record["codes"][f"blue_angel_product_{index}"] = {
+            "system": "BLUE_ANGEL_PRODUCT_PAGE",
+            "value": url,
+            "source_id": "BLUE_ANGEL_DE_UZ_178",
+            "status": row["lifecycle_status"],
+        }
+    return record
+
+
+def merge_blue_angel_evidence(target: dict, source_record: dict, raw: dict) -> None:
+    target["specifications"].setdefault("blue_angel_de_uz_178", []).append({
+        "source_record_id": raw["source_record_id"],
+        "categories": raw["official_categories"],
+        "product_page_urls": raw["product_page_urls"],
+        "snapshot_date": raw["snapshot_date"],
+    })
+    existing_codes = {(code.get("system", key).upper(), code["value"]) for key, code in target["codes"].items()}
+    for key, code in source_record["codes"].items():
+        identity = (code.get("system", key).upper(), code["value"])
+        if identity not in existing_codes:
+            target["codes"][f"blue_angel_{raw['source_record_id']}_{key}"] = code
+            existing_codes.add(identity)
+
+
 def liqui_moly_identity_name(value: str) -> str:
     return re.sub(r"^liqui moly(?: gmbh)?\s+", "", normalize(value)).strip()
 
@@ -1437,6 +1509,43 @@ def main() -> None:
     licensed_source_rows = [json.loads(line) for line in LICENSED_JSONL.read_text(encoding="utf-8").splitlines() if line]
     licensed_records = [licensed_record(row) for row in licensed_source_rows]
     input_records.extend(licensed_records)
+    blue_angel_source_rows = [json.loads(line) for line in BLUE_ANGEL_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    blue_angel_records = [blue_angel_record(row) for row in blue_angel_source_rows]
+    existing_by_name_family = defaultdict(list)
+    existing_by_name = defaultdict(list)
+    for row in input_records:
+        existing_by_name_family[(row["product_name_normalized"], row["family_code"])].append(row)
+        existing_by_name[row["product_name_normalized"]].append(row)
+    blue_angel_product_key = {}
+    blue_angel_added_rows = 0
+    blue_angel_matched_rows = 0
+    blue_angel_review_keys = []
+    blue_angel_family_conflict_keys = []
+    for raw, source_record in zip(blue_angel_source_rows, blue_angel_records):
+        name = normalize(raw["product_name"])
+        matches = [
+            row for row in existing_by_name_family[(name, raw["family_code"])]
+            if brand_tokens_overlap(raw["manufacturer"], row["brand"])
+        ]
+        if len(matches) == 1:
+            target = matches[0]
+            merge_blue_angel_evidence(target, source_record, raw)
+            blue_angel_matched_rows += 1
+        else:
+            target = source_record
+            input_records.append(target)
+            existing_by_name_family[(name, raw["family_code"])].append(target)
+            other_family_matches = [
+                row for row in existing_by_name[name]
+                if row["family_code"] != raw["family_code"] and brand_tokens_overlap(raw["manufacturer"], row["brand"])
+            ]
+            existing_by_name[name].append(target)
+            blue_angel_added_rows += 1
+            if len(matches) > 1:
+                blue_angel_review_keys.append((target["canonical_key"], [row["canonical_key"] for row in matches]))
+            if other_family_matches:
+                blue_angel_family_conflict_keys.append((target["canonical_key"], [row["canonical_key"] for row in other_family_matches]))
+        blue_angel_product_key[raw["source_record_id"]] = target["canonical_key"]
     biopreferred_source_rows = [json.loads(line) for line in USDA_BIOPREFERRED_JSONL.read_text(encoding="utf-8").splitlines() if line]
     biopreferred_records = [biopreferred_record(row) for row in biopreferred_source_rows]
     input_records.extend(biopreferred_records)
@@ -2100,6 +2209,24 @@ def main() -> None:
     input_records.extend(dla_qpd_records)
     records, candidates = deduplicate(input_records)
     canonical_by_key = {row["canonical_key"]: row for row in records}
+    for source_key, match_keys in blue_angel_review_keys:
+        source_product = canonical_by_key[source_key]
+        for match_key in match_keys:
+            match_product = canonical_by_key[match_key]
+            candidates.append({
+                "product_id_a": match_product["product_id"], "product_id_b": source_product["product_id"],
+                "reason": "blue_angel_exact_product_name_and_family_with_multiple_existing_registry_records",
+                "score": 0.995, "decision": "review_blue_angel_multi_registry_identity",
+            })
+    for source_key, match_keys in blue_angel_family_conflict_keys:
+        source_product = canonical_by_key[source_key]
+        for match_key in match_keys:
+            match_product = canonical_by_key[match_key]
+            candidates.append({
+                "product_id_a": match_product["product_id"], "product_id_b": source_product["product_id"],
+                "reason": "same_blue_angel_product_name_but_conflicting_professional_family_across_registries",
+                "score": 0.75, "decision": "keep_separate_blue_angel_family_conflict",
+            })
     for source_key, match_keys in man_service_review_keys:
         source_product = canonical_by_key[source_key]
         for match_key in match_keys:
@@ -2395,6 +2522,17 @@ def main() -> None:
             "product_id": target["product_id"], "source_id": raw["source_id"],
             "source_record_id": text(raw["source_record_id"]), "source_row": raw["source_row_number"],
             "relation": "official_licensed_registry",
+        }
+        link_key = (link["product_id"], link["source_id"], link["source_record_id"])
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
+    for raw in blue_angel_source_rows:
+        target = canonical_by_key[blue_angel_product_key[raw["source_record_id"]]]
+        link = {
+            "product_id": target["product_id"], "source_id": "BLUE_ANGEL_DE_UZ_178",
+            "source_record_id": raw["source_record_id"], "source_row": raw["source_row_numbers"][0],
+            "relation": "official_ecolabel_product_registry",
         }
         link_key = (link["product_id"], link["source_id"], link["source_record_id"])
         if link_key not in source_link_keys:
@@ -2725,6 +2863,7 @@ def main() -> None:
         "normalized_input_sha256": hashlib.sha256(CATALOG.read_bytes()).hexdigest(),
         "jaso_normalized_input_sha256": hashlib.sha256(JASO_JSONL.read_bytes()).hexdigest(),
         "official_licensed_input_sha256": hashlib.sha256(LICENSED_JSONL.read_bytes()).hexdigest(),
+        "blue_angel_input_sha256": hashlib.sha256(BLUE_ANGEL_JSONL.read_bytes()).hexdigest(),
         "usda_biopreferred_input_sha256": hashlib.sha256(USDA_BIOPREFERRED_JSONL.read_bytes()).hexdigest(),
         "zf_te_ml_input_sha256": hashlib.sha256(ZF_TE_ML_JSONL.read_bytes()).hexdigest(),
         "allison_input_sha256": hashlib.sha256(ALLISON_JSONL.read_bytes()).hexdigest(),
@@ -2761,6 +2900,10 @@ def main() -> None:
         "official_filed_registry_rows": sum(r["evidence_status"] == "official_filed_registry" for r in records),
         "official_licensed_registry_rows": sum(r["evidence_status"] == "official_licensed_registry" for r in records),
         "official_licensed_source_rows": len(licensed_source_rows),
+        "blue_angel_source_rows": len(blue_angel_source_rows),
+        "blue_angel_products_matched_to_existing": blue_angel_matched_rows,
+        "blue_angel_products_added": blue_angel_added_rows,
+        "official_ecolabel_product_registry_rows": sum(r["evidence_status"] == "official_ecolabel_product_registry" for r in records),
         "official_government_program_rows": sum(r["evidence_status"] == "official_government_program_catalog" for r in records),
         "official_government_regulatory_registry_rows": sum(r["evidence_status"] == "official_government_regulatory_registry" for r in records),
         "official_government_qualified_product_registry_rows": sum(r["evidence_status"] == "official_government_qualified_product_registry" for r in records),

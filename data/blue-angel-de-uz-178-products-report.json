@@ -1,0 +1,45 @@
+{
+  "category_hits": {
+    "Getriebeschmierstoffe": 3,
+    "Hydraulikflüssigkeiten": 33,
+    "Kettenschmierstoffe für Motorsägen": 68,
+    "Schalöle und Betontrennmittel": 19,
+    "Schmierfette": 7,
+    "Schmierstoffe": 22,
+    "Verlustschmierstoffe": 7
+  },
+  "category_occurrences": 159,
+  "category_page_facts_sha256": {
+    "https://www.blauer-engel.de/de/produktwelt/schmierstoffe-und-hydraulikfluessigkeiten/getriebeschmierstoffe": "ae0599ca305c4d5fe039855c5052cb28c5bb1ee9abff93f5c67d9a8e852536cf",
+    "https://www.blauer-engel.de/de/produktwelt/schmierstoffe-und-hydraulikfluessigkeiten/hydraulikfluessigkeiten": "6305ba0d2b24effa5260a46200b4be086c9dc0e61b0e8b704e30508ed664230b",
+    "https://www.blauer-engel.de/de/produktwelt/schmierstoffe-und-hydraulikfluessigkeiten/kettenschmierstoffe-fuer-motorsaegen": "893782722a1aefd1c0db49be40fa65fe789f5378a2ececd5aad3c65717d95d82",
+    "https://www.blauer-engel.de/de/produktwelt/schmierstoffe-und-hydraulikfluessigkeiten/schaloele-und-betontrennmittel": "904ee0f941ebc292a93f3e0aedc678724cb1541d15b1f84d1fa8c00bf538d00a",
+    "https://www.blauer-engel.de/de/produktwelt/schmierstoffe-und-hydraulikfluessigkeiten/schmierfette": "f3518f621dd4ae1216c0f3e1b2d51b7c39c72a2a130e53a1a56f3bfaa748a2ad",
+    "https://www.blauer-engel.de/de/produktwelt/schmierstoffe-und-hydraulikfluessigkeiten/schmierstoffe": "42278612904967ab84afbb4a6529e442c763ff11e3923a518d8a6b013bb38c1f",
+    "https://www.blauer-engel.de/de/produktwelt/schmierstoffe-und-hydraulikfluessigkeiten/verlustschmierstoffe": "8e450cb4098fb72195ca4ba3f066dfbd423b5047dee7f4acda8593f8e528e899"
+  },
+  "criteria_url": "https://produktinfo.blauer-engel.de/uploads/criteriafile/de/202/DE-UZ%20178-202201-de%20Kriterien-V4.pdf",
+  "duplicate_export_occurrences_merged": 1,
+  "export_rows": 149,
+  "families": {
+    "G": 7,
+    "H": 33,
+    "I": 86,
+    "S": 19,
+    "T": 3
+  },
+  "grain_note": "One row is normalized manufacturer + product name. The one exact duplicate export identity is merged while both official product-page paths and source row numbers are retained.",
+  "imprint_url": "https://www.blauer-engel.de/de/impressum",
+  "lifecycle_note": "A row means the product is present in the current official DE-UZ 178 export on the snapshot date. It is not a claim about availability in every market.",
+  "manufacturers": 63,
+  "normalized_output_sha256": "ae08ed7e61a040ed9fd2dd70a0dc72b68c54693a52153296aaf9af23acab29c8",
+  "normalized_products": 148,
+  "official_product_cards": 149,
+  "rights_note": "The official Blue Angel product page provides an explicit XLS export. Only factual product, manufacturer, category, certification and source-link fields are republished with attribution; addresses, phone numbers, email, images and marketing descriptions are omitted.",
+  "schema_version": 1,
+  "snapshot_date": "2026-07-21",
+  "source_export_facts_sha256": "d1b405a63809ff66e7ef83ac04535d147a3bb8684e7f68879a87ec4f58d7e468",
+  "source_page_facts_sha256": "5e6d7db1ad005adcc0f2e574691d2518bc962a68afc241d0d3172676513aefeb",
+  "source_url": "https://www.blauer-engel.de/de/produktwelt/schmierstoffe-und-hydraulikfluessigkeiten",
+  "status": "official_current_ecolabel_product_export_normalized"
+}

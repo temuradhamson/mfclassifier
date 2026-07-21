@@ -700,6 +700,21 @@
       "notes": "Public search exposes current food-grade lubricant registrations; bulk extraction rights and an official feed must be confirmed before ingestion."
     },
     {
+      "source_id": "BLUE_ANGEL_DE_UZ_178",
+      "title": "Blue Angel DE-UZ 178 Biodegradable Lubricants and Hydraulic Fluids",
+      "owner": "RAL gGmbH / German Environment Agency (Umweltbundesamt)",
+      "source_type": "official_ecolabel_product_registry_xlsx_export",
+      "source_locator": "data/blue-angel-de-uz-178-products.jsonl",
+      "source_url": "https://www.blauer-engel.de/de/produktwelt/schmierstoffe-und-hydraulikfluessigkeiten",
+      "terms_url": "https://www.blauer-engel.de/de/impressum",
+      "source_sha256": "ae08ed7e61a040ed9fd2dd70a0dc72b68c54693a52153296aaf9af23acab29c8",
+      "access_status": "public_official_product_registry_with_explicit_xlsx_export",
+      "bulk_ingest_allowed": true,
+      "publication_status": "normalized_factual_certification_records_with_attribution",
+      "observed_count": 148,
+      "notes": "Официальная страница DE-UZ 178 показывает 149 product cards и прямо предлагает XLS-Datei. 149 export-строк нормализованы в 148 identities manufacturer + product; одна точная дублирующая identity объединена с сохранением обеих product-page ссылок. Семь официальных категорий дали 159 category occurrences. Адреса, телефоны, email, изображения и маркетинговые описания не переносятся."
+    },
+    {
       "source_id": "DLA_QPD_FSC_9150",
       "title": "US Defense Logistics Agency Qualified Products Database — FSC 9150",
       "owner": "US Defense Logistics Agency",
