@@ -93,6 +93,8 @@ def main() -> None:
     anp_rows = [json.loads(line) for line in (ROOT / "data/anp-brazil-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     indonesia_report = json.loads((ROOT / "data/indonesia-npt-lubricant-products-report.json").read_text(encoding="utf-8"))
     indonesia_rows = [json.loads(line) for line in (ROOT / "data/indonesia-npt-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    thailand_doeb_report = json.loads((ROOT / "data/thailand-doeb-lubricant-products-report.json").read_text(encoding="utf-8"))
+    thailand_doeb_rows = [json.loads(line) for line in (ROOT / "data/thailand-doeb-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     dla_report = json.loads((ROOT / "data/dla-qpd-lubricant-products-report.json").read_text(encoding="utf-8"))
     dla_rows = [json.loads(line) for line in (ROOT / "data/dla-qpd-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     blue_angel_report = json.loads((ROOT / "data/blue-angel-de-uz-178-products-report.json").read_text(encoding="utf-8"))
@@ -140,7 +142,7 @@ def main() -> None:
     assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
     assert not db.execute("PRAGMA foreign_key_check").fetchall()
     assert db.execute("SELECT count(*) FROM products").fetchone()[0] == len(lines)
-    assert len(lines) == 48484
+    assert len(lines) == 53970
     assert report["jaso_source_rows"] == jaso_report["rows"] == 3630
     assert report["jaso_unique_oil_codes"] == jaso_report["unique_oil_codes"] == 3629
     assert report["official_filed_registry_rows"] == 3629
@@ -176,7 +178,14 @@ def main() -> None:
     assert report["indonesia_npt_rows_with_source_data_issue"] == indonesia_report["rows_with_source_placeholder_no_registration_number"] == 51
     assert indonesia_report["unique_registration_numbers"] == 12565
     assert indonesia_report["registration_number_collisions"] == 10
-    assert report["official_government_regulatory_registry_rows"] == 25239
+    assert report["thailand_doeb_normalized_products"] == thailand_doeb_report["normalized_products"] == len(thailand_doeb_rows) == 5486
+    assert report["thailand_doeb_source_occurrences"] == thailand_doeb_report["published_source_rows"] == 6213
+    assert thailand_doeb_report["duplicate_registration_occurrences_merged"] == 727
+    assert report["thailand_doeb_unique_registration_numbers"] == thailand_doeb_report["unique_registration_numbers"] == 6210
+    assert report["thailand_doeb_registration_collision_products"] == thailand_doeb_report["registration_number_collision_products"] == 6
+    assert thailand_doeb_report["registration_number_collision_source_rows"] == 6
+    assert report["thailand_doeb_published_end_date_not_expired_products"] == thailand_doeb_report["lifecycle_assessments"]["not_expired_by_published_end_date_as_of_catalog_snapshot"] == 1492
+    assert report["official_government_regulatory_registry_rows"] == 30725
     assert report["official_government_registry_source_data_issue_rows"] == 51
     assert report["dla_qpd_source_rows"] == dla_report["normalized_products"] == len(dla_rows) == 456
     assert report["official_government_qualified_product_registry_rows"] == 456
@@ -321,7 +330,7 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_product_conformity_registry'").fetchone()[0] == 1840
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_product_certification_registry'").fetchone()[0] == 1596
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_program_catalog'").fetchone()[0] == 894
-    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_regulatory_registry'").fetchone()[0] == 25239
+    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_regulatory_registry'").fetchone()[0] == 30725
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_registry_source_data_issue'").fetchone()[0] == 51
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_qualified_product_registry'").fetchone()[0] == 456
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_approval_registry'").fetchone()[0] == 5475
@@ -363,6 +372,10 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='INDONESIA_NPT_REGISTRATION_NUMBER'").fetchone()[0] == 12575
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='INDONESIA_NPT_LUBRICANT_REGISTRY'").fetchone()[0] == 12626
     assert db.execute("SELECT count(*) FROM quality_issues WHERE issue_code='source_registration_number_missing'").fetchone()[0] == 51
+    assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='THAILAND_DOEB_LUBRICANT_REGISTRY'").fetchone()[0] == 5486
+    assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='THAILAND_DOEB_REGISTRATION_NUMBER'").fetchone()[0] == 6213
+    assert db.execute("SELECT count(*) FROM quality_issues WHERE issue_code='thailand_doeb_registration_number_collision'").fetchone()[0] == 6
+    assert db.execute("SELECT count(*) FROM quality_issues WHERE issue_code='thailand_doeb_nonstandard_sae_notation'").fetchone()[0] == 1
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='DLA_QPD_FSC_9150'").fetchone()[0] == 431
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='DLA_QPD_FSC_6850_LUBRICANT_SCOPE'").fetchone()[0] == 25
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='BLUE_ANGEL_DE_UZ_178'").fetchone()[0] == 148
@@ -514,6 +527,16 @@ def main() -> None:
         "source_expiry_error": 1,
         "source_placeholder_registration_unverified": 51,
     }
+    assert policy_by_id["THAILAND_DOEB_LUBRICANT_REGISTRY"]["source_sha256"] == thailand_doeb_report["normalized_output_sha256"]
+    assert policy_by_id["THAILAND_DOEB_LUBRICANT_REGISTRY"]["observed_count"] == len(thailand_doeb_rows) == 5486
+    assert report["thailand_doeb_input_sha256"] == hashlib.sha256((ROOT / "data/thailand-doeb-lubricant-products.jsonl").read_bytes()).hexdigest()
+    assert thailand_doeb_report["source_snapshot_month"] == "2024-03"
+    assert thailand_doeb_report["registration_holders"] == 234
+    assert thailand_doeb_report["families"] == {"M": 5486}
+    assert thailand_doeb_report["standards"] == {"ACEA": 380, "API": 5328, "ILSAC": 249, "JASO": 677, "NMMA": 11, "OEM": 99}
+    assert thailand_doeb_report["source_quality_flags"] == {"nonstandard_sae_notation": 1, "registration_number_collision": 6}
+    assert all(row["family_code"] == "M" and row["registration_numbers"] for row in thailand_doeb_rows)
+    assert sum(row["source_occurrence_count"] for row in thailand_doeb_rows) == 6213
     assert policy_by_id["DLA_QPD_FSC_9150"]["source_sha256"] == dla_report["normalized_output_sha256"]
     assert policy_by_id["DLA_QPD_FSC_9150"]["observed_count"] == dla_report["normalized_products_by_source"]["DLA_QPD_FSC_9150"]
     assert policy_by_id["DLA_QPD_FSC_6850_LUBRICANT_SCOPE"]["source_sha256"] == dla_report["normalized_output_sha256"]

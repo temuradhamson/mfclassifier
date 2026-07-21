@@ -44,6 +44,7 @@ LIQUI_MOLY_2020_JSONL = ROOT / "data" / "liqui-moly-2020-products.jsonl"
 LIQUI_MOLY_CURRENT_JSONL = ROOT / "data" / "liqui-moly-current-products.jsonl"
 ANP_BRAZIL_JSONL = ROOT / "data" / "anp-brazil-lubricant-products.jsonl"
 INDONESIA_NPT_JSONL = ROOT / "data" / "indonesia-npt-lubricant-products.jsonl"
+THAILAND_DOEB_JSONL = ROOT / "data" / "thailand-doeb-lubricant-products.jsonl"
 DLA_QPD_JSONL = ROOT / "data" / "dla-qpd-lubricant-products.jsonl"
 BLUE_ANGEL_JSONL = ROOT / "data" / "blue-angel-de-uz-178-products.jsonl"
 KOREA_ECOLABEL_JSONL = ROOT / "data" / "korea-ecolabel-el611-lubricants.jsonl"
@@ -994,6 +995,76 @@ def indonesia_npt_record(row: dict) -> dict:
             "system": "INDONESIA_NPT_REGISTRATION_NUMBER",
             "value": row["registration_number"],
             "source_id": "INDONESIA_NPT_LUBRICANT_REGISTRY",
+            "status": row["lifecycle_status"],
+        }
+    return record
+
+
+def thailand_doeb_record(row: dict) -> dict:
+    """Convert one Thai DOEB motor-lubricant registration occurrence."""
+    technical = row["technical"]
+    performance = "; ".join(
+        f"{system.upper()} {value}"
+        for system in ("api", "acea", "jaso", "ilsac", "oem", "nmma")
+        for value in technical[system]
+    )
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["registration_holder"],
+        "name": row["product_name"],
+        "category": "Государственный реестр моторных масел DOEB Таиланда",
+        "category_code": "M",
+        "family": FAMILY_NAMES["M"],
+        "sae_class": technical["sae"][0],
+        "api_class": performance,
+        "viscosity": "",
+        "grease_class": "",
+        "source": "THAILAND_DOEB_LUBRICANT_REGISTRY",
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["registration_holder"],
+        "brand": row["registration_holder"],
+        "market": row["market"],
+        "source_id": "THAILAND_DOEB_LUBRICANT_REGISTRY",
+        "source_record_id": row["source_record_id"],
+        "source_row": row["source_row"],
+        "evidence_status": "official_government_regulatory_registry",
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update({
+        "thailand_doeb_registration_holder": row["registration_holder"],
+        "thailand_doeb_registration_number_raw_values": row["registration_number_raw_values"],
+        "sae_source_raw_values": row["sae_source_raw_values"],
+        "sae_source_reported": technical["sae"],
+        "api_source_reported": technical["api"],
+        "acea_source_reported": technical["acea"],
+        "jaso_source_reported": technical["jaso"],
+        "ilsac_source_reported": technical["ilsac"],
+        "oem_source_reported": technical["oem"],
+        "nmma_source_reported": technical["nmma"],
+        "standards_source_reported": row["standards"],
+        "valid_through": row["valid_through"],
+        "lifecycle_basis": row["lifecycle_basis"],
+        "classification_basis": row["classification_basis"],
+        "source_quality_flags": row["source_quality_flags"],
+        "source_occurrences": row["source_occurrences"],
+        "source_occurrence_count": row["source_occurrence_count"],
+        "source_rows": row["source_rows"],
+        "source_snapshot_month": row["source_snapshot_month"],
+        "source_dataset_url": row["source_dataset_url"],
+        "source_mirror_url": row["source_mirror_url"],
+        "source_resource_id": row["source_resource_id"],
+    })
+    record["canonical_key"] += f"|thailand_doeb_record:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    for index, registration_number in enumerate(row["registration_numbers"], 1):
+        record["codes"][f"thailand_doeb_registration_number_{index}"] = {
+            "system": "THAILAND_DOEB_REGISTRATION_NUMBER",
+            "value": registration_number,
+            "source_id": "THAILAND_DOEB_LUBRICANT_REGISTRY",
             "status": row["lifecycle_status"],
         }
     return record
@@ -2247,6 +2318,8 @@ def main() -> None:
     input_records.extend(anp_brazil_records)
     indonesia_npt_source_rows = [json.loads(line) for line in INDONESIA_NPT_JSONL.read_text(encoding="utf-8").splitlines() if line]
     indonesia_npt_records = [indonesia_npt_record(row) for row in indonesia_npt_source_rows]
+    thailand_doeb_source_rows = [json.loads(line) for line in THAILAND_DOEB_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    thailand_doeb_records = [thailand_doeb_record(row) for row in thailand_doeb_source_rows]
     dla_qpd_source_rows = [json.loads(line) for line in DLA_QPD_JSONL.read_text(encoding="utf-8").splitlines() if line]
     dla_qpd_records = [dla_qpd_record(row) for row in dla_qpd_source_rows]
     fuchs_india_source_rows = [json.loads(line) for line in FUCHS_INDIA_JSONL.read_text(encoding="utf-8").splitlines() if line]
@@ -2806,6 +2879,7 @@ def main() -> None:
     # consolidation. Cross-source identities remain review candidates and cannot
     # perturb already established manufacturer-market deduplication decisions.
     input_records.extend(indonesia_npt_records)
+    input_records.extend(thailand_doeb_records)
     input_records.extend(dla_qpd_records)
     records, candidates = deduplicate(input_records)
     canonical_by_key = {row["canonical_key"]: row for row in records}
@@ -3490,6 +3564,24 @@ def main() -> None:
     } for row in records if row["evidence_status"] == "official_government_registry_source_data_issue")
     issues.extend({
         "product_id": row["product_id"],
+        "issue_code": "thailand_doeb_registration_number_collision",
+        "severity": "high",
+        "field": "THAILAND_DOEB_REGISTRATION_NUMBER",
+        "value": "; ".join(code["value"] for code in row["codes"].values() if code.get("system") == "THAILAND_DOEB_REGISTRATION_NUMBER"),
+        "expected": "One registration number per product and SAE identity",
+        "action": "Keep conflicting rows separate and request source-authority clarification before treating the registration number as a unique identity.",
+    } for row in records if row["source_id"] == "THAILAND_DOEB_LUBRICANT_REGISTRY" and "registration_number_collision" in row["specifications"]["source_quality_flags"])
+    issues.extend({
+        "product_id": row["product_id"],
+        "issue_code": "thailand_doeb_nonstandard_sae_notation",
+        "severity": "medium",
+        "field": "SAE",
+        "value": "; ".join(row["specifications"]["sae_source_raw_values"]),
+        "expected": "Recognized SAE J300 viscosity notation",
+        "action": "Retain the source value but exclude it from strict SAE equivalence until the authority or an official TDS confirms the grade.",
+    } for row in records if row["source_id"] == "THAILAND_DOEB_LUBRICANT_REGISTRY" and "nonstandard_sae_notation" in row["specifications"]["source_quality_flags"])
+    issues.extend({
+        "product_id": row["product_id"],
         "issue_code": "dla_qpd_lifecycle_restriction",
         "severity": "high" if row["lifecycle_status"] in {"stop_ship", "sam_inactive_source_review"} else "medium",
         "field": "DLA_QPD_QUALIFICATION_STATUS",
@@ -3530,6 +3622,7 @@ def main() -> None:
         "liqui_moly_current_input_sha256": hashlib.sha256(LIQUI_MOLY_CURRENT_JSONL.read_bytes()).hexdigest(),
         "anp_brazil_input_sha256": hashlib.sha256(ANP_BRAZIL_JSONL.read_bytes()).hexdigest(),
         "indonesia_npt_input_sha256": hashlib.sha256(INDONESIA_NPT_JSONL.read_bytes()).hexdigest(),
+        "thailand_doeb_input_sha256": hashlib.sha256(THAILAND_DOEB_JSONL.read_bytes()).hexdigest(),
         "dla_qpd_input_sha256": hashlib.sha256(DLA_QPD_JSONL.read_bytes()).hexdigest(),
         "fuchs_india_input_sha256": hashlib.sha256(FUCHS_INDIA_JSONL.read_bytes()).hexdigest(),
         "fuchs_us_input_sha256": hashlib.sha256(FUCHS_US_JSONL.read_bytes()).hexdigest(),
@@ -3585,6 +3678,11 @@ def main() -> None:
         "indonesia_npt_source_rows": len(indonesia_npt_source_rows),
         "indonesia_npt_rows_with_registration_value": sum(bool(row["registration_number"]) for row in indonesia_npt_source_rows),
         "indonesia_npt_rows_with_source_data_issue": sum(not row["registration_number"] for row in indonesia_npt_source_rows),
+        "thailand_doeb_normalized_products": len(thailand_doeb_source_rows),
+        "thailand_doeb_source_occurrences": sum(row["source_occurrence_count"] for row in thailand_doeb_source_rows),
+        "thailand_doeb_unique_registration_numbers": len({number for row in thailand_doeb_source_rows for number in row["registration_numbers"]}),
+        "thailand_doeb_registration_collision_products": sum("registration_number_collision" in row["source_quality_flags"] for row in thailand_doeb_source_rows),
+        "thailand_doeb_published_end_date_not_expired_products": sum(row["lifecycle_status"] == "not_expired_by_published_end_date_as_of_catalog_snapshot" for row in thailand_doeb_source_rows),
         "dla_qpd_source_rows": len(dla_qpd_source_rows),
         "dla_qpd_source_rows_by_source": dict(sorted(Counter(row["source_id"] for row in dla_qpd_source_rows).items())),
         "dla_qpd_lifecycle_statuses": dict(sorted(Counter(row["lifecycle_status"] for row in dla_qpd_source_rows).items())),

@@ -920,6 +920,21 @@
       "notes": "Еженедельный государственный CSV. 14 960 исходных строк сведены к 12 664 строкам продукта-класса-вязкости; 2 296 повторных вхождений объединены. Сохранены регистрация, держатель, производитель, назначение, SAE/ISO/NLGI, уровень свойств, состав и фасовки; narrative OBS не переиздаётся."
     },
     {
+      "source_id": "THAILAND_DOEB_LUBRICANT_REGISTRY",
+      "title": "Thailand DOEB Motor Lubricant Registration Registry",
+      "owner": "Thailand Department of Energy Business",
+      "source_type": "official_government_open_data_regulatory_registry_snapshot",
+      "source_locator": "data/thailand-doeb-lubricant-products.jsonl",
+      "source_url": "https://data.doeb.go.th/dataset/e8179a95-18f9-489f-b636-43407e8bb172",
+      "terms_url": "https://gdcatalognhic.nha.co.th/dataset/lubricant_data",
+      "source_sha256": "a6e16a45cfcf8ec0b329bdf2026d72e5e4c2d02c1c8cd24974eb2f4720f819f2",
+      "access_status": "public_government_open_data_via_government_ckan_mirror",
+      "bulk_ingest_allowed": true,
+      "publication_status": "normalized_factual_registration_fields_with_attribution",
+      "observed_count": 5486,
+      "notes": "Последний доступный полный snapshot за март 2024 содержит 6 213 регистрационных строк моторных масел и 6 210 уникальных номеров. Точное совпадение держателя, продукта, SAE и полного набора стандартов объединяет 727 повторных регистрационных вхождений в 5 486 product identities с сохранением всех номеров и строк. Три номера конфликтуют между шестью продуктами и сохранены раздельно. Статус срока действия вычислен по опубликованной дате и не представлен как live-подтверждение. Dataset классифицирован как public и лицензирован Open Data Common."
+    },
+    {
       "source_id": "INDONESIA_NPT_LUBRICANT_REGISTRY",
       "title": "Indonesia General List of Lubricants (NPT) 2021-2025",
       "owner": "Directorate General of Oil and Gas, Ministry of Energy and Mineral Resources of Indonesia",

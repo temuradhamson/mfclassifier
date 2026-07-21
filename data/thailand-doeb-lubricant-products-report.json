@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "status": "official_public_government_registry_snapshot_normalized",
+  "snapshot_date": "2026-07-21",
+  "source_snapshot_month": "2024-03",
+  "source_id": "THAILAND_DOEB_LUBRICANT_REGISTRY",
+  "source_dataset_url": "https://data.doeb.go.th/dataset/e8179a95-18f9-489f-b636-43407e8bb172",
+  "source_mirror_url": "https://gdcatalognhic.nha.co.th/dataset/lubricant_data",
+  "source_resource_id": "fe63ef44-c9fa-4987-b205-46d714d762ae",
+  "source_api_response_sha256": "50ec674e1734efafbe14bd8f97a20b298a88bdd9707200ffa4505d592fc7ddff",
+  "normalized_output_sha256": "a6e16a45cfcf8ec0b329bdf2026d72e5e4c2d02c1c8cd24974eb2f4720f819f2",
+  "published_source_rows": 6213,
+  "normalized_products": 5486,
+  "duplicate_registration_occurrences_merged": 727,
+  "unique_registration_numbers": 6210,
+  "registration_number_collision_groups": 3,
+  "registration_number_collision_source_rows": 6,
+  "registration_number_collision_products": 6,
+  "registration_number_collision_details": {
+    "584056.27/2566": [
+      "TH-DOEB-2024M03-000900",
+      "TH-DOEB-2024M03-000955"
+    ],
+    "218129.08/2558": [
+      "TH-DOEB-2024M03-002407",
+      "TH-DOEB-2024M03-002408"
+    ],
+    "065017.17/2567": [
+      "TH-DOEB-2024M03-003827",
+      "TH-DOEB-2024M03-003828"
+    ]
+  },
+  "registration_holders": 234,
+  "product_names": 3412,
+  "sae_values": {
+    "0W-12": 1,
+    "0W-16": 13,
+    "0W-20": 194,
+    "0W-30": 53,
+    "0W-40": 53,
+    "0W-50": 4,
+    "10W": 13,
+    "10W-30": 754,
+    "10W-40": 672,
+    "10W-50": 68,
+    "10W-60": 37,
+    "13W-30": 1,
+    "15W-30": 1,
+    "15W-40": 1003,
+    "15W-50": 83,
+    "15W-60": 1,
+    "20W-20": 1,
+    "20W-40": 85,
+    "20W-50": 699,
+    "20W-60": 1,
+    "30": 189,
+    "40": 393,
+    "50": 184,
+    "5W-20": 16,
+    "5W-30": 556,
+    "5W-40": 376,
+    "5W-50": 33,
+    "60": 2
+  },
+  "standards": {
+    "ACEA": 380,
+    "API": 5328,
+    "ILSAC": 249,
+    "JASO": 677,
+    "NMMA": 11,
+    "OEM": 99
+  },
+  "lifecycle_assessments": {
+    "expired_by_published_end_date": 3994,
+    "not_expired_by_published_end_date_as_of_catalog_snapshot": 1492
+  },
+  "families": {
+    "M": 5486
+  },
+  "source_quality_flags": {
+    "nonstandard_sae_notation": 1,
+    "registration_number_collision": 6
+  },
+  "rights_note": "The Thai government catalog classifies the dataset as public and licenses it under Open Data Common. Only normalized factual registration fields are republished with attribution.",
+  "grain_note": "Published registration occurrences are consolidated only when holder, normalized product name, SAE and the complete professional-standard set are identical. All registration numbers and source rows remain attached. Three numbers collide across conflicting identities and remain separate."
+}
