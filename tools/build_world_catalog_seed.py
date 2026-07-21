@@ -41,6 +41,7 @@ MERCEDES_DTFR_JSONL = ROOT / "data" / "mercedes-dtfr-approved-fluids.jsonl"
 MERCEDES_BEVO_JSONL = ROOT / "data" / "mercedes-bevo-approved-fluids.jsonl"
 VOLVO_GENUINE_JSONL = ROOT / "data" / "volvo-genuine-fluids.jsonl"
 SCANIA_GENUINE_JSONL = ROOT / "data" / "scania-genuine-oils.jsonl"
+BRAVA_OFFICIAL_JSONL = ROOT / "data" / "brava-official-products.jsonl"
 CEYPETCO_JSONL = ROOT / "data" / "ceypetco-lubricant-products.jsonl"
 MAN_SERVICE_JSONL = ROOT / "data" / "man-service-products.jsonl"
 LIQUI_MOLY_2020_JSONL = ROOT / "data" / "liqui-moly-2020-products.jsonl"
@@ -753,6 +754,62 @@ def scania_genuine_record(row: dict) -> dict:
     record["specifications"]["source_url"] = row["source_url"]
     record["canonical_key"] += f"|scania_genuine_record:{normalize(row['source_record_id'])}"
     record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    return record
+
+
+def brava_official_record(row: dict) -> dict:
+    specs = row["specifications"]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Официальный каталог Brava Lubricants",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": specs.get("sae_engine") or specs.get("sae_gear") or "",
+        "api_class": " ".join(
+            [f"API {'/'.join(specs.get('api', []))}" if specs.get("api") else ""]
+            + [f"API {'/'.join(specs.get('api_gl', []))}" if specs.get("api_gl") else ""]
+            + [f"ACEA {'/'.join(specs.get('acea', []))}" if specs.get("acea") else ""]
+            + [f"ILSAC {'/'.join(specs.get('ilsac', []))}" if specs.get("ilsac") else ""]
+        ).strip(),
+        "viscosity": specs.get("iso_vg", ""),
+        "coolant_class": specs.get("brake_fluid_class", ""),
+        "source": "BRAVA_LUBRICANTS_OFFICIAL_CATALOG",
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": "BRAVA_LUBRICANTS_OFFICIAL_CATALOG",
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": "official_manufacturer_product_catalog",
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update(specs)
+    record["specifications"].update({
+        "source_url": row["source_url"],
+        "technical_document_url": row["technical_document_url"],
+        "safety_document_url": row["safety_document_url"],
+        "source_page_modified_at": row["source_page_modified_at"],
+        "source_series": row["source_series"],
+        "source_type": row["source_type"],
+        "source_variant": row["source_variant"],
+        "source_quality_flags": row["source_quality_flags"],
+    })
+    record["canonical_key"] += f"|brava_official_record:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    for index, package in enumerate(row["packages"], 1):
+        record["codes"][f"brava_part_number_{index}"] = {
+            "system": "BRAVA_PART_NUMBER",
+            "value": package["part_number"],
+            "source_id": "BRAVA_LUBRICANTS_OFFICIAL_CATALOG",
+            "status": "current_official_catalog",
+        }
     return record
 
 
@@ -2871,6 +2928,9 @@ def main() -> None:
     scania_genuine_source_rows = [json.loads(line) for line in SCANIA_GENUINE_JSONL.read_text(encoding="utf-8").splitlines() if line]
     scania_genuine_records = [scania_genuine_record(row) for row in scania_genuine_source_rows]
     input_records.extend(scania_genuine_records)
+    brava_official_source_rows = [json.loads(line) for line in BRAVA_OFFICIAL_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    brava_official_records = [brava_official_record(row) for row in brava_official_source_rows]
+    input_records.extend(brava_official_records)
     ceypetco_source_rows = [json.loads(line) for line in CEYPETCO_JSONL.read_text(encoding="utf-8").splitlines() if line]
     ceypetco_records = [ceypetco_record(row) for row in ceypetco_source_rows]
     input_records.extend(ceypetco_records)
@@ -4075,6 +4135,17 @@ def main() -> None:
         if link_key not in source_link_keys:
             source_links.append(link)
             source_link_keys.add(link_key)
+    for raw, normalized_row in zip(brava_official_source_rows, brava_official_records):
+        target = canonical_by_key[normalized_row["canonical_key"]]
+        link = {
+            "product_id": target["product_id"], "source_id": "BRAVA_LUBRICANTS_OFFICIAL_CATALOG",
+            "source_record_id": raw["source_record_id"], "source_row": None,
+            "relation": "official_manufacturer_product_catalog",
+        }
+        link_key = (link["product_id"], link["source_id"], link["source_record_id"])
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     for raw, normalized_row in zip(ceypetco_source_rows, ceypetco_records):
         target = canonical_by_key[normalized_row["canonical_key"]]
         link = {
@@ -4306,6 +4377,34 @@ def main() -> None:
                 "source_id": "LIQUI_MOLY_CURRENT_OPENAPI",
                 "source_record_id": article["sku"],
             })
+    for raw, normalized_row in zip(brava_official_source_rows, brava_official_records):
+        target = canonical_by_key[normalized_row["canonical_key"]]
+        for package in raw["packages"]:
+            package_name = package["package_name"]
+            quantity = None
+            unit = "package"
+            if package_name == "Quart":
+                quantity, unit = 1.0, "qt"
+            else:
+                package_match = re.match(r"([0-9]+(?:[.,][0-9]+)?)\s*(L|GL|oz)\b", package_name, flags=re.I)
+                if package_match:
+                    quantity = float(package_match.group(1).replace(",", "."))
+                    unit = {"l": "l", "gl": "gal", "oz": "fl oz"}[package_match.group(2).lower()]
+            offers.append({
+                "offer_id": f"BRAVA-{raw['source_record_id']}-{package['part_number']}",
+                "product_id": target["product_id"],
+                "market": "PR_US",
+                "package_name": package_name,
+                "unit": unit,
+                "quantity_per_package": quantity,
+                "weight_kg": None,
+                "density_kg_per_l": None,
+                "lifecycle_status": "listed_current_catalog",
+                "archive_type": "",
+                "archive_reason": "",
+                "source_id": "BRAVA_LUBRICANTS_OFFICIAL_CATALOG",
+                "source_record_id": package["part_number"],
+            })
     issues = quality_issues(records)
     issues.extend({
         "product_id": row["product_id"],
@@ -4350,6 +4449,26 @@ def main() -> None:
                 "severity": severity,
                 "field": field,
                 "value": row["specifications"].get("source_conflict_note", flag),
+                "expected": expected,
+                "action": action,
+            })
+    brava_issue_meta = {
+        "nonstandard_acea_class_source_reported_verbatim": ("medium", "ACEA", "A recognized published ACEA class", "Retain A4/B4 verbatim but exclude it from strict equivalence until the manufacturer publishes a corrected class."),
+        "source_part_number_placeholder_excluded": ("low", "PART_NUMBER", "A concrete manufacturer part number", "Keep the product-grade row but do not create an offer/code from the source placeholder."),
+        "source_part_number_cross_product_collision": ("high", "PART_NUMBER", "One product-grade identity per current manufacturer part number", "Retain both source assignments as separate offers and request manufacturer clarification before treating the part number as a unique identity."),
+        "vague_additional_specifications_not_enumerated": ("medium", "PERFORMANCE", "An explicitly enumerated specification", "Exclude the words 'and more' from equivalence and retain only the named Allison C-4 claim."),
+    }
+    for row in records:
+        if row["source_id"] != "BRAVA_LUBRICANTS_OFFICIAL_CATALOG":
+            continue
+        for flag in row["specifications"].get("source_quality_flags", []):
+            severity, field, expected, action = brava_issue_meta[flag]
+            issues.append({
+                "product_id": row["product_id"],
+                "issue_code": f"brava_{flag}",
+                "severity": severity,
+                "field": field,
+                "value": flag,
                 "expected": expected,
                 "action": action,
             })
@@ -4398,6 +4517,7 @@ def main() -> None:
         "mercedes_bevo_input_sha256": hashlib.sha256(MERCEDES_BEVO_JSONL.read_bytes()).hexdigest(),
         "volvo_genuine_input_sha256": hashlib.sha256(VOLVO_GENUINE_JSONL.read_bytes()).hexdigest(),
         "scania_genuine_input_sha256": hashlib.sha256(SCANIA_GENUINE_JSONL.read_bytes()).hexdigest(),
+        "brava_official_input_sha256": hashlib.sha256(BRAVA_OFFICIAL_JSONL.read_bytes()).hexdigest(),
         "ceypetco_input_sha256": hashlib.sha256(CEYPETCO_JSONL.read_bytes()).hexdigest(),
         "man_service_input_sha256": hashlib.sha256(MAN_SERVICE_JSONL.read_bytes()).hexdigest(),
         "liqui_moly_2020_input_sha256": hashlib.sha256(LIQUI_MOLY_2020_JSONL.read_bytes()).hexdigest(),
@@ -4501,6 +4621,7 @@ def main() -> None:
         "mercedes_bevo_products_added": mercedes_bevo_added_rows,
         "volvo_genuine_source_rows": len(volvo_genuine_source_rows),
         "scania_genuine_source_rows": len(scania_genuine_source_rows),
+        "brava_official_source_rows": len(brava_official_source_rows),
         "ceypetco_source_rows": len(ceypetco_source_rows),
         "man_service_source_rows": len(man_service_source_rows),
         "man_service_products_matched_to_existing": man_service_matched_rows,
@@ -4603,7 +4724,8 @@ def main() -> None:
         "aichilon_products_added": aichilon_new_rows,
         "aichilon_rows_excluded": len(exclusions),
         "offers": len(offers),
-        "active_offers": sum(o["lifecycle_status"] == "active" for o in offers),
+        "active_offers": sum(o["lifecycle_status"] in {"active", "listed_current_catalog"} for o in offers),
+        "current_catalog_listed_offers": sum(o["lifecycle_status"] == "listed_current_catalog" for o in offers),
         "archived_offers": sum(o["lifecycle_status"] == "archived" for o in offers),
         "duplicate_decisions": dict(Counter(c["decision"] for c in candidates)),
         "quality_issues": dict(Counter(i["issue_code"] for i in issues)),

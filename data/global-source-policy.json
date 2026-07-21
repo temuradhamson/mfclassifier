@@ -1580,6 +1580,33 @@
       "publication_status": "reviewed_zero_relevant_product_rows",
       "observed_count": 0,
       "notes": "The complete seven-page Mauricert licence list dated 31 December 2025 was reviewed. It contains no marketed lubricant, grease, coolant, brake-fluid or other technical-fluid product row."
+    },
+    {
+      "source_id": "NAMIBIA_NSI_CERTIFIED_PRODUCTS_LUBRICANT_REVIEW",
+      "title": "Namibian Standards Institution certified products — lubricant review",
+      "owner": "Namibian Standards Institution",
+      "source_type": "official_government_product_certification_directory",
+      "source_url": "https://www.nsi.com.na/wp-content/uploads/2024/08/Directory-of-Certified-products.pdf",
+      "access_status": "public_official_certification_directory",
+      "bulk_ingest_allowed": true,
+      "publication_status": "reviewed_zero_relevant_product_rows",
+      "observed_count": 0,
+      "notes": "The current one-page product-certification directory was reviewed in full and contains two cement licences only. A separate current management-system directory mentions Vivo Energy's lubricant warehouse, but that is an ISO 9001 organization scope rather than a marketed product record and was not ingested."
+    },
+    {
+      "source_id": "BRAVA_LUBRICANTS_OFFICIAL_CATALOG",
+      "title": "Brava Lubricants current product-grade catalog",
+      "owner": "Brava Lubricants / Olein Refinery Corp.",
+      "source_type": "official_manufacturer_product_pages_and_technical_documents",
+      "source_locator": "data/brava-official-products.jsonl",
+      "source_url": "https://bravalubricants.com/products/view-catalog/",
+      "robots_url": "https://bravalubricants.com/robots.txt",
+      "source_sha256": "fbb7e87b61bd55d51bb3f0925366f6b16985412089ba736cea2fea0e95f5fc28",
+      "access_status": "public_official_catalog_crawling_allowed_no_separate_republication_terms_found",
+      "bulk_ingest_allowed": true,
+      "publication_status": "derived_factual_product_grade_records_with_attribution",
+      "observed_count": 69,
+      "notes": "Thirty current official product pages expose 69 distinct product-grade cards across engine, transmission, hydraulic, industrial, turbine and technical fluids. Only factual names, grades, explicitly listed standards/approvals, document links, 94 package occurrences and 93 concrete part-number values are retained. Marketing descriptions, images, logos and page design are excluded. Robots.txt explicitly allows crawling; the site publishes no separate content-republication terms beyond an all-rights-reserved footer, so the normalized output is limited to attributed non-expressive facts. One nonstandard ACEA A4/B4 claim is retained verbatim and flagged; two placeholder part numbers and one vague 'and more' statement are excluded from strict data. Part number BRA-119-D is assigned by the source to both Ignis 5W-20 and Aurum 5W-20; both assignments remain separate and flagged."
     }
   ]
 }

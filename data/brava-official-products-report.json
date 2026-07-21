@@ -1,0 +1,219 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-07-21",
+  "source_id": "BRAVA_LUBRICANTS_OFFICIAL_CATALOG",
+  "catalog_url": "https://bravalubricants.com/products/view-catalog/",
+  "robots_url": "https://bravalubricants.com/robots.txt",
+  "catalog_sha256": "8d876f94e01588e1b6d3848b7834b944d4c972cc1fb5bdce24f97da3c052ce45",
+  "robots_sha256": "af6fd45f93a61c675e46943f41cb2f7a7a362c32da19a20142fc2ce30b5f0006",
+  "source_product_pages": 30,
+  "normalized_product_grade_rows": 69,
+  "families": {
+    "H": 5,
+    "I": 2,
+    "M": 42,
+    "T": 13,
+    "TF": 4,
+    "U": 3
+  },
+  "rows_with_sae": 48,
+  "rows_with_iso_vg": 7,
+  "package_occurrences": 94,
+  "unique_part_numbers": 93,
+  "colliding_part_numbers": {
+    "BRA-119-D": [
+      "Brava Aurum 5W-20",
+      "Brava Ignis 5W-20"
+    ]
+  },
+  "source_quality_flags": {
+    "nonstandard_acea_class_source_reported_verbatim": 1,
+    "source_part_number_cross_product_collision": 2,
+    "source_part_number_placeholder_excluded": 2,
+    "vague_additional_specifications_not_enumerated": 1
+  },
+  "page_evidence": [
+    {
+      "slug": "brava-diamantis",
+      "source_url": "https://bravalubricants.com/product/brava-diamantis/",
+      "source_sha256": "0614ba539ecab962c807d6e768fc88d54f23f3e6260d71b3a07d765e19c7db48",
+      "normalized_product_grade_rows": 7
+    },
+    {
+      "slug": "brava-ignis",
+      "source_url": "https://bravalubricants.com/product/brava-ignis/",
+      "source_sha256": "8ba7439b14bc7f8f251e00e4354208d7827ff0f4ffd38d8b0f381c3ab333b7bb",
+      "normalized_product_grade_rows": 5
+    },
+    {
+      "slug": "brava-aurum",
+      "source_url": "https://bravalubricants.com/product/brava-aurum/",
+      "source_sha256": "858dcb3f610ed008934727340a7dd9ea6a1892e129987c9400d16f7671f5c8d7",
+      "normalized_product_grade_rows": 6
+    },
+    {
+      "slug": "brava-atf",
+      "source_url": "https://bravalubricants.com/product/brava-atf/",
+      "source_sha256": "60f4e3b8fd26fb39d95652294ae3a9dc00a253b50c9ae95d7dbd114d9ec1c717",
+      "normalized_product_grade_rows": 1
+    },
+    {
+      "slug": "brava-cvt",
+      "source_url": "https://bravalubricants.com/product/brava-cvt/",
+      "source_sha256": "6ca3c607e31a3217e271f838697ac0d4cc4eb0244d65152a1cdeb7c2e8145605",
+      "normalized_product_grade_rows": 1
+    },
+    {
+      "slug": "brava-euro",
+      "source_url": "https://bravalubricants.com/product/brava-euro/",
+      "source_sha256": "3d82deec16f88758d921521ce9fe8646f1d844585936e6bb34222fff1166d65e",
+      "normalized_product_grade_rows": 2
+    },
+    {
+      "slug": "brava-elite-racing",
+      "source_url": "https://bravalubricants.com/product/brava-elite-racing/",
+      "source_sha256": "1e7dfdbb65f6048a69afff874505e61f8ce06fe531fee731ab197cb8fbe81787",
+      "normalized_product_grade_rows": 3
+    },
+    {
+      "slug": "brava-duratio",
+      "source_url": "https://bravalubricants.com/product/brava-duratio/",
+      "source_sha256": "e1c1779132e2f1ee775e22f2c227fd9a5022a74bc44fc0bf60ead1d4745c9e16",
+      "normalized_product_grade_rows": 2
+    },
+    {
+      "slug": "brava-optimum-hd",
+      "source_url": "https://bravalubricants.com/product/brava-optimum-hd/",
+      "source_sha256": "ea158a4b2672dea60a7c18f6538b63b49903d42712091459c64f62cd47dac552",
+      "normalized_product_grade_rows": 3
+    },
+    {
+      "slug": "brava-optimum-max",
+      "source_url": "https://bravalubricants.com/product/brava-optimum-max/",
+      "source_sha256": "66a2d1cf9ab59e2d574988028e691ff1cc87783718c78fd21181556624a1f4f3",
+      "normalized_product_grade_rows": 2
+    },
+    {
+      "slug": "brava-optimum-plus",
+      "source_url": "https://bravalubricants.com/product/brava-optimum-plus/",
+      "source_sha256": "039fcb6c70a894364d1138bcad5fd4dee1e45cbfaf83f4b9f06c614a4f580790",
+      "normalized_product_grade_rows": 2
+    },
+    {
+      "slug": "brava-optimum-ultra",
+      "source_url": "https://bravalubricants.com/product/brava-optimum-ultra/",
+      "source_sha256": "75e469c4a81818f03a746054687ecfb864a23aea27d474bc29d9e4df79ff8dea",
+      "normalized_product_grade_rows": 2
+    },
+    {
+      "slug": "brava-omnis",
+      "source_url": "https://bravalubricants.com/product/brava-omnis/",
+      "source_sha256": "c1b4fe710c15c375ddfc4c7eee98fe53c77d108e26428b5c60876ea177f9ddda",
+      "normalized_product_grade_rows": 1
+    },
+    {
+      "slug": "brava-mercon-v",
+      "source_url": "https://bravalubricants.com/product/brava-mercon-v/",
+      "source_sha256": "7b25c2f56e0fbe66349c4fa0a3cf365fdddef315b1f4636ea04634366a3bda7a",
+      "normalized_product_grade_rows": 1
+    },
+    {
+      "slug": "brava-atf-dexron-vi",
+      "source_url": "https://bravalubricants.com/product/brava-atf-dexron-vi/",
+      "source_sha256": "2c89a0096fece6943a9df2a417d1f974a1c8259cecd92f1a902928d2e6156ec5",
+      "normalized_product_grade_rows": 1
+    },
+    {
+      "slug": "brava-motus",
+      "source_url": "https://bravalubricants.com/product/brava-motus/",
+      "source_sha256": "c5c73bed45e84ec56e2af1b226118b5c99506322cbad02a48be9592d516a111c",
+      "normalized_product_grade_rows": 4
+    },
+    {
+      "slug": "brava-nauticus",
+      "source_url": "https://bravalubricants.com/product/brava-nauticus/",
+      "source_sha256": "9d7a63c7dba9ea15266495cf848fe0111513731ad1478a1b1bb592b7beea0339",
+      "normalized_product_grade_rows": 1
+    },
+    {
+      "slug": "lonvita",
+      "source_url": "https://bravalubricants.com/product/lonvita/",
+      "source_sha256": "026a57aa09f083484256c35b6115182f459c94fac62a3c793940d21b55671e6f",
+      "normalized_product_grade_rows": 3
+    },
+    {
+      "slug": "brava-armoleo",
+      "source_url": "https://bravalubricants.com/product/brava-armoleo/",
+      "source_sha256": "36e7cbf4c8b8c5ca6e694cc29e753276e970cafb4ac2f1474ade7c9e03de5ef4",
+      "normalized_product_grade_rows": 3
+    },
+    {
+      "slug": "brava-gravis",
+      "source_url": "https://bravalubricants.com/product/brava-gravis/",
+      "source_sha256": "5d13403404f8b3e3e2a696ebcd8ef9c2f4bd7738cb14a5212e4bc78b08b9e9db",
+      "normalized_product_grade_rows": 3
+    },
+    {
+      "slug": "brava-genex",
+      "source_url": "https://bravalubricants.com/product/brava-genex/",
+      "source_sha256": "dbfdfb26f08112983b29d9f2e9e4536992fe06e34ee6f0b6e8bbac4f433032cc",
+      "normalized_product_grade_rows": 2
+    },
+    {
+      "slug": "brava-imperium",
+      "source_url": "https://bravalubricants.com/product/brava-imperium/",
+      "source_sha256": "28aee109b22a7e0870c8dd994aae33e9beae7d5c98176280ae064d82b7711de1",
+      "normalized_product_grade_rows": 3
+    },
+    {
+      "slug": "brava-fabros",
+      "source_url": "https://bravalubricants.com/product/brava-fabros/",
+      "source_sha256": "26b21a62c14a2040c27d317993676d45d6d855b4efbc3bd5192af90b5f96e38c",
+      "normalized_product_grade_rows": 2
+    },
+    {
+      "slug": "brava-tractor-utto",
+      "source_url": "https://bravalubricants.com/product/brava-tractor-utto/",
+      "source_sha256": "df2281a6038305338147548bf6f2c966502442ffac6bc06d39041456e43bcb4c",
+      "normalized_product_grade_rows": 2
+    },
+    {
+      "slug": "brava-ge-1350",
+      "source_url": "https://bravalubricants.com/product/brava-ge-1350/",
+      "source_sha256": "2650596751cd56857120484e684e7c22de43120d6c7820f433e4629c45ae4e10",
+      "normalized_product_grade_rows": 1
+    },
+    {
+      "slug": "brava-frigus",
+      "source_url": "https://bravalubricants.com/product/brava-frigus/",
+      "source_sha256": "aeba3f702c2fd023e4de0a18b95b04d156c741e640dfc11efb78a58741f2cbfa",
+      "normalized_product_grade_rows": 2
+    },
+    {
+      "slug": "brava-dot-4",
+      "source_url": "https://bravalubricants.com/product/brava-dot-4/",
+      "source_sha256": "5e098dae48fccfb633f1c91ea94dea0d9ef013c8225b263dea678095dbc71ed5",
+      "normalized_product_grade_rows": 1
+    },
+    {
+      "slug": "brava-dot-3",
+      "source_url": "https://bravalubricants.com/product/brava-dot-3/",
+      "source_sha256": "23e43cb0522d818a1df24b90d1b4acf6ee472693b131bb2d158a5f2e4809c1cd",
+      "normalized_product_grade_rows": 1
+    },
+    {
+      "slug": "brava-victum",
+      "source_url": "https://bravalubricants.com/product/brava-victum/",
+      "source_sha256": "c9d5b70157a095e1dd000bd215f37e3b348ca2d02d9498a8fa2dbebe982d1b3a",
+      "normalized_product_grade_rows": 1
+    },
+    {
+      "slug": "brava-power-steering-stop-leak",
+      "source_url": "https://bravalubricants.com/product/brava-power-steering-stop-leak/",
+      "source_sha256": "9511273fc280077b3a20b0131570d4563a3ba8ca0e2234162f92390880548231",
+      "normalized_product_grade_rows": 1
+    }
+  ],
+  "normalized_output_sha256": "fbb7e87b61bd55d51bb3f0925366f6b16985412089ba736cea2fea0e95f5fc28",
+  "publication_scope": "Derived factual product-grade, specification, package and part-number records with source attribution. Marketing descriptions, images, logos and page design are excluded."
+}

@@ -58,6 +58,8 @@ def main() -> None:
     volvo_report = json.loads((ROOT / "data/volvo-genuine-fluids-report.json").read_text(encoding="utf-8"))
     scania_report = json.loads((ROOT / "data/scania-genuine-oils-report.json").read_text(encoding="utf-8"))
     scania_rows = [json.loads(line) for line in (ROOT / "data/scania-genuine-oils.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    brava_report = json.loads((ROOT / "data/brava-official-products-report.json").read_text(encoding="utf-8"))
+    brava_rows = [json.loads(line) for line in (ROOT / "data/brava-official-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     ceypetco_report = json.loads((ROOT / "data/ceypetco-lubricant-products-report.json").read_text(encoding="utf-8"))
     ceypetco_rows = [json.loads(line) for line in (ROOT / "data/ceypetco-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     man_report = json.loads((ROOT / "data/man-service-products-report.json").read_text(encoding="utf-8"))
@@ -195,7 +197,7 @@ def main() -> None:
     assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
     assert not db.execute("PRAGMA foreign_key_check").fetchall()
     assert db.execute("SELECT count(*) FROM products").fetchone()[0] == len(lines)
-    assert len(lines) == 98068
+    assert len(lines) == 98137
     assert report["jaso_source_rows"] == jaso_report["rows"] == 3630
     assert report["jaso_unique_oil_codes"] == jaso_report["unique_oil_codes"] == 3629
     assert report["official_filed_registry_rows"] == 3629
@@ -220,6 +222,30 @@ def main() -> None:
     assert all(not ({"description", "image", "logo", "marketing_text"} & set(row)) for row in scania_rows)
     ldf4 = next(row for row in scania_rows if row["product_name"] == "Scania Oil LDF-4")
     assert not ldf4["specifications"].get("sae_engine")
+    assert report["brava_official_source_rows"] == brava_report["normalized_product_grade_rows"] == len(brava_rows) == 69
+    assert brava_report["source_product_pages"] == 30
+    assert brava_report["families"] == {"H": 5, "I": 2, "M": 42, "T": 13, "TF": 4, "U": 3}
+    assert brava_report["rows_with_sae"] == 48
+    assert brava_report["rows_with_iso_vg"] == 7
+    assert brava_report["package_occurrences"] == 94
+    assert brava_report["unique_part_numbers"] == 93
+    assert brava_report["colliding_part_numbers"] == {
+        "BRA-119-D": ["Brava Aurum 5W-20", "Brava Ignis 5W-20"],
+    }
+    assert brava_report["source_quality_flags"] == {
+        "nonstandard_acea_class_source_reported_verbatim": 1,
+        "source_part_number_cross_product_collision": 2,
+        "source_part_number_placeholder_excluded": 2,
+        "vague_additional_specifications_not_enumerated": 1,
+    }
+    assert report["brava_official_input_sha256"] == brava_report["normalized_output_sha256"]
+    assert policy_by_id["BRAVA_LUBRICANTS_OFFICIAL_CATALOG"]["source_sha256"] == brava_report["normalized_output_sha256"]
+    assert policy_by_id["BRAVA_LUBRICANTS_OFFICIAL_CATALOG"]["observed_count"] == 69
+    assert len({row["source_record_id"] for row in brava_rows}) == 69
+    assert len({row["product_name"] for row in brava_rows}) == 69
+    assert all(row["manufacturer"] == "Olein Refinery Corp." for row in brava_rows)
+    assert all(not ({"description", "image", "logo", "marketing_text"} & set(row)) for row in brava_rows)
+    assert sum("nonstandard_acea_class_source_reported_verbatim" in row["source_quality_flags"] for row in brava_rows) == 1
     assert report["korea_ecolabel_source_rows"] == korea_ecolabel_report["normalized_products"] == len(korea_ecolabel_rows) == 20
     assert report["korea_ecolabel_products_matched_to_existing"] == 0
     assert report["korea_ecolabel_products_added"] == 20
@@ -304,7 +330,7 @@ def main() -> None:
     assert dla_report["plant_rows_without_product_designation_excluded"] == 766
     assert report["zf_te_ml_source_rows"] == zf_report["unique_approval_numbers"] == 1498
     assert report["official_oem_approval_rows"] == 5475
-    assert report["official_manufacturer_catalog_rows"] == 5541
+    assert report["official_manufacturer_catalog_rows"] == 5610
     assert report["official_oem_service_recommendation_rows"] == 30
     assert report["allison_source_rows"] == allison_report["products"] == 104
     assert report["driventic_diwa_source_rows"] == driventic_report["products"] == 226
@@ -434,8 +460,9 @@ def main() -> None:
     assert report["aichilon_products_matched_to_existing"] == 255
     assert report["aichilon_products_added"] == 60
     assert report["aichilon_rows_excluded"] == 2
-    assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 3859
-    assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status='active'").fetchone()[0] == report["active_offers"] == 1455
+    assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 3953
+    assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 2534
+    assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status='listed_current_catalog'").fetchone()[0] == report["current_catalog_listed_offers"] == 1079
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_filed_registry'").fetchone()[0] == 3629
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_licensed_registry'").fetchone()[0] == 3037
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_ecolabel_product_registry'").fetchone()[0] == 127
@@ -447,7 +474,12 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_registry_source_data_issue'").fetchone()[0] == 51
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_qualified_product_registry'").fetchone()[0] == 456
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_approval_registry'").fetchone()[0] == 5475
-    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_manufacturer_product_catalog'").fetchone()[0] == 5541
+    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_manufacturer_product_catalog'").fetchone()[0] == 5610
+    assert db.execute("SELECT count(*) FROM products WHERE source_id='BRAVA_LUBRICANTS_OFFICIAL_CATALOG'").fetchone()[0] == 69
+    assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='BRAVA_LUBRICANTS_OFFICIAL_CATALOG'").fetchone()[0] == 69
+    assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='BRAVA_PART_NUMBER'").fetchone()[0] == 94
+    assert db.execute("SELECT count(DISTINCT code_value) FROM external_codes WHERE code_system='BRAVA_PART_NUMBER'").fetchone()[0] == 93
+    assert db.execute("SELECT count(*) FROM product_offers WHERE source_id='BRAVA_LUBRICANTS_OFFICIAL_CATALOG'").fetchone()[0] == 94
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_service_recommendation'").fetchone()[0] == 30
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='ALLISON_APPROVAL_NUMBER'").fetchone()[0] == 119
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='MERCEDES_DTFR_PRODUCT_ID'").fetchone()[0] == 1892
@@ -774,6 +806,7 @@ def main() -> None:
     assert policy_by_id["MALAWI_MBS_CERTIFIED_PRODUCTS_LUBRICANT_REVIEW"]["observed_count"] == 0
     assert policy_by_id["ZIMBABWE_SAZ_CERTIFIED_PRODUCTS_LUBRICANT_REVIEW"]["observed_count"] == 0
     assert policy_by_id["MAURITIUS_MSB_MAURICERT_LUBRICANT_REVIEW"]["observed_count"] == 0
+    assert policy_by_id["NAMIBIA_NSI_CERTIFIED_PRODUCTS_LUBRICANT_REVIEW"]["observed_count"] == 0
     assert biopreferred_report["source_occurrences"] == 1387
     assert biopreferred_report["duplicate_category_occurrences_merged"] == 495
     assert policy_by_id["INDONESIA_NPT_LUBRICANT_REGISTRY"]["source_sha256"] == indonesia_report["normalized_output_sha256"]
