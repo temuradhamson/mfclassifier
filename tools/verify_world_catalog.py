@@ -215,7 +215,7 @@ def main() -> None:
     assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
     assert not db.execute("PRAGMA foreign_key_check").fetchall()
     assert db.execute("SELECT count(*) FROM products").fetchone()[0] == len(lines)
-    assert len(lines) == 100116
+    assert len(lines) == 100310
     assert report["jaso_source_rows"] == jaso_report["rows"] == 3630
     assert report["jaso_unique_oil_codes"] == jaso_report["unique_oil_codes"] == 3629
     assert report["official_filed_registry_rows"] == 3629
@@ -893,16 +893,32 @@ def main() -> None:
     assert all(not ({"city", "state", "address", "phone", "email"} & set(row)) for row in epa_safer_choice_rows)
     assert policy_by_id["EPA_CHEMEXPO_CPDAT_LUBRICANTS"]["source_sha256"] == epa_chemexpo_report["normalized_output_sha256"]
     assert policy_by_id["EPA_CHEMEXPO_CPDAT_LUBRICANTS"]["observed_count"] == epa_chemexpo_report["normalized_products"]
-    assert epa_chemexpo_report["source_category_product_occurrences"] == 10019
-    assert epa_chemexpo_report["kept_product_occurrences"] == 7217
-    assert epa_chemexpo_report["excluded_product_occurrences"] == 2802
-    assert len(epa_chemexpo_rows) == 5714
-    assert report["epa_chemexpo_products_matched_to_existing"] == 268
-    assert report["epa_chemexpo_products_added"] == 5446
-    assert epa_chemexpo_report["kept_product_occurrences"] + epa_chemexpo_report["excluded_product_occurrences"] == 10019
+    assert epa_chemexpo_report["source_category_product_occurrences"] == 10342
+    assert epa_chemexpo_report["kept_product_occurrences"] == 7450
+    assert epa_chemexpo_report["excluded_product_occurrences"] == 2892
+    assert len(epa_chemexpo_rows) == 5915
+    assert report["epa_chemexpo_products_matched_to_existing"] == 275
+    assert report["epa_chemexpo_products_added"] == 5640
+    assert epa_chemexpo_report["kept_product_occurrences"] + epa_chemexpo_report["excluded_product_occurrences"] == 10342
     assert epa_chemexpo_report["within_source_occurrences_merged"] == epa_chemexpo_report["kept_product_occurrences"] - len(epa_chemexpo_rows)
     assert epa_chemexpo_report["licence"] == "CC0"
     assert epa_chemexpo_report["cpdat_release"] == "4.1 (May 2025)"
+    assert epa_chemexpo_report["categories"]["380"] == {
+        "general_category": "Industrial products",
+        "product_family": "mold release agents",
+        "product_type": "",
+        "scope_rule": "filtered_mold_release",
+        "source_products": 323,
+        "kept_occurrences": 233,
+        "excluded_occurrences": 90,
+        "api_page_sha256": [
+            "fa0675c78d57a6bace8a6c49f7b71765f43855fb72d1ec92842d3e719d4ede1e",
+            "eedf25b591ab980878aa06347a33e9aaec1e0c9bdbe7e386bd41cd6d682a4f4b",
+            "5b0d63c63b649ef1ba351e6519aa3a7399b8dc30b28af082113257554526bc92",
+            "807385575db32c9a2ae5cfd96b089dbbec8547cd25a9c8adb4a73cac3cd33b4b",
+        ],
+    }
+    assert epa_chemexpo_report["exclusions"]["puc_380_strict_mold_release_name_or_reviewed_assignment_filter"] == 90
     assert len({row["source_record_id"] for row in epa_chemexpo_rows}) == len(epa_chemexpo_rows)
     chemexpo_product_ids = [product_id for row in epa_chemexpo_rows for product_id in row["source_product_ids"]]
     assert len(chemexpo_product_ids) == len(set(chemexpo_product_ids)) == epa_chemexpo_report["kept_product_occurrences"]

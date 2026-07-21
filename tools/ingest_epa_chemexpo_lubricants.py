@@ -53,6 +53,7 @@ PUC_RULES = {
     358: "filtered_metalworking_quality",
     378: "filtered_aviation",
     379: "direct",     # Industrial lubricants
+    380: "filtered_mold_release",
     381: "direct",     # Hydraulic fluid
     385: "direct",     # Tractor hydraulic fluid
     386: "direct",     # Penetrating oil
@@ -107,7 +108,12 @@ def fetch_puc_products(puc_id: int) -> tuple[list[list[str]], list[str], int]:
     return rows, page_hashes, total
 
 
-def scoped(rule: str, product_name: str, manufacturer: str = "") -> tuple[bool, str]:
+def scoped(
+    rule: str,
+    product_name: str,
+    manufacturer: str = "",
+    classification_method: str = "",
+) -> tuple[bool, str]:
     value = normalize(product_name)
     if rule == "direct":
         return True, "exact_relevant_puc"
@@ -129,6 +135,28 @@ def scoped(rule: str, product_name: str, manufacturer: str = "") -> tuple[bool, 
         return include, (
             "metalworking_puc_with_explicit_name_support" if explicit else "metalworking_puc_opaque_name"
         )
+    if rule == "filtered_mold_release":
+        explicit = re.search(
+            r"\b(?:mould|mold|release|mold rel|mold re|epoxease|plastilease|freekote|"
+            r"mold wiz|moldwax|mold wax|mold ease|moldaway|formkote|eject|pull ease|"
+            r"partall|silicone spray|grease|lubricant|lubricating|lube|oil|wax)\b",
+            value,
+        )
+        obvious_misclassification = re.search(
+            r"\b(?:mildewcide|epoxy resin|resin thinner|phenolic powder|gasketing|"
+            r"welding rod|solder|flux|etch|paint|reducer|abrasive|compressed asbestos|"
+            r"acid|toluenediamine|fluorescene|pigment|accelerator|brazing alloy)\b",
+            value,
+        )
+        reviewed_assignment = normalize(classification_method) in {
+            "manual", "manual batch", "bulk assignment",
+        }
+        include = bool(explicit or (reviewed_assignment and not obvious_misclassification))
+        if explicit:
+            return include, "mold_release_puc_with_explicit_name_support"
+        if include:
+            return include, "reviewed_mold_release_puc_assignment"
+        return include, "strict_mold_release_name_or_reviewed_assignment_filter"
     if rule == "filtered_boat":
         positive = re.search(
             r"\b(?:oil|oils|lube|lubricant|lubricants|lubricating|grease|greases|"
@@ -261,7 +289,8 @@ def main() -> None:
                 raise RuntimeError(f"Missing ChemExpo product ID in {link_html!r}")
             brand = strip_html(brand_html)
             manufacturer = strip_html(manufacturer_html)
-            include, basis = scoped(rule, product_name, manufacturer)
+            classification_method = strip_html(method_html)
+            include, basis = scoped(rule, product_name, manufacturer, classification_method)
             normalized_name = normalize(product_name)
             cleaner_only = re.search(
                 r"\b(?:cleaner|degreaser|grease cutter|parts cleaner|carburetor cleaner|choke cleaner)\b",

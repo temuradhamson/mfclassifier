@@ -1112,12 +1112,12 @@
       "source_locator": "data/epa-chemexpo-lubricants.jsonl",
       "source_url": "https://comptox.epa.gov/chemexpo/",
       "terms_url": "https://epa.figshare.com/articles/dataset/The_Chemical_and_Products_Database_CPDat_MySQL_Data_File/5352997",
-      "source_sha256": "febed70610c64160f620df2d04de32e34dd37db00986c931bcca57fb5fef3ecd",
+      "source_sha256": "75f5b4547e1f6f2c2f5fe0b5e0d4908d1a0de1d02bc1640dc4111c3560db4251",
       "access_status": "public_official_government_cc0_bulk_download_and_product_api",
       "bulk_ingest_allowed": true,
       "publication_status": "normalized_factual_product_and_puc_evidence_with_attribution",
-      "observed_count": 5714,
-      "notes": "CPDat 4.1 is published under CC0 and ChemExpo exposes direct product cards plus downloadable PUC metadata and bulk composition data. Exact lubricant, hydraulic-fluid, metalworking-fluid, motor-oil, antifreeze, deicer and anti-seize PUCs are retained; broader automotive, marine, windshield, clipper and aviation categories use explicit inclusion and fuel/cleaner exclusion rules. Package-only suffixes and repeated EPA product records are merged while every source product ID remains linked. CPDat mixes historical and current public documents, EPA states that the compiled data are not reviewed by EPA, and current market availability is therefore never inferred."
+      "observed_count": 5915,
+      "notes": "CPDat 4.1 is published under CC0 and ChemExpo exposes direct product cards plus downloadable PUC metadata and bulk composition data. Exact lubricant, hydraulic-fluid, metalworking-fluid, motor-oil, antifreeze, deicer and anti-seize PUCs are retained; broader automotive, marine, windshield, clipper, aviation and industrial mold-release categories use explicit inclusion and false-positive exclusion rules. The mold-release audit reviewed all 323 source occurrences, retained 233 explicit or manually classified release/lubricant products and excluded 90 obvious or unsupported automatic assignments. Package-only suffixes and repeated EPA product records are merged while every retained source product ID remains linked. CPDat mixes historical and current public documents, EPA states that the compiled data are not reviewed by EPA, and current market availability is therefore never inferred."
     },
     {
       "source_id": "PSQCA_ENGINE_OIL_CM_LICENCES",

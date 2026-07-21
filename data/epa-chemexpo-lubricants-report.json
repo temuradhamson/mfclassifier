@@ -8,23 +8,23 @@
   "cpdat_release": "4.1 (May 2025)",
   "licence": "CC0",
   "puc_metadata_sha256": "de9414f410e15253868828affd9ec9cdcfe2020de5c309d4d42fa486122835d6",
-  "api_pages_manifest_sha256": "347ca9f6e38a581575009fdaf6e3e2c492708d8b3340e837b1ab5e4d34925fee",
-  "source_category_product_occurrences": 10019,
-  "kept_product_occurrences": 7217,
-  "excluded_product_occurrences": 2802,
-  "normalized_products": 5714,
-  "within_source_occurrences_merged": 1503,
-  "manufacturers_reported": 1722,
-  "brands_reported": 18,
+  "api_pages_manifest_sha256": "0eb2261cb0eb46f0250a14d3936d78b0e8ad8c7c054a7799db57fc7a13f78fff",
+  "source_category_product_occurrences": 10342,
+  "kept_product_occurrences": 7450,
+  "excluded_product_occurrences": 2892,
+  "normalized_products": 5915,
+  "within_source_occurrences_merged": 1535,
+  "manufacturers_reported": 1790,
+  "brands_reported": 19,
   "owner_not_reported_products": 64,
   "families": {
     "C": 13,
     "E": 1,
-    "G": 371,
+    "G": 375,
     "H": 301,
     "I": 863,
     "M": 702,
-    "S": 2628,
+    "S": 2825,
     "T": 135,
     "TF": 665,
     "U": 35
@@ -271,6 +271,21 @@
         "9378e0d253083570bbeb133b11522dfdec07b9d8794cfb94a5268ef8ced2be4f"
       ]
     },
+    "380": {
+      "general_category": "Industrial products",
+      "product_family": "mold release agents",
+      "product_type": "",
+      "scope_rule": "filtered_mold_release",
+      "source_products": 323,
+      "kept_occurrences": 233,
+      "excluded_occurrences": 90,
+      "api_page_sha256": [
+        "fa0675c78d57a6bace8a6c49f7b71765f43855fb72d1ec92842d3e719d4ede1e",
+        "eedf25b591ab980878aa06347a33e9aaec1e0c9bdbe7e386bd41cd6d682a4f4b",
+        "5b0d63c63b649ef1ba351e6519aa3a7399b8dc30b28af082113257554526bc92",
+        "807385575db32c9a2ae5cfd96b089dbbec8547cd25a9c8adb4a73cac3cd33b4b"
+      ]
+    },
     "381": {
       "general_category": "Industrial products",
       "product_family": "hydraulic fluid",
@@ -355,11 +370,12 @@
     "puc_378_strict_name_filter_excluding_fuels_from_aviation_fluids_puc": 860,
     "puc_379_obvious_fuel_product_excluded_despite_puc_assignment": 1,
     "puc_379_obvious_non_lubricant_material_excluded_despite_puc_assignment": 6,
+    "puc_380_strict_mold_release_name_or_reviewed_assignment_filter": 90,
     "puc_396_obvious_non_lubricant_material_excluded_despite_puc_assignment": 1,
     "puc_398_obvious_non_lubricant_material_excluded_despite_puc_assignment": 2,
     "puc_92_cleaner_without_lubricant_or_technical_fluid_context_excluded": 2
   },
-  "normalized_output_sha256": "febed70610c64160f620df2d04de32e34dd37db00986c931bcca57fb5fef3ecd",
+  "normalized_output_sha256": "75f5b4547e1f6f2c2f5fe0b5e0d4908d1a0de1d02bc1640dc4111c3560db4251",
   "grain_note": "One row is a conservative manufacturer/brand + formulation name + professional family identity; package suffixes and exact repeated EPA product records are merged with all EPA product IDs retained.",
   "lifecycle_note": "CPDat mixes historical and current source documents and does not assert current market availability. No row is promoted to an active offer.",
   "quality_note": "EPA states that ChemExpo data are compiled from public sources and are not reviewed by EPA. Exact PUC evidence, curation method and direct product cards are retained; broad categories use explicit inclusion filters."
