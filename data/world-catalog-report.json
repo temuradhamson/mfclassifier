@@ -3,7 +3,7 @@
   "run_id": "seed-2026-07-21",
   "snapshot_date": "2026-07-21",
   "status": "seed_only_world_catalog_incomplete",
-  "input_rows": 31290,
+  "input_rows": 43916,
   "normalized_input_sha256": "819d11779ffccddf9683a9b18a70e39bd5a1b8d72d9811fb5bb46d136b0f8073",
   "jaso_normalized_input_sha256": "b664fea5aee78de7303c33bf13d3c9ac26c8779b78beac24c54295b4d58603d3",
   "official_licensed_input_sha256": "533183ffbc755268ef12b54a556d1f3ea78db4fc80b564e12c391a10a8e2075e",
@@ -18,6 +18,7 @@
   "liqui_moly_2020_input_sha256": "784ea162ebb0981415b285237c7dfbf7a8af92cb5c04f08ae98e98d354714c03",
   "liqui_moly_current_input_sha256": "3203df17a7a098ecc0ebafbcba05c808b92ff4d1fd5af3bfa35a33cdebb94ca6",
   "anp_brazil_input_sha256": "7b9774a63691395ca4fe472f9e6d199ba6931cc8a5bcf53adcc41cbbca50add2",
+  "indonesia_npt_input_sha256": "bafa96ca274c28f204d4516e6f9b7c2adbe5fc858407d2a5460afbf5e9c57c69",
   "fuchs_india_input_sha256": "156d97af5c72385cf8e33dbdcebfccc82354624f395956a9451b4788b28fad49",
   "fuchs_us_input_sha256": "1d465bc588b31b578cd819902d5131c1e750c00d38bdfb627a803db77e6909d3",
   "fuchs_germany_input_sha256": "401b13d682aea8b3da0a6f9316b38caac989ac4f8ec974265d6be5809cb848f7",
@@ -32,19 +33,19 @@
   "fuchs_czech_input_sha256": "01a9bb43179907ea0fd9a633f9642bbe672b91247a0854bad14aa9fd3d9dfc97",
   "fuchs_mexico_input_sha256": "1e0b40f59b811e28e52742cf6636eda5e89bb326fea60b55f903c76095772ff8",
   "fuchs_south_africa_input_sha256": "fe9dd647609f1e93e516a93ff9afc7dbfc2f65965e773409bdd752b5cd0a1f6d",
-  "canonical_rows": 31289,
-  "brands": 2060,
+  "canonical_rows": 43915,
+  "brands": 2411,
   "families": {
-    "C": 133,
-    "E": 10,
-    "G": 1748,
-    "H": 872,
-    "I": 1080,
-    "M": 16356,
-    "S": 1888,
-    "T": 6934,
-    "TF": 2235,
-    "U": 33
+    "C": 1165,
+    "E": 24,
+    "G": 3604,
+    "H": 2028,
+    "I": 2159,
+    "M": 20474,
+    "S": 2143,
+    "T": 9741,
+    "TF": 2274,
+    "U": 303
   },
   "project_source_rows": 443,
   "legacy_rows_needing_evidence": 88,
@@ -53,9 +54,13 @@
   "official_licensed_registry_rows": 3037,
   "official_licensed_source_rows": 3037,
   "official_government_program_rows": 892,
-  "official_government_regulatory_registry_rows": 12664,
+  "official_government_regulatory_registry_rows": 25239,
   "usda_biopreferred_source_rows": 892,
   "anp_brazil_source_rows": 12664,
+  "indonesia_npt_source_rows": 12626,
+  "indonesia_npt_rows_with_registration_value": 12575,
+  "indonesia_npt_rows_with_source_data_issue": 51,
+  "official_government_registry_source_data_issue_rows": 51,
   "official_oem_approval_rows": 5475,
   "official_manufacturer_catalog_rows": 4971,
   "official_oem_service_recommendation_rows": 30,
@@ -162,8 +167,8 @@
   "archived_offers": 1419,
   "duplicate_decisions": {
     "merged": 1,
-    "keep_separate_specification_conflict": 6924,
-    "review_cross_source_identity": 1382,
+    "keep_separate_specification_conflict": 7910,
+    "review_cross_source_identity": 1391,
     "review_brand_alias_identity": 2,
     "review_liqui_moly_multi_registry_identity": 49,
     "review_liqui_moly_current_multiple_historical_candidates": 4,
@@ -171,8 +176,9 @@
     "keep_separate_fuchs_market_family_conflict": 354
   },
   "quality_issues": {
-    "professional_key_incomplete": 2354,
-    "classification_family_conflict": 214
+    "professional_key_incomplete": 7256,
+    "classification_family_conflict": 214,
+    "source_registration_number_missing": 51
   },
   "bulk_sources_allowed": [
     "user-supplied-chilon-2026",
@@ -214,7 +220,8 @@
     "FUCHS_CZECH_PRODUCT_FINDER",
     "FUCHS_MEXICO_PRODUCT_FINDER",
     "FUCHS_SOUTH_AFRICA_PRODUCT_FINDER",
-    "ANP_BRAZIL_LUBRICANT_REGISTRY"
+    "ANP_BRAZIL_LUBRICANT_REGISTRY",
+    "INDONESIA_NPT_LUBRICANT_REGISTRY"
   ],
   "bulk_sources_blocked": [
     "totalenergies-global",

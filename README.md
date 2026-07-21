@@ -58,7 +58,7 @@ python3 tools/build_analytics_demo.py \
 
 ## Мировой каталог и расширение ЕНКТ
 
-Отдельный provenance-aware слой содержит 31 289 канонических продуктовых строк
+Отдельный provenance-aware слой содержит 43 915 канонических продуктовых строк
 на срез 21.07.2026. В него уже входят проектные источники, AIChilon, официальные
 реестры JASO, GM dexos, NMMA, NLGI, ZF TE-ML, Allison TES, Driventic DIWA,
 Mercedes-Benz Trucks DTFR, Mercedes-Benz BeVo, официальные каталоги Volvo
@@ -66,7 +66,11 @@ Genuine и четырнадцати рынков FUCHS, исторический
 текущий LIQUI MOLY OpenAPI 2026, действующие рекомендации MAN, USDA BioPreferred
 и открытый API EU Ecolabel. Слой также включает 12 664 строки
 продукта-класса-вязкости из еженедельного
-открытого государственного реестра масел и смазок ANP Бразилии. Один
+открытого государственного реестра масел и смазок ANP Бразилии, а также
+12 626 опубликованных товарных строк государственного перечня NPT Индонезии
+2021–2025. В индонезийском срезе 12 575 строк содержат номер NPT, а 51 строка
+с ошибочным заполнением государственного источника сохранена с явным флагом и
+не выдаётся за подтверждённую регистрацию. Один
 регистрационный номер ANP может соответствовать нескольким вязкостным или
 эксплуатационным исполнениям, поэтому они не схлопываются в одну строку.
 Это проверенный растущий seed, а не заявление о полном мировом охвате;
@@ -86,8 +90,12 @@ Genuine и четырнадцати рынков FUCHS, исторический
 - `data/anp-brazil-lubricant-products.jsonl` — 12 664 действующих
   регистрационных продукта/града ANP с назначением, SAE/ISO/NLGI, уровнем
   свойств, составом и provenance исходных строк;
+- `data/indonesia-npt-lubricant-products.jsonl` — 12 626 опубликованных
+  строк NPT с компанией, товаром, сроком, страницей, техническими признаками и
+  отдельными статусами качества источника; active/expired является вычисленной
+  оценкой по месяцу окончания, а не live-подтверждением;
 - `deliverables/World_lubricants_catalog_seed.xlsx` — проверяемая выгрузка;
-- `deliverables/Global_lubricants_catalog_registry.xlsx` — реестр 57 источников
+- `deliverables/Global_lubricants_catalog_registry.xlsx` — реестр 58 источников
   и статусы допуска;
 - `deliverables/ENKT_GSM_extension_pilot.xlsx` — 171 пилотный технический
   профиль и предложение по пятизначному суффиксу ЕНКТ.
@@ -103,6 +111,8 @@ python3 tools/ingest_mercedes_dtfr_approved_fluids.py
 python3 tools/ingest_mercedes_bevo_approved_fluids.py
 python3 tools/ingest_volvo_genuine_fluids.py
 python3 tools/ingest_man_service_products.py
+python3 tools/ingest_anp_lubricant_registry.py
+python3 tools/ingest_indonesia_npt_registry.py
 python3 tools/ingest_fuchs_india_catalog.py
 python3 tools/ingest_fuchs_us_catalog.py
 python3 tools/ingest_fuchs_germany_catalog.py
@@ -119,7 +129,6 @@ python3 tools/ingest_fuchs_mexico_catalog.py
 python3 tools/ingest_fuchs_south_africa_catalog.py
 python3 tools/ingest_liqui_moly_2020_catalog.py
 python3 tools/ingest_liqui_moly_current_catalog.py
-python3 tools/ingest_anp_lubricant_registry.py
 python3 tools/build_world_catalog_seed.py
 python3 tools/verify_world_catalog.py
 ```

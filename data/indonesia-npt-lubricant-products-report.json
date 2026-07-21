@@ -1,0 +1,206 @@
+{
+  "classification_basis": {
+    "npt_class_A": 145,
+    "npt_class_C": 589,
+    "npt_class_D": 7,
+    "npt_class_E": 2761,
+    "npt_class_F": 274,
+    "npt_class_G": 1033,
+    "npt_class_H": 678,
+    "npt_class_I": 26,
+    "npt_class_K": 47,
+    "npt_class_M": 566,
+    "npt_class_P": 293,
+    "npt_class_R": 1458,
+    "npt_class_S": 194,
+    "npt_class_T": 194,
+    "npt_class_W": 9,
+    "npt_class_X": 1,
+    "product_keyword_compressor_or_refrigeration": 169,
+    "product_keyword_electrical_insulating": 14,
+    "product_keyword_engine": 1348,
+    "product_keyword_grease": 823,
+    "product_keyword_hydraulic": 478,
+    "product_keyword_technical_fluid": 39,
+    "product_keyword_transmission": 1349,
+    "product_keyword_turbine": 76,
+    "unresolved_name_and_npt_class": 55
+  },
+  "families": {
+    "C": 1032,
+    "E": 14,
+    "G": 1856,
+    "H": 1156,
+    "I": 1079,
+    "M": 4118,
+    "S": 255,
+    "T": 2807,
+    "TF": 39,
+    "U": 270
+  },
+  "grain_note": "One output row is one company + product name + published NPT cell + PDF position. Colliding NPT values are intentionally kept separate for review.",
+  "lifecycle_assessments": {
+    "expired_by_expiry_date": 4242,
+    "potentially_active_by_expiry_date": 8332,
+    "source_expiry_error": 1,
+    "source_placeholder_registration_unverified": 51
+  },
+  "lifecycle_note": "Potentially active/expired is an inference from the published expiry month against the snapshot date, not confirmation from the live search form. Expired rows remain as historical product evidence.",
+  "normalized_output_sha256": "bafa96ca274c28f204d4516e6f9b7c2adbe5fc858407d2a5460afbf5e9c57c69",
+  "npt_class_codes": {
+    "A": 147,
+    "C": 773,
+    "D": 7,
+    "E": 4206,
+    "F": 281,
+    "G": 1850,
+    "H": 1144,
+    "I": 28,
+    "K": 47,
+    "M": 576,
+    "P": 312,
+    "R": 2702,
+    "S": 197,
+    "T": 261,
+    "W": 9,
+    "X": 1,
+    "unparsed": 34
+  },
+  "published_product_rows": 12626,
+  "quality_note": "All named product rows are retained. Rows whose NPT cell says CEK INPUTAN DATA have no external NPT code and carry an explicit source-data-quality status.",
+  "registration_number_collision_details": {
+    "CQ097E3004010926": [
+      {
+        "company": "PT ABADI KOKOH INSANI",
+        "product_name": "MIYAKO SAE 40 API CF/SF",
+        "source_pdf_page": 1
+      },
+      {
+        "company": "PT ABADI KOKOH INSANI",
+        "product_name": "PETROMAX SAE 40 API CF/SF",
+        "source_pdf_page": 1
+      }
+    ],
+    "EA156S3004610725": [
+      {
+        "company": "PT CIPTA GRIA PARAMITA",
+        "product_name": "S.O FLUSHING 46",
+        "source_pdf_page": 35
+      },
+      {
+        "company": "PT CIPTA GRIA PARAMITA",
+        "product_name": "S.O FLUSHING OIL 46",
+        "source_pdf_page": 35
+      }
+    ],
+    "EA157S3003210725": [
+      {
+        "company": "PT CIPTA GRIA PARAMITA",
+        "product_name": "S.O FLUSHING 32",
+        "source_pdf_page": 35
+      },
+      {
+        "company": "PT CIPTA GRIA PARAMITA",
+        "product_name": "S.O FLUSHING OIL 32",
+        "source_pdf_page": 35
+      }
+    ],
+    "FJ007C1005710725": [
+      {
+        "company": "PT INDO KOMPRESIGMA",
+        "product_name": "KAESAR SIGMA FLUID S-570 (ISO 57 46), ISO VG 57",
+        "source_pdf_page": 77
+      },
+      {
+        "company": "PT INDO KOMPRESIGMA",
+        "product_name": "KAESER SIGMA FLUID S-570 (ISO 57 46)",
+        "source_pdf_page": 77
+      }
+    ],
+    "FJ008G2NNN310725": [
+      {
+        "company": "PT INDO KOMPRESIGMA",
+        "product_name": "KAESAR GREASE UNIREX N3, NLGI 3",
+        "source_pdf_page": 76
+      },
+      {
+        "company": "PT INDO KOMPRESIGMA",
+        "product_name": "KAESER GREASE UNIREX N3 NLGI 3",
+        "source_pdf_page": 77
+      }
+    ],
+    "GGM050R7809010428": [
+      {
+        "company": "PT GANI DISTRIBUSI LUBRINDO",
+        "product_name": "Euro 1 GX5 SAE 80W-90 API GL-5",
+        "source_pdf_page": 64
+      },
+      {
+        "company": "PT GANI DISTRIBUSI LUBRINDO",
+        "product_name": "Euro 1 GX5 SAE 85W-140 API GL-5",
+        "source_pdf_page": 64
+      }
+    ],
+    "NNN001M2000011126": [
+      {
+        "company": "PT AMER LUBRICANTS INDONESIA",
+        "product_name": "AMER DRAWING LUBRICANT S590",
+        "source_pdf_page": 8
+      },
+      {
+        "company": "PT AMER LUBRICANTS INDONESIA",
+        "product_name": "AMER S590",
+        "source_pdf_page": 8
+      }
+    ],
+    "NNN006H2004611126": [
+      {
+        "company": "PT AMER LUBRICANTS INDONESIA",
+        "product_name": "AMER FIRE RESISTANT FLUID HFC46",
+        "source_pdf_page": 8
+      },
+      {
+        "company": "PT AMER LUBRICANTS INDONESIA",
+        "product_name": "AMER HFC46",
+        "source_pdf_page": 8
+      }
+    ],
+    "QQA012D1000010128": [
+      {
+        "company": "PT CLP INDONESIA",
+        "product_name": "SHL FOUNT CUT 2228",
+        "source_pdf_page": 37
+      },
+      {
+        "company": "PT CLP INDONESIA",
+        "product_name": "SHL FOUNT CUT 2228B",
+        "source_pdf_page": 37
+      }
+    ],
+    "QQA013A1000010128": [
+      {
+        "company": "PT CLP INDONESIA",
+        "product_name": "SHL SAMLEX HP 5025V",
+        "source_pdf_page": 37
+      },
+      {
+        "company": "PT CLP INDONESIA",
+        "product_name": "SHL SAMLEX HP 502V",
+        "source_pdf_page": 37
+      }
+    ]
+  },
+  "registration_number_collisions": 10,
+  "rights_note": "The Ministry publishes the PDF under Informasi Publik. Only normalized factual table fields are republished with attribution; document layout and narrative expression are omitted.",
+  "rows_with_registration_value": 12575,
+  "rows_with_source_placeholder_no_registration_number": 51,
+  "schema_version": 1,
+  "snapshot_date": "2026-07-21",
+  "source_document_date": "2025-08-07",
+  "source_page_url": "https://migas.esdm.go.id/daftar-umum-pelumas",
+  "source_pdf_pages": 211,
+  "source_sha256": "62e364f25ff55405ad045a2b9f800015f40ccd6d673925fef1ae041ed09b87e5",
+  "source_url": "https://migas.esdm.go.id/cms/uploads/informasi-publik/Daftar%20Umum%20Pelumas/Daftar%20Umum%20Pelumas%202021%20-%202025.pdf",
+  "status": "official_public_government_registry_snapshot_normalized",
+  "unique_registration_numbers": 12565
+}

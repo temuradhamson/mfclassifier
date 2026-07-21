@@ -622,6 +622,21 @@
       "notes": "Еженедельный государственный CSV. 14 960 исходных строк сведены к 12 664 строкам продукта-класса-вязкости; 2 296 повторных вхождений объединены. Сохранены регистрация, держатель, производитель, назначение, SAE/ISO/NLGI, уровень свойств, состав и фасовки; narrative OBS не переиздаётся."
     },
     {
+      "source_id": "INDONESIA_NPT_LUBRICANT_REGISTRY",
+      "title": "Indonesia General List of Lubricants (NPT) 2021-2025",
+      "owner": "Directorate General of Oil and Gas, Ministry of Energy and Mineral Resources of Indonesia",
+      "source_type": "official_public_government_registry_pdf",
+      "source_locator": "data/indonesia-npt-lubricant-products.jsonl",
+      "source_url": "https://migas.esdm.go.id/cms/uploads/informasi-publik/Daftar%20Umum%20Pelumas/Daftar%20Umum%20Pelumas%202021%20-%202025.pdf",
+      "terms_url": "https://migas.esdm.go.id/daftar-umum-pelumas",
+      "source_sha256": "bafa96ca274c28f204d4516e6f9b7c2adbe5fc858407d2a5460afbf5e9c57c69",
+      "access_status": "public_government_information_factual_fields_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "normalized_factual_records_with_attribution",
+      "observed_count": 12626,
+      "notes": "Официальный перечень NPT на 211 страницах, опубликованный в разделе Informasi Publik. Сохранены только факты таблицы: компания, продукт, NPT, срок, страница и вычисленные технические признаки. 12 575 строк содержат NPT; 51 строка с CEK INPUTAN DATA сохранена с явным флагом ошибки источника. Статус по сроку — вычисленная оценка, не результат live-проверки."
+    },
+    {
       "source_id": "deutz-dqc-release-lists",
       "title": "DEUTZ DQC Oil and Coolant Release Lists",
       "owner": "DEUTZ AG",
