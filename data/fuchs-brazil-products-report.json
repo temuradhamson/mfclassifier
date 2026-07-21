@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-07-21",
+  "source_id": "FUCHS_BRAZIL_PRODUCT_FINDER",
+  "source_url": "https://www.fuchs.com/br/en/products/service-links/product-finder/",
+  "imprint_url": "https://www.fuchs.com/br/en/imprint/",
+  "source_html_sha256": "fbeb69b0def28460c034c34680f1735e9ae57021c85f9b11c052ab1f417d820f",
+  "imprint_html_sha256": "6274f31dbf2e8b40657909e76438e2b4a95b5282765857e4aba7883a4944e157",
+  "embedded_source_rows": 213,
+  "products": 182,
+  "source_series_rows_excluded": 30,
+  "equipment_rows_excluded": 0,
+  "placeholder_rows_excluded": 0,
+  "duplicate_source_occurrences_merged": 1,
+  "families": {
+    "C": 4,
+    "G": 68,
+    "H": 13,
+    "I": 2,
+    "M": 8,
+    "S": 17,
+    "T": 37,
+    "TF": 33
+  },
+  "brand_lines": 22,
+  "compound_designation_review_rows": 5,
+  "classification_basis": {
+    "explicit_product_line_and_application": 1,
+    "industrial_product_group": 1,
+    "multifunctional_product_groups": 11,
+    "product_group": 62,
+    "product_group_or_explicit_product_form": 68,
+    "special_product_group": 6,
+    "technical_fluid_product_group": 33
+  },
+  "normalized_output_sha256": "4554ef1b651617a4a810d945bc519bed1e809ace1cda4246d6b63c7fff99affc",
+  "rights_review": "The official imprint permits use, copying and distribution for informational purposes within an organisation when the copyright notice is retained, and prohibits commercial use. Only attributed factual fields are republished; marketing descriptions are excluded and represented only by SHA-256 evidence hashes.",
+  "publication_scope": "Product identity, region, group, specifications, approvals, recommendations and derived technical fields; no marketing descriptions or page layout."
+}

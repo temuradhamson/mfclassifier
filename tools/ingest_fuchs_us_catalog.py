@@ -33,6 +33,7 @@ def ingest_catalog(
     *, out: Path, report_path: Path, source_url: str, imprint_url: str,
     source_id: str, record_prefix: str, manufacturer: str, market: str,
     expected_embedded: int, expected_products: int,
+    snapshot_date: str = SNAPSHOT_DATE,
     rights_review: str = "Only factual fields are republished with attribution. Marketing descriptions are excluded and represented only by SHA-256 evidence hashes; the applicable imprint limits copying of documentation for commercial use.",
 ) -> dict:
     payload = fetch(source_url)
@@ -108,7 +109,7 @@ def ingest_catalog(
             "source_description_sha256": sorted({hashlib.sha256((row.get("description") or "").encode()).hexdigest() for row in rows}),
             "source_urls": ["https://www.fuchs.com" + row["url"] for row in rows],
             "source_url": source_url,
-            "snapshot_date": SNAPSHOT_DATE,
+            "snapshot_date": snapshot_date,
             "grain_warning": "compound_designation_review" if "/" in primary["title"] else "",
         })
 
@@ -119,7 +120,7 @@ def ingest_catalog(
     out.write_text("".join(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n" for row in records), encoding="utf-8")
     report = {
         "schema_version": 1,
-        "snapshot_date": SNAPSHOT_DATE,
+        "snapshot_date": snapshot_date,
         "source_id": source_id,
         "source_url": source_url,
         "imprint_url": imprint_url,

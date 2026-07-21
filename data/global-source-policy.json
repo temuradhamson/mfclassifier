@@ -559,6 +559,34 @@
       "notes": "Из 864 embedded rows исключены 94 серии и 6 единиц оборудования; 8 повторных source-вхождений объединены. Получено 756 конкретных продуктов без fallback-классификаций."
     },
     {
+      "source_id": "FUCHS_BRAZIL_PRODUCT_FINDER",
+      "title": "FUCHS Brazil Product Finder",
+      "owner": "FUCHS LUBRIFICANTES DO BRASIL LTDA",
+      "source_type": "official_manufacturer_embedded_product_catalog",
+      "source_locator": "data/fuchs-brazil-products.jsonl",
+      "source_url": "https://www.fuchs.com/br/en/products/service-links/product-finder/",
+      "terms_url": "https://www.fuchs.com/br/en/imprint/",
+      "source_sha256": "4554ef1b651617a4a810d945bc519bed1e809ace1cda4246d6b63c7fff99affc",
+      "access_status": "public_full_catalog_embedded_in_official_page",
+      "bulk_ingest_allowed": true,
+      "publication_status": "informational_factual_fields_only_with_attribution_no_marketing_descriptions",
+      "observed_count": 182,
+      "notes": "Из 213 embedded rows исключены 30 строк серий и объединено одно повторное source-вхождение. Получено 182 конкретных продукта. Официальный imprint разрешает использование, копирование и распространение документации для информационных целей внутри организации при сохранении copyright notice и запрещает коммерческое использование; описания не публикуются."
+    },
+    {
+      "source_id": "fuchs-benelux",
+      "title": "FUCHS Belgium / Benelux Product Finder",
+      "owner": "FUCHS LUBRICANTS BENELUX NV/SA",
+      "source_type": "website_database",
+      "source_url": "https://www.fuchs.com/be/en/products/service-links/product-finder/",
+      "terms_url": "https://www.fuchs.com/be/en/imprint/",
+      "access_status": "written_permission_required",
+      "bulk_ingest_allowed": false,
+      "publication_status": "count_only_until_permission",
+      "observed_count": 591,
+      "notes": "На официальной странице наблюдались 673 embedded rows и 591 конкретный продукт после нормализации, но imprint запрещает копирование, воспроизведение и публикацию материалов, кроме личной некоммерческой загрузки. Продуктовые строки не импортированы."
+    },
+    {
       "source_id": "totalenergies-global",
       "title": "TotalEnergies Lubricants Catalog",
       "owner": "TotalEnergies Lubrifiants S.A.",
