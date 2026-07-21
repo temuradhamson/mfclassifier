@@ -307,6 +307,21 @@
       "notes": "Официальная 150-страничная рекомендация MAN, выпуск апрель 2026: 32 конкретных масла, смазки, ОЖ и технические жидкости / 33 вхождения. Стандарты без коммерческого продукта, общие ISO VG-классы и серия Chevron без конкретной градации исключены. Статус строки означает текущую рекомендацию или предписание MAN для узла применения, но не подменяется утверждением о наличии отдельного формального approval letter."
     },
     {
+      "source_id": "LIQUI_MOLY_2020_PRODUCT_CATALOG",
+      "title": "LIQUI MOLY official English product catalog 2020",
+      "owner": "LIQUI MOLY GmbH",
+      "source_type": "official_manufacturer_downloadable_pdf_catalog",
+      "source_locator": "data/liqui-moly-2020-products.jsonl",
+      "source_url": "https://www.liqui-moly.com/fileadmin/user_upload/Downloads/Technische_Informationen/Kataloge_und_Prospekte/EN/5603.pdf",
+      "terms_url": "https://www.liqui-moly.com/en/gb/product-catalog-p002680.html",
+      "source_sha256": "784ea162ebb0981415b285237c7dfbf7a8af92cb5c04f08ae98e98d354714c03",
+      "access_status": "public_official_download_document",
+      "bulk_ingest_allowed": true,
+      "publication_status": "historical_factual_fields_only_with_attribution_no_marketing_descriptions",
+      "observed_count": 419,
+      "notes": "Официальный 204-страничный англоязычный каталог создан 23.04.2020. Из 72 релевантных страниц получено 419 продуктов, 1 482 уникальных part number и 413 продуктов с фасовочными строками. Текущий lifecycle не предполагается: каждая позиция помечена historical_catalog_current_status_unverified."
+    },
+    {
       "source_id": "FUCHS_INDIA_PRODUCT_FINDER",
       "title": "FUCHS India Product Finder",
       "owner": "FUCHS LUBRICANTS (INDIA) PVT. LTD.",
@@ -528,6 +543,32 @@
       "publication_status": "count_only_until_permission",
       "observed_count": 1246,
       "notes": "GTCU section 4.3 prohibits extraction or reuse of a substantial part of the database. No bulk crawl until written permission or licensed feed."
+    },
+    {
+      "source_id": "molykote-dupont",
+      "title": "MOLYKOTE Specialty Lubricants Product Finder",
+      "owner": "DuPont de Nemours, Inc.",
+      "source_type": "website_database",
+      "source_url": "https://www.dupont.com/solution-finder/results.html?BU=molykote",
+      "terms_url": "https://www.dupont.com/content/dupont/amer/us/en/corporate-homepage/legal-notices-and-terms-of-use.html",
+      "access_status": "written_permission_or_licensed_feed_required",
+      "bulk_ingest_allowed": false,
+      "publication_status": "count_only_until_permission",
+      "observed_count": 170,
+      "notes": "Официальный finder показывает 170 результатов и богатые технические атрибуты, но действующие Terms запрещают page-scrape и копирование материалов без разрешения. Автоматический импорт не выполняется."
+    },
+    {
+      "source_id": "mobil-industrial",
+      "title": "Mobil Industrial Lubricants Product Search",
+      "owner": "Exxon Mobil Corporation",
+      "source_type": "website_database",
+      "source_url": "https://www.mobil.com/en/lubricants/for-businesses/industrial/lubricants/search",
+      "terms_url": "https://corporate.exxonmobil.com/global-legal-pages/terms-and-conditions",
+      "access_status": "written_permission_or_licensed_feed_required",
+      "bulk_ingest_allowed": false,
+      "publication_status": "discovery_only_until_permission",
+      "observed_count": null,
+      "notes": "Официальный поиск поддерживает серии, спецификации, применения и OEM, однако Terms ExxonMobil запрещают bots. Нужен разрешённый feed или письменное разрешение."
     },
     {
       "source_id": "shell-epc",

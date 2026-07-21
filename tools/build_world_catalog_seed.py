@@ -39,6 +39,7 @@ MERCEDES_DTFR_JSONL = ROOT / "data" / "mercedes-dtfr-approved-fluids.jsonl"
 MERCEDES_BEVO_JSONL = ROOT / "data" / "mercedes-bevo-approved-fluids.jsonl"
 VOLVO_GENUINE_JSONL = ROOT / "data" / "volvo-genuine-fluids.jsonl"
 MAN_SERVICE_JSONL = ROOT / "data" / "man-service-products.jsonl"
+LIQUI_MOLY_2020_JSONL = ROOT / "data" / "liqui-moly-2020-products.jsonl"
 FUCHS_INDIA_JSONL = ROOT / "data" / "fuchs-india-products.jsonl"
 FUCHS_US_JSONL = ROOT / "data" / "fuchs-us-products.jsonl"
 FUCHS_GERMANY_JSONL = ROOT / "data" / "fuchs-germany-products.jsonl"
@@ -712,6 +713,50 @@ def man_service_record(row: dict) -> dict:
     return record
 
 
+def liqui_moly_catalog_record(row: dict) -> dict:
+    technical = row["technical"]
+    generic = {
+        "id": row["source_record_id"], "source_number": row["source_record_id"],
+        "brand": row["brand"], "name": row["product_name"],
+        "category": "Исторический официальный каталог LIQUI MOLY 2020",
+        "category_code": row["family_code"], "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": (technical.get("sae_grades") or [""])[0],
+        "api_class": "; ".join(technical.get("api", []) + technical.get("acea", [])),
+        "viscosity": (technical.get("iso_vg") or [""])[0],
+        "source": "LIQUI_MOLY_2020_PRODUCT_CATALOG",
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"], "brand": row["brand"], "market": row["market"],
+        "source_id": "LIQUI_MOLY_2020_PRODUCT_CATALOG", "source_record_id": row["source_record_id"],
+        "source_row": None, "evidence_status": "official_manufacturer_product_catalog",
+        "lifecycle_status": row["lifecycle_status"], "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update({
+        "technical": technical, "document_date": row["document_date"], "source_pages": row["source_pages"],
+        "part_numbers": row["part_numbers"], "package_rows": row["package_rows"],
+        "source_url": row["source_url"], "catalog_page_url": row["catalog_page_url"],
+    })
+    record["canonical_key"] += f"|liqui_moly_2020_record:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    for index, part_number in enumerate(row["part_numbers"], 1):
+        record["codes"][f"liqui_moly_part_number_{index}"] = {"system": "LIQUI_MOLY_PART_NUMBER", "value": part_number, "source_id": "LIQUI_MOLY_2020_PRODUCT_CATALOG", "status": "historical_official_catalog"}
+    return record
+
+
+def merge_liqui_moly_evidence(target: dict, source_record: dict, raw: dict) -> None:
+    target["specifications"].setdefault("liqui_moly_historical_catalog_entries", []).append({
+        "document_date": raw["document_date"], "pages": raw["source_pages"], "technical": raw["technical"],
+        "part_numbers": raw["part_numbers"], "package_rows": raw["package_rows"], "source_url": raw["source_url"],
+    })
+    for key, code in source_record["codes"].items():
+        target["codes"][f"liqui_moly_{raw['source_record_id']}_{key}"] = code
+
+
+def liqui_moly_identity_name(value: str) -> str:
+    return re.sub(r"^liqui moly(?: gmbh)?\s+", "", normalize(value)).strip()
+
+
 def brand_tokens_overlap(left: str, right: str) -> bool:
     left_tokens = set(normalize(left).split())
     right_tokens = set(normalize(right).split())
@@ -1167,6 +1212,37 @@ def main() -> None:
             if len(matches) > 1:
                 man_service_review_keys.append((target["canonical_key"], [row["canonical_key"] for row in matches]))
         man_service_product_key[raw["source_record_id"]] = target["canonical_key"]
+    liqui_moly_source_rows = [json.loads(line) for line in LIQUI_MOLY_2020_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    liqui_moly_records = [liqui_moly_catalog_record(row) for row in liqui_moly_source_rows]
+    existing_by_name_family = defaultdict(list)
+    existing_by_name = defaultdict(list)
+    for row in input_records:
+        if brand_tokens_overlap("LIQUI MOLY", row["brand"]):
+            identity_name = liqui_moly_identity_name(row["product_name_raw"])
+            existing_by_name_family[(identity_name, row["family_code"])].append(row)
+            existing_by_name[identity_name].append(row)
+    liqui_moly_product_key = {}
+    liqui_moly_added_rows = liqui_moly_matched_rows = 0
+    liqui_moly_review_keys, liqui_moly_family_conflict_keys = [], []
+    for raw, source_record in zip(liqui_moly_source_rows, liqui_moly_records):
+        name = liqui_moly_identity_name(raw["product_name"])
+        matches = [row for row in existing_by_name_family[(name, raw["family_code"])] if brand_tokens_overlap("LIQUI MOLY", row["brand"])]
+        if len(matches) == 1:
+            target = matches[0]
+            merge_liqui_moly_evidence(target, source_record, raw)
+            liqui_moly_matched_rows += 1
+        else:
+            target = source_record
+            input_records.append(target)
+            existing_by_name_family[(name, raw["family_code"])].append(target)
+            other_family_matches = [row for row in existing_by_name[name] if brand_tokens_overlap("LIQUI MOLY", row["brand"]) and row["family_code"] != raw["family_code"]]
+            existing_by_name[name].append(target)
+            liqui_moly_added_rows += 1
+            if len(matches) > 1:
+                liqui_moly_review_keys.append((target["canonical_key"], [row["canonical_key"] for row in matches]))
+            if other_family_matches:
+                liqui_moly_family_conflict_keys.append((target["canonical_key"], [row["canonical_key"] for row in other_family_matches]))
+        liqui_moly_product_key[raw["source_record_id"]] = target["canonical_key"]
     fuchs_india_source_rows = [json.loads(line) for line in FUCHS_INDIA_JSONL.read_text(encoding="utf-8").splitlines() if line]
     fuchs_india_records = [fuchs_catalog_record(row, "FUCHS_INDIA_PRODUCT_FINDER", "India") for row in fuchs_india_source_rows]
     existing_by_name_family = defaultdict(list)
@@ -1708,6 +1784,16 @@ def main() -> None:
                 "score": 0.99,
                 "decision": "review_brand_alias_identity",
             })
+    for source_key, match_keys in liqui_moly_review_keys:
+        source_product = canonical_by_key[source_key]
+        for match_key in match_keys:
+            match_product = canonical_by_key[match_key]
+            candidates.append({"product_id_a": match_product["product_id"], "product_id_b": source_product["product_id"], "reason": "liqui_moly_2020_exact_product_name_and_family_with_multiple_existing_registry_records", "score": 0.995, "decision": "review_liqui_moly_multi_registry_identity"})
+    for source_key, match_keys in liqui_moly_family_conflict_keys:
+        source_product = canonical_by_key[source_key]
+        for match_key in match_keys:
+            match_product = canonical_by_key[match_key]
+            candidates.append({"product_id_a": match_product["product_id"], "product_id_b": source_product["product_id"], "reason": "same_liqui_moly_product_name_but_conflicting_professional_family", "score": 0.70, "decision": "keep_separate_liqui_moly_family_conflict"})
     for source_key, match_keys in fuchs_india_review_keys:
         source_product = canonical_by_key[source_key]
         for match_key in match_keys:
@@ -2064,6 +2150,13 @@ def main() -> None:
         if link_key not in source_link_keys:
             source_links.append(link)
             source_link_keys.add(link_key)
+    for raw in liqui_moly_source_rows:
+        target = canonical_by_key[liqui_moly_product_key[raw["source_record_id"]]]
+        link = {"product_id": target["product_id"], "source_id": "LIQUI_MOLY_2020_PRODUCT_CATALOG", "source_record_id": raw["source_record_id"], "source_row": None, "relation": "historical_official_manufacturer_product_catalog"}
+        link_key = (link["product_id"], link["source_id"], link["source_record_id"])
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     for raw in fuchs_india_source_rows:
         target = canonical_by_key[fuchs_india_product_key[raw["source_record_id"]]]
         link = {
@@ -2244,6 +2337,7 @@ def main() -> None:
         "mercedes_bevo_input_sha256": hashlib.sha256(MERCEDES_BEVO_JSONL.read_bytes()).hexdigest(),
         "volvo_genuine_input_sha256": hashlib.sha256(VOLVO_GENUINE_JSONL.read_bytes()).hexdigest(),
         "man_service_input_sha256": hashlib.sha256(MAN_SERVICE_JSONL.read_bytes()).hexdigest(),
+        "liqui_moly_2020_input_sha256": hashlib.sha256(LIQUI_MOLY_2020_JSONL.read_bytes()).hexdigest(),
         "fuchs_india_input_sha256": hashlib.sha256(FUCHS_INDIA_JSONL.read_bytes()).hexdigest(),
         "fuchs_us_input_sha256": hashlib.sha256(FUCHS_US_JSONL.read_bytes()).hexdigest(),
         "fuchs_germany_input_sha256": hashlib.sha256(FUCHS_GERMANY_JSONL.read_bytes()).hexdigest(),
@@ -2283,6 +2377,9 @@ def main() -> None:
         "man_service_source_rows": len(man_service_source_rows),
         "man_service_products_matched_to_existing": man_service_matched_rows,
         "man_service_products_added": man_service_added_rows,
+        "liqui_moly_2020_source_rows": len(liqui_moly_source_rows),
+        "liqui_moly_2020_products_matched_to_existing": liqui_moly_matched_rows,
+        "liqui_moly_2020_products_added": liqui_moly_added_rows,
         "fuchs_india_source_rows": len(fuchs_india_source_rows),
         "fuchs_india_products_matched_to_existing": fuchs_india_matched_rows,
         "fuchs_india_products_added": fuchs_india_added_rows,
