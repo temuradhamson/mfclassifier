@@ -730,6 +730,21 @@
       "notes": "The 2026-01-31 official CSV contains 240,695 observed data rows although portal metadata reports 99,602. Exact category EL611 selects 21 lubricant rows, normalized to 20 product identities after merging one 20-Liter package occurrence. Business registration numbers, locations and factory identifiers are excluded."
     },
     {
+      "source_id": "KOREA_ECOLABEL_EL509",
+      "title": "Korea Eco-Label certification records — EL509 Vehicle Glass Washer Fluids",
+      "owner": "Korea Environmental Industry & Technology Institute (KEITI)",
+      "source_type": "official_open_government_ecolabel_csv",
+      "source_locator": "data/korea-ecolabel-el509-washer-fluids.jsonl",
+      "source_url": "https://www.data.go.kr/data/15043624/fileData.do",
+      "terms_url": "https://www.data.go.kr/data/15043624/fileData.do",
+      "source_sha256": "cc7835c3605592ba5b4aeede42e60cde5fe3c336f152b5a96e32037f3ca81aab",
+      "access_status": "public_official_csv_no_login_use_restrictions_none",
+      "bulk_ingest_allowed": true,
+      "publication_status": "normalized_factual_certification_records_with_attribution",
+      "observed_count": 9,
+      "notes": "Exact category EL509 selects 11 vehicle glass washer fluid rows, normalized to nine product identities after merging two pairs of 1.5 L/1.8 L model-package occurrences. Business registration numbers, locations and factory identifiers are excluded."
+    },
+    {
       "source_id": "JAPAN_ECOMARK_CATEGORY_110",
       "title": "Japan Eco Mark Category 110 Biodegradable Lubricating Oil",
       "owner": "Japan Environment Association Eco Mark Office",

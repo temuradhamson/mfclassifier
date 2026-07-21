@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Download and normalize Korea Eco-Label EL611 lubricant records."""
+"""Download and normalize Korea Eco-Label lubricant/technical-fluid records."""
 
 from __future__ import annotations
 
@@ -17,6 +17,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "data" / "korea-ecolabel-el611-lubricants.jsonl"
 REPORT = ROOT / "data" / "korea-ecolabel-el611-lubricants-report.json"
+OUTPUT_EL509 = ROOT / "data" / "korea-ecolabel-el509-washer-fluids.jsonl"
+REPORT_EL509 = ROOT / "data" / "korea-ecolabel-el509-washer-fluids-report.json"
 SOURCE_PAGE_URL = "https://www.data.go.kr/data/15043624/fileData.do"
 SOURCE_DOWNLOAD_URL = (
     "https://www.data.go.kr/cmm/cmm/fileDownload.do?"
@@ -24,6 +26,7 @@ SOURCE_DOWNLOAD_URL = (
 )
 DATASET_SNAPSHOT_DATE = "2026-01-31"
 TARGET_CATEGORY = "EL611.윤활유"
+TARGET_CATEGORY_EL509 = "EL509.자동차용 창유리 세정액"
 USER_AGENT = "MFClassifierResearch/1.0 (official-open-data-lubricant-registry)"
 
 
@@ -77,11 +80,15 @@ def main() -> None:
 
     all_rows = 0
     source_rows = []
+    source_rows_el509 = []
     for source_row_number, row in enumerate(reader, 2):
         all_rows += 1
         if clean(row["대상제품군"]) == TARGET_CATEGORY:
             source_rows.append((source_row_number, row))
+        elif clean(row["대상제품군"]) == TARGET_CATEGORY_EL509:
+            source_rows_el509.append((source_row_number, row))
     assert len(source_rows) == 21
+    assert len(source_rows_el509) == 11
 
     grouped: dict[tuple[str, str, str], list[tuple[int, dict]]] = defaultdict(list)
     for source_row_number, row in source_rows:
@@ -150,7 +157,72 @@ def main() -> None:
         "source_count_discrepancy_note": "The portal metadata reports 99,602 rows, while the downloaded 2026-01-31 CSV contains 240,695 data rows; the parser records the observed file count and filters only exact EL611 category rows.",
     }
     REPORT.write_text(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    print(json.dumps({key: report[key] for key in ["source_csv_rows_observed", "source_EL611_rows", "normalized_products", "manufacturers", "families"]}, ensure_ascii=False))
+
+    grouped_el509: dict[tuple[str, str, str], list[tuple[int, dict]]] = defaultdict(list)
+    for source_row_number, row in source_rows_el509:
+        key = (normalize(row["업체명"]), normalize(row["제품명"]), clean(row["인증번호"]))
+        grouped_el509[key].append((source_row_number, row))
+    records_el509 = []
+    for key, occurrences in sorted(grouped_el509.items()):
+        _, first = occurrences[0]
+        product_name = clean(first["제품명"])
+        manufacturer = clean(first["업체명"])
+        certificate = clean(first["인증번호"])
+        models = sorted({clean(row["세부 모델(품번)명"]) for _, row in occurrences if clean(row["세부 모델(품번)명"])})
+        packages = sorted({match.replace(" ", "")[:-1] + " L" for model in models for match in re.findall(r"\b\d+(?:\.\d+)?\s*L\b", model, re.I)})
+        fingerprint = hashlib.sha256("|".join(key).encode()).hexdigest()[:16]
+        records_el509.append({
+            "source_id": "KOREA_ECOLABEL_EL509",
+            "source_record_id": f"KR-EL509-{certificate}-{fingerprint}",
+            "source_url": SOURCE_PAGE_URL,
+            "dataset_snapshot_date": DATASET_SNAPSHOT_DATE,
+            "market": "Republic of Korea",
+            "product_name": product_name,
+            "source_model_names": models,
+            "manufacturer": manufacturer,
+            "official_category_code": "EL509",
+            "official_category_name": "자동차용 창유리 세정액",
+            "official_use": clean(first["용도"]),
+            "certificate_number": certificate,
+            "initial_certification_date": clean(first["최초인증일"]),
+            "certification_start_date": clean(first["인증시작일"]),
+            "certification_end_date": clean(first["인증종료일"]),
+            "lifecycle_status": "certified_at_official_dataset_snapshot",
+            "family_code": "TF",
+            "classification_basis": "official_EL509_vehicle_glass_washer_fluid_category",
+            "technical": {"iso_vg": [], "nlgi": [], "sae": []},
+            "packages": packages,
+            "source_occurrence_count": len(occurrences),
+            "source_row_numbers": sorted(number for number, _ in occurrences),
+        })
+    assert len(records_el509) == 9
+    output_el509_text = "".join(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n" for row in records_el509)
+    OUTPUT_EL509.write_text(output_el509_text, encoding="utf-8")
+    report_el509 = {
+        "schema_version": 1,
+        "status": "official_open_government_ecolabel_washer_fluids_normalized",
+        "dataset_snapshot_date": DATASET_SNAPSHOT_DATE,
+        "source_page_url": SOURCE_PAGE_URL,
+        "source_download_url": SOURCE_DOWNLOAD_URL,
+        "source_file_sha256": hashlib.sha256(raw).hexdigest(),
+        "normalized_output_sha256": hashlib.sha256(output_el509_text.encode()).hexdigest(),
+        "source_csv_rows_observed": all_rows,
+        "portal_metadata_rows_reported": 99602,
+        "source_EL509_rows": len(source_rows_el509),
+        "normalized_products": len(records_el509),
+        "duplicate_model_package_occurrences_merged": len(source_rows_el509) - len(records_el509),
+        "manufacturers": len({normalize(row["manufacturer"]) for row in records_el509}),
+        "families": {"TF": len(records_el509)},
+        "rights_note": "The official Korean Public Data Portal marks the file as free of use restrictions and available without login.",
+        "privacy_note": "Business registration numbers, headquarters/factory locations and factory identifiers are excluded from the normalized output.",
+        "grain_note": "One row is certificate + manufacturer + normalized product identity. Repeated model rows that differ only by 1.5 L/1.8 L package are merged with models, packages and source rows retained.",
+    }
+    REPORT_EL509.write_text(json.dumps(report_el509, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps({
+        "source_csv_rows_observed": all_rows,
+        "EL611_source_rows": len(source_rows), "EL611_products": len(records),
+        "EL509_source_rows": len(source_rows_el509), "EL509_products": len(records_el509),
+    }, ensure_ascii=False))
 
 
 if __name__ == "__main__":

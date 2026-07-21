@@ -1,0 +1,21 @@
+{
+  "dataset_snapshot_date": "2026-01-31",
+  "duplicate_model_package_occurrences_merged": 2,
+  "families": {
+    "TF": 9
+  },
+  "grain_note": "One row is certificate + manufacturer + normalized product identity. Repeated model rows that differ only by 1.5 L/1.8 L package are merged with models, packages and source rows retained.",
+  "manufacturers": 2,
+  "normalized_output_sha256": "cc7835c3605592ba5b4aeede42e60cde5fe3c336f152b5a96e32037f3ca81aab",
+  "normalized_products": 9,
+  "portal_metadata_rows_reported": 99602,
+  "privacy_note": "Business registration numbers, headquarters/factory locations and factory identifiers are excluded from the normalized output.",
+  "rights_note": "The official Korean Public Data Portal marks the file as free of use restrictions and available without login.",
+  "schema_version": 1,
+  "source_EL509_rows": 11,
+  "source_csv_rows_observed": 240695,
+  "source_download_url": "https://www.data.go.kr/cmm/cmm/fileDownload.do?atchFileId=FILE_000000003599199&fileDetailSn=1&insertDataPrcus=N",
+  "source_file_sha256": "dede842165f1b527b18619732d1ade379d8d3db6ec2d084e151f82f805fb508c",
+  "source_page_url": "https://www.data.go.kr/data/15043624/fileData.do",
+  "status": "official_open_government_ecolabel_washer_fluids_normalized"
+}
