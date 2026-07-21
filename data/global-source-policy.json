@@ -694,6 +694,21 @@
       "notes": "Из 1 074 embedded rows исключены 97 серий и 6 единиц оборудования, объединены 5 повторных вхождений; получено 966 продуктов. Imprint разрешает информационное копирование внутри организации; описания не публикуются."
     },
     {
+      "source_id": "FUCHS_SWITZERLAND_PRODUCT_FINDER",
+      "title": "FUCHS Switzerland Product Finder",
+      "owner": "FUCHS LUBRICANTS SWITZERLAND SA",
+      "source_type": "official_manufacturer_embedded_product_catalog_with_cross_market_taxonomy_reconciliation",
+      "source_locator": "data/fuchs-switzerland-products.jsonl",
+      "source_url": "https://www.fuchs.com/ch/en/products/service-links/product-finder/",
+      "terms_url": "https://www.fuchs.com/ch/en/imprint/",
+      "source_sha256": "12050f7d86c4344bc6254545b35b1637279bf481a7791f91791ed065f9a0c8a3",
+      "access_status": "public_full_catalog_embedded_in_official_page",
+      "bulk_ingest_allowed": true,
+      "publication_status": "informational_factual_fields_only_with_attribution_no_marketing_descriptions",
+      "observed_count": 1464,
+      "notes": "Из 1 466 embedded rows исключены две единицы оборудования. 1 453 продукта имеют точное однозначное совпадение имени с официальным Germany-каталогом; его семейство использовано как reference taxonomy с сохранением исходной Swiss-классификации. Исправлены 203 расхождения и разрешены все 234 fallback-строки; 11 уникальных Swiss-продуктов сохранены по исходной классификации."
+    },
+    {
       "source_id": "fuchs-benelux",
       "title": "FUCHS Belgium / Benelux Product Finder",
       "owner": "FUCHS LUBRICANTS BENELUX NV/SA",

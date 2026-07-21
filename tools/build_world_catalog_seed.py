@@ -78,6 +78,7 @@ FUCHS_ADDITIONAL_EUROPE = [
     ("romania", ROOT / "data" / "fuchs-romania-products.jsonl", "FUCHS_ROMANIA_PRODUCT_FINDER", "Romania"),
     ("austria", ROOT / "data" / "fuchs-austria-products.jsonl", "FUCHS_AUSTRIA_PRODUCT_FINDER", "Austria"),
     ("greece", ROOT / "data" / "fuchs-greece-products.jsonl", "FUCHS_GREECE_PRODUCT_FINDER", "Greece"),
+    ("switzerland", ROOT / "data" / "fuchs-switzerland-products.jsonl", "FUCHS_SWITZERLAND_PRODUCT_FINDER", "Switzerland"),
 ]
 SCHEMA_VERSION = 1
 SNAPSHOT_DATE = "2026-07-21"
@@ -1673,6 +1674,7 @@ def fuchs_catalog_record(row: dict, source_id: str, market_name: str) -> dict:
         "FUCHS_ROMANIA_PRODUCT_FINDER": "fuchs_romania_record",
         "FUCHS_AUSTRIA_PRODUCT_FINDER": "fuchs_austria_record",
         "FUCHS_GREECE_PRODUCT_FINDER": "fuchs_greece_record",
+        "FUCHS_SWITZERLAND_PRODUCT_FINDER": "fuchs_switzerland_record",
     }[source_id]
     record["canonical_key"] += f"|{source_key}:{normalize(row['source_record_id'])}"
     record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
