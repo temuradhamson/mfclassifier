@@ -71,6 +71,10 @@ def classify_family(title: str, paths: list[list[str]], source_text: str) -> tup
         return "M", "explicit_product_line_and_application"
     if re.search(r"^CASSIDA\s+SILICONE FLUID\b", title, re.I):
         return "I", "explicit_product_line_and_application"
+    if re.search(r"^RENOLIN\s+MR\b", title, re.I):
+        return "H", "explicit_product_line_and_application"
+    if primary_brand_prefix(title) == "RENOCLEAN":
+        return "TF", "brand_line_and_explicit_application"
     if "lubricating greases" in path_text or "special greases" in path_text or " pastes" in path_text or "smary" in path_text or re.search(r"\bgrease\b|\bpaste\b", text):
         return "G", "product_group_or_explicit_product_form"
     if "multifunctional fluids (stou)" in path_text or "płyny wielofukcyjne (stou)" in path_text:
@@ -125,11 +129,13 @@ def classify_family(title: str, paths: list[list[str]], source_text: str) -> tup
         return "G", "brand_line_and_explicit_application"
     if re.search(r"\bengine oil\b|(?:oil|lubricant) for [^.]{0,40}engines|olej(?:e)? do silnik|olej silnik|olio (?:per )?motor|olio motore|motori? [24][ -]?tempi|lubrifiant (?:pour )?moteur|moteurs? [24][ -]?temps", text):
         return "M", "explicit_text"
-    if primary_brand_prefix(title) in {"ECOCOOL", "ECOCUT", "FERROFORM", "LUBRODAL", "NEUTRAFILM", "PLANTOCUT", "PLANTOFORM", "RATAK", "RENOCAST", "RENOCLEAN", "RENOFORM", "SAWBAND", "SILKUT", "SOLCENIC", "THERMISOL", "VISCOR", "VITROLIS", "WISURA"}:
+    if primary_brand_prefix(title) in {"ANTICORIT", "ECOCOOL", "ECOCUT", "FERROFORM", "LUBRODAL", "NEUTRAFILM", "PLANTOCUT", "PLANTOFORM", "RATAK", "RENOCAST", "RENOCLEAN", "RENOFORM", "SAWBAND", "SILKUT", "SOLCENIC", "THERMISOL", "TURMOCUT", "VISCOR", "VITROLIS", "WISURA"}:
         return "TF", "brand_line_and_explicit_application"
-    if re.search(r"\bchain (?:oil|lube|lubricant)\b|\brope lubricant\b", text):
+    if primary_brand_prefix(title) == "MOLYPHIDE":
+        return "S", "brand_line_and_explicit_application"
+    if re.search(r"\bchain (?:oil|lube|lubricant)\b", text):
         return "I", "explicit_text"
-    if re.search(r"\bhydraulic\b|olio idraulic|fluido idraulic", text):
+    if re.search(r"\bhydraulic\b", text):
         return "H", "explicit_text"
     if re.search(r"\bshock absorber\b", text):
         return "H", "explicit_text"

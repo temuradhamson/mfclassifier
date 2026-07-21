@@ -472,6 +472,21 @@
       "notes": "Из 281 embedded rows исключены две серии и объединено одно повторное source-вхождение. Получено 278 конкретных продуктов. Официальный imprint разрешает информационное использование внутри организации с сохранением copyright notice и запрещает коммерческое использование; описания не публикуются."
     },
     {
+      "source_id": "FUCHS_CZECH_PRODUCT_FINDER",
+      "title": "FUCHS Czech Republic Product Finder",
+      "owner": "FUCHS OIL CORPORATION (CZ), spol. s r.o.",
+      "source_type": "official_manufacturer_embedded_product_catalog",
+      "source_locator": "data/fuchs-czech-products.jsonl",
+      "source_url": "https://www.fuchs.com/cz/en/products/service-links/product-finder/",
+      "terms_url": "https://www.fuchs.com/cz/en/imprint/",
+      "source_sha256": "01a9bb43179907ea0fd9a633f9642bbe672b91247a0854bad14aa9fd3d9dfc97",
+      "access_status": "public_full_catalog_embedded_in_official_page",
+      "bulk_ingest_allowed": true,
+      "publication_status": "informational_factual_fields_only_with_attribution_no_marketing_descriptions",
+      "observed_count": 1146,
+      "notes": "Из 1 253 embedded rows исключены 98 серий и 6 единиц оборудования; три повторных source-вхождения объединены. Получено 1 146 конкретных продуктов без fallback-классификаций. Спорные межрыночные семейства не склеиваются автоматически."
+    },
+    {
       "source_id": "totalenergies-global",
       "title": "TotalEnergies Lubricants Catalog",
       "owner": "TotalEnergies Lubrifiants S.A.",

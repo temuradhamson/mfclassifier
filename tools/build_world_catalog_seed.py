@@ -50,6 +50,7 @@ FUCHS_FRANCE_JSONL = ROOT / "data" / "fuchs-france-products.jsonl"
 FUCHS_TURKEY_JSONL = ROOT / "data" / "fuchs-turkey-products.jsonl"
 FUCHS_CANADA_JSONL = ROOT / "data" / "fuchs-canada-products.jsonl"
 FUCHS_CHINA_JSONL = ROOT / "data" / "fuchs-china-products.jsonl"
+FUCHS_CZECH_JSONL = ROOT / "data" / "fuchs-czech-products.jsonl"
 SCHEMA_VERSION = 1
 SNAPSHOT_DATE = "2026-07-20"
 
@@ -783,6 +784,7 @@ def fuchs_catalog_record(row: dict, source_id: str, market_name: str) -> dict:
         "FUCHS_TURKEY_PRODUCT_FINDER": "fuchs_turkey_record",
         "FUCHS_CANADA_PRODUCT_FINDER": "fuchs_canada_record",
         "FUCHS_CHINA_PRODUCT_FINDER": "fuchs_china_record",
+        "FUCHS_CZECH_PRODUCT_FINDER": "fuchs_czech_record",
     }[source_id]
     record["canonical_key"] += f"|{source_key}:{normalize(row['source_record_id'])}"
     record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
@@ -1583,6 +1585,41 @@ def main() -> None:
             if other_family_matches:
                 fuchs_china_family_conflict_keys.append((target["canonical_key"], [row["canonical_key"] for row in other_family_matches]))
         fuchs_china_product_key[raw["source_record_id"]] = target["canonical_key"]
+    fuchs_czech_source_rows = [json.loads(line) for line in FUCHS_CZECH_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    fuchs_czech_records = [fuchs_catalog_record(row, "FUCHS_CZECH_PRODUCT_FINDER", "Czech Republic") for row in fuchs_czech_source_rows]
+    prior_market_name_families = defaultdict(set)
+    for row in fuchs_india_source_rows + fuchs_us_source_rows + fuchs_germany_source_rows + fuchs_poland_source_rows + fuchs_italy_source_rows + fuchs_sweden_source_rows + fuchs_spain_source_rows + fuchs_france_source_rows + fuchs_turkey_source_rows + fuchs_canada_source_rows + fuchs_china_source_rows:
+        prior_market_name_families[normalize(row["product_name"])].add(row["family_code"])
+    fuchs_czech_cross_market_exact_name_family_rows = sum(row["family_code"] in prior_market_name_families[normalize(row["product_name"])] for row in fuchs_czech_source_rows)
+    fuchs_czech_cross_market_family_conflict_rows = sum(bool(prior_market_name_families[normalize(row["product_name"])]) and row["family_code"] not in prior_market_name_families[normalize(row["product_name"])] for row in fuchs_czech_source_rows)
+    existing_by_name_family = defaultdict(list)
+    existing_by_name = defaultdict(list)
+    for row in input_records:
+        if brand_tokens_overlap("FUCHS", row["brand"]):
+            existing_by_name_family[(row["product_name_normalized"], row["family_code"])].append(row)
+            existing_by_name[row["product_name_normalized"]].append(row)
+    fuchs_czech_product_key = {}
+    fuchs_czech_added_rows = fuchs_czech_matched_rows = 0
+    fuchs_czech_review_keys, fuchs_czech_family_conflict_keys = [], []
+    for raw, source_record in zip(fuchs_czech_source_rows, fuchs_czech_records):
+        name = normalize(raw["product_name"])
+        matches = existing_by_name_family[(name, raw["family_code"])]
+        if len(matches) == 1:
+            target = matches[0]
+            merge_fuchs_catalog_evidence(target, source_record, raw)
+            fuchs_czech_matched_rows += 1
+        else:
+            target = source_record
+            input_records.append(target)
+            existing_by_name_family[(name, raw["family_code"])].append(target)
+            other_family_matches = [row for row in existing_by_name[name] if row["family_code"] != raw["family_code"]]
+            existing_by_name[name].append(target)
+            fuchs_czech_added_rows += 1
+            if len(matches) > 1:
+                fuchs_czech_review_keys.append((target["canonical_key"], [row["canonical_key"] for row in matches]))
+            if other_family_matches:
+                fuchs_czech_family_conflict_keys.append((target["canonical_key"], [row["canonical_key"] for row in other_family_matches]))
+        fuchs_czech_product_key[raw["source_record_id"]] = target["canonical_key"]
     aichilon_products, aichilon_packages, exclusions = aichilon_seed()
     existing_by_name = defaultdict(list)
     for row in input_records:
@@ -1823,6 +1860,16 @@ def main() -> None:
                 "reason": "same_fuchs_product_name_but_conflicting_professional_family_across_markets",
                 "score": 0.70, "decision": "keep_separate_fuchs_market_family_conflict",
             })
+    for source_key, match_keys in fuchs_czech_review_keys:
+        source_product = canonical_by_key[source_key]
+        for match_key in match_keys:
+            match_product = canonical_by_key[match_key]
+            candidates.append({"product_id_a": match_product["product_id"], "product_id_b": source_product["product_id"], "reason": "fuchs_czech_exact_product_name_and_family_with_multiple_existing_registry_records", "score": 0.995, "decision": "review_fuchs_multi_registry_identity"})
+    for source_key, match_keys in fuchs_czech_family_conflict_keys:
+        source_product = canonical_by_key[source_key]
+        for match_key in match_keys:
+            match_product = canonical_by_key[match_key]
+            candidates.append({"product_id_a": match_product["product_id"], "product_id_b": source_product["product_id"], "reason": "same_fuchs_product_name_but_conflicting_professional_family_across_markets", "score": 0.70, "decision": "keep_separate_fuchs_market_family_conflict"})
     source_links = [{
         "product_id": row["product_id"], "source_id": row["source_id"], "source_record_id": row["source_record_id"],
         "source_row": row["source_row"], "relation": "primary_seed_record",
@@ -2069,6 +2116,13 @@ def main() -> None:
         if link_key not in source_link_keys:
             source_links.append(link)
             source_link_keys.add(link_key)
+    for raw in fuchs_czech_source_rows:
+        target = canonical_by_key[fuchs_czech_product_key[raw["source_record_id"]]]
+        link = {"product_id": target["product_id"], "source_id": "FUCHS_CZECH_PRODUCT_FINDER", "source_record_id": raw["source_record_id"], "source_row": None, "relation": "official_manufacturer_product_catalog"}
+        link_key = (link["product_id"], link["source_id"], link["source_record_id"])
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     offers = []
     for package in aichilon_packages:
         canonical_key = aichilon_product_key.get(int(package["source_product_id"]))
@@ -2121,6 +2175,7 @@ def main() -> None:
         "fuchs_turkey_input_sha256": hashlib.sha256(FUCHS_TURKEY_JSONL.read_bytes()).hexdigest(),
         "fuchs_canada_input_sha256": hashlib.sha256(FUCHS_CANADA_JSONL.read_bytes()).hexdigest(),
         "fuchs_china_input_sha256": hashlib.sha256(FUCHS_CHINA_JSONL.read_bytes()).hexdigest(),
+        "fuchs_czech_input_sha256": hashlib.sha256(FUCHS_CZECH_JSONL.read_bytes()).hexdigest(),
         "canonical_rows": len(records),
         "brands": len({r["brand"] for r in records}),
         "families": dict(sorted(Counter(r["family_code"] for r in records).items())),
@@ -2199,6 +2254,11 @@ def main() -> None:
         "fuchs_china_products_added": fuchs_china_added_rows,
         "fuchs_china_cross_market_exact_name_family_rows": fuchs_china_cross_market_exact_name_family_rows,
         "fuchs_china_cross_market_family_conflict_rows": fuchs_china_cross_market_family_conflict_rows,
+        "fuchs_czech_source_rows": len(fuchs_czech_source_rows),
+        "fuchs_czech_products_matched_to_existing": fuchs_czech_matched_rows,
+        "fuchs_czech_products_added": fuchs_czech_added_rows,
+        "fuchs_czech_cross_market_exact_name_family_rows": fuchs_czech_cross_market_exact_name_family_rows,
+        "fuchs_czech_cross_market_family_conflict_rows": fuchs_czech_cross_market_family_conflict_rows,
         "jaso_source_rows": len(jaso_source_rows),
         "jaso_unique_oil_codes": len({r["oil_code"] for r in jaso_source_rows}),
         "aichilon_source_products": len(aichilon_products) + len(exclusions),
