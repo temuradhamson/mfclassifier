@@ -52,6 +52,7 @@ UAE_MOIAT_JSONL = ROOT / "data" / "uae-moiat-conformity-products.jsonl"
 EPA_SAFER_CHOICE_JSONL = ROOT / "data" / "epa-safer-choice-lubricants.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
+SON_MANCAP_JSONL = ROOT / "data" / "son-mancap-chemical-lubricant-products.jsonl"
 FUCHS_INDIA_JSONL = ROOT / "data" / "fuchs-india-products.jsonl"
 FUCHS_US_JSONL = ROOT / "data" / "fuchs-us-products.jsonl"
 FUCHS_GERMANY_JSONL = ROOT / "data" / "fuchs-germany-products.jsonl"
@@ -1440,6 +1441,79 @@ def east_africa_certified_record(row: dict) -> dict:
     return record
 
 
+def son_mancap_record(row: dict) -> dict:
+    """Convert one normalized product from SON's public MANCAP chemical list."""
+    technical = row["technical"]
+    sae_candidates = (
+        technical["sae_gear"] + technical["sae"] + technical["sae_monograde"]
+        if row["family_code"] == "T"
+        else technical["sae"] + technical["sae_monograde"] + technical["sae_gear"]
+    )
+    iso_vg = (technical["iso_vg_explicit"] + technical["iso_vg_designation_inferred"] + [""])[0]
+    nlgi = (technical["nlgi_explicit"] + technical["nlgi_designation_inferred"] + [""])[0]
+    performance = [f"API {value}" for value in technical["api"]] + technical["api_gl"]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Nigeria SON MANCAP Chemical Sector certified product",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": (sae_candidates + [""])[0],
+        "api_class": "; ".join(performance),
+        "viscosity": iso_vg,
+        "grease_class": nlgi,
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": "official_government_product_certification_registry",
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["dataset_snapshot_date"],
+    })
+    if iso_vg:
+        record["specifications"]["iso_vg"] = iso_vg
+    if nlgi:
+        record["specifications"]["nlgi"] = nlgi
+    record["specifications"].update({
+        "sae_source_reported": technical["sae"],
+        "sae_monograde_source_reported": technical["sae_monograde"],
+        "sae_gear_source_reported": technical["sae_gear"],
+        "api_source_reported": technical["api"],
+        "api_gl_source_reported": technical["api_gl"],
+        "acea_source_reported": technical["acea"],
+        "ilsac_source_reported": technical["ilsac"],
+        "jaso_source_reported": technical["jaso"],
+        "iso_vg_explicit_source_reported": technical["iso_vg_explicit"],
+        "iso_vg_product_designation_inferred": technical["iso_vg_designation_inferred"],
+        "nlgi_explicit_source_reported": technical["nlgi_explicit"],
+        "nlgi_product_designation_inferred": technical["nlgi_designation_inferred"],
+        "grease_thickener_source_reported": technical["grease_thickener_source_reported"],
+        "dot_source_reported": technical["dot"],
+        "dexron_source_reported": technical["dexron"],
+        "temperature_c_source_reported": technical["temperature_c"],
+        "base_oil_grade_source_reported": technical["base_oil_grade"],
+        "classification_basis": row["classification_basis"],
+        "certification_authority": row["certification_authority"],
+        "certification_list_period": row["source_list_period"],
+        "certification_source_entries": row["source_entries"],
+        "source_company_raw": row["source_company_raw"],
+        "source_occurrence_count": row["source_occurrence_count"],
+        "source_url": row["source_url"],
+        "source_context_url": row["source_context_url"],
+    })
+    record["canonical_key"] += f"|son_mancap_record:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    return record
+
+
 def liqui_moly_identity_name(value: str) -> str:
     return re.sub(r"^liqui moly(?: gmbh)?\s+", "", normalize(value)).strip()
 
@@ -1945,6 +2019,9 @@ def main() -> None:
     east_africa_certified_source_rows = [json.loads(line) for line in EAST_AFRICA_CERTIFIED_JSONL.read_text(encoding="utf-8").splitlines() if line]
     east_africa_certified_records = [east_africa_certified_record(row) for row in east_africa_certified_source_rows]
     input_records.extend(east_africa_certified_records)
+    son_mancap_source_rows = [json.loads(line) for line in SON_MANCAP_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    son_mancap_records = [son_mancap_record(row) for row in son_mancap_source_rows]
+    input_records.extend(son_mancap_records)
     biopreferred_source_rows = [json.loads(line) for line in USDA_BIOPREFERRED_JSONL.read_text(encoding="utf-8").splitlines() if line]
     biopreferred_records = [biopreferred_record(row) for row in biopreferred_source_rows]
     input_records.extend(biopreferred_records)
@@ -3309,6 +3386,7 @@ def main() -> None:
         "epa_safer_choice_input_sha256": hashlib.sha256(EPA_SAFER_CHOICE_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
+        "son_mancap_input_sha256": hashlib.sha256(SON_MANCAP_JSONL.read_bytes()).hexdigest(),
         "usda_biopreferred_input_sha256": hashlib.sha256(USDA_BIOPREFERRED_JSONL.read_bytes()).hexdigest(),
         "zf_te_ml_input_sha256": hashlib.sha256(ZF_TE_ML_JSONL.read_bytes()).hexdigest(),
         "allison_input_sha256": hashlib.sha256(ALLISON_JSONL.read_bytes()).hexdigest(),
@@ -3361,6 +3439,7 @@ def main() -> None:
         "kebs_smark_source_rows": len(kebs_smark_source_rows),
         "east_africa_certified_source_rows": len(east_africa_certified_source_rows),
         "east_africa_certified_source_rows_by_source": dict(sorted(Counter(row["source_id"] for row in east_africa_certified_source_rows).items())),
+        "son_mancap_source_rows": len(son_mancap_source_rows),
         "official_government_product_conformity_registry_rows": sum(r["evidence_status"] == "official_government_product_conformity_registry" for r in records),
         "official_government_product_certification_registry_rows": sum(r["evidence_status"] == "official_government_product_certification_registry" for r in records),
         "official_government_program_rows": sum(r["evidence_status"] == "official_government_program_catalog" for r in records),

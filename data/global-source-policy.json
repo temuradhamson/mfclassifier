@@ -835,6 +835,21 @@
       "notes": "The public TBS register exposed 2,642 certification rows at the 2026-07-21 snapshot. Seventy exact lubricant/coolant/brake-fluid certificate rows contain 184 comma-separated marketed product-designation occurrences; they normalize to 183 product identities after one repeated current certification occurrence is merged. TBS lifecycle is explicitly computed from official issue/expiry dates because the table has no separate live status flag. Only company, marketed product designation, product type, licence lifecycle and standard designation are retained. Location/contact fields and standard body text are excluded; the registered TBS mark itself is not reproduced."
     },
     {
+      "source_id": "SON_MANCAP_CHEMICAL_LUBRICANT_PRODUCTS",
+      "title": "Nigeria Standards Organisation — MANCAP Chemical Sector certified lubricant products",
+      "owner": "Standards Organisation of Nigeria (SON)",
+      "source_type": "official_government_mandatory_product_certification_pdf_curated_scope",
+      "source_locator": "data/son-mancap-chemical-lubricant-products.jsonl",
+      "source_url": "https://son.gov.ng/wp-content/uploads/2026/07/CHEMICAL-PRODUCTS-SECTOR_compressed.pdf",
+      "terms_url": "https://son.gov.ng/mancapservice/",
+      "source_sha256": "3728be0200a766f1a862f3c2bd0cf6b92bc6bf9b4d78e832e7c117a2d3a1ec36",
+      "access_status": "public_official_government_mandatory_product_certification_list",
+      "bulk_ingest_allowed": true,
+      "publication_status": "normalized_factual_certification_records_with_attribution",
+      "observed_count": 608,
+      "notes": "The official 2024-2029 Chemical Sector PDF contains 2,011 consecutively numbered certification rows across 233 pages. A strict lubricant, grease, coolant and technical-fluid scope retains 286 certificate rows and 613 marketed product-designation occurrences, normalized to 608 identities after five exact notation or repeated-row duplicates are merged. Only factual company, product, technical designation, source row/page and list-period evidence is published. Addresses, state, contacts, certification-mark artwork, the PDF itself and non-scope chemicals are excluded."
+    },
+    {
       "source_id": "JAPAN_ECOMARK_CATEGORY_110",
       "title": "Japan Eco Mark Category 110 Biodegradable Lubricating Oil",
       "owner": "Japan Environment Association Eco Mark Office",

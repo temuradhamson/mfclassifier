@@ -1,0 +1,53 @@
+{
+  "status": "official_public_government_mandatory_product_certification_list_normalized",
+  "source_id": "SON_MANCAP_CHEMICAL_LUBRICANT_PRODUCTS",
+  "source_url": "https://son.gov.ng/wp-content/uploads/2026/07/CHEMICAL-PRODUCTS-SECTOR_compressed.pdf",
+  "source_context_url": "https://son.gov.ng/mancapservice/",
+  "snapshot_date": "2026-07-21",
+  "source_list_period": "2024-2029",
+  "source_pdf_pages": 233,
+  "source_pdf_sha256": "8f18e7ad808f54ce92ee6ed625af6d5d4a9b227a0ed32e10d58e054e483ed624",
+  "source_certificate_rows": 2011,
+  "lubricant_scope_certificate_rows": 286,
+  "product_designation_occurrences": 613,
+  "normalized_products": 608,
+  "duplicate_product_occurrences_merged": 5,
+  "manufacturers": 127,
+  "lifecycle_statuses": {
+    "listed_in_current_2024_2029_certified_products_pdf": 608
+  },
+  "families": {
+    "G": 30,
+    "H": 25,
+    "I": 2,
+    "M": 418,
+    "T": 115,
+    "TF": 18
+  },
+  "technical_coverage": {
+    "acea": 10,
+    "api": 267,
+    "api_gl": 32,
+    "base_oil_grade": 1,
+    "dexron": 42,
+    "dot": 1,
+    "grease_thickener_source_reported": 15,
+    "iso_vg_designation_inferred": 9,
+    "iso_vg_explicit": 13,
+    "jaso": 4,
+    "nlgi_designation_inferred": 11,
+    "nlgi_explicit": 1,
+    "sae": 229,
+    "sae_gear": 61,
+    "sae_monograde": 147
+  },
+  "normalized_output_sha256": "3728be0200a766f1a862f3c2bd0cf6b92bc6bf9b4d78e832e7c117a2d3a1ec36",
+  "rights_note": "Public MANCAP certification facts only. Company address, state and certification-mark artwork are excluded; the PDF itself and non-scope chemical products are not republished.",
+  "excluded_fields": [
+    "company_address",
+    "state",
+    "contacts",
+    "certification_mark_artwork",
+    "non_scope_chemical_products"
+  ]
+}
