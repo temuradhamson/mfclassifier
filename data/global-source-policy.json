@@ -707,12 +707,27 @@
       "source_locator": "data/dla-qpd-lubricant-products.jsonl",
       "source_url": "https://qpldocs.dla.mil/search/default.aspx",
       "terms_url": "https://qpldocs.dla.mil/help/default.aspx",
-      "source_sha256": "cea165e62e8c22633c2936e2421c6cb31f3134cea20a5532754c216ff5629b25",
+      "source_sha256": "edf5866ed5564323a1eff49042b6f2ffd53faf341a555bfac218a54d6ddefe35",
       "access_status": "public_official_government_qualification_data",
       "bulk_ingest_allowed": true,
       "publication_status": "normalized_factual_qualification_records_with_attribution",
       "observed_count": 431,
-      "notes": "56 действующих QPL по FSC 9150 содержат 455 товарных вхождений и 431 нормализованный продукт. Сохранены только факты квалификации, QPL/MIL/Federal designation, company/CAGE и GREEN/YELLOW/RED/SAM/Stop Ship; 737 строк заводов без обозначения продукта исключены. Адреса, телефоны, сайты, test reference и notes не переиздаются. Публичные QPL-документы имеют помету Approved for public release; distribution is unlimited. SHA-256 стабильного манифеста фактов 108 qualification pages: 88780a50a30eaa89fed84ea974ceb3c94ca9d3b31934ad3b7710da6292821032."
+      "notes": "56 действующих QPL по FSC 9150 содержат 455 товарных вхождений и 431 нормализованный продукт. Сохранены только факты квалификации, QPL/MIL/Federal designation, company/CAGE и GREEN/YELLOW/RED/SAM/Stop Ship; plant-строки без обозначения продукта исключены. Адреса, телефоны, сайты и test reference не переиздаются. Публичные QPL-документы имеют помету Approved for public release; distribution is unlimited. Общий JSONL также содержит строго отобранный lubricant-scope FSC 6850; SHA-256 стабильного манифеста фактов 118 qualification pages: cc243e32a0668eb065cabc3d0f17e994e79cf24dbec759912171828453c84098."
+    },
+    {
+      "source_id": "DLA_QPD_FSC_6850_LUBRICANT_SCOPE",
+      "title": "US DLA Qualified Products Database — FSC 6850 lubricant/lubricity subset",
+      "owner": "US Defense Logistics Agency",
+      "source_type": "official_government_qualified_products_database_curated_scope",
+      "source_locator": "data/dla-qpd-lubricant-products.jsonl",
+      "source_url": "https://qpldocs.dla.mil/search/default.aspx",
+      "terms_url": "https://qpldocs.dla.mil/help/default.aspx",
+      "source_sha256": "edf5866ed5564323a1eff49042b6f2ffd53faf341a555bfac218a54d6ddefe35",
+      "access_status": "public_official_government_qualification_data",
+      "bulk_ingest_allowed": true,
+      "publication_status": "normalized_factual_qualification_records_with_attribution",
+      "observed_count": 25,
+      "notes": "Из 24 действующих QPL класса FSC 6850 включены только шесть спецификаций — QPL-6529, 8188, AS8660, 25017, 29608 и 32490 — где title прямо устанавливает oil, silicone compound, cleaning-lubricating compound, corrosion/lubricity inhibitor или lubricity improver. Получено 25 продуктов из 25 вхождений; чистые cleaners, solvents, desiccants и иная химия исключены. Qualification qualifiers отделены от стандартизированного товарного названия, но сохранены как фактическое доказательство."
     },
     {
       "source_id": "detroit-dfs-approved-fluids",

@@ -92,7 +92,7 @@ def main() -> None:
     assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
     assert not db.execute("PRAGMA foreign_key_check").fetchall()
     assert db.execute("SELECT count(*) FROM products").fetchone()[0] == len(lines)
-    assert len(lines) == 44346
+    assert len(lines) == 44371
     assert report["jaso_source_rows"] == jaso_report["rows"] == 3630
     assert report["jaso_unique_oil_codes"] == jaso_report["unique_oil_codes"] == 3629
     assert report["official_filed_registry_rows"] == 3629
@@ -108,12 +108,19 @@ def main() -> None:
     assert indonesia_report["registration_number_collisions"] == 10
     assert report["official_government_regulatory_registry_rows"] == 25239
     assert report["official_government_registry_source_data_issue_rows"] == 51
-    assert report["dla_qpd_source_rows"] == dla_report["normalized_products"] == len(dla_rows) == 431
-    assert report["official_government_qualified_product_registry_rows"] == 431
-    assert dla_report["active_qpls_in_scope"] == 56
-    assert dla_report["government_designations"] == 108
-    assert dla_report["published_manufacturer_product_occurrences"] == 455
-    assert dla_report["plant_rows_without_product_designation_excluded"] == 737
+    assert report["dla_qpd_source_rows"] == dla_report["normalized_products"] == len(dla_rows) == 456
+    assert report["official_government_qualified_product_registry_rows"] == 456
+    assert report["dla_qpd_source_rows_by_source"] == dla_report["normalized_products_by_source"] == {
+        "DLA_QPD_FSC_6850_LUBRICANT_SCOPE": 25,
+        "DLA_QPD_FSC_9150": 431,
+    }
+    assert dla_report["active_qpls_in_scope"] == 62
+    assert dla_report["qpls_by_fsc"] == {"6850_lubricant_scope": 6, "9150": 56}
+    assert len(dla_report["fsc_6850_excluded_active_qpls"]) == 18
+    assert not ({q.removeprefix("QPL-") for q in dla_report["fsc_6850_excluded_active_qpls"]} & {"6529", "8188", "AS8660", "25017", "29608", "32490"})
+    assert dla_report["government_designations"] == 118
+    assert dla_report["published_manufacturer_product_occurrences"] == 480
+    assert dla_report["plant_rows_without_product_designation_excluded"] == 766
     assert report["zf_te_ml_source_rows"] == zf_report["unique_approval_numbers"] == 1498
     assert report["official_oem_approval_rows"] == 5475
     assert report["official_manufacturer_catalog_rows"] == 4971
@@ -219,7 +226,7 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_program_catalog'").fetchone()[0] == 892
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_regulatory_registry'").fetchone()[0] == 25239
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_registry_source_data_issue'").fetchone()[0] == 51
-    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_qualified_product_registry'").fetchone()[0] == 431
+    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_qualified_product_registry'").fetchone()[0] == 456
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_approval_registry'").fetchone()[0] == 5475
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_manufacturer_product_catalog'").fetchone()[0] == 4971
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_service_recommendation'").fetchone()[0] == 30
@@ -253,8 +260,9 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='INDONESIA_NPT_LUBRICANT_REGISTRY'").fetchone()[0] == 12626
     assert db.execute("SELECT count(*) FROM quality_issues WHERE issue_code='source_registration_number_missing'").fetchone()[0] == 51
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='DLA_QPD_FSC_9150'").fetchone()[0] == 431
-    assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='DLA_QPL_NUMBER'").fetchone()[0] == 432
-    assert db.execute("SELECT count(*) FROM quality_issues WHERE issue_code='dla_qpd_lifecycle_restriction'").fetchone()[0] == 89
+    assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='DLA_QPD_FSC_6850_LUBRICANT_SCOPE'").fetchone()[0] == 25
+    assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='DLA_QPL_NUMBER'").fetchone()[0] == 457
+    assert db.execute("SELECT count(*) FROM quality_issues WHERE issue_code='dla_qpd_lifecycle_restriction'").fetchone()[0] == 93
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='FUCHS_PRODUCT_UID'").fetchone()[0] == 10605
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='JASO_OIL_CODE'").fetchone()[0] == 3629
     assert db.execute("SELECT count(*) FROM sources WHERE bulk_ingest_allowed=0").fetchone()[0] == len(report["bulk_sources_blocked"])
@@ -290,14 +298,16 @@ def main() -> None:
         "source_placeholder_registration_unverified": 51,
     }
     assert policy_by_id["DLA_QPD_FSC_9150"]["source_sha256"] == dla_report["normalized_output_sha256"]
-    assert policy_by_id["DLA_QPD_FSC_9150"]["observed_count"] == dla_report["normalized_products"]
+    assert policy_by_id["DLA_QPD_FSC_9150"]["observed_count"] == dla_report["normalized_products_by_source"]["DLA_QPD_FSC_9150"]
+    assert policy_by_id["DLA_QPD_FSC_6850_LUBRICANT_SCOPE"]["source_sha256"] == dla_report["normalized_output_sha256"]
+    assert policy_by_id["DLA_QPD_FSC_6850_LUBRICANT_SCOPE"]["observed_count"] == dla_report["normalized_products_by_source"]["DLA_QPD_FSC_6850_LUBRICANT_SCOPE"]
     assert dla_report["lifecycle_statuses"] == {
         "mixed_qualification_lifecycle_review": 1,
-        "qualification_overdue_contact_qa": 44,
-        "qualified_source_certified": 342,
-        "qualified_source_due_for_certification": 22,
+        "qualification_overdue_contact_qa": 46,
+        "qualified_source_certified": 363,
+        "qualified_source_due_for_certification": 23,
         "sam_inactive_source_review": 21,
-        "stop_ship": 1,
+        "stop_ship": 2,
     }
     assert policy_by_id["ZF_TE_ML"]["source_sha256"] == zf_report["normalized_output_sha256"]
     assert policy_by_id["ZF_TE_ML"]["observed_count"] == zf_report["unique_approval_numbers"]

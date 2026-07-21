@@ -1,9 +1,9 @@
 {
-  "active_qpls_in_scope": 56,
+  "active_qpls_in_scope": 62,
   "certified_statuses_by_occurrence": {
-    "GREEN": 377,
-    "RED": 54,
-    "YELLOW": 24
+    "GREEN": 398,
+    "RED": 57,
+    "YELLOW": 25
   },
   "duplicate_qualification_occurrences_merged": 24,
   "families": {
@@ -12,28 +12,55 @@
     "H": 52,
     "I": 12,
     "M": 203,
-    "S": 61,
+    "S": 86,
     "T": 13,
     "TF": 15,
     "U": 9
   },
-  "fsc": "9150",
-  "government_designations": 108,
+  "fsc_6850_excluded_active_qpls": {
+    "QPL-17563": "component impregnant",
+    "QPL-24577": "distiller scale-preventive treatment",
+    "QPL-29602": "parts-washer cleaning compound",
+    "QPL-32295": "non-aqueous cleaner",
+    "QPL-32587": "paint remover",
+    "QPL-32597": "polymer/composite cleaner",
+    "QPL-32684": "vapor-degreasing solvent",
+    "QPL-3464": "desiccant",
+    "QPL-372": "cleaning solvent for weapon bores",
+    "QPL-53021": "diesel-fuel stabilizer without an explicit lubrication function",
+    "QPL-680": "degreasing solvent",
+    "QPL-85570": "aircraft exterior cleaner",
+    "QPL-85704": "turbine-engine gas-path cleaner",
+    "QPL-87937": "aerospace-equipment cleaner",
+    "QPL-AMS-C-19853": "carbon remover",
+    "QPL-AMS-C-22542": "high-pressure cleaning compound",
+    "QPL-AMS2644": "inspection penetrant",
+    "QPL-P-C-444": "grease-emulsifying cleaning compound, not a lubricant"
+  },
+  "fsc_scope": [
+    "9150",
+    "6850 (lubricant/lubricity subset only)"
+  ],
+  "government_designations": 118,
   "grain_note": "One normalized row is company + manufacturer designation + professional family. Multiple government designations and QPL occurrences are retained as qualifications on that row.",
   "help_url": "https://qpldocs.dla.mil/help/default.aspx",
   "lifecycle_statuses": {
     "mixed_qualification_lifecycle_review": 1,
-    "qualification_overdue_contact_qa": 44,
-    "qualified_source_certified": 342,
-    "qualified_source_due_for_certification": 22,
+    "qualification_overdue_contact_qa": 46,
+    "qualified_source_certified": 363,
+    "qualified_source_due_for_certification": 23,
     "sam_inactive_source_review": 21,
-    "stop_ship": 1
+    "stop_ship": 2
   },
-  "normalized_output_sha256": "cea165e62e8c22633c2936e2421c6cb31f3134cea20a5532754c216ff5629b25",
-  "normalized_products": 431,
-  "plant_rows_without_product_designation_excluded": 737,
+  "normalized_output_sha256": "edf5866ed5564323a1eff49042b6f2ffd53faf341a555bfac218a54d6ddefe35",
+  "normalized_products": 456,
+  "normalized_products_by_source": {
+    "DLA_QPD_FSC_6850_LUBRICANT_SCOPE": 25,
+    "DLA_QPD_FSC_9150": 431
+  },
+  "plant_rows_without_product_designation_excluded": 766,
   "privacy_and_scope_note": "Addresses, telephone numbers, websites, test references, notes and page presentation are deliberately omitted. Plant rows without a manufacturer designation are not products and are excluded.",
-  "published_manufacturer_product_occurrences": 455,
+  "published_manufacturer_product_occurrences": 480,
   "qpl_metadata": {
     "10924": {
       "document_date": "09/30/2008",
@@ -215,6 +242,16 @@
       "qualifying_activity": "AS",
       "title": "Grease, Aircraft, Ball and Roller Bearing, NATO Code Number G-372, Metric"
     },
+    "25017": {
+      "document_date": "08/04/2011",
+      "document_id": "MIL-PRF-25017H(1)",
+      "fsc": "6850",
+      "qpd_update_date": "11/18/2025",
+      "qpl_number": "QPL-25017",
+      "qpl_status": "Active",
+      "qualifying_activity": "68",
+      "title": "Inhibitor, Corrosion/Lubricity Improver, Fuel Soluble (NATO S-1747)"
+    },
     "25537": {
       "document_date": "04/08/1988",
       "document_id": "MIL-G-25537C(1)",
@@ -234,6 +271,16 @@
       "qpl_status": "Active",
       "qualifying_activity": "68",
       "title": "Grease, Aircraft and Instrument, Fuel and Oxidizer Resistant"
+    },
+    "29608": {
+      "document_date": "11/02/2016",
+      "document_id": "MIL-PRF-29608C",
+      "fsc": "6850",
+      "qpd_update_date": "09/14/2025",
+      "qpl_number": "QPL-29608",
+      "qpl_status": "Active",
+      "qualifying_activity": "AS",
+      "title": "Cleaning and Cleaning-Lubricating Compounds, Electrical Contact"
     },
     "3150": {
       "document_date": "08/07/2008",
@@ -274,6 +321,16 @@
       "qpl_status": "Active",
       "qualifying_activity": "AT",
       "title": "Hydraulic Fluid, Biobased"
+    },
+    "32490": {
+      "document_date": "05/24/2019",
+      "document_id": "MIL-PRF-32490A",
+      "fsc": "6850",
+      "qpd_update_date": "03/05/2026",
+      "qpl_number": "QPL-32490",
+      "qpl_status": "Active",
+      "qualifying_activity": "SH",
+      "title": "Additive, Lubricity Improver, Distillate Fuel"
     },
     "32538": {
       "document_date": "10/07/2015",
@@ -435,6 +492,16 @@
       "qualifying_activity": "AR",
       "title": "Cleaner, Lubricant, and Preservative for Weapons and Weapon Systems"
     },
+    "6529": {
+      "document_date": "12/03/1997",
+      "document_id": "MIL-C-6529C(2) NOT 2",
+      "fsc": "6850",
+      "qpd_update_date": "01/28/2026",
+      "qpl_number": "QPL-6529",
+      "qpl_status": "Inactive",
+      "qualifying_activity": "20",
+      "title": "Corrosion Preventive, Aircraft Engine"
+    },
     "7808": {
       "document_date": "06/10/2022",
       "document_id": "MIL-PRF-7808M",
@@ -474,6 +541,16 @@
       "qpl_status": "Active",
       "qualifying_activity": "AS",
       "title": "Grease, Aircraft, High Load Capacity, Wide Temperature Range"
+    },
+    "8188": {
+      "document_date": "12/10/1997",
+      "document_id": "MIL-PRF-8188D",
+      "fsc": "6850",
+      "qpd_update_date": "01/29/2026",
+      "qpl_number": "QPL-8188",
+      "qpl_status": "Active",
+      "qualifying_activity": "20",
+      "title": "Corrosion-Preventive Oil, Aircraft Turbine Engine, Synthetic Base"
     },
     "83282": {
       "document_date": "12/10/1997",
@@ -565,6 +642,16 @@
       "qualifying_activity": "AS",
       "title": "Grease, Plug Valve, Gasoline And Oil Resistant, Nato Code Number G-363, Metric"
     },
+    "AS8660": {
+      "document_date": "09/30/1999",
+      "document_id": "SAE-AS8660",
+      "fsc": "6850",
+      "qpd_update_date": "02/24/2026",
+      "qpl_number": "QPL-AS8660",
+      "qpl_status": "Active",
+      "qualifying_activity": "AS",
+      "title": "Silicone Compound NATO Code Number S-736 ILICONE COMPOUND NATO CODE NUMBER S-736"
+    },
     "J1899": {
       "document_date": "11/01/1995",
       "document_id": "SAE-J1899",
@@ -652,18 +739,29 @@
     "QPL-85733",
     "QPL-85734",
     "QPL-87252",
-    "QPL-87257"
+    "QPL-87257",
+    "QPL-6529",
+    "QPL-8188",
+    "QPL-AS8660",
+    "QPL-25017",
+    "QPL-29608",
+    "QPL-32490"
   ],
+  "qpls_by_fsc": {
+    "6850_lubricant_scope": 6,
+    "9150": 56
+  },
   "rights_note": "DLA QPD publishes official qualification data for sourcing decisions; QPL public-release documents state distribution is unlimited. Only factual product and qualification fields are retained with attribution.",
   "schema_version": 1,
+  "scope_note": "All active FSC 9150 QPLs are included. From FSC 6850 only QPL-6529, 8188, AS8660, 25017, 29608 and 32490 are included because their governing titles explicitly establish an oil, silicone compound, cleaning-lubricating compound, corrosion/lubricity inhibitor or lubricity-improver function; pure cleaners, solvents and unrelated chemicals are excluded.",
   "snapshot_date": "2026-07-21",
-  "source_fact_pages": 108,
-  "source_facts_manifest_sha256": "88780a50a30eaa89fed84ea974ceb3c94ca9d3b31934ad3b7710da6292821032",
+  "source_fact_pages": 118,
+  "source_facts_manifest_sha256": "cc243e32a0668eb065cabc3d0f17e994e79cf24dbec759912171828453c84098",
   "source_url": "https://qpldocs.dla.mil/search/default.aspx",
   "status": "official_government_qualified_product_registry_normalized",
   "status_note": "GREEN, YELLOW, RED, SAM status and Stop Ship remain distinct lifecycle evidence. Publication in QPD is not flattened into a generic active-product claim.",
   "stop_ship_by_occurrence": {
-    "NO": 454,
-    "YES": 1
+    "NO": 478,
+    "YES": 2
   }
 }

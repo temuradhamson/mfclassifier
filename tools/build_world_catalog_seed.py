@@ -972,6 +972,7 @@ def indonesia_npt_record(row: dict) -> dict:
 
 def dla_qpd_record(row: dict) -> dict:
     """Convert one normalized DLA qualification identity to catalog form."""
+    source_id = row["source_id"]
     technical = row["technical"]
     qualification_names = sorted({
         value
@@ -990,14 +991,14 @@ def dla_qpd_record(row: dict) -> dict:
         "sae_class": technical["sae"][0] if technical["sae"] else "",
         "viscosity": technical["iso_vg"][0] if technical["iso_vg"] else "",
         "grease_class": technical["nlgi"][0] if technical["nlgi"] else "",
-        "source": "DLA_QPD_FSC_9150",
+        "source": source_id,
     }
     record = canonical_record(generic)
     record.update({
         "manufacturer": row["company"],
         "brand": row["company"],
         "market": row["market"],
-        "source_id": "DLA_QPD_FSC_9150",
+        "source_id": source_id,
         "source_record_id": row["source_record_id"],
         "source_row": None,
         "evidence_status": "official_government_qualified_product_registry",
@@ -1011,6 +1012,8 @@ def dla_qpd_record(row: dict) -> dict:
         "dla_qpd_sam_statuses": row["sam_statuses"],
         "dla_qpd_stop_ship_values": row["stop_ship_values"],
         "dla_qpd_source_types": row["source_types"],
+        "dla_qpd_manufacturer_designations_raw": row.get("manufacturer_designations_raw", [row["product_name"]]),
+        "dla_qpd_designation_qualifiers": row.get("designation_qualifiers", []),
         "cage_codes": row["cage_codes"],
         "nato_codes": technical["nato_codes"],
         "sae_source_reported": technical["sae"],
@@ -1026,7 +1029,7 @@ def dla_qpd_record(row: dict) -> dict:
         record["codes"][f"dla_qpl_{index}"] = {
             "system": "DLA_QPL_NUMBER",
             "value": qpl_number,
-            "source_id": "DLA_QPD_FSC_9150",
+            "source_id": source_id,
             "status": row["lifecycle_status"],
         }
     return record
@@ -2767,6 +2770,7 @@ def main() -> None:
         "indonesia_npt_rows_with_registration_value": sum(bool(row["registration_number"]) for row in indonesia_npt_source_rows),
         "indonesia_npt_rows_with_source_data_issue": sum(not row["registration_number"] for row in indonesia_npt_source_rows),
         "dla_qpd_source_rows": len(dla_qpd_source_rows),
+        "dla_qpd_source_rows_by_source": dict(sorted(Counter(row["source_id"] for row in dla_qpd_source_rows).items())),
         "dla_qpd_lifecycle_statuses": dict(sorted(Counter(row["lifecycle_status"] for row in dla_qpd_source_rows).items())),
         "official_government_registry_source_data_issue_rows": sum(r["evidence_status"] == "official_government_registry_source_data_issue" for r in records),
         "official_oem_approval_rows": sum(r["evidence_status"] == "official_oem_approval_registry" for r in records),
