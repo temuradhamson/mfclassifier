@@ -3,7 +3,7 @@
   "run_id": "seed-2026-07-21",
   "snapshot_date": "2026-07-21",
   "status": "seed_only_world_catalog_incomplete",
-  "input_rows": 99990,
+  "input_rows": 100117,
   "normalized_input_sha256": "819d11779ffccddf9683a9b18a70e39bd5a1b8d72d9811fb5bb46d136b0f8073",
   "jaso_normalized_input_sha256": "b664fea5aee78de7303c33bf13d3c9ac26c8779b78beac24c54295b4d58603d3",
   "official_licensed_input_sha256": "533183ffbc755268ef12b54a556d1f3ea78db4fc80b564e12c391a10a8e2075e",
@@ -65,19 +65,19 @@
   "fuchs_brazil_input_sha256": "4554ef1b651617a4a810d945bc519bed1e809ace1cda4246d6b63c7fff99affc",
   "fuchs_norway_input_sha256": "7ef62a3216e7f497ed96512202b7d386673fd01a4c6273ae1cc8fff6e026801a",
   "fuchs_hungary_input_sha256": "8a82b90335bc58ab44734be7541daaad051707258b5fbcb5346f8c2a2bf66ed4",
-  "canonical_rows": 99989,
+  "canonical_rows": 100116,
   "brands": 13926,
   "families": {
-    "C": 2486,
-    "E": 151,
-    "G": 11057,
-    "H": 5783,
-    "I": 4427,
-    "M": 43248,
-    "S": 7466,
-    "T": 17349,
-    "TF": 7272,
-    "U": 750
+    "C": 2489,
+    "E": 155,
+    "G": 11084,
+    "H": 5792,
+    "I": 4438,
+    "M": 43281,
+    "S": 7468,
+    "T": 17370,
+    "TF": 7287,
+    "U": 752
   },
   "project_source_rows": 443,
   "legacy_rows_needing_evidence": 88,
@@ -156,7 +156,7 @@
   },
   "official_government_registry_source_data_issue_rows": 51,
   "official_oem_approval_rows": 6495,
-  "official_manufacturer_catalog_rows": 6298,
+  "official_manufacturer_catalog_rows": 6425,
   "official_manufacturer_sds_change_observation_rows": 144,
   "official_oem_service_recommendation_rows": 30,
   "zf_te_ml_source_rows": 1498,
@@ -347,16 +347,16 @@
   "duplicate_decisions": {
     "merged": 1,
     "keep_separate_specification_conflict": 10235,
-    "review_cross_source_identity": 5049,
+    "review_cross_source_identity": 5518,
     "keep_separate_blue_angel_family_conflict": 34,
     "review_brand_alias_identity": 2,
     "review_liqui_moly_multi_registry_identity": 49,
     "review_liqui_moly_current_multiple_historical_candidates": 4,
-    "review_fuchs_multi_registry_identity": 6652,
-    "keep_separate_fuchs_market_family_conflict": 529
+    "review_fuchs_multi_registry_identity": 7199,
+    "keep_separate_fuchs_market_family_conflict": 534
   },
   "quality_issues": {
-    "professional_key_incomplete": 28999,
+    "professional_key_incomplete": 29038,
     "classification_family_conflict": 214,
     "source_multigrade_table_not_safely_aligned_to_listing_title": 27,
     "source_registration_number_missing": 51,
@@ -496,7 +496,9 @@
     "PARKER_DENISON_CURRENT_FLUID_RATINGS",
     "PAKISTAN_STATE_OIL_OFFICIAL_CATALOG",
     "PERTAMINA_LUBRICANTS_OFFICIAL_CATALOG",
-    "EGYPT_EOS_QUALITY_MARK_LUBRICANT_SCOPE_REVIEW"
+    "EGYPT_EOS_QUALITY_MARK_LUBRICANT_SCOPE_REVIEW",
+    "FUCHS_SAUDI_ARABIA_PRODUCT_FINDER",
+    "FUCHS_MACEDONIA_PRODUCT_FINDER"
   ],
   "bulk_sources_blocked": [
     "fuchs-benelux",
@@ -522,7 +524,10 @@
     "CUMMINS_CURRENT_OIL_REGISTRATION_LIST",
     "REPSOL_LUBRICANTS_PRODUCT_CATALOG",
     "EATON_APPROVED_LUBRICANTS_TCMT0020",
-    "BOSCH_REXROTH_RDE_90245_FLUID_RATINGS"
+    "BOSCH_REXROTH_RDE_90245_FLUID_RATINGS",
+    "PETRONAS_LUBRICANTS_GLOBAL_PRODUCT_CATALOG",
+    "GULF_OIL_INTERNATIONAL_PDS_CATALOG",
+    "ENEOS_ENGLISH_LUBRICANT_PRODUCT_CATALOG"
   ],
   "confirmed_world_total": null,
   "completion_note": "The seed proves the pipeline, not worldwide coverage. Exact worldwide count remains pending licensed/authorized source ingestion.",
@@ -615,5 +620,17 @@
   "fuchs_croatia_products_matched_to_existing": 954,
   "fuchs_croatia_products_added": 21,
   "fuchs_croatia_cross_market_exact_name_family_rows": 971,
-  "fuchs_croatia_cross_market_family_conflict_rows": 0
+  "fuchs_croatia_cross_market_family_conflict_rows": 0,
+  "fuchs_saudi-arabia_input_sha256": "bfeed7bc775c475b07a98cf503b7b32a8c17e26da321f52c4fb7a92cae0851bd",
+  "fuchs_saudi-arabia_source_rows": 360,
+  "fuchs_saudi-arabia_products_matched_to_existing": 247,
+  "fuchs_saudi-arabia_products_added": 113,
+  "fuchs_saudi-arabia_cross_market_exact_name_family_rows": 254,
+  "fuchs_saudi-arabia_cross_market_family_conflict_rows": 1,
+  "fuchs_macedonia_input_sha256": "c130f41797773e71208f3bfce0bc71b9b9c8f4bb34c38104b7ae0d7ba51b08df",
+  "fuchs_macedonia_source_rows": 948,
+  "fuchs_macedonia_products_matched_to_existing": 934,
+  "fuchs_macedonia_products_added": 14,
+  "fuchs_macedonia_cross_market_exact_name_family_rows": 948,
+  "fuchs_macedonia_cross_market_family_conflict_rows": 0
 }

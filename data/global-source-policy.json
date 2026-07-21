@@ -1792,6 +1792,44 @@
       "notes": "The current official industrial API exposes 104 product cards and 104 linked PDS documents; four current automotive pages expose 22 cards. PDS grade tables expand the source to 252 product occurrences and 250 normalized product-grade rows after two exact within-source repeats are merged. One ungraded MEDITRAN SX automotive series card is excluded because current graded industrial products are present. The industrial API's viscosity field is not treated as grade authority because it sometimes concatenates table columns and sometimes labels ISO VG values as SAE; linked PDS tables are authoritative. The Rusguard Lube 10 card links to a PDS titled Rusguard Lube X, so that document is retained as provenance but excluded from technical evidence for Lube 10. No package offers are inferred. Only attributed non-expressive factual fields are published; descriptions, images, artwork, layout and marketing prose are excluded. Robots permits crawling and no product-data reuse terms were located on the published privacy page at the 2026-07-21 snapshot."
     },
     {
+      "source_id": "PETRONAS_LUBRICANTS_GLOBAL_PRODUCT_CATALOG",
+      "title": "PETRONAS Lubricants International global product catalog",
+      "owner": "PETRONAS Lubricants International",
+      "source_type": "official_manufacturer_current_product_catalog_and_datasheets",
+      "source_url": "https://global.pli-petronas.com/products",
+      "access_status": "cloudfront_403_from_current_research_environment_and_no_reuse_permission_located",
+      "bulk_ingest_allowed": false,
+      "publication_status": "metadata_only_pending_official_feed_or_written_permission",
+      "observed_count": null,
+      "notes": "The official current site exposes indexed product pages with viscosity, industry specifications, OEM approvals, applications and manufacturer FG codes, but its CloudFront edge returns HTTP 403 from the current research environment for the product catalog, individual PDF routes, sitemap and robots.txt. Search-visible pages state that rights are reserved, and no machine-readable feed or product-data reuse permission was located. No protection is bypassed and no rows are imported from search-engine caches. Request an official feed or written permission and an allowlisted retrieval route."
+    },
+    {
+      "source_id": "GULF_OIL_INTERNATIONAL_PDS_CATALOG",
+      "title": "Gulf Oil International current Product Data Sheet catalog",
+      "owner": "Gulf Oil International Limited",
+      "source_type": "official_manufacturer_current_product_data_sheet_directory",
+      "source_url": "https://pds.gulfoilltd.com/prodoemsearchresult",
+      "terms_url": "https://pds.gulfoilltd.com/website-terms",
+      "access_status": "public_browse_personal_use_only_all_other_use_prohibited",
+      "bulk_ingest_allowed": false,
+      "publication_status": "aggregate_metadata_only_pending_written_permission_or_official_feed",
+      "observed_count": 226,
+      "notes": "The public current 'Show all products' result contains 226 PDS listing rows across 38 product segments, representing 200 case-insensitive unique displayed product names and 226 distinct PDS URLs. The portal robots file allows its own catalog pages while disallowing the archived S3 path. However, the website terms reserve all Content including product data sheets, permit viewing/printing/downloading/copying only for reasonable personal use, and strictly prohibit all other use, alteration or modification. No PDS content or normalized product rows are imported without written permission or an official licensed feed."
+    },
+    {
+      "source_id": "ENEOS_ENGLISH_LUBRICANT_PRODUCT_CATALOG",
+      "title": "ENEOS Corporation English lubricant product catalog",
+      "owner": "ENEOS Corporation",
+      "source_type": "official_manufacturer_current_product_pages_and_pds",
+      "source_url": "https://www.eneos.co.jp/english/products/lubricants/",
+      "terms_url": "https://www.eneos.co.jp/english/guide/",
+      "access_status": "public_browse_personal_use_only_prior_written_permission_required",
+      "bulk_ingest_allowed": false,
+      "publication_status": "aggregate_metadata_only_pending_written_permission_or_official_feed",
+      "observed_count": 481,
+      "notes": "Seven current English lubricant pages expose 481 displayed product occurrences: 21 ENEOS OIL automotive entries, 32 fleet entries, 194 industrial lubricants, 124 metalworking fluids, 53 greases, 27 marine lubricants and 30 industrial/private-use engine oils. These represent 467 case-insensitive unique displayed names after 14 cross-page repeats. Robots does not disallow the catalog. ENEOS Terms of Use prohibit copying or using site content, as-is or modified, except for personal use or another purpose explicitly permitted by law, without prior written permission. No product rows or PDS content are imported; request a licensed feed or written permission."
+    },
+    {
       "source_id": "EGYPT_EOS_QUALITY_MARK_LUBRICANT_SCOPE_REVIEW",
       "title": "Egyptian EOS Quality Mark certified products — lubricant scope review",
       "owner": "Egyptian Organization for Standardization and Quality (EOS)",
@@ -1803,6 +1841,36 @@
       "publication_status": "reviewed_zero_relevant_product_rows",
       "observed_count": 0,
       "notes": "The full current Quality Mark directory was reviewed on 2026-07-21: eight listing pages exposed 143 unique certificate-holder pages and 238 current product rows. A strict Arabic lubricant, grease, hydraulic-fluid, brake-fluid, coolant and engine-oil scope produced two initial keyword candidates, both limestone-cement false positives caused by the Arabic substring for gear occurring inside limestone. No professional lubricant or technical-fluid product row remained, so nothing is added to the canonical catalog."
+    },
+    {
+      "source_id": "FUCHS_SAUDI_ARABIA_PRODUCT_FINDER",
+      "title": "FUCHS Saudi Arabia Product Finder",
+      "owner": "Alhamrani-Fuchs Petroleum Saudi Arabia Limited",
+      "source_type": "official_manufacturer_embedded_product_catalog",
+      "source_locator": "data/fuchs-saudi-arabia-products.jsonl",
+      "source_url": "https://www.fuchs.com/sa/en/products/service-links/product-finder/",
+      "terms_url": "https://www.fuchs.com/sa/en/imprint/",
+      "source_sha256": "bfeed7bc775c475b07a98cf503b7b32a8c17e26da321f52c4fb7a92cae0851bd",
+      "access_status": "public_full_catalog_embedded_in_official_page",
+      "bulk_ingest_allowed": true,
+      "publication_status": "informational_factual_fields_only_with_attribution_no_marketing_descriptions",
+      "observed_count": 360,
+      "notes": "The official imprint permits use, copying and distribution for informational purposes within an organisation when the complete copyright notice is retained, and prohibits commercial use. Of 376 embedded rows, 13 series and two placeholders are excluded and one duplicate occurrence is merged."
+    },
+    {
+      "source_id": "FUCHS_MACEDONIA_PRODUCT_FINDER",
+      "title": "FUCHS Macedonia Product Finder",
+      "owner": "FUCHS MAK DOOEL",
+      "source_type": "official_manufacturer_embedded_product_catalog",
+      "source_locator": "data/fuchs-macedonia-products.jsonl",
+      "source_url": "https://www.fuchs.com/mk/en/products/service-links/product-finder/",
+      "terms_url": "https://www.fuchs.com/mk/en/imprint/",
+      "source_sha256": "c130f41797773e71208f3bfce0bc71b9b9c8f4bb34c38104b7ae0d7ba51b08df",
+      "access_status": "public_full_catalog_embedded_in_official_page",
+      "bulk_ingest_allowed": true,
+      "publication_status": "informational_factual_fields_only_with_attribution_no_marketing_descriptions",
+      "observed_count": 948,
+      "notes": "The official imprint permits use, copying and distribution for informational purposes within an organisation when the complete copyright notice is retained, and prohibits commercial use. Of 1,075 embedded rows, 97 series and six equipment rows are excluded and 24 duplicate occurrences are merged."
     }
   ]
 }
