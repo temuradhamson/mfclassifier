@@ -1,0 +1,53 @@
+{
+  "status": "official_philippines_bps_brake_fluid_certification_evidence_normalized",
+  "source_landing_url": "https://bps.dti.gov.ph/product-certification/certified-products",
+  "snapshot_date": "2026-07-21",
+  "source_sheet_urls": {
+    "PHILIPPINES_BPS_PS_BRAKE_FLUID_LICENCES": "https://docs.google.com/spreadsheets/d/1DSg7CcAPt6c35s4YVj1gF3fpG8nGrwpG/gviz/tq?tqx=out:csv&gid=1052759647",
+    "PHILIPPINES_BPS_ICC_BRAKE_FLUID_CERTIFICATES": "https://docs.google.com/spreadsheets/d/1QSy99bJgQi9TERnk2S_6ZZroPF2-ktfO/gviz/tq?tqx=out:csv&gid=980728304"
+  },
+  "source_snapshot_dates": {
+    "PHILIPPINES_BPS_PS_BRAKE_FLUID_LICENCES": "2026-05-31",
+    "PHILIPPINES_BPS_ICC_BRAKE_FLUID_CERTIFICATES": "2026-04-30"
+  },
+  "source_csv_sha256": {
+    "PHILIPPINES_BPS_PS_BRAKE_FLUID_LICENCES": "fd0fb88b41b5cb2bfd3a6cf1c4a2f31059aebe4cb96b8e7d76ed243994f9d72a",
+    "PHILIPPINES_BPS_ICC_BRAKE_FLUID_CERTIFICATES": "301ac93be26bebb1938b218ab7810c9b8abd237aaa38898020c727d41a1f5e7a"
+  },
+  "source_reports": {
+    "PHILIPPINES_BPS_PS_BRAKE_FLUID_LICENCES": {
+      "source_rows": 3558,
+      "relevant_source_rows": 13,
+      "normalized_rows": 89
+    },
+    "PHILIPPINES_BPS_ICC_BRAKE_FLUID_CERTIFICATES": {
+      "source_rows": 19461,
+      "relevant_source_rows": 114,
+      "false_positive_rows_excluded": 1,
+      "expanded_grade_occurrences": 129,
+      "normalized_rows": 34
+    }
+  },
+  "normalized_products_or_brand_grade_scopes": 123,
+  "rows_by_source": {
+    "PHILIPPINES_BPS_ICC_BRAKE_FLUID_CERTIFICATES": 34,
+    "PHILIPPINES_BPS_PS_BRAKE_FLUID_LICENCES": 89
+  },
+  "brake_fluid_classes": {
+    "DOT 3": 62,
+    "DOT 4": 56,
+    "ENV6": 1
+  },
+  "source_quality_flags": {
+    "brake_fluid_class_not_reported": 4,
+    "source_brand_name_and_model_type_fields_conflict": 1,
+    "source_product_category_typo_retained": 2,
+    "source_reports_env6_without_dot_class": 1,
+    "source_standard_inconsistent_with_brake_fluid_category": 3,
+    "source_type_appears_to_contain_tyre_size": 2
+  },
+  "normalized_output_sha256": "543ac5e233fb68590b8427fcff0dc7676bafa1c969c22e624d1ef0ea983596ed",
+  "grain_note": "PS rows are licence + source-reported brand/product label + DOT grade scopes. ICC rows are certificate-holder + source-reported brand/product label + brake-fluid class identities with repeated sticker ranges merged.",
+  "market_note": "Neither PS nor ICC certification evidence is treated as a current commercial offer or price observation.",
+  "privacy_note": "Region, addresses, contacts and personal data are excluded. ICC sticker serial ranges are retained as non-personal certificate evidence."
+}

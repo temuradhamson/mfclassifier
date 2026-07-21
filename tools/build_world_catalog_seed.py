@@ -57,6 +57,7 @@ EAEU_CONFORMITY_JSONL = ROOT / "data" / "eaeu-conformity-lubricant-products.json
 EPA_SAFER_CHOICE_JSONL = ROOT / "data" / "epa-safer-choice-lubricants.jsonl"
 EPA_CHEMEXPO_JSONL = ROOT / "data" / "epa-chemexpo-lubricants.jsonl"
 PSQCA_ENGINE_OIL_JSONL = ROOT / "data" / "psqca-engine-oil-licences.jsonl"
+PHILIPPINES_BPS_BRAKE_FLUID_JSONL = ROOT / "data" / "philippines-bps-brake-fluid-products.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
 SON_MANCAP_JSONL = ROOT / "data" / "son-mancap-chemical-lubricant-products.jsonl"
@@ -1717,6 +1718,76 @@ def psqca_engine_oil_record(row: dict) -> dict:
     return record
 
 
+def philippines_bps_brake_fluid_record(row: dict) -> dict:
+    """Convert one conservative Philippine BPS brake-fluid evidence identity."""
+    brake_classes = row["technical"]["brake_fluid_class"]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": f"Philippines BPS {row['scheme']} brake-fluid certification evidence",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": "",
+        "api_class": "",
+        "viscosity": "",
+        "grease_class": "",
+        "coolant_class": brake_classes[0] if brake_classes else "",
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer_or_certificate_holder"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": row["evidence_status"],
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["dataset_snapshot_date"],
+        "certificate_status": row["lifecycle_status"],
+    })
+    record["specifications"].update({
+        "philippines_bps_scheme": row["scheme"],
+        "philippines_bps_brand_basis": row["brand_basis"],
+        "philippines_bps_certificate_entries": row["certificate_entries"],
+        "philippines_bps_source_snapshot_date": row["source_snapshot_date"],
+        "philippines_bps_source_quality_flags": row["source_quality_flags"],
+        "brake_fluid_class_source_reported": brake_classes,
+        "source_url": row["source_url"],
+        "source_landing_url": row["source_landing_url"],
+        "source_facts_sha256": row["source_facts_sha256"],
+    })
+    for key in ("source_brand_name_field", "source_model_type_field", "source_product_field", "source_occurrences", "source_occurrence_count"):
+        if key in row:
+            record["specifications"][f"philippines_bps_{key}"] = row[key]
+    code_system = "PHILIPPINES_BPS_PS_LICENCE" if row["scheme"] == "PS" else "PHILIPPINES_BPS_ICC_CERTIFICATE"
+    seen_certificate_numbers = set()
+    for index, certificate in enumerate(row["certificate_entries"], 1):
+        number = certificate["number"]
+        if not number or number in seen_certificate_numbers:
+            continue
+        seen_certificate_numbers.add(number)
+        record["codes"][f"philippines_bps_certificate_{index}"] = {
+            "system": code_system,
+            "value": number,
+            "source_id": row["source_id"],
+            "status": row["lifecycle_status"],
+        }
+    if row["certificate_entries"]:
+        record["certificate"].update({
+            "number": row["certificate_entries"][0]["number"],
+            "technical_document": "; ".join(row["technical"].get("certified_standard", row["technical"].get("certified_standard_source_reported", []))),
+        })
+    # The same label/grade can have different local-production and import
+    # certificates or different holders. Do not collapse those formula scopes.
+    record["canonical_key"] += f"|philippines_bps_record:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    return record
+
+
 def kebs_smark_record(row: dict) -> dict:
     """Convert one normalized product identity from the public KEBS S-Mark directory."""
     technical = row["technical"]
@@ -2540,6 +2611,9 @@ def main() -> None:
     psqca_engine_oil_source_rows = [json.loads(line) for line in PSQCA_ENGINE_OIL_JSONL.read_text(encoding="utf-8").splitlines() if line]
     psqca_engine_oil_records = [psqca_engine_oil_record(row) for row in psqca_engine_oil_source_rows]
     input_records.extend(psqca_engine_oil_records)
+    philippines_bps_brake_fluid_source_rows = [json.loads(line) for line in PHILIPPINES_BPS_BRAKE_FLUID_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    philippines_bps_brake_fluid_records = [philippines_bps_brake_fluid_record(row) for row in philippines_bps_brake_fluid_source_rows]
+    input_records.extend(philippines_bps_brake_fluid_records)
     kebs_smark_source_rows = [json.loads(line) for line in KEBS_SMARK_JSONL.read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_records = [kebs_smark_record(row) for row in kebs_smark_source_rows]
     input_records.extend(kebs_smark_records)
@@ -4072,6 +4146,7 @@ def main() -> None:
         "epa_safer_choice_input_sha256": hashlib.sha256(EPA_SAFER_CHOICE_JSONL.read_bytes()).hexdigest(),
         "epa_chemexpo_input_sha256": hashlib.sha256(EPA_CHEMEXPO_JSONL.read_bytes()).hexdigest(),
         "psqca_engine_oil_input_sha256": hashlib.sha256(PSQCA_ENGINE_OIL_JSONL.read_bytes()).hexdigest(),
+        "philippines_bps_brake_fluid_input_sha256": hashlib.sha256(PHILIPPINES_BPS_BRAKE_FLUID_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "son_mancap_input_sha256": hashlib.sha256(SON_MANCAP_JSONL.read_bytes()).hexdigest(),
@@ -4141,6 +4216,9 @@ def main() -> None:
         "epa_chemexpo_products_added": epa_chemexpo_added_rows,
         "psqca_engine_oil_source_rows": len(psqca_engine_oil_source_rows),
         "official_government_product_certification_brand_scope_rows": sum(r["evidence_status"] == "official_government_product_certification_brand_scope" for r in records),
+        "philippines_bps_brake_fluid_source_rows": len(philippines_bps_brake_fluid_source_rows),
+        "philippines_bps_ps_brake_fluid_rows": sum(r["source_id"] == "PHILIPPINES_BPS_PS_BRAKE_FLUID_LICENCES" for r in records),
+        "philippines_bps_icc_brake_fluid_rows": sum(r["source_id"] == "PHILIPPINES_BPS_ICC_BRAKE_FLUID_CERTIFICATES" for r in records),
         "kebs_smark_source_rows": len(kebs_smark_source_rows),
         "east_africa_certified_source_rows": len(east_africa_certified_source_rows),
         "east_africa_certified_source_rows_by_source": dict(sorted(Counter(row["source_id"] for row in east_africa_certified_source_rows).items())),

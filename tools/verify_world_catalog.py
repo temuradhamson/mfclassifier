@@ -148,6 +148,8 @@ def main() -> None:
     epa_chemexpo_rows = [json.loads(line) for line in (ROOT / "data/epa-chemexpo-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     psqca_report = json.loads((ROOT / "data/psqca-engine-oil-licences-report.json").read_text(encoding="utf-8"))
     psqca_rows = [json.loads(line) for line in (ROOT / "data/psqca-engine-oil-licences.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    philippines_bps_report = json.loads((ROOT / "data/philippines-bps-brake-fluid-products-report.json").read_text(encoding="utf-8"))
+    philippines_bps_rows = [json.loads(line) for line in (ROOT / "data/philippines-bps-brake-fluid-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_report = json.loads((ROOT / "data/kebs-smark-lubricant-products-report.json").read_text(encoding="utf-8"))
     kebs_smark_rows = [json.loads(line) for line in (ROOT / "data/kebs-smark-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     east_africa_report = json.loads((ROOT / "data/east-africa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -187,7 +189,7 @@ def main() -> None:
     assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
     assert not db.execute("PRAGMA foreign_key_check").fetchall()
     assert db.execute("SELECT count(*) FROM products").fetchone()[0] == len(lines)
-    assert len(lines) == 97924
+    assert len(lines) == 98047
     assert report["jaso_source_rows"] == jaso_report["rows"] == 3630
     assert report["jaso_unique_oil_codes"] == jaso_report["unique_oil_codes"] == 3629
     assert report["official_filed_registry_rows"] == 3629
@@ -235,6 +237,9 @@ def main() -> None:
     assert report["official_government_compiled_product_database_rows"] == report["epa_chemexpo_products_added"]
     assert report["psqca_engine_oil_source_rows"] == psqca_report["normalized_licence_brand_scopes"] == len(psqca_rows) == 14
     assert report["official_government_product_certification_brand_scope_rows"] == 14
+    assert report["philippines_bps_brake_fluid_source_rows"] == philippines_bps_report["normalized_products_or_brand_grade_scopes"] == len(philippines_bps_rows) == 123
+    assert report["philippines_bps_ps_brake_fluid_rows"] == philippines_bps_report["rows_by_source"]["PHILIPPINES_BPS_PS_BRAKE_FLUID_LICENCES"] == 89
+    assert report["philippines_bps_icc_brake_fluid_rows"] == philippines_bps_report["rows_by_source"]["PHILIPPINES_BPS_ICC_BRAKE_FLUID_CERTIFICATES"] == 34
     assert report["kebs_smark_source_rows"] == kebs_smark_report["normalized_products"] == len(kebs_smark_rows) == 750
     assert report["east_africa_certified_source_rows"] == east_africa_report["normalized_products"] == len(east_africa_rows) == 229
     assert report["east_africa_certified_source_rows_by_source"] == east_africa_report["normalized_products_by_source"] == {
@@ -386,7 +391,17 @@ def main() -> None:
     assert report["liqui_moly_current_products_matched_to_2020"] == 295
     assert report["liqui_moly_current_products_added"] == 152
     assert report["liqui_moly_current_article_skus"] == liqui_moly_current_report["unique_article_skus"] == 985
-    assert report["duplicate_decisions"]["review_cross_source_identity"] == 5037
+    assert report["duplicate_decisions"]["review_cross_source_identity"] == 5039
+    assert db.execute("""
+        SELECT count(*) FROM duplicate_decisions d
+        JOIN products a ON a.product_id=d.product_id_a
+        JOIN products b ON b.product_id=d.product_id_b
+        WHERE d.decision='review_cross_source_identity'
+          AND a.source_id='PHILIPPINES_BPS_ICC_BRAKE_FLUID_CERTIFICATES'
+          AND b.source_id='PHILIPPINES_BPS_PS_BRAKE_FLUID_LICENCES'
+          AND a.brand='Würth'
+          AND b.brand='WÜRTH'
+    """).fetchone()[0] == 2
     assert report["duplicate_decisions"]["keep_separate_blue_angel_family_conflict"] == 34
     assert report["duplicate_decisions"]["review_brand_alias_identity"] == 2
     assert report["duplicate_decisions"]["review_liqui_moly_multi_registry_identity"] == 49
@@ -465,6 +480,28 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='EPA_CHEMEXPO_PRODUCT_ID'").fetchone()[0] == epa_chemexpo_report["kept_product_occurrences"]
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='PSQCA_ENGINE_OIL_CM_LICENCES'").fetchone()[0] == 14
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='PSQCA_CM_LICENCE'").fetchone()[0] == 14
+    assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='PHILIPPINES_BPS_PS_BRAKE_FLUID_LICENCES'").fetchone()[0] == 89
+    assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='PHILIPPINES_BPS_ICC_BRAKE_FLUID_CERTIFICATES'").fetchone()[0] == 34
+    assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='PHILIPPINES_BPS_PS_LICENCE'").fetchone()[0] == 89
+    assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='PHILIPPINES_BPS_ICC_CERTIFICATE'").fetchone()[0] == 68
+    assert db.execute("""
+        SELECT count(*) FROM certificates c JOIN products p ON p.product_id=c.product_id
+        WHERE p.source_id LIKE 'PHILIPPINES_BPS_%'
+    """).fetchone()[0] == 123
+    assert db.execute("SELECT count(*) FROM product_offers WHERE source_id LIKE 'PHILIPPINES_BPS_%'").fetchone()[0] == 0
+    assert db.execute("""
+        SELECT count(*) FROM products p
+        WHERE p.source_id LIKE 'PHILIPPINES_BPS_%'
+          AND NOT EXISTS (
+              SELECT 1 FROM specifications s
+              WHERE s.product_id=p.product_id AND s.spec_type='coolant_class'
+          )
+    """).fetchone()[0] == 4
+    assert db.execute("""
+        SELECT count(*) FROM specifications s JOIN products p ON p.product_id=s.product_id
+        WHERE p.source_id LIKE 'PHILIPPINES_BPS_%'
+          AND s.spec_type='coolant_class' AND s.spec_value='ENV6'
+    """).fetchone()[0] == 1
     assert db.execute("""
         SELECT count(*) FROM certificates c
         JOIN products p ON p.product_id=c.product_id
@@ -587,6 +624,34 @@ def main() -> None:
     assert all(row["technical"]["sae"] == row["technical"]["api"] == [] for row in psqca_rows)
     assert all(row["product_name_basis"] == "source_reported_certified_brand_scope_not_individual_grade" for row in psqca_rows)
     assert all(not ({"address", "phone", "email", "contact_person"} & set(row)) for row in psqca_rows)
+    assert philippines_bps_report["source_reports"]["PHILIPPINES_BPS_PS_BRAKE_FLUID_LICENCES"] == {
+        "source_rows": 3558,
+        "relevant_source_rows": 13,
+        "normalized_rows": 89,
+    }
+    assert philippines_bps_report["source_reports"]["PHILIPPINES_BPS_ICC_BRAKE_FLUID_CERTIFICATES"] == {
+        "source_rows": 19461,
+        "relevant_source_rows": 114,
+        "false_positive_rows_excluded": 1,
+        "expanded_grade_occurrences": 129,
+        "normalized_rows": 34,
+    }
+    assert philippines_bps_report["brake_fluid_classes"] == {"DOT 3": 62, "DOT 4": 56, "ENV6": 1}
+    assert philippines_bps_report["source_quality_flags"] == {
+        "brake_fluid_class_not_reported": 4,
+        "source_brand_name_and_model_type_fields_conflict": 1,
+        "source_product_category_typo_retained": 2,
+        "source_reports_env6_without_dot_class": 1,
+        "source_standard_inconsistent_with_brake_fluid_category": 3,
+        "source_type_appears_to_contain_tyre_size": 2,
+    }
+    assert len({row["source_record_id"] for row in philippines_bps_rows}) == 123
+    assert sum(not row["technical"]["brake_fluid_class"] for row in philippines_bps_rows) == 4
+    assert all(row["family_code"] == "TF" for row in philippines_bps_rows)
+    assert all(not ({"region", "address", "phone", "email", "contact_person"} & set(row)) for row in philippines_bps_rows)
+    for source_id, expected in (("PHILIPPINES_BPS_PS_BRAKE_FLUID_LICENCES", 89), ("PHILIPPINES_BPS_ICC_BRAKE_FLUID_CERTIFICATES", 34)):
+        assert policy_by_id[source_id]["source_sha256"] == philippines_bps_report["normalized_output_sha256"]
+        assert policy_by_id[source_id]["observed_count"] == expected
     assert policy_by_id["nsf-white-book"]["bulk_ingest_allowed"] is False
     assert policy_by_id["FLENDER_T7300_APPROVED_LUBRICANTS"]["bulk_ingest_allowed"] is False
     chemexpo_names = {row["product_name"].casefold() for row in epa_chemexpo_rows}

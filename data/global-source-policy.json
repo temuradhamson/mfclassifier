@@ -1135,6 +1135,36 @@
       "notes": "Two exact product filters for PS 343 mono-grade and multi-grade internal-combustion engine lubricating oil expose 14 licence/brand scopes. One licence is valid and 13 are expired at the 2026-07-21 snapshot. The source grain is a certified brand scope, not an individual SAE/API formulation; SAE/API are therefore never inferred. Locations, contacts and addresses are excluded."
     },
     {
+      "source_id": "PHILIPPINES_BPS_PS_BRAKE_FLUID_LICENCES",
+      "title": "Philippine Bureau of Product Standards — PS motor-vehicle brake-fluid licensees",
+      "owner": "Philippines Department of Trade and Industry — Bureau of Philippine Standards",
+      "source_type": "official_government_live_product_certification_spreadsheet_curated_scope",
+      "source_locator": "data/philippines-bps-brake-fluid-products.jsonl",
+      "source_url": "https://bps.dti.gov.ph/product-certification/certified-products",
+      "terms_url": "https://bps.dti.gov.ph/product-certification/certified-products",
+      "source_sha256": "543ac5e233fb68590b8427fcff0dc7676bafa1c969c22e624d1ef0ea983596ed",
+      "access_status": "public_official_government_page_with_direct_live_spreadsheet",
+      "bulk_ingest_allowed": true,
+      "publication_status": "normalized_factual_certification_scope_evidence_with_attribution",
+      "observed_count": 89,
+      "notes": "The official BPS List of Certified Products page directly links a live PS-licensee spreadsheet. Its 2026-05-31 snapshot contains 3,558 rows; 13 exact Motor Vehicle Brake Fluid licences normalize to 89 licence + brand/product-label + DOT scopes. Audited per-licence mappings avoid assigning every brand to every grade. Region and contacts are excluded; one source conflict between Brand Name and Model/Type remains explicitly flagged."
+    },
+    {
+      "source_id": "PHILIPPINES_BPS_ICC_BRAKE_FLUID_CERTIFICATES",
+      "title": "Philippine Bureau of Product Standards — ICC motor-vehicle brake-fluid certificate holders",
+      "owner": "Philippines Department of Trade and Industry — Bureau of Philippine Standards",
+      "source_type": "official_government_live_import_certificate_spreadsheet_curated_scope",
+      "source_locator": "data/philippines-bps-brake-fluid-products.jsonl",
+      "source_url": "https://bps.dti.gov.ph/product-certification/certified-products",
+      "terms_url": "https://bps.dti.gov.ph/product-certification/certified-products",
+      "source_sha256": "543ac5e233fb68590b8427fcff0dc7676bafa1c969c22e624d1ef0ea983596ed",
+      "access_status": "public_official_government_page_with_direct_live_spreadsheet",
+      "bulk_ingest_allowed": true,
+      "publication_status": "normalized_factual_import_certificate_evidence_with_attribution",
+      "observed_count": 34,
+      "notes": "The official BPS page directly links a live ICC-holder spreadsheet. Its 2026-04-30 snapshot contains 19,461 rows; 114 exact Motor Vehicle Brake Fluid rows expand to 129 class occurrences and normalize to 34 holder + product-label + brake-fluid-class identities after repeated ICC sticker ranges are merged. One false ceramic-tile row containing brake-fluid text is excluded. Category typos, inconsistent standards and tyre-like type values remain explicit quality flags. ICC evidence is not treated as a current commercial offer."
+    },
+    {
       "source_id": "FLENDER_T7300_APPROVED_LUBRICANTS",
       "title": "Flender T7300 approved lubricants",
       "owner": "Flender GmbH",
