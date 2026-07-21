@@ -3,7 +3,7 @@
   "run_id": "seed-2026-07-21",
   "snapshot_date": "2026-07-21",
   "status": "seed_only_world_catalog_incomplete",
-  "input_rows": 99490,
+  "input_rows": 99705,
   "normalized_input_sha256": "819d11779ffccddf9683a9b18a70e39bd5a1b8d72d9811fb5bb46d136b0f8073",
   "jaso_normalized_input_sha256": "b664fea5aee78de7303c33bf13d3c9ac26c8779b78beac24c54295b4d58603d3",
   "official_licensed_input_sha256": "533183ffbc755268ef12b54a556d1f3ea78db4fc80b564e12c391a10a8e2075e",
@@ -35,6 +35,7 @@
   "cummins_valvoline_2022_input_sha256": "65daf2907d9bc323cc517d1ca892cd4654f5891abde4a999779da9fa14eb06eb",
   "taiwan_cpc_input_sha256": "0c412c453189bc202ef2c88fae18beca3d5ced78295263eb8f68d5923e87c243",
   "volvo_websds_input_sha256": "83729b531618da758e9ddee12eb2ba0e44c5cce1b3d2825a7c5cb7f4d2eddd7a",
+  "parker_denison_input_sha256": "50fb95a241ed18b215dcda4d35f46e8f4bc9621bf60097e93cac3306ad2d799d",
   "scania_genuine_input_sha256": "bed1b35c1e61f17604726845a2326a3b928f178ae38d5f75919d55814d3e210f",
   "brava_official_input_sha256": "fbb7e87b61bd55d51bb3f0925366f6b16985412089ba736cea2fea0e95f5fc28",
   "ceypetco_input_sha256": "df35372735310aa2251d10bbe1d4ded683a678d063bf77f9265205e6056ffcc3",
@@ -62,13 +63,13 @@
   "fuchs_brazil_input_sha256": "4554ef1b651617a4a810d945bc519bed1e809ace1cda4246d6b63c7fff99affc",
   "fuchs_norway_input_sha256": "7ef62a3216e7f497ed96512202b7d386673fd01a4c6273ae1cc8fff6e026801a",
   "fuchs_hungary_input_sha256": "8a82b90335bc58ab44734be7541daaad051707258b5fbcb5346f8c2a2bf66ed4",
-  "canonical_rows": 99489,
-  "brands": 13854,
+  "canonical_rows": 99704,
+  "brands": 13924,
   "families": {
     "C": 2462,
     "E": 148,
     "G": 11037,
-    "H": 5533,
+    "H": 5748,
     "I": 4356,
     "M": 43201,
     "S": 7455,
@@ -152,8 +153,8 @@
     "stop_ship": 2
   },
   "official_government_registry_source_data_issue_rows": 51,
-  "official_oem_approval_rows": 6278,
-  "official_manufacturer_catalog_rows": 6015,
+  "official_oem_approval_rows": 6495,
+  "official_manufacturer_catalog_rows": 6013,
   "official_manufacturer_sds_change_observation_rows": 144,
   "official_oem_service_recommendation_rows": 30,
   "zf_te_ml_source_rows": 1498,
@@ -170,6 +171,12 @@
   "taiwan_cpc_source_rows": 224,
   "volvo_websds_source_rows": 144,
   "volvo_websds_unique_part_numbers": 394,
+  "parker_denison_source_rows": 217,
+  "parker_denison_lifecycle_statuses": {
+    "published_rating_expired_by_validity_month_as_of_snapshot": 11,
+    "published_rating_not_expired_by_validity_month_as_of_snapshot": 205,
+    "source_validity_value_invalid_review_required": 1
+  },
   "taiwan_cpc_structured_package_offers": 478,
   "scania_genuine_source_rows": 4,
   "brava_official_source_rows": 69,
@@ -194,8 +201,8 @@
   "fuchs_india_products_matched_to_existing": 22,
   "fuchs_india_products_added": 985,
   "fuchs_us_source_rows": 623,
-  "fuchs_us_products_matched_to_existing": 124,
-  "fuchs_us_products_added": 499,
+  "fuchs_us_products_matched_to_existing": 126,
+  "fuchs_us_products_added": 497,
   "fuchs_cross_market_exact_name_family_rows": 118,
   "fuchs_cross_market_family_conflict_rows": 4,
   "fuchs_germany_source_rows": 1464,
@@ -295,7 +302,7 @@
     "keep_separate_fuchs_market_family_conflict": 529
   },
   "quality_issues": {
-    "professional_key_incomplete": 28764,
+    "professional_key_incomplete": 28980,
     "classification_family_conflict": 214,
     "source_multigrade_table_not_safely_aligned_to_listing_title": 27,
     "source_registration_number_missing": 51,
@@ -320,7 +327,8 @@
     "cummins_valvoline_2022_source_article_number_cross_product_collision_retained_verbatim": 6,
     "cummins_valvoline_2022_source_product_title_missing_viscosity_grade": 1,
     "cummins_valvoline_2022_source_product_title_hlvp_notation_retained_verbatim": 2,
-    "dla_qpd_lifecycle_restriction": 93
+    "dla_qpd_lifecycle_restriction": 93,
+    "parker_denison_source_invalid_validity_month": 1
   },
   "bulk_sources_allowed": [
     "user-supplied-chilon-2026",
@@ -423,7 +431,8 @@
     "CUMMINS_VALVOLINE_EU_2022_CATALOG",
     "TAIWAN_CPC_CURRENT_LUBRICANT_CATALOG",
     "VOLVO_GROUP_WEBSDS_CHANGE_ARCHIVE",
-    "MEXICO_CONUEE_CERTIFIED_PRODUCTS_LUBRICANT_SCOPE_REVIEW"
+    "MEXICO_CONUEE_CERTIFIED_PRODUCTS_LUBRICANT_SCOPE_REVIEW",
+    "PARKER_DENISON_CURRENT_FLUID_RATINGS"
   ],
   "bulk_sources_blocked": [
     "fuchs-benelux",
@@ -447,7 +456,8 @@
     "MALAYSIA_SIRIM_ENGINE_OIL_DIRECTORY_REVIEW",
     "INDIANOIL_SERVO_PRODUCT_CATALOG",
     "CUMMINS_CURRENT_OIL_REGISTRATION_LIST",
-    "REPSOL_LUBRICANTS_PRODUCT_CATALOG"
+    "REPSOL_LUBRICANTS_PRODUCT_CATALOG",
+    "EATON_APPROVED_LUBRICANTS_TCMT0020"
   ],
   "confirmed_world_total": null,
   "completion_note": "The seed proves the pipeline, not worldwide coverage. Exact worldwide count remains pending licensed/authorized source ingestion.",

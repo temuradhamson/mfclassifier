@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-07-21",
+  "source_id": "PARKER_DENISON_CURRENT_FLUID_RATINGS",
+  "source_url": "https://discover.parker.com/hydraulic-fluid-evaluation-process",
+  "source_document_url": "https://images.solutions.parker.com/Web/Parker/%7B07ef2fe8-ccb4-406e-bff7-d48dd318ca71%7D_MSG30-0004_Parker-Denison_fluid_ratings.pdf",
+  "source_document_sha256": "a32d4aa248adc30eae63b00b3433272f0d9e37e19a22ff5c7aad66d68294ebc1",
+  "source_document_pages": 8,
+  "rating_list_review_date": "2026-04-14",
+  "normalized_rating_rows": 217,
+  "manufacturers": 104,
+  "rows_by_lifecycle": {
+    "published_rating_expired_by_validity_month_as_of_snapshot": 11,
+    "published_rating_not_expired_by_validity_month_as_of_snapshot": 205,
+    "source_validity_value_invalid_review_required": 1
+  },
+  "rows_by_hf_class": {
+    "HF0": 205,
+    "HF1": 12,
+    "HF2": 11,
+    "HF6": 11,
+    "HF6e": 3
+  },
+  "rows_by_iso_vg": {
+    "32": 197,
+    "46": 216,
+    "68": 194
+  },
+  "source_quality_flags": {
+    "source_hf01_superscript_footnote_normalized_to_hf0": 86,
+    "source_hf02_superscript_footnote_normalized_to_hf0": 1,
+    "source_invalid_validity_month_retained_verbatim": 1
+  },
+  "normalized_output_sha256": "50fb95a241ed18b215dcda4d35f46e8f4bc9621bf60097e93cac3306ad2d799d",
+  "publication_scope": "Attributed non-expressive rating facts only: manufacturer, commercial name, ISO VG rating columns, HM/HV, ashless/zinc-free, HF classification, validity and source coordinates. Narrative text and document layout are not republished.",
+  "lifecycle_note": "Validity is evaluated only at published month granularity. A malformed source month remains verbatim and is not repaired by inference."
+}

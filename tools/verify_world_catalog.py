@@ -66,6 +66,8 @@ def main() -> None:
     taiwan_cpc_rows = [json.loads(line) for line in (ROOT / "data/taiwan-cpc-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     volvo_websds_report = json.loads((ROOT / "data/volvo-group-websds-lubricant-products-report.json").read_text(encoding="utf-8"))
     volvo_websds_rows = [json.loads(line) for line in (ROOT / "data/volvo-group-websds-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    parker_denison_report = json.loads((ROOT / "data/parker-denison-fluid-ratings-report.json").read_text(encoding="utf-8"))
+    parker_denison_rows = [json.loads(line) for line in (ROOT / "data/parker-denison-fluid-ratings.jsonl").read_text(encoding="utf-8").splitlines() if line]
     scania_report = json.loads((ROOT / "data/scania-genuine-oils-report.json").read_text(encoding="utf-8"))
     scania_rows = [json.loads(line) for line in (ROOT / "data/scania-genuine-oils.jsonl").read_text(encoding="utf-8").splitlines() if line]
     brava_report = json.loads((ROOT / "data/brava-official-products-report.json").read_text(encoding="utf-8"))
@@ -207,7 +209,7 @@ def main() -> None:
     assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
     assert not db.execute("PRAGMA foreign_key_check").fetchall()
     assert db.execute("SELECT count(*) FROM products").fetchone()[0] == len(lines)
-    assert len(lines) == 99489
+    assert len(lines) == 99704
     assert report["jaso_source_rows"] == jaso_report["rows"] == 3630
     assert report["jaso_unique_oil_codes"] == jaso_report["unique_oil_codes"] == 3629
     assert report["official_filed_registry_rows"] == 3629
@@ -335,6 +337,24 @@ def main() -> None:
     assert policy_by_id["REPSOL_LUBRICANTS_PRODUCT_CATALOG"]["bulk_ingest_allowed"] is False
     assert policy_by_id["REPSOL_LUBRICANTS_PRODUCT_CATALOG"]["observed_count"] == 0
     assert policy_by_id["MEXICO_CONUEE_CERTIFIED_PRODUCTS_LUBRICANT_SCOPE_REVIEW"]["observed_count"] == 0
+    assert report["parker_denison_source_rows"] == parker_denison_report["normalized_rating_rows"] == len(parker_denison_rows) == 217
+    assert report["parker_denison_input_sha256"] == parker_denison_report["normalized_output_sha256"]
+    assert policy_by_id["PARKER_DENISON_CURRENT_FLUID_RATINGS"]["source_sha256"] == parker_denison_report["normalized_output_sha256"]
+    assert policy_by_id["PARKER_DENISON_CURRENT_FLUID_RATINGS"]["observed_count"] == 217
+    assert parker_denison_report["source_document_sha256"] == "a32d4aa248adc30eae63b00b3433272f0d9e37e19a22ff5c7aad66d68294ebc1"
+    assert parker_denison_report["source_document_pages"] == 8
+    assert parker_denison_report["rating_list_review_date"] == "2026-04-14"
+    assert parker_denison_report["manufacturers"] == 104
+    assert parker_denison_report["rows_by_lifecycle"] == {
+        "published_rating_expired_by_validity_month_as_of_snapshot": 11,
+        "published_rating_not_expired_by_validity_month_as_of_snapshot": 205,
+        "source_validity_value_invalid_review_required": 1,
+    }
+    assert parker_denison_report["rows_by_iso_vg"] == {"32": 197, "46": 216, "68": 194}
+    assert all(row["family_code"] == "H" for row in parker_denison_rows)
+    assert all(row["specifications"]["approved_iso_vg"] for row in parker_denison_rows)
+    assert all(not ({"description", "image", "logo", "marketing_text", "narrative"} & set(row)) for row in parker_denison_rows)
+    assert policy_by_id["EATON_APPROVED_LUBRICANTS_TCMT0020"]["bulk_ingest_allowed"] is False
     assert sum(len(row["source_occurrences"]) for row in mack_2014_rows) == 806
     assert all(row["lifecycle_status"] == "historical_approval_as_published_2014_04_current_status_unverified" for row in mack_2014_rows)
     assert report["korea_ecolabel_source_rows"] == korea_ecolabel_report["normalized_products"] == len(korea_ecolabel_rows) == 20
@@ -420,8 +440,8 @@ def main() -> None:
     assert dla_report["published_manufacturer_product_occurrences"] == 480
     assert dla_report["plant_rows_without_product_designation_excluded"] == 766
     assert report["zf_te_ml_source_rows"] == zf_report["unique_approval_numbers"] == 1498
-    assert report["official_oem_approval_rows"] == 6278
-    assert report["official_manufacturer_catalog_rows"] == 6015
+    assert report["official_oem_approval_rows"] == 6495
+    assert report["official_manufacturer_catalog_rows"] == 6013
     assert report["official_oem_service_recommendation_rows"] == 30
     assert report["allison_source_rows"] == allison_report["products"] == 104
     assert report["driventic_diwa_source_rows"] == driventic_report["products"] == 226
@@ -438,8 +458,8 @@ def main() -> None:
     assert report["fuchs_india_products_matched_to_existing"] == 22
     assert report["fuchs_india_products_added"] == 985
     assert report["fuchs_us_source_rows"] == fuchs_us_report["products"] == 623
-    assert report["fuchs_us_products_matched_to_existing"] == 124
-    assert report["fuchs_us_products_added"] == 499
+    assert report["fuchs_us_products_matched_to_existing"] == 126
+    assert report["fuchs_us_products_added"] == 497
     assert report["fuchs_cross_market_exact_name_family_rows"] == 118
     assert report["fuchs_cross_market_family_conflict_rows"] == 4
     assert report["fuchs_germany_source_rows"] == fuchs_germany_report["products"] == 1464
@@ -572,8 +592,8 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_regulatory_registry'").fetchone()[0] == 30725
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_registry_source_data_issue'").fetchone()[0] == 51
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_qualified_product_registry'").fetchone()[0] == 456
-    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_approval_registry'").fetchone()[0] == 6278
-    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_manufacturer_product_catalog'").fetchone()[0] == 6015
+    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_approval_registry'").fetchone()[0] == 6495
+    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_manufacturer_product_catalog'").fetchone()[0] == 6013
     assert db.execute("SELECT count(*) FROM products WHERE source_id='BRAVA_LUBRICANTS_OFFICIAL_CATALOG'").fetchone()[0] == 69
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='BRAVA_LUBRICANTS_OFFICIAL_CATALOG'").fetchone()[0] == 69
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='BRAVA_PART_NUMBER'").fetchone()[0] == 94
@@ -617,6 +637,16 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='VOLVO_GROUP_WEBSDS_PART_NUMBER'").fetchone()[0] == 394
     assert db.execute("SELECT count(DISTINCT code_value) FROM external_codes WHERE code_system='VOLVO_GROUP_WEBSDS_PART_NUMBER'").fetchone()[0] == 394
     assert db.execute("SELECT count(*) FROM product_offers WHERE source_id='VOLVO_GROUP_WEBSDS_CHANGE_ARCHIVE'").fetchone()[0] == 0
+    assert db.execute("SELECT count(*) FROM products WHERE source_id='PARKER_DENISON_CURRENT_FLUID_RATINGS'").fetchone()[0] == 217
+    assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='PARKER_DENISON_CURRENT_FLUID_RATINGS'").fetchone()[0] == 217
+    assert db.execute("SELECT count(*) FROM product_offers WHERE source_id='PARKER_DENISON_CURRENT_FLUID_RATINGS'").fetchone()[0] == 0
+    assert db.execute("SELECT count(*) FROM quality_issues WHERE issue_code='parker_denison_source_invalid_validity_month'").fetchone()[0] == 1
+    assert db.execute("""
+        SELECT count(*) FROM products p
+        JOIN product_sources s ON s.product_id=p.product_id
+        WHERE p.source_id='PARKER_DENISON_CURRENT_FLUID_RATINGS'
+          AND s.source_id='FUCHS_US_PRODUCT_FINDER'
+    """).fetchone()[0] == 2
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_service_recommendation'").fetchone()[0] == 30
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='ALLISON_APPROVAL_NUMBER'").fetchone()[0] == 119
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='MERCEDES_DTFR_PRODUCT_ID'").fetchone()[0] == 1892

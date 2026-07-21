@@ -1718,6 +1718,33 @@
       "publication_status": "reviewed_zero_relevant_rows_no_product_ingest",
       "observed_count": 0,
       "notes": "The March 2026 downloadable CSV contains 7,835 energy-efficiency certified-product rows. A strict lubricant/coolant/technical-fluid scope review found zero relevant product rows, so this source is retained as a documented zero-coverage result rather than padded into the catalog."
+    },
+    {
+      "source_id": "PARKER_DENISON_CURRENT_FLUID_RATINGS",
+      "title": "Parker-Denison current hydraulic-fluid ratings",
+      "owner": "Parker Hannifin Manufacturing France SAS",
+      "source_type": "official_current_oem_fluid_rating_pdf",
+      "source_locator": "data/parker-denison-fluid-ratings.jsonl",
+      "source_url": "https://discover.parker.com/hydraulic-fluid-evaluation-process",
+      "source_sha256": "50fb95a241ed18b215dcda4d35f46e8f4bc9621bf60097e93cac3306ad2d799d",
+      "access_status": "public_official_rating_list_attributed_factual_fields_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "derived_factual_oem_rating_records_with_attribution",
+      "observed_count": 217,
+      "notes": "Official eight-page list reviewed 2026-04-14. It exposes 217 ratings from 104 manufacturers, applicable ISO VG 32/46/68 columns, HM/HV, ashless/zinc-free, Parker HF classifications and validity month. Parker explicitly permits manufacturers to reference positive ratings when procedures, validity and qualifications are stated. The catalog republishes only attributed non-expressive facts, not narrative or layout. Eleven ratings are expired by published month at snapshot; 205 are not expired by month; malformed source value 2028-31 remains verbatim and unvalidated."
+    },
+    {
+      "source_id": "EATON_APPROVED_LUBRICANTS_TCMT0020",
+      "title": "Eaton Approved Lubricants and Categories TCMT0020",
+      "owner": "Eaton Corporation plc",
+      "source_type": "official_oem_approved_lubricant_pdf",
+      "source_url": "https://www.eaton.com/content/dam/eaton/products/transmissions/lubricants/eaton-lubricant-suppliers-brochure-tcmt0020.pdf",
+      "terms_url": "https://www.eaton.com/us/en-us/company/policies-and-statements/terms-and-conditions.html",
+      "access_status": "public_browse_personal_noncommercial_download_terms",
+      "bulk_ingest_allowed": false,
+      "publication_status": "metadata_only_pending_written_permission_or_official_feed",
+      "observed_count": 0,
+      "notes": "The July 2024 official guide contains useful approved transmission and axle lubricant tables. Eaton's general website terms limit downloads to personal non-commercial use, while the PDF grants free copying only in its entirety and printed format. No normalized product rows are imported pending written permission or an official licensed feed."
     }
   ]
 }

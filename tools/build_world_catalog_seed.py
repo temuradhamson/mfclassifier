@@ -45,6 +45,7 @@ MACK_2014_APPROVED_JSONL = ROOT / "data" / "mack-2014-approved-oils.jsonl"
 CUMMINS_VALVOLINE_2022_JSONL = ROOT / "data" / "cummins-valvoline-2022-products.jsonl"
 TAIWAN_CPC_JSONL = ROOT / "data" / "taiwan-cpc-lubricant-products.jsonl"
 VOLVO_WEBSDS_JSONL = ROOT / "data" / "volvo-group-websds-lubricant-products.jsonl"
+PARKER_DENISON_JSONL = ROOT / "data" / "parker-denison-fluid-ratings.jsonl"
 SCANIA_GENUINE_JSONL = ROOT / "data" / "scania-genuine-oils.jsonl"
 BRAVA_OFFICIAL_JSONL = ROOT / "data" / "brava-official-products.jsonl"
 CEYPETCO_JSONL = ROOT / "data" / "ceypetco-lubricant-products.jsonl"
@@ -999,6 +1000,49 @@ def volvo_websds_record(row: dict) -> dict:
             "source_id": row["source_id"],
             "status": "official_sds_change_observation_current_availability_unverified",
         }
+    return record
+
+
+def parker_denison_record(row: dict) -> dict:
+    """Convert one Parker-Denison hydraulic-fluid rating row."""
+    specs = row["specifications"]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Parker-Denison current hydraulic-fluid rating list",
+        "category_code": "H",
+        "family": FAMILY_NAMES["H"],
+        "api_class": "/".join(specs["parker_denison_hf_classes"]),
+        # A rating row may cover several grades; keep the array in structured
+        # evidence instead of asserting one strict-equivalence ISO VG value.
+        "viscosity": "",
+        "source": "PARKER_DENISON_CURRENT_FLUID_RATINGS",
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": row["source_table_row"],
+        "evidence_status": "official_oem_approval_registry",
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update(specs)
+    record["specifications"].update({
+        "rating_validity_until_source_reported": row["rating_validity_until_source_reported"],
+        "rating_list_review_date": row["rating_list_review_date"],
+        "source_url": row["source_url"],
+        "source_document_url": row["source_document_url"],
+        "source_page": row["source_page"],
+        "source_quality_flags": row["source_quality_flags"],
+    })
+    record["canonical_key"] += f"|parker_denison_rating:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
     return record
 
 
@@ -3218,6 +3262,9 @@ def main() -> None:
     volvo_websds_source_rows = [json.loads(line) for line in VOLVO_WEBSDS_JSONL.read_text(encoding="utf-8").splitlines() if line]
     volvo_websds_records = [volvo_websds_record(row) for row in volvo_websds_source_rows]
     input_records.extend(volvo_websds_records)
+    parker_denison_source_rows = [json.loads(line) for line in PARKER_DENISON_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    parker_denison_records = [parker_denison_record(row) for row in parker_denison_source_rows]
+    input_records.extend(parker_denison_records)
     ceypetco_source_rows = [json.loads(line) for line in CEYPETCO_JSONL.read_text(encoding="utf-8").splitlines() if line]
     ceypetco_records = [ceypetco_record(row) for row in ceypetco_source_rows]
     input_records.extend(ceypetco_records)
@@ -4490,6 +4537,19 @@ def main() -> None:
         if link_key not in source_link_keys:
             source_links.append(link)
             source_link_keys.add(link_key)
+    for raw, normalized_row in zip(parker_denison_source_rows, parker_denison_records):
+        target = canonical_by_key[normalized_row["canonical_key"]]
+        link = {
+            "product_id": target["product_id"],
+            "source_id": "PARKER_DENISON_CURRENT_FLUID_RATINGS",
+            "source_record_id": raw["source_record_id"],
+            "source_row": raw["source_table_row"],
+            "relation": "official_oem_approval_registry",
+        }
+        link_key = (link["product_id"], link["source_id"], link["source_record_id"])
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     for raw, normalized_row in zip(ceypetco_source_rows, ceypetco_records):
         target = canonical_by_key[normalized_row["canonical_key"]]
         link = {
@@ -4978,6 +5038,15 @@ def main() -> None:
         "expected": "qualified_source_certified",
         "action": "Retain as official qualification history, but review the live QPD status before sourcing or declaring current equivalence.",
     } for row in records if row["evidence_status"] == "official_government_qualified_product_registry" and row["lifecycle_status"] != "qualified_source_certified")
+    issues.extend({
+        "product_id": row["product_id"],
+        "issue_code": "parker_denison_source_invalid_validity_month",
+        "severity": "high",
+        "field": "RATING_VALIDITY_UNTIL",
+        "value": row["specifications"]["rating_validity_until_source_reported"],
+        "expected": "YYYY-MM with a calendar month from 01 to 12",
+        "action": "Retain the official row, but do not assert current validity until Parker publishes a corrected value.",
+    } for row in records if row["source_id"] == "PARKER_DENISON_CURRENT_FLUID_RATINGS" and row["lifecycle_status"] == "source_validity_value_invalid_review_required")
     run_id = f"seed-{SNAPSHOT_DATE}"
     JSONL_OUT.write_text("".join(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n" for row in records), encoding="utf-8")
     compress_jsonl()
@@ -5018,6 +5087,7 @@ def main() -> None:
         "cummins_valvoline_2022_input_sha256": hashlib.sha256(CUMMINS_VALVOLINE_2022_JSONL.read_bytes()).hexdigest(),
         "taiwan_cpc_input_sha256": hashlib.sha256(TAIWAN_CPC_JSONL.read_bytes()).hexdigest(),
         "volvo_websds_input_sha256": hashlib.sha256(VOLVO_WEBSDS_JSONL.read_bytes()).hexdigest(),
+        "parker_denison_input_sha256": hashlib.sha256(PARKER_DENISON_JSONL.read_bytes()).hexdigest(),
         "scania_genuine_input_sha256": hashlib.sha256(SCANIA_GENUINE_JSONL.read_bytes()).hexdigest(),
         "brava_official_input_sha256": hashlib.sha256(BRAVA_OFFICIAL_JSONL.read_bytes()).hexdigest(),
         "ceypetco_input_sha256": hashlib.sha256(CEYPETCO_JSONL.read_bytes()).hexdigest(),
@@ -5129,6 +5199,8 @@ def main() -> None:
         "taiwan_cpc_source_rows": len(taiwan_cpc_source_rows),
         "volvo_websds_source_rows": len(volvo_websds_source_rows),
         "volvo_websds_unique_part_numbers": len({part for row in volvo_websds_source_rows for part in row["part_numbers"]}),
+        "parker_denison_source_rows": len(parker_denison_source_rows),
+        "parker_denison_lifecycle_statuses": dict(sorted(Counter(row["lifecycle_status"] for row in parker_denison_source_rows).items())),
         "taiwan_cpc_structured_package_offers": sum(len(row["packages"]) for row in taiwan_cpc_source_rows),
         "scania_genuine_source_rows": len(scania_genuine_source_rows),
         "brava_official_source_rows": len(brava_official_source_rows),
