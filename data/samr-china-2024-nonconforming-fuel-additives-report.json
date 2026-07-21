@@ -1,0 +1,20 @@
+{
+  "status": "official_china_2024_nonconforming_gasoline_detergent_observations_normalized",
+  "source_id": "SAMR_CHINA_2024_NONCONFORMING_FUEL_ADDITIVES",
+  "source_url": "https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/zljds/art/2025/art_d75bb5a15c794893bca6cf8baf9f5155.html",
+  "attachment_url": "https://www.samr.gov.cn/cms_files/filemanager/1647978232/attach/20254/e9b731884e6848659c3f7c2b8a98f826.xlsx",
+  "snapshot_date": "2026-07-21",
+  "report_date": "2025-04-07",
+  "source_xlsx_sha256": "a5c76c5d5834f1d33512e4177b79cc0601f13c4ee0fefa2a8e8c45db8caf1ca5",
+  "source_relevant_rows": 23,
+  "normalized_product_observations": 23,
+  "families": {
+    "S": 23
+  },
+  "retest_confirmed_nonconforming_rows": 9,
+  "normalized_output_sha256": "c270fc2511bac9e61b9055433a5f7de2ab2a703c0b74b09acfe99083c7b2e368",
+  "grain_note": "One row is one nominal producer + product name + model/package identity observed as nonconforming in the 2024 national inspection.",
+  "lifecycle_note": "Historical failed-inspection evidence only; never approval, recommendation or evidence of current sale.",
+  "rights_note": "The SAMR workbook is not redistributed. Only attributed non-expressive product and inspection facts are normalized.",
+  "privacy_note": "Retailers, testing laboratories and producer locations are excluded."
+}

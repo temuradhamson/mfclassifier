@@ -178,6 +178,10 @@ def main() -> None:
     samr_china_rows = [json.loads(line) for line in (ROOT / "data/samr-china-2025-nonconforming-fluids.jsonl").read_text(encoding="utf-8").splitlines() if line]
     samr_china_2023_report = json.loads((ROOT / "data/samr-china-2023-nonconforming-fluids-report.json").read_text(encoding="utf-8"))
     samr_china_2023_rows = [json.loads(line) for line in (ROOT / "data/samr-china-2023-nonconforming-fluids.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    samr_china_2024_report = json.loads((ROOT / "data/samr-china-2024-nonconforming-fuel-additives-report.json").read_text(encoding="utf-8"))
+    samr_china_2024_rows = [json.loads(line) for line in (ROOT / "data/samr-china-2024-nonconforming-fuel-additives.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    shenzhen_china_2021_report = json.loads((ROOT / "data/shenzhen-2021-nonconforming-automotive-fluids-report.json").read_text(encoding="utf-8"))
+    shenzhen_china_2021_rows = [json.loads(line) for line in (ROOT / "data/shenzhen-2021-nonconforming-automotive-fluids.jsonl").read_text(encoding="utf-8").splitlines() if line]
     philippines_bps_report = json.loads((ROOT / "data/philippines-bps-brake-fluid-products-report.json").read_text(encoding="utf-8"))
     philippines_bps_rows = [json.loads(line) for line in (ROOT / "data/philippines-bps-brake-fluid-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     ghana_gsa_report = json.loads((ROOT / "data/ghana-gsa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -223,7 +227,7 @@ def main() -> None:
     assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
     assert not db.execute("PRAGMA foreign_key_check").fetchall()
     assert db.execute("SELECT count(*) FROM products").fetchone()[0] == len(lines)
-    assert len(lines) == 100550
+    assert len(lines) == 100584
     assert report["jaso_source_rows"] == jaso_report["rows"] == 3630
     assert report["jaso_unique_oil_codes"] == jaso_report["unique_oil_codes"] == 3629
     assert report["official_filed_registry_rows"] == 3629
@@ -449,8 +453,13 @@ def main() -> None:
     assert report["samr_china_2023_source_rows"] == samr_china_2023_report["normalized_product_observations"] == len(samr_china_2023_rows) == 126
     assert report["samr_china_2023_products_matched_to_existing"] == 1
     assert report["samr_china_2023_products_added"] == 125
-    assert report["samr_china_source_observations"] == 151
-    assert report["official_government_nonconforming_product_inspection_observation_rows"] == 150
+    assert report["samr_china_2024_source_rows"] == samr_china_2024_report["normalized_product_observations"] == len(samr_china_2024_rows) == 23
+    assert report["shenzhen_china_2021_source_rows"] == shenzhen_china_2021_report["normalized_product_observations"] == len(shenzhen_china_2021_rows) == 12
+    assert report["shenzhen_china_2021_products_matched_to_existing"] == 1
+    assert report["shenzhen_china_2021_products_added"] == 11
+    assert report["samr_china_source_observations"] == 174
+    assert report["china_government_inspection_source_observations"] == 186
+    assert report["official_government_nonconforming_product_inspection_observation_rows"] == 184
     assert report["philippines_bps_brake_fluid_source_rows"] == philippines_bps_report["normalized_products_or_brand_grade_scopes"] == len(philippines_bps_rows) == 123
     assert report["philippines_bps_ps_brake_fluid_rows"] == philippines_bps_report["rows_by_source"]["PHILIPPINES_BPS_PS_BRAKE_FLUID_LICENCES"] == 89
     assert report["philippines_bps_icc_brake_fluid_rows"] == philippines_bps_report["rows_by_source"]["PHILIPPINES_BPS_ICC_BRAKE_FLUID_CERTIFICATES"] == 34
@@ -791,12 +800,30 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='SAMR_CHINA_2023_NONCONFORMING_FLUIDS'").fetchone()[0] == 126
     assert db.execute("SELECT count(*) FROM products WHERE source_id='SAMR_CHINA_2023_NONCONFORMING_FLUIDS'").fetchone()[0] == 125
     assert db.execute("SELECT count(*) FROM product_offers WHERE source_id='SAMR_CHINA_2023_NONCONFORMING_FLUIDS'").fetchone()[0] == 0
+    assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='SAMR_CHINA_2024_NONCONFORMING_FUEL_ADDITIVES'").fetchone()[0] == 23
+    assert db.execute("SELECT count(*) FROM products WHERE source_id='SAMR_CHINA_2024_NONCONFORMING_FUEL_ADDITIVES'").fetchone()[0] == 23
+    assert db.execute("SELECT count(*) FROM product_offers WHERE source_id='SAMR_CHINA_2024_NONCONFORMING_FUEL_ADDITIVES'").fetchone()[0] == 0
+    assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='SHENZHEN_CHINA_2021_NONCONFORMING_AUTOMOTIVE_FLUIDS'").fetchone()[0] == 12
+    assert db.execute("SELECT count(*) FROM products WHERE source_id='SHENZHEN_CHINA_2021_NONCONFORMING_AUTOMOTIVE_FLUIDS'").fetchone()[0] == 11
+    assert db.execute("SELECT count(*) FROM product_offers WHERE source_id='SHENZHEN_CHINA_2021_NONCONFORMING_AUTOMOTIVE_FLUIDS'").fetchone()[0] == 0
+    shenzhen_history_product = db.execute("""
+        SELECT p.product_id, p.source_id FROM product_sources ps
+        JOIN products p ON p.product_id=ps.product_id
+        WHERE ps.source_record_id='SZ-CN-2021-002'
+    """).fetchone()
+    assert shenzhen_history_product[1] == "SAMR_CHINA_2023_NONCONFORMING_FLUIDS"
+    assert db.execute("""
+        SELECT count(*) FROM specifications
+        WHERE product_id=? AND spec_type='samr_inspection_occurrences'
+    """, (shenzhen_history_product[0],)).fetchone()[0] == 2
     assert db.execute("""
         SELECT count(*) FROM duplicate_decisions d
         JOIN products a ON a.product_id=d.product_id_a
         JOIN products b ON b.product_id=d.product_id_b
         WHERE d.decision='review_cross_source_identity'
-          AND (a.source_id LIKE 'SAMR_CHINA_%' OR b.source_id LIKE 'SAMR_CHINA_%')
+          AND (a.source_id LIKE 'SAMR_CHINA_%' OR b.source_id LIKE 'SAMR_CHINA_%'
+               OR a.source_id='SHENZHEN_CHINA_2021_NONCONFORMING_AUTOMOTIVE_FLUIDS'
+               OR b.source_id='SHENZHEN_CHINA_2021_NONCONFORMING_AUTOMOTIVE_FLUIDS')
     """).fetchone()[0] == 0
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='PHILIPPINES_BPS_PS_BRAKE_FLUID_LICENCES'").fetchone()[0] == 89
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='PHILIPPINES_BPS_ICC_BRAKE_FLUID_CERTIFICATES'").fetchone()[0] == 34
@@ -1029,6 +1056,25 @@ def main() -> None:
     assert all(row["inspection_outcome"] == "nonconforming" for row in samr_china_2023_rows)
     assert all("涉嫌假冒" not in row["source_note"] for row in samr_china_2023_rows)
     assert all(not ({"retailer", "seller", "testing_laboratory", "producer_location", "address", "phone", "email"} & set(row)) for row in samr_china_2023_rows)
+    assert report["samr_china_2024_input_sha256"] == samr_china_2024_report["normalized_output_sha256"]
+    assert policy_by_id["SAMR_CHINA_2024_NONCONFORMING_FUEL_ADDITIVES"]["source_sha256"] == samr_china_2024_report["normalized_output_sha256"]
+    assert policy_by_id["SAMR_CHINA_2024_NONCONFORMING_FUEL_ADDITIVES"]["observed_count"] == 23
+    assert samr_china_2024_report["source_xlsx_sha256"] == "a5c76c5d5834f1d33512e4177b79cc0601f13c4ee0fefa2a8e8c45db8caf1ca5"
+    assert samr_china_2024_report["families"] == {"S": 23}
+    assert samr_china_2024_report["retest_confirmed_nonconforming_rows"] == 9
+    assert all(row["inspection_outcome"] == "nonconforming" and row["family_code"] == "S" for row in samr_china_2024_rows)
+    assert report["shenzhen_china_2021_input_sha256"] == shenzhen_china_2021_report["normalized_output_sha256"]
+    assert policy_by_id["SHENZHEN_CHINA_2021_NONCONFORMING_AUTOMOTIVE_FLUIDS"]["source_sha256"] == shenzhen_china_2021_report["normalized_output_sha256"]
+    assert policy_by_id["SHENZHEN_CHINA_2021_NONCONFORMING_AUTOMOTIVE_FLUIDS"]["observed_count"] == 12
+    assert shenzhen_china_2021_report["source_xlsx_sha256"] == "73a011b46ee94611f487c89791bf9cf01c7a2a978c59c495f46bd95dd7f414bd"
+    assert shenzhen_china_2021_report["source_rows"] == 13 and shenzhen_china_2021_report["excluded_diesel_fuel_rows"] == 1
+    assert shenzhen_china_2021_report["families"] == {"M": 6, "S": 1, "TF": 5}
+    assert shenzhen_china_2021_report["rows_with_api"] == shenzhen_china_2021_report["rows_with_sae"] == 5
+    assert shenzhen_china_2021_report["rows_with_coolant_class"] == 2
+    assert shenzhen_china_2021_report["rows_with_washer_class"] == 1
+    assert shenzhen_china_2021_report["retest_confirmed_nonconforming_rows"] == 3
+    assert all(row["inspection_outcome"] == "nonconforming" for row in shenzhen_china_2021_rows)
+    assert all(not ({"retailer", "seller", "testing_laboratory", "producer_location", "address", "phone", "email"} & set(row)) for row in shenzhen_china_2021_rows)
     assert db.execute("""
         SELECT count(*) FROM products
         WHERE source_id='SAMR_CHINA_2025_NONCONFORMING_FLUIDS'

@@ -1,0 +1,32 @@
+{
+  "status": "official_shenzhen_2021_nonconforming_automotive_fluid_observations_normalized",
+  "source_id": "SHENZHEN_CHINA_2021_NONCONFORMING_AUTOMOTIVE_FLUIDS",
+  "source_url": "https://www.sz.gov.cn/cn/xxgk/zfxxgj/scjg/cpzljy/content/mpost_9934070.html",
+  "attachment_url": "http://www.sz.gov.cn/attachment/0/997/997590/9934070.xlsx",
+  "snapshot_date": "2026-07-21",
+  "report_date": "2022-07-06",
+  "source_xlsx_sha256": "73a011b46ee94611f487c89791bf9cf01c7a2a978c59c495f46bd95dd7f414bd",
+  "source_rows": 13,
+  "excluded_diesel_fuel_rows": 1,
+  "normalized_product_observations": 12,
+  "families": {
+    "M": 6,
+    "S": 1,
+    "TF": 5
+  },
+  "rows_by_source_product_kind": {
+    "机动车发动机冷却液": 3,
+    "机动车发动机润滑油": 6,
+    "汽车风窗玻璃清洗液": 2,
+    "车用汽油清净剂": 1
+  },
+  "rows_with_api": 5,
+  "rows_with_sae": 5,
+  "rows_with_coolant_class": 2,
+  "rows_with_washer_class": 1,
+  "retest_confirmed_nonconforming_rows": 3,
+  "normalized_output_sha256": "9af2d36711c31ce65017dd1451ba0d9b49efe222c11952ed10226aaa5ba9332d",
+  "grain_note": "One row is one nominal producer + sample name + exact source model/specification identity observed as nonconforming.",
+  "lifecycle_note": "Historical municipal inspection evidence only; never approval, recommendation or evidence of current sale.",
+  "privacy_note": "Inspected retailers are excluded. Only producer-level and product facts required for identity and regulatory provenance are retained."
+}

@@ -1911,6 +1911,36 @@
       "notes": "The official current TIS 1040-2541 search exposes ten manufacturing licences across nine exact company holders. The linked data.go.th dataset is published under Creative Commons Attribution. Each normalized row remains a licence-holder certification scope, not a marketed brand, grade or SKU; no SAE/API value or current-validity claim is inferred."
     },
     {
+      "source_id": "SAMR_CHINA_2024_NONCONFORMING_FUEL_ADDITIVES",
+      "title": "China SAMR 2024 national inspection — nonconforming gasoline detergent additives",
+      "owner": "State Administration for Market Regulation of the People's Republic of China (SAMR)",
+      "source_type": "official_government_national_product_quality_inspection_xlsx",
+      "source_locator": "data/samr-china-2024-nonconforming-fuel-additives.jsonl",
+      "source_url": "https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/zljds/art/2025/art_d75bb5a15c794893bca6cf8baf9f5155.html",
+      "terms_url": "https://www.samr.gov.cn/jg/wzsm/art/2021/art_c30de52ec3264bd29886479e5471dc72.html",
+      "source_sha256": "c270fc2511bac9e61b9055433a5f7de2ab2a703c0b74b09acfe99083c7b2e368",
+      "access_status": "public_official_government_information_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_document_redistribution",
+      "observed_count": 23,
+      "notes": "The official 2024 national-inspection workbook contains 23 nonconforming automotive gasoline detergent products. Nine remained nonconforming after retest. Only nominal producer, product name, exact model/package and inspection facts are normalized; the workbook, retailers, laboratories and locations are not redistributed."
+    },
+    {
+      "source_id": "SHENZHEN_CHINA_2021_NONCONFORMING_AUTOMOTIVE_FLUIDS",
+      "title": "Shenzhen 2021 municipal inspection — nonconforming automotive fluids",
+      "owner": "Shenzhen Administration for Market Regulation",
+      "source_type": "official_municipal_government_product_quality_inspection_xlsx",
+      "source_locator": "data/shenzhen-2021-nonconforming-automotive-fluids.jsonl",
+      "source_url": "https://www.sz.gov.cn/cn/xxgk/zfxxgj/scjg/cpzljy/content/mpost_9934070.html",
+      "terms_url": "https://www.sz.gov.cn/cn/qt/gywm/",
+      "source_sha256": "9af2d36711c31ce65017dd1451ba0d9b49efe222c11952ed10226aaa5ba9332d",
+      "access_status": "public_official_government_information_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_document_redistribution",
+      "observed_count": 12,
+      "notes": "Of 13 failed rows, one diesel-fuel sample is outside catalog scope. Twelve exact automotive-fluid identities remain: six engine oils, three coolants, two washer fluids and one gasoline detergent additive. Retailers are excluded. Generic graphic-mark brand cells fall back explicitly to the nominal producer; one exact later SAMR observation is linked as inspection history rather than duplicated."
+    },
+    {
       "source_id": "SAMR_CHINA_2023_NONCONFORMING_FLUIDS",
       "title": "China SAMR 2023 national inspection — nonconforming automotive fluids",
       "owner": "State Administration for Market Regulation of the People's Republic of China (SAMR), mirrored by Shandan County government",
