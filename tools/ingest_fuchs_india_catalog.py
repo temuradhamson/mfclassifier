@@ -55,7 +55,7 @@ def is_series(title: str) -> bool:
 
 
 def is_non_product_placeholder(title: str) -> bool:
-    return normalized(title) in {"0 test delete", "test delete"}
+    return not normalized(title) or normalized(title) in {"0 test delete", "test delete"}
 
 
 def classify_family(title: str, paths: list[list[str]], source_text: str) -> tuple[str, str]:

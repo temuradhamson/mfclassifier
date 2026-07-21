@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-07-21",
+  "source_id": "FUCHS_ARGENTINA_PRODUCT_FINDER",
+  "source_url": "https://www.fuchs.com/ar/en/products/service-links/product-finder/",
+  "imprint_url": "https://www.fuchs.com/ar/en/imprint/",
+  "source_html_sha256": "4aee405ec3d26850bdc763366e80f876340730d2ec3f1f79a78bc119964b9990",
+  "imprint_html_sha256": "b3aae1c199d5017752cad50482309fbe841414a2e378f026386a31d9d257f803",
+  "embedded_source_rows": 35,
+  "products": 5,
+  "source_series_rows_excluded": 30,
+  "equipment_rows_excluded": 0,
+  "placeholder_rows_excluded": 0,
+  "duplicate_source_occurrences_merged": 0,
+  "families": {
+    "G": 4,
+    "TF": 1
+  },
+  "brand_lines": 2,
+  "compound_designation_review_rows": 0,
+  "classification_basis": {
+    "product_group_or_explicit_product_form": 4,
+    "technical_fluid_product_group": 1
+  },
+  "normalized_output_sha256": "6381e569cdbe1270e45ad6a0e9ef7a9f0371b7a88d2c6efe55d3485df7aceaf1",
+  "rights_review": "The official imprint permits use, copying and distribution for informational purposes within an organisation when the copyright notice is retained, and prohibits commercial use. Only attributed factual fields are republished; marketing descriptions are excluded and represented only by SHA-256 evidence hashes.",
+  "publication_scope": "Product identity, region, group, specifications, approvals, recommendations and derived technical fields; no marketing descriptions or page layout."
+}

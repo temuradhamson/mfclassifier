@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-07-21",
+  "source_id": "FUCHS_SLOVENIA_PRODUCT_FINDER",
+  "source_url": "https://www.fuchs.com/si/en/products/service-links/product-finder/",
+  "imprint_url": "https://www.fuchs.com/si/en/imprint/",
+  "source_html_sha256": "defc382acc2e2800ce59ec1a662e92357e96deda9d782eec9f2e7769583dd64b",
+  "imprint_html_sha256": "f0ec9eaa980bd0a251e758ad3a5903e98492c2bcdbe0a7f9a36a6964847c92cc",
+  "embedded_source_rows": 1,
+  "products": 1,
+  "source_series_rows_excluded": 0,
+  "equipment_rows_excluded": 0,
+  "placeholder_rows_excluded": 0,
+  "duplicate_source_occurrences_merged": 0,
+  "families": {
+    "M": 1
+  },
+  "brand_lines": 0,
+  "compound_designation_review_rows": 0,
+  "classification_basis": {
+    "product_group": 1
+  },
+  "normalized_output_sha256": "756f73c83173f4ad2dc1fba4e61e62b5296134d1573c70973634dc65f3d8fff4",
+  "rights_review": "The official imprint permits use, copying and distribution for informational purposes within an organisation when the copyright notice is retained, and prohibits commercial use. Only attributed factual fields are republished; marketing descriptions are excluded and represented only by SHA-256 evidence hashes.",
+  "publication_scope": "Product identity, region, group, specifications, approvals, recommendations and derived technical fields; no marketing descriptions or page layout."
+}

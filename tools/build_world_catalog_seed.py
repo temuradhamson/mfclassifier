@@ -71,7 +71,7 @@ FUCHS_SOUTH_AFRICA_JSONL = ROOT / "data" / "fuchs-south-africa-products.jsonl"
 FUCHS_BRAZIL_JSONL = ROOT / "data" / "fuchs-brazil-products.jsonl"
 FUCHS_NORWAY_JSONL = ROOT / "data" / "fuchs-norway-products.jsonl"
 FUCHS_HUNGARY_JSONL = ROOT / "data" / "fuchs-hungary-products.jsonl"
-FUCHS_ADDITIONAL_EUROPE = [
+FUCHS_ADDITIONAL_MARKETS = [
     ("denmark", ROOT / "data" / "fuchs-denmark-products.jsonl", "FUCHS_DENMARK_PRODUCT_FINDER", "Denmark"),
     ("finland", ROOT / "data" / "fuchs-finland-products.jsonl", "FUCHS_FINLAND_PRODUCT_FINDER", "Finland"),
     ("portugal", ROOT / "data" / "fuchs-portugal-products.jsonl", "FUCHS_PORTUGAL_PRODUCT_FINDER", "Portugal"),
@@ -79,6 +79,14 @@ FUCHS_ADDITIONAL_EUROPE = [
     ("austria", ROOT / "data" / "fuchs-austria-products.jsonl", "FUCHS_AUSTRIA_PRODUCT_FINDER", "Austria"),
     ("greece", ROOT / "data" / "fuchs-greece-products.jsonl", "FUCHS_GREECE_PRODUCT_FINDER", "Greece"),
     ("switzerland", ROOT / "data" / "fuchs-switzerland-products.jsonl", "FUCHS_SWITZERLAND_PRODUCT_FINDER", "Switzerland"),
+    ("korea", ROOT / "data" / "fuchs-korea-products.jsonl", "FUCHS_KOREA_PRODUCT_FINDER", "Korea"),
+    ("uae", ROOT / "data" / "fuchs-uae-products.jsonl", "FUCHS_UAE_PRODUCT_FINDER", "United Arab Emirates"),
+    ("argentina", ROOT / "data" / "fuchs-argentina-products.jsonl", "FUCHS_ARGENTINA_PRODUCT_FINDER", "Argentina"),
+    ("chile", ROOT / "data" / "fuchs-chile-products.jsonl", "FUCHS_CHILE_PRODUCT_FINDER", "Chile"),
+    ("ukraine", ROOT / "data" / "fuchs-ukraine-products.jsonl", "FUCHS_UKRAINE_PRODUCT_FINDER", "Ukraine"),
+    ("slovakia", ROOT / "data" / "fuchs-slovakia-products.jsonl", "FUCHS_SLOVAKIA_PRODUCT_FINDER", "Slovakia"),
+    ("slovenia", ROOT / "data" / "fuchs-slovenia-products.jsonl", "FUCHS_SLOVENIA_PRODUCT_FINDER", "Slovenia"),
+    ("croatia", ROOT / "data" / "fuchs-croatia-products.jsonl", "FUCHS_CROATIA_PRODUCT_FINDER", "Croatia"),
 ]
 SCHEMA_VERSION = 1
 SNAPSHOT_DATE = "2026-07-21"
@@ -1675,6 +1683,14 @@ def fuchs_catalog_record(row: dict, source_id: str, market_name: str) -> dict:
         "FUCHS_AUSTRIA_PRODUCT_FINDER": "fuchs_austria_record",
         "FUCHS_GREECE_PRODUCT_FINDER": "fuchs_greece_record",
         "FUCHS_SWITZERLAND_PRODUCT_FINDER": "fuchs_switzerland_record",
+        "FUCHS_KOREA_PRODUCT_FINDER": "fuchs_korea_record",
+        "FUCHS_UAE_PRODUCT_FINDER": "fuchs_uae_record",
+        "FUCHS_ARGENTINA_PRODUCT_FINDER": "fuchs_argentina_record",
+        "FUCHS_CHILE_PRODUCT_FINDER": "fuchs_chile_record",
+        "FUCHS_UKRAINE_PRODUCT_FINDER": "fuchs_ukraine_record",
+        "FUCHS_SLOVAKIA_PRODUCT_FINDER": "fuchs_slovakia_record",
+        "FUCHS_SLOVENIA_PRODUCT_FINDER": "fuchs_slovenia_record",
+        "FUCHS_CROATIA_PRODUCT_FINDER": "fuchs_croatia_record",
     }[source_id]
     record["canonical_key"] += f"|{source_key}:{normalize(row['source_record_id'])}"
     record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
@@ -2761,7 +2777,7 @@ def main() -> None:
     fuchs_hungary_cross_market_exact_name_family_rows, fuchs_hungary_cross_market_family_conflict_rows = fuchs_hungary["exact"], fuchs_hungary["conflicts"]
     additional_fuchs = {}
     additional_prior_rows = prior_fuchs_rows + fuchs_mexico_source_rows + fuchs_south_africa_source_rows + fuchs_brazil_source_rows + fuchs_norway_source_rows + fuchs_hungary_source_rows
-    for slug, source_path, source_id, market_name in FUCHS_ADDITIONAL_EUROPE:
+    for slug, source_path, source_id, market_name in FUCHS_ADDITIONAL_MARKETS:
         source_rows = [json.loads(line) for line in source_path.read_text(encoding="utf-8").splitlines() if line]
         integration = integrate_fuchs_market(input_records, source_rows, source_id, market_name, additional_prior_rows)
         additional_fuchs[slug] = {"source_path": source_path, "source_id": source_id, "source_rows": source_rows, **integration}
