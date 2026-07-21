@@ -41,6 +41,7 @@ MERCEDES_DTFR_JSONL = ROOT / "data" / "mercedes-dtfr-approved-fluids.jsonl"
 MERCEDES_BEVO_JSONL = ROOT / "data" / "mercedes-bevo-approved-fluids.jsonl"
 VOLVO_GENUINE_JSONL = ROOT / "data" / "volvo-genuine-fluids.jsonl"
 MACK_GENUINE_JSONL = ROOT / "data" / "mack-genuine-fluids.jsonl"
+MACK_2014_APPROVED_JSONL = ROOT / "data" / "mack-2014-approved-oils.jsonl"
 SCANIA_GENUINE_JSONL = ROOT / "data" / "scania-genuine-oils.jsonl"
 BRAVA_OFFICIAL_JSONL = ROOT / "data" / "brava-official-products.jsonl"
 CEYPETCO_JSONL = ROOT / "data" / "ceypetco-lubricant-products.jsonl"
@@ -789,6 +790,48 @@ def mack_genuine_record(row: dict) -> dict:
             "source_id": "MACK_GENUINE_FLUIDS",
             "status": "current_official_catalog",
         }
+    return record
+
+
+def mack_2014_approved_record(row: dict) -> dict:
+    specs = row["specifications"]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Historical Mack approved oils (Service Bulletin 175-61-08)",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": specs.get("sae_engine") or specs.get("sae_gear") or "",
+        "api_class": "API CJ-4" if specs.get("api") == ["CJ-4"] else "",
+        "source": "MACK_2014_APPROVED_OILS",
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": "MACK_2014_APPROVED_OILS",
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": "official_oem_approval_registry",
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update(specs)
+    record["specifications"].update({
+        "source_url": row["source_url"],
+        "source_document": row["source_document"],
+        "source_document_date": row["source_document_date"],
+        "product_name_source": row["product_name_source"],
+        "source_occurrences": row["source_occurrences"],
+        "source_quality_flags": row["source_quality_flags"],
+    })
+    sections = "|".join(specs["mack_approval_sections"])
+    record["canonical_key"] += f"|mack_historical_approval:{normalize(sections)}"
+    record["canonical_key"] += f"|mack_2014_record:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
     return record
 
 
@@ -3687,6 +3730,11 @@ def main() -> None:
     input_records.extend(indonesia_npt_records)
     input_records.extend(thailand_doeb_records)
     input_records.extend(dla_qpd_records)
+    # Historical Mack approvals are appended only after every current-catalog
+    # matching pass, so they cannot become accidental lifecycle-merge targets.
+    mack_2014_source_rows = [json.loads(line) for line in MACK_2014_APPROVED_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    mack_2014_records = [mack_2014_approved_record(row) for row in mack_2014_source_rows]
+    input_records.extend(mack_2014_records)
     records, candidates = deduplicate(input_records)
     canonical_by_key = {row["canonical_key"]: row for row in records}
     for source_key, match_keys in blue_angel_review_keys:
@@ -4206,6 +4254,17 @@ def main() -> None:
         if link_key not in source_link_keys:
             source_links.append(link)
             source_link_keys.add(link_key)
+    for raw, normalized_row in zip(mack_2014_source_rows, mack_2014_records):
+        target = canonical_by_key[normalized_row["canonical_key"]]
+        link = {
+            "product_id": target["product_id"], "source_id": "MACK_2014_APPROVED_OILS",
+            "source_record_id": raw["source_record_id"], "source_row": None,
+            "relation": "historical_official_oem_approval_registry",
+        }
+        link_key = (link["product_id"], link["source_id"], link["source_record_id"])
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     for raw, normalized_row in zip(scania_genuine_source_rows, scania_genuine_records):
         target = canonical_by_key[normalized_row["canonical_key"]]
         link = {
@@ -4599,6 +4658,27 @@ def main() -> None:
                 "expected": expected,
                 "action": action,
             })
+    mack_2014_issue_meta = {
+        "source_duplicate_approval_row_merged": ("low", "SOURCE_OCCURRENCE", "One source occurrence per approval identity", "Preserve both page/row occurrences while exposing one normalized historical product."),
+        "source_multi_grade_approval_row_split": ("low", "SAE", "One product-grade identity per viscosity", "Split the source row into separate grade identities and retain the shared source occurrence."),
+        "viscosity_inferred_from_product_name_due_empty_table_cell": ("medium", "SAE", "A populated source viscosity cell", "Use the explicit 75W-90 printed in the product name, retain the empty-cell anomaly, and require current evidence before present-day equivalence."),
+        "cross_section_same_product_identity_merged": ("low", "OEM_APPROVAL", "One identity carrying every source approval section", "Merge the exact supplier-product-grade identity and retain both historical approval sections."),
+        "source_name_grade_notation_variants_merged": ("low", "PRODUCT_NAME", "Consistent grade punctuation", "Normalize the SAE notation while retaining both source spellings and occurrences."),
+    }
+    for row in records:
+        if row["source_id"] != "MACK_2014_APPROVED_OILS":
+            continue
+        for flag in row["specifications"].get("source_quality_flags", []):
+            severity, field, expected, action = mack_2014_issue_meta[flag]
+            issues.append({
+                "product_id": row["product_id"],
+                "issue_code": f"mack_2014_{flag}",
+                "severity": severity,
+                "field": field,
+                "value": flag,
+                "expected": expected,
+                "action": action,
+            })
     issues.extend({
         "product_id": row["product_id"],
         "issue_code": "dla_qpd_lifecycle_restriction",
@@ -4644,6 +4724,7 @@ def main() -> None:
         "mercedes_bevo_input_sha256": hashlib.sha256(MERCEDES_BEVO_JSONL.read_bytes()).hexdigest(),
         "volvo_genuine_input_sha256": hashlib.sha256(VOLVO_GENUINE_JSONL.read_bytes()).hexdigest(),
         "mack_genuine_input_sha256": hashlib.sha256(MACK_GENUINE_JSONL.read_bytes()).hexdigest(),
+        "mack_2014_approved_input_sha256": hashlib.sha256(MACK_2014_APPROVED_JSONL.read_bytes()).hexdigest(),
         "scania_genuine_input_sha256": hashlib.sha256(SCANIA_GENUINE_JSONL.read_bytes()).hexdigest(),
         "brava_official_input_sha256": hashlib.sha256(BRAVA_OFFICIAL_JSONL.read_bytes()).hexdigest(),
         "ceypetco_input_sha256": hashlib.sha256(CEYPETCO_JSONL.read_bytes()).hexdigest(),
@@ -4749,6 +4830,7 @@ def main() -> None:
         "mercedes_bevo_products_added": mercedes_bevo_added_rows,
         "volvo_genuine_source_rows": len(volvo_genuine_source_rows),
         "mack_genuine_source_rows": len(mack_genuine_source_rows),
+        "mack_2014_approved_source_rows": len(mack_2014_source_rows),
         "scania_genuine_source_rows": len(scania_genuine_source_rows),
         "brava_official_source_rows": len(brava_official_source_rows),
         "ceypetco_source_rows": len(ceypetco_source_rows),

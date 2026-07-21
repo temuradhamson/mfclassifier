@@ -1621,6 +1621,21 @@
       "publication_status": "derived_factual_product_grade_records_with_attribution",
       "observed_count": 15,
       "notes": "Current official Mack SDS catalog and product overview expose 15 product-grade rows and 32 package/part-number offers across engine oils, gear and transmission fluids, grease, hydraulic oil and coolants. Six additional regional part-number variants from six hashed official product sheets produce 38 unique official part numbers. Engine-oil EOS/API mappings come from the December 2023 Mack body-builder manual; mDRIVE standards and VCS2 POAT chemistry come from the current official overview. Source-reported mDRIVE part numbers retain unusual embedded spaces and are flagged. The printed standard 37319 is retained verbatim but flagged and excluded from asserted equivalence until confirmed. Two catalog SDS links point to differently named products and are retained only as source anomalies, not technical evidence. Only attributed non-expressive facts are published; marketing prose, images and page design are excluded."
+    },
+    {
+      "source_id": "MACK_2014_APPROVED_OILS",
+      "title": "Mack Service Bulletin 175-61-08 Approved Oils",
+      "owner": "Mack Trucks, Inc. / Volvo Group",
+      "source_type": "official_historical_oem_approval_pdf",
+      "source_locator": "data/mack-2014-approved-oils.jsonl",
+      "source_url": "https://sv.macktrucks.com/media/files/body-builder/pv776-89149448.pdf",
+      "source_sha256": "953b50cba4ba6f15e429b05d1698ab4f6bc30f98e915bb0f18e75907a746d96b",
+      "source_document_sha256": "ecf4e0547c4fbb5f96f18f7f22348ba0a5c98eae0e337a0d3e03347e45faf6a4",
+      "access_status": "public_official_historical_service_document_factual_fields_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "derived_historical_factual_approval_records_with_attribution",
+      "observed_count": 803,
+      "notes": "Official 29-page bulletin dated April 2014. The parser retains 806 approval occurrences, 805 section-level product-grade rows and 803 normalized supplier-product-grade identities across EO-O Premium Plus, EO-N Premium Plus, mDRIVE, TO-A Plus, GO-J and GO-J Plus. One exact duplicate source row and two cross-section/grade-notation identities are merged with all page/row evidence preserved. Every row is historical_approval with current status explicitly unverified; it is not current-market or current-approval evidence. Only attributed non-expressive table facts are published."
     }
   ]
 }

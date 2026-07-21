@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-07-21",
+  "document_date": "2014-04",
+  "source_id": "MACK_2014_APPROVED_OILS",
+  "source_url": "https://sv.macktrucks.com/media/files/body-builder/pv776-89149448.pdf",
+  "source_pdf_sha256": "ecf4e0547c4fbb5f96f18f7f22348ba0a5c98eae0e337a0d3e03347e45faf6a4",
+  "pdf_pages": 29,
+  "approval_occurrences": 806,
+  "source_section_product_grade_rows": 805,
+  "normalized_products": 803,
+  "duplicate_source_occurrences_merged": 1,
+  "cross_section_or_notation_identity_merges": 2,
+  "sections": {
+    "EO-N Premium Plus": 45,
+    "EO-O Premium Plus": 435,
+    "GO-J": 128,
+    "GO-J Plus": 94,
+    "TO-A Plus": 80,
+    "mDRIVE extended drain": 6,
+    "mDRIVE regular drain": 18
+  },
+  "families": {
+    "M": 479,
+    "T": 324
+  },
+  "source_quality_flags": {
+    "cross_section_same_product_identity_merged": 1,
+    "source_duplicate_approval_row_merged": 1,
+    "source_multi_grade_approval_row_split": 2,
+    "source_name_grade_notation_variants_merged": 1,
+    "viscosity_inferred_from_product_name_due_empty_table_cell": 1
+  },
+  "normalized_output_sha256": "953b50cba4ba6f15e429b05d1698ab4f6bc30f98e915bb0f18e75907a746d96b",
+  "publication_scope": "Attributed derived factual approval rows only; bulletin prose, layout, artwork and images are not republished."
+}

@@ -58,6 +58,8 @@ def main() -> None:
     volvo_report = json.loads((ROOT / "data/volvo-genuine-fluids-report.json").read_text(encoding="utf-8"))
     mack_report = json.loads((ROOT / "data/mack-genuine-fluids-report.json").read_text(encoding="utf-8"))
     mack_rows = [json.loads(line) for line in (ROOT / "data/mack-genuine-fluids.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    mack_2014_report = json.loads((ROOT / "data/mack-2014-approved-oils-report.json").read_text(encoding="utf-8"))
+    mack_2014_rows = [json.loads(line) for line in (ROOT / "data/mack-2014-approved-oils.jsonl").read_text(encoding="utf-8").splitlines() if line]
     scania_report = json.loads((ROOT / "data/scania-genuine-oils-report.json").read_text(encoding="utf-8"))
     scania_rows = [json.loads(line) for line in (ROOT / "data/scania-genuine-oils.jsonl").read_text(encoding="utf-8").splitlines() if line]
     brava_report = json.loads((ROOT / "data/brava-official-products-report.json").read_text(encoding="utf-8"))
@@ -199,7 +201,7 @@ def main() -> None:
     assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
     assert not db.execute("PRAGMA foreign_key_check").fetchall()
     assert db.execute("SELECT count(*) FROM products").fetchone()[0] == len(lines)
-    assert len(lines) == 98152
+    assert len(lines) == 98955
     assert report["jaso_source_rows"] == jaso_report["rows"] == 3630
     assert report["jaso_unique_oil_codes"] == jaso_report["unique_oil_codes"] == 3629
     assert report["official_filed_registry_rows"] == 3629
@@ -266,6 +268,26 @@ def main() -> None:
         "source_sds_link_target_name_mismatch_not_used_as_technical_evidence": 2,
     }
     assert all(not ({"description", "image", "logo", "marketing_text"} & set(row)) for row in mack_rows)
+    assert report["mack_2014_approved_source_rows"] == mack_2014_report["normalized_products"] == len(mack_2014_rows) == 803
+    assert report["mack_2014_approved_input_sha256"] == mack_2014_report["normalized_output_sha256"]
+    assert policy_by_id["MACK_2014_APPROVED_OILS"]["source_sha256"] == mack_2014_report["normalized_output_sha256"]
+    assert policy_by_id["MACK_2014_APPROVED_OILS"]["observed_count"] == 803
+    assert mack_2014_report["document_date"] == "2014-04"
+    assert mack_2014_report["pdf_pages"] == 29
+    assert mack_2014_report["approval_occurrences"] == 806
+    assert mack_2014_report["source_section_product_grade_rows"] == 805
+    assert mack_2014_report["duplicate_source_occurrences_merged"] == 1
+    assert mack_2014_report["cross_section_or_notation_identity_merges"] == 2
+    assert mack_2014_report["families"] == {"M": 479, "T": 324}
+    assert mack_2014_report["source_quality_flags"] == {
+        "cross_section_same_product_identity_merged": 1,
+        "source_duplicate_approval_row_merged": 1,
+        "source_multi_grade_approval_row_split": 2,
+        "source_name_grade_notation_variants_merged": 1,
+        "viscosity_inferred_from_product_name_due_empty_table_cell": 1,
+    }
+    assert sum(len(row["source_occurrences"]) for row in mack_2014_rows) == 806
+    assert all(row["lifecycle_status"] == "historical_approval_as_published_2014_04_current_status_unverified" for row in mack_2014_rows)
     assert report["korea_ecolabel_source_rows"] == korea_ecolabel_report["normalized_products"] == len(korea_ecolabel_rows) == 20
     assert report["korea_ecolabel_products_matched_to_existing"] == 0
     assert report["korea_ecolabel_products_added"] == 20
@@ -349,7 +371,7 @@ def main() -> None:
     assert dla_report["published_manufacturer_product_occurrences"] == 480
     assert dla_report["plant_rows_without_product_designation_excluded"] == 766
     assert report["zf_te_ml_source_rows"] == zf_report["unique_approval_numbers"] == 1498
-    assert report["official_oem_approval_rows"] == 5475
+    assert report["official_oem_approval_rows"] == 6278
     assert report["official_manufacturer_catalog_rows"] == 5625
     assert report["official_oem_service_recommendation_rows"] == 30
     assert report["allison_source_rows"] == allison_report["products"] == 104
@@ -493,7 +515,7 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_regulatory_registry'").fetchone()[0] == 30725
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_registry_source_data_issue'").fetchone()[0] == 51
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_qualified_product_registry'").fetchone()[0] == 456
-    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_approval_registry'").fetchone()[0] == 5475
+    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_approval_registry'").fetchone()[0] == 6278
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_manufacturer_product_catalog'").fetchone()[0] == 5625
     assert db.execute("SELECT count(*) FROM products WHERE source_id='BRAVA_LUBRICANTS_OFFICIAL_CATALOG'").fetchone()[0] == 69
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='BRAVA_LUBRICANTS_OFFICIAL_CATALOG'").fetchone()[0] == 69
@@ -512,6 +534,11 @@ def main() -> None:
     assert "mack_professional_performance:mack 97307 97318" in mdrive_7580_key
     assert "mack_professional_performance:mack 97315" in mdrive_7590_key
     assert "37319" not in mdrive_7590_key
+    assert db.execute("SELECT count(*) FROM products WHERE source_id='MACK_2014_APPROVED_OILS'").fetchone()[0] == 803
+    assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='MACK_2014_APPROVED_OILS'").fetchone()[0] == 803
+    assert db.execute("SELECT count(*) FROM product_offers WHERE source_id='MACK_2014_APPROVED_OILS'").fetchone()[0] == 0
+    assert db.execute("SELECT count(*) FROM products WHERE source_id='MACK_2014_APPROVED_OILS' AND lifecycle_status='historical_approval_as_published_2014_04_current_status_unverified'").fetchone()[0] == 803
+    assert db.execute("SELECT count(*) FROM quality_issues WHERE issue_code LIKE 'mack_2014_%'").fetchone()[0] == 6
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_service_recommendation'").fetchone()[0] == 30
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='ALLISON_APPROVAL_NUMBER'").fetchone()[0] == 119
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='MERCEDES_DTFR_PRODUCT_ID'").fetchone()[0] == 1892
@@ -906,6 +933,8 @@ def main() -> None:
     assert len(volvo_report["excluded_ungraded_engine_oil_series"]) == 3
     assert policy_by_id["MACK_GENUINE_FLUIDS"]["source_sha256"] == mack_report["normalized_output_sha256"]
     assert policy_by_id["MACK_GENUINE_FLUIDS"]["observed_count"] == mack_report["products"]
+    assert policy_by_id["MACK_2014_APPROVED_OILS"]["source_sha256"] == mack_2014_report["normalized_output_sha256"]
+    assert policy_by_id["MACK_2014_APPROVED_OILS"]["observed_count"] == mack_2014_report["normalized_products"]
     assert policy_by_id["CEYPETCO_OFFICIAL_LUBRICANT_CATALOG"]["source_sha256"] == ceypetco_report["normalized_output_sha256"]
     assert policy_by_id["CEYPETCO_OFFICIAL_LUBRICANT_CATALOG"]["observed_count"] == len(ceypetco_rows) == 47
     assert report["ceypetco_input_sha256"] == hashlib.sha256((ROOT / "data/ceypetco-lubricant-products.jsonl").read_bytes()).hexdigest()
