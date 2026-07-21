@@ -61,7 +61,13 @@ def main() -> None:
     liqui_moly_lifecycle_rows = [json.loads(line) for line in (ROOT / "data/liqui-moly-2020-2026-lifecycle.jsonl").read_text(encoding="utf-8").splitlines() if line]
     anp_report = json.loads((ROOT / "data/anp-brazil-lubricant-products-report.json").read_text(encoding="utf-8"))
     anp_rows = [json.loads(line) for line in (ROOT / "data/anp-brazil-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
-    lines = [json.loads(line) for line in (ROOT / "data/world-catalog-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    jsonl_gz_path = ROOT / "data/world-catalog-products.jsonl.gz"
+    with gzip.open(jsonl_gz_path, "rt", encoding="utf-8") as stream:
+        lines = [json.loads(line) for line in stream if line.strip()]
+    local_jsonl_path = ROOT / "data/world-catalog-products.jsonl"
+    if local_jsonl_path.exists():
+        with local_jsonl_path.open("rb") as plain, gzip.open(jsonl_gz_path, "rb") as packed:
+            assert hashlib.sha256(plain.read()).digest() == hashlib.sha256(packed.read()).digest()
     assert report["status"] == "seed_only_world_catalog_incomplete"
     assert report["confirmed_world_total"] is None
     assert len(lines) == report["canonical_rows"]

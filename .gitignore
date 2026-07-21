@@ -3,3 +3,4 @@ __pycache__/
 *.pyc
 .DS_Store
 data/world-catalog.sqlite3
+data/world-catalog-products.jsonl

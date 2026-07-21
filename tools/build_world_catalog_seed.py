@@ -24,6 +24,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CATALOG = ROOT / "data" / "catalog-v3.json"
 POLICY = ROOT / "data" / "global-source-policy.json"
 JSONL_OUT = ROOT / "data" / "world-catalog-products.jsonl"
+JSONL_GZ_OUT = ROOT / "data" / "world-catalog-products.jsonl.gz"
 REPORT_OUT = ROOT / "data" / "world-catalog-report.json"
 SQLITE_OUT = ROOT / "data" / "world-catalog.sqlite3"
 SQLITE_GZ_OUT = ROOT / "data" / "world-catalog.sqlite3.gz"
@@ -1198,6 +1199,13 @@ def build_sqlite(records: list[dict], candidates: list[dict], issues: list[dict]
 def compress_sqlite() -> None:
     """Create a deterministic repository-safe copy of the generated SQLite database."""
     with SQLITE_OUT.open("rb") as source, SQLITE_GZ_OUT.open("wb") as target:
+        with gzip.GzipFile(filename="", mode="wb", fileobj=target, compresslevel=9, mtime=0) as archive:
+            shutil.copyfileobj(source, archive, length=1024 * 1024)
+
+
+def compress_jsonl() -> None:
+    """Create a deterministic compressed copy of the generated JSONL aggregate."""
+    with JSONL_OUT.open("rb") as source, JSONL_GZ_OUT.open("wb") as target:
         with gzip.GzipFile(filename="", mode="wb", fileobj=target, compresslevel=9, mtime=0) as archive:
             shutil.copyfileobj(source, archive, length=1024 * 1024)
 
@@ -2544,6 +2552,7 @@ def main() -> None:
     issues = quality_issues(records)
     run_id = f"seed-{SNAPSHOT_DATE}"
     JSONL_OUT.write_text("".join(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n" for row in records), encoding="utf-8")
+    compress_jsonl()
     report = {
         "schema_version": SCHEMA_VERSION,
         "run_id": run_id,
