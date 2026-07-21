@@ -1528,6 +1528,58 @@
       "publication_status": "reviewed_zero_lubricant_product_categories",
       "observed_count": 0,
       "notes": "The current certified-products page exposes building-material, mineral, fibre-reinforced home-decor and paint categories, with no lubricant, grease, coolant or automotive-fluid category. No product rows were ingested."
+    },
+    {
+      "source_id": "SCANIA_GENUINE_ENGINE_OILS",
+      "title": "Scania genuine engine oils — Middle East Gulf Region",
+      "owner": "Scania CV AB",
+      "source_type": "official_manufacturer_regional_product_page",
+      "source_locator": "data/scania-genuine-oils.jsonl",
+      "source_url": "https://www.scania.com/ae/en/home/services/repair-and-maintenance/scania-oil.html",
+      "terms_url": "https://www.scania.com/ae/en/home/admin/misc/legal.html",
+      "source_sha256": "bed1b35c1e61f17604726845a2326a3b928f178ae38d5f75919d55814d3e210f",
+      "access_status": "public_official_page_creative_commons_3_noncommercial_with_attribution",
+      "bulk_ingest_allowed": true,
+      "publication_status": "normalized_factual_product_fields_with_attribution_noncommercial_use",
+      "observed_count": 4,
+      "notes": "The current regional page names four Scania engine oils. Only product identity and explicitly stated SAE, ACEA, temperature, drain-interval and engine-application facts are retained. LDF-4 has no SAE on this page, so none is inferred. Marketing prose, images, logos and page design are excluded. The same-region legal notice permits Creative Commons 3.0 use with Scania attribution when the contents are not commercialized as such."
+    },
+    {
+      "source_id": "MALAWI_MBS_CERTIFIED_PRODUCTS_LUBRICANT_REVIEW",
+      "title": "Malawi Bureau of Standards certified and pre-certified products — lubricant review",
+      "owner": "Malawi Bureau of Standards",
+      "source_type": "official_government_product_certification_directory_historical_snapshot",
+      "source_url": "https://mbsmw.org/wp-content/uploads/2023/06/DIRECTORY-OF-CERTIFIED-AND-PRE-CERTIFIED-PRODUCTS-AND-SERVICES-MAY-2023_compressed12.pdf",
+      "archive_url": "https://web.archive.org/web/20230811193441id_/https://mbsmw.org/wp-content/uploads/2023/06/DIRECTORY-OF-CERTIFIED-AND-PRE-CERTIFIED-PRODUCTS-AND-SERVICES-MAY-2023_compressed12.pdf",
+      "access_status": "official_historical_directory_recovered_from_web_archive",
+      "bulk_ingest_allowed": true,
+      "publication_status": "reviewed_zero_relevant_product_rows",
+      "observed_count": 0,
+      "notes": "All 154 pages and 928 directory entries (596 certified and 332 pre-certified) in the May 2023 official snapshot were reviewed. Oil hits were edible oils, hair oil and release agents; no lubricant, grease, coolant, brake fluid or other professional technical-fluid product row was present."
+    },
+    {
+      "source_id": "ZIMBABWE_SAZ_CERTIFIED_PRODUCTS_LUBRICANT_REVIEW",
+      "title": "Standards Association of Zimbabwe certified products — lubricant review",
+      "owner": "Standards Association of Zimbabwe",
+      "source_type": "official_product_certification_regional_directories",
+      "source_url": "https://www.saz.org.zw/certify-your-product/",
+      "access_status": "public_official_certification_directories",
+      "bulk_ingest_allowed": true,
+      "publication_status": "reviewed_zero_relevant_product_rows",
+      "observed_count": 0,
+      "notes": "The linked Harare, Bulawayo and Mutare certified-product lists were reviewed in full at the snapshot. They contain no marketed lubricant, grease, coolant, brake-fluid or other technical-fluid product row."
+    },
+    {
+      "source_id": "MAURITIUS_MSB_MAURICERT_LUBRICANT_REVIEW",
+      "title": "Mauritius Standards Bureau Mauricert licences — lubricant review",
+      "owner": "Mauritius Standards Bureau",
+      "source_type": "official_government_product_certification_directory",
+      "source_url": "https://msb.intnet.mu/Documents/Certification-Schemes/MSB%20Certification%20Mark/Mauricert%20Licences%20as%20at%2031%20December%202025%20%20Annex%202.pdf",
+      "access_status": "public_official_certification_directory",
+      "bulk_ingest_allowed": true,
+      "publication_status": "reviewed_zero_relevant_product_rows",
+      "observed_count": 0,
+      "notes": "The complete seven-page Mauricert licence list dated 31 December 2025 was reviewed. It contains no marketed lubricant, grease, coolant, brake-fluid or other technical-fluid product row."
     }
   ]
 }

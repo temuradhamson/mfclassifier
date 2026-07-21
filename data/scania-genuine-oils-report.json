@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-07-21",
+  "source_id": "SCANIA_GENUINE_ENGINE_OILS",
+  "source_url": "https://www.scania.com/ae/en/home/services/repair-and-maintenance/scania-oil.html",
+  "terms_url": "https://www.scania.com/ae/en/home/admin/misc/legal.html",
+  "source_page_sha256": "9f5a4fd70a761b179423cd678ac40e85d7cde9b62b3706d078625b619f6a533e",
+  "terms_page_sha256": "8791fbe4ba8d49d96cb6e520b51c3c58109435bd1c3c139ffad9508c7c3c2899",
+  "normalized_products": 4,
+  "families": {
+    "M": 4
+  },
+  "rows_with_sae": 2,
+  "rows_with_acea": 1,
+  "normalized_output_sha256": "bed1b35c1e61f17604726845a2326a3b928f178ae38d5f75919d55814d3e210f",
+  "publication_scope": "Factual product and technical fields with Scania attribution; marketing prose, images, logos and page design are excluded. Noncommercial use only under the source terms."
+}
