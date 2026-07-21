@@ -32,11 +32,12 @@
       "owner": "CHILON project",
       "source_type": "SQLite",
       "source_locator": "/workspace/chilon/aichilon/var/chilon_seed.sqlite",
-      "source_sha256": "c601b35eff1224b3a3933bad2aa051f2b18e7714714bbcaab3e85bf571905f79",
+      "source_sha256": "425524c54ce2c805acbe0e6334ede77a0af4861718495ed17fb3444ddef50c14",
+      "source_hash_scope": "sqlite_catalog_projection_v1",
       "access_status": "authorized_project_input",
       "bulk_ingest_allowed": true,
       "publication_status": "internal_and_derived_facts",
-      "notes": "Внутренний справочник продуктов и упаковок; клиентские, пользовательские, заявочные и ценовые таблицы в мировой seed не переносятся."
+      "notes": "Внутренний справочник продуктов и упаковок; клиентские, пользовательские, заявочные и ценовые таблицы в мировой seed не переносятся. Контрольный SHA-256 вычисляется только по детерминированной проекции brands, products и product_packages, поэтому операционные изменения в заявках, ценах и аналитике не создают ложный дрейф каталога."
     },
     {
       "source_id": "JASO_4T",
@@ -1257,6 +1258,32 @@
       "publication_status": "count_and_source_version_evidence_only",
       "observed_count": 661,
       "notes": "11 текущих списков DFS от 09.07.2026 содержат 661 вхождение одобрений и примерно 631 уникальную identity company + product + family. DTNA Legal Terms ограничивают загрузку личным некоммерческим использованием и запрещают повторное использование/изменение содержимого, поэтому товарные строки не импортируются без письменного разрешения."
+    },
+    {
+      "source_id": "wolf-lubricants-official-catalog",
+      "title": "Wolf Lubricants official product catalog",
+      "owner": "Wolf Oil Corporation N.V.",
+      "source_type": "official_manufacturer_product_catalog_and_tds",
+      "source_url": "https://docs.wolfoil.com/en-us",
+      "terms_url": "https://www.wolflubes.com/en-us/disclaimer",
+      "access_status": "public_catalog_but_substantial_database_reuse_requires_written_permission",
+      "bulk_ingest_allowed": false,
+      "publication_status": "aggregate_count_and_source_links_only_pending_written_permission",
+      "observed_count": 391,
+      "notes": "Official daily product sitemaps expose exactly 391 Wolf product identities (ID suffix -01) in 27 locale/host variants at the 2026-07-21 snapshot. Product cards publish category, factual specifications, typicals and TDS/MSDS links. Section 4.2 of the official terms prohibits access to or reuse of a qualitatively or quantitatively substantial part of the database for any purpose, so no individual product rows are imported without prior written consent."
+    },
+    {
+      "source_id": "champion-lubricants-official-catalog",
+      "title": "Champion Lubricants official product catalog",
+      "owner": "Wolf Oil Corporation N.V.",
+      "source_type": "official_manufacturer_product_catalog_and_tds",
+      "source_url": "https://www.championlubes.com/en-us/products",
+      "terms_url": "https://www.championlubes.com/en-us/disclaimer",
+      "access_status": "public_catalog_but_substantial_database_reuse_requires_written_permission",
+      "bulk_ingest_allowed": false,
+      "publication_status": "aggregate_count_and_source_links_only_pending_written_permission",
+      "observed_count": 431,
+      "notes": "Official daily product sitemaps expose exactly 431 Champion product identities (ID suffix -02) in 27 locale/host variants at the 2026-07-21 snapshot. Product IDs can share a formulation number with Wolf while remaining separate branded products. Wolf Oil Corporation's database-reuse restriction applies, so no individual Champion rows are imported without prior written consent."
     }
   ]
 }

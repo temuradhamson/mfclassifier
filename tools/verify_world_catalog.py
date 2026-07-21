@@ -13,6 +13,35 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def sqlite_catalog_projection_sha256(path: Path) -> str:
+    """Hash only the AIChilon catalog projection, not its mutable operations data."""
+    queries = [
+        ("brands", "SELECT id, code, name FROM brands ORDER BY id"),
+        (
+            "products",
+            "SELECT id, brand_id, category, name, is_active, archive_type, archive_reason "
+            "FROM products ORDER BY id",
+        ),
+        (
+            "product_packages",
+            "SELECT id, product_id, package_name, unit, quantity_per_package, is_active, "
+            "weight_kg, density_kg_per_l, archive_type, archive_reason "
+            "FROM product_packages ORDER BY id",
+        ),
+    ]
+    digest = hashlib.sha256()
+    db = sqlite3.connect(f"file:{path}?mode=ro", uri=True)
+    try:
+        for label, query in queries:
+            digest.update(f"{label}\n".encode())
+            for row in db.execute(query):
+                payload = json.dumps(row, ensure_ascii=False, separators=(",", ":"))
+                digest.update(f"{payload}\n".encode())
+    finally:
+        db.close()
+    return digest.hexdigest()
+
+
 def main() -> None:
     report = json.loads((ROOT / "data/world-catalog-report.json").read_text(encoding="utf-8"))
     policy = json.loads((ROOT / "data/global-source-policy.json").read_text(encoding="utf-8"))
@@ -133,7 +162,11 @@ def main() -> None:
 
     for source in policy["sources"]:
         if source.get("source_locator") and source.get("source_sha256"):
-            actual = hashlib.sha256((ROOT / source["source_locator"]).read_bytes()).hexdigest()
+            source_path = ROOT / source["source_locator"]
+            if source.get("source_hash_scope") == "sqlite_catalog_projection_v1":
+                actual = sqlite_catalog_projection_sha256(source_path)
+            else:
+                actual = hashlib.sha256(source_path.read_bytes()).hexdigest()
             assert actual == source["source_sha256"], source["source_id"]
         if not source["bulk_ingest_allowed"]:
             assert source["source_id"] in report["bulk_sources_blocked"]

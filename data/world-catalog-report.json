@@ -351,7 +351,9 @@
     "BIS_PRODUCT_CERTIFICATION_LUBRICANT_LICENCES",
     "BPCL_MAK_PRODUCT_CATALOG",
     "JAPAN_ECOMARK_CATEGORY_110",
-    "detroit-dfs-approved-fluids"
+    "detroit-dfs-approved-fluids",
+    "wolf-lubricants-official-catalog",
+    "champion-lubricants-official-catalog"
   ],
   "confirmed_world_total": null,
   "completion_note": "The seed proves the pipeline, not worldwide coverage. Exact worldwide count remains pending licensed/authorized source ingestion.",
