@@ -1911,6 +1911,21 @@
       "notes": "The official current TIS 1040-2541 search exposes ten manufacturing licences across nine exact company holders. The linked data.go.th dataset is published under Creative Commons Attribution. Each normalized row remains a licence-holder certification scope, not a marketed brand, grade or SKU; no SAE/API value or current-validity claim is inferred."
     },
     {
+      "source_id": "SHENZHEN_CHINA_2025_AUTOMOTIVE_FLUID_INSPECTION",
+      "title": "Shenzhen 2025 complete automotive-fluid inspection",
+      "owner": "Shenzhen Administration for Market Regulation",
+      "source_type": "official_municipal_government_complete_product_quality_inspection_pdf",
+      "source_locator": "data/shenzhen-2025-automotive-fluid-inspection.jsonl",
+      "source_url": "https://www.sz.gov.cn/cn/xxgk/zfxxgj/tzgg/content/mpost_12770607.html",
+      "terms_url": "https://www.sz.gov.cn/cn/qt/gywm/",
+      "source_sha256": "afa6be47ca44b01aced962949406ac196d096b9628a414a8453a0c3074f05332",
+      "access_status": "public_official_government_information_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_document_redistribution",
+      "observed_count": 100,
+      "notes": "The official five-page table contains 246 inspected batches. Exactly all 100 automotive-product rows are normalized: 56 source-labelled lubricants, 11 coolants, nine urea solutions, nine fuel additives, nine washer fluids and six brake fluids; one source-labelled lubricant is explicitly a gasoline additive and is classified S with a flag. Ninety-nine batches passed and one failed low-temperature cranking viscosity. Two repeated/package-variant coolant observations merge into 98 product identities with every source row preserved. Retailers and the PDF itself are not redistributed. Passing means only the sampled batch conformed at inspection, never blanket approval or current commercial availability."
+    },
+    {
       "source_id": "SAMR_CHINA_2024_NONCONFORMING_FUEL_ADDITIVES",
       "title": "China SAMR 2024 national inspection — nonconforming gasoline detergent additives",
       "owner": "State Administration for Market Regulation of the People's Republic of China (SAMR)",

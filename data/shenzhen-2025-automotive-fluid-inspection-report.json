@@ -1,0 +1,42 @@
+{
+  "status": "official_shenzhen_2025_complete_automotive_fluid_inspection_normalized",
+  "source_id": "SHENZHEN_CHINA_2025_AUTOMOTIVE_FLUID_INSPECTION",
+  "source_url": "https://www.sz.gov.cn/cn/xxgk/zfxxgj/tzgg/content/mpost_12770607.html",
+  "attachment_url": "http://www.sz.gov.cn/attachment/1/1711/1711226/12770607.pdf",
+  "snapshot_date": "2026-07-21",
+  "report_date": "2026-05-09",
+  "source_pdf_sha256": "6cb5b14209ad9717d4d790175889d5b19bb5917016f2449e6317d821a12a1905",
+  "source_pdf_pages": 5,
+  "source_all_rows": 246,
+  "source_automotive_rows": 100,
+  "outcomes": {
+    "conforming": 99,
+    "nonconforming": 1
+  },
+  "source_product_types": {
+    "冷却液": 11,
+    "制动液": 6,
+    "润滑油": 56,
+    "燃油添加剂": 9,
+    "玻璃水": 9,
+    "车用尿素溶液": 9
+  },
+  "families_before_identity_merging": {
+    "M": 55,
+    "S": 10,
+    "TF": 35
+  },
+  "rows_with_api": 47,
+  "rows_with_sae": 55,
+  "rows_with_acea": 7,
+  "rows_with_ilsac": 3,
+  "rows_with_brake_class": 6,
+  "rows_with_coolant_class": 11,
+  "rows_with_washer_class": 9,
+  "rows_with_aus32": 2,
+  "normalized_output_sha256": "afa6be47ca44b01aced962949406ac196d096b9628a414a8453a0c3074f05332",
+  "grain_note": "One output row is one inspected batch observation. The catalog builder merges only strict same producer + product + package-independent technical identity and preserves every occurrence.",
+  "scope_note": "Exactly the 100 automotive-product rows are retained; 146 furniture, panel, plywood and drone rows are excluded by the official product-type column.",
+  "lifecycle_note": "Conforming means only that the sampled batch passed this inspection. Neither outcome is treated as a current commercial offer or a blanket product approval.",
+  "privacy_note": "Inspected retailers are excluded from normalized records; only nominal producer, product, brand, model and inspection provenance remain."
+}
