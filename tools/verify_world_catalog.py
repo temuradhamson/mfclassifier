@@ -62,6 +62,8 @@ def main() -> None:
     mack_2014_rows = [json.loads(line) for line in (ROOT / "data/mack-2014-approved-oils.jsonl").read_text(encoding="utf-8").splitlines() if line]
     cummins_valvoline_report = json.loads((ROOT / "data/cummins-valvoline-2022-products-report.json").read_text(encoding="utf-8"))
     cummins_valvoline_rows = [json.loads(line) for line in (ROOT / "data/cummins-valvoline-2022-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    taiwan_cpc_report = json.loads((ROOT / "data/taiwan-cpc-lubricant-products-report.json").read_text(encoding="utf-8"))
+    taiwan_cpc_rows = [json.loads(line) for line in (ROOT / "data/taiwan-cpc-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     scania_report = json.loads((ROOT / "data/scania-genuine-oils-report.json").read_text(encoding="utf-8"))
     scania_rows = [json.loads(line) for line in (ROOT / "data/scania-genuine-oils.jsonl").read_text(encoding="utf-8").splitlines() if line]
     brava_report = json.loads((ROOT / "data/brava-official-products-report.json").read_text(encoding="utf-8"))
@@ -203,7 +205,7 @@ def main() -> None:
     assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
     assert not db.execute("PRAGMA foreign_key_check").fetchall()
     assert db.execute("SELECT count(*) FROM products").fetchone()[0] == len(lines)
-    assert len(lines) == 99121
+    assert len(lines) == 99345
     assert report["jaso_source_rows"] == jaso_report["rows"] == 3630
     assert report["jaso_unique_oil_codes"] == jaso_report["unique_oil_codes"] == 3629
     assert report["official_filed_registry_rows"] == 3629
@@ -300,6 +302,20 @@ def main() -> None:
     assert cummins_valvoline_report["cross_product_colliding_article_numbers"] == 8
     assert all(row["lifecycle_status"] == "historical_catalog_as_published_2022_04_current_status_unverified" for row in cummins_valvoline_rows)
     assert all(not ({"description", "image", "logo", "marketing_text"} & set(row)) for row in cummins_valvoline_rows)
+    assert report["taiwan_cpc_source_rows"] == taiwan_cpc_report["current_product_cards"] == len(taiwan_cpc_rows) == 224
+    assert report["taiwan_cpc_input_sha256"] == taiwan_cpc_report["normalized_output_sha256"]
+    assert policy_by_id["TAIWAN_CPC_CURRENT_LUBRICANT_CATALOG"]["source_sha256"] == taiwan_cpc_report["normalized_output_sha256"]
+    assert policy_by_id["TAIWAN_CPC_CURRENT_LUBRICANT_CATALOG"]["observed_count"] == 224
+    assert taiwan_cpc_report["families"] == {"C": 9, "E": 1, "G": 21, "H": 15, "I": 71, "M": 76, "S": 11, "T": 11, "TF": 4, "U": 5}
+    assert report["taiwan_cpc_structured_package_offers"] == taiwan_cpc_report["structured_package_offers"] == 478
+    assert taiwan_cpc_report["products_with_structured_package_offers"] == 224
+    assert taiwan_cpc_report["rows_with_iso_vg"] == 50
+    assert taiwan_cpc_report["rows_with_nlgi"] == 21
+    assert taiwan_cpc_report["source_quality_flags"] == {"source_multigrade_table_not_safely_aligned_to_listing_title": 27}
+    assert len({row["manufacturer_product_code"] for row in taiwan_cpc_rows}) == 224
+    assert all(row["lifecycle_status"] == "listed_on_current_official_product_sheet_directory" for row in taiwan_cpc_rows)
+    assert all(row["packages"] for row in taiwan_cpc_rows)
+    assert all(not ({"description", "image", "logo", "marketing_text"} & set(row)) for row in taiwan_cpc_rows)
     assert sum(len(row["source_occurrences"]) for row in mack_2014_rows) == 806
     assert all(row["lifecycle_status"] == "historical_approval_as_published_2014_04_current_status_unverified" for row in mack_2014_rows)
     assert report["korea_ecolabel_source_rows"] == korea_ecolabel_report["normalized_products"] == len(korea_ecolabel_rows) == 20
@@ -386,7 +402,7 @@ def main() -> None:
     assert dla_report["plant_rows_without_product_designation_excluded"] == 766
     assert report["zf_te_ml_source_rows"] == zf_report["unique_approval_numbers"] == 1498
     assert report["official_oem_approval_rows"] == 6278
-    assert report["official_manufacturer_catalog_rows"] == 5791
+    assert report["official_manufacturer_catalog_rows"] == 6015
     assert report["official_oem_service_recommendation_rows"] == 30
     assert report["allison_source_rows"] == allison_report["products"] == 104
     assert report["driventic_diwa_source_rows"] == driventic_report["products"] == 226
@@ -516,9 +532,9 @@ def main() -> None:
     assert report["aichilon_products_matched_to_existing"] == 255
     assert report["aichilon_products_added"] == 60
     assert report["aichilon_rows_excluded"] == 2
-    assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 4495
-    assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 2566
-    assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status='listed_current_catalog'").fetchone()[0] == report["current_catalog_listed_offers"] == 1111
+    assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 4973
+    assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3044
+    assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status='listed_current_catalog'").fetchone()[0] == report["current_catalog_listed_offers"] == 1589
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_filed_registry'").fetchone()[0] == 3629
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_licensed_registry'").fetchone()[0] == 3037
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_ecolabel_product_registry'").fetchone()[0] == 127
@@ -530,7 +546,7 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_registry_source_data_issue'").fetchone()[0] == 51
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_qualified_product_registry'").fetchone()[0] == 456
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_approval_registry'").fetchone()[0] == 6278
-    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_manufacturer_product_catalog'").fetchone()[0] == 5791
+    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_manufacturer_product_catalog'").fetchone()[0] == 6015
     assert db.execute("SELECT count(*) FROM products WHERE source_id='BRAVA_LUBRICANTS_OFFICIAL_CATALOG'").fetchone()[0] == 69
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='BRAVA_LUBRICANTS_OFFICIAL_CATALOG'").fetchone()[0] == 69
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='BRAVA_PART_NUMBER'").fetchone()[0] == 94
@@ -560,6 +576,14 @@ def main() -> None:
     assert db.execute("SELECT count(DISTINCT code_value) FROM external_codes WHERE code_system='VALVOLINE_ARTICLE_NUMBER'").fetchone()[0] == 502
     assert db.execute("SELECT count(*) FROM products WHERE source_id='CUMMINS_VALVOLINE_EU_2022_CATALOG' AND lifecycle_status='historical_catalog_as_published_2022_04_current_status_unverified'").fetchone()[0] == 166
     assert db.execute("SELECT count(*) FROM quality_issues WHERE issue_code LIKE 'cummins_valvoline_2022_%'").fetchone()[0] == 9
+    assert db.execute("SELECT count(*) FROM products WHERE source_id='TAIWAN_CPC_CURRENT_LUBRICANT_CATALOG'").fetchone()[0] == 224
+    assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='TAIWAN_CPC_CURRENT_LUBRICANT_CATALOG'").fetchone()[0] == 224
+    assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='CPC_TAIWAN_PRODUCT_CODE'").fetchone()[0] == 224
+    assert db.execute("SELECT count(DISTINCT code_value) FROM external_codes WHERE code_system='CPC_TAIWAN_PRODUCT_CODE'").fetchone()[0] == 224
+    assert db.execute("SELECT count(*) FROM product_offers WHERE source_id='TAIWAN_CPC_CURRENT_LUBRICANT_CATALOG'").fetchone()[0] == 478
+    assert db.execute("SELECT count(*) FROM product_offers WHERE source_id='TAIWAN_CPC_CURRENT_LUBRICANT_CATALOG' AND lifecycle_status='listed_current_catalog'").fetchone()[0] == 478
+    assert db.execute("SELECT count(*) FROM products WHERE source_id='TAIWAN_CPC_CURRENT_LUBRICANT_CATALOG' AND lifecycle_status='listed_on_current_official_product_sheet_directory'").fetchone()[0] == 224
+    assert db.execute("SELECT count(*) FROM quality_issues WHERE issue_code='source_multigrade_table_not_safely_aligned_to_listing_title'").fetchone()[0] == 27
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_service_recommendation'").fetchone()[0] == 30
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='ALLISON_APPROVAL_NUMBER'").fetchone()[0] == 119
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='MERCEDES_DTFR_PRODUCT_ID'").fetchone()[0] == 1892

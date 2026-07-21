@@ -43,6 +43,7 @@ VOLVO_GENUINE_JSONL = ROOT / "data" / "volvo-genuine-fluids.jsonl"
 MACK_GENUINE_JSONL = ROOT / "data" / "mack-genuine-fluids.jsonl"
 MACK_2014_APPROVED_JSONL = ROOT / "data" / "mack-2014-approved-oils.jsonl"
 CUMMINS_VALVOLINE_2022_JSONL = ROOT / "data" / "cummins-valvoline-2022-products.jsonl"
+TAIWAN_CPC_JSONL = ROOT / "data" / "taiwan-cpc-lubricant-products.jsonl"
 SCANIA_GENUINE_JSONL = ROOT / "data" / "scania-genuine-oils.jsonl"
 BRAVA_OFFICIAL_JSONL = ROOT / "data" / "brava-official-products.jsonl"
 CEYPETCO_JSONL = ROOT / "data" / "ceypetco-lubricant-products.jsonl"
@@ -888,6 +889,61 @@ def cummins_valvoline_2022_record(row: dict) -> dict:
             "source_id": "CUMMINS_VALVOLINE_EU_2022_CATALOG",
             "status": "historical_official_catalog_2022_current_status_unverified",
         }
+    return record
+
+
+def taiwan_cpc_record(row: dict) -> dict:
+    """Convert one current official CPC Taiwan product-sheet card."""
+    specs = row["specifications"]
+    performance = []
+    for system, values in (("API", specs.get("api", [])), ("ACEA", specs.get("acea", [])), ("JASO", specs.get("jaso", []))):
+        if values:
+            performance.append(f"{system} {'/'.join(values)}")
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Current CPC Taiwan lubricant and technical-fluid catalog",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": specs.get("sae_engine") or specs.get("sae_gear") or "",
+        "api_class": "; ".join(performance),
+        "viscosity": specs.get("iso_vg", ""),
+        "grease_class": specs.get("nlgi", ""),
+        "coolant_class": "/".join(specs.get("brake_fluid_classes", [])),
+        "source": "TAIWAN_CPC_CURRENT_LUBRICANT_CATALOG",
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": "TAIWAN_CPC_CURRENT_LUBRICANT_CATALOG",
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": "official_manufacturer_product_catalog",
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update(specs)
+    record["specifications"].update({
+        "source_url": row["source_url"],
+        "product_sheet_url": row["product_sheet_url"],
+        "product_sheet_data_url": row["product_sheet_data_url"],
+        "product_sheet_update_date": row["product_sheet_update_date"],
+        "product_sheet_data_sha256": row["product_sheet_data_sha256"],
+        "packages_source_reported": row["packages_source_reported"],
+        "source_quality_flags": row["source_quality_flags"],
+    })
+    record["canonical_key"] += f"|taiwan_cpc_product_code:{normalize(row['manufacturer_product_code'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    record["codes"]["cpc_taiwan_product_code"] = {
+        "system": "CPC_TAIWAN_PRODUCT_CODE",
+        "value": row["manufacturer_product_code"],
+        "source_id": "TAIWAN_CPC_CURRENT_LUBRICANT_CATALOG",
+        "status": "current_official_catalog",
+    }
     return record
 
 
@@ -3101,6 +3157,9 @@ def main() -> None:
     brava_official_source_rows = [json.loads(line) for line in BRAVA_OFFICIAL_JSONL.read_text(encoding="utf-8").splitlines() if line]
     brava_official_records = [brava_official_record(row) for row in brava_official_source_rows]
     input_records.extend(brava_official_records)
+    taiwan_cpc_source_rows = [json.loads(line) for line in TAIWAN_CPC_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    taiwan_cpc_records = [taiwan_cpc_record(row) for row in taiwan_cpc_source_rows]
+    input_records.extend(taiwan_cpc_records)
     ceypetco_source_rows = [json.loads(line) for line in CEYPETCO_JSONL.read_text(encoding="utf-8").splitlines() if line]
     ceypetco_records = [ceypetco_record(row) for row in ceypetco_source_rows]
     input_records.extend(ceypetco_records)
@@ -4665,7 +4724,54 @@ def main() -> None:
                 "source_id": "CUMMINS_VALVOLINE_EU_2022_CATALOG",
                 "source_record_id": package["article_number"],
             })
+    for raw, normalized_row in zip(taiwan_cpc_source_rows, taiwan_cpc_records):
+        target = canonical_by_key[normalized_row["canonical_key"]]
+        for package_index, package in enumerate(raw["packages"], 1):
+            package_name = package["package_name_source"]
+            if package.get("units_per_case"):
+                package_name += f" ({package['units_per_case']} units/case)"
+            offer_identity = f"{raw['source_record_id']}|{package_index}|{package_name}"
+            quantity = package.get("quantity")
+            unit = package.get("unit") or "catalog_package"
+            offers.append({
+                "offer_id": "TAIWAN-CPC-" + hashlib.sha256(offer_identity.encode()).hexdigest()[:20],
+                "product_id": target["product_id"],
+                "market": raw["market"],
+                "package_name": package_name,
+                "unit": unit,
+                "quantity_per_package": quantity,
+                "weight_kg": quantity if unit == "kg" else None,
+                "density_kg_per_l": None,
+                "lifecycle_status": "listed_current_catalog",
+                "archive_type": "",
+                "archive_reason": "",
+                "source_id": "TAIWAN_CPC_CURRENT_LUBRICANT_CATALOG",
+                "source_record_id": f"{raw['source_record_id']}:package:{package_index}",
+            })
     issues = quality_issues(records)
+    cpc_issue_rules = {
+        "source_multigrade_table_not_safely_aligned_to_listing_title": (
+            "medium", "ISO_VG", "One unambiguous source grade mapped to this exact CPC product code",
+            "Retain the product without an ISO VG assertion until CPC publishes an unambiguous product-specific mapping.",
+        ),
+        "source_package_text_present_but_no_product_specific_structured_offer": (
+            "medium", "PACKAGE", "One or more package facts attributable to this exact CPC product code",
+            "Retain the source package statement but exclude it from structured offers until attribution is unambiguous.",
+        ),
+    }
+    for raw, normalized_row in zip(taiwan_cpc_source_rows, taiwan_cpc_records):
+        target = canonical_by_key[normalized_row["canonical_key"]]
+        for flag in raw["source_quality_flags"]:
+            severity, field, expected, action = cpc_issue_rules[flag]
+            issues.append({
+                "product_id": target["product_id"],
+                "issue_code": flag,
+                "severity": severity,
+                "field": field,
+                "value": raw["product_name_source"],
+                "expected": expected,
+                "action": action,
+            })
     issues.extend({
         "product_id": row["product_id"],
         "issue_code": "source_registration_number_missing",
@@ -4839,6 +4945,7 @@ def main() -> None:
         "mack_genuine_input_sha256": hashlib.sha256(MACK_GENUINE_JSONL.read_bytes()).hexdigest(),
         "mack_2014_approved_input_sha256": hashlib.sha256(MACK_2014_APPROVED_JSONL.read_bytes()).hexdigest(),
         "cummins_valvoline_2022_input_sha256": hashlib.sha256(CUMMINS_VALVOLINE_2022_JSONL.read_bytes()).hexdigest(),
+        "taiwan_cpc_input_sha256": hashlib.sha256(TAIWAN_CPC_JSONL.read_bytes()).hexdigest(),
         "scania_genuine_input_sha256": hashlib.sha256(SCANIA_GENUINE_JSONL.read_bytes()).hexdigest(),
         "brava_official_input_sha256": hashlib.sha256(BRAVA_OFFICIAL_JSONL.read_bytes()).hexdigest(),
         "ceypetco_input_sha256": hashlib.sha256(CEYPETCO_JSONL.read_bytes()).hexdigest(),
@@ -4946,6 +5053,8 @@ def main() -> None:
         "mack_genuine_source_rows": len(mack_genuine_source_rows),
         "mack_2014_approved_source_rows": len(mack_2014_source_rows),
         "cummins_valvoline_2022_source_rows": len(cummins_valvoline_2022_source_rows),
+        "taiwan_cpc_source_rows": len(taiwan_cpc_source_rows),
+        "taiwan_cpc_structured_package_offers": sum(len(row["packages"]) for row in taiwan_cpc_source_rows),
         "scania_genuine_source_rows": len(scania_genuine_source_rows),
         "brava_official_source_rows": len(brava_official_source_rows),
         "ceypetco_source_rows": len(ceypetco_source_rows),

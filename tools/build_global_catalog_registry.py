@@ -146,6 +146,7 @@ SOURCES = [
     ("Sinopec Lubricant", "Global / market-specific", "Official products", "https://www.sinopeclube.com/", None, None, "Automotive and industrial products; multilingual source review needed", "discovery"),
     ("DEUTZ DQC", "Global OEM approvals", "Official oil and coolant release lists", "https://www.deutz.com/germany/en/parts-service/operating-liquids/technical-information/", None, None, "Current issue 07/2026 located; copyright notice requires permission for transformed/commercial reuse", "permission_or_licensed_feed_required"),
     ("Detroit / Daimler Truck DFS", "North America / global suppliers", "Official approved-fluids PDF lists", "https://dtnacontent-dtna.prd.freightliner.com/content/public/dtnaportalpublic/LubricantsFuelsCoolants.html", 661, "approval occurrences", "11 current lists dated 2026-07-09; terms restrict reuse to noncommercial personal use, therefore products are not ingested", "written_permission_required"),
+    ("CPC Corporation Taiwan", "Taiwan / current domestic catalog", "Official state-owned manufacturer directory and open-government datasets", "https://cpclube.cpc.com.tw/News_eBook.aspx?PageSize=1000&_CSN=0&n=7478&page=1&sms=12330", 224, "current product-grade cards", "Seven categories; 224 unique manufacturer product codes; 478 structured package offers; factual fields published under Taiwan Open Government Data License 1.0", "ingested_and_verified_current_factual_fields_only"),
 ]
 
 

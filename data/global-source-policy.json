@@ -1663,6 +1663,21 @@
       "publication_status": "metadata_only_blocked_pending_authorized_access",
       "observed_count": 0,
       "notes": "Cummins documents the current oil-registration lists under QuickServe Online > Service > Service Tools, but the product tables require an authenticated Limited Owners Plan or other authorized account. No authentication was bypassed and no current registry product row is claimed. The public 2022 corporate catalog is tracked separately and must not be presented as the current Cummins registration list."
+    },
+    {
+      "source_id": "TAIWAN_CPC_CURRENT_LUBRICANT_CATALOG",
+      "title": "CPC Taiwan current lubricant, grease and technical-fluid product sheets",
+      "owner": "CPC Corporation, Taiwan",
+      "source_type": "official_state_owned_manufacturer_product_directory_and_open_government_datasets",
+      "source_locator": "data/taiwan-cpc-lubricant-products.jsonl",
+      "source_url": "https://cpclube.cpc.com.tw/News_eBook.aspx?PageSize=1000&_CSN=0&n=7478&page=1&sms=12330",
+      "source_sha256": "0c412c453189bc202ef2c88fae18beca3d5ced78295263eb8f68d5923e87c243",
+      "license_url": "https://data.gov.tw/license",
+      "access_status": "public_official_catalog_and_taiwan_open_government_data_license_1_0",
+      "bulk_ingest_allowed": true,
+      "publication_status": "derived_factual_product_grade_and_package_records_with_attribution",
+      "observed_count": 224,
+      "notes": "Seven current official directory categories expose 224 unique CPC manufacturer product codes and product-sheet cards. Derived output retains product identity, code, update date, technical grades and standards, 478 structured package facts, evidence URLs and hashes. Descriptive prose, images and layout are excluded. Twenty-seven cards contain multi-grade ISO VG tables that cannot be attributed to the exact listing safely; those products remain present without a guessed ISO VG and carry explicit quality flags. The ingestion uses normal certificate verification with the official TWCA intermediate pinned by SHA-256; no TLS verification bypass is used."
     }
   ]
 }

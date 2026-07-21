@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-07-21",
+  "source_id": "TAIWAN_CPC_CURRENT_LUBRICANT_CATALOG",
+  "source_directory_url": "https://cpclube.cpc.com.tw/News_eBook.aspx?PageSize=1000&_CSN=0&n=7478&page=1&sms=12330",
+  "source_dataset_urls": {
+    "motor": "https://data.gov.tw/en/datasets/25519",
+    "industrial": "https://data.gov.tw/en/datasets/25570",
+    "grease": "https://data.gov.tw/en/datasets/25571"
+  },
+  "source_license_url": "https://data.gov.tw/license",
+  "intermediate_ca_url": "http://sslserver.twca.com.tw/cacert/secure_sha2_2023G3.crt",
+  "intermediate_ca_sha256": "1a2c75fd096e0499e9ff6ac74e526f61eaae3edfc8c2ea4436fee0c24d8b7d0e",
+  "categories": {
+    "industrial_oils": 103,
+    "vehicle_oils_and_fluids": 62,
+    "marine_engine_oils": 12,
+    "greases": 21,
+    "base_oils": 9,
+    "apex_motorcycle_oils": 7,
+    "mirage_pro_automotive_oils": 10
+  },
+  "current_product_cards": 224,
+  "families": {
+    "C": 9,
+    "E": 1,
+    "G": 21,
+    "H": 15,
+    "I": 71,
+    "M": 76,
+    "S": 11,
+    "T": 11,
+    "TF": 4,
+    "U": 5
+  },
+  "brands": {
+    "CPC Kuo Kuang": 211,
+    "MiRAGE": 13
+  },
+  "structured_package_offers": 478,
+  "products_with_structured_package_offers": 224,
+  "rows_with_sae": 60,
+  "rows_with_api": 61,
+  "rows_with_acea": 12,
+  "rows_with_jaso": 13,
+  "rows_with_iso_vg": 50,
+  "rows_with_nlgi": 21,
+  "source_quality_flags": {
+    "source_multigrade_table_not_safely_aligned_to_listing_title": 27
+  },
+  "listing_page_sha256": {
+    "industrial_oils": "88866b1c280bbda7373b1a84048ea152005c5aadc1ba5c6056decde3d03c52a2",
+    "vehicle_oils_and_fluids": "e7710e13808004732ba4464228c26604a3c645462c723706e998d01410d6141f",
+    "marine_engine_oils": "71eef4928c9406ed6fb6e1946cbd3ee6c1157d1040744c02e2bfe7bfbec703cb",
+    "greases": "aa037581882fd0500545e2cf709f5f2e00605832822dc0371446f1c32d3858e0",
+    "base_oils": "a5eea47ab0df4df622bf4cc145d63a9d042fdfe4124b706f197b99adc1025c33",
+    "apex_motorcycle_oils": "783f499b6388a1b79b9b893c82b8880434352628b74ed9e90d8ad705c1b8b252",
+    "mirage_pro_automotive_oils": "04bf299390e19ef9ca4d537e1986f0eaf4244fea6fe233ca99d914064ade63f0"
+  },
+  "product_sheet_data_aggregate_sha256": "76af39842056cfd48f9f23e312e5e4155891192ca8e46ff0beb10e91b72a77da",
+  "normalized_output_sha256": "0c412c453189bc202ef2c88fae18beca3d5ced78295263eb8f68d5923e87c243",
+  "publication_scope": "Attributed derived factual names, product codes, dates, grades, standards and package facts under Taiwan Open Government Data License 1.0; descriptive prose, page images and layout are not republished."
+}
