@@ -19,6 +19,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from collections import Counter, defaultdict
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date
 from pathlib import Path
 
@@ -37,6 +38,7 @@ SNAPSHOT_DATE = "2026-07-21"
 USER_AGENT = "MFClassifierResearch/1.0 (official-open-data-lubricant-registry)"
 ID_BATCH_SIZE = 250
 DETAIL_BATCH_SIZE = 40
+DEFAULT_WORKERS = 4
 
 # Russian is the register language.  English terms cover source-entered trade
 # designations and make the crawl resilient to future national submissions.
@@ -233,58 +235,96 @@ def fetch_detail_batch(record_ids: list[str]) -> bytes:
     raise RuntimeError(f"EAEU REST detail batch failed: {error}")
 
 
-def crawl(terms: tuple[str, ...], max_pages: int) -> tuple[dict[str, dict], dict]:
+def crawl_term_ids(term: str, max_pages: int) -> dict:
+    """Fetch one search slice; every raw page is an independent checkpoint."""
+    record_ids: set[str] = set()
+    page_hashes: list[str] = []
+    matched = 0
+    pages = 0
+    skip = 0
+    truncated = False
+    while True:
+        payload = fetch_id_page(term, skip)
+        page_hashes.append(hashlib.sha256(payload).hexdigest())
+        rows = json.loads(payload)["value"]
+        for row in rows:
+            record_ids.add(row["Id"])
+        matched += len(rows)
+        pages += 1
+        print(
+            json.dumps(
+                {"term": term, "page": pages, "rows": len(rows), "matched": matched, "term_unique_ids": len(record_ids)},
+                ensure_ascii=False,
+            ),
+            flush=True,
+        )
+        if len(rows) < ID_BATCH_SIZE:
+            break
+        if max_pages and pages >= max_pages:
+            truncated = True
+            break
+        skip += ID_BATCH_SIZE
+    return {
+        "term": term,
+        "record_ids": sorted(record_ids),
+        "matched": matched,
+        "pages": pages,
+        "truncated": truncated,
+        "page_hashes": page_hashes,
+    }
+
+
+def fetch_detail_result(batch_ids: list[str]) -> tuple[list[str], bytes, list[dict]]:
+    payload = fetch_detail_batch(batch_ids)
+    return batch_ids, payload, json.loads(payload)["result"]
+
+
+def crawl(terms: tuple[str, ...], max_pages: int, workers: int = DEFAULT_WORKERS) -> tuple[dict[str, dict], dict]:
+    workers = max(1, workers)
+    term_results: dict[str, dict] = {}
+    with ThreadPoolExecutor(max_workers=min(workers, len(terms))) as executor:
+        futures = {executor.submit(crawl_term_ids, term, max_pages): term for term in terms}
+        for future in as_completed(futures):
+            result = future.result()
+            term_results[result["term"]] = result
+
     record_ids: set[str] = set()
     counts: dict[str, int] = {}
     pages_by_term: dict[str, int] = {}
     truncated_terms: list[str] = []
     page_hashes: list[str] = []
     for term in terms:
-        matched = 0
-        pages = 0
-        skip = 0
-        while True:
-            payload = fetch_id_page(term, skip)
+        result = term_results[term]
+        record_ids.update(result["record_ids"])
+        counts[term] = result["matched"]
+        pages_by_term[term] = result["pages"]
+        page_hashes.extend(result["page_hashes"])
+        if result["truncated"]:
+            truncated_terms.append(term)
+
+    documents: dict[str, dict] = {}
+    ordered_ids = sorted(record_ids)
+    batches = [ordered_ids[offset : offset + DETAIL_BATCH_SIZE] for offset in range(0, len(ordered_ids), DETAIL_BATCH_SIZE)]
+    completed_rows = 0
+    with ThreadPoolExecutor(max_workers=workers) as executor:
+        futures = {executor.submit(fetch_detail_result, batch): batch for batch in batches}
+        for future in as_completed(futures):
+            batch_ids, payload, rows = future.result()
             page_hashes.append(hashlib.sha256(payload).hexdigest())
-            rows = json.loads(payload)["value"]
             for row in rows:
-                record_ids.add(row["Id"])
-            matched += len(rows)
-            pages += 1
+                record_id = clean((row.get("_id") or {}).get("$oid"))
+                if not record_id:
+                    continue
+                row["Id"] = record_id
+                documents[record_id] = row
+            completed_rows += len(batch_ids)
             print(
                 json.dumps(
-                    {"term": term, "page": pages, "rows": len(rows), "matched": matched, "unique_ids": len(record_ids)},
+                    {"detail_rows": completed_rows, "detail_total": len(ordered_ids), "documents": len(documents)},
                     ensure_ascii=False,
                 ),
                 flush=True,
             )
-            if len(rows) < ID_BATCH_SIZE:
-                break
-            if max_pages and pages >= max_pages:
-                truncated_terms.append(term)
-                break
-            skip += ID_BATCH_SIZE
-        counts[term] = matched
-        pages_by_term[term] = pages
-    documents: dict[str, dict] = {}
-    ordered_ids = sorted(record_ids)
-    for offset in range(0, len(ordered_ids), DETAIL_BATCH_SIZE):
-        batch_ids = ordered_ids[offset : offset + DETAIL_BATCH_SIZE]
-        payload = fetch_detail_batch(batch_ids)
-        page_hashes.append(hashlib.sha256(payload).hexdigest())
-        for row in json.loads(payload)["result"]:
-            record_id = clean((row.get("_id") or {}).get("$oid"))
-            if not record_id:
-                continue
-            row["Id"] = record_id
-            documents[record_id] = row
-        print(
-            json.dumps(
-                {"detail_rows": min(offset + DETAIL_BATCH_SIZE, len(ordered_ids)), "detail_total": len(ordered_ids), "documents": len(documents)},
-                ensure_ascii=False,
-            ),
-            flush=True,
-        )
     missing_ids = sorted(record_ids - documents.keys())
     if missing_ids:
         raise RuntimeError(f"REST projection omitted {len(missing_ids)} requested documents; first={missing_ids[0]}")
@@ -612,9 +652,10 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--terms", nargs="*", help="Override the audited default query-term set")
     parser.add_argument("--max-pages", type=int, default=0, help="Diagnostic cap per term; 0 means complete pagination")
+    parser.add_argument("--workers", type=int, default=DEFAULT_WORKERS, help="Concurrent official requests (default: 4)")
     args = parser.parse_args()
     terms = tuple(args.terms) if args.terms else SEARCH_TERMS
-    documents, crawl_audit = crawl(terms, args.max_pages)
+    documents, crawl_audit = crawl(terms, args.max_pages, args.workers)
     records, normalization_audit = normalize_documents(documents)
     text = "".join(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n" for row in records)
     diagnostic = bool(args.max_pages)
