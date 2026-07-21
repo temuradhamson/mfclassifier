@@ -1896,6 +1896,21 @@
       "notes": "The complete current Chemical and Mechanical category scopes were reviewed through the site's ordinary public ASP.NET WebForms workflow on 2026-07-21. Four Chemical-category companies exposed 95 product cards: paints, butane and household cleaning or personal-care products. Two Mechanical-category companies exposed 69 product cards: commercial cooking equipment and cable systems. No lubricant, oil, grease, coolant, antifreeze, hydraulic fluid, transmission fluid or brake-fluid product remained, so nothing is added to the canonical catalog."
     },
     {
+      "source_id": "TISI_TWO_STROKE_OIL_LICENCES",
+      "title": "Thailand TISI manufacturing licences for TIS 1040-2541 two-stroke engine oil",
+      "owner": "Thai Industrial Standards Institute (TISI)",
+      "source_type": "official_government_compulsory_standard_licence_registry",
+      "source_locator": "data/tisi-two-stroke-oil-licences.jsonl",
+      "source_url": "https://appdb.tisi.go.th/tis_dev/p4_license_report/p4license_report.php?data=tis&txt_tis=1040-2541",
+      "terms_url": "https://www.data.go.th/dataset/tis_hav_lic_total",
+      "source_sha256": "7df58462fa9454e4313568dea4edcbda14211dce975bd8f9a26a9483ca293598",
+      "access_status": "public_official_open_government_dataset_cc_by",
+      "bulk_ingest_allowed": true,
+      "publication_status": "ingested_and_verified_certified_holder_scopes_with_attribution",
+      "observed_count": 10,
+      "notes": "The official current TIS 1040-2541 search exposes ten manufacturing licences across nine exact company holders. The linked data.go.th dataset is published under Creative Commons Attribution. Each normalized row remains a licence-holder certification scope, not a marketed brand, grade or SKU; no SAE/API value or current-validity claim is inferred."
+    },
+    {
       "source_id": "FUCHS_SAUDI_ARABIA_PRODUCT_FINDER",
       "title": "FUCHS Saudi Arabia Product Finder",
       "owner": "Alhamrani-Fuchs Petroleum Saudi Arabia Limited",

@@ -172,6 +172,8 @@ def main() -> None:
     epa_chemexpo_rows = [json.loads(line) for line in (ROOT / "data/epa-chemexpo-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     psqca_report = json.loads((ROOT / "data/psqca-engine-oil-licences-report.json").read_text(encoding="utf-8"))
     psqca_rows = [json.loads(line) for line in (ROOT / "data/psqca-engine-oil-licences.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    tisi_report = json.loads((ROOT / "data/tisi-two-stroke-oil-licences-report.json").read_text(encoding="utf-8"))
+    tisi_rows = [json.loads(line) for line in (ROOT / "data/tisi-two-stroke-oil-licences.jsonl").read_text(encoding="utf-8").splitlines() if line]
     philippines_bps_report = json.loads((ROOT / "data/philippines-bps-brake-fluid-products-report.json").read_text(encoding="utf-8"))
     philippines_bps_rows = [json.loads(line) for line in (ROOT / "data/philippines-bps-brake-fluid-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     ghana_gsa_report = json.loads((ROOT / "data/ghana-gsa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -215,7 +217,7 @@ def main() -> None:
     assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
     assert not db.execute("PRAGMA foreign_key_check").fetchall()
     assert db.execute("SELECT count(*) FROM products").fetchone()[0] == len(lines)
-    assert len(lines) == 100390
+    assert len(lines) == 100400
     assert report["jaso_source_rows"] == jaso_report["rows"] == 3630
     assert report["jaso_unique_oil_codes"] == jaso_report["unique_oil_codes"] == 3629
     assert report["official_filed_registry_rows"] == 3629
@@ -435,6 +437,8 @@ def main() -> None:
     assert report["official_government_compiled_product_database_rows"] == report["epa_chemexpo_products_added"]
     assert report["psqca_engine_oil_source_rows"] == psqca_report["normalized_licence_brand_scopes"] == len(psqca_rows) == 14
     assert report["official_government_product_certification_brand_scope_rows"] == 14
+    assert report["tisi_two_stroke_oil_source_rows"] == tisi_report["normalized_licence_holder_scopes"] == len(tisi_rows) == 10
+    assert report["official_government_product_certification_holder_scope_rows"] == 10
     assert report["philippines_bps_brake_fluid_source_rows"] == philippines_bps_report["normalized_products_or_brand_grade_scopes"] == len(philippines_bps_rows) == 123
     assert report["philippines_bps_ps_brake_fluid_rows"] == philippines_bps_report["rows_by_source"]["PHILIPPINES_BPS_PS_BRAKE_FLUID_LICENCES"] == 89
     assert report["philippines_bps_icc_brake_fluid_rows"] == philippines_bps_report["rows_by_source"]["PHILIPPINES_BPS_ICC_BRAKE_FLUID_CERTIFICATES"] == 34
@@ -767,6 +771,8 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='EPA_CHEMEXPO_PRODUCT_ID'").fetchone()[0] == epa_chemexpo_report["kept_product_occurrences"]
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='PSQCA_ENGINE_OIL_CM_LICENCES'").fetchone()[0] == 14
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='PSQCA_CM_LICENCE'").fetchone()[0] == 14
+    assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='TISI_TWO_STROKE_OIL_LICENCES'").fetchone()[0] == 10
+    assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='TISI_MANUFACTURING_LICENCE'").fetchone()[0] == 10
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='PHILIPPINES_BPS_PS_BRAKE_FLUID_LICENCES'").fetchone()[0] == 89
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='PHILIPPINES_BPS_ICC_BRAKE_FLUID_CERTIFICATES'").fetchone()[0] == 34
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='PHILIPPINES_BPS_PS_LICENCE'").fetchone()[0] == 89
@@ -797,6 +803,17 @@ def main() -> None:
         JOIN products p ON p.product_id=c.product_id
         WHERE p.source_id='PSQCA_ENGINE_OIL_CM_LICENCES'
     """).fetchone()[0] == 14
+    assert db.execute("""
+        SELECT count(*) FROM certificates c
+        JOIN products p ON p.product_id=c.product_id
+        WHERE p.source_id='TISI_TWO_STROKE_OIL_LICENCES'
+    """).fetchone()[0] == 10
+    assert db.execute("""
+        SELECT count(*) FROM products
+        WHERE source_id='TISI_TWO_STROKE_OIL_LICENCES'
+          AND (json_extract(profile_match_basis_json, '$.sae') IS NOT NULL
+               OR json_extract(profile_match_basis_json, '$.api') IS NOT NULL)
+    """).fetchone()[0] == 0
     assert db.execute("""
         SELECT count(*) FROM products
         WHERE source_id='PSQCA_ENGINE_OIL_CM_LICENCES'
@@ -937,6 +954,20 @@ def main() -> None:
     assert all(row["technical"]["sae"] == row["technical"]["api"] == [] for row in psqca_rows)
     assert all(row["product_name_basis"] == "source_reported_certified_brand_scope_not_individual_grade" for row in psqca_rows)
     assert all(not ({"address", "phone", "email", "contact_person"} & set(row)) for row in psqca_rows)
+    assert report["tisi_two_stroke_oil_input_sha256"] == tisi_report["normalized_output_sha256"]
+    assert policy_by_id["TISI_TWO_STROKE_OIL_LICENCES"]["source_sha256"] == tisi_report["normalized_output_sha256"]
+    assert policy_by_id["TISI_TWO_STROKE_OIL_LICENCES"]["observed_count"] == 10
+    assert tisi_report["source_occurrences"] == tisi_report["normalized_licence_holder_scopes"] == 10
+    assert tisi_report["unique_licence_holders"] == 9
+    assert tisi_report["permit_types"] == {"manufacturing": 10}
+    assert tisi_report["issue_year_range"] == ["2005", "2022"]
+    assert tisi_report["families"] == {"M": 10}
+    assert len({row["permit_number"] for row in tisi_rows}) == 10
+    assert all(row["family_code"] == "M" for row in tisi_rows)
+    assert all(row["technical"]["sae"] == row["technical"]["api"] == [] for row in tisi_rows)
+    assert all(row["product_name_basis"] == "source_reported_certified_holder_scope_not_individual_brand_grade_or_sku" for row in tisi_rows)
+    assert all(row["lifecycle_status"] == "published_in_current_tisi_licence_search_current_validity_not_independently_stated" for row in tisi_rows)
+    assert all(not ({"address", "tax_id", "phone", "email", "contact_person"} & set(row)) for row in tisi_rows)
     assert philippines_bps_report["source_reports"]["PHILIPPINES_BPS_PS_BRAKE_FLUID_LICENCES"] == {
         "source_rows": 3558,
         "relevant_source_rows": 13,

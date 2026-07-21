@@ -68,6 +68,7 @@ EAEU_CONFORMITY_JSONL = ROOT / "data" / "eaeu-conformity-lubricant-products.json
 EPA_SAFER_CHOICE_JSONL = ROOT / "data" / "epa-safer-choice-lubricants.jsonl"
 EPA_CHEMEXPO_JSONL = ROOT / "data" / "epa-chemexpo-lubricants.jsonl"
 PSQCA_ENGINE_OIL_JSONL = ROOT / "data" / "psqca-engine-oil-licences.jsonl"
+TISI_TWO_STROKE_OIL_JSONL = ROOT / "data" / "tisi-two-stroke-oil-licences.jsonl"
 PHILIPPINES_BPS_BRAKE_FLUID_JSONL = ROOT / "data" / "philippines-bps-brake-fluid-products.jsonl"
 GHANA_GSA_CERTIFIED_JSONL = ROOT / "data" / "ghana-gsa-certified-lubricant-products.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
@@ -2383,6 +2384,68 @@ def psqca_engine_oil_record(row: dict) -> dict:
     return record
 
 
+def tisi_two_stroke_oil_record(row: dict) -> dict:
+    """Convert one TISI licence at its conservative certified-holder grain."""
+    technical = row["technical"]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Thailand TISI licence — certified two-stroke engine-oil holder scope",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": "",
+        "api_class": "",
+        "viscosity": "",
+        "grease_class": "",
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": row["evidence_status"],
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+        "certificate_status": row["lifecycle_status"],
+    })
+    record["specifications"].update({
+        "tisi_certified_standard": technical["certified_standard"],
+        "tisi_certified_product_scope": row["certified_product_scope"],
+        "tisi_certified_product_scope_source_reported": row["certified_product_scope_source_reported"],
+        "tisi_product_name_basis": row["product_name_basis"],
+        "tisi_permit_type": row["permit_type"],
+        "tisi_permit_type_source_reported": row["permit_type_source_reported"],
+        "tisi_source_quality_flags": row["source_quality_flags"],
+        "sae_source_reported": technical["sae"],
+        "api_source_reported": technical["api"],
+        "source_url": row["source_url"],
+        "dataset_url": row["dataset_url"],
+        "standard_url": row["standard_url"],
+        "source_facts_sha256": row["source_facts_sha256"],
+    })
+    record["codes"]["tisi_manufacturing_licence"] = {
+        "system": "TISI_MANUFACTURING_LICENCE",
+        "value": row["permit_number"],
+        "source_id": row["source_id"],
+        "status": row["lifecycle_status"],
+    }
+    record["certificate"].update({
+        "number": row["permit_number"],
+        "issued_at": row["issued_at"],
+        "technical_document": "; ".join(technical["certified_standard"]),
+    })
+    # A holder-level licence scope must never collapse into a marketed product.
+    record["canonical_key"] += f"|tisi_licence:{normalize(row['permit_number'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    return record
+
+
 def philippines_bps_brake_fluid_record(row: dict) -> dict:
     """Convert one conservative Philippine BPS brake-fluid evidence identity."""
     brake_classes = row["technical"]["brake_fluid_class"]
@@ -3374,6 +3437,9 @@ def main() -> None:
     psqca_engine_oil_source_rows = [json.loads(line) for line in PSQCA_ENGINE_OIL_JSONL.read_text(encoding="utf-8").splitlines() if line]
     psqca_engine_oil_records = [psqca_engine_oil_record(row) for row in psqca_engine_oil_source_rows]
     input_records.extend(psqca_engine_oil_records)
+    tisi_two_stroke_oil_source_rows = [json.loads(line) for line in TISI_TWO_STROKE_OIL_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    tisi_two_stroke_oil_records = [tisi_two_stroke_oil_record(row) for row in tisi_two_stroke_oil_source_rows]
+    input_records.extend(tisi_two_stroke_oil_records)
     philippines_bps_brake_fluid_source_rows = [json.loads(line) for line in PHILIPPINES_BPS_BRAKE_FLUID_JSONL.read_text(encoding="utf-8").splitlines() if line]
     philippines_bps_brake_fluid_records = [philippines_bps_brake_fluid_record(row) for row in philippines_bps_brake_fluid_source_rows]
     input_records.extend(philippines_bps_brake_fluid_records)
@@ -4112,7 +4178,10 @@ def main() -> None:
         raw_owner = " ".join(value for value in [raw["brand_source_reported"], raw["manufacturer"]] if value)
         strong_matches = []
         for candidate in candidates_for_name:
-            if candidate["evidence_status"] == "official_government_product_certification_brand_scope":
+            if candidate["evidence_status"] in {
+                "official_government_product_certification_brand_scope",
+                "official_government_product_certification_holder_scope",
+            }:
                 continue
             candidate_owner = " ".join(value for value in [candidate["brand"], candidate["manufacturer"]] if value)
             candidate_brand = normalize(candidate["brand"])
@@ -5413,6 +5482,7 @@ def main() -> None:
         "epa_safer_choice_input_sha256": hashlib.sha256(EPA_SAFER_CHOICE_JSONL.read_bytes()).hexdigest(),
         "epa_chemexpo_input_sha256": hashlib.sha256(EPA_CHEMEXPO_JSONL.read_bytes()).hexdigest(),
         "psqca_engine_oil_input_sha256": hashlib.sha256(PSQCA_ENGINE_OIL_JSONL.read_bytes()).hexdigest(),
+        "tisi_two_stroke_oil_input_sha256": hashlib.sha256(TISI_TWO_STROKE_OIL_JSONL.read_bytes()).hexdigest(),
         "philippines_bps_brake_fluid_input_sha256": hashlib.sha256(PHILIPPINES_BPS_BRAKE_FLUID_JSONL.read_bytes()).hexdigest(),
         "ghana_gsa_certified_input_sha256": hashlib.sha256(GHANA_GSA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
@@ -5498,6 +5568,8 @@ def main() -> None:
         "epa_chemexpo_products_added": epa_chemexpo_added_rows,
         "psqca_engine_oil_source_rows": len(psqca_engine_oil_source_rows),
         "official_government_product_certification_brand_scope_rows": sum(r["evidence_status"] == "official_government_product_certification_brand_scope" for r in records),
+        "tisi_two_stroke_oil_source_rows": len(tisi_two_stroke_oil_source_rows),
+        "official_government_product_certification_holder_scope_rows": sum(r["evidence_status"] == "official_government_product_certification_holder_scope" for r in records),
         "philippines_bps_brake_fluid_source_rows": len(philippines_bps_brake_fluid_source_rows),
         "philippines_bps_ps_brake_fluid_rows": sum(r["source_id"] == "PHILIPPINES_BPS_PS_BRAKE_FLUID_LICENCES" for r in records),
         "philippines_bps_icc_brake_fluid_rows": sum(r["source_id"] == "PHILIPPINES_BPS_ICC_BRAKE_FLUID_CERTIFICATES" for r in records),

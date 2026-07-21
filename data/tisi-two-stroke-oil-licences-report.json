@@ -1,0 +1,29 @@
+{
+  "status": "official_thailand_two_stroke_oil_manufacturing_licences_normalized",
+  "source_id": "TISI_TWO_STROKE_OIL_LICENCES",
+  "source_url": "https://appdb.tisi.go.th/tis_dev/p4_license_report/p4license_report.php?data=tis&txt_tis=1040-2541",
+  "dataset_url": "https://www.data.go.th/dataset/tis_hav_lic_total",
+  "standard_url": "https://a.tisi.go.th/t/?n=1040-2541",
+  "snapshot_date": "2026-07-21",
+  "standard": "TIS 1040-2541",
+  "source_occurrences": 10,
+  "normalized_licence_holder_scopes": 10,
+  "unique_licence_holders": 9,
+  "permit_types": {
+    "manufacturing": 10
+  },
+  "issue_year_range": [
+    "2005",
+    "2022"
+  ],
+  "families": {
+    "M": 10
+  },
+  "source_response_sha256": "986fe734216033712c5f29d3105ade5d0c7a4007f849863aaa0725fdfd0823dc",
+  "normalized_output_sha256": "7df58462fa9454e4313568dea4edcbda14211dce975bd8f9a26a9483ca293598",
+  "grain_note": "One row is one TISI manufacturing licence + exact licence holder + TIS 1040-2541 certified scope. It is not a marketed brand, grade or SKU.",
+  "technical_note": "TIS 1040-2541 is retained as certification evidence. No SAE or API value is inferred because the public result does not publish one.",
+  "lifecycle_note": "The row appears in the current public licence search, but the result does not explicitly state a current-validity flag or expiry date.",
+  "rights_note": "The official data.go.th dataset page publishes the source under Creative Commons Attribution; source and dataset URLs are retained for attribution.",
+  "privacy_note": "Only company-level licence facts are retained; no addresses, tax identifiers, contacts or personal data are collected."
+}
