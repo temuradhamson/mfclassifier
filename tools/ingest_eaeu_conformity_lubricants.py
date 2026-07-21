@@ -40,6 +40,33 @@ ID_BATCH_SIZE = 250
 DETAIL_BATCH_SIZE = 40
 DEFAULT_WORKERS = 4
 
+# Exact 10-digit commodity codes observed in the register for the regulated
+# lubricant / technical-fluid scope.  Exact-code queries use the registry's
+# index and avoid the pathological deep-$skip behaviour of text search.
+COMMODITY_CODES = (
+    "2710198100",
+    "2710198200",  # motor, compressor and turbine lubricating oils
+    "2710198300",
+    "2710198400",  # hydraulic-purpose fluids
+    "2710198700",
+    "2710198800",  # gear and reduction-gear oils
+    "2710199100",
+    "2710199400",  # electrical insulating oils
+    "2710199800",  # other lubricating and other oils
+    "2710199900",
+    "3403110000",
+    "3403191000",
+    "3403199000",
+    "3403910000",
+    "3403990000",  # other lubricating preparations
+    "3819000000",  # hydraulic brake and transmission fluids
+    "3820000000",  # antifreeze and prepared de-icing fluids
+)
+
+COMMODITY_CODE_FIELDS = (
+    "technicalRegulationObjectDetails.productDetails.commodityCode",
+)
+
 # Russian is the register language.  English terms cover source-entered trade
 # designations and make the crawl resilient to future national submissions.
 SEARCH_TERMS = (
@@ -204,6 +231,53 @@ def rest_detail_url(limit: int) -> str:
     return f"{REST_URL}?{query}"
 
 
+def rest_id_url(limit: int) -> str:
+    fields = json.dumps({"_id": 1}, separators=(",", ":"))
+    query = urllib.parse.urlencode({"collection": REST_COLLECTION, "limit": limit, "fields": fields})
+    return f"{REST_URL}?{query}"
+
+
+def fetch_code_id_page(code: str, field: str, after_id: str) -> bytes:
+    """Fetch one exact-code page using indexed ObjectId keyset pagination."""
+    CACHE.mkdir(parents=True, exist_ok=True)
+    slice_id = safe_slug(f"{field}|{code}")
+    cursor = after_id or "start"
+    path = CACHE / f"code-ids-b{ID_BATCH_SIZE}-{slice_id}-{cursor}.json"
+    if path.exists():
+        return path.read_bytes()
+    clauses = [f"{{{json.dumps(field)}:{json.dumps(code)}}}"]
+    if after_id:
+        clauses.append(f'{{"_id":{{"$gt":ObjectId({json.dumps(after_id)})}}}}')
+    # The public service accepts Mongo-like literals, so ObjectId must remain
+    # unquoted while ordinary values remain JSON escaped.
+    body = ('{"$and":[' + ",".join(clauses) + "]}").encode("utf-8")
+    request = urllib.request.Request(
+        rest_id_url(ID_BATCH_SIZE),
+        data=body,
+        headers={"User-Agent": USER_AGENT, "Content-Type": "text/plain"},
+        method="POST",
+    )
+    error: Exception | None = None
+    for attempt in range(6):
+        try:
+            with urllib.request.urlopen(request, timeout=90) as response:
+                payload = response.read()
+            parsed = json.loads(payload)
+            rows = parsed.get("result")
+            if not isinstance(rows, list):
+                raise RuntimeError(parsed.get("message") or "invalid REST code response")
+            ids = [clean((row.get("_id") or {}).get("$oid")) for row in rows]
+            if any(not value for value in ids) or ids != sorted(ids):
+                raise RuntimeError("REST code page omitted an ObjectId or broke ascending keyset order")
+            path.write_bytes(payload)
+            time.sleep(0.08)
+            return payload
+        except (urllib.error.URLError, TimeoutError, RuntimeError, json.JSONDecodeError) as exc:
+            error = exc
+            time.sleep(min(20, 2 * (attempt + 1)))
+    raise RuntimeError(f"EAEU REST code query failed for {field}={code}, after={after_id or 'start'}: {error}")
+
+
 def fetch_detail_batch(record_ids: list[str]) -> bytes:
     CACHE.mkdir(parents=True, exist_ok=True)
     identity = "\n".join(sorted(record_ids))
@@ -274,33 +348,94 @@ def crawl_term_ids(term: str, max_pages: int) -> dict:
     }
 
 
+def crawl_code_ids(code: str, field: str, max_pages: int) -> dict:
+    """Fetch an exact commodity-code slice with stable ObjectId cursors."""
+    record_ids: set[str] = set()
+    page_hashes: list[str] = []
+    matched_total = None
+    pages = 0
+    after_id = ""
+    truncated = False
+    while True:
+        payload = fetch_code_id_page(code, field, after_id)
+        parsed = json.loads(payload)
+        page_hashes.append(hashlib.sha256(payload).hexdigest())
+        rows = parsed["result"]
+        ids = [clean((row.get("_id") or {}).get("$oid")) for row in rows]
+        record_ids.update(ids)
+        pages += 1
+        if matched_total is None:
+            matched_total = int(parsed.get("matchedDocuments") or len(rows))
+        print(
+            json.dumps(
+                {
+                    "commodity_code": code,
+                    "commodity_field": field.rsplit(".", 1)[-1],
+                    "page": pages,
+                    "rows": len(rows),
+                    "slice_unique_ids": len(record_ids),
+                    "source_matches": matched_total,
+                },
+                ensure_ascii=False,
+            ),
+            flush=True,
+        )
+        if len(rows) < ID_BATCH_SIZE:
+            break
+        if max_pages and pages >= max_pages:
+            truncated = True
+            break
+        next_after = ids[-1]
+        if not next_after or next_after == after_id:
+            raise RuntimeError(f"EAEU code keyset did not advance for {field}={code}")
+        after_id = next_after
+    return {
+        "slice": f"{field}={code}",
+        "record_ids": sorted(record_ids),
+        "matched": matched_total or 0,
+        "pages": pages,
+        "truncated": truncated,
+        "page_hashes": page_hashes,
+    }
+
+
 def fetch_detail_result(batch_ids: list[str]) -> tuple[list[str], bytes, list[dict]]:
     payload = fetch_detail_batch(batch_ids)
     return batch_ids, payload, json.loads(payload)["result"]
 
 
-def crawl(terms: tuple[str, ...], max_pages: int, workers: int = DEFAULT_WORKERS) -> tuple[dict[str, dict], dict]:
+def crawl(
+    terms: tuple[str, ...],
+    max_pages: int,
+    workers: int = DEFAULT_WORKERS,
+    strategy: str = "codes",
+) -> tuple[dict[str, dict], dict]:
     workers = max(1, workers)
-    term_results: dict[str, dict] = {}
-    with ThreadPoolExecutor(max_workers=min(workers, len(terms))) as executor:
-        futures = {executor.submit(crawl_term_ids, term, max_pages): term for term in terms}
+    if strategy == "codes":
+        slices = [(code, field) for code in COMMODITY_CODES for field in COMMODITY_CODE_FIELDS]
+        jobs = [(f"{field}={code}", crawl_code_ids, (code, field, max_pages)) for code, field in slices]
+    else:
+        jobs = [(term, crawl_term_ids, (term, max_pages)) for term in terms]
+    slice_results: dict[str, dict] = {}
+    with ThreadPoolExecutor(max_workers=min(workers, len(jobs))) as executor:
+        futures = {executor.submit(function, *arguments): name for name, function, arguments in jobs}
         for future in as_completed(futures):
             result = future.result()
-            term_results[result["term"]] = result
+            slice_results[futures[future]] = result
 
     record_ids: set[str] = set()
     counts: dict[str, int] = {}
     pages_by_term: dict[str, int] = {}
     truncated_terms: list[str] = []
     page_hashes: list[str] = []
-    for term in terms:
-        result = term_results[term]
+    for name, _, _ in jobs:
+        result = slice_results[name]
         record_ids.update(result["record_ids"])
-        counts[term] = result["matched"]
-        pages_by_term[term] = result["pages"]
+        counts[name] = result["matched"]
+        pages_by_term[name] = result["pages"]
         page_hashes.extend(result["page_hashes"])
         if result["truncated"]:
-            truncated_terms.append(term)
+            truncated_terms.append(name)
 
     documents: dict[str, dict] = {}
     ordered_ids = sorted(record_ids)
@@ -318,13 +453,14 @@ def crawl(terms: tuple[str, ...], max_pages: int, workers: int = DEFAULT_WORKERS
                 row["Id"] = record_id
                 documents[record_id] = row
             completed_rows += len(batch_ids)
-            print(
-                json.dumps(
-                    {"detail_rows": completed_rows, "detail_total": len(ordered_ids), "documents": len(documents)},
-                    ensure_ascii=False,
-                ),
-                flush=True,
-            )
+            if completed_rows % 1000 == 0 or completed_rows == len(ordered_ids):
+                print(
+                    json.dumps(
+                        {"detail_rows": completed_rows, "detail_total": len(ordered_ids), "documents": len(documents)},
+                        ensure_ascii=False,
+                    ),
+                    flush=True,
+                )
     missing_ids = sorted(record_ids - documents.keys())
     if missing_ids:
         raise RuntimeError(f"REST projection omitted {len(missing_ids)} requested documents; first={missing_ids[0]}")
@@ -332,6 +468,9 @@ def crawl(terms: tuple[str, ...], max_pages: int, workers: int = DEFAULT_WORKERS
         "query_matches_by_term": counts,
         "query_pages_by_term": pages_by_term,
         "query_truncated_terms": truncated_terms,
+        "crawl_strategy": strategy,
+        "commodity_codes": list(COMMODITY_CODES) if strategy == "codes" else [],
+        "commodity_code_fields": list(COMMODITY_CODE_FIELDS) if strategy == "codes" else [],
         "detail_projection_fields": list(DETAIL_FIELDS),
         "cached_response_manifest_sha256": hashlib.sha256("\n".join(sorted(page_hashes)).encode()).hexdigest(),
     }
@@ -512,7 +651,8 @@ def normalize_documents(documents: dict[str, dict]) -> tuple[list[dict], dict]:
     candidates: list[dict] = []
     rejection_counts = Counter()
     family_counts = Counter()
-    for row in documents.values():
+    for record_id in sorted(documents):
+        row = documents[record_id]
         technical_object = row.get("technicalRegulationObjectDetails") or {}
         manufacturers = [clean(item.get("businessEntityName")) for item in technical_object.get("manufacturerDetails") or []]
         manufacturers = [item for item in manufacturers if item and normalize(item) not in {"нет данных", "не указано"}]
@@ -593,7 +733,6 @@ def normalize_documents(documents: dict[str, dict]) -> tuple[list[dict], dict]:
     records = []
     duplicate_occurrences = 0
     for sequence, (key, occurrences) in enumerate(sorted(grouped.items()), 1):
-        exemplar = occurrences[0]
         evidence_by_id = {item["evidence"]["record_id"]: item["evidence"] for item in occurrences}
         evidence = sorted(evidence_by_id.values(), key=lambda item: (item["document_start_date"], item["document_number"], item["record_id"]))
         duplicate_occurrences += len(occurrences) - 1
@@ -606,6 +745,7 @@ def normalize_documents(documents: dict[str, dict]) -> tuple[list[dict], dict]:
                 merged_specs[name].extend(values)
         specs = {name: sorted(set(values)) for name, values in merged_specs.items()}
         latest = max(occurrences, key=lambda item: (item["evidence"]["document_start_date"], item["evidence"]["record_id"]))
+        exemplar = latest
         identity = "|".join(map(str, key))
         source_record_id = "EAEU-" + hashlib.sha256(identity.encode()).hexdigest()[:20]
         record = {
@@ -651,11 +791,17 @@ def normalize_documents(documents: dict[str, dict]) -> tuple[list[dict], dict]:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--terms", nargs="*", help="Override the audited default query-term set")
-    parser.add_argument("--max-pages", type=int, default=0, help="Diagnostic cap per term; 0 means complete pagination")
+    parser.add_argument(
+        "--strategy",
+        choices=("codes", "terms"),
+        default="codes",
+        help="Indexed exact TN VED crawl (default) or supplemental product-name search",
+    )
+    parser.add_argument("--max-pages", type=int, default=0, help="Diagnostic cap per query slice; 0 means complete pagination")
     parser.add_argument("--workers", type=int, default=DEFAULT_WORKERS, help="Concurrent official requests (default: 4)")
     args = parser.parse_args()
     terms = tuple(args.terms) if args.terms else SEARCH_TERMS
-    documents, crawl_audit = crawl(terms, args.max_pages, args.workers)
+    documents, crawl_audit = crawl(terms, args.max_pages, args.workers, args.strategy)
     records, normalization_audit = normalize_documents(documents)
     text = "".join(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n" for row in records)
     diagnostic = bool(args.max_pages)
@@ -671,7 +817,8 @@ def main() -> None:
         "source_rights_url": RIGHTS_URL,
         "odata_url": ODATA_URL,
         "snapshot_date": SNAPSHOT_DATE,
-        "search_terms": list(terms),
+        "search_terms": list(terms) if args.strategy == "terms" else [],
+        "crawl_strategy": args.strategy,
         "unique_conformity_documents": len(documents),
         **crawl_audit,
         **normalization_audit,

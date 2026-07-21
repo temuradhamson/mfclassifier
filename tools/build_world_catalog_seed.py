@@ -51,6 +51,7 @@ BLUE_ANGEL_JSONL = ROOT / "data" / "blue-angel-de-uz-178-products.jsonl"
 KOREA_ECOLABEL_JSONL = ROOT / "data" / "korea-ecolabel-el611-lubricants.jsonl"
 KOREA_ECOLABEL_EL509_JSONL = ROOT / "data" / "korea-ecolabel-el509-washer-fluids.jsonl"
 UAE_MOIAT_JSONL = ROOT / "data" / "uae-moiat-conformity-products.jsonl"
+EAEU_CONFORMITY_JSONL = ROOT / "data" / "eaeu-conformity-lubricant-products.jsonl"
 EPA_SAFER_CHOICE_JSONL = ROOT / "data" / "epa-safer-choice-lubricants.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
@@ -1398,6 +1399,80 @@ def uae_moiat_record(row: dict) -> dict:
     return record
 
 
+def eaeu_conformity_record(row: dict) -> dict:
+    """Convert one conservative product identity from official EAEU open data."""
+    technical = row["specifications"]
+    performance = "; ".join(
+        technical.get("api", [])
+        + technical.get("api_gl", [])
+        + technical.get("acea", [])
+        + technical.get("jaso", [])
+    )
+    sae_engine = technical.get("sae_engine", [])
+    sae_gear = technical.get("sae_gear", [])
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "EAEU conformity document product evidence",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": (sae_engine + sae_gear + [""])[0],
+        "api_class": performance,
+        "viscosity": (technical.get("iso_vg", []) + [""])[0],
+        "grease_class": (technical.get("nlgi", []) + [""])[0],
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": "official_government_product_conformity_registry",
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update({
+        "sae_engine_source_reported": sae_engine,
+        "sae_gear_source_reported": sae_gear,
+        "api_source_reported": technical.get("api", []),
+        "api_gl_source_reported": technical.get("api_gl", []),
+        "acea_source_reported": technical.get("acea", []),
+        "jaso_source_reported": technical.get("jaso", []),
+        "iso_vg_source_reported": technical.get("iso_vg", []),
+        "nlgi_source_reported": technical.get("nlgi", []),
+        "brake_fluid_class_source_reported": technical.get("brake_fluid_class", []),
+        "atf_specifications_source_reported": technical.get("atf_specifications", []),
+        "brand_basis": row["brand_basis"],
+        "family_basis": row["family_basis"],
+        "manufacturer_candidates": row["manufacturer_candidates"],
+        "technical_regulations": row["technical_regulations"],
+        "standards_and_evidence_documents": row["standards_and_evidence_documents"],
+        "certificate_occurrence_count": row["certificate_occurrence_count"],
+        "certificate_evidence": row["certificate_evidence"],
+        "source_url": row["source_url"],
+        "source_registry_url": row["source_registry_url"],
+        "source_rights_url": row["source_rights_url"],
+    })
+    for index, code in enumerate(row["tnved_codes"], 1):
+        record["codes"][f"eaeu_tnved_{index}"] = {
+            "system": "TNVED",
+            "value": code,
+            "source_id": row["source_id"],
+            "status": "source_reported_official_conformity_evidence",
+        }
+    # The conformity register is evidence rather than a manufacturer master.
+    # Keep its conservative identity independent until a cross-source review
+    # proves formula/grade equivalence.
+    record["canonical_key"] += f"|eaeu_conformity_record:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    return record
+
+
 def epa_safer_choice_record(row: dict) -> dict:
     """Convert one explicitly named EPA Safer Choice lubricant product."""
     generic = {
@@ -2230,6 +2305,9 @@ def main() -> None:
     uae_moiat_source_rows = [json.loads(line) for line in UAE_MOIAT_JSONL.read_text(encoding="utf-8").splitlines() if line]
     uae_moiat_records = [uae_moiat_record(row) for row in uae_moiat_source_rows]
     input_records.extend(uae_moiat_records)
+    eaeu_conformity_source_rows = [json.loads(line) for line in EAEU_CONFORMITY_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    eaeu_conformity_records = [eaeu_conformity_record(row) for row in eaeu_conformity_source_rows]
+    input_records.extend(eaeu_conformity_records)
     epa_safer_choice_source_rows = [json.loads(line) for line in EPA_SAFER_CHOICE_JSONL.read_text(encoding="utf-8").splitlines() if line]
     epa_safer_choice_records = [epa_safer_choice_record(row) for row in epa_safer_choice_source_rows]
     input_records.extend(epa_safer_choice_records)
@@ -3691,6 +3769,7 @@ def main() -> None:
         "korea_ecolabel_input_sha256": hashlib.sha256(KOREA_ECOLABEL_JSONL.read_bytes()).hexdigest(),
         "korea_ecolabel_el509_input_sha256": hashlib.sha256(KOREA_ECOLABEL_EL509_JSONL.read_bytes()).hexdigest(),
         "uae_moiat_input_sha256": hashlib.sha256(UAE_MOIAT_JSONL.read_bytes()).hexdigest(),
+        "eaeu_conformity_input_sha256": hashlib.sha256(EAEU_CONFORMITY_JSONL.read_bytes()).hexdigest(),
         "epa_safer_choice_input_sha256": hashlib.sha256(EPA_SAFER_CHOICE_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
@@ -3749,6 +3828,9 @@ def main() -> None:
         "korea_ecolabel_el509_products_matched_to_existing": korea_el509_matched_rows,
         "korea_ecolabel_el509_products_added": korea_el509_added_rows,
         "uae_moiat_source_rows": len(uae_moiat_source_rows),
+        "eaeu_conformity_source_rows": len(eaeu_conformity_source_rows),
+        "eaeu_conformity_explicit_brand_rows": sum(row["brand_basis"] == "explicit_source_trademark" for row in eaeu_conformity_source_rows),
+        "eaeu_conformity_manufacturer_holder_fallback_rows": sum(row["brand_basis"] == "manufacturer_holder_fallback" for row in eaeu_conformity_source_rows),
         "epa_safer_choice_source_rows": len(epa_safer_choice_source_rows),
         "kebs_smark_source_rows": len(kebs_smark_source_rows),
         "east_africa_certified_source_rows": len(east_africa_certified_source_rows),

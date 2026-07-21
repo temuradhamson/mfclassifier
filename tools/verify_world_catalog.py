@@ -45,6 +45,7 @@ def sqlite_catalog_projection_sha256(path: Path) -> str:
 def main() -> None:
     report = json.loads((ROOT / "data/world-catalog-report.json").read_text(encoding="utf-8"))
     policy = json.loads((ROOT / "data/global-source-policy.json").read_text(encoding="utf-8"))
+    policy_by_id = {source["source_id"]: source for source in policy["sources"]}
     jaso_report = json.loads((ROOT / "data/jaso-filed-oils-report.json").read_text(encoding="utf-8"))
     licensed_report = json.loads((ROOT / "data/official-licensed-products-report.json").read_text(encoding="utf-8"))
     biopreferred_report = json.loads((ROOT / "data/usda-biopreferred-products-report.json").read_text(encoding="utf-8"))
@@ -136,6 +137,8 @@ def main() -> None:
     korea_el509_rows = [json.loads(line) for line in (ROOT / "data/korea-ecolabel-el509-washer-fluids.jsonl").read_text(encoding="utf-8").splitlines() if line]
     uae_moiat_report = json.loads((ROOT / "data/uae-moiat-conformity-products-report.json").read_text(encoding="utf-8"))
     uae_moiat_rows = [json.loads(line) for line in (ROOT / "data/uae-moiat-conformity-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    eaeu_conformity_report = json.loads((ROOT / "data/eaeu-conformity-lubricant-products-report.json").read_text(encoding="utf-8"))
+    eaeu_conformity_rows = [json.loads(line) for line in (ROOT / "data/eaeu-conformity-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     epa_safer_choice_report = json.loads((ROOT / "data/epa-safer-choice-lubricants-report.json").read_text(encoding="utf-8"))
     epa_safer_choice_rows = [json.loads(line) for line in (ROOT / "data/epa-safer-choice-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_report = json.loads((ROOT / "data/kebs-smark-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -177,7 +180,7 @@ def main() -> None:
     assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
     assert not db.execute("PRAGMA foreign_key_check").fetchall()
     assert db.execute("SELECT count(*) FROM products").fetchone()[0] == len(lines)
-    assert len(lines) == 54017
+    assert len(lines) == 92461
     assert report["jaso_source_rows"] == jaso_report["rows"] == 3630
     assert report["jaso_unique_oil_codes"] == jaso_report["unique_oil_codes"] == 3629
     assert report["official_filed_registry_rows"] == 3629
@@ -194,7 +197,23 @@ def main() -> None:
     assert report["korea_ecolabel_el509_products_added"] == 9
     assert report["official_government_ecolabel_registry_rows"] == 29
     assert report["uae_moiat_source_rows"] == uae_moiat_report["normalized_products"] == len(uae_moiat_rows) == 1840
-    assert report["official_government_product_conformity_registry_rows"] == 1840
+    assert report["eaeu_conformity_source_rows"] == eaeu_conformity_report["deduplicated_product_rows"] == len(eaeu_conformity_rows) == 38444
+    assert report["eaeu_conformity_explicit_brand_rows"] == eaeu_conformity_report["explicit_brand_rows"] == 2943
+    assert report["eaeu_conformity_manufacturer_holder_fallback_rows"] == eaeu_conformity_report["manufacturer_holder_fallback_rows"] == 35501
+    assert report["official_government_product_conformity_registry_rows"] == 40284
+    assert eaeu_conformity_report["status"] == "official_eaeu_open_data_product_evidence_normalized"
+    assert eaeu_conformity_report["crawl_strategy"] == "codes"
+    assert eaeu_conformity_report["search_terms"] == []
+    assert eaeu_conformity_report["unique_conformity_documents"] == 81076
+    assert eaeu_conformity_report["candidate_occurrences"] == 51768
+    assert eaeu_conformity_report["duplicate_certificate_occurrences_merged"] == 13324
+    assert eaeu_conformity_report["query_truncated_terms"] == []
+    assert eaeu_conformity_report["families"] == {"C": 1246, "E": 119, "G": 6780, "H": 2899, "I": 1117, "M": 13119, "S": 2466, "T": 6443, "TF": 3883, "U": 372}
+    assert eaeu_conformity_report["normalized_output_sha256"] == hashlib.sha256((ROOT / "data/eaeu-conformity-lubricant-products.jsonl").read_bytes()).hexdigest()
+    assert policy_by_id["EAEU_CONFORMITY_LUBRICANT_PRODUCTS"]["source_sha256"] == eaeu_conformity_report["normalized_output_sha256"]
+    assert policy_by_id["EAEU_CONFORMITY_LUBRICANT_PRODUCTS"]["observed_count"] == len(eaeu_conformity_rows)
+    assert len({row["source_record_id"] for row in eaeu_conformity_rows}) == len(eaeu_conformity_rows)
+    assert all(row["source_url"].startswith("https://tech.eaeunion.org/tech/registers/35-1/ru/registryList/conformityDocs/view/") for row in eaeu_conformity_rows)
     assert report["epa_safer_choice_source_rows"] == epa_safer_choice_report["normalized_products"] == len(epa_safer_choice_rows) == 2
     assert report["kebs_smark_source_rows"] == kebs_smark_report["normalized_products"] == len(kebs_smark_rows) == 750
     assert report["east_africa_certified_source_rows"] == east_africa_report["normalized_products"] == len(east_africa_rows) == 229
@@ -363,7 +382,7 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_licensed_registry'").fetchone()[0] == 3037
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_ecolabel_product_registry'").fetchone()[0] == 127
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_ecolabel_registry'").fetchone()[0] == 29
-    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_product_conformity_registry'").fetchone()[0] == 1840
+    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_product_conformity_registry'").fetchone()[0] == 40284
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_product_certification_registry'").fetchone()[0] == 1596
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_program_catalog'").fetchone()[0] == 894
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_regulatory_registry'").fetchone()[0] == 30725
@@ -419,6 +438,7 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='KOREA_ECOLABEL_EL611'").fetchone()[0] == 20
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='KOREA_ECOLABEL_EL509'").fetchone()[0] == 9
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='UAE_MOIAT_PRODUCT_CONFORMITY'").fetchone()[0] == 1840
+    assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='EAEU_CONFORMITY_LUBRICANT_PRODUCTS'").fetchone()[0] == 38444
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='EPA_SAFER_CHOICE_LUBRICANTS'").fetchone()[0] == 2
     assert db.execute("SELECT count(*) FROM external_codes WHERE source_id='EPA_SAFER_CHOICE_LUBRICANTS'").fetchone()[0] == 12
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='KEBS_SMARK_LUBRICANT_PRODUCTS'").fetchone()[0] == 750

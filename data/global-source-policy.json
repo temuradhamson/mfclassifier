@@ -1074,6 +1074,21 @@
       "notes": "131 listing pages yielded 1,236 certificate cards and 3,176 product-certificate occurrences across selected lubricant, engine-oil, ATF, brake-fluid and AdBlue types. Explicit 250/500 ml and 1/4/5/20/208 L suffixes are separated from formula/model identity; renewals and duplicate ECAS/EQM occurrences are merged with every certificate retained. 1,840 normalized products remain, including 111 with a certificate active at the 2026-07-21 snapshot; 183 generic-code identities remain in review family S. The official Open Data page explicitly permits free use, reuse, distribution and sharing without restrictions."
     },
     {
+      "source_id": "EAEU_CONFORMITY_LUBRICANT_PRODUCTS",
+      "title": "EAEU conformity-document register — Lubricants and Technical Fluids",
+      "owner": "Eurasian Economic Commission",
+      "source_type": "official_open_government_conformity_register_odata_rest",
+      "source_locator": "data/eaeu-conformity-lubricant-products.jsonl",
+      "source_url": "https://tech.eaeunion.org/tech/registers/35-1",
+      "terms_url": "https://opendata.eaeunion.org/opendata/ru/api/apiodata",
+      "source_sha256": "e5c9f152c2d74104f143537df445a952be8660b9183cde4b5d5de5100310238d",
+      "access_status": "public_official_eaeu_open_data_with_attribution",
+      "bulk_ingest_allowed": true,
+      "publication_status": "normalized_factual_conformity_evidence_with_attribution",
+      "observed_count": 38444,
+      "notes": "A complete indexed exact-code crawl covered 81,076 unique conformity documents across 17 audited ten-digit TN VED codes. Strict product-level filtering retained 51,768 occurrences and normalized them to 38,444 manufacturer/holder + reported designation + family identities; 13,324 repeated certificate occurrences were merged with all evidence and direct official card links retained. Generic assortment declarations and non-product text were excluded. Only 2,943 rows contain an explicitly parsed trademark; the remaining 35,501 use the source manufacturer/holder as a clearly flagged fallback and must not be interpreted as independently verified brands. The register proves conformity-document evidence, not current market availability or formula equivalence."
+    },
+    {
       "source_id": "EPA_SAFER_CHOICE_LUBRICANTS",
       "title": "US EPA Safer Choice and Design for the Environment — explicit lubricant products",
       "owner": "United States Environmental Protection Agency",
