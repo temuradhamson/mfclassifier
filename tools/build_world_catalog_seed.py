@@ -50,6 +50,7 @@ KOREA_ECOLABEL_JSONL = ROOT / "data" / "korea-ecolabel-el611-lubricants.jsonl"
 KOREA_ECOLABEL_EL509_JSONL = ROOT / "data" / "korea-ecolabel-el509-washer-fluids.jsonl"
 UAE_MOIAT_JSONL = ROOT / "data" / "uae-moiat-conformity-products.jsonl"
 EPA_SAFER_CHOICE_JSONL = ROOT / "data" / "epa-safer-choice-lubricants.jsonl"
+KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 FUCHS_INDIA_JSONL = ROOT / "data" / "fuchs-india-products.jsonl"
 FUCHS_US_JSONL = ROOT / "data" / "fuchs-us-products.jsonl"
 FUCHS_GERMANY_JSONL = ROOT / "data" / "fuchs-germany-products.jsonl"
@@ -1302,6 +1303,68 @@ def epa_safer_choice_record(row: dict) -> dict:
     return record
 
 
+def kebs_smark_record(row: dict) -> dict:
+    """Convert one normalized product identity from the public KEBS S-Mark directory."""
+    technical = row["technical"]
+    sae_candidates = (
+        technical["sae_gear"] + technical["sae"] + technical["sae_monograde"]
+        if row["family_code"] == "T"
+        else technical["sae"] + technical["sae_monograde"] + technical["sae_gear"]
+    )
+    sae_class = (sae_candidates + [""])[0]
+    api_class = "; ".join(f"API {value}" for value in technical["api"])
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Kenya KEBS Standardization Mark",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": sae_class,
+        "api_class": api_class,
+        "viscosity": technical["iso_vg"][0] if technical["iso_vg"] else "",
+        "grease_class": technical["nlgi"][0] if technical["nlgi"] else "",
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": "official_government_product_certification_registry",
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["dataset_snapshot_date"],
+    })
+    record["specifications"].update({
+        "sae_source_reported": technical["sae"],
+        "sae_monograde_source_reported": technical["sae_monograde"],
+        "sae_gear_source_reported": technical["sae_gear"],
+        "api_source_reported": technical["api"],
+        "iso_vg_source_reported": technical["iso_vg"],
+        "nlgi_source_reported": technical["nlgi"],
+        "classification_basis": row["classification_basis"],
+        "kebs_standards_source_reported": row["standards"],
+        "kebs_smark_permits": row["permit_entries"],
+        "source_permit_count": row["source_permit_count"],
+        "source_url": row["source_url"],
+        "source_context_url": row["source_context_url"],
+    })
+    for index, permit in enumerate(row["permit_entries"], 1):
+        record["codes"][f"kebs_smark_permit_{index}"] = {
+            "system": "KEBS_SMARK_PERMIT",
+            "value": permit["permit_number"],
+            "source_id": row["source_id"],
+            "status": permit["status"] or row["lifecycle_status"],
+        }
+    record["canonical_key"] += f"|kebs_smark_record:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    return record
+
+
 def liqui_moly_identity_name(value: str) -> str:
     return re.sub(r"^liqui moly(?: gmbh)?\s+", "", normalize(value)).strip()
 
@@ -1801,6 +1864,9 @@ def main() -> None:
     epa_safer_choice_source_rows = [json.loads(line) for line in EPA_SAFER_CHOICE_JSONL.read_text(encoding="utf-8").splitlines() if line]
     epa_safer_choice_records = [epa_safer_choice_record(row) for row in epa_safer_choice_source_rows]
     input_records.extend(epa_safer_choice_records)
+    kebs_smark_source_rows = [json.loads(line) for line in KEBS_SMARK_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    kebs_smark_records = [kebs_smark_record(row) for row in kebs_smark_source_rows]
+    input_records.extend(kebs_smark_records)
     biopreferred_source_rows = [json.loads(line) for line in USDA_BIOPREFERRED_JSONL.read_text(encoding="utf-8").splitlines() if line]
     biopreferred_records = [biopreferred_record(row) for row in biopreferred_source_rows]
     input_records.extend(biopreferred_records)
@@ -3163,6 +3229,7 @@ def main() -> None:
         "korea_ecolabel_el509_input_sha256": hashlib.sha256(KOREA_ECOLABEL_EL509_JSONL.read_bytes()).hexdigest(),
         "uae_moiat_input_sha256": hashlib.sha256(UAE_MOIAT_JSONL.read_bytes()).hexdigest(),
         "epa_safer_choice_input_sha256": hashlib.sha256(EPA_SAFER_CHOICE_JSONL.read_bytes()).hexdigest(),
+        "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "usda_biopreferred_input_sha256": hashlib.sha256(USDA_BIOPREFERRED_JSONL.read_bytes()).hexdigest(),
         "zf_te_ml_input_sha256": hashlib.sha256(ZF_TE_ML_JSONL.read_bytes()).hexdigest(),
         "allison_input_sha256": hashlib.sha256(ALLISON_JSONL.read_bytes()).hexdigest(),
@@ -3212,7 +3279,9 @@ def main() -> None:
         "korea_ecolabel_el509_products_added": korea_el509_added_rows,
         "uae_moiat_source_rows": len(uae_moiat_source_rows),
         "epa_safer_choice_source_rows": len(epa_safer_choice_source_rows),
+        "kebs_smark_source_rows": len(kebs_smark_source_rows),
         "official_government_product_conformity_registry_rows": sum(r["evidence_status"] == "official_government_product_conformity_registry" for r in records),
+        "official_government_product_certification_registry_rows": sum(r["evidence_status"] == "official_government_product_certification_registry" for r in records),
         "official_government_program_rows": sum(r["evidence_status"] == "official_government_program_catalog" for r in records),
         "official_government_regulatory_registry_rows": sum(r["evidence_status"] == "official_government_regulatory_registry" for r in records),
         "official_government_qualified_product_registry_rows": sum(r["evidence_status"] == "official_government_qualified_product_registry" for r in records),

@@ -790,6 +790,21 @@
       "notes": "The official 4,786-row bulk CSV contains 12 occurrences whose product name explicitly contains the standalone word lubricant. UPC/GTIN/MPN repetitions are merged into two medical-instrument lubricant products from two companies. Degreasers, grease-trap cleaners and unrelated oils are excluded; city and state are not republished."
     },
     {
+      "source_id": "KEBS_SMARK_LUBRICANT_PRODUCTS",
+      "title": "Kenya Bureau of Standards — S-Mark lubricant and technical-fluid products",
+      "owner": "Kenya Bureau of Standards (KEBS)",
+      "source_type": "official_government_product_certification_directory_curated_scope",
+      "source_locator": "data/kebs-smark-lubricant-products.jsonl",
+      "source_url": "https://www.kebs.org/products-with-smarks/",
+      "terms_url": "https://www.kebs.org/marks-of-quality/",
+      "source_sha256": "629656be992d2fd2969db6839d22ff57c59017a36f8b402dd40b74702cb25df8",
+      "access_status": "public_official_government_product_verification_directory",
+      "bulk_ingest_allowed": true,
+      "publication_status": "normalized_factual_certification_records_with_attribution",
+      "observed_count": 750,
+      "notes": "The public directory reported 42,358 S-Marks at the 2026-07-21 snapshot. Twenty-five broad and professional search slices exposed 4,276 visible cards; 4,271 cards parsed to 2,897 unique permits. A strict lubricant/technical-fluid scope retained 775 permits and merged 25 renewal or duplicate permits into 750 product identities from 64 manufacturers. Only factual product, brand, company, permit lifecycle and standard designation/title evidence is retained; addresses, contacts and Kenya Standard body text are excluded. Search totals and visible-card counts are reported separately because KEBS pagination does not render every result counted by its backend."
+    },
+    {
       "source_id": "JAPAN_ECOMARK_CATEGORY_110",
       "title": "Japan Eco Mark Category 110 Biodegradable Lubricating Oil",
       "owner": "Japan Environment Association Eco Mark Office",
