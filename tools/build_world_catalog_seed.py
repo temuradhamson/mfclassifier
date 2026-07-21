@@ -56,6 +56,7 @@ UAE_MOIAT_JSONL = ROOT / "data" / "uae-moiat-conformity-products.jsonl"
 EAEU_CONFORMITY_JSONL = ROOT / "data" / "eaeu-conformity-lubricant-products.jsonl"
 EPA_SAFER_CHOICE_JSONL = ROOT / "data" / "epa-safer-choice-lubricants.jsonl"
 EPA_CHEMEXPO_JSONL = ROOT / "data" / "epa-chemexpo-lubricants.jsonl"
+PSQCA_ENGINE_OIL_JSONL = ROOT / "data" / "psqca-engine-oil-licences.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
 SON_MANCAP_JSONL = ROOT / "data" / "son-mancap-chemical-lubricant-products.jsonl"
@@ -1655,6 +1656,67 @@ def merge_epa_chemexpo_evidence(target: dict, source_record: dict, raw: dict) ->
             existing_codes.add(identity)
 
 
+def psqca_engine_oil_record(row: dict) -> dict:
+    """Convert one PSQCA CM licence at its conservative brand-scope grain."""
+    technical = row["technical"]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Pakistan PSQCA CM licence — certified engine-oil brand scope",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": "",
+        "api_class": "",
+        "viscosity": "",
+        "grease_class": "",
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": row["evidence_status"],
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+        "certificate_status": row["lifecycle_status"],
+    })
+    record["specifications"].update({
+        "psqca_certified_standard": technical["certified_standard"],
+        "psqca_certified_product_scope": row["certified_product_scope"],
+        "psqca_search_product_scope": row["search_product_scope"],
+        "psqca_product_name_basis": row["product_name_basis"],
+        "psqca_source_quality_flags": row["source_quality_flags"],
+        "sae_source_reported": technical["sae"],
+        "api_source_reported": technical["api"],
+        "source_url": row["source_url"],
+        "standard_url": row["standard_url"],
+        "source_facts_sha256": row["source_facts_sha256"],
+    })
+    record["codes"]["psqca_cm_licence"] = {
+        "system": "PSQCA_CM_LICENCE",
+        "value": row["licence_number"],
+        "source_id": row["source_id"],
+        "status": row["lifecycle_status"],
+    }
+    record["certificate"].update({
+        "number": row["licence_number"],
+        "issued_at": row["issued_at"],
+        "expires_at": row["expires_at"],
+        "technical_document": "; ".join(technical["certified_standard"]),
+    })
+    # A certified brand scope is not an individual SAE/API formulation. Keep it
+    # separate even when a commercial catalog contains the same short brand name.
+    record["canonical_key"] += f"|psqca_cm_licence:{normalize(row['licence_number'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    return record
+
+
 def kebs_smark_record(row: dict) -> dict:
     """Convert one normalized product identity from the public KEBS S-Mark directory."""
     technical = row["technical"]
@@ -2475,6 +2537,9 @@ def main() -> None:
     input_records.extend(epa_safer_choice_records)
     epa_chemexpo_source_rows = [json.loads(line) for line in EPA_CHEMEXPO_JSONL.read_text(encoding="utf-8").splitlines() if line]
     epa_chemexpo_records = [epa_chemexpo_record(row) for row in epa_chemexpo_source_rows]
+    psqca_engine_oil_source_rows = [json.loads(line) for line in PSQCA_ENGINE_OIL_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    psqca_engine_oil_records = [psqca_engine_oil_record(row) for row in psqca_engine_oil_source_rows]
+    input_records.extend(psqca_engine_oil_records)
     kebs_smark_source_rows = [json.loads(line) for line in KEBS_SMARK_JSONL.read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_records = [kebs_smark_record(row) for row in kebs_smark_source_rows]
     input_records.extend(kebs_smark_records)
@@ -3166,6 +3231,8 @@ def main() -> None:
         raw_owner = " ".join(value for value in [raw["brand_source_reported"], raw["manufacturer"]] if value)
         strong_matches = []
         for candidate in candidates_for_name:
+            if candidate["evidence_status"] == "official_government_product_certification_brand_scope":
+                continue
             candidate_owner = " ".join(value for value in [candidate["brand"], candidate["manufacturer"]] if value)
             candidate_brand = normalize(candidate["brand"])
             name_supports_candidate_brand = bool(candidate_brand and len(candidate_brand) >= 4 and candidate_brand in name)
@@ -4004,6 +4071,7 @@ def main() -> None:
         "eaeu_conformity_input_sha256": hashlib.sha256(EAEU_CONFORMITY_JSONL.read_bytes()).hexdigest(),
         "epa_safer_choice_input_sha256": hashlib.sha256(EPA_SAFER_CHOICE_JSONL.read_bytes()).hexdigest(),
         "epa_chemexpo_input_sha256": hashlib.sha256(EPA_CHEMEXPO_JSONL.read_bytes()).hexdigest(),
+        "psqca_engine_oil_input_sha256": hashlib.sha256(PSQCA_ENGINE_OIL_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "son_mancap_input_sha256": hashlib.sha256(SON_MANCAP_JSONL.read_bytes()).hexdigest(),
@@ -4071,6 +4139,8 @@ def main() -> None:
         "epa_chemexpo_source_product_occurrences": sum(row["source_occurrence_count"] for row in epa_chemexpo_source_rows),
         "epa_chemexpo_products_matched_to_existing": epa_chemexpo_matched_rows,
         "epa_chemexpo_products_added": epa_chemexpo_added_rows,
+        "psqca_engine_oil_source_rows": len(psqca_engine_oil_source_rows),
+        "official_government_product_certification_brand_scope_rows": sum(r["evidence_status"] == "official_government_product_certification_brand_scope" for r in records),
         "kebs_smark_source_rows": len(kebs_smark_source_rows),
         "east_africa_certified_source_rows": len(east_africa_certified_source_rows),
         "east_africa_certified_source_rows_by_source": dict(sorted(Counter(row["source_id"] for row in east_africa_certified_source_rows).items())),

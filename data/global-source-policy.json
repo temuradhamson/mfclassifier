@@ -1008,10 +1008,11 @@
       "owner": "NSF",
       "source_type": "official_registration_directory",
       "source_url": "https://info.nsf.org/USDA/psnclistings.asp",
-      "access_status": "terms_and_feed_review_required",
+      "terms_url": "https://www.nsf.org/privacy-copyright",
+      "access_status": "public_search_but_data_extraction_and_data_mining_require_written_permission",
       "bulk_ingest_allowed": false,
-      "publication_status": "individual_listing_links_only_until_confirmed",
-      "notes": "Public search exposes current food-grade lubricant registrations; bulk extraction rights and an official feed must be confirmed before ingestion."
+      "publication_status": "count_or_individual_link_evidence_only_until_written_permission",
+      "notes": "Public search exposes current food-grade lubricant registrations, but NSF terms explicitly prohibit data extraction and data mining without prior written permission. No rows are bulk-ingested; an official feed or permission is required."
     },
     {
       "source_id": "BLUE_ANGEL_DE_UZ_178",
@@ -1117,6 +1118,33 @@
       "publication_status": "normalized_factual_product_and_puc_evidence_with_attribution",
       "observed_count": 5714,
       "notes": "CPDat 4.1 is published under CC0 and ChemExpo exposes direct product cards plus downloadable PUC metadata and bulk composition data. Exact lubricant, hydraulic-fluid, metalworking-fluid, motor-oil, antifreeze, deicer and anti-seize PUCs are retained; broader automotive, marine, windshield, clipper and aviation categories use explicit inclusion and fuel/cleaner exclusion rules. Package-only suffixes and repeated EPA product records are merged while every source product ID remains linked. CPDat mixes historical and current public documents, EPA states that the compiled data are not reviewed by EPA, and current market availability is therefore never inferred."
+    },
+    {
+      "source_id": "PSQCA_ENGINE_OIL_CM_LICENCES",
+      "title": "Pakistan Standards and Quality Control Authority — engine-oil CM licences",
+      "owner": "Pakistan Standards and Quality Control Authority (PSQCA)",
+      "source_type": "official_government_product_certification_licence_verification",
+      "source_locator": "data/psqca-engine-oil-licences.jsonl",
+      "source_url": "https://icq.psqca.com.pk/e_services/t_cmverify.aspx",
+      "terms_url": "https://www.psqca.com.pk/",
+      "source_sha256": "ff70d6de1cc4fb426eefe52118bd8d2c42dcceef3ee652d9f40ee51bc3d5e9e9",
+      "access_status": "public_official_government_search_without_authentication_or_captcha",
+      "bulk_ingest_allowed": true,
+      "publication_status": "normalized_factual_licence_brand_scope_evidence_with_attribution",
+      "observed_count": 14,
+      "notes": "Two exact product filters for PS 343 mono-grade and multi-grade internal-combustion engine lubricating oil expose 14 licence/brand scopes. One licence is valid and 13 are expired at the 2026-07-21 snapshot. The source grain is a certified brand scope, not an individual SAE/API formulation; SAE/API are therefore never inferred. Locations, contacts and addresses are excluded."
+    },
+    {
+      "source_id": "FLENDER_T7300_APPROVED_LUBRICANTS",
+      "title": "Flender T7300 approved lubricants",
+      "owner": "Flender GmbH",
+      "source_type": "official_oem_approved_lubricants_pages",
+      "source_url": "https://www.flender.com/en/approvedlubricants",
+      "terms_url": "https://www.flender.com/en/TermsOfUse",
+      "access_status": "public_pages_but_copying_reproduction_and_exploitation_require_written_consent",
+      "bulk_ingest_allowed": false,
+      "publication_status": "source_gap_recorded_until_written_permission",
+      "notes": "Official T7300 approval pages are publicly viewable, but Flender Terms of Use prohibit copying, reproducing or exploiting website content without prior written consent. No approval rows are imported."
     },
     {
       "source_id": "KEBS_SMARK_LUBRICANT_PRODUCTS",

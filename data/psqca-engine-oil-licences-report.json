@@ -1,0 +1,33 @@
+{
+  "status": "official_pakistan_engine_oil_certification_licences_normalized",
+  "source_id": "PSQCA_ENGINE_OIL_CM_LICENCES",
+  "source_url": "https://icq.psqca.com.pk/e_services/t_cmverify.aspx",
+  "standard_url": "https://psqca.com.pk/cs/Chemical/PS%20343-2009.pdf",
+  "snapshot_date": "2026-07-21",
+  "source_product_scopes": {
+    "271": "Internal Combustion Engine Lubricating Oil (Mono Grade)",
+    "290": "Internal Combustion Engine Lubricating Oil (Multi Grade)"
+  },
+  "source_occurrences": 14,
+  "normalized_licence_brand_scopes": 14,
+  "duplicates_merged": 0,
+  "lifecycle_statuses": {
+    "certification_expired": 13,
+    "certification_valid_as_of_source_query": 1
+  },
+  "families": {
+    "M": 14
+  },
+  "selector_page_sha256_by_scope": {
+    "271": "53960253e65b7c68977dc4360cd2c0e871edda599510c537c955f1cb6f3ae76b",
+    "290": "53960253e65b7c68977dc4360cd2c0e871edda599510c537c955f1cb6f3ae76b"
+  },
+  "result_page_sha256_by_scope": {
+    "271": "231a3987deb1c7178ccfffbf38116f5056a5039686ca086d2959c1ff25c274f0",
+    "290": "cc775f7c281da019e007ffe0b0ed99585497ebe1b7035eecdf6d8b9aca3ffc68"
+  },
+  "normalized_output_sha256": "ff70d6de1cc4fb426eefe52118bd8d2c42dcceef3ee652d9f40ee51bc3d5e9e9",
+  "grain_note": "One row is one PSQCA CM licence + source-reported brand + certified engine-lubricating-oil scope. It is not an individual SAE/API formulation.",
+  "technical_note": "PS 343 is retained as certification evidence. No SAE or API grade is inferred because the public result row does not publish one.",
+  "privacy_note": "No addresses, contacts or personal data are retained. A trailing city in Unit Name is removed from the normalized manufacturer while the exact public unit spelling is retained for audit."
+}
