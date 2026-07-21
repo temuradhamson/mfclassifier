@@ -44,6 +44,7 @@ LIQUI_MOLY_2020_JSONL = ROOT / "data" / "liqui-moly-2020-products.jsonl"
 LIQUI_MOLY_CURRENT_JSONL = ROOT / "data" / "liqui-moly-current-products.jsonl"
 ANP_BRAZIL_JSONL = ROOT / "data" / "anp-brazil-lubricant-products.jsonl"
 INDONESIA_NPT_JSONL = ROOT / "data" / "indonesia-npt-lubricant-products.jsonl"
+DLA_QPD_JSONL = ROOT / "data" / "dla-qpd-lubricant-products.jsonl"
 FUCHS_INDIA_JSONL = ROOT / "data" / "fuchs-india-products.jsonl"
 FUCHS_US_JSONL = ROOT / "data" / "fuchs-us-products.jsonl"
 FUCHS_GERMANY_JSONL = ROOT / "data" / "fuchs-germany-products.jsonl"
@@ -969,6 +970,68 @@ def indonesia_npt_record(row: dict) -> dict:
     return record
 
 
+def dla_qpd_record(row: dict) -> dict:
+    """Convert one normalized DLA qualification identity to catalog form."""
+    technical = row["technical"]
+    qualification_names = sorted({
+        value
+        for approval in row["qualifications"]
+        for value in (approval["qpl_number"], approval["document_id"], approval["government_designation"])
+        if value
+    })
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["company"],
+        "name": row["product_name"],
+        "category": "Официальный реестр квалифицированной продукции DLA, FSC 9150",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": technical["sae"][0] if technical["sae"] else "",
+        "viscosity": technical["iso_vg"][0] if technical["iso_vg"] else "",
+        "grease_class": technical["nlgi"][0] if technical["nlgi"] else "",
+        "source": "DLA_QPD_FSC_9150",
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["company"],
+        "brand": row["company"],
+        "market": row["market"],
+        "source_id": "DLA_QPD_FSC_9150",
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": "official_government_qualified_product_registry",
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update({
+        "dla_qpd_qualifications": qualification_names,
+        "dla_qpd_qualification_records": row["qualifications"],
+        "dla_qpd_certified_statuses": row["certified_statuses"],
+        "dla_qpd_sam_statuses": row["sam_statuses"],
+        "dla_qpd_stop_ship_values": row["stop_ship_values"],
+        "dla_qpd_source_types": row["source_types"],
+        "cage_codes": row["cage_codes"],
+        "nato_codes": technical["nato_codes"],
+        "sae_source_reported": technical["sae"],
+        "iso_vg_source_reported": technical["iso_vg"],
+        "nlgi_source_reported": technical["nlgi"],
+        "source_occurrence_count": row["source_occurrence_count"],
+        "source_url": row["source_url"],
+        "help_url": row["help_url"],
+    })
+    record["canonical_key"] += f"|dla_qpd_record:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    for index, qpl_number in enumerate(sorted({qualification["qpl_number"] for qualification in row["qualifications"]})):
+        record["codes"][f"dla_qpl_{index}"] = {
+            "system": "DLA_QPL_NUMBER",
+            "value": qpl_number,
+            "source_id": "DLA_QPD_FSC_9150",
+            "status": row["lifecycle_status"],
+        }
+    return record
+
+
 def liqui_moly_identity_name(value: str) -> str:
     return re.sub(r"^liqui moly(?: gmbh)?\s+", "", normalize(value)).strip()
 
@@ -1182,14 +1245,15 @@ def quality_issues(records: list[dict]) -> list[dict]:
                 })
         specs = row["specifications"]
         missing = []
+        has_government_qualification = bool(specs.get("dla_qpd_qualifications"))
         if row["family_code"] == "M":
             is_jaso_two_cycle = specs.get("jaso_family_detail") == "two_cycle_gasoline_engine_oil"
             is_nmma_two_cycle = specs.get("licensed_standard") == "NMMA TC-W3"
-            if not specs["sae_engine"] and not is_jaso_two_cycle and not is_nmma_two_cycle:
+            if not specs["sae_engine"] and not is_jaso_two_cycle and not is_nmma_two_cycle and not has_government_qualification:
                 missing.append("SAE")
-            if not specs["api"] and not specs["acea"] and not specs["ilsac"] and not specs.get("jaso") and not specs.get("licensed_standard"):
+            if not specs["api"] and not specs["acea"] and not specs["ilsac"] and not specs.get("jaso") and not specs.get("licensed_standard") and not has_government_qualification:
                 missing.append("API/ACEA/ILSAC/JASO/OEM licence")
-        elif row["family_code"] in {"H", "I", "C", "U"} and not specs["iso_vg"]:
+        elif row["family_code"] in {"H", "I", "C", "U"} and not specs["iso_vg"] and not has_government_qualification:
             missing.append("ISO VG")
         if missing:
             issues.append({
@@ -1496,6 +1560,8 @@ def main() -> None:
     input_records.extend(anp_brazil_records)
     indonesia_npt_source_rows = [json.loads(line) for line in INDONESIA_NPT_JSONL.read_text(encoding="utf-8").splitlines() if line]
     indonesia_npt_records = [indonesia_npt_record(row) for row in indonesia_npt_source_rows]
+    dla_qpd_source_rows = [json.loads(line) for line in DLA_QPD_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    dla_qpd_records = [dla_qpd_record(row) for row in dla_qpd_source_rows]
     fuchs_india_source_rows = [json.loads(line) for line in FUCHS_INDIA_JSONL.read_text(encoding="utf-8").splitlines() if line]
     fuchs_india_records = [fuchs_catalog_record(row, "FUCHS_INDIA_PRODUCT_FINDER", "India") for row in fuchs_india_source_rows]
     existing_by_name_family = defaultdict(list)
@@ -2028,6 +2094,7 @@ def main() -> None:
     # consolidation. Cross-source identities remain review candidates and cannot
     # perturb already established manufacturer-market deduplication decisions.
     input_records.extend(indonesia_npt_records)
+    input_records.extend(dla_qpd_records)
     records, candidates = deduplicate(input_records)
     canonical_by_key = {row["canonical_key"]: row for row in records}
     for source_key, match_keys in man_service_review_keys:
@@ -2634,6 +2701,15 @@ def main() -> None:
         "expected": "Published NPT registration number",
         "action": "Retain as product-name evidence, but do not treat it as a verified registered product until the authority corrects the source row.",
     } for row in records if row["evidence_status"] == "official_government_registry_source_data_issue")
+    issues.extend({
+        "product_id": row["product_id"],
+        "issue_code": "dla_qpd_lifecycle_restriction",
+        "severity": "high" if row["lifecycle_status"] in {"stop_ship", "sam_inactive_source_review"} else "medium",
+        "field": "DLA_QPD_QUALIFICATION_STATUS",
+        "value": row["lifecycle_status"],
+        "expected": "qualified_source_certified",
+        "action": "Retain as official qualification history, but review the live QPD status before sourcing or declaring current equivalence.",
+    } for row in records if row["evidence_status"] == "official_government_qualified_product_registry" and row["lifecycle_status"] != "qualified_source_certified")
     run_id = f"seed-{SNAPSHOT_DATE}"
     JSONL_OUT.write_text("".join(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n" for row in records), encoding="utf-8")
     compress_jsonl()
@@ -2658,6 +2734,7 @@ def main() -> None:
         "liqui_moly_current_input_sha256": hashlib.sha256(LIQUI_MOLY_CURRENT_JSONL.read_bytes()).hexdigest(),
         "anp_brazil_input_sha256": hashlib.sha256(ANP_BRAZIL_JSONL.read_bytes()).hexdigest(),
         "indonesia_npt_input_sha256": hashlib.sha256(INDONESIA_NPT_JSONL.read_bytes()).hexdigest(),
+        "dla_qpd_input_sha256": hashlib.sha256(DLA_QPD_JSONL.read_bytes()).hexdigest(),
         "fuchs_india_input_sha256": hashlib.sha256(FUCHS_INDIA_JSONL.read_bytes()).hexdigest(),
         "fuchs_us_input_sha256": hashlib.sha256(FUCHS_US_JSONL.read_bytes()).hexdigest(),
         "fuchs_germany_input_sha256": hashlib.sha256(FUCHS_GERMANY_JSONL.read_bytes()).hexdigest(),
@@ -2683,11 +2760,14 @@ def main() -> None:
         "official_licensed_source_rows": len(licensed_source_rows),
         "official_government_program_rows": sum(r["evidence_status"] == "official_government_program_catalog" for r in records),
         "official_government_regulatory_registry_rows": sum(r["evidence_status"] == "official_government_regulatory_registry" for r in records),
+        "official_government_qualified_product_registry_rows": sum(r["evidence_status"] == "official_government_qualified_product_registry" for r in records),
         "usda_biopreferred_source_rows": len(biopreferred_source_rows),
         "anp_brazil_source_rows": len(anp_brazil_source_rows),
         "indonesia_npt_source_rows": len(indonesia_npt_source_rows),
         "indonesia_npt_rows_with_registration_value": sum(bool(row["registration_number"]) for row in indonesia_npt_source_rows),
         "indonesia_npt_rows_with_source_data_issue": sum(not row["registration_number"] for row in indonesia_npt_source_rows),
+        "dla_qpd_source_rows": len(dla_qpd_source_rows),
+        "dla_qpd_lifecycle_statuses": dict(sorted(Counter(row["lifecycle_status"] for row in dla_qpd_source_rows).items())),
         "official_government_registry_source_data_issue_rows": sum(r["evidence_status"] == "official_government_registry_source_data_issue" for r in records),
         "official_oem_approval_rows": sum(r["evidence_status"] == "official_oem_approval_registry" for r in records),
         "official_manufacturer_catalog_rows": sum(r["evidence_status"] == "official_manufacturer_product_catalog" for r in records),

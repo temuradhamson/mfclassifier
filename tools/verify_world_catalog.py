@@ -63,6 +63,8 @@ def main() -> None:
     anp_rows = [json.loads(line) for line in (ROOT / "data/anp-brazil-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     indonesia_report = json.loads((ROOT / "data/indonesia-npt-lubricant-products-report.json").read_text(encoding="utf-8"))
     indonesia_rows = [json.loads(line) for line in (ROOT / "data/indonesia-npt-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    dla_report = json.loads((ROOT / "data/dla-qpd-lubricant-products-report.json").read_text(encoding="utf-8"))
+    dla_rows = [json.loads(line) for line in (ROOT / "data/dla-qpd-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     jsonl_gz_path = ROOT / "data/world-catalog-products.jsonl.gz"
     with gzip.open(jsonl_gz_path, "rt", encoding="utf-8") as stream:
         lines = [json.loads(line) for line in stream if line.strip()]
@@ -90,7 +92,7 @@ def main() -> None:
     assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
     assert not db.execute("PRAGMA foreign_key_check").fetchall()
     assert db.execute("SELECT count(*) FROM products").fetchone()[0] == len(lines)
-    assert len(lines) == 43915
+    assert len(lines) == 44346
     assert report["jaso_source_rows"] == jaso_report["rows"] == 3630
     assert report["jaso_unique_oil_codes"] == jaso_report["unique_oil_codes"] == 3629
     assert report["official_filed_registry_rows"] == 3629
@@ -106,6 +108,12 @@ def main() -> None:
     assert indonesia_report["registration_number_collisions"] == 10
     assert report["official_government_regulatory_registry_rows"] == 25239
     assert report["official_government_registry_source_data_issue_rows"] == 51
+    assert report["dla_qpd_source_rows"] == dla_report["normalized_products"] == len(dla_rows) == 431
+    assert report["official_government_qualified_product_registry_rows"] == 431
+    assert dla_report["active_qpls_in_scope"] == 56
+    assert dla_report["government_designations"] == 108
+    assert dla_report["published_manufacturer_product_occurrences"] == 455
+    assert dla_report["plant_rows_without_product_designation_excluded"] == 737
     assert report["zf_te_ml_source_rows"] == zf_report["unique_approval_numbers"] == 1498
     assert report["official_oem_approval_rows"] == 5475
     assert report["official_manufacturer_catalog_rows"] == 4971
@@ -195,7 +203,7 @@ def main() -> None:
     assert report["liqui_moly_current_products_matched_to_2020"] == 295
     assert report["liqui_moly_current_products_added"] == 152
     assert report["liqui_moly_current_article_skus"] == liqui_moly_current_report["unique_article_skus"] == 985
-    assert report["duplicate_decisions"]["review_cross_source_identity"] == 1391
+    assert report["duplicate_decisions"]["review_cross_source_identity"] == 1393
     assert report["duplicate_decisions"]["review_brand_alias_identity"] == 2
     assert report["duplicate_decisions"]["review_liqui_moly_multi_registry_identity"] == 49
     assert report["duplicate_decisions"]["review_liqui_moly_current_multiple_historical_candidates"] == 4
@@ -211,6 +219,7 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_program_catalog'").fetchone()[0] == 892
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_regulatory_registry'").fetchone()[0] == 25239
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_registry_source_data_issue'").fetchone()[0] == 51
+    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_qualified_product_registry'").fetchone()[0] == 431
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_approval_registry'").fetchone()[0] == 5475
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_manufacturer_product_catalog'").fetchone()[0] == 4971
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_service_recommendation'").fetchone()[0] == 30
@@ -243,6 +252,9 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='INDONESIA_NPT_REGISTRATION_NUMBER'").fetchone()[0] == 12575
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='INDONESIA_NPT_LUBRICANT_REGISTRY'").fetchone()[0] == 12626
     assert db.execute("SELECT count(*) FROM quality_issues WHERE issue_code='source_registration_number_missing'").fetchone()[0] == 51
+    assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='DLA_QPD_FSC_9150'").fetchone()[0] == 431
+    assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='DLA_QPL_NUMBER'").fetchone()[0] == 432
+    assert db.execute("SELECT count(*) FROM quality_issues WHERE issue_code='dla_qpd_lifecycle_restriction'").fetchone()[0] == 89
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='FUCHS_PRODUCT_UID'").fetchone()[0] == 10605
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='JASO_OIL_CODE'").fetchone()[0] == 3629
     assert db.execute("SELECT count(*) FROM sources WHERE bulk_ingest_allowed=0").fetchone()[0] == len(report["bulk_sources_blocked"])
@@ -276,6 +288,16 @@ def main() -> None:
         "potentially_active_by_expiry_date": 8332,
         "source_expiry_error": 1,
         "source_placeholder_registration_unverified": 51,
+    }
+    assert policy_by_id["DLA_QPD_FSC_9150"]["source_sha256"] == dla_report["normalized_output_sha256"]
+    assert policy_by_id["DLA_QPD_FSC_9150"]["observed_count"] == dla_report["normalized_products"]
+    assert dla_report["lifecycle_statuses"] == {
+        "mixed_qualification_lifecycle_review": 1,
+        "qualification_overdue_contact_qa": 44,
+        "qualified_source_certified": 342,
+        "qualified_source_due_for_certification": 22,
+        "sam_inactive_source_review": 21,
+        "stop_ship": 1,
     }
     assert policy_by_id["ZF_TE_ML"]["source_sha256"] == zf_report["normalized_output_sha256"]
     assert policy_by_id["ZF_TE_ML"]["observed_count"] == zf_report["unique_approval_numbers"]

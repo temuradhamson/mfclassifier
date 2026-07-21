@@ -698,6 +698,34 @@
       "bulk_ingest_allowed": false,
       "publication_status": "individual_listing_links_only_until_confirmed",
       "notes": "Public search exposes current food-grade lubricant registrations; bulk extraction rights and an official feed must be confirmed before ingestion."
+    },
+    {
+      "source_id": "DLA_QPD_FSC_9150",
+      "title": "US Defense Logistics Agency Qualified Products Database — FSC 9150",
+      "owner": "US Defense Logistics Agency",
+      "source_type": "official_government_qualified_products_database",
+      "source_locator": "data/dla-qpd-lubricant-products.jsonl",
+      "source_url": "https://qpldocs.dla.mil/search/default.aspx",
+      "terms_url": "https://qpldocs.dla.mil/help/default.aspx",
+      "source_sha256": "cea165e62e8c22633c2936e2421c6cb31f3134cea20a5532754c216ff5629b25",
+      "access_status": "public_official_government_qualification_data",
+      "bulk_ingest_allowed": true,
+      "publication_status": "normalized_factual_qualification_records_with_attribution",
+      "observed_count": 431,
+      "notes": "56 действующих QPL по FSC 9150 содержат 455 товарных вхождений и 431 нормализованный продукт. Сохранены только факты квалификации, QPL/MIL/Federal designation, company/CAGE и GREEN/YELLOW/RED/SAM/Stop Ship; 737 строк заводов без обозначения продукта исключены. Адреса, телефоны, сайты, test reference и notes не переиздаются. Публичные QPL-документы имеют помету Approved for public release; distribution is unlimited. SHA-256 стабильного манифеста фактов 108 qualification pages: 88780a50a30eaa89fed84ea974ceb3c94ca9d3b31934ad3b7710da6292821032."
+    },
+    {
+      "source_id": "detroit-dfs-approved-fluids",
+      "title": "Detroit / Daimler Truck DFS Approved Fluids Lists",
+      "owner": "Daimler Truck North America LLC",
+      "source_type": "official_oem_approval_registry_pdfs",
+      "source_url": "https://dtnacontent-dtna.prd.freightliner.com/content/public/dtnaportalpublic/LubricantsFuelsCoolants.html",
+      "terms_url": "https://northamerica.daimlertruck.com/legal",
+      "access_status": "written_permission_or_licensed_feed_required",
+      "bulk_ingest_allowed": false,
+      "publication_status": "count_and_source_version_evidence_only",
+      "observed_count": 661,
+      "notes": "11 текущих списков DFS от 09.07.2026 содержат 661 вхождение одобрений и примерно 631 уникальную identity company + product + family. DTNA Legal Terms ограничивают загрузку личным некоммерческим использованием и запрещают повторное использование/изменение содержимого, поэтому товарные строки не импортируются без письменного разрешения."
     }
   ]
 }
