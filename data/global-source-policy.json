@@ -195,6 +195,19 @@
       "notes": "Еврокомиссия прямо предоставляет CSV/API для повторного использования публичных данных ECAT. Хэш рассчитан по нормализованным строкам API; ECAT предупреждает, что каталог неполон, поскольку регистрацию выполняют держатели лицензий."
     },
     {
+      "source_id": "NORDIC_SWAN_EU_ECOLABEL_LUBRICANTS_CROSSCHECK",
+      "title": "Nordic Swan product search — EU Ecolabel Lubricating Grease cross-check",
+      "owner": "Ecolabelling Sweden AB",
+      "source_type": "official_ecolabel_product_search_with_explicit_csv_export",
+      "source_url": "https://www.svanen.se/en/product-types/lubricating-grease/?format=Csv",
+      "terms_url": "https://www.svanen.se/en/about-us/",
+      "access_status": "public_official_csv_export_secondary_evidence",
+      "bulk_ingest_allowed": true,
+      "publication_status": "count_and_cross_registry_identity_evidence_no_duplicate_product_rows",
+      "observed_count": 60,
+      "notes": "The official page explicitly exports 60 product rows as CSV. All 60 are labelled EU Ecolabel / EU27 Lubricants. Licence-number reconciliation shows that they are a subset of the 878 ECAT rows already ingested; 12 apparent name differences are punctuation, token-order or package-format variants under licence SE/027/003. The export is therefore retained as independent coverage evidence and does not inflate the canonical product count."
+    },
+    {
       "source_id": "usda-biopreferred",
       "title": "USDA BioPreferred Program Catalog",
       "owner": "United States Department of Agriculture",
@@ -600,11 +613,13 @@
       "title": "API EOLCS Licensee Directory",
       "owner": "American Petroleum Institute",
       "source_type": "official_licensing_directory",
-      "source_url": "https://www.api.org/products-and-services/engine-oil/eolcs-licensee-directory",
-      "access_status": "feed_or_access_request_required",
+      "source_url": "https://engineoil.api.org/Directory/EolcsProductResults?accountId=-1",
+      "terms_url": "https://www.api.org/terms-and-conditions",
+      "access_status": "public_search_count_evidence_bulk_republication_prohibited",
       "bulk_ingest_allowed": false,
-      "publication_status": "directory_links_and_source_description_only",
-      "notes": "API calls the directory free and states that it covers active licensees and licensed products; the current directory endpoint redirects to account sign-in and no authorized bulk feed was discovered."
+      "publication_status": "aggregate_counts_and_source_links_only_pending_written_permission",
+      "observed_count": 35174,
+      "notes": "Live public directory count observed 2026-07-21: 35,174 licensed product rows and 883 licensee companies. API states that the directory covers active licensees and products and is updated frequently. API website terms prohibit copying/downloading and republishing site material without authorization, so no product row is retained; an official feed or written permission is required."
     },
     {
       "source_id": "ANP_BRAZIL_LUBRICANT_REGISTRY",
@@ -758,6 +773,21 @@
       "publication_status": "normalized_factual_certification_records_with_attribution",
       "observed_count": 1840,
       "notes": "131 listing pages yielded 1,236 certificate cards and 3,176 product-certificate occurrences across selected lubricant, engine-oil, ATF, brake-fluid and AdBlue types. Explicit 250/500 ml and 1/4/5/20/208 L suffixes are separated from formula/model identity; renewals and duplicate ECAS/EQM occurrences are merged with every certificate retained. 1,840 normalized products remain, including 111 with a certificate active at the 2026-07-21 snapshot; 183 generic-code identities remain in review family S. The official Open Data page explicitly permits free use, reuse, distribution and sharing without restrictions."
+    },
+    {
+      "source_id": "EPA_SAFER_CHOICE_LUBRICANTS",
+      "title": "US EPA Safer Choice and Design for the Environment — explicit lubricant products",
+      "owner": "United States Environmental Protection Agency",
+      "source_type": "official_open_government_csv_api_curated_scope",
+      "source_locator": "data/epa-safer-choice-lubricants.jsonl",
+      "source_url": "https://data.epa.gov/efservice/t_safer_choice_and_design_for_the_environment/CSV",
+      "terms_url": "https://www.epa.gov/enviro/download-additional-envirofacts-datasets",
+      "source_sha256": "d57690b0399cd0a96f86895516baf837fd313af694924bb6b2493dee641a535f",
+      "access_status": "public_official_government_bulk_csv_api",
+      "bulk_ingest_allowed": true,
+      "publication_status": "normalized_factual_program_records_with_attribution",
+      "observed_count": 2,
+      "notes": "The official 4,786-row bulk CSV contains 12 occurrences whose product name explicitly contains the standalone word lubricant. UPC/GTIN/MPN repetitions are merged into two medical-instrument lubricant products from two companies. Degreasers, grease-trap cleaners and unrelated oils are excluded; city and state are not republished."
     },
     {
       "source_id": "JAPAN_ECOMARK_CATEGORY_110",

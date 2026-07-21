@@ -1,0 +1,22 @@
+{
+  "status": "official_open_government_safer_choice_lubricants_normalized",
+  "source_id": "EPA_SAFER_CHOICE_LUBRICANTS",
+  "source_url": "https://data.epa.gov/efservice/t_safer_choice_and_design_for_the_environment/CSV",
+  "source_page_url": "https://www.epa.gov/enviro/download-additional-envirofacts-datasets",
+  "snapshot_date": "2026-07-21",
+  "source_payload_sha256": "a66f666b1194d47c2888c795d1d9a06a063d1ede2c957ea123441dfaad965655",
+  "source_csv_rows": 4786,
+  "explicit_lubricant_name_occurrences": 12,
+  "normalized_products": 2,
+  "duplicate_identifier_occurrences_merged": 10,
+  "manufacturers": 2,
+  "families": {
+    "S": 2
+  },
+  "normalized_output_sha256": "d57690b0399cd0a96f86895516baf837fd313af694924bb6b2493dee641a535f",
+  "scope_rule": "Product name contains the standalone word lubricant or lubricants; degreasers and grease-trap cleaners are excluded.",
+  "excluded_fields": [
+    "city",
+    "state"
+  ]
+}

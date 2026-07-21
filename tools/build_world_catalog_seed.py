@@ -49,6 +49,7 @@ BLUE_ANGEL_JSONL = ROOT / "data" / "blue-angel-de-uz-178-products.jsonl"
 KOREA_ECOLABEL_JSONL = ROOT / "data" / "korea-ecolabel-el611-lubricants.jsonl"
 KOREA_ECOLABEL_EL509_JSONL = ROOT / "data" / "korea-ecolabel-el509-washer-fluids.jsonl"
 UAE_MOIAT_JSONL = ROOT / "data" / "uae-moiat-conformity-products.jsonl"
+EPA_SAFER_CHOICE_JSONL = ROOT / "data" / "epa-safer-choice-lubricants.jsonl"
 FUCHS_INDIA_JSONL = ROOT / "data" / "fuchs-india-products.jsonl"
 FUCHS_US_JSONL = ROOT / "data" / "fuchs-us-products.jsonl"
 FUCHS_GERMANY_JSONL = ROOT / "data" / "fuchs-germany-products.jsonl"
@@ -1249,6 +1250,58 @@ def uae_moiat_record(row: dict) -> dict:
     return record
 
 
+def epa_safer_choice_record(row: dict) -> dict:
+    """Convert one explicitly named EPA Safer Choice lubricant product."""
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "EPA Safer Choice — special lubricant",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": "",
+        "api_class": "",
+        "viscosity": "",
+        "grease_class": "",
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": "US",
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": "official_government_program_catalog",
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["dataset_snapshot_date"],
+    })
+    record["specifications"].update({
+        "epa_safer_choice_program": row["program"],
+        "epa_safer_choice_categories": row["categories"],
+        "epa_safer_choice_sectors": row["sectors"],
+        "epa_safer_choice_partner_since": row["partner_since"],
+        "epa_safer_choice_company_in_good_standing": row["company_in_good_standing"],
+        "classification_basis": row["classification_basis"],
+        "source_occurrence_count": row["source_occurrence_count"],
+        "source_url": row["source_url"],
+        "product_url": row["product_url"],
+    })
+    for system, values in (("UPC", row["upcs"]), ("GTIN", row["gtins"]), ("MPN", row["mpns"])):
+        for index, value in enumerate(values, 1):
+            record["codes"][f"epa_safer_choice_{system.lower()}_{index}"] = {
+                "system": system,
+                "value": value,
+                "source_id": row["source_id"],
+                "status": row["lifecycle_status"],
+            }
+    record["canonical_key"] += f"|epa_safer_choice_record:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    return record
+
+
 def liqui_moly_identity_name(value: str) -> str:
     return re.sub(r"^liqui moly(?: gmbh)?\s+", "", normalize(value)).strip()
 
@@ -1745,6 +1798,9 @@ def main() -> None:
     uae_moiat_source_rows = [json.loads(line) for line in UAE_MOIAT_JSONL.read_text(encoding="utf-8").splitlines() if line]
     uae_moiat_records = [uae_moiat_record(row) for row in uae_moiat_source_rows]
     input_records.extend(uae_moiat_records)
+    epa_safer_choice_source_rows = [json.loads(line) for line in EPA_SAFER_CHOICE_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    epa_safer_choice_records = [epa_safer_choice_record(row) for row in epa_safer_choice_source_rows]
+    input_records.extend(epa_safer_choice_records)
     biopreferred_source_rows = [json.loads(line) for line in USDA_BIOPREFERRED_JSONL.read_text(encoding="utf-8").splitlines() if line]
     biopreferred_records = [biopreferred_record(row) for row in biopreferred_source_rows]
     input_records.extend(biopreferred_records)
@@ -3106,6 +3162,7 @@ def main() -> None:
         "korea_ecolabel_input_sha256": hashlib.sha256(KOREA_ECOLABEL_JSONL.read_bytes()).hexdigest(),
         "korea_ecolabel_el509_input_sha256": hashlib.sha256(KOREA_ECOLABEL_EL509_JSONL.read_bytes()).hexdigest(),
         "uae_moiat_input_sha256": hashlib.sha256(UAE_MOIAT_JSONL.read_bytes()).hexdigest(),
+        "epa_safer_choice_input_sha256": hashlib.sha256(EPA_SAFER_CHOICE_JSONL.read_bytes()).hexdigest(),
         "usda_biopreferred_input_sha256": hashlib.sha256(USDA_BIOPREFERRED_JSONL.read_bytes()).hexdigest(),
         "zf_te_ml_input_sha256": hashlib.sha256(ZF_TE_ML_JSONL.read_bytes()).hexdigest(),
         "allison_input_sha256": hashlib.sha256(ALLISON_JSONL.read_bytes()).hexdigest(),
@@ -3154,6 +3211,7 @@ def main() -> None:
         "korea_ecolabel_el509_products_matched_to_existing": korea_el509_matched_rows,
         "korea_ecolabel_el509_products_added": korea_el509_added_rows,
         "uae_moiat_source_rows": len(uae_moiat_source_rows),
+        "epa_safer_choice_source_rows": len(epa_safer_choice_source_rows),
         "official_government_product_conformity_registry_rows": sum(r["evidence_status"] == "official_government_product_conformity_registry" for r in records),
         "official_government_program_rows": sum(r["evidence_status"] == "official_government_program_catalog" for r in records),
         "official_government_regulatory_registry_rows": sum(r["evidence_status"] == "official_government_regulatory_registry" for r in records),

@@ -58,7 +58,7 @@ python3 tools/build_analytics_demo.py \
 
 ## Мировой каталог и расширение ЕНКТ
 
-Отдельный provenance-aware слой содержит 46 367 канонических продуктовых строк
+Отдельный provenance-aware слой содержит 46 369 канонических продуктовых строк
 на срез 21.07.2026. В него уже входят проектные источники, AIChilon, официальные
 реестры JASO, GM dexos, NMMA, NLGI, ZF TE-ML, Allison TES, Driventic DIWA,
 Mercedes-Benz Trucks DTFR, Mercedes-Benz BeVo, официальные каталоги Volvo
@@ -76,7 +76,13 @@ Genuine и четырнадцати рынков FUCHS, исторический
 Подключены также официальные реестры DLA QPD, Blue Angel, Korea Eco-Label и
 открытые Product Conformity Data MOIAT ОАЭ. Из 1 236 сертификатов MOIAT извлечено
 3 176 товарных вхождений, нормализованных в 1 840 продуктов/моделей; фасовки и
-продления сертификатов не раздувают число формул. Это проверенный растущий seed,
+продления сертификатов не раздувают число формул. Из открытого bulk-CSV US EPA
+Safer Choice добавлены ещё два явно названных медицинских инструментальных
+лубриканта: 12 строк UPC/GTIN/MPN объединены по товарной identity. Nordic Swan
+CSV отдельно подтвердил 60 уже имеющихся EU Ecolabel строк без создания дублей.
+Публичный API EOLCS на 21.07.2026 показывает 35 174 лицензированных продукта от
+883 компаний, но строки не импортируются: условия API требуют письменного
+разрешения на массовое копирование и переиздание. Это проверенный растущий seed,
 а не заявление о полном мировом охвате;
 подтверждённый мировой
 итог появится только после подключения разрешённых источников и дедупликации.
@@ -101,8 +107,10 @@ Genuine и четырнадцати рынков FUCHS, исторический
 - `data/uae-moiat-conformity-products.jsonl` — 1 840 нормализованных
   сертифицированных продукта/модели ОАЭ с брендом, SAE/API/ACEA/JASO/DOT,
   сертификатами, сроками, штрихкодами и отделёнными фасовками;
+- `data/epa-safer-choice-lubricants.jsonl` — два продукта из официального
+  открытого CSV EPA с объединёнными UPC, GTIN и MPN;
 - `deliverables/World_lubricants_catalog_seed.xlsx` — проверяемая выгрузка;
-- `deliverables/Global_lubricants_catalog_registry.xlsx` — реестр 66 источников
+- `deliverables/Global_lubricants_catalog_registry.xlsx` — реестр 68 источников
   и статусы допуска;
 - `deliverables/ENKT_GSM_extension_pilot.xlsx` — 171 пилотный технический
   профиль и предложение по пятизначному суффиксу ЕНКТ.
@@ -124,6 +132,7 @@ python3 tools/ingest_dla_qpd_lubricants.py
 python3 tools/ingest_blue_angel_lubricants.py
 python3 tools/ingest_korea_ecolabel_lubricants.py
 python3 tools/ingest_uae_moiat_conformity_products.py
+python3 tools/ingest_epa_safer_choice_lubricants.py
 python3 tools/ingest_fuchs_india_catalog.py
 python3 tools/ingest_fuchs_us_catalog.py
 python3 tools/ingest_fuchs_germany_catalog.py
