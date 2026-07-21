@@ -397,6 +397,21 @@
       "notes": "Все 675 встроенных карточек являются конкретными продуктами; серий, оборудования и повторных source-вхождений не обнаружено. Карточки без дерева групп классифицированы по официальным фактическим признакам; описания не публикуются."
     },
     {
+      "source_id": "FUCHS_SPAIN_PRODUCT_FINDER",
+      "title": "FUCHS Spain Product Finder",
+      "owner": "FUCHS LUBRICANTES, S.A.U.",
+      "source_type": "official_manufacturer_embedded_product_catalog",
+      "source_locator": "data/fuchs-spain-products.jsonl",
+      "source_url": "https://www.fuchs.com/es/en/products/service-links/product-finder/",
+      "terms_url": "https://www.fuchs.com/es/en/imprint/",
+      "source_sha256": "1849b4e9f95b14dea8a1efb8e51895ddcdbcacde5b87ce29e657d19e6448f717",
+      "access_status": "public_full_catalog_embedded_in_official_page",
+      "bulk_ingest_allowed": true,
+      "publication_status": "factual_fields_only_with_attribution_no_marketing_descriptions",
+      "observed_count": 938,
+      "notes": "Из 1 017 embedded rows исключены 69 серий, 6 единиц оборудования и одна явная тестовая placeholder-карточка; три повторных source-вхождения объединены. Получено 938 конкретных продуктов, публикуются только факты, UID/URL и хэши."
+    },
+    {
       "source_id": "totalenergies-global",
       "title": "TotalEnergies Lubricants Catalog",
       "owner": "TotalEnergies Lubrifiants S.A.",

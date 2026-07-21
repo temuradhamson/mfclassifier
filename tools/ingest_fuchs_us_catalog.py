@@ -16,6 +16,7 @@ from ingest_fuchs_india_catalog import (
     fetch,
     flatten_groups,
     is_series,
+    is_non_product_placeholder,
     normalized,
 )
 
@@ -49,6 +50,9 @@ def ingest_catalog(
     for row in source["products"]:
         if is_series(row["title"]):
             excluded.append({"uid": row["uid"], "title": row["title"], "reason": "series_not_specific_product_grade"})
+            continue
+        if is_non_product_placeholder(row["title"]):
+            excluded.append({"uid": row["uid"], "title": row["title"], "reason": "non_product_test_placeholder"})
             continue
         grouped[normalized(row["title"])].append(row)
 
@@ -124,6 +128,7 @@ def ingest_catalog(
         "products": len(records),
         "source_series_rows_excluded": sum(row["reason"] == "series_not_specific_product_grade" for row in excluded),
         "equipment_rows_excluded": sum(row["reason"] == "excluded_equipment" for row in excluded),
+        "placeholder_rows_excluded": sum(row["reason"] == "non_product_test_placeholder" for row in excluded),
         "duplicate_source_occurrences_merged": duplicate_occurrences_merged,
         "families": dict(sorted(Counter(row["family_code"] for row in records).items())),
         "brand_lines": len({brand for row in records for brand in row["brand_lines"]}),

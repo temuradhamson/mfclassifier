@@ -54,6 +54,10 @@ def is_series(title: str) -> bool:
     return bool(re.search(r"\bseries\b|-series\b|\bseria\b|-seria\b|\bserie\b|-serie\b|\bgrupa\b|-grupa\b", title, re.I))
 
 
+def is_non_product_placeholder(title: str) -> bool:
+    return normalized(title) in {"0 test delete", "test delete"}
+
+
 def classify_family(title: str, paths: list[list[str]], source_text: str) -> tuple[str, str]:
     path_text = " | ".join(" > ".join(path) for path in paths).casefold()
     text = f"{title} {source_text}".casefold()
@@ -188,6 +192,9 @@ def main() -> None:
         if is_series(row["title"]):
             excluded.append({"uid": row["uid"], "title": row["title"], "reason": "series_not_specific_product_grade"})
             continue
+        if is_non_product_placeholder(row["title"]):
+            excluded.append({"uid": row["uid"], "title": row["title"], "reason": "non_product_test_placeholder"})
+            continue
         grouped[normalized(row["title"])].append(row)
 
     records = []
@@ -263,6 +270,7 @@ def main() -> None:
         "products": len(records),
         "source_series_rows_excluded": sum(row["reason"] == "series_not_specific_product_grade" for row in excluded),
         "equipment_rows_excluded": sum(row["reason"] == "excluded_equipment" for row in excluded),
+        "placeholder_rows_excluded": sum(row["reason"] == "non_product_test_placeholder" for row in excluded),
         "duplicate_source_occurrences_merged": duplicate_occurrences_merged,
         "families": dict(sorted(Counter(row["family_code"] for row in records).items())),
         "brand_lines": len({brand for row in records for brand in row["brand_lines"]}),
