@@ -3471,6 +3471,100 @@ def deduplicate(records: list[dict]) -> tuple[list[dict], list[dict]]:
     return canonical, candidates
 
 
+def has_any_spec(specs: dict, *keys: str) -> bool:
+    return any(bool(specs.get(key)) for key in keys)
+
+
+def professional_key_missing(row: dict) -> list[str]:
+    """Return source facts still required before strict same-family equivalence."""
+    specs = row["specifications"]
+    family = row["family_code"]
+    has_government_qualification = bool(specs.get("dla_qpd_qualifications"))
+    missing = []
+
+    if family == "M":
+        is_jaso_two_cycle = specs.get("jaso_family_detail") == "two_cycle_gasoline_engine_oil"
+        is_nmma_two_cycle = specs.get("licensed_standard") == "NMMA TC-W3"
+        if not specs["sae_engine"] and not is_jaso_two_cycle and not is_nmma_two_cycle and not has_government_qualification:
+            missing.append("SAE")
+        if not has_any_spec(specs, "api", "acea", "ilsac", "jaso", "licensed_standard", "oem_approvals", "oem_specifications") and not has_government_qualification:
+            missing.append("API/ACEA/ILSAC/JASO/OEM licence")
+    elif family == "T":
+        has_transmission_grade_or_class = has_any_spec(
+            specs, "sae_gear", "sae_engine", "iso_vg", "atf_specifications", "dexron",
+            "licensed_standard", "oem_approvals", "oem_specifications",
+        ) or has_government_qualification
+        has_transmission_performance = has_any_spec(
+            specs, "api_gl", "atf_specifications", "dexron", "licensed_standard",
+            "oem_approvals", "oem_specifications", "source_approvals",
+        ) or has_government_qualification
+        if not has_transmission_grade_or_class:
+            missing.append("SAE/ISO VG/ATF or OEM class")
+        if not has_transmission_performance:
+            missing.append("API GL/ATF/OEM approval")
+    elif family == "G":
+        if not has_any_spec(specs, "nlgi", "grease_class") and not has_government_qualification:
+            missing.append("NLGI/consistency class")
+        if not has_any_spec(
+            specs, "standards", "din", "licensed_standard", "oem_approvals",
+            "oem_specifications", "source_approvals", "grease_type",
+        ) and not has_government_qualification:
+            missing.append("grease standard/OEM qualification")
+    elif family in {"H", "I", "C", "U"}:
+        if not specs["iso_vg"] and not has_government_qualification:
+            missing.append("ISO VG")
+    elif family == "E":
+        if not has_any_spec(
+            specs, "standards", "source_specifications", "standards_and_approvals_source_reported",
+            "kebs_standards_source_reported", "licensed_standard", "oem_approvals",
+            "oem_specifications",
+        ):
+            missing.append("IEC/ASTM/ГОСТ or OEM transformer-fluid standard")
+    elif family == "TF":
+        kind_text = normalize(" ".join(text(value) for value in (
+            row.get("category"), row.get("product_name_raw"), row.get("product_name_normalized"),
+            specs.get("samr_product_kind_english"), specs.get("samr_product_kind_source_reported"),
+        )))
+        if any(token in kind_text for token in ("brake", "тормозн", "制动液")):
+            if not has_any_spec(
+                specs, "brake_fluid_class", "brake_fluid_classes", "brake_fluid_class_source_reported",
+                "brake_fluid_dot_source_reported", "brake_fluid_hzy_source_reported", "dot_source_reported",
+            ):
+                missing.append("DOT/HZY/ENV brake-fluid class")
+        elif any(token in kind_text for token in ("coolant", "antifreeze", "охлаж", "антифриз", "冷却液")):
+            if not has_any_spec(
+                specs, "coolant_class", "coolant_class_source_reported", "coolant_standard_source_reported",
+                "standards", "oem_approvals", "oem_specifications",
+            ):
+                missing.append("coolant class/standard/OEM approval")
+            if not has_any_spec(
+                specs, "coolant_freezing_point_source_reported", "coolant_chemistry", "coolant_mix_source_reported",
+                "product_form",
+            ):
+                missing.append("coolant form/chemistry/freezing point")
+        elif any(token in kind_text for token in ("washer", "стеклоом", "玻璃水")):
+            if not has_any_spec(
+                specs, "washer_fluid_class_source_reported", "washer_fluid_freezing_point_source_reported",
+            ):
+                missing.append("washer-fluid class/freezing point")
+        elif any(token in kind_text for token in ("urea", "adblue", "aus32", "aus 32", "мочевин", "尿素")):
+            if not has_any_spec(specs, "urea_class_source_reported"):
+                missing.append("AUS 32/urea solution class")
+        elif not has_any_spec(
+            specs, "standards", "licensed_standard", "oem_approvals", "oem_specifications",
+            "source_approvals", "source_specifications", "application",
+        ):
+            missing.append("functional technical-fluid class/standard")
+    elif family == "S":
+        if not has_any_spec(
+            specs, "standards", "licensed_standard", "oem_approvals", "oem_specifications",
+            "source_approvals", "source_specifications", "application",
+            "certification_standard_source_reported", "certification_standards_source_reported",
+        ) and not has_government_qualification:
+            missing.append("explicit application/functional standard")
+    return missing
+
+
 def quality_issues(records: list[dict]) -> list[dict]:
     issues = []
     for row in records:
@@ -3487,18 +3581,7 @@ def quality_issues(records: list[dict]) -> list[dict]:
                     "expected": expected,
                     "action": "Do not use for analytics; remap against current ENKT/SKP and retain legacy value as evidence.",
                 })
-        specs = row["specifications"]
-        missing = []
-        has_government_qualification = bool(specs.get("dla_qpd_qualifications"))
-        if row["family_code"] == "M":
-            is_jaso_two_cycle = specs.get("jaso_family_detail") == "two_cycle_gasoline_engine_oil"
-            is_nmma_two_cycle = specs.get("licensed_standard") == "NMMA TC-W3"
-            if not specs["sae_engine"] and not is_jaso_two_cycle and not is_nmma_two_cycle and not has_government_qualification:
-                missing.append("SAE")
-            if not specs["api"] and not specs["acea"] and not specs["ilsac"] and not specs.get("jaso") and not specs.get("licensed_standard") and not has_government_qualification:
-                missing.append("API/ACEA/ILSAC/JASO/OEM licence")
-        elif row["family_code"] in {"H", "I", "C", "U"} and not specs["iso_vg"] and not has_government_qualification:
-            missing.append("ISO VG")
+        missing = professional_key_missing(row)
         if missing:
             issues.append({
                 "product_id": row["product_id"],

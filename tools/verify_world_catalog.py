@@ -802,6 +802,16 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3044
     assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 105957
     assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 105956
+    assert report["quality_issues"]["professional_key_incomplete"] == 68524
+    assert dict(db.execute("""
+        SELECT p.family_code, count(*) FROM quality_issues q
+        JOIN products p USING(product_id)
+        WHERE q.issue_code='professional_key_incomplete'
+        GROUP BY p.family_code
+    """)) == {
+        "C": 2060, "E": 148, "G": 10898, "H": 4761, "I": 3491,
+        "M": 22138, "S": 6845, "T": 11047, "TF": 6540, "U": 596,
+    }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
     assert offline_quality_audit["canonical_products"] == report["canonical_rows"]

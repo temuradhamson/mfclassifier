@@ -20,20 +20,20 @@ DEFAULT_MARKDOWN = ROOT / "deliverables" / "World_catalog_offline_quality_audit_
 
 GRADE_TYPES = {
     "M": {"sae_engine"},
-    "T": {"sae_gear", "iso_vg", "source_grade", "viscosity_source_reported"},
+    "T": {"sae_gear", "sae_engine", "iso_vg", "source_grade", "viscosity_source_reported", "atf_specifications", "dexron", "licensed_standard", "oem_approvals", "oem_specifications"},
     "G": {"nlgi", "grease_class"},
     "H": {"iso_vg", "sae_engine", "sae_gear", "viscosity_source_reported"},
     "I": {"iso_vg", "sae_engine", "sae_gear", "viscosity_source_reported"},
     "C": {"iso_vg", "sae_engine", "sae_gear", "viscosity_source_reported"},
     "U": {"iso_vg", "sae_engine", "sae_gear", "viscosity_source_reported"},
-    "E": {"iso_vg", "viscosity_source_reported"},
+    "E": {"standards", "source_specifications", "standards_and_approvals_source_reported", "kebs_standards_source_reported", "licensed_standard", "oem_approvals", "oem_specifications"},
     "TF": {
         "brake_fluid_class", "brake_fluid_classes", "brake_fluid_dot_source_reported",
         "brake_fluid_hzy_source_reported", "coolant_class", "coolant_class_source_reported",
         "coolant_freezing_point_source_reported", "washer_fluid_class_source_reported",
         "washer_fluid_freezing_point_source_reported", "urea_class_source_reported",
     },
-    "S": {"iso_vg", "sae_engine", "sae_gear", "nlgi", "source_grade"},
+    "S": {"standards", "licensed_standard", "oem_approvals", "oem_specifications", "source_approvals", "source_specifications", "application", "certification_standard_source_reported", "certification_standards_source_reported"},
 }
 
 TECHNICAL_TYPES = {
@@ -44,7 +44,7 @@ TECHNICAL_TYPES = {
     "I": {"din", "standards", "licensed_standard", "oem_approvals", "oem_specifications", "source_approvals"},
     "C": {"din", "standards", "licensed_standard", "oem_approvals", "oem_specifications", "source_approvals"},
     "U": {"din", "standards", "licensed_standard", "oem_approvals", "oem_specifications", "source_approvals"},
-    "E": {"standards", "licensed_standard", "oem_approvals", "oem_specifications", "source_approvals"},
+    "E": {"standards", "source_specifications", "standards_and_approvals_source_reported", "kebs_standards_source_reported", "licensed_standard", "oem_approvals", "oem_specifications"},
     "TF": {
         "brake_fluid_class", "brake_fluid_classes", "coolant_class", "coolant_chemistry",
         "coolant_standard_source_reported", "washer_fluid_class_source_reported",
@@ -137,7 +137,7 @@ def audit(db: sqlite3.Connection, compressed_db: Path) -> dict:
             "both_selector_and_technical_basis_present": both,
             "both_percent": pct(both, total),
             "existing_professional_key_issue": incomplete,
-            "existing_professional_key_gate_implemented": code in {"M", "H", "I", "C", "U"},
+            "existing_professional_key_gate_implemented": True,
         })
 
     decisions = []
@@ -192,7 +192,7 @@ def audit(db: sqlite3.Connection, compressed_db: Path) -> dict:
             "confirmed_count": "105956 is the verified canonical row count of the current seed, not the final number of all products worldwide.",
             "selector_metric": "Presence is measured only from explicit normalized fields; absence may reflect source granularity rather than a parsing defect.",
             "duplicate_metric": "Review pairs are candidates or conflicts, not proven removable duplicates.",
-            "professional_gate_gap": "The current professional_key_incomplete rule directly gates M/H/I/C/U only; T/G/TF/S/E need family-specific completeness rules.",
+            "professional_gate_scope": "Family-specific professional_key_incomplete rules cover M/T/G/H/I/C/U/E/TF/S; source-level gaps remain explicit and are not filled by inference.",
         },
     }
 
@@ -220,7 +220,7 @@ def markdown(report: dict) -> str:
         "",
         "## Покрытие профессиональными полями",
         "",
-        "| Код | Семейство | Карточки | Класс/вязкость | Техническая база | Оба признака | Текущий gate |",
+        "| Код | Семейство | Карточки | Селектор/класс | Техническая база | Оба признака | Текущий gate |",
         "|---|---|---:|---:|---:|---:|---|",
     ]
     for row in report["family_coverage"]:
@@ -233,7 +233,7 @@ def markdown(report: dict) -> str:
         )
     lines.extend([
         "",
-        "Показатель «оба признака» не объявляет продукты эквивалентными: он лишь показывает, что для строгого сравнения есть хотя бы класс/вязкость и хотя бы одна техническая база.",
+        "Показатель «оба признака» не объявляет продукты эквивалентными: он лишь показывает, что для строгого сравнения есть хотя бы семейно-релевантный селектор/класс и хотя бы одна техническая база.",
         "",
         "## Очереди качества и дедупликации",
         "",
@@ -249,7 +249,7 @@ def markdown(report: dict) -> str:
         "",
         "## Что улучшать офлайн до возобновления загрузок",
         "",
-        "1. Ввести отдельные completeness-gates для T, G, TF, S и E; сейчас формальный `professional_key_incomplete` покрывает только M/H/I/C/U.",
+        "1. Приоритизировать получение официальных TDS/PDS для карточек, отмеченных family-specific `professional_key_incomplete`; правила теперь покрывают все десять семейств.",
         "2. Разобрать 214 конфликтов семейства с ЕНКТ/СКП и не допускать их в аналитику до remap.",
         "3. Приоритизировать review-пары по источникам и совпадению строгого профессионального ключа; не схлопывать по одному названию.",
         "4. Сохранять разницу между явно указанным брендом и manufacturer/holder fallback — таких карточек много из-за гранулярности ЕАЭС.",
