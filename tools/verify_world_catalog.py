@@ -207,6 +207,7 @@ def main() -> None:
     jilin_china_report = json.loads((ROOT / "data/jilin-2024-2025-automotive-fluid-inspections-report.json").read_text(encoding="utf-8"))
     jilin_china_rows = [json.loads(line) for line in (ROOT / "data/jilin-2024-2025-automotive-fluid-inspections.jsonl").read_text(encoding="utf-8").splitlines() if line]
     offline_quality_audit = json.loads((ROOT / "data/world-catalog-offline-quality-audit.json").read_text(encoding="utf-8"))
+    duplicate_triage = json.loads((ROOT / "data/world-catalog-duplicate-triage.json").read_text(encoding="utf-8"))
     philippines_bps_report = json.loads((ROOT / "data/philippines-bps-brake-fluid-products-report.json").read_text(encoding="utf-8"))
     philippines_bps_rows = [json.loads(line) for line in (ROOT / "data/philippines-bps-brake-fluid-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     ghana_gsa_report = json.loads((ROOT / "data/ghana-gsa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -257,12 +258,20 @@ def main() -> None:
         + report["anp_brazil_monitoring_historical_identities_added"]
         + report["qingdao_china_products_added"]
         + report["jilin_china_products_added"]
+        - report["gm_dual_standard_license_rows_merged"]
     )
     assert report["jaso_source_rows"] == jaso_report["rows"] == 3630
     assert report["jaso_unique_oil_codes"] == jaso_report["unique_oil_codes"] == 3629
     assert report["official_filed_registry_rows"] == 3629
     assert report["official_licensed_source_rows"] == licensed_report["rows"] == 3037
-    assert report["official_licensed_registry_rows"] == 3037
+    assert report["official_licensed_registry_rows"] == 3030
+    assert report["official_licensed_canonical_records_before_global_deduplication"] == 3030
+    assert report["gm_dual_standard_license_rows_merged"] == 7
+    assert report["gm_license_code_name_collisions_retained"] == 1
+    for source in licensed_report["sources"]:
+        assert db.execute(
+            "SELECT count(*) FROM product_sources WHERE source_id=?", (source["source_id"],)
+        ).fetchone()[0] == source["rows"]
     assert report["blue_angel_source_rows"] == blue_angel_report["normalized_products"] == len(blue_angel_rows) == 148
     assert report["blue_angel_products_matched_to_existing"] == 21
     assert report["blue_angel_products_added"] == report["official_ecolabel_product_registry_rows"] == 127
@@ -679,7 +688,7 @@ def main() -> None:
     assert report["liqui_moly_current_products_matched_to_2020"] == 295
     assert report["liqui_moly_current_products_added"] == 152
     assert report["liqui_moly_current_article_skus"] == liqui_moly_current_report["unique_article_skus"] == 985
-    assert report["duplicate_decisions"]["review_cross_source_identity"] == 6414
+    assert report["duplicate_decisions"]["review_cross_source_identity"] == 6406
     assert report["duplicate_decisions"]["keep_separate_specification_conflict"] == 10769
     assert db.execute("""
         SELECT count(*) FROM duplicate_decisions d
@@ -793,15 +802,20 @@ def main() -> None:
     assert report["duplicate_decisions"]["review_brand_alias_identity"] == 2
     assert report["duplicate_decisions"]["review_liqui_moly_multi_registry_identity"] == 49
     assert report["duplicate_decisions"]["review_liqui_moly_current_multiple_historical_candidates"] == 4
-    assert report["duplicate_decisions"]["review_fuchs_multi_registry_identity"] == 7199
+    assert report["duplicate_decisions"]["review_fuchs_multi_registry_identity"] == 6635
     assert report["duplicate_decisions"]["keep_separate_fuchs_market_family_conflict"] == 534
+    assert report["duplicate_decision_self_pairs_dropped"] == {
+        "merged": 1, "review_fuchs_multi_registry_identity": 564,
+    }
+    assert report["canonical_input_rows_collapsed"] == 1
+    assert db.execute("SELECT count(*) FROM duplicate_decisions WHERE product_id_a=product_id_b").fetchone()[0] == 0
     assert report["aichilon_products_matched_to_existing"] == 255
     assert report["aichilon_products_added"] == 60
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 4973
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3044
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 105957
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 105956
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 105950
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 105949
     assert report["quality_issues"]["professional_key_incomplete"] == 68524
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
@@ -819,9 +833,29 @@ def main() -> None:
     assert offline_quality_audit["canonical_key_duplicates"] == 0
     assert offline_quality_audit["products_with_at_least_one_source_link"] == report["canonical_rows"]
     assert sum(row["products"] for row in offline_quality_audit["family_coverage"]) == report["canonical_rows"]
+    assert duplicate_triage["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
+    assert duplicate_triage["canonical_products"] == report["canonical_rows"]
+    assert duplicate_triage["review_pairs"] == 13096
+    assert duplicate_triage["distinct_products_in_review"] == 2035
+    assert duplicate_triage["self_pairs_remaining"] == 0
+    assert duplicate_triage["already_applied_safe_merges"] == {
+        "canonical_input_rows_collapsed": 1,
+        "gm_dual_standard_same_license_manufacturer_name_family_viscosity": 7,
+    }
+    assert duplicate_triage["retained_source_code_collisions"] == {
+        "gm_same_license_different_product_names": 1,
+    }
+    assert duplicate_triage["triage_status_counts"] == {
+        "compatible_partial_specification_review": 4000,
+        "complete_exact_signature_candidate": 3523,
+        "explicit_exclusive_specification_conflict": 703,
+        "insufficient_comparable_evidence": 4870,
+    }
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status='listed_current_catalog'").fetchone()[0] == report["current_catalog_listed_offers"] == 1589
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_filed_registry'").fetchone()[0] == 3629
-    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_licensed_registry'").fetchone()[0] == 3037
+    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_licensed_registry'").fetchone()[0] == 3030
+    assert db.execute("SELECT count(*) FROM specifications WHERE spec_type='gm_license_occurrences'").fetchone()[0] == 1705
+    assert db.execute("SELECT count(DISTINCT product_id) FROM specifications WHERE spec_type='gm_license_occurrences'").fetchone()[0] == 1698
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_ecolabel_product_registry'").fetchone()[0] == 127
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_ecolabel_registry'").fetchone()[0] == 33
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_product_conformity_registry'").fetchone()[0] == 40284

@@ -1,0 +1,443 @@
+{
+  "already_applied_safe_merges": {
+    "canonical_input_rows_collapsed": 1,
+    "gm_dual_standard_same_license_manufacturer_name_family_viscosity": 7
+  },
+  "by_decision_and_status": [
+    {
+      "decision": "review_brand_alias_identity",
+      "pairs": 2,
+      "triage_status": "insufficient_comparable_evidence"
+    },
+    {
+      "decision": "review_cross_source_identity",
+      "pairs": 1912,
+      "triage_status": "compatible_partial_specification_review"
+    },
+    {
+      "decision": "review_cross_source_identity",
+      "pairs": 1712,
+      "triage_status": "complete_exact_signature_candidate"
+    },
+    {
+      "decision": "review_cross_source_identity",
+      "pairs": 668,
+      "triage_status": "explicit_exclusive_specification_conflict"
+    },
+    {
+      "decision": "review_cross_source_identity",
+      "pairs": 2114,
+      "triage_status": "insufficient_comparable_evidence"
+    },
+    {
+      "decision": "review_fuchs_multi_registry_identity",
+      "pairs": 2046,
+      "triage_status": "compatible_partial_specification_review"
+    },
+    {
+      "decision": "review_fuchs_multi_registry_identity",
+      "pairs": 1811,
+      "triage_status": "complete_exact_signature_candidate"
+    },
+    {
+      "decision": "review_fuchs_multi_registry_identity",
+      "pairs": 35,
+      "triage_status": "explicit_exclusive_specification_conflict"
+    },
+    {
+      "decision": "review_fuchs_multi_registry_identity",
+      "pairs": 2743,
+      "triage_status": "insufficient_comparable_evidence"
+    },
+    {
+      "decision": "review_liqui_moly_current_multiple_historical_candidates",
+      "pairs": 4,
+      "triage_status": "insufficient_comparable_evidence"
+    },
+    {
+      "decision": "review_liqui_moly_multi_registry_identity",
+      "pairs": 42,
+      "triage_status": "compatible_partial_specification_review"
+    },
+    {
+      "decision": "review_liqui_moly_multi_registry_identity",
+      "pairs": 7,
+      "triage_status": "insufficient_comparable_evidence"
+    }
+  ],
+  "by_family_and_status": [
+    {
+      "family_code": "G",
+      "pairs": 2523,
+      "triage_status": "insufficient_comparable_evidence"
+    },
+    {
+      "family_code": "H",
+      "pairs": 1,
+      "triage_status": "complete_exact_signature_candidate"
+    },
+    {
+      "family_code": "H",
+      "pairs": 1,
+      "triage_status": "explicit_exclusive_specification_conflict"
+    },
+    {
+      "family_code": "H",
+      "pairs": 7,
+      "triage_status": "insufficient_comparable_evidence"
+    },
+    {
+      "family_code": "I",
+      "pairs": 342,
+      "triage_status": "complete_exact_signature_candidate"
+    },
+    {
+      "family_code": "I",
+      "pairs": 19,
+      "triage_status": "explicit_exclusive_specification_conflict"
+    },
+    {
+      "family_code": "I",
+      "pairs": 19,
+      "triage_status": "insufficient_comparable_evidence"
+    },
+    {
+      "family_code": "M",
+      "pairs": 3161,
+      "triage_status": "compatible_partial_specification_review"
+    },
+    {
+      "family_code": "M",
+      "pairs": 2275,
+      "triage_status": "complete_exact_signature_candidate"
+    },
+    {
+      "family_code": "M",
+      "pairs": 627,
+      "triage_status": "explicit_exclusive_specification_conflict"
+    },
+    {
+      "family_code": "M",
+      "pairs": 16,
+      "triage_status": "insufficient_comparable_evidence"
+    },
+    {
+      "family_code": "S",
+      "pairs": 9,
+      "triage_status": "insufficient_comparable_evidence"
+    },
+    {
+      "family_code": "T",
+      "pairs": 836,
+      "triage_status": "compatible_partial_specification_review"
+    },
+    {
+      "family_code": "T",
+      "pairs": 890,
+      "triage_status": "complete_exact_signature_candidate"
+    },
+    {
+      "family_code": "T",
+      "pairs": 44,
+      "triage_status": "explicit_exclusive_specification_conflict"
+    },
+    {
+      "family_code": "T",
+      "pairs": 2290,
+      "triage_status": "insufficient_comparable_evidence"
+    },
+    {
+      "family_code": "TF",
+      "pairs": 3,
+      "triage_status": "compatible_partial_specification_review"
+    },
+    {
+      "family_code": "TF",
+      "pairs": 15,
+      "triage_status": "complete_exact_signature_candidate"
+    },
+    {
+      "family_code": "TF",
+      "pairs": 12,
+      "triage_status": "explicit_exclusive_specification_conflict"
+    },
+    {
+      "family_code": "TF",
+      "pairs": 6,
+      "triage_status": "insufficient_comparable_evidence"
+    }
+  ],
+  "canonical_products": 105949,
+  "compressed_database_sha256": "112c2c4be752ab714d8b5dae3cd97d9f2af277e72ce9245b5eac934df2c4f494",
+  "distinct_products_in_review": 2035,
+  "examples": {
+    "compatible_partial_specification_review": [
+      {
+        "conflicting_exclusive_fields": [],
+        "family_code": "M",
+        "matching_fields": [
+          "sae_engine"
+        ],
+        "product_id_a": "WC-be97f9b3c2ee56ac01e4",
+        "product_id_b": "WC-6af0ba27c596023ce057",
+        "shared_code_systems": [],
+        "source_id_a": "JASO_4T",
+        "source_id_b": "ANP_BRAZIL_LUBRICANT_MONITORING_HISTORY"
+      },
+      {
+        "conflicting_exclusive_fields": [],
+        "family_code": "M",
+        "matching_fields": [
+          "sae_engine"
+        ],
+        "product_id_a": "WC-5eaff1b1c8e1498f6bac",
+        "product_id_b": "WC-46f9b805bc9acdf9545c",
+        "shared_code_systems": [],
+        "source_id_a": "JASO_4T",
+        "source_id_b": "ANP_BRAZIL_LUBRICANT_REGISTRY"
+      },
+      {
+        "conflicting_exclusive_fields": [],
+        "family_code": "M",
+        "matching_fields": [
+          "sae_engine"
+        ],
+        "product_id_a": "WC-2095d8a0f7e233813c4d",
+        "product_id_b": "WC-431cf6334be3f02f56ef",
+        "shared_code_systems": [],
+        "source_id_a": "JASO_4T",
+        "source_id_b": "ANP_BRAZIL_LUBRICANT_REGISTRY"
+      },
+      {
+        "conflicting_exclusive_fields": [],
+        "family_code": "M",
+        "matching_fields": [
+          "sae_engine"
+        ],
+        "product_id_a": "WC-f10781bb60860ce21ada",
+        "product_id_b": "WC-7ff4d8b16cad684618ef",
+        "shared_code_systems": [],
+        "source_id_a": "JASO_4T",
+        "source_id_b": "ANP_BRAZIL_LUBRICANT_REGISTRY"
+      },
+      {
+        "conflicting_exclusive_fields": [],
+        "family_code": "M",
+        "matching_fields": [
+          "sae_engine"
+        ],
+        "product_id_a": "WC-ab33baa24c8e8201f38f",
+        "product_id_b": "WC-72f897e0474924b6eb26",
+        "shared_code_systems": [],
+        "source_id_a": "JASO_4T",
+        "source_id_b": "INDONESIA_NPT_LUBRICANT_REGISTRY"
+      }
+    ],
+    "complete_exact_signature_candidate": [
+      {
+        "conflicting_exclusive_fields": [],
+        "family_code": "M",
+        "matching_fields": [
+          "sae_engine",
+          "api"
+        ],
+        "product_id_a": "WC-220a356070679055327a",
+        "product_id_b": "WC-f06f3f7da1a11f3bd5d5",
+        "shared_code_systems": [],
+        "source_id_a": "SHENZHEN_CHINA_2020_AUTOMOTIVE_FLUID_INSPECTION",
+        "source_id_b": "SHANGHAI_CHINA_2025_ENGINE_OIL_INSPECTION"
+      },
+      {
+        "conflicting_exclusive_fields": [],
+        "family_code": "M",
+        "matching_fields": [
+          "sae_engine",
+          "api"
+        ],
+        "product_id_a": "WC-d3ee26b55d2483576fc5",
+        "product_id_b": "WC-5544b1136e42d9269911",
+        "shared_code_systems": [],
+        "source_id_a": "SHANGHAI_CHINA_2025_ENGINE_OIL_INSPECTION",
+        "source_id_b": "BEIJING_CHINA_2018_AUTOMOTIVE_FLUID_INSPECTION_1"
+      },
+      {
+        "conflicting_exclusive_fields": [],
+        "family_code": "M",
+        "matching_fields": [
+          "sae_engine",
+          "api"
+        ],
+        "product_id_a": "WC-d3ee26b55d2483576fc5",
+        "product_id_b": "WC-41f18c63572b8fadbb44",
+        "shared_code_systems": [],
+        "source_id_a": "SHANGHAI_CHINA_2025_ENGINE_OIL_INSPECTION",
+        "source_id_b": "SHENZHEN_CHINA_2017_LUBRICANT_INSPECTION"
+      },
+      {
+        "conflicting_exclusive_fields": [],
+        "family_code": "M",
+        "matching_fields": [
+          "sae_engine",
+          "api"
+        ],
+        "product_id_a": "WC-d3ee26b55d2483576fc5",
+        "product_id_b": "WC-5013dfd9702cfec29643",
+        "shared_code_systems": [],
+        "source_id_a": "SHANGHAI_CHINA_2025_ENGINE_OIL_INSPECTION",
+        "source_id_b": "JILIN_CHINA_2024_AUTOMOTIVE_FLUID_INSPECTION"
+      },
+      {
+        "conflicting_exclusive_fields": [],
+        "family_code": "M",
+        "matching_fields": [
+          "sae_engine",
+          "api"
+        ],
+        "product_id_a": "WC-d3ee26b55d2483576fc5",
+        "product_id_b": "WC-07d6c545756da1bad131",
+        "shared_code_systems": [],
+        "source_id_a": "SHANGHAI_CHINA_2025_ENGINE_OIL_INSPECTION",
+        "source_id_b": "JILIN_CHINA_2025_AUTOMOTIVE_FLUID_INSPECTION"
+      }
+    ],
+    "explicit_exclusive_specification_conflict": [
+      {
+        "conflicting_exclusive_fields": [
+          "sae_engine"
+        ],
+        "family_code": "M",
+        "matching_fields": [],
+        "product_id_a": "WC-be97f9b3c2ee56ac01e4",
+        "product_id_b": "WC-1f4b2e14c8396640d02b",
+        "shared_code_systems": [],
+        "source_id_a": "JASO_4T",
+        "source_id_b": "ANP_BRAZIL_LUBRICANT_REGISTRY"
+      },
+      {
+        "conflicting_exclusive_fields": [
+          "sae_engine"
+        ],
+        "family_code": "M",
+        "matching_fields": [],
+        "product_id_a": "WC-1f4b2e14c8396640d02b",
+        "product_id_b": "WC-6af0ba27c596023ce057",
+        "shared_code_systems": [
+          "ANP_BRAZIL_REGISTRATION_NUMBER"
+        ],
+        "source_id_a": "ANP_BRAZIL_LUBRICANT_REGISTRY",
+        "source_id_b": "ANP_BRAZIL_LUBRICANT_MONITORING_HISTORY"
+      },
+      {
+        "conflicting_exclusive_fields": [
+          "jaso_family_detail"
+        ],
+        "family_code": "M",
+        "matching_fields": [],
+        "product_id_a": "WC-e6421a0c644628f5b34c",
+        "product_id_b": "WC-9304f9797b03526f8b76",
+        "shared_code_systems": [],
+        "source_id_a": "JASO_4T",
+        "source_id_b": "JASO_2T"
+      },
+      {
+        "conflicting_exclusive_fields": [
+          "jaso_family_detail"
+        ],
+        "family_code": "M",
+        "matching_fields": [],
+        "product_id_a": "WC-29a8200ccfb8044188aa",
+        "product_id_b": "WC-9304f9797b03526f8b76",
+        "shared_code_systems": [],
+        "source_id_a": "JASO_4T",
+        "source_id_b": "JASO_2T"
+      },
+      {
+        "conflicting_exclusive_fields": [
+          "jaso_family_detail"
+        ],
+        "family_code": "M",
+        "matching_fields": [],
+        "product_id_a": "WC-95fd7d368a7048630142",
+        "product_id_b": "WC-9304f9797b03526f8b76",
+        "shared_code_systems": [],
+        "source_id_a": "JASO_4T",
+        "source_id_b": "JASO_2T"
+      }
+    ],
+    "insufficient_comparable_evidence": [
+      {
+        "conflicting_exclusive_fields": [],
+        "family_code": "T",
+        "matching_fields": [],
+        "product_id_a": "WC-a85c17001c03ea10907b",
+        "product_id_b": "WC-0ee5b2fb5e2cbd057543",
+        "shared_code_systems": [],
+        "source_id_a": "EU_ECOLABEL_LUBRICANTS",
+        "source_id_b": "ZF_TE_ML"
+      },
+      {
+        "conflicting_exclusive_fields": [],
+        "family_code": "T",
+        "matching_fields": [],
+        "product_id_a": "WC-074d2c5d8e85223c150b",
+        "product_id_b": "WC-d780eabd7b22dfeaea8b",
+        "shared_code_systems": [],
+        "source_id_a": "EU_ECOLABEL_LUBRICANTS",
+        "source_id_b": "ZF_TE_ML"
+      },
+      {
+        "conflicting_exclusive_fields": [],
+        "family_code": "G",
+        "matching_fields": [],
+        "product_id_a": "WC-f7ea5240ad6523e7fed5",
+        "product_id_b": "WC-d4db0096ac9560452d36",
+        "shared_code_systems": [],
+        "source_id_a": "EU_ECOLABEL_LUBRICANTS",
+        "source_id_b": "usda-biopreferred"
+      },
+      {
+        "conflicting_exclusive_fields": [],
+        "family_code": "G",
+        "matching_fields": [],
+        "product_id_a": "WC-d15d6e1ea58180383563",
+        "product_id_b": "WC-81c69c1458ed0509c77f",
+        "shared_code_systems": [],
+        "source_id_a": "EU_ECOLABEL_LUBRICANTS",
+        "source_id_b": "usda-biopreferred"
+      },
+      {
+        "conflicting_exclusive_fields": [],
+        "family_code": "M",
+        "matching_fields": [],
+        "product_id_a": "WC-69169b0eb2cfac3ee706",
+        "product_id_b": "WC-cf51a6c93c4c380e6715",
+        "shared_code_systems": [],
+        "source_id_a": "NMMA_TCW3",
+        "source_id_b": "ANP_BRAZIL_LUBRICANT_REGISTRY"
+      }
+    ]
+  },
+  "policy": {
+    "exact_signature_candidate": "High-priority review, not automatic identity proof: formulation revision, market and lifecycle can still differ.",
+    "explicit_conflict": "Keep separate; disjoint exclusive grade/class facts outweigh name similarity.",
+    "insufficient": "Do not merge from name/company similarity alone.",
+    "partial": "Require a common official product code or cross-reference plus missing TDS/PDS fields.",
+    "registration_code": "A shared code is interpreted by system semantics; ANP registration numbers are not unique product-grade identifiers."
+  },
+  "retained_source_code_collisions": {
+    "gm_same_license_different_product_names": 1
+  },
+  "review_pairs": 13096,
+  "self_pairs_remaining": 0,
+  "shared_code_system_counts": {
+    "ANP_BRAZIL_REGISTRATION_NUMBER": 439
+  },
+  "snapshot_date": "2026-07-22",
+  "status": "offline_duplicate_triage_no_unproven_auto_merge",
+  "triage_status_counts": {
+    "compatible_partial_specification_review": 4000,
+    "complete_exact_signature_candidate": 3523,
+    "explicit_exclusive_specification_conflict": 703,
+    "insufficient_comparable_evidence": 4870
+  }
+}

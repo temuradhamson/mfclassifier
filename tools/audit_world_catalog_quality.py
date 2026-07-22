@@ -189,7 +189,7 @@ def audit(db: sqlite3.Connection, compressed_db: Path) -> dict:
         "quality_issue_details": issue_counts,
         "duplicate_review_queues": decisions,
         "interpretation": {
-            "confirmed_count": "105956 is the verified canonical row count of the current seed, not the final number of all products worldwide.",
+            "confirmed_count": f"{canonical} is the verified canonical row count of the current seed, not the final number of all products worldwide.",
             "selector_metric": "Presence is measured only from explicit normalized fields; absence may reflect source granularity rather than a parsing defect.",
             "duplicate_metric": "Review pairs are candidates or conflicts, not proven removable duplicates.",
             "professional_gate_scope": "Family-specific professional_key_incomplete rules cover M/T/G/H/I/C/U/E/TF/S; source-level gaps remain explicit and are not filled by inference.",
@@ -216,7 +216,7 @@ def markdown(report: dict) -> str:
         f"без производителя: {fmt_int(report['products_with_missing_manufacturer'])}.",
         f"- С явно помеченным fallback вместо самостоятельного бренда: {fmt_int(report['products_using_explicitly_marked_brand_fallback'])}.",
         "",
-        "Число 105 956 подтверждает размер текущего seed. Оно не доказывает, что все мировые продукты уже собраны.",
+        f"Число {report['canonical_products']:,} подтверждает размер текущего seed. Оно не доказывает, что все мировые продукты уже собраны.".replace(",", " "),
         "",
         "## Покрытие профессиональными полями",
         "",

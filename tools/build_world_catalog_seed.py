@@ -3785,8 +3785,53 @@ def main() -> None:
     jaso_records = [jaso_record(row) for row in jaso_source_rows]
     input_records.extend(jaso_records)
     licensed_source_rows = [json.loads(line) for line in LICENSED_JSONL.read_text(encoding="utf-8").splitlines() if line]
-    licensed_records = [licensed_record(row) for row in licensed_source_rows]
-    input_records.extend(licensed_records)
+    licensed_records_raw = [licensed_record(row) for row in licensed_source_rows]
+    licensed_records = []
+    unique_licensed_records = []
+    gm_license_identity_targets = {}
+    gm_license_names = defaultdict(set)
+    gm_dual_standard_license_rows_merged = 0
+    for raw, source_record in zip(licensed_source_rows, licensed_records_raw):
+        is_gm = raw["source_id"].startswith("GM_") and bool(raw.get("license_number"))
+        if not is_gm:
+            licensed_records.append(source_record)
+            unique_licensed_records.append(source_record)
+            continue
+        license_number = raw["license_number"]
+        gm_license_names[license_number].add(normalize(raw["product_name"]))
+        identity = (
+            license_number,
+            normalize(raw["manufacturer"]),
+            normalize(raw["product_name"]),
+            raw["family_code"],
+            normalize(raw.get("viscosity", "")),
+        )
+        occurrence = {
+            "source_id": raw["source_id"],
+            "source_record_id": raw["source_record_id"],
+            "licensed_standard": raw["specification"],
+        }
+        target = gm_license_identity_targets.get(identity)
+        if target is None:
+            target = source_record
+            target["specifications"]["gm_license_occurrences"] = [occurrence]
+            gm_license_identity_targets[identity] = target
+            unique_licensed_records.append(target)
+        else:
+            standards = target["specifications"]["licensed_standard"]
+            standards = standards if isinstance(standards, list) else [standards]
+            target["specifications"]["licensed_standard"] = sorted(set(standards + [raw["specification"]]))
+            target["specifications"]["certification_tags"] = sorted(set(
+                target["specifications"].get("certification_tags", [])
+                + source_record["specifications"].get("certification_tags", [])
+            ))
+            target["specifications"]["gm_license_occurrences"].append(occurrence)
+            gm_dual_standard_license_rows_merged += 1
+        licensed_records.append(target)
+    gm_license_code_name_collisions_retained = sum(
+        len(names) > 1 for names in gm_license_names.values()
+    )
+    input_records.extend(unique_licensed_records)
     blue_angel_source_rows = [json.loads(line) for line in BLUE_ANGEL_JSONL.read_text(encoding="utf-8").splitlines() if line]
     blue_angel_records = [blue_angel_record(row) for row in blue_angel_source_rows]
     existing_by_name_family = defaultdict(list)
@@ -6342,6 +6387,14 @@ def main() -> None:
                 "source_id": "TAIWAN_CPC_CURRENT_LUBRICANT_CATALOG",
                 "source_record_id": f"{raw['source_record_id']}:package:{package_index}",
             })
+    duplicate_decision_self_pairs_dropped = dict(Counter(
+        candidate["decision"] for candidate in candidates
+        if candidate["product_id_a"] == candidate["product_id_b"]
+    ))
+    candidates = [
+        candidate for candidate in candidates
+        if candidate["product_id_a"] != candidate["product_id_b"]
+    ]
     issues = quality_issues(records)
     cpc_issue_rules = {
         "source_multigrade_table_not_safely_aligned_to_listing_title": (
@@ -6648,6 +6701,9 @@ def main() -> None:
         "official_filed_registry_rows": sum(r["evidence_status"] == "official_filed_registry" for r in records),
         "official_licensed_registry_rows": sum(r["evidence_status"] == "official_licensed_registry" for r in records),
         "official_licensed_source_rows": len(licensed_source_rows),
+        "official_licensed_canonical_records_before_global_deduplication": len(unique_licensed_records),
+        "gm_dual_standard_license_rows_merged": gm_dual_standard_license_rows_merged,
+        "gm_license_code_name_collisions_retained": gm_license_code_name_collisions_retained,
         "blue_angel_source_rows": len(blue_angel_source_rows),
         "blue_angel_products_matched_to_existing": blue_angel_matched_rows,
         "blue_angel_products_added": blue_angel_added_rows,
@@ -6912,6 +6968,8 @@ def main() -> None:
         "current_catalog_listed_offers": sum(o["lifecycle_status"] == "listed_current_catalog" for o in offers),
         "archived_offers": sum(o["lifecycle_status"] == "archived" for o in offers),
         "duplicate_decisions": dict(Counter(c["decision"] for c in candidates)),
+        "duplicate_decision_self_pairs_dropped": duplicate_decision_self_pairs_dropped,
+        "canonical_input_rows_collapsed": len(input_records) - len(records),
         "quality_issues": dict(Counter(i["issue_code"] for i in issues)),
         "bulk_sources_allowed": [s["source_id"] for s in policies["sources"] if s["bulk_ingest_allowed"]],
         "bulk_sources_blocked": [s["source_id"] for s in policies["sources"] if not s["bulk_ingest_allowed"]],
