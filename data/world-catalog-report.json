@@ -3,7 +3,7 @@
   "run_id": "seed-2026-07-22",
   "snapshot_date": "2026-07-22",
   "status": "seed_only_world_catalog_incomplete",
-  "input_rows": 106193,
+  "input_rows": 106212,
   "normalized_input_sha256": "819d11779ffccddf9683a9b18a70e39bd5a1b8d72d9811fb5bb46d136b0f8073",
   "jaso_normalized_input_sha256": "b664fea5aee78de7303c33bf13d3c9ac26c8779b78beac24c54295b4d58603d3",
   "official_licensed_input_sha256": "533183ffbc755268ef12b54a556d1f3ea78db4fc80b564e12c391a10a8e2075e",
@@ -38,6 +38,7 @@
   "ecuador_inen_current_input_sha256": "e54cc987ebe05725c16645ae8439b52c03c662385efd30fca3324efe3ca4920c",
   "ecuador_inen_current_report_sha256": "ff7460fa3af8dade14d90e55a1bff8eaa100869046a6e014a4f996d4f9bd2efc",
   "peru_sunat_noncontrolled_input_sha256": "3e9c1e8d5862017116b694e1ceeea691d5023743ba1b362432c2200bdfb07431",
+  "paraguay_dnit_lubricant_input_sha256": "a6feaadd917ed375e070224f2f321d02ef24a123f8b9a0764a776f5eb3e6c71e",
   "kebs_smark_input_sha256": "629656be992d2fd2969db6839d22ff57c59017a36f8b402dd40b74702cb25df8",
   "east_africa_certified_input_sha256": "fa272e24f17a96b732c6edcf09914de0bbd4a245ccd94a33cab415213cf164ab",
   "son_mancap_input_sha256": "3728be0200a766f1a862f3c2bd0cf6b92bc6bf9b4d78e832e7c117a2d3a1ec36",
@@ -87,17 +88,17 @@
   "fuchs_brazil_input_sha256": "4554ef1b651617a4a810d945bc519bed1e809ace1cda4246d6b63c7fff99affc",
   "fuchs_norway_input_sha256": "7ef62a3216e7f497ed96512202b7d386673fd01a4c6273ae1cc8fff6e026801a",
   "fuchs_hungary_input_sha256": "8a82b90335bc58ab44734be7541daaad051707258b5fbcb5346f8c2a2bf66ed4",
-  "canonical_rows": 106192,
-  "brands": 16022,
+  "canonical_rows": 106211,
+  "brands": 16026,
   "families": {
     "C": 2489,
     "E": 155,
     "G": 11039,
     "H": 5949,
     "I": 4455,
-    "M": 47860,
-    "S": 7942,
-    "T": 17590,
+    "M": 47873,
+    "S": 7945,
+    "T": 17593,
     "TF": 7961,
     "U": 752
   },
@@ -198,6 +199,7 @@
   "ecuador_inen_announcement_rows_matched_to_current": 19,
   "ecuador_inen_announcement_products_added": 11,
   "peru_sunat_noncontrolled_source_rows": 87,
+  "paraguay_dnit_lubricant_source_rows": 19,
   "kebs_smark_source_rows": 750,
   "east_africa_certified_source_rows": 229,
   "east_africa_certified_source_rows_by_source": {
@@ -543,7 +545,7 @@
   },
   "canonical_input_rows_collapsed": 1,
   "quality_issues": {
-    "professional_key_incomplete": 68493,
+    "professional_key_incomplete": 68510,
     "classification_family_conflict": 214,
     "source_multigrade_table_not_safely_aligned_to_listing_title": 27,
     "source_registration_number_missing": 51,
@@ -723,7 +725,8 @@
     "ECUADOR_INEN_2025_01_CERTIFIED_LUBRICANTS",
     "ECUADOR_INEN_2025_02_CERTIFIED_LUBRICANTS",
     "ECUADOR_INEN_2026_07_CURRENT_CERTIFIED_LUBRICANTS",
-    "PERU_SUNAT_2025_NONCONTROLLED_LUBRICANT_PRODUCTS"
+    "PERU_SUNAT_2025_NONCONTROLLED_LUBRICANT_PRODUCTS",
+    "PARAGUAY_DNIT_LUBRICANT_TARIFF_CLASSIFICATION_RULINGS"
   ],
   "bulk_sources_blocked": [
     "fuchs-benelux",

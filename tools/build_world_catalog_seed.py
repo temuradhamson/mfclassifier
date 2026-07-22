@@ -93,6 +93,7 @@ ECUADOR_INEN_CERTIFIED_JSONL = ROOT / "data" / "ecuador-inen-certified-lubricant
 ECUADOR_INEN_CURRENT_JSONL = ROOT / "data" / "ecuador-inen-current-certified-lubricants.jsonl"
 ECUADOR_INEN_CURRENT_REPORT = ROOT / "data" / "ecuador-inen-current-certified-lubricants-report.json"
 PERU_SUNAT_NONCONTROLLED_JSONL = ROOT / "data" / "peru-sunat-noncontrolled-lubricants.jsonl"
+PARAGUAY_DNIT_LUBRICANT_JSONL = ROOT / "data" / "paraguay-dnit-lubricant-classifications.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
 SON_MANCAP_JSONL = ROOT / "data" / "son-mancap-chemical-lubricant-products.jsonl"
@@ -3154,6 +3155,61 @@ def peru_sunat_noncontrolled_record(row: dict) -> dict:
     return record
 
 
+def paraguay_dnit_lubricant_record(row: dict) -> dict:
+    """Convert one official Paraguay DNIT product tariff ruling."""
+    technical = row["technical"]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Paraguay DNIT lubricant tariff classification ruling",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": technical["sae"][0] if technical["sae"] else "",
+        "api_class": "; ".join(f"API {value}" for value in technical["api"]),
+        "viscosity": "",
+        "grease_class": "",
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer_or_certificate_holder"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": row["source_numeric_id"],
+        "evidence_status": row["evidence_status"],
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["dataset_snapshot_date"],
+    })
+    record["specifications"].update({
+        "sae_source_reported": technical["sae"],
+        "api_source_reported": technical["api"],
+        "paraguay_dnit_performance_source_reported": technical["performance_source_reported"],
+        "paraguay_dnit_source_resolution": row["source_resolution"],
+        "paraguay_dnit_source_ruling": row["source_ruling"],
+        "paraguay_dnit_source_product_field": row["source_product_field"],
+        "paraguay_dnit_source_description": row["source_description"],
+        "paraguay_dnit_source_legal_basis": row["source_legal_basis"],
+        "paraguay_dnit_ruling_date": row["ruling_date"],
+        "paraguay_dnit_tariff_code": row["tariff_code"],
+        "paraguay_dnit_source_quality_flags": row["source_quality_flags"],
+        "source_url": row["source_url"],
+        "source_facts_sha256": row["source_facts_sha256"],
+    })
+    record["codes"]["paraguay_ncm_tariff_classification"] = {
+        "system": "PARAGUAY_NCM_TARIFF_CLASSIFICATION",
+        "value": row["tariff_code"],
+        "source_id": row["source_id"],
+        "status": "official_product_tariff_classification_ruling",
+    }
+    record["canonical_key"] += f"|paraguay_dnit_ruling:{row['source_numeric_id']}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    return record
+
+
 def kebs_smark_record(row: dict) -> dict:
     """Convert one normalized product identity from the public KEBS S-Mark directory."""
     technical = row["technical"]
@@ -4945,6 +5001,9 @@ def main() -> None:
     peru_sunat_noncontrolled_source_rows = [json.loads(line) for line in PERU_SUNAT_NONCONTROLLED_JSONL.read_text(encoding="utf-8").splitlines() if line]
     peru_sunat_noncontrolled_records = [peru_sunat_noncontrolled_record(row) for row in peru_sunat_noncontrolled_source_rows]
     input_records.extend(peru_sunat_noncontrolled_records)
+    paraguay_dnit_lubricant_source_rows = [json.loads(line) for line in PARAGUAY_DNIT_LUBRICANT_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    paraguay_dnit_lubricant_records = [paraguay_dnit_lubricant_record(row) for row in paraguay_dnit_lubricant_source_rows]
+    input_records.extend(paraguay_dnit_lubricant_records)
     ecuador_inen_current_record_by_id = {
         raw["source_record_id"]: record
         for raw, record in zip(ecuador_inen_current_source_rows, ecuador_inen_current_records)
@@ -7327,6 +7386,7 @@ def main() -> None:
         "ecuador_inen_current_input_sha256": hashlib.sha256(ECUADOR_INEN_CURRENT_JSONL.read_bytes()).hexdigest(),
         "ecuador_inen_current_report_sha256": hashlib.sha256(ECUADOR_INEN_CURRENT_REPORT.read_bytes()).hexdigest(),
         "peru_sunat_noncontrolled_input_sha256": hashlib.sha256(PERU_SUNAT_NONCONTROLLED_JSONL.read_bytes()).hexdigest(),
+        "paraguay_dnit_lubricant_input_sha256": hashlib.sha256(PARAGUAY_DNIT_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "son_mancap_input_sha256": hashlib.sha256(SON_MANCAP_JSONL.read_bytes()).hexdigest(),
@@ -7488,6 +7548,7 @@ def main() -> None:
         "ecuador_inen_announcement_rows_matched_to_current": ecuador_inen_announcement_rows_matched_to_current,
         "ecuador_inen_announcement_products_added": ecuador_inen_announcement_products_added,
         "peru_sunat_noncontrolled_source_rows": len(peru_sunat_noncontrolled_source_rows),
+        "paraguay_dnit_lubricant_source_rows": len(paraguay_dnit_lubricant_source_rows),
         "kebs_smark_source_rows": len(kebs_smark_source_rows),
         "east_africa_certified_source_rows": len(east_africa_certified_source_rows),
         "east_africa_certified_source_rows_by_source": dict(sorted(Counter(row["source_id"] for row in east_africa_certified_source_rows).items())),

@@ -1,0 +1,28 @@
+{
+  "brands": {
+    "BASTON": 1,
+    "Brand not stated (DNIT source)": 1,
+    "Mobil": 10,
+    "Mundial Prime": 1,
+    "Shell": 4,
+    "TEKORO": 1,
+    "Valvoline": 1
+  },
+  "families": {
+    "M": 13,
+    "S": 3,
+    "T": 3
+  },
+  "method": "all 627 embedded official rulings audited by lubricant tariff headings 2710/3403/3819/3820; exact product, description, ruling and NCM retained",
+  "normalized_output_sha256": "a6feaadd917ed375e070224f2f321d02ef24a123f8b9a0764a776f5eb3e6c71e",
+  "normalized_products": 19,
+  "normalized_source_sha256": "9f8c1a975a77552d1af539c415a6a2cc390b9b98e7c321a9454dcee108ef0cb3",
+  "rows_with_api": 2,
+  "rows_with_explicit_performance": 3,
+  "rows_with_sae": 12,
+  "ruling_date_max": "2025-10-17",
+  "ruling_date_min": "2021-10-13",
+  "source_rows_audited": 627,
+  "source_url": "https://www.dnit.gov.py/web/portal-institucional/dictamenes-de-clasificacion",
+  "status": "official_paraguay_dnit_lubricant_tariff_rulings_normalized"
+}

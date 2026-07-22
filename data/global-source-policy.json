@@ -2476,6 +2476,21 @@
       "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_pdf_redistribution",
       "observed_count": 87,
       "notes": "All 4,518 sequential rows across 302 pages were parsed. A broad 176-row lexical candidate set was manually reviewed; 95 explicit lubricant/technical-fluid occurrences normalize to 87 product identities after eight exact product/package duplicate collapses. NO CONTROLADO is retained strictly as a SUNAT regulatory evaluation result, not represented as performance approval or certification."
+    },
+    {
+      "source_id": "PARAGUAY_DNIT_LUBRICANT_TARIFF_CLASSIFICATION_RULINGS",
+      "title": "Paraguay DNIT product tariff classification rulings for lubricants",
+      "owner": "Dirección Nacional de Ingresos Tributarios (DNIT)",
+      "source_type": "official_national_government_product_tariff_classification_rulings_html",
+      "source_locator": "data/paraguay-dnit-lubricant-classifications.jsonl",
+      "source_url": "https://www.dnit.gov.py/web/portal-institucional/dictamenes-de-clasificacion",
+      "terms_url": "https://www.dnit.gov.py/web/portal-institucional/dictamenes-de-clasificacion",
+      "source_sha256": "a6feaadd917ed375e070224f2f321d02ef24a123f8b9a0764a776f5eb3e6c71e",
+      "access_status": "public_official_government_information_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_html_redistribution",
+      "observed_count": 19,
+      "notes": "All 627 embedded official rulings were audited by lubricant tariff headings 2710/3403/3819/3820. Nineteen exact product rulings retain ruling/date, source description, NCM, SAE/API and transmission specifications where explicitly published. Rulings prove product identity/composition/tariff classification, not current availability or product-performance approval."
     }
   ]
 }
