@@ -12,7 +12,7 @@
 - С прямым URL первичного источника: 105 358; без производителя: 85.
 - С явно помеченным fallback вместо самостоятельного бренда: 36 261.
 
-Число 105 949 подтверждает размер текущего seed. Оно не доказывает  что все мировые продукты уже собраны.
+Число 105 949 подтверждает размер текущего seed. Оно не доказывает, что все мировые продукты уже собраны.
 
 ## Покрытие профессиональными полями
 
@@ -35,8 +35,9 @@
 
 - Quality issues: high — 311, medium — 68 642, low — 15.
 - `keep_separate_specification_conflict`: 10 769 пар, 16 604 затронутых карточек.
-- `review_fuchs_multi_registry_identity`: 6 635 пар, 703 затронутых карточек.
-- `review_cross_source_identity`: 6 406 пар, 1 837 затронутых карточек.
+- `review_fuchs_multi_registry_identity`: 6 600 пар, 698 затронутых карточек.
+- `review_cross_source_identity`: 5 738 пар, 1 374 затронутых карточек.
+- `keep_separate_professional_signature_conflict`: 703 пар, 736 затронутых карточек.
 - `keep_separate_fuchs_market_family_conflict`: 534 пар, 784 затронутых карточек.
 - `review_liqui_moly_multi_registry_identity`: 49 пар, 73 затронутых карточек.
 - `keep_separate_blue_angel_family_conflict`: 34 пар, 68 затронутых карточек.
@@ -53,4 +54,4 @@
 4. Сохранять разницу между явно указанным брендом и manufacturer/holder fallback — таких карточек много из-за гранулярности ЕАЭС.
 5. После снятия паузы получать TDS/PDS прежде всего для семейств с низким процентом обоих профессиональных признаков.
 
-SHA-256 проверенной сжатой SQLite: `112c2c4be752ab714d8b5dae3cd97d9f2af277e72ce9245b5eac934df2c4f494`.
+SHA-256 проверенной сжатой SQLite: `edab9601f5a3a2ec031cd3ed89a97c74f7820214c386433be03ecf8f60c83d86`.

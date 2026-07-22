@@ -168,6 +168,12 @@ def audit(db: sqlite3.Connection, database: Path, build_report: dict) -> dict:
         "retained_source_code_collisions": {
             "gm_same_license_different_product_names": build_report["gm_license_code_name_collisions_retained"],
         },
+        "resolved_keep_separate_pairs": {
+            "explicit_professional_signature_conflict": build_report["duplicate_decisions"].get(
+                "keep_separate_professional_signature_conflict", 0
+            ),
+            "conflicting_fields": build_report.get("duplicate_review_conflicts_resolved", {}),
+        },
         "triage_status_counts": dict(sorted(status_counts.items())),
         "by_decision_and_status": [
             {"decision": decision, "triage_status": status, "pairs": count}
@@ -202,6 +208,7 @@ def markdown(report: dict) -> str:
         f"- Self-pairs в очереди: {report['self_pairs_remaining']}.",
         f"- Доказательно объединены одинаковые GM dexos2/dexosD строки: {report['already_applied_safe_merges']['gm_dual_standard_same_license_manufacturer_name_family_viscosity']}.",
         f"- Сохранена несхлопнутой GM-коллизия одного license code с разными названиями: {report['retained_source_code_collisions']['gm_same_license_different_product_names']}.",
+        f"- Доказательно переведено в `keep_separate` по конфликтующим профессиональным полям — пар: {fmt(report['resolved_keep_separate_pairs']['explicit_professional_signature_conflict'])}.",
         "",
         "## Классы оставшейся очереди",
         "",

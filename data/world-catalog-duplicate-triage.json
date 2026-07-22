@@ -21,11 +21,6 @@
     },
     {
       "decision": "review_cross_source_identity",
-      "pairs": 668,
-      "triage_status": "explicit_exclusive_specification_conflict"
-    },
-    {
-      "decision": "review_cross_source_identity",
       "pairs": 2114,
       "triage_status": "insufficient_comparable_evidence"
     },
@@ -38,11 +33,6 @@
       "decision": "review_fuchs_multi_registry_identity",
       "pairs": 1811,
       "triage_status": "complete_exact_signature_candidate"
-    },
-    {
-      "decision": "review_fuchs_multi_registry_identity",
-      "pairs": 35,
-      "triage_status": "explicit_exclusive_specification_conflict"
     },
     {
       "decision": "review_fuchs_multi_registry_identity",
@@ -78,11 +68,6 @@
     },
     {
       "family_code": "H",
-      "pairs": 1,
-      "triage_status": "explicit_exclusive_specification_conflict"
-    },
-    {
-      "family_code": "H",
       "pairs": 7,
       "triage_status": "insufficient_comparable_evidence"
     },
@@ -90,11 +75,6 @@
       "family_code": "I",
       "pairs": 342,
       "triage_status": "complete_exact_signature_candidate"
-    },
-    {
-      "family_code": "I",
-      "pairs": 19,
-      "triage_status": "explicit_exclusive_specification_conflict"
     },
     {
       "family_code": "I",
@@ -110,11 +90,6 @@
       "family_code": "M",
       "pairs": 2275,
       "triage_status": "complete_exact_signature_candidate"
-    },
-    {
-      "family_code": "M",
-      "pairs": 627,
-      "triage_status": "explicit_exclusive_specification_conflict"
     },
     {
       "family_code": "M",
@@ -138,11 +113,6 @@
     },
     {
       "family_code": "T",
-      "pairs": 44,
-      "triage_status": "explicit_exclusive_specification_conflict"
-    },
-    {
-      "family_code": "T",
       "pairs": 2290,
       "triage_status": "insufficient_comparable_evidence"
     },
@@ -158,18 +128,13 @@
     },
     {
       "family_code": "TF",
-      "pairs": 12,
-      "triage_status": "explicit_exclusive_specification_conflict"
-    },
-    {
-      "family_code": "TF",
       "pairs": 6,
       "triage_status": "insufficient_comparable_evidence"
     }
   ],
   "canonical_products": 105949,
-  "compressed_database_sha256": "112c2c4be752ab714d8b5dae3cd97d9f2af277e72ce9245b5eac934df2c4f494",
-  "distinct_products_in_review": 2035,
+  "compressed_database_sha256": "edab9601f5a3a2ec031cd3ed89a97c74f7820214c386433be03ecf8f60c83d86",
+  "distinct_products_in_review": 1568,
   "examples": {
     "compatible_partial_specification_review": [
       {
@@ -300,70 +265,6 @@
         "source_id_b": "JILIN_CHINA_2025_AUTOMOTIVE_FLUID_INSPECTION"
       }
     ],
-    "explicit_exclusive_specification_conflict": [
-      {
-        "conflicting_exclusive_fields": [
-          "sae_engine"
-        ],
-        "family_code": "M",
-        "matching_fields": [],
-        "product_id_a": "WC-be97f9b3c2ee56ac01e4",
-        "product_id_b": "WC-1f4b2e14c8396640d02b",
-        "shared_code_systems": [],
-        "source_id_a": "JASO_4T",
-        "source_id_b": "ANP_BRAZIL_LUBRICANT_REGISTRY"
-      },
-      {
-        "conflicting_exclusive_fields": [
-          "sae_engine"
-        ],
-        "family_code": "M",
-        "matching_fields": [],
-        "product_id_a": "WC-1f4b2e14c8396640d02b",
-        "product_id_b": "WC-6af0ba27c596023ce057",
-        "shared_code_systems": [
-          "ANP_BRAZIL_REGISTRATION_NUMBER"
-        ],
-        "source_id_a": "ANP_BRAZIL_LUBRICANT_REGISTRY",
-        "source_id_b": "ANP_BRAZIL_LUBRICANT_MONITORING_HISTORY"
-      },
-      {
-        "conflicting_exclusive_fields": [
-          "jaso_family_detail"
-        ],
-        "family_code": "M",
-        "matching_fields": [],
-        "product_id_a": "WC-e6421a0c644628f5b34c",
-        "product_id_b": "WC-9304f9797b03526f8b76",
-        "shared_code_systems": [],
-        "source_id_a": "JASO_4T",
-        "source_id_b": "JASO_2T"
-      },
-      {
-        "conflicting_exclusive_fields": [
-          "jaso_family_detail"
-        ],
-        "family_code": "M",
-        "matching_fields": [],
-        "product_id_a": "WC-29a8200ccfb8044188aa",
-        "product_id_b": "WC-9304f9797b03526f8b76",
-        "shared_code_systems": [],
-        "source_id_a": "JASO_4T",
-        "source_id_b": "JASO_2T"
-      },
-      {
-        "conflicting_exclusive_fields": [
-          "jaso_family_detail"
-        ],
-        "family_code": "M",
-        "matching_fields": [],
-        "product_id_a": "WC-95fd7d368a7048630142",
-        "product_id_b": "WC-9304f9797b03526f8b76",
-        "shared_code_systems": [],
-        "source_id_a": "JASO_4T",
-        "source_id_b": "JASO_2T"
-      }
-    ],
     "insufficient_comparable_evidence": [
       {
         "conflicting_exclusive_fields": [],
@@ -424,20 +325,32 @@
     "partial": "Require a common official product code or cross-reference plus missing TDS/PDS fields.",
     "registration_code": "A shared code is interpreted by system semantics; ANP registration numbers are not unique product-grade identifiers."
   },
+  "resolved_keep_separate_pairs": {
+    "conflicting_fields": {
+      "brake_fluid_hzy_source_reported": 2,
+      "coolant_class": 4,
+      "coolant_class_source_reported": 7,
+      "coolant_freezing_point_source_reported": 7,
+      "iso_vg": 20,
+      "jaso_family_detail": 3,
+      "sae_engine": 624,
+      "sae_gear": 44
+    },
+    "explicit_professional_signature_conflict": 703
+  },
   "retained_source_code_collisions": {
     "gm_same_license_different_product_names": 1
   },
-  "review_pairs": 13096,
+  "review_pairs": 12393,
   "self_pairs_remaining": 0,
   "shared_code_system_counts": {
-    "ANP_BRAZIL_REGISTRATION_NUMBER": 439
+    "ANP_BRAZIL_REGISTRATION_NUMBER": 167
   },
   "snapshot_date": "2026-07-22",
   "status": "offline_duplicate_triage_no_unproven_auto_merge",
   "triage_status_counts": {
     "compatible_partial_specification_review": 4000,
     "complete_exact_signature_candidate": 3523,
-    "explicit_exclusive_specification_conflict": 703,
     "insufficient_comparable_evidence": 4870
   }
 }

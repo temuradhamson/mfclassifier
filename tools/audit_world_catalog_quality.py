@@ -216,7 +216,7 @@ def markdown(report: dict) -> str:
         f"без производителя: {fmt_int(report['products_with_missing_manufacturer'])}.",
         f"- С явно помеченным fallback вместо самостоятельного бренда: {fmt_int(report['products_using_explicitly_marked_brand_fallback'])}.",
         "",
-        f"Число {report['canonical_products']:,} подтверждает размер текущего seed. Оно не доказывает, что все мировые продукты уже собраны.".replace(",", " "),
+        f"Число {fmt_int(report['canonical_products'])} подтверждает размер текущего seed. Оно не доказывает, что все мировые продукты уже собраны.",
         "",
         "## Покрытие профессиональными полями",
         "",

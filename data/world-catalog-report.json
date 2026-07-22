@@ -429,17 +429,28 @@
   "archived_offers": 1419,
   "duplicate_decisions": {
     "keep_separate_specification_conflict": 10769,
-    "review_cross_source_identity": 6406,
+    "keep_separate_professional_signature_conflict": 703,
+    "review_cross_source_identity": 5738,
     "keep_separate_blue_angel_family_conflict": 34,
     "review_brand_alias_identity": 2,
     "review_liqui_moly_multi_registry_identity": 49,
     "review_liqui_moly_current_multiple_historical_candidates": 4,
-    "review_fuchs_multi_registry_identity": 6635,
+    "review_fuchs_multi_registry_identity": 6600,
     "keep_separate_fuchs_market_family_conflict": 534
   },
   "duplicate_decision_self_pairs_dropped": {
     "merged": 1,
     "review_fuchs_multi_registry_identity": 564
+  },
+  "duplicate_review_conflicts_resolved": {
+    "brake_fluid_hzy_source_reported": 2,
+    "coolant_class": 4,
+    "coolant_class_source_reported": 7,
+    "coolant_freezing_point_source_reported": 7,
+    "iso_vg": 20,
+    "jaso_family_detail": 3,
+    "sae_engine": 624,
+    "sae_gear": 44
   },
   "canonical_input_rows_collapsed": 1,
   "quality_issues": {

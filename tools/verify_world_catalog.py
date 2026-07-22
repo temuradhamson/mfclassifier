@@ -688,7 +688,7 @@ def main() -> None:
     assert report["liqui_moly_current_products_matched_to_2020"] == 295
     assert report["liqui_moly_current_products_added"] == 152
     assert report["liqui_moly_current_article_skus"] == liqui_moly_current_report["unique_article_skus"] == 985
-    assert report["duplicate_decisions"]["review_cross_source_identity"] == 6406
+    assert report["duplicate_decisions"]["review_cross_source_identity"] == 5738
     assert report["duplicate_decisions"]["keep_separate_specification_conflict"] == 10769
     assert db.execute("""
         SELECT count(*) FROM duplicate_decisions d
@@ -696,7 +696,14 @@ def main() -> None:
         JOIN products b ON b.product_id=d.product_id_b
         WHERE d.decision='review_cross_source_identity'
           AND (a.source_id LIKE 'BEIJING_CHINA_%' OR b.source_id LIKE 'BEIJING_CHINA_%')
-    """).fetchone()[0] == 55
+    """).fetchone()[0] == 14
+    assert db.execute("""
+        SELECT count(*) FROM duplicate_decisions d
+        JOIN products a ON a.product_id=d.product_id_a
+        JOIN products b ON b.product_id=d.product_id_b
+        WHERE d.decision='keep_separate_professional_signature_conflict'
+          AND (a.source_id LIKE 'BEIJING_CHINA_%' OR b.source_id LIKE 'BEIJING_CHINA_%')
+    """).fetchone()[0] == 41
     assert db.execute("""
         SELECT count(*) FROM duplicate_decisions d
         JOIN products a ON a.product_id=d.product_id_a
@@ -710,7 +717,14 @@ def main() -> None:
         JOIN products b ON b.product_id=d.product_id_b
         WHERE d.decision='review_cross_source_identity'
           AND (a.source_id LIKE 'QINGDAO_CHINA_%' OR b.source_id LIKE 'QINGDAO_CHINA_%')
-    """).fetchone()[0] == 34
+    """).fetchone()[0] == 21
+    assert db.execute("""
+        SELECT count(*) FROM duplicate_decisions d
+        JOIN products a ON a.product_id=d.product_id_a
+        JOIN products b ON b.product_id=d.product_id_b
+        WHERE d.decision='keep_separate_professional_signature_conflict'
+          AND (a.source_id LIKE 'QINGDAO_CHINA_%' OR b.source_id LIKE 'QINGDAO_CHINA_%')
+    """).fetchone()[0] == 13
     assert db.execute("""
         SELECT count(*) FROM duplicate_decisions d
         JOIN products a ON a.product_id=d.product_id_a
@@ -724,7 +738,14 @@ def main() -> None:
         JOIN products b ON b.product_id=d.product_id_b
         WHERE d.decision='review_cross_source_identity'
           AND (a.source_id LIKE 'JILIN_CHINA_%' OR b.source_id LIKE 'JILIN_CHINA_%')
-    """).fetchone()[0] == 60
+    """).fetchone()[0] == 34
+    assert db.execute("""
+        SELECT count(*) FROM duplicate_decisions d
+        JOIN products a ON a.product_id=d.product_id_a
+        JOIN products b ON b.product_id=d.product_id_b
+        WHERE d.decision='keep_separate_professional_signature_conflict'
+          AND (a.source_id LIKE 'JILIN_CHINA_%' OR b.source_id LIKE 'JILIN_CHINA_%')
+    """).fetchone()[0] == 26
     assert db.execute("""
         SELECT count(*) FROM duplicate_decisions d
         JOIN products a ON a.product_id=d.product_id_a
@@ -739,7 +760,15 @@ def main() -> None:
         WHERE d.decision='review_cross_source_identity'
           AND (a.source_id IN ('SHENZHEN_CHINA_2016_LUBRICANT_INSPECTION', 'SHENZHEN_CHINA_2017_LUBRICANT_INSPECTION')
                OR b.source_id IN ('SHENZHEN_CHINA_2016_LUBRICANT_INSPECTION', 'SHENZHEN_CHINA_2017_LUBRICANT_INSPECTION'))
-    """).fetchone()[0] == 36
+    """).fetchone()[0] == 19
+    assert db.execute("""
+        SELECT count(*) FROM duplicate_decisions d
+        JOIN products a ON a.product_id=d.product_id_a
+        JOIN products b ON b.product_id=d.product_id_b
+        WHERE d.decision='keep_separate_professional_signature_conflict'
+          AND (a.source_id IN ('SHENZHEN_CHINA_2016_LUBRICANT_INSPECTION', 'SHENZHEN_CHINA_2017_LUBRICANT_INSPECTION')
+               OR b.source_id IN ('SHENZHEN_CHINA_2016_LUBRICANT_INSPECTION', 'SHENZHEN_CHINA_2017_LUBRICANT_INSPECTION'))
+    """).fetchone()[0] == 17
     assert db.execute("""
         SELECT count(*) FROM duplicate_decisions d
         JOIN products a ON a.product_id=d.product_id_a
@@ -771,12 +800,28 @@ def main() -> None:
         WHERE d.decision='review_cross_source_identity'
           AND (a.source_id='SHENZHEN_CHINA_2020_AUTOMOTIVE_FLUID_INSPECTION'
                OR b.source_id='SHENZHEN_CHINA_2020_AUTOMOTIVE_FLUID_INSPECTION')
-    """).fetchone()[0] == 23
+    """).fetchone()[0] == 16
+    assert db.execute("""
+        SELECT count(*) FROM duplicate_decisions d
+        JOIN products a ON a.product_id=d.product_id_a
+        JOIN products b ON b.product_id=d.product_id_b
+        WHERE d.decision='keep_separate_professional_signature_conflict'
+          AND (a.source_id='SHENZHEN_CHINA_2020_AUTOMOTIVE_FLUID_INSPECTION'
+               OR b.source_id='SHENZHEN_CHINA_2020_AUTOMOTIVE_FLUID_INSPECTION')
+    """).fetchone()[0] == 7
     assert db.execute("""
         SELECT count(*) FROM duplicate_decisions d
         JOIN products a ON a.product_id=d.product_id_a
         JOIN products b ON b.product_id=d.product_id_b
         WHERE d.decision='review_cross_source_identity'
+          AND (a.source_id='SHENZHEN_CHINA_2019_AUTOMOTIVE_FLUID_INSPECTION'
+               OR b.source_id='SHENZHEN_CHINA_2019_AUTOMOTIVE_FLUID_INSPECTION')
+    """).fetchone()[0] == 0
+    assert db.execute("""
+        SELECT count(*) FROM duplicate_decisions d
+        JOIN products a ON a.product_id=d.product_id_a
+        JOIN products b ON b.product_id=d.product_id_b
+        WHERE d.decision='keep_separate_professional_signature_conflict'
           AND (a.source_id='SHENZHEN_CHINA_2019_AUTOMOTIVE_FLUID_INSPECTION'
                OR b.source_id='SHENZHEN_CHINA_2019_AUTOMOTIVE_FLUID_INSPECTION')
     """).fetchone()[0] == 1
@@ -802,8 +847,19 @@ def main() -> None:
     assert report["duplicate_decisions"]["review_brand_alias_identity"] == 2
     assert report["duplicate_decisions"]["review_liqui_moly_multi_registry_identity"] == 49
     assert report["duplicate_decisions"]["review_liqui_moly_current_multiple_historical_candidates"] == 4
-    assert report["duplicate_decisions"]["review_fuchs_multi_registry_identity"] == 6635
+    assert report["duplicate_decisions"]["review_fuchs_multi_registry_identity"] == 6600
     assert report["duplicate_decisions"]["keep_separate_fuchs_market_family_conflict"] == 534
+    assert report["duplicate_decisions"]["keep_separate_professional_signature_conflict"] == 703
+    assert report["duplicate_review_conflicts_resolved"] == {
+        "brake_fluid_hzy_source_reported": 2,
+        "coolant_class": 4,
+        "coolant_class_source_reported": 7,
+        "coolant_freezing_point_source_reported": 7,
+        "iso_vg": 20,
+        "jaso_family_detail": 3,
+        "sae_engine": 624,
+        "sae_gear": 44,
+    }
     assert report["duplicate_decision_self_pairs_dropped"] == {
         "merged": 1, "review_fuchs_multi_registry_identity": 564,
     }
@@ -835,8 +891,8 @@ def main() -> None:
     assert sum(row["products"] for row in offline_quality_audit["family_coverage"]) == report["canonical_rows"]
     assert duplicate_triage["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert duplicate_triage["canonical_products"] == report["canonical_rows"]
-    assert duplicate_triage["review_pairs"] == 13096
-    assert duplicate_triage["distinct_products_in_review"] == 2035
+    assert duplicate_triage["review_pairs"] == 12393
+    assert duplicate_triage["distinct_products_in_review"] == 1568
     assert duplicate_triage["self_pairs_remaining"] == 0
     assert duplicate_triage["already_applied_safe_merges"] == {
         "canonical_input_rows_collapsed": 1,
@@ -845,10 +901,13 @@ def main() -> None:
     assert duplicate_triage["retained_source_code_collisions"] == {
         "gm_same_license_different_product_names": 1,
     }
+    assert duplicate_triage["resolved_keep_separate_pairs"] == {
+        "explicit_professional_signature_conflict": 703,
+        "conflicting_fields": report["duplicate_review_conflicts_resolved"],
+    }
     assert duplicate_triage["triage_status_counts"] == {
         "compatible_partial_specification_review": 4000,
         "complete_exact_signature_candidate": 3523,
-        "explicit_exclusive_specification_conflict": 703,
         "insufficient_comparable_evidence": 4870,
     }
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status='listed_current_catalog'").fetchone()[0] == report["current_catalog_listed_offers"] == 1589
@@ -1082,7 +1141,22 @@ def main() -> None:
                OR b.source_id='SHENZHEN_CHINA_2019_AUTOMOTIVE_FLUID_INSPECTION'
                OR a.source_id='SHENZHEN_CHINA_2025_AUTOMOTIVE_FLUID_INSPECTION'
                OR b.source_id='SHENZHEN_CHINA_2025_AUTOMOTIVE_FLUID_INSPECTION')
-    """).fetchone()[0] == 34
+    """).fetchone()[0] == 20
+    assert db.execute("""
+        SELECT count(*) FROM duplicate_decisions d
+        JOIN products a ON a.product_id=d.product_id_a
+        JOIN products b ON b.product_id=d.product_id_b
+        WHERE d.decision='keep_separate_professional_signature_conflict'
+          AND (a.source_id LIKE 'SAMR_CHINA_%' OR b.source_id LIKE 'SAMR_CHINA_%'
+               OR a.source_id='SHENZHEN_CHINA_2021_NONCONFORMING_AUTOMOTIVE_FLUIDS'
+               OR b.source_id='SHENZHEN_CHINA_2021_NONCONFORMING_AUTOMOTIVE_FLUIDS'
+               OR a.source_id='SHENZHEN_CHINA_2020_AUTOMOTIVE_FLUID_INSPECTION'
+               OR b.source_id='SHENZHEN_CHINA_2020_AUTOMOTIVE_FLUID_INSPECTION'
+               OR a.source_id='SHENZHEN_CHINA_2019_AUTOMOTIVE_FLUID_INSPECTION'
+               OR b.source_id='SHENZHEN_CHINA_2019_AUTOMOTIVE_FLUID_INSPECTION'
+               OR a.source_id='SHENZHEN_CHINA_2025_AUTOMOTIVE_FLUID_INSPECTION'
+               OR b.source_id='SHENZHEN_CHINA_2025_AUTOMOTIVE_FLUID_INSPECTION')
+    """).fetchone()[0] == 14
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='PHILIPPINES_BPS_PS_BRAKE_FLUID_LICENCES'").fetchone()[0] == 89
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='PHILIPPINES_BPS_ICC_BRAKE_FLUID_CERTIFICATES'").fetchone()[0] == 34
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='PHILIPPINES_BPS_PS_LICENCE'").fetchone()[0] == 89

@@ -154,6 +154,28 @@ EXPECTED_ENKT_BASE = {
     "G": "19.20.29.210",
 }
 
+# Fields whose disjoint source-reported values identify different physical
+# grades/classes.  Performance approvals are intentionally absent: approval
+# sets are additive and a shorter list does not prove a different product.
+EXCLUSIVE_DUPLICATE_FIELDS = {
+    "M": ("sae_engine", "jaso_family_detail"),
+    "T": ("sae_gear", "sae_engine", "iso_vg"),
+    "G": ("nlgi", "grease_class"),
+    "H": ("iso_vg",),
+    "I": ("iso_vg",),
+    "C": ("iso_vg",),
+    "U": ("iso_vg",),
+    "E": (),
+    "TF": (
+        "brake_fluid_class", "brake_fluid_classes", "brake_fluid_class_source_reported",
+        "brake_fluid_dot_source_reported", "brake_fluid_hzy_source_reported",
+        "coolant_class", "coolant_class_source_reported", "coolant_freezing_point_source_reported",
+        "washer_fluid_class_source_reported", "washer_fluid_freezing_point_source_reported",
+        "urea_class_source_reported", "product_form",
+    ),
+    "S": (),
+}
+
 
 def text(value) -> str:
     return str(value or "").strip()
@@ -3471,6 +3493,26 @@ def deduplicate(records: list[dict]) -> tuple[list[dict], list[dict]]:
     return canonical, candidates
 
 
+def specification_values(record: dict, field: str) -> set[str]:
+    """Return the values exactly as they will be represented in SQLite."""
+    value = record["specifications"].get(field)
+    values = value if isinstance(value, list) else [value]
+    return {text(item) for item in values if text(item)}
+
+
+def exclusive_duplicate_conflicts(left: dict, right: dict) -> list[str]:
+    """Find explicit grade/class contradictions that prove two cards differ."""
+    if left["family_code"] != right["family_code"]:
+        return ["family_code"]
+    conflicts = []
+    for field in EXCLUSIVE_DUPLICATE_FIELDS[left["family_code"]]:
+        left_values = specification_values(left, field)
+        right_values = specification_values(right, field)
+        if left_values and right_values and left_values.isdisjoint(right_values):
+            conflicts.append(field)
+    return conflicts
+
+
 def has_any_spec(specs: dict, *keys: str) -> bool:
     return any(bool(specs.get(key)) for key in keys)
 
@@ -6395,6 +6437,21 @@ def main() -> None:
         candidate for candidate in candidates
         if candidate["product_id_a"] != candidate["product_id_b"]
     ]
+    records_by_id = {record["product_id"]: record for record in records}
+    duplicate_review_conflicts_resolved = Counter()
+    for candidate in candidates:
+        if not candidate["decision"].startswith("review_"):
+            continue
+        conflicts = exclusive_duplicate_conflicts(
+            records_by_id[candidate["product_id_a"]],
+            records_by_id[candidate["product_id_b"]],
+        )
+        if not conflicts:
+            continue
+        candidate["decision"] = "keep_separate_professional_signature_conflict"
+        candidate["reason"] = "explicit_disjoint_professional_fields:" + ",".join(conflicts)
+        candidate["score"] = 1.0
+        duplicate_review_conflicts_resolved.update(conflicts)
     issues = quality_issues(records)
     cpc_issue_rules = {
         "source_multigrade_table_not_safely_aligned_to_listing_title": (
@@ -6969,6 +7026,7 @@ def main() -> None:
         "archived_offers": sum(o["lifecycle_status"] == "archived" for o in offers),
         "duplicate_decisions": dict(Counter(c["decision"] for c in candidates)),
         "duplicate_decision_self_pairs_dropped": duplicate_decision_self_pairs_dropped,
+        "duplicate_review_conflicts_resolved": dict(sorted(duplicate_review_conflicts_resolved.items())),
         "canonical_input_rows_collapsed": len(input_records) - len(records),
         "quality_issues": dict(Counter(i["issue_code"] for i in issues)),
         "bulk_sources_allowed": [s["source_id"] for s in policies["sources"] if s["bulk_ingest_allowed"]],
