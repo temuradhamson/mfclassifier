@@ -1,0 +1,45 @@
+{
+  "status": "official_shenzhen_2020_complete_automotive_fluid_inspection_normalized",
+  "source_id": "SHENZHEN_CHINA_2020_AUTOMOTIVE_FLUID_INSPECTION",
+  "source_url": "https://www.sz.gov.cn/cn/xxgk/zfxxgj/tzgg/content/post_8537379.html",
+  "attachment_urls": {
+    "conforming": "http://www.sz.gov.cn/attachment/0/748/748883/8537379.xlsx",
+    "nonconforming": "http://www.sz.gov.cn/attachment/0/757/757058/8537379.xlsx"
+  },
+  "snapshot_date": "2026-07-21",
+  "report_date": "2021-02-01",
+  "source_xlsx_sha256": {
+    "conforming": "6eb62911fd9b0e6a8c4e89cd33f2b5e0463ec174812277b04219967a5d2d94eb",
+    "nonconforming": "9dda9aa6d8b4b295e559b63a7dc6b3e2a1a3c47484bd40d1e8a9ea9c81eb6a83"
+  },
+  "source_rows": 106,
+  "outcomes": {
+    "conforming": 95,
+    "nonconforming": 11
+  },
+  "source_product_types": {
+    "机动车制动液": 22,
+    "机动车发动机冷却液": 25,
+    "机动车发动机润滑油": 26,
+    "车用尿素溶液": 20,
+    "车用汽油清净剂": 13
+  },
+  "families_before_identity_merging": {
+    "M": 26,
+    "S": 13,
+    "TF": 67
+  },
+  "rows_with_api": 24,
+  "rows_with_sae": 26,
+  "rows_with_acea": 2,
+  "rows_with_ilsac": 2,
+  "rows_with_brake_class": 20,
+  "rows_with_coolant_class_or_freezing_point": 11,
+  "rows_with_aus32": 9,
+  "counterfeit_source_notes": 1,
+  "normalized_output_sha256": "2bb1ae98e264c828b3927a596beb7e0610ae0c88688c5b54d5fff74763affc82",
+  "grain_note": "One output row is one inspected batch observation. Product identities may merge later only under strict producer, product and package-independent technical identity while every occurrence remains linked.",
+  "scope_note": "Both official workbooks are complete for this program: all 95 conforming and all 11 nonconforming automotive-product rows are retained.",
+  "lifecycle_note": "Conforming means only that the sampled batch passed this inspection. Neither outcome is treated as a current commercial offer or blanket approval.",
+  "privacy_note": "Inspected retailers are excluded; nominal producer, product, brand, model, batch date, outcome and failure facts are retained."
+}

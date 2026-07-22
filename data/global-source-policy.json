@@ -1911,6 +1911,21 @@
       "notes": "The official current TIS 1040-2541 search exposes ten manufacturing licences across nine exact company holders. The linked data.go.th dataset is published under Creative Commons Attribution. Each normalized row remains a licence-holder certification scope, not a marketed brand, grade or SKU; no SAE/API value or current-validity claim is inferred."
     },
     {
+      "source_id": "SHENZHEN_CHINA_2020_AUTOMOTIVE_FLUID_INSPECTION",
+      "title": "Shenzhen 2020 complete automotive-fluid inspection",
+      "owner": "Shenzhen Administration for Market Regulation",
+      "source_type": "official_municipal_government_complete_product_quality_inspection_xlsx_workbooks",
+      "source_locator": "data/shenzhen-2020-automotive-fluid-inspection.jsonl",
+      "source_url": "https://www.sz.gov.cn/cn/xxgk/zfxxgj/tzgg/content/post_8537379.html",
+      "terms_url": "https://www.sz.gov.cn/cn/qt/gywm/",
+      "source_sha256": "2bb1ae98e264c828b3927a596beb7e0610ae0c88688c5b54d5fff74763affc82",
+      "access_status": "public_official_government_information_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_document_redistribution",
+      "observed_count": 106,
+      "notes": "The two official complete workbooks contain 95 conforming and 11 nonconforming observations: 26 engine oils, 25 coolants, 22 brake fluids, 20 automotive urea solutions and 13 fuel additives. Four repeated batch observations merge into 102 strict within-source identities; one Audi DOT4/HZY4 identity is conservatively reconciled to the same 2025 producer/product, so 101 new catalog products are added while all 106 source links and outcomes remain preserved. One source-reported counterfeit Shell trademark product is explicitly flagged. Retailers and the workbooks are not redistributed; passing means only that the sampled batch conformed at inspection, never blanket approval or current availability."
+    },
+    {
       "source_id": "SHENZHEN_CHINA_2025_AUTOMOTIVE_FLUID_INSPECTION",
       "title": "Shenzhen 2025 complete automotive-fluid inspection",
       "owner": "Shenzhen Administration for Market Regulation",
