@@ -55,6 +55,7 @@ MAN_SERVICE_JSONL = ROOT / "data" / "man-service-products.jsonl"
 LIQUI_MOLY_2020_JSONL = ROOT / "data" / "liqui-moly-2020-products.jsonl"
 LIQUI_MOLY_CURRENT_JSONL = ROOT / "data" / "liqui-moly-current-products.jsonl"
 ANP_BRAZIL_JSONL = ROOT / "data" / "anp-brazil-lubricant-products.jsonl"
+ANP_BRAZIL_MONITORING_JSONL = ROOT / "data" / "anp-brazil-monitoring-observations.jsonl"
 INDONESIA_NPT_JSONL = ROOT / "data" / "indonesia-npt-lubricant-products.jsonl"
 THAILAND_DOEB_JSONL = ROOT / "data" / "thailand-doeb-lubricant-products.jsonl"
 DLA_QPD_JSONL = ROOT / "data" / "dla-qpd-lubricant-products.jsonl"
@@ -119,7 +120,7 @@ FUCHS_ADDITIONAL_MARKETS = [
     ("macedonia", ROOT / "data" / "fuchs-macedonia-products.jsonl", "FUCHS_MACEDONIA_PRODUCT_FINDER", "Macedonia"),
 ]
 SCHEMA_VERSION = 1
-SNAPSHOT_DATE = "2026-07-21"
+SNAPSHOT_DATE = "2026-07-22"
 
 FAMILY_NAMES = {
     "M": "Моторные масла",
@@ -1602,6 +1603,105 @@ def anp_brazil_record(row: dict) -> dict:
         "status": "active_in_current_anp_snapshot",
     }
     return record
+
+
+def anp_monitoring_performance_key(value: str) -> str:
+    """Return the comparable performance token printed in an ANP PML annex."""
+    normalized = normalize(value)
+    if normalized in {"", "n a", "na", "acea"}:
+        return ""
+    words = normalized.split()
+    if words and words[0] in {"api", "acea", "jaso", "ilsac"}:
+        words = words[1:]
+    return " ".join(words)
+
+
+def anp_monitoring_current_performance_keys(value: str) -> set[str]:
+    return {
+        key
+        for part in text(value).split(";")
+        if (key := anp_monitoring_performance_key(part))
+    }
+
+
+def anp_monitoring_identity_key(row: dict) -> tuple[str, ...]:
+    registration = normalize(row["registration_number"])
+    base = (
+        registration,
+        normalize(row["product_name"]),
+        normalize(row["sae"]),
+        anp_monitoring_performance_key(row["performance_level"]),
+    )
+    # A registration number is the stable public identity.  For unregistered
+    # samples the holder is required to avoid merging unrelated same-name oils.
+    return base if registration else base + (normalize(row["registration_holder"]),)
+
+
+def anp_monitoring_history_record(identity: tuple[str, ...], occurrences: list[dict]) -> dict:
+    row = occurrences[0]
+    family_code = "T" if anp_monitoring_performance_key(row["performance_level"]) == "gl 4" else "M"
+    holder = row["registration_holder"] or "ANP sample — holder not reported"
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": holder,
+        "name": row["product_name"],
+        "category": "Исторический мониторинг масел ANP Бразилии",
+        "category_code": family_code,
+        "family": FAMILY_NAMES[family_code],
+        "sae_class": row["sae"],
+        "api_class": row["performance_level"],
+        "source": "ANP_BRAZIL_LUBRICANT_MONITORING_HISTORY",
+    }
+    record = canonical_record(generic)
+    fingerprint = hashlib.sha256("|".join(identity).encode()).hexdigest()[:18]
+    record.update({
+        "manufacturer": holder,
+        "brand": holder,
+        "market": "Brazil",
+        "source_id": "ANP_BRAZIL_LUBRICANT_MONITORING_HISTORY",
+        "source_record_id": f"ANP-PML-GRADE-{fingerprint}",
+        "source_row": row["source_row"],
+        "evidence_status": "official_government_historical_market_monitoring",
+        "lifecycle_status": "historical_sample_not_matched_to_current_anp_registry_grade",
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["canonical_key"] += f"|anp_monitoring_history:{fingerprint}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    if row["registration_number"]:
+        record["codes"]["anp_historical_registration_number"] = {
+            "system": "ANP_BRAZIL_REGISTRATION_NUMBER",
+            "value": row["registration_number"],
+            "source_id": "ANP_BRAZIL_LUBRICANT_MONITORING_HISTORY",
+            "status": "historically_observed_not_currently_matched_grade",
+        }
+    return record
+
+
+def merge_anp_monitoring_evidence(target: dict, occurrences: list[dict], match_basis: str, candidate_count: int) -> None:
+    years = sorted({row["issue_year"] for row in occurrences if row["issue_year"]})
+    sample_ids = sorted({row["sample_id"] for row in occurrences if row["sample_id"]})
+    flags = sorted({flag for row in occurrences for flag in row["quality_flags"]})
+    holders = sorted({row["registration_holder"] for row in occurrences if row["registration_holder"]}, key=str.casefold)
+    files = sorted({row["source_url"] for row in occurrences})
+    target["specifications"].setdefault("anp_monitoring_history", []).append({
+        "reported_product_name": occurrences[0]["product_name"],
+        "reported_registration_number": occurrences[0]["registration_number"],
+        "reported_sae": occurrences[0]["sae"],
+        "reported_performance_level": occurrences[0]["performance_level"],
+        "reported_holders": holders,
+        "issue_years": years,
+        "first_issue_year": years[0] if years else None,
+        "last_issue_year": years[-1] if years else None,
+        "observation_count": len(occurrences),
+        "sample_ids": sample_ids,
+        "sample_ids_omitted_count": len(occurrences) - len(sample_ids),
+        "quality_flags": flags,
+        "source_files": files,
+        "match_basis": match_basis,
+        "current_registry_candidate_count": candidate_count,
+        "source_page_url": occurrences[0]["source_page_url"],
+    })
 
 
 def indonesia_npt_record(row: dict) -> dict:
@@ -3432,7 +3532,7 @@ def build_sqlite(records: list[dict], candidates: list[dict], issues: list[dict]
 def compress_sqlite() -> None:
     """Create a deterministic repository-safe copy of the generated SQLite database."""
     with SQLITE_OUT.open("rb") as source, lzma.open(
-        SQLITE_XZ_OUT, "wb", format=lzma.FORMAT_XZ, preset=9 | lzma.PRESET_EXTREME
+        SQLITE_XZ_OUT, "wb", format=lzma.FORMAT_XZ, preset=9
     ) as archive:
         shutil.copyfileobj(source, archive, length=1024 * 1024)
 
@@ -4059,6 +4159,64 @@ def main() -> None:
     anp_brazil_source_rows = [json.loads(line) for line in ANP_BRAZIL_JSONL.read_text(encoding="utf-8").splitlines() if line]
     anp_brazil_records = [anp_brazil_record(row) for row in anp_brazil_source_rows]
     input_records.extend(anp_brazil_records)
+    anp_monitoring_source_rows = [json.loads(line) for line in ANP_BRAZIL_MONITORING_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    anp_monitoring_groups = defaultdict(list)
+    for raw in anp_monitoring_source_rows:
+        anp_monitoring_groups[anp_monitoring_identity_key(raw)].append(raw)
+    current_anp_index = defaultdict(list)
+    for raw, record in zip(anp_brazil_source_rows, anp_brazil_records):
+        current_anp_index[(
+            normalize(raw["registration_number"]),
+            normalize(raw["product_name"]),
+            normalize(raw["sae"]),
+        )].append((raw, record))
+    anp_monitoring_product_key = {}
+    anp_monitoring_matched_identities = 0
+    anp_monitoring_ambiguous_match_identities = 0
+    anp_monitoring_added_identities = 0
+    anp_monitoring_added_registered_identities = 0
+    anp_monitoring_added_unregistered_identities = 0
+    for identity, occurrences in sorted(anp_monitoring_groups.items()):
+        row = occurrences[0]
+        base_key = (
+            normalize(row["registration_number"]),
+            normalize(row["product_name"]),
+            normalize(row["sae"]),
+        )
+        base_candidates = current_anp_index[base_key]
+        performance_key = anp_monitoring_performance_key(row["performance_level"])
+        performance_candidates = [
+            pair for pair in base_candidates
+            if not performance_key or performance_key in anp_monitoring_current_performance_keys(pair[0]["performance_level"])
+        ]
+        candidates = performance_candidates if performance_candidates else []
+        if candidates:
+            # Holder renames occur through the archive.  Prefer the exact
+            # current holder when available, then use a deterministic record.
+            holder_matches = [
+                pair for pair in candidates
+                if normalize(pair[0]["registration_holder"]) == normalize(row["registration_holder"])
+            ]
+            ranked = holder_matches or candidates
+            raw_target, target = min(ranked, key=lambda pair: pair[1]["source_record_id"])
+            match_basis = "registration_name_sae_performance"
+            if holder_matches:
+                match_basis += "_holder"
+            merge_anp_monitoring_evidence(target, occurrences, match_basis, len(candidates))
+            anp_monitoring_matched_identities += 1
+            if len(candidates) > 1:
+                anp_monitoring_ambiguous_match_identities += 1
+        else:
+            target = anp_monitoring_history_record(identity, occurrences)
+            merge_anp_monitoring_evidence(target, occurrences, "historical_grade_absent_from_current_anp_snapshot", 0)
+            input_records.append(target)
+            anp_monitoring_added_identities += 1
+            if row["registration_number"]:
+                anp_monitoring_added_registered_identities += 1
+            else:
+                anp_monitoring_added_unregistered_identities += 1
+        for raw in occurrences:
+            anp_monitoring_product_key[raw["source_record_id"]] = target["canonical_key"]
     indonesia_npt_source_rows = [json.loads(line) for line in INDONESIA_NPT_JSONL.read_text(encoding="utf-8").splitlines() if line]
     indonesia_npt_records = [indonesia_npt_record(row) for row in indonesia_npt_source_rows]
     thailand_doeb_source_rows = [json.loads(line) for line in THAILAND_DOEB_JSONL.read_text(encoding="utf-8").splitlines() if line]
@@ -5067,6 +5225,19 @@ def main() -> None:
         "source_row": row["source_row"], "relation": "primary_seed_record",
     } for row in records]
     source_link_keys = {(link["product_id"], link["source_id"], link["source_record_id"]) for link in source_links}
+    for raw in anp_monitoring_source_rows:
+        target = canonical_by_key[anp_monitoring_product_key[raw["source_record_id"]]]
+        link = {
+            "product_id": target["product_id"],
+            "source_id": raw["source_id"],
+            "source_record_id": raw["source_record_id"],
+            "source_row": raw["source_row"],
+            "relation": "official_government_historical_market_monitoring_observation",
+        }
+        link_key = (link["product_id"], link["source_id"], link["source_record_id"])
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     for raw in samr_china_2023_source_rows:
         target = canonical_by_key[samr_china_2023_product_key[raw["source_record_id"]]]
         link = {
@@ -6006,6 +6177,7 @@ def main() -> None:
         "liqui_moly_2020_input_sha256": hashlib.sha256(LIQUI_MOLY_2020_JSONL.read_bytes()).hexdigest(),
         "liqui_moly_current_input_sha256": hashlib.sha256(LIQUI_MOLY_CURRENT_JSONL.read_bytes()).hexdigest(),
         "anp_brazil_input_sha256": hashlib.sha256(ANP_BRAZIL_JSONL.read_bytes()).hexdigest(),
+        "anp_brazil_monitoring_input_sha256": hashlib.sha256(ANP_BRAZIL_MONITORING_JSONL.read_bytes()).hexdigest(),
         "indonesia_npt_input_sha256": hashlib.sha256(INDONESIA_NPT_JSONL.read_bytes()).hexdigest(),
         "thailand_doeb_input_sha256": hashlib.sha256(THAILAND_DOEB_JSONL.read_bytes()).hexdigest(),
         "dla_qpd_input_sha256": hashlib.sha256(DLA_QPD_JSONL.read_bytes()).hexdigest(),
@@ -6111,6 +6283,14 @@ def main() -> None:
         "official_government_qualified_product_registry_rows": sum(r["evidence_status"] == "official_government_qualified_product_registry" for r in records),
         "usda_biopreferred_source_rows": len(biopreferred_source_rows),
         "anp_brazil_source_rows": len(anp_brazil_source_rows),
+        "anp_brazil_monitoring_source_observations": len(anp_monitoring_source_rows),
+        "anp_brazil_monitoring_product_grade_identities": len(anp_monitoring_groups),
+        "anp_brazil_monitoring_identities_matched_to_current_registry": anp_monitoring_matched_identities,
+        "anp_brazil_monitoring_ambiguous_current_registry_matches": anp_monitoring_ambiguous_match_identities,
+        "anp_brazil_monitoring_historical_identities_added": anp_monitoring_added_identities,
+        "anp_brazil_monitoring_registered_historical_identities_added": anp_monitoring_added_registered_identities,
+        "anp_brazil_monitoring_unregistered_historical_identities_added": anp_monitoring_added_unregistered_identities,
+        "official_government_historical_market_monitoring_rows": sum(r["evidence_status"] == "official_government_historical_market_monitoring" for r in records),
         "indonesia_npt_source_rows": len(indonesia_npt_source_rows),
         "indonesia_npt_rows_with_registration_value": sum(bool(row["registration_number"]) for row in indonesia_npt_source_rows),
         "indonesia_npt_rows_with_source_data_issue": sum(not row["registration_number"] for row in indonesia_npt_source_rows),

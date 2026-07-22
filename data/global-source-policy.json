@@ -906,6 +906,18 @@
       "notes": "Live public directory count observed 2026-07-21: 35,174 licensed product rows and 883 licensee companies. API states that the directory covers active licensees and products and is updated frequently. API website terms prohibit copying/downloading and republishing site material without authorization, so no product row is retained; an official feed or written permission is required."
     },
     {
+      "source_id": "idemitsu-global-lubricants",
+      "title": "Idemitsu Global Lubricants Product List",
+      "owner": "Idemitsu Kosan Co., Ltd.",
+      "source_type": "official_manufacturer_product_search",
+      "source_url": "https://www.idemitsu.com/en/business/lube/products/index.html",
+      "terms_url": "https://www.idemitsu.com/en/siteuse/index.html",
+      "access_status": "public_search_written_permission_required_for_reproduction",
+      "bulk_ingest_allowed": false,
+      "publication_status": "source_link_and_gap_evidence_only_pending_written_permission",
+      "notes": "Official Website Usage Guidelines state that Idemitsu owns the site content and strictly prohibits use, reproduction, modification, transfer or duplication in whole or part beyond uses explicitly permitted by law without prior written consent. The application/name search is therefore retained as a coverage lead only; no product rows are copied."
+    },
+    {
       "source_id": "ANP_BRAZIL_LUBRICANT_REGISTRY",
       "title": "ANP Brazil Registry of Lubricating Oils and Greases",
       "owner": "Agência Nacional do Petróleo, Gás Natural e Biocombustíveis",
@@ -919,6 +931,21 @@
       "publication_status": "normalized_factual_records_with_attribution",
       "observed_count": 12664,
       "notes": "Еженедельный государственный CSV. 14 960 исходных строк сведены к 12 664 строкам продукта-класса-вязкости; 2 296 повторных вхождений объединены. Сохранены регистрация, держатель, производитель, назначение, SAE/ISO/NLGI, уровень свойств, состав и фасовки; narrative OBS не переиздаётся."
+    },
+    {
+      "source_id": "ANP_BRAZIL_LUBRICANT_MONITORING_HISTORY",
+      "title": "ANP Brazil Lubricant Monitoring Programme XLSX Archive 2017-2026",
+      "owner": "Agência Nacional do Petróleo, Gás Natural e Biocombustíveis",
+      "source_type": "official_open_government_monitoring_archive",
+      "source_locator": "data/anp-brazil-monitoring-observations.jsonl",
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletins/boletim-de-monitoramento-de-lubrificantes",
+      "terms_url": "https://www.gov.br/pt-br/termos-de-uso",
+      "source_sha256": "1273aea359ae63dd04ba891618f7b6aa940aaddee17db3754af96dff97525581",
+      "access_status": "public_open_government_data_cc_by_nd_3_0",
+      "bulk_ingest_allowed": true,
+      "publication_status": "normalized_factual_observations_with_attribution",
+      "observed_count": 11026,
+      "notes": "Полный машиночитаемый слой из 28 XLSX, опубликованных на официальной странице PML для 2017-2026 годов. Сохранены только продукт, регистрация, держатель, SAE, уровень свойств, лот, даты, координата строки и хэши файлов; адреса, CNPJ и оформление книг исключены. Наблюдение доказывает исторический отбор образца, но не текущую регистрацию или доступность. PDF-only выпуски до октября 2017 и выпуски 2024 остаются отдельным backlog."
     },
     {
       "source_id": "THAILAND_DOEB_LUBRICANT_REGISTRY",

@@ -1,0 +1,203 @@
+{
+  "schema_version": 1,
+  "status": "official_open_government_monitoring_archive_normalized",
+  "snapshot_date": "2026-07-22",
+  "source_page_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletins/boletim-de-monitoramento-de-lubrificantes",
+  "terms_url": "https://www.gov.br/pt-br/termos-de-uso",
+  "source_page_sha256": "daa5cb92161d80c602d431dca611fb4abe63ebc832c9a234f69fb1c90bb3b669",
+  "normalized_output_sha256": "1273aea359ae63dd04ba891618f7b6aa940aaddee17db3754af96dff97525581",
+  "official_xlsx_files": 28,
+  "files": [
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2026/anexo-1.xlsx",
+      "source_file_name": "anexo-1.xlsx",
+      "source_sha256": "67ac5425f9ed9639bf2f68a0442c6caad5ed0af6f7cd40013bc69d16b6bdb7cc",
+      "parsed_rows_including_supplementary": 341
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2025/anexo-pml2-amostras-analisadas.xlsx",
+      "source_file_name": "anexo-pml2-amostras-analisadas.xlsx",
+      "source_sha256": "714e45c6e53dbfd2f7d4454682110858768390dd8717055dc3f8f7f60c5c8c1b",
+      "parsed_rows_including_supplementary": 468
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2025/anexo-1-amostras-analisadas.xlsx",
+      "source_file_name": "anexo-1-amostras-analisadas.xlsx",
+      "source_sha256": "6582b8b82c4f775695ed9c8a9ce403eb009146f9d91968fbae8f1d9b5c0f41e0",
+      "parsed_rows_including_supplementary": 210
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2023/anexo-boletim-pml-04.xlsx",
+      "source_file_name": "anexo-boletim-pml-04.xlsx",
+      "source_sha256": "e3be8d361735e079c7423a0c9a224991e9c664add994ae09fb0973d38cf69e7c",
+      "parsed_rows_including_supplementary": 326
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2023/anexo-boletim-pml-03.xlsx",
+      "source_file_name": "anexo-boletim-pml-03.xlsx",
+      "source_sha256": "bc5c9dbace0cc9ac7f180ede1fdc4658239dd6e341f02c649bfa9046b57f7553",
+      "parsed_rows_including_supplementary": 379
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2023/anexo-boletim-pml-02.xlsx",
+      "source_file_name": "anexo-boletim-pml-02.xlsx",
+      "source_sha256": "9196e88ce6131a8035b97237f5d2857a3bba1e0e7c58dfbeda4bb6afa75f657d",
+      "parsed_rows_including_supplementary": 257
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2023/anexo-boletim-pml-01.xlsx",
+      "source_file_name": "anexo-boletim-pml-01.xlsx",
+      "source_sha256": "cfb66cd3e320b80d615bb4980f3a4f102d4bf2305a81954ad9b98bf72de0060e",
+      "parsed_rows_including_supplementary": 395
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2022/4-boletim-pml-amostras-analisadas.xlsx",
+      "source_file_name": "4-boletim-pml-amostras-analisadas.xlsx",
+      "source_sha256": "c5bb906d4deacd324d12108502fcd824c1ff34dac01fbd2e922d2fb5af49fcd4",
+      "parsed_rows_including_supplementary": 225
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2022/anexo_1_pml_2022_3_amostras_analisadas.xlsx",
+      "source_file_name": "anexo_1_pml_2022_3_amostras_analisadas.xlsx",
+      "source_sha256": "35e4ddbb1415f9a8a0b317f23ced39d02070442cf31954f40baee423e6ac913c",
+      "parsed_rows_including_supplementary": 241
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2022/anexo1-pml-2022-2-amostras-analisadas.xlsx",
+      "source_file_name": "anexo1-pml-2022-2-amostras-analisadas.xlsx",
+      "source_sha256": "3e63661097a51c7e7e64b5df4e68dfeb66d122bee3f7039d6014ffd48605d908",
+      "parsed_rows_including_supplementary": 155
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2022/anexo_1_pml_2022_1_amostras_analisadas.xlsx",
+      "source_file_name": "anexo_1_pml_2022_1_amostras_analisadas.xlsx",
+      "source_sha256": "b70e0053cabc3192a97fbb810d2396aca56adcfb8a7872d9904c07ad0a33ff8b",
+      "parsed_rows_including_supplementary": 321
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2021/4-boletim-pml-amostras-analisadas.xlsx",
+      "source_file_name": "4-boletim-pml-amostras-analisadas.xlsx",
+      "source_sha256": "f218c00343ed6801e129d1196c94276d7651d5235996276ae4a616f8041d58d0",
+      "parsed_rows_including_supplementary": 294
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2021/3-boletim-pml-amostras-analisadas.xlsx",
+      "source_file_name": "3-boletim-pml-amostras-analisadas.xlsx",
+      "source_sha256": "7387ec04a0be7b244730de4437b70ce8ac4f48651a64bc14a5c6be7643333bc8",
+      "parsed_rows_including_supplementary": 407
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2021/2-boletim-pml-amostras-analisadas.xlsx",
+      "source_file_name": "2-boletim-pml-amostras-analisadas.xlsx",
+      "source_sha256": "ec7ac5baac0ec398f2e355c7eb77e407ac97aace3d6e68876321e0df89a91657",
+      "parsed_rows_including_supplementary": 542
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2021/1-boletim-pml-amostras-analisadas.xlsx",
+      "source_file_name": "1-boletim-pml-amostras-analisadas.xlsx",
+      "source_sha256": "5a9d7e2816b160e5501d63742e7ecc38b6fa2d534d1f01d649dcaa8799f860e4",
+      "parsed_rows_including_supplementary": 757
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2020/4-boletim-pml-amostras-analisadas.xlsx",
+      "source_file_name": "4-boletim-pml-amostras-analisadas.xlsx",
+      "source_sha256": "f0d2011e32c6242c6777f634cb03054a90887c711abd3286d9d9cbb4365db384",
+      "parsed_rows_including_supplementary": 662
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2020/3-boletim-pml-amostras-analisadas.xlsx",
+      "source_file_name": "3-boletim-pml-amostras-analisadas.xlsx",
+      "source_sha256": "94aa3f85e6ff0c29672626556da3b07d7b41a9b3545aabc246c540f085a4a69a",
+      "parsed_rows_including_supplementary": 330
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2020/2-boletim-pml-amostras-analisadas.xlsx",
+      "source_file_name": "2-boletim-pml-amostras-analisadas.xlsx",
+      "source_sha256": "41cc6b5b3babffdf25a009f0f7213e4406d227b076d1a742868086c1ac7391f1",
+      "parsed_rows_including_supplementary": 532
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2020/1-boletim-pml-amostras-analisadas.xlsx",
+      "source_file_name": "1-boletim-pml-amostras-analisadas.xlsx",
+      "source_sha256": "2775c3162741a33da54de224710a94bd83cbd8150f6527847452782ab54cfffa",
+      "parsed_rows_including_supplementary": 295
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2019/4-boletim-pml-amostras-analisadas.xlsx",
+      "source_file_name": "4-boletim-pml-amostras-analisadas.xlsx",
+      "source_sha256": "82736efe22c5b0d8b473b22d055070ffe6a246a2fd7e703e3c243c8d4f3e4703",
+      "parsed_rows_including_supplementary": 346
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2019/3-boletim-pml-amostras-analisadas.xlsx",
+      "source_file_name": "3-boletim-pml-amostras-analisadas.xlsx",
+      "source_sha256": "c4bc2a42e59b7ce434fcdfb1069a87370777a5a5dc6cedceff45df216ab32534",
+      "parsed_rows_including_supplementary": 385
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2019/2-boletim-pml-amostras-analisadas.xlsx",
+      "source_file_name": "2-boletim-pml-amostras-analisadas.xlsx",
+      "source_sha256": "11f94508889ceace75ee6cc6c664d67c3cfe73aba1258377cda45d00c081c386",
+      "parsed_rows_including_supplementary": 319
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2019/1-boletim-pml-amostras-analisadas.xlsx",
+      "source_file_name": "1-boletim-pml-amostras-analisadas.xlsx",
+      "source_sha256": "3a27d4e6942154b6d12c1019b219f37f3d9a50f182c67b206c817e494afe8069",
+      "parsed_rows_including_supplementary": 1560
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2018/3-boletim-pml-amostras-analisadas.xlsx",
+      "source_file_name": "3-boletim-pml-amostras-analisadas.xlsx",
+      "source_sha256": "50d8f30ea3345aa0e20ef34ca56e75dcffeb13cae289982fbb8ac176302cbc66",
+      "parsed_rows_including_supplementary": 352
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2018/2-boletim-pml-amostras-analisadas.xlsx",
+      "source_file_name": "2-boletim-pml-amostras-analisadas.xlsx",
+      "source_sha256": "c24a2e0e100a6cec6bda4b19c57f490b400e21ff4097bf33ed2db910fa284dbb",
+      "parsed_rows_including_supplementary": 324
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2018/1-boletim-pml-amostras-analisadas.xlsx",
+      "source_file_name": "1-boletim-pml-amostras-analisadas.xlsx",
+      "source_sha256": "d399b32fc4262a04b098ade559336233115264ea3f39f8fe54dcccf3ea328f1a",
+      "parsed_rows_including_supplementary": 233
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2017/5-boletim-pml-amostras-analisada.xlsx",
+      "source_file_name": "5-boletim-pml-amostras-analisada.xlsx",
+      "source_sha256": "24c8dc43fb4413d54897a479fef7377f5a51365f708d422a94943b41987d9d65",
+      "parsed_rows_including_supplementary": 195
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2017/4-boletim-pml-amostras-analisada.xlsx",
+      "source_file_name": "4-boletim-pml-amostras-analisada.xlsx",
+      "source_sha256": "8319556167a59d34b6ca47ffeb2f7f93bfdb6dad58348e05f7cfc88473948116",
+      "parsed_rows_including_supplementary": 234
+    }
+  ],
+  "source_observations": 11026,
+  "unique_sample_ids": 8177,
+  "normalized_product_grade_holder_identities": 3097,
+  "observations_by_issue_year": {
+    "2017": 429,
+    "2018": 909,
+    "2019": 2565,
+    "2020": 1805,
+    "2021": 2000,
+    "2022": 942,
+    "2023": 1357,
+    "2025": 678,
+    "2026": 341
+  },
+  "supplementary_rows": 59,
+  "supplementary_quality_flags_joined": 59,
+  "quality_flags": {
+    "source_reported_additive_absence": 51,
+    "source_reported_without_registration": 8
+  },
+  "rights_note": "ANP publishes the archive on gov.br, whose page states CC BY-ND 3.0. Only normalized factual fields and provenance are republished; workbook layout and narrative text are omitted.",
+  "scope_note": "Complete machine-readable XLSX annex scope linked by the official PML page at snapshot time. The page has no XLSX annexes for 2024 and only PDF bulletins before late 2017; those PDF-only years remain a separate extraction backlog.",
+  "lifecycle_note": "A monitoring observation proves that a labelled sample existed and was analysed. It is historical evidence, not proof of current registration or market availability."
+}
