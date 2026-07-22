@@ -2461,6 +2461,21 @@
       "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_pdf_redistribution",
       "observed_count": 410,
       "notes": "All 1,763 unique certificate rows across the 81-page current list were audited; 410 lubricant/base-oil certificates are retained with certificate number, validity, standard, holder, brand, SAE and API/API GL/JASO/ILSAC/ACEA where reported. All 410 are valid at the 2026-07-22 snapshot; one source product-family versus standard-family conflict remains explicit."
+    },
+    {
+      "source_id": "PERU_SUNAT_2025_NONCONTROLLED_LUBRICANT_PRODUCTS",
+      "title": "Peru SUNAT products evaluated as non-controlled under DS 268-2019-EF",
+      "owner": "Superintendencia Nacional de Aduanas y de Administración Tributaria (SUNAT)",
+      "source_type": "official_national_government_regulatory_product_evaluation_list_pdf",
+      "source_locator": "data/peru-sunat-noncontrolled-lubricants.jsonl",
+      "source_url": "https://orientacion.sunat.gob.pe/sites/default/files/inline-files/PORTAL%203%20Productos%20NO%20CONTROLADOS%20NACIONAL%20DS%20268%202019%20%2030.04.2025_2.pdf",
+      "terms_url": "https://orientacion.sunat.gob.pe/insumos-quimicos-y-bienes-fiscalizados",
+      "source_sha256": "3e9c1e8d5862017116b694e1ceeea691d5023743ba1b362432c2200bdfb07431",
+      "access_status": "public_official_government_information_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_pdf_redistribution",
+      "observed_count": 87,
+      "notes": "All 4,518 sequential rows across 302 pages were parsed. A broad 176-row lexical candidate set was manually reviewed; 95 explicit lubricant/technical-fluid occurrences normalize to 87 product identities after eight exact product/package duplicate collapses. NO CONTROLADO is retained strictly as a SUNAT regulatory evaluation result, not represented as performance approval or certification."
     }
   ]
 }

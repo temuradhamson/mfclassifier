@@ -92,6 +92,7 @@ GHANA_GSA_CERTIFIED_JSONL = ROOT / "data" / "ghana-gsa-certified-lubricant-produ
 ECUADOR_INEN_CERTIFIED_JSONL = ROOT / "data" / "ecuador-inen-certified-lubricants.jsonl"
 ECUADOR_INEN_CURRENT_JSONL = ROOT / "data" / "ecuador-inen-current-certified-lubricants.jsonl"
 ECUADOR_INEN_CURRENT_REPORT = ROOT / "data" / "ecuador-inen-current-certified-lubricants-report.json"
+PERU_SUNAT_NONCONTROLLED_JSONL = ROOT / "data" / "peru-sunat-noncontrolled-lubricants.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
 SON_MANCAP_JSONL = ROOT / "data" / "son-mancap-chemical-lubricant-products.jsonl"
@@ -3106,6 +3107,53 @@ def ecuador_inen_current_record(row: dict) -> dict:
     return record
 
 
+def peru_sunat_noncontrolled_record(row: dict) -> dict:
+    """Convert one SUNAT non-controlled regulatory product identity."""
+    brand = row["brand"] or "Brand not stated (SUNAT source)"
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": brand,
+        "name": row["product_name"],
+        "category": "Peru SUNAT non-controlled lubricant or technical fluid",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": "",
+        "api_class": "",
+        "viscosity": "",
+        "grease_class": "",
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer_or_certificate_holder"],
+        "brand": brand,
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": row["source_item_numbers"][0],
+        "evidence_status": row["evidence_status"],
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["dataset_snapshot_date"],
+    })
+    record["specifications"].update({
+        "peru_sunat_source_item_numbers": row["source_item_numbers"],
+        "peru_sunat_source_pdf_pages": row["source_pdf_pages"],
+        "peru_sunat_source_product_fields": row["source_product_fields"],
+        "peru_sunat_source_code_text": row["source_code_text"],
+        "peru_sunat_regulatory_evaluation": row["source_evaluation"],
+        "peru_sunat_source_list_date": row["source_list_date"],
+        "peru_sunat_source_quality_flags": row["source_quality_flags"],
+        "source_url": row["source_url"],
+        "source_facts_sha256": row["source_facts_sha256"],
+    })
+    # SUNAT does not publish manufacturer identity or technical performance.
+    # Keep the regulatory list identity separate from similarly named products.
+    record["canonical_key"] += f"|peru_sunat_item:{row['source_item_numbers'][0]}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    return record
+
+
 def kebs_smark_record(row: dict) -> dict:
     """Convert one normalized product identity from the public KEBS S-Mark directory."""
     technical = row["technical"]
@@ -4894,6 +4942,9 @@ def main() -> None:
     ecuador_inen_current_source_rows = [json.loads(line) for line in ECUADOR_INEN_CURRENT_JSONL.read_text(encoding="utf-8").splitlines() if line]
     ecuador_inen_current_records = [ecuador_inen_current_record(row) for row in ecuador_inen_current_source_rows]
     input_records.extend(ecuador_inen_current_records)
+    peru_sunat_noncontrolled_source_rows = [json.loads(line) for line in PERU_SUNAT_NONCONTROLLED_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    peru_sunat_noncontrolled_records = [peru_sunat_noncontrolled_record(row) for row in peru_sunat_noncontrolled_source_rows]
+    input_records.extend(peru_sunat_noncontrolled_records)
     ecuador_inen_current_record_by_id = {
         raw["source_record_id"]: record
         for raw, record in zip(ecuador_inen_current_source_rows, ecuador_inen_current_records)
@@ -7275,6 +7326,7 @@ def main() -> None:
         "ecuador_inen_certified_input_sha256": hashlib.sha256(ECUADOR_INEN_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "ecuador_inen_current_input_sha256": hashlib.sha256(ECUADOR_INEN_CURRENT_JSONL.read_bytes()).hexdigest(),
         "ecuador_inen_current_report_sha256": hashlib.sha256(ECUADOR_INEN_CURRENT_REPORT.read_bytes()).hexdigest(),
+        "peru_sunat_noncontrolled_input_sha256": hashlib.sha256(PERU_SUNAT_NONCONTROLLED_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "son_mancap_input_sha256": hashlib.sha256(SON_MANCAP_JSONL.read_bytes()).hexdigest(),
@@ -7435,6 +7487,7 @@ def main() -> None:
         "ecuador_inen_current_source_rows": len(ecuador_inen_current_source_rows),
         "ecuador_inen_announcement_rows_matched_to_current": ecuador_inen_announcement_rows_matched_to_current,
         "ecuador_inen_announcement_products_added": ecuador_inen_announcement_products_added,
+        "peru_sunat_noncontrolled_source_rows": len(peru_sunat_noncontrolled_source_rows),
         "kebs_smark_source_rows": len(kebs_smark_source_rows),
         "east_africa_certified_source_rows": len(east_africa_certified_source_rows),
         "east_africa_certified_source_rows_by_source": dict(sorted(Counter(row["source_id"] for row in east_africa_certified_source_rows).items())),

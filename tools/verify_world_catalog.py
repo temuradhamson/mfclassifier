@@ -220,6 +220,8 @@ def main() -> None:
     ecuador_inen_rows = [json.loads(line) for line in (ROOT / "data/ecuador-inen-certified-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     ecuador_inen_current_report = json.loads((ROOT / "data/ecuador-inen-current-certified-lubricants-report.json").read_text(encoding="utf-8"))
     ecuador_inen_current_rows = [json.loads(line) for line in (ROOT / "data/ecuador-inen-current-certified-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    peru_sunat_report = json.loads((ROOT / "data/peru-sunat-noncontrolled-lubricants-report.json").read_text(encoding="utf-8"))
+    peru_sunat_rows = [json.loads(line) for line in (ROOT / "data/peru-sunat-noncontrolled-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_report = json.loads((ROOT / "data/kebs-smark-lubricant-products-report.json").read_text(encoding="utf-8"))
     kebs_smark_rows = [json.loads(line) for line in (ROOT / "data/kebs-smark-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     east_africa_report = json.loads((ROOT / "data/east-africa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -270,6 +272,7 @@ def main() -> None:
         + report["yantai_china_products_added"]
         + report["ecuador_inen_current_source_rows"]
         + report["ecuador_inen_announcement_products_added"]
+        + report["peru_sunat_noncontrolled_source_rows"]
         - report["gm_dual_standard_license_rows_merged"]
         - report["fuchs_exact_payload_identity_rows_matched"]
         - report["fuchs_exact_content_identity_rows_matched"]
@@ -975,17 +978,17 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 4973
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3044
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 106106
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 106105
-    assert report["quality_issues"]["professional_key_incomplete"] == 68406
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 106193
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 106192
+    assert report["quality_issues"]["professional_key_incomplete"] == 68493
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
         WHERE q.issue_code='professional_key_incomplete'
         GROUP BY p.family_code
     """)) == {
-        "C": 2060, "E": 148, "G": 10825, "H": 4761, "I": 3493,
-        "M": 22143, "S": 6855, "T": 10985, "TF": 6540, "U": 596,
+        "C": 2060, "E": 148, "G": 10845, "H": 4762, "I": 3495,
+        "M": 22143, "S": 6906, "T": 10985, "TF": 6553, "U": 596,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -1960,6 +1963,25 @@ def main() -> None:
     assert db.execute(
         "SELECT count(*) FROM product_sources WHERE source_id='ECUADOR_INEN_2026_07_CURRENT_CERTIFIED_LUBRICANTS'"
     ).fetchone()[0] == 410
+    assert peru_sunat_report["source_pdf_sha256"] == "f8e154f1b352853fcc95aabebf4543b71905eef8e097742cc87b7b93c4e61ce8"
+    assert peru_sunat_report["source_pdf_pages"] == 302
+    assert peru_sunat_report["audited_all_product_rows"] == 4518
+    assert peru_sunat_report["broad_candidate_rows_reviewed"] == 176
+    assert peru_sunat_report["relevant_source_occurrences"] == 95
+    assert peru_sunat_report["duplicate_source_occurrences_collapsed"] == 8
+    assert peru_sunat_report["normalized_product_identities"] == len(peru_sunat_rows) == 87
+    assert peru_sunat_report["families"] == {"G": 20, "H": 1, "I": 2, "S": 51, "TF": 13}
+    assert peru_sunat_report["source_table_extraction_anomalies"] == 1
+    assert all(row["source_evaluation"] == "NO CONTROLADO" for row in peru_sunat_rows)
+    assert all(not (row["manufacturer_or_certificate_holder"] or ({"address", "phone", "email", "contact_person"} & set(row))) for row in peru_sunat_rows)
+    assert policy_by_id["PERU_SUNAT_2025_NONCONTROLLED_LUBRICANT_PRODUCTS"]["source_sha256"] == peru_sunat_report["normalized_output_sha256"]
+    assert policy_by_id["PERU_SUNAT_2025_NONCONTROLLED_LUBRICANT_PRODUCTS"]["observed_count"] == 87
+    assert db.execute(
+        "SELECT count(*) FROM products WHERE source_id='PERU_SUNAT_2025_NONCONTROLLED_LUBRICANT_PRODUCTS'"
+    ).fetchone()[0] == 87
+    assert db.execute(
+        "SELECT count(*) FROM product_sources WHERE source_id='PERU_SUNAT_2025_NONCONTROLLED_LUBRICANT_PRODUCTS'"
+    ).fetchone()[0] == 87
     assert policy_by_id["nsf-white-book"]["bulk_ingest_allowed"] is False
     assert policy_by_id["FLENDER_T7300_APPROVED_LUBRICANTS"]["bulk_ingest_allowed"] is False
     chemexpo_names = {row["product_name"].casefold() for row in epa_chemexpo_rows}

@@ -1,0 +1,27 @@
+{
+  "audited_all_product_rows": 4518,
+  "broad_candidate_rows_reviewed": 176,
+  "dataset_snapshot_date": "2026-07-22",
+  "duplicate_source_occurrences_collapsed": 8,
+  "families": {
+    "G": 20,
+    "H": 1,
+    "I": 2,
+    "S": 51,
+    "TF": 13
+  },
+  "method": "all 4,518 sequential table rows parsed; 176 broad lexical candidates manually reviewed; only explicit lubricant and technical-fluid names retained",
+  "normalized_output_sha256": "3e9c1e8d5862017116b694e1ceeea691d5023743ba1b362432c2200bdfb07431",
+  "normalized_product_identities": 87,
+  "relevant_source_occurrences": 95,
+  "rows_excluded_after_candidate_review": 81,
+  "scope_warning": "NO CONTROLADO is a SUNAT regulatory evaluation result, not a lubricant approval or performance certification",
+  "source_list_date": "2025-04-30",
+  "source_pdf_created_at": "2025-05-20T10:08:21-05:00",
+  "source_pdf_pages": 302,
+  "source_pdf_sha256": "f8e154f1b352853fcc95aabebf4543b71905eef8e097742cc87b7b93c4e61ce8",
+  "source_pdf_title": "Productos Consultados VIGENCIA DEL DS 268 2019 EF.xlsx",
+  "source_table_extraction_anomalies": 1,
+  "source_url": "https://orientacion.sunat.gob.pe/sites/default/files/inline-files/PORTAL%203%20Productos%20NO%20CONTROLADOS%20NACIONAL%20DS%20268%202019%20%2030.04.2025_2.pdf",
+  "status": "official_peru_sunat_noncontrolled_lubricant_product_evidence_normalized"
+}
