@@ -3345,6 +3345,7 @@ def fuchs_catalog_record(row: dict, source_id: str, market_name: str) -> dict:
         "grain_warning": row["grain_warning"],
         "fuchs_source_description_sha256": row.get("source_description_sha256", []),
         "fuchs_payload_identity_sha256": fuchs_payload_identity_sha256(row),
+        "fuchs_content_identity_sha256": fuchs_content_identity_sha256(row),
     })
     source_key = {
         "FUCHS_INDIA_PRODUCT_FINDER": "fuchs_india_record",
@@ -3415,12 +3416,34 @@ def fuchs_payload_identity_sha256(row: dict) -> str:
     return hashlib.sha256(serialized.encode()).hexdigest()
 
 
-def fuchs_description_hashes_unique_to_name_family() -> set[str]:
-    """Return reusable FUCHS description hashes from conflict-free name/families."""
+def fuchs_content_identity_sha256(row: dict) -> str:
+    """Hash exact current-catalog content while ignoring market publication dates."""
     empty_description_sha256 = hashlib.sha256(b"").hexdigest()
-    identities: dict[str, set[tuple[str, str]]] = defaultdict(set)
+    description_hashes = sorted(
+        value for value in row.get("source_description_sha256", [])
+        if value and value != empty_description_sha256
+    )
+    if not description_hashes:
+        return ""
+    payload = {
+        "source_description_sha256": description_hashes,
+        "specifications": sorted(row.get("specifications", [])),
+        "approvals": sorted(row.get("approvals", [])),
+        "fuchs_recommendations": sorted(row.get("fuchs_recommendations", [])),
+        "technical": row.get("technical", {}),
+    }
+    serialized = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(serialized.encode()).hexdigest()
+
+
+def fuchs_identity_hashes_unique_to_name_family() -> dict[str, set[str]]:
+    """Return reusable FUCHS hashes from globally conflict-free name/families."""
+    empty_description_sha256 = hashlib.sha256(b"").hexdigest()
+    description_identities: dict[str, set[tuple[str, str]]] = defaultdict(set)
+    content_identities: dict[str, set[tuple[str, str]]] = defaultdict(set)
     records_by_identity: dict[tuple[str, str], list[dict]] = defaultdict(list)
-    occurrences = Counter()
+    description_occurrences = Counter()
+    content_occurrences = Counter()
     for path in sorted((ROOT / "data").glob("fuchs-*-products.jsonl")):
         for line in path.read_text(encoding="utf-8").splitlines():
             if not line:
@@ -3432,8 +3455,12 @@ def fuchs_description_hashes_unique_to_name_family() -> set[str]:
             )
             for value in row.get("source_description_sha256", []):
                 if value and value != empty_description_sha256:
-                    identities[value].add(identity)
-                    occurrences[value] += 1
+                    description_identities[value].add(identity)
+                    description_occurrences[value] += 1
+            content_identity = fuchs_content_identity_sha256(row)
+            if content_identity:
+                content_identities[content_identity].add(identity)
+                content_occurrences[content_identity] += 1
     conflicting_identities = set()
     for identity, records in records_by_identity.items():
         for index, left in enumerate(records):
@@ -3441,9 +3468,16 @@ def fuchs_description_hashes_unique_to_name_family() -> set[str]:
                 conflicting_identities.add(identity)
                 break
     return {
-        value for value, name_families in identities.items()
-        if len(name_families) == 1 and occurrences[value] > 1
-        and next(iter(name_families)) not in conflicting_identities
+        "description": {
+            value for value, name_families in description_identities.items()
+            if len(name_families) == 1 and description_occurrences[value] > 1
+            and next(iter(name_families)) not in conflicting_identities
+        },
+        "content": {
+            value for value, name_families in content_identities.items()
+            if len(name_families) == 1 and content_occurrences[value] > 1
+            and next(iter(name_families)) not in conflicting_identities
+        },
     }
 
 
@@ -3455,7 +3489,7 @@ def as_value_list(value: object) -> list:
 
 def select_fuchs_identity_match(
     matches: list[dict], source_record: dict, raw: dict,
-    unique_description_hashes: set[str],
+    unique_description_hashes: set[str], unique_content_hashes: set[str],
 ) -> tuple[dict | None, str | None]:
     """Select one existing current FUCHS identity using exact source evidence."""
     if len(matches) == 1:
@@ -3483,6 +3517,15 @@ def select_fuchs_identity_match(
         for index, left in enumerate(current_group)
         for right in current_group[index + 1:]
     )
+    content_identity = fuchs_content_identity_sha256(raw)
+    if content_identity in unique_content_hashes and not group_has_professional_conflict:
+        content_matches = [
+            row for row in matches
+            if content_identity in as_value_list(row["specifications"].get("fuchs_content_identity_sha256", []))
+            and not exclusive_duplicate_conflicts(row, source_record)
+        ]
+        if len(content_matches) == 1:
+            return content_matches[0], "exact_content_identity"
     if description_hashes and not group_has_professional_conflict:
         description_matches = [
             row for row in matches
@@ -3511,6 +3554,7 @@ def merge_fuchs_catalog_evidence(target: dict, source_record: dict, raw: dict) -
     for field, values in {
         "fuchs_source_description_sha256": raw.get("source_description_sha256", []),
         "fuchs_payload_identity_sha256": [fuchs_payload_identity_sha256(raw)],
+        "fuchs_content_identity_sha256": [fuchs_content_identity_sha256(raw)],
     }.items():
         existing = target["specifications"].get(field, [])
         existing = existing if isinstance(existing, list) else [existing]
@@ -3522,7 +3566,8 @@ def merge_fuchs_catalog_evidence(target: dict, source_record: dict, raw: dict) -
 def integrate_fuchs_market(
     input_records: list[dict], source_rows: list[dict], source_id: str,
     market_name: str, prior_market_rows: list[dict],
-    unique_description_hashes: set[str], identity_match_counts: dict[str, Counter],
+    unique_description_hashes: set[str], unique_content_hashes: set[str],
+    identity_match_counts: dict[str, Counter],
 ) -> dict:
     """Attach one official FUCHS market while preserving ambiguous identities for review."""
     source_records = [fuchs_catalog_record(row, source_id, market_name) for row in source_rows]
@@ -3542,13 +3587,17 @@ def integrate_fuchs_market(
     for raw, source_record in zip(source_rows, source_records):
         name = normalize(raw["product_name"])
         matches = existing_by_name_family[(name, raw["family_code"])]
-        target, match_basis = select_fuchs_identity_match(matches, source_record, raw, unique_description_hashes)
+        target, match_basis = select_fuchs_identity_match(
+            matches, source_record, raw, unique_description_hashes, unique_content_hashes
+        )
         if target is not None:
             if match_basis == "exact_payload_identity":
                 payload_matched_rows += 1
                 identity_match_counts["payload"][source_id] += 1
             elif match_basis == "exact_description_identity":
                 identity_match_counts["description"][source_id] += 1
+            elif match_basis == "exact_content_identity":
+                identity_match_counts["content"][source_id] += 1
             merge_fuchs_catalog_evidence(target, source_record, raw)
             matched_rows += 1
         else:
@@ -4856,8 +4905,12 @@ def main() -> None:
     thailand_doeb_records = [thailand_doeb_record(row) for row in thailand_doeb_source_rows]
     dla_qpd_source_rows = [json.loads(line) for line in DLA_QPD_JSONL.read_text(encoding="utf-8").splitlines() if line]
     dla_qpd_records = [dla_qpd_record(row) for row in dla_qpd_source_rows]
-    fuchs_unique_description_hashes = fuchs_description_hashes_unique_to_name_family()
-    fuchs_identity_match_counts = {"payload": Counter(), "description": Counter()}
+    fuchs_unique_identity_hashes = fuchs_identity_hashes_unique_to_name_family()
+    fuchs_unique_description_hashes = fuchs_unique_identity_hashes["description"]
+    fuchs_unique_content_hashes = fuchs_unique_identity_hashes["content"]
+    fuchs_identity_match_counts = {
+        "payload": Counter(), "content": Counter(), "description": Counter(),
+    }
     fuchs_india_source_rows = [json.loads(line) for line in FUCHS_INDIA_JSONL.read_text(encoding="utf-8").splitlines() if line]
     fuchs_india_records = [fuchs_catalog_record(row, "FUCHS_INDIA_PRODUCT_FINDER", "India") for row in fuchs_india_source_rows]
     existing_by_name_family = defaultdict(list)
@@ -4872,9 +4925,9 @@ def main() -> None:
             row for row in existing_by_name_family[(normalize(raw["product_name"]), raw["family_code"])]
             if brand_tokens_overlap("FUCHS", row["brand"])
         ]
-        target, match_basis = select_fuchs_identity_match(matches, source_record, raw, fuchs_unique_description_hashes)
+        target, match_basis = select_fuchs_identity_match(matches, source_record, raw, fuchs_unique_description_hashes, fuchs_unique_content_hashes)
         if target is not None:
-            if match_basis in {"exact_payload_identity", "exact_description_identity"}:
+            if match_basis in {"exact_payload_identity", "exact_content_identity", "exact_description_identity"}:
                 fuchs_identity_match_counts[match_basis.removeprefix("exact_").removesuffix("_identity")]["FUCHS_INDIA_PRODUCT_FINDER"] += 1
             merge_fuchs_catalog_evidence(target, source_record, raw)
             fuchs_india_matched_rows += 1
@@ -4914,9 +4967,9 @@ def main() -> None:
     for raw, source_record in zip(fuchs_us_source_rows, fuchs_us_records):
         name = normalize(raw["product_name"])
         matches = existing_by_name_family[(name, raw["family_code"])]
-        target, match_basis = select_fuchs_identity_match(matches, source_record, raw, fuchs_unique_description_hashes)
+        target, match_basis = select_fuchs_identity_match(matches, source_record, raw, fuchs_unique_description_hashes, fuchs_unique_content_hashes)
         if target is not None:
-            if match_basis in {"exact_payload_identity", "exact_description_identity"}:
+            if match_basis in {"exact_payload_identity", "exact_content_identity", "exact_description_identity"}:
                 fuchs_identity_match_counts[match_basis.removeprefix("exact_").removesuffix("_identity")]["FUCHS_US_PRODUCT_FINDER"] += 1
             merge_fuchs_catalog_evidence(target, source_record, raw)
             fuchs_us_matched_rows += 1
@@ -4960,9 +5013,9 @@ def main() -> None:
     for raw, source_record in zip(fuchs_germany_source_rows, fuchs_germany_records):
         name = normalize(raw["product_name"])
         matches = existing_by_name_family[(name, raw["family_code"])]
-        target, match_basis = select_fuchs_identity_match(matches, source_record, raw, fuchs_unique_description_hashes)
+        target, match_basis = select_fuchs_identity_match(matches, source_record, raw, fuchs_unique_description_hashes, fuchs_unique_content_hashes)
         if target is not None:
-            if match_basis in {"exact_payload_identity", "exact_description_identity"}:
+            if match_basis in {"exact_payload_identity", "exact_content_identity", "exact_description_identity"}:
                 fuchs_identity_match_counts[match_basis.removeprefix("exact_").removesuffix("_identity")]["FUCHS_GERMANY_PRODUCT_FINDER"] += 1
             merge_fuchs_catalog_evidence(target, source_record, raw)
             fuchs_germany_matched_rows += 1
@@ -5006,9 +5059,9 @@ def main() -> None:
     for raw, source_record in zip(fuchs_poland_source_rows, fuchs_poland_records):
         name = normalize(raw["product_name"])
         matches = existing_by_name_family[(name, raw["family_code"])]
-        target, match_basis = select_fuchs_identity_match(matches, source_record, raw, fuchs_unique_description_hashes)
+        target, match_basis = select_fuchs_identity_match(matches, source_record, raw, fuchs_unique_description_hashes, fuchs_unique_content_hashes)
         if target is not None:
-            if match_basis in {"exact_payload_identity", "exact_description_identity"}:
+            if match_basis in {"exact_payload_identity", "exact_content_identity", "exact_description_identity"}:
                 fuchs_identity_match_counts[match_basis.removeprefix("exact_").removesuffix("_identity")]["FUCHS_POLAND_PRODUCT_FINDER"] += 1
             merge_fuchs_catalog_evidence(target, source_record, raw)
             fuchs_poland_matched_rows += 1
@@ -5052,9 +5105,9 @@ def main() -> None:
     for raw, source_record in zip(fuchs_italy_source_rows, fuchs_italy_records):
         name = normalize(raw["product_name"])
         matches = existing_by_name_family[(name, raw["family_code"])]
-        target, match_basis = select_fuchs_identity_match(matches, source_record, raw, fuchs_unique_description_hashes)
+        target, match_basis = select_fuchs_identity_match(matches, source_record, raw, fuchs_unique_description_hashes, fuchs_unique_content_hashes)
         if target is not None:
-            if match_basis in {"exact_payload_identity", "exact_description_identity"}:
+            if match_basis in {"exact_payload_identity", "exact_content_identity", "exact_description_identity"}:
                 fuchs_identity_match_counts[match_basis.removeprefix("exact_").removesuffix("_identity")]["FUCHS_ITALY_PRODUCT_FINDER"] += 1
             merge_fuchs_catalog_evidence(target, source_record, raw)
             fuchs_italy_matched_rows += 1
@@ -5097,9 +5150,9 @@ def main() -> None:
     for raw, source_record in zip(fuchs_sweden_source_rows, fuchs_sweden_records):
         name = normalize(raw["product_name"])
         matches = existing_by_name_family[(name, raw["family_code"])]
-        target, match_basis = select_fuchs_identity_match(matches, source_record, raw, fuchs_unique_description_hashes)
+        target, match_basis = select_fuchs_identity_match(matches, source_record, raw, fuchs_unique_description_hashes, fuchs_unique_content_hashes)
         if target is not None:
-            if match_basis in {"exact_payload_identity", "exact_description_identity"}:
+            if match_basis in {"exact_payload_identity", "exact_content_identity", "exact_description_identity"}:
                 fuchs_identity_match_counts[match_basis.removeprefix("exact_").removesuffix("_identity")]["FUCHS_SWEDEN_PRODUCT_FINDER"] += 1
             merge_fuchs_catalog_evidence(target, source_record, raw)
             fuchs_sweden_matched_rows += 1
@@ -5142,9 +5195,9 @@ def main() -> None:
     for raw, source_record in zip(fuchs_spain_source_rows, fuchs_spain_records):
         name = normalize(raw["product_name"])
         matches = existing_by_name_family[(name, raw["family_code"])]
-        target, match_basis = select_fuchs_identity_match(matches, source_record, raw, fuchs_unique_description_hashes)
+        target, match_basis = select_fuchs_identity_match(matches, source_record, raw, fuchs_unique_description_hashes, fuchs_unique_content_hashes)
         if target is not None:
-            if match_basis in {"exact_payload_identity", "exact_description_identity"}:
+            if match_basis in {"exact_payload_identity", "exact_content_identity", "exact_description_identity"}:
                 fuchs_identity_match_counts[match_basis.removeprefix("exact_").removesuffix("_identity")]["FUCHS_SPAIN_PRODUCT_FINDER"] += 1
             merge_fuchs_catalog_evidence(target, source_record, raw)
             fuchs_spain_matched_rows += 1
@@ -5187,9 +5240,9 @@ def main() -> None:
     for raw, source_record in zip(fuchs_france_source_rows, fuchs_france_records):
         name = normalize(raw["product_name"])
         matches = existing_by_name_family[(name, raw["family_code"])]
-        target, match_basis = select_fuchs_identity_match(matches, source_record, raw, fuchs_unique_description_hashes)
+        target, match_basis = select_fuchs_identity_match(matches, source_record, raw, fuchs_unique_description_hashes, fuchs_unique_content_hashes)
         if target is not None:
-            if match_basis in {"exact_payload_identity", "exact_description_identity"}:
+            if match_basis in {"exact_payload_identity", "exact_content_identity", "exact_description_identity"}:
                 fuchs_identity_match_counts[match_basis.removeprefix("exact_").removesuffix("_identity")]["FUCHS_FRANCE_PRODUCT_FINDER"] += 1
             merge_fuchs_catalog_evidence(target, source_record, raw)
             fuchs_france_matched_rows += 1
@@ -5232,9 +5285,9 @@ def main() -> None:
     for raw, source_record in zip(fuchs_turkey_source_rows, fuchs_turkey_records):
         name = normalize(raw["product_name"])
         matches = existing_by_name_family[(name, raw["family_code"])]
-        target, match_basis = select_fuchs_identity_match(matches, source_record, raw, fuchs_unique_description_hashes)
+        target, match_basis = select_fuchs_identity_match(matches, source_record, raw, fuchs_unique_description_hashes, fuchs_unique_content_hashes)
         if target is not None:
-            if match_basis in {"exact_payload_identity", "exact_description_identity"}:
+            if match_basis in {"exact_payload_identity", "exact_content_identity", "exact_description_identity"}:
                 fuchs_identity_match_counts[match_basis.removeprefix("exact_").removesuffix("_identity")]["FUCHS_TURKEY_PRODUCT_FINDER"] += 1
             merge_fuchs_catalog_evidence(target, source_record, raw)
             fuchs_turkey_matched_rows += 1
@@ -5277,9 +5330,9 @@ def main() -> None:
     for raw, source_record in zip(fuchs_canada_source_rows, fuchs_canada_records):
         name = normalize(raw["product_name"])
         matches = existing_by_name_family[(name, raw["family_code"])]
-        target, match_basis = select_fuchs_identity_match(matches, source_record, raw, fuchs_unique_description_hashes)
+        target, match_basis = select_fuchs_identity_match(matches, source_record, raw, fuchs_unique_description_hashes, fuchs_unique_content_hashes)
         if target is not None:
-            if match_basis in {"exact_payload_identity", "exact_description_identity"}:
+            if match_basis in {"exact_payload_identity", "exact_content_identity", "exact_description_identity"}:
                 fuchs_identity_match_counts[match_basis.removeprefix("exact_").removesuffix("_identity")]["FUCHS_CANADA_PRODUCT_FINDER"] += 1
             merge_fuchs_catalog_evidence(target, source_record, raw)
             fuchs_canada_matched_rows += 1
@@ -5322,9 +5375,9 @@ def main() -> None:
     for raw, source_record in zip(fuchs_china_source_rows, fuchs_china_records):
         name = normalize(raw["product_name"])
         matches = existing_by_name_family[(name, raw["family_code"])]
-        target, match_basis = select_fuchs_identity_match(matches, source_record, raw, fuchs_unique_description_hashes)
+        target, match_basis = select_fuchs_identity_match(matches, source_record, raw, fuchs_unique_description_hashes, fuchs_unique_content_hashes)
         if target is not None:
-            if match_basis in {"exact_payload_identity", "exact_description_identity"}:
+            if match_basis in {"exact_payload_identity", "exact_content_identity", "exact_description_identity"}:
                 fuchs_identity_match_counts[match_basis.removeprefix("exact_").removesuffix("_identity")]["FUCHS_CHINA_PRODUCT_FINDER"] += 1
             merge_fuchs_catalog_evidence(target, source_record, raw)
             fuchs_china_matched_rows += 1
@@ -5359,9 +5412,9 @@ def main() -> None:
     for raw, source_record in zip(fuchs_czech_source_rows, fuchs_czech_records):
         name = normalize(raw["product_name"])
         matches = existing_by_name_family[(name, raw["family_code"])]
-        target, match_basis = select_fuchs_identity_match(matches, source_record, raw, fuchs_unique_description_hashes)
+        target, match_basis = select_fuchs_identity_match(matches, source_record, raw, fuchs_unique_description_hashes, fuchs_unique_content_hashes)
         if target is not None:
-            if match_basis in {"exact_payload_identity", "exact_description_identity"}:
+            if match_basis in {"exact_payload_identity", "exact_content_identity", "exact_description_identity"}:
                 fuchs_identity_match_counts[match_basis.removeprefix("exact_").removesuffix("_identity")]["FUCHS_CZECH_PRODUCT_FINDER"] += 1
             merge_fuchs_catalog_evidence(target, source_record, raw)
             fuchs_czech_matched_rows += 1
@@ -5379,31 +5432,31 @@ def main() -> None:
         fuchs_czech_product_key[raw["source_record_id"]] = target["canonical_key"]
     prior_fuchs_rows = fuchs_india_source_rows + fuchs_us_source_rows + fuchs_germany_source_rows + fuchs_poland_source_rows + fuchs_italy_source_rows + fuchs_sweden_source_rows + fuchs_spain_source_rows + fuchs_france_source_rows + fuchs_turkey_source_rows + fuchs_canada_source_rows + fuchs_china_source_rows + fuchs_czech_source_rows
     fuchs_mexico_source_rows = [json.loads(line) for line in FUCHS_MEXICO_JSONL.read_text(encoding="utf-8").splitlines() if line]
-    fuchs_mexico = integrate_fuchs_market(input_records, fuchs_mexico_source_rows, "FUCHS_MEXICO_PRODUCT_FINDER", "Mexico", prior_fuchs_rows, fuchs_unique_description_hashes, fuchs_identity_match_counts)
+    fuchs_mexico = integrate_fuchs_market(input_records, fuchs_mexico_source_rows, "FUCHS_MEXICO_PRODUCT_FINDER", "Mexico", prior_fuchs_rows, fuchs_unique_description_hashes, fuchs_unique_content_hashes, fuchs_identity_match_counts)
     fuchs_mexico_product_key = fuchs_mexico["product_key"]
     fuchs_mexico_added_rows, fuchs_mexico_matched_rows = fuchs_mexico["added"], fuchs_mexico["matched"]
     fuchs_mexico_review_keys, fuchs_mexico_family_conflict_keys = fuchs_mexico["review_keys"], fuchs_mexico["family_conflict_keys"]
     fuchs_mexico_cross_market_exact_name_family_rows, fuchs_mexico_cross_market_family_conflict_rows = fuchs_mexico["exact"], fuchs_mexico["conflicts"]
     fuchs_south_africa_source_rows = [json.loads(line) for line in FUCHS_SOUTH_AFRICA_JSONL.read_text(encoding="utf-8").splitlines() if line]
-    fuchs_south_africa = integrate_fuchs_market(input_records, fuchs_south_africa_source_rows, "FUCHS_SOUTH_AFRICA_PRODUCT_FINDER", "South Africa", prior_fuchs_rows + fuchs_mexico_source_rows, fuchs_unique_description_hashes, fuchs_identity_match_counts)
+    fuchs_south_africa = integrate_fuchs_market(input_records, fuchs_south_africa_source_rows, "FUCHS_SOUTH_AFRICA_PRODUCT_FINDER", "South Africa", prior_fuchs_rows + fuchs_mexico_source_rows, fuchs_unique_description_hashes, fuchs_unique_content_hashes, fuchs_identity_match_counts)
     fuchs_south_africa_product_key = fuchs_south_africa["product_key"]
     fuchs_south_africa_added_rows, fuchs_south_africa_matched_rows = fuchs_south_africa["added"], fuchs_south_africa["matched"]
     fuchs_south_africa_review_keys, fuchs_south_africa_family_conflict_keys = fuchs_south_africa["review_keys"], fuchs_south_africa["family_conflict_keys"]
     fuchs_south_africa_cross_market_exact_name_family_rows, fuchs_south_africa_cross_market_family_conflict_rows = fuchs_south_africa["exact"], fuchs_south_africa["conflicts"]
     fuchs_brazil_source_rows = [json.loads(line) for line in FUCHS_BRAZIL_JSONL.read_text(encoding="utf-8").splitlines() if line]
-    fuchs_brazil = integrate_fuchs_market(input_records, fuchs_brazil_source_rows, "FUCHS_BRAZIL_PRODUCT_FINDER", "Brazil", prior_fuchs_rows + fuchs_mexico_source_rows + fuchs_south_africa_source_rows, fuchs_unique_description_hashes, fuchs_identity_match_counts)
+    fuchs_brazil = integrate_fuchs_market(input_records, fuchs_brazil_source_rows, "FUCHS_BRAZIL_PRODUCT_FINDER", "Brazil", prior_fuchs_rows + fuchs_mexico_source_rows + fuchs_south_africa_source_rows, fuchs_unique_description_hashes, fuchs_unique_content_hashes, fuchs_identity_match_counts)
     fuchs_brazil_product_key = fuchs_brazil["product_key"]
     fuchs_brazil_added_rows, fuchs_brazil_matched_rows = fuchs_brazil["added"], fuchs_brazil["matched"]
     fuchs_brazil_review_keys, fuchs_brazil_family_conflict_keys = fuchs_brazil["review_keys"], fuchs_brazil["family_conflict_keys"]
     fuchs_brazil_cross_market_exact_name_family_rows, fuchs_brazil_cross_market_family_conflict_rows = fuchs_brazil["exact"], fuchs_brazil["conflicts"]
     fuchs_norway_source_rows = [json.loads(line) for line in FUCHS_NORWAY_JSONL.read_text(encoding="utf-8").splitlines() if line]
-    fuchs_norway = integrate_fuchs_market(input_records, fuchs_norway_source_rows, "FUCHS_NORWAY_PRODUCT_FINDER", "Norway", prior_fuchs_rows + fuchs_mexico_source_rows + fuchs_south_africa_source_rows + fuchs_brazil_source_rows, fuchs_unique_description_hashes, fuchs_identity_match_counts)
+    fuchs_norway = integrate_fuchs_market(input_records, fuchs_norway_source_rows, "FUCHS_NORWAY_PRODUCT_FINDER", "Norway", prior_fuchs_rows + fuchs_mexico_source_rows + fuchs_south_africa_source_rows + fuchs_brazil_source_rows, fuchs_unique_description_hashes, fuchs_unique_content_hashes, fuchs_identity_match_counts)
     fuchs_norway_product_key = fuchs_norway["product_key"]
     fuchs_norway_added_rows, fuchs_norway_matched_rows = fuchs_norway["added"], fuchs_norway["matched"]
     fuchs_norway_review_keys, fuchs_norway_family_conflict_keys = fuchs_norway["review_keys"], fuchs_norway["family_conflict_keys"]
     fuchs_norway_cross_market_exact_name_family_rows, fuchs_norway_cross_market_family_conflict_rows = fuchs_norway["exact"], fuchs_norway["conflicts"]
     fuchs_hungary_source_rows = [json.loads(line) for line in FUCHS_HUNGARY_JSONL.read_text(encoding="utf-8").splitlines() if line]
-    fuchs_hungary = integrate_fuchs_market(input_records, fuchs_hungary_source_rows, "FUCHS_HUNGARY_PRODUCT_FINDER", "Hungary", prior_fuchs_rows + fuchs_mexico_source_rows + fuchs_south_africa_source_rows + fuchs_brazil_source_rows + fuchs_norway_source_rows, fuchs_unique_description_hashes, fuchs_identity_match_counts)
+    fuchs_hungary = integrate_fuchs_market(input_records, fuchs_hungary_source_rows, "FUCHS_HUNGARY_PRODUCT_FINDER", "Hungary", prior_fuchs_rows + fuchs_mexico_source_rows + fuchs_south_africa_source_rows + fuchs_brazil_source_rows + fuchs_norway_source_rows, fuchs_unique_description_hashes, fuchs_unique_content_hashes, fuchs_identity_match_counts)
     fuchs_hungary_product_key = fuchs_hungary["product_key"]
     fuchs_hungary_added_rows, fuchs_hungary_matched_rows = fuchs_hungary["added"], fuchs_hungary["matched"]
     fuchs_hungary_review_keys, fuchs_hungary_family_conflict_keys = fuchs_hungary["review_keys"], fuchs_hungary["family_conflict_keys"]
@@ -5412,7 +5465,7 @@ def main() -> None:
     additional_prior_rows = prior_fuchs_rows + fuchs_mexico_source_rows + fuchs_south_africa_source_rows + fuchs_brazil_source_rows + fuchs_norway_source_rows + fuchs_hungary_source_rows
     for slug, source_path, source_id, market_name in FUCHS_ADDITIONAL_MARKETS:
         source_rows = [json.loads(line) for line in source_path.read_text(encoding="utf-8").splitlines() if line]
-        integration = integrate_fuchs_market(input_records, source_rows, source_id, market_name, additional_prior_rows, fuchs_unique_description_hashes, fuchs_identity_match_counts)
+        integration = integrate_fuchs_market(input_records, source_rows, source_id, market_name, additional_prior_rows, fuchs_unique_description_hashes, fuchs_unique_content_hashes, fuchs_identity_match_counts)
         additional_fuchs[slug] = {"source_path": source_path, "source_id": source_id, "source_rows": source_rows, **integration}
         additional_prior_rows += source_rows
     chemexpo_by_name_family = defaultdict(list)
@@ -6861,6 +6914,7 @@ def main() -> None:
     JSONL_OUT.write_text("".join(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n" for row in records), encoding="utf-8")
     compress_jsonl()
     fuchs_payload_matches_by_source = dict(sorted(fuchs_identity_match_counts["payload"].items()))
+    fuchs_content_matches_by_source = dict(sorted(fuchs_identity_match_counts["content"].items()))
     fuchs_description_matches_by_source = dict(sorted(fuchs_identity_match_counts["description"].items()))
     report = {
         "schema_version": SCHEMA_VERSION,
@@ -7212,9 +7266,12 @@ def main() -> None:
         "fuchs_hungary_cross_market_family_conflict_rows": fuchs_hungary_cross_market_family_conflict_rows,
         "fuchs_exact_payload_identity_rows_matched": sum(fuchs_payload_matches_by_source.values()),
         "fuchs_exact_payload_identity_rows_matched_by_source": fuchs_payload_matches_by_source,
+        "fuchs_exact_content_identity_rows_matched": sum(fuchs_content_matches_by_source.values()),
+        "fuchs_exact_content_identity_rows_matched_by_source": fuchs_content_matches_by_source,
         "fuchs_unique_description_identity_rows_matched": sum(fuchs_description_matches_by_source.values()),
         "fuchs_unique_description_identity_rows_matched_by_source": fuchs_description_matches_by_source,
         "fuchs_unique_description_hashes": len(fuchs_unique_description_hashes),
+        "fuchs_unique_content_hashes": len(fuchs_unique_content_hashes),
         "jaso_source_rows": len(jaso_source_rows),
         "jaso_unique_oil_codes": len({r["oil_code"] for r in jaso_source_rows}),
         "aichilon_source_products": len(aichilon_products) + len(exclusions),

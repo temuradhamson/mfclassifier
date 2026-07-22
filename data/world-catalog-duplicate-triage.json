@@ -26,12 +26,12 @@
     },
     {
       "decision": "review_fuchs_multi_registry_identity",
-      "pairs": 1345,
+      "pairs": 938,
       "triage_status": "compatible_partial_specification_review"
     },
     {
       "decision": "review_fuchs_multi_registry_identity",
-      "pairs": 741,
+      "pairs": 576,
       "triage_status": "complete_exact_signature_candidate"
     },
     {
@@ -83,12 +83,12 @@
     },
     {
       "family_code": "M",
-      "pairs": 1733,
+      "pairs": 1326,
       "triage_status": "compatible_partial_specification_review"
     },
     {
       "family_code": "M",
-      "pairs": 472,
+      "pairs": 307,
       "triage_status": "complete_exact_signature_candidate"
     },
     {
@@ -132,16 +132,16 @@
       "triage_status": "insufficient_comparable_evidence"
     }
   ],
-  "canonical_products": 105734,
-  "compressed_database_sha256": "b91e0d4dc62aa6c3ce4cd63b7f8447397fb6cac0a83a633d4a56237d45dc0c1f",
-  "distinct_products_in_review": 1353,
+  "canonical_products": 105699,
+  "compressed_database_sha256": "0723848a0f9cd75eabdefb989699eb6577d05fa342a8a4dd7c21713ed4f2b879",
+  "distinct_products_in_review": 1318,
   "duplicate_decision_rows_collapsed": {
     "by_decision_combination": {
       "keep_separate_professional_signature_conflict + keep_separate_professional_signature_conflict": 11,
-      "review_cross_source_identity + review_fuchs_multi_registry_identity": 2002,
+      "review_cross_source_identity + review_fuchs_multi_registry_identity": 1500,
       "review_cross_source_identity + review_liqui_moly_current_multiple_historical_candidates": 2
     },
-    "total_extra_rows_removed": 2015
+    "total_extra_rows_removed": 1513
   },
   "examples": {
     "compatible_partial_specification_review": [
@@ -349,7 +349,7 @@
   "retained_source_code_collisions": {
     "gm_same_license_different_product_names": 1
   },
-  "review_pairs": 3529,
+  "review_pairs": 2957,
   "self_pairs_remaining": 0,
   "shared_code_system_counts": {
     "ANP_BRAZIL_REGISTRATION_NUMBER": 167
@@ -357,8 +357,8 @@
   "snapshot_date": "2026-07-22",
   "status": "offline_duplicate_triage_no_unproven_auto_merge",
   "triage_status_counts": {
-    "compatible_partial_specification_review": 1842,
-    "complete_exact_signature_candidate": 770,
+    "compatible_partial_specification_review": 1435,
+    "complete_exact_signature_candidate": 605,
     "insufficient_comparable_evidence": 917
   }
 }
