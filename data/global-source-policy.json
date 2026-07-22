@@ -1911,6 +1911,21 @@
       "notes": "The official current TIS 1040-2541 search exposes ten manufacturing licences across nine exact company holders. The linked data.go.th dataset is published under Creative Commons Attribution. Each normalized row remains a licence-holder certification scope, not a marketed brand, grade or SKU; no SAE/API value or current-validity claim is inferred."
     },
     {
+      "source_id": "SHENZHEN_CHINA_2019_AUTOMOTIVE_FLUID_INSPECTION",
+      "title": "Shenzhen 2019 complete automotive-fluid inspection",
+      "owner": "Shenzhen Administration for Market Regulation",
+      "source_type": "official_municipal_government_complete_product_quality_inspection_xls_workbooks",
+      "source_locator": "data/shenzhen-2019-automotive-fluid-inspection.jsonl",
+      "source_url": "https://www.sz.gov.cn/cn/xxgk/zfxxgj/scjg/cpzljy/content/post_6601774.html",
+      "terms_url": "https://www.sz.gov.cn/cn/qt/gywm/",
+      "source_sha256": "0e90597c54009911eafcbc54163ee0cd8836456f0193f921f69a2cd5d87acc4f",
+      "access_status": "public_official_government_information_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_document_redistribution",
+      "observed_count": 60,
+      "notes": "The official complete workbooks contain all 60 inspected batches: 20 automotive urea solutions, 20 fuel additives and 20 brake or clutch fluids. Fifty-one had no nonconforming item found and nine failed: four urea, three additive and two brake-fluid batches. Ten observations reconcile to nine existing 2020-2023 identities, one repeated JMC batch is merged, and 49 catalog products are added while all 60 source links remain. Source-reported AUS30 remains an explicitly flagged atypical value and is not silently changed to AUS32. Retailers and source workbooks are not redistributed; inspection outcomes are historical batch evidence, never current offers or blanket approvals."
+    },
+    {
       "source_id": "SHENZHEN_CHINA_2020_AUTOMOTIVE_FLUID_INSPECTION",
       "title": "Shenzhen 2020 complete automotive-fluid inspection",
       "owner": "Shenzhen Administration for Market Regulation",

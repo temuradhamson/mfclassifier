@@ -1,0 +1,51 @@
+{
+  "status": "official_shenzhen_2019_complete_automotive_fluid_inspection_normalized",
+  "source_id": "SHENZHEN_CHINA_2019_AUTOMOTIVE_FLUID_INSPECTION",
+  "source_url": "https://www.sz.gov.cn/cn/xxgk/zfxxgj/scjg/cpzljy/content/post_6601774.html",
+  "attachment_urls": {
+    "conforming": "http://www.sz.gov.cn/attachment/0/452/452428/6601774.xls",
+    "nonconforming": "http://www.sz.gov.cn/attachment/0/452/452430/6601774.xls"
+  },
+  "snapshot_date": "2026-07-22",
+  "report_date": "2019-12-25",
+  "source_xls_sha256": {
+    "conforming": "838dec55b34970ddbd4e6ccdcd7654f2551940c0104d676c5a631bd0cbb8b81e",
+    "nonconforming": "cae0176f84915f288d929ef9e2bfd372475b96ff0670519bc6d154eb283ed846"
+  },
+  "source_rows": 60,
+  "outcomes": {
+    "conforming": 51,
+    "nonconforming": 9
+  },
+  "source_product_types": {
+    "机动车制动液": 20,
+    "车用尿素溶液": 20,
+    "车用燃油添加剂": 20
+  },
+  "outcomes_by_product_type": {
+    "机动车制动液": {
+      "conforming": 18,
+      "nonconforming": 2
+    },
+    "车用尿素溶液": {
+      "conforming": 16,
+      "nonconforming": 4
+    },
+    "车用燃油添加剂": {
+      "conforming": 17,
+      "nonconforming": 3
+    }
+  },
+  "families_before_identity_merging": {
+    "S": 20,
+    "TF": 40
+  },
+  "rows_with_brake_class": 19,
+  "rows_with_aus32": 3,
+  "rows_with_atypical_aus30": 1,
+  "normalized_output_sha256": "0e90597c54009911eafcbc54163ee0cd8836456f0193f921f69a2cd5d87acc4f",
+  "grain_note": "One output row is one inspected batch observation. Product identities merge later only under strict producer, product and package-independent technical identity while every occurrence remains linked.",
+  "scope_note": "Both official workbooks are complete: all 51 conforming and all nine nonconforming rows are retained, matching the official 20 urea + 20 fuel-additive + 20 brake-fluid program totals.",
+  "lifecycle_note": "No-problem-found means only that the sampled batch passed this inspection. Neither outcome is treated as a current offer or blanket approval.",
+  "privacy_note": "Inspected retailers are excluded; nominal producer, product, brand, model, batch date, outcome and failure facts are retained."
+}
