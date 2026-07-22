@@ -1,8 +1,8 @@
 {
   "active_offers": 3044,
   "canonical_key_duplicates": 0,
-  "canonical_products": 105666,
-  "compressed_database_sha256": "b8f159a75c22e1a341b9bddf2653e256598e506b491a0277489f733e895e4a5b",
+  "canonical_products": 105674,
+  "compressed_database_sha256": "db1c71d831d3a1c1358ed6c5a434ec2ca2ac77e7d896b1c355cf7736c8dc84e0",
   "duplicate_review_queues": [
     {
       "candidate_pairs": 10769,
@@ -15,14 +15,14 @@
       "distinct_products_involved": 415
     },
     {
-      "candidate_pairs": 690,
+      "candidate_pairs": 699,
       "decision": "keep_separate_professional_signature_conflict",
-      "distinct_products_involved": 735
+      "distinct_products_involved": 736
     },
     {
-      "candidate_pairs": 582,
+      "candidate_pairs": 585,
       "decision": "review_cross_source_identity",
-      "distinct_products_involved": 797
+      "distinct_products_involved": 798
     },
     {
       "candidate_pairs": 482,
@@ -53,16 +53,16 @@
   "family_coverage": [
     {
       "both_percent": 51.55,
-      "both_selector_and_technical_basis_present": 24513,
+      "both_selector_and_technical_basis_present": 24517,
       "existing_professional_key_gate_implemented": true,
-      "existing_professional_key_issue": 22122,
+      "existing_professional_key_issue": 22124,
       "family": "Моторные масла",
       "family_code": "M",
-      "products": 47556,
+      "products": 47562,
       "selector_grade_or_class_percent": 89.92,
-      "selector_grade_or_class_present": 42760,
+      "selector_grade_or_class_present": 42766,
       "technical_basis_percent": 53.59,
-      "technical_basis_present": 25486
+      "technical_basis_present": 25490
     },
     {
       "both_percent": 37.04,
@@ -123,9 +123,9 @@
       "existing_professional_key_issue": 4761,
       "family": "Гидравлические масла",
       "family_code": "H",
-      "products": 5946,
-      "selector_grade_or_class_percent": 21.21,
-      "selector_grade_or_class_present": 1261,
+      "products": 5948,
+      "selector_grade_or_class_percent": 21.23,
+      "selector_grade_or_class_present": 1263,
       "technical_basis_percent": 6.22,
       "technical_basis_present": 370
     },
@@ -182,25 +182,25 @@
       "technical_basis_present": 7
     }
   ],
-  "input_rows_before_canonicalization": 105667,
+  "input_rows_before_canonicalization": 105675,
   "interpretation": {
-    "confirmed_count": "105666 is the verified canonical row count of the current seed, not the final number of all products worldwide.",
+    "confirmed_count": "105674 is the verified canonical row count of the current seed, not the final number of all products worldwide.",
     "duplicate_metric": "Review pairs are candidates or conflicts, not proven removable duplicates.",
     "professional_gate_scope": "Family-specific professional_key_incomplete rules cover M/T/G/H/I/C/U/E/TF/S; source-level gaps remain explicit and are not filled by inference.",
     "selector_metric": "Presence is measured only from explicit normalized fields; absence may reflect source granularity rather than a parsing defect."
   },
-  "primary_sources_used": 121,
-  "products_using_explicitly_marked_brand_fallback": 36261,
-  "products_with_at_least_one_source_link": 105666,
-  "products_with_family": 105666,
+  "primary_sources_used": 122,
+  "products_using_explicitly_marked_brand_fallback": 36263,
+  "products_with_at_least_one_source_link": 105674,
+  "products_with_family": 105674,
   "products_with_missing_manufacturer": 85,
-  "products_with_normalized_name": 105666,
-  "products_with_primary_source_hash": 105666,
-  "products_with_primary_source_url": 105075,
+  "products_with_normalized_name": 105674,
+  "products_with_primary_source_hash": 105674,
+  "products_with_primary_source_url": 105083,
   "quality_issue_details": [
     {
       "issue_code": "professional_key_incomplete",
-      "rows": 68373,
+      "rows": 68375,
       "severity": "medium"
     },
     {
@@ -377,9 +377,9 @@
   "quality_issues_by_severity": {
     "high": 311,
     "low": 15,
-    "medium": 68491
+    "medium": 68493
   },
   "snapshot_date": "2026-07-22",
-  "source_registry_entries": 168,
+  "source_registry_entries": 169,
   "status": "offline_quality_audit_current_seed_not_worldwide_completion"
 }

@@ -11,7 +11,7 @@
     },
     {
       "decision": "review_cross_source_identity",
-      "pairs": 455,
+      "pairs": 458,
       "triage_status": "compatible_partial_specification_review"
     },
     {
@@ -83,7 +83,7 @@
     },
     {
       "family_code": "M",
-      "pairs": 1098,
+      "pairs": 1101,
       "triage_status": "compatible_partial_specification_review"
     },
     {
@@ -132,9 +132,9 @@
       "triage_status": "insufficient_comparable_evidence"
     }
   ],
-  "canonical_products": 105666,
-  "compressed_database_sha256": "b8f159a75c22e1a341b9bddf2653e256598e506b491a0277489f733e895e4a5b",
-  "distinct_products_in_review": 1285,
+  "canonical_products": 105674,
+  "compressed_database_sha256": "db1c71d831d3a1c1358ed6c5a434ec2ca2ac77e7d896b1c355cf7736c8dc84e0",
+  "distinct_products_in_review": 1286,
   "duplicate_decision_rows_collapsed": {
     "by_decision_combination": {
       "keep_separate_professional_signature_conflict + keep_separate_professional_signature_conflict": 11,
@@ -341,15 +341,15 @@
       "coolant_freezing_point_source_reported": 7,
       "iso_vg": 20,
       "jaso_family_detail": 3,
-      "sae_engine": 624,
+      "sae_engine": 633,
       "sae_gear": 42
     },
-    "explicit_professional_signature_conflict": 690
+    "explicit_professional_signature_conflict": 699
   },
   "retained_source_code_collisions": {
     "gm_same_license_different_product_names": 1
   },
-  "review_pairs": 2566,
+  "review_pairs": 2569,
   "self_pairs_remaining": 0,
   "shared_code_system_counts": {
     "ANP_BRAZIL_REGISTRATION_NUMBER": 167
@@ -357,7 +357,7 @@
   "snapshot_date": "2026-07-22",
   "status": "offline_duplicate_triage_no_unproven_auto_merge",
   "triage_status_counts": {
-    "compatible_partial_specification_review": 1192,
+    "compatible_partial_specification_review": 1195,
     "complete_exact_signature_candidate": 469,
     "insufficient_comparable_evidence": 905
   }

@@ -2371,6 +2371,21 @@
       "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_document_redistribution",
       "observed_count": 205,
       "notes": "All 209 official rows were audited; 205 relevant observations are retained, four denatured-ethanol rows are excluded, and all 13 nonconforming outcomes including three suspected counterfeits remain explicit."
+    },
+    {
+      "source_id": "WUXI_CHINA_2024_LUBRICANT_INSPECTION",
+      "title": "Wuxi 2024 complete lubricant inspection",
+      "owner": "Wuxi Administration for Market Regulation",
+      "source_type": "official_municipal_government_complete_product_quality_inspection_xls",
+      "source_locator": "data/wuxi-2024-lubricant-inspection.jsonl",
+      "source_url": "https://scjgj.wuxi.gov.cn/doc/2024/09/04/4386075.shtml",
+      "terms_url": "https://scjgj.wuxi.gov.cn/",
+      "source_sha256": "158788de44efc3e7f47c899210d01cbb76a6c138947ccf28efb5051762efad61",
+      "access_status": "public_official_government_information_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_document_redistribution",
+      "observed_count": 10,
+      "notes": "All ten official workbook rows are retained: eight engine oils and two hydraulic oils, all conforming at the sampled batch. Retailers, inspected units and addresses are omitted."
     }
   ]
 }
