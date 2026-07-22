@@ -1,0 +1,126 @@
+{
+  "status": "official_jilin_2024_2025_automotive_fluid_inspections_normalized",
+  "snapshot_date": "2026-07-22",
+  "rights_url": "https://scjg.jl.gov.cn/gywm/",
+  "source_files": [
+    {
+      "year": "2024",
+      "source_url": "https://scjg.jl.gov.cn/jianguan/zlcc/202501/t20250113_9032819.html",
+      "attachment_url": "https://scjg.jl.gov.cn/jianguan/zlcc/202501/P020250113350321815316.pdf",
+      "source_pdf_sha256": "095535608bce0826e046264dc79be24c2f7c7d1429d252dd850f18aae6a35461",
+      "source_rows": 206,
+      "source_pages": 17
+    },
+    {
+      "year": "2025",
+      "source_url": "https://scjg.jl.gov.cn/jianguan/zlcc/202602/t20260202_9413231.html",
+      "attachment_url": "https://scjg.jl.gov.cn/jianguan/zlcc/202602/P020260624601397455443.pdf",
+      "source_pdf_sha256": "e437192cab367b60ed0b2b58812e1eaebda2df643e41812a7c4eb45998368c3d",
+      "source_rows": 209,
+      "source_pages": 20
+    }
+  ],
+  "source_all_rows": 415,
+  "retained_product_observations": 404,
+  "excluded_motor_fuel_rows": 11,
+  "excluded_motor_fuels": [
+    {
+      "year": "2024",
+      "source_row": 10,
+      "product_name": "车用柴油"
+    },
+    {
+      "year": "2024",
+      "source_row": 11,
+      "product_name": "车用乙醇汽油调和组分油"
+    },
+    {
+      "year": "2024",
+      "source_row": 12,
+      "product_name": "车用乙醇汽油调和组分油"
+    },
+    {
+      "year": "2024",
+      "source_row": 13,
+      "product_name": "变性燃料乙醇"
+    },
+    {
+      "year": "2024",
+      "source_row": 16,
+      "product_name": "变性燃料乙醇"
+    },
+    {
+      "year": "2024",
+      "source_row": 63,
+      "product_name": "车用乙醇汽油调合组分油"
+    },
+    {
+      "year": "2024",
+      "source_row": 66,
+      "product_name": "车用乙醇汽油调合组分油"
+    },
+    {
+      "year": "2025",
+      "source_row": 20,
+      "product_name": "变性燃料乙醇"
+    },
+    {
+      "year": "2025",
+      "source_row": 59,
+      "product_name": "变性燃料乙醇"
+    },
+    {
+      "year": "2025",
+      "source_row": 60,
+      "product_name": "变性燃料乙醇"
+    },
+    {
+      "year": "2025",
+      "source_row": 142,
+      "product_name": "变性燃料乙醇"
+    }
+  ],
+  "unavailable_historical_source": {
+    "title": "2023年吉林省车用油品产品质量专项监督抽查结果汇总表",
+    "attachment_url": "https://scjg.jl.gov.cn/jianguan/zlcc/202402/P020240410402479715129.pdf",
+    "status_at_snapshot": "official_attachment_http_404_not_ingested"
+  },
+  "source_counts": {
+    "JILIN_CHINA_2024_AUTOMOTIVE_FLUID_INSPECTION": 199,
+    "JILIN_CHINA_2025_AUTOMOTIVE_FLUID_INSPECTION": 205
+  },
+  "outcomes": {
+    "conforming": 379,
+    "nonconforming": 25
+  },
+  "suspected_counterfeit": 3,
+  "product_kinds": {
+    "automotive aqueous urea solution": 74,
+    "automotive fuel-system additive or cleaner": 46,
+    "automotive windshield washer fluid": 70,
+    "motor-vehicle brake fluid": 72,
+    "motor-vehicle engine coolant": 72,
+    "motor-vehicle engine oil": 70
+  },
+  "families": {
+    "M": 70,
+    "S": 46,
+    "TF": 288
+  },
+  "rows_with_api": 70,
+  "rows_with_sae": 70,
+  "rows_with_acea": 1,
+  "rows_with_ilsac": 1,
+  "rows_with_brake_class": 71,
+  "rows_with_coolant_class": 69,
+  "rows_with_coolant_freezing_point": 69,
+  "rows_with_washer_class": 70,
+  "rows_with_washer_freezing_point": 7,
+  "rows_with_aus32": 74,
+  "normalized_output_sha256": "d5b24bc245017ace44b800cddc0d8b4e4486ccda62c68a2097012cddb193b5d6",
+  "grain_note": "One output row is one inspected batch observation. Strict product identity is resolved later while every occurrence remains linked.",
+  "scope_note": "All 415 official table rows were audited; 404 lubricant, coolant, brake, washer, urea and fuel-additive observations are retained and 11 motor-fuel rows are excluded.",
+  "historical_gap_note": "The indexed official 2023 attachment currently returns HTTP 404 and is not represented as ingested data.",
+  "privacy_note": "Retail sellers and inspected units are excluded from normalized records and factual hashes; only product-side facts are retained.",
+  "lifecycle_note": "A conforming result applies only to the sampled batch and does not prove a current offer, recommendation or blanket approval."
+}

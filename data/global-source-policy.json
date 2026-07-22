@@ -2341,6 +2341,36 @@
       "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_document_redistribution",
       "observed_count": 23,
       "notes": "All six detergent-additive, nine gear-oil and eight hydraulic-oil observations are retained. The one nonconforming GL-5 SAE 85W-90 batch remains historical evidence and is never treated as approved."
+    },
+    {
+      "source_id": "JILIN_CHINA_2024_AUTOMOTIVE_FLUID_INSPECTION",
+      "title": "Jilin 2024 complete automotive-fluid inspection",
+      "owner": "Jilin Provincial Administration for Market Regulation",
+      "source_type": "official_provincial_government_complete_product_quality_inspection_pdf",
+      "source_locator": "data/jilin-2024-2025-automotive-fluid-inspections.jsonl",
+      "source_url": "https://scjg.jl.gov.cn/jianguan/zlcc/202501/t20250113_9032819.html",
+      "terms_url": "https://scjg.jl.gov.cn/gywm/",
+      "source_sha256": "d5b24bc245017ace44b800cddc0d8b4e4486ccda62c68a2097012cddb193b5d6",
+      "access_status": "public_official_government_information_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_document_redistribution",
+      "observed_count": 199,
+      "notes": "All 206 official rows were audited; 199 lubricant, coolant, brake, washer, urea and fuel-additive observations are retained and seven motor-fuel rows are excluded. Retailers are omitted."
+    },
+    {
+      "source_id": "JILIN_CHINA_2025_AUTOMOTIVE_FLUID_INSPECTION",
+      "title": "Jilin 2025 complete automotive-fluid inspection",
+      "owner": "Jilin Provincial Administration for Market Regulation",
+      "source_type": "official_provincial_government_complete_product_quality_inspection_pdf",
+      "source_locator": "data/jilin-2024-2025-automotive-fluid-inspections.jsonl",
+      "source_url": "https://scjg.jl.gov.cn/jianguan/zlcc/202602/t20260202_9413231.html",
+      "terms_url": "https://scjg.jl.gov.cn/gywm/",
+      "source_sha256": "d5b24bc245017ace44b800cddc0d8b4e4486ccda62c68a2097012cddb193b5d6",
+      "access_status": "public_official_government_information_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_document_redistribution",
+      "observed_count": 205,
+      "notes": "All 209 official rows were audited; 205 relevant observations are retained, four denatured-ethanol rows are excluded, and all 13 nonconforming outcomes including three suspected counterfeits remain explicit."
     }
   ]
 }
