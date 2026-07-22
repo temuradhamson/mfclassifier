@@ -148,6 +148,8 @@ def main() -> None:
     anp_rows = [json.loads(line) for line in (ROOT / "data/anp-brazil-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     anp_monitoring_report = json.loads((ROOT / "data/anp-brazil-monitoring-report.json").read_text(encoding="utf-8"))
     anp_monitoring_rows = [json.loads(line) for line in (ROOT / "data/anp-brazil-monitoring-observations.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    anp_monitoring_pdf_report = json.loads((ROOT / "data/anp-brazil-monitoring-pdf-report.json").read_text(encoding="utf-8"))
+    anp_monitoring_pdf_rows = [json.loads(line) for line in (ROOT / "data/anp-brazil-monitoring-pdf-observations.jsonl").read_text(encoding="utf-8").splitlines() if line]
     indonesia_report = json.loads((ROOT / "data/indonesia-npt-lubricant-products-report.json").read_text(encoding="utf-8"))
     indonesia_rows = [json.loads(line) for line in (ROOT / "data/indonesia-npt-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     thailand_doeb_report = json.loads((ROOT / "data/thailand-doeb-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -638,8 +640,8 @@ def main() -> None:
     assert report["liqui_moly_current_products_matched_to_2020"] == 295
     assert report["liqui_moly_current_products_added"] == 152
     assert report["liqui_moly_current_article_skus"] == liqui_moly_current_report["unique_article_skus"] == 985
-    assert report["duplicate_decisions"]["review_cross_source_identity"] == 5948
-    assert report["duplicate_decisions"]["keep_separate_specification_conflict"] == 10282
+    assert report["duplicate_decisions"]["review_cross_source_identity"] == 6054
+    assert report["duplicate_decisions"]["keep_separate_specification_conflict"] == 10289
     assert db.execute("""
         SELECT count(*) FROM duplicate_decisions d
         JOIN products a ON a.product_id=d.product_id_a
@@ -824,7 +826,8 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='LIQUI_MOLY_MASTER_SKU'").fetchone()[0] == 447
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='LIQUI_MOLY_ARTICLE_SKU'").fetchone()[0] == 985
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='ANP_BRAZIL_REGISTRATION_NUMBER'").fetchone()[0] == 12664 + report["anp_brazil_monitoring_registered_historical_identities_added"]
-    assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='ANP_BRAZIL_LUBRICANT_MONITORING_HISTORY'").fetchone()[0] == len(anp_monitoring_rows) + report["anp_brazil_monitoring_historical_identities_added"]
+    assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='ANP_BRAZIL_LUBRICANT_MONITORING_HISTORY'").fetchone()[0] == 12048
+    assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='ANP_BRAZIL_LUBRICANT_MONITORING_PDF_HISTORY'").fetchone()[0] == 1552
     assert len(anp_monitoring_rows) == 11026
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='INDONESIA_NPT_REGISTRATION_NUMBER'").fetchone()[0] == 12575
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='INDONESIA_NPT_LUBRICANT_REGISTRY'").fetchone()[0] == 12626
@@ -1686,7 +1689,16 @@ def main() -> None:
         "source_reported_additive_absence": 51,
         "source_reported_without_registration": 8,
     }
-    assert report["anp_brazil_monitoring_source_observations"] == len(anp_monitoring_rows)
+    assert policy_by_id["ANP_BRAZIL_LUBRICANT_MONITORING_PDF_HISTORY"]["source_sha256"] == anp_monitoring_pdf_report["normalized_output_sha256"]
+    assert policy_by_id["ANP_BRAZIL_LUBRICANT_MONITORING_PDF_HISTORY"]["observed_count"] == len(anp_monitoring_pdf_rows) == 1425
+    assert report["anp_brazil_monitoring_pdf_input_sha256"] == hashlib.sha256((ROOT / "data/anp-brazil-monitoring-pdf-observations.jsonl").read_bytes()).hexdigest()
+    assert anp_monitoring_pdf_report["official_pdf_files"] == 3
+    assert anp_monitoring_pdf_report["normalized_product_grade_holder_identities"] == 693
+    assert [row["published_product_rows"] for row in anp_monitoring_pdf_report["files"]] == [782, 462, 181]
+    assert [row["published_minus_reported"] for row in anp_monitoring_pdf_report["files"]] == [0, 0, -9]
+    assert report["anp_brazil_monitoring_xlsx_source_observations"] == len(anp_monitoring_rows)
+    assert report["anp_brazil_monitoring_pdf_source_observations"] == len(anp_monitoring_pdf_rows)
+    assert report["anp_brazil_monitoring_source_observations"] == len(anp_monitoring_rows) + len(anp_monitoring_pdf_rows)
     assert report["anp_brazil_monitoring_product_grade_identities"] == (
         report["anp_brazil_monitoring_identities_matched_to_current_registry"]
         + report["anp_brazil_monitoring_historical_identities_added"]
@@ -1695,6 +1707,9 @@ def main() -> None:
     assert report["anp_brazil_monitoring_registered_historical_identities_added"] + report["anp_brazil_monitoring_unregistered_historical_identities_added"] == report["anp_brazil_monitoring_historical_identities_added"]
     assert all(row["lifecycle_status"] == "historical_market_sample_observation" for row in anp_monitoring_rows)
     assert all(not ({"registration_holder_cnpj", "collection_location", "address"} & set(row)) for row in anp_monitoring_rows)
+    assert all(row["published_scope"] == "complete_analyzed_products_list" for row in anp_monitoring_pdf_rows)
+    assert all(row["lifecycle_status"] == "historical_market_sample_observation" for row in anp_monitoring_pdf_rows)
+    assert all(not ({"cnpj", "registration_holder_cnpj", "collection_location", "address", "municipality", "retailer"} & set(row)) for row in anp_monitoring_pdf_rows)
     forbidden_tables = {"users", "requests", "request_items", "prices", "oil_market_sales"}
     output_tables = {row[0] for row in db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
     assert not forbidden_tables & output_tables

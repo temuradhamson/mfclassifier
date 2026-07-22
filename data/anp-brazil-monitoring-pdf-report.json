@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "status": "official_open_government_pdf_monitoring_tables_normalized",
+  "snapshot_date": "2026-07-22",
+  "source_page_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletins/boletim-de-monitoramento-de-lubrificantes",
+  "terms_url": "https://www.gov.br/pt-br/termos-de-uso",
+  "normalized_output_sha256": "1c993eb6e665acb99f69c6f204ed74ac979dcf27620799db1d41fd0f364aaedc",
+  "official_pdf_files": 3,
+  "files": [
+    {
+      "report_key": "PML-2024-2",
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2024/boletim-pml-2-2024.pdf",
+      "source_sha256": "2bd37bd766745466542680cf48c2d062c41135562507d3542f666218c75d743b",
+      "published_product_rows": 782,
+      "reported_samples_analyzed": 782,
+      "published_minus_reported": 0,
+      "product_table_pages": [
+        32,
+        97
+      ]
+    },
+    {
+      "report_key": "PML-2024-1",
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2024/boletim-pml-1-2024-v2.pdf",
+      "source_sha256": "6f75f2412b1c899cb583d320b71fa75aa0274aff755cab220b0f2f5788c34f3f",
+      "published_product_rows": 462,
+      "reported_samples_analyzed": 462,
+      "published_minus_reported": 0,
+      "product_table_pages": [
+        31,
+        66
+      ]
+    },
+    {
+      "report_key": "TRANSMISSION-2024-1",
+      "source_url": "https://www.gov.br/anp/pt-br/assuntos/qualidade-de-produtos/arquivos-cpt/relatorio-n-1-24-panorama-transmissao.pdf",
+      "source_sha256": "4bb068ddc7b017491d39a61807e5df27d9f3a364601619b0d530d83bf24a6cad",
+      "published_product_rows": 181,
+      "reported_samples_analyzed": 190,
+      "published_minus_reported": -9,
+      "product_table_pages": [
+        29,
+        42
+      ]
+    }
+  ],
+  "source_observations": 1425,
+  "normalized_product_grade_holder_identities": 693,
+  "observations_by_family_hint": {
+    "M": 1244,
+    "T": 181
+  },
+  "rights_note": "ANP publishes the reports on gov.br. Only normalized factual fields and provenance are republished; PDF layout, narrative, CNPJ and collection-location fields are omitted.",
+  "scope_note": "Complete product tables published in the two 2024 PML motor-oil bulletins and the 2024 automotive-transmission panorama. The transmission report states 190 analyzed samples but publishes 181 machine-extractable product rows; the nine-row source discrepancy is retained and no rows are invented.",
+  "correction_note": "The second-version transmission PDF contains ANP-issued corrections. This ingest reads the corrected document as published, including DULUB HIPOIDE registration 12340; it does not reconstruct superseded values.",
+  "lifecycle_note": "A monitoring observation proves that a labelled sample existed and was analysed. It is historical evidence, not proof of current registration or market availability."
+}

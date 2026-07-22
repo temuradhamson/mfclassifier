@@ -945,7 +945,22 @@
       "bulk_ingest_allowed": true,
       "publication_status": "normalized_factual_observations_with_attribution",
       "observed_count": 11026,
-      "notes": "Полный машиночитаемый слой из 28 XLSX, опубликованных на официальной странице PML для 2017-2026 годов. Сохранены только продукт, регистрация, держатель, SAE, уровень свойств, лот, даты, координата строки и хэши файлов; адреса, CNPJ и оформление книг исключены. Наблюдение доказывает исторический отбор образца, но не текущую регистрацию или доступность. PDF-only выпуски до октября 2017 и выпуски 2024 остаются отдельным backlog."
+      "notes": "Полный машиночитаемый слой из 28 XLSX, опубликованных на официальной странице PML для 2017-2026 годов. Сохранены только продукт, регистрация, держатель, SAE, уровень свойств, лот, даты, координата строки и хэши файлов; адреса, CNPJ и оформление книг исключены. Наблюдение доказывает исторический отбор образца, но не текущую регистрацию или доступность. PDF-only выпуски до октября 2017 остаются отдельным backlog; полные таблицы 2024 подключены отдельным источником."
+    },
+    {
+      "source_id": "ANP_BRAZIL_LUBRICANT_MONITORING_PDF_HISTORY",
+      "title": "ANP Brazil Lubricant Monitoring Complete PDF Tables 2024",
+      "owner": "Agência Nacional do Petróleo, Gás Natural e Biocombustíveis",
+      "source_type": "official_open_government_monitoring_pdf_archive",
+      "source_locator": "data/anp-brazil-monitoring-pdf-observations.jsonl",
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletins/boletim-de-monitoramento-de-lubrificantes",
+      "terms_url": "https://www.gov.br/pt-br/termos-de-uso",
+      "source_sha256": "1c993eb6e665acb99f69c6f204ed74ac979dcf27620799db1d41fd0f364aaedc",
+      "access_status": "public_open_government_data_cc_by_nd_3_0",
+      "bulk_ingest_allowed": true,
+      "publication_status": "normalized_factual_observations_with_attribution",
+      "observed_count": 1425,
+      "notes": "Полные координатно извлечённые таблицы продуктов из двух моторных бюллетеней PML 2024 и панорамы трансмиссионных масел 2024: 1 425 опубликованных наблюдений и 693 профессиональные product-grade identity. Моторные таблицы точно сходятся с заявленными 782 + 462 образцами; трансмиссионный отчёт заявляет 190, но публикует 181 строку, поэтому девять строк не выдуманы. CNPJ, продавцы и места отбора исключены."
     },
     {
       "source_id": "THAILAND_DOEB_LUBRICANT_REGISTRY",
