@@ -963,6 +963,21 @@
       "notes": "Полные координатно извлечённые таблицы продуктов из двух моторных бюллетеней PML 2024 и панорамы трансмиссионных масел 2024: 1 425 опубликованных наблюдений и 693 профессиональные product-grade identity. Моторные таблицы точно сходятся с заявленными 782 + 462 образцами; трансмиссионный отчёт заявляет 190, но публикует 181 строку, поэтому девять строк не выдуманы. CNPJ, продавцы и места отбора исключены."
     },
     {
+      "source_id": "ANP_BRAZIL_LUBRICANT_MONITORING_PDF_EXCEPTIONS",
+      "title": "ANP Brazil Lubricant Monitoring Nonconforming Product PDF Appendices 2007-2017",
+      "owner": "Agência Nacional do Petróleo, Gás Natural e Biocombustíveis",
+      "source_type": "official_open_government_monitoring_pdf_exception_archive",
+      "source_locator": "data/anp-brazil-monitoring-pdf-exceptions.jsonl",
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletins/boletim-de-monitoramento-de-lubrificantes",
+      "terms_url": "https://www.gov.br/pt-br/termos-de-uso",
+      "source_sha256": "82a77abe98c5bf591a49f98e4356d7be329e5600f7375bb4d96db38c47d34e76",
+      "access_status": "public_open_government_data_cc_by_nd_3_0",
+      "bulk_ingest_allowed": true,
+      "publication_status": "normalized_factual_exception_observations_with_attribution",
+      "observed_count": 4837,
+      "notes": "73 официальных PDF-выпуска 2007-2017 годов дали 4 837 исторических наблюдений и 5 612 появлений проб в приложениях о несоответствии регистрации, маркировки или качества. Это только опубликованные исключения, не полная совокупность отобранных проб. CNPJ, продавцы, адреса и места отбора исключены; сокращённые и физически разорванные номера CPT восстановлены только из контекста года и геометрии той же PDF-ячейки с явной пометкой метода."
+    },
+    {
       "source_id": "THAILAND_DOEB_LUBRICANT_REGISTRY",
       "title": "Thailand DOEB Motor Lubricant Registration Registry",
       "owner": "Thailand Department of Energy Business",

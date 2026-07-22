@@ -57,6 +57,7 @@ LIQUI_MOLY_CURRENT_JSONL = ROOT / "data" / "liqui-moly-current-products.jsonl"
 ANP_BRAZIL_JSONL = ROOT / "data" / "anp-brazil-lubricant-products.jsonl"
 ANP_BRAZIL_MONITORING_JSONL = ROOT / "data" / "anp-brazil-monitoring-observations.jsonl"
 ANP_BRAZIL_MONITORING_PDF_JSONL = ROOT / "data" / "anp-brazil-monitoring-pdf-observations.jsonl"
+ANP_BRAZIL_MONITORING_PDF_EXCEPTIONS_JSONL = ROOT / "data" / "anp-brazil-monitoring-pdf-exceptions.jsonl"
 INDONESIA_NPT_JSONL = ROOT / "data" / "indonesia-npt-lubricant-products.jsonl"
 THAILAND_DOEB_JSONL = ROOT / "data" / "thailand-doeb-lubricant-products.jsonl"
 DLA_QPD_JSONL = ROOT / "data" / "dla-qpd-lubricant-products.jsonl"
@@ -4167,10 +4168,35 @@ def main() -> None:
     input_records.extend(anp_brazil_records)
     anp_monitoring_xlsx_source_rows = [json.loads(line) for line in ANP_BRAZIL_MONITORING_JSONL.read_text(encoding="utf-8").splitlines() if line]
     anp_monitoring_pdf_source_rows = [json.loads(line) for line in ANP_BRAZIL_MONITORING_PDF_JSONL.read_text(encoding="utf-8").splitlines() if line]
-    anp_monitoring_source_rows = anp_monitoring_xlsx_source_rows + anp_monitoring_pdf_source_rows
+    anp_monitoring_pdf_exception_source_rows = [json.loads(line) for line in ANP_BRAZIL_MONITORING_PDF_EXCEPTIONS_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    anp_monitoring_complete_source_rows = anp_monitoring_xlsx_source_rows + anp_monitoring_pdf_source_rows
+    anp_monitoring_source_rows = anp_monitoring_complete_source_rows + anp_monitoring_pdf_exception_source_rows
     anp_monitoring_groups = defaultdict(list)
-    for raw in anp_monitoring_source_rows:
-        anp_monitoring_groups[anp_monitoring_identity_key(raw)].append(raw)
+    complete_identities_by_base = defaultdict(set)
+    for raw in anp_monitoring_complete_source_rows:
+        identity = anp_monitoring_identity_key(raw)
+        anp_monitoring_groups[identity].append(raw)
+        base = identity[:3] + (identity[4:] if len(identity) > 4 else ())
+        complete_identities_by_base[base].add(identity)
+    exception_raw_identity_keys = set()
+    exception_semantic_identity_keys = set()
+    exception_semantically_remapped_observations = 0
+    exception_semantically_remapped_identity_keys = set()
+    for raw in anp_monitoring_pdf_exception_source_rows:
+        raw_identity = anp_monitoring_identity_key(raw)
+        identity = raw_identity
+        base = identity[:3] + (identity[4:] if len(identity) > 4 else ())
+        # Exception appendices often omit API while a complete ANP table has
+        # exactly one grade for the same registration + name + SAE (+ holder
+        # when unregistered).  Only that one-candidate case is safe to merge.
+        if not identity[3] and len(complete_identities_by_base[base]) == 1:
+            identity = next(iter(complete_identities_by_base[base]))
+        if identity != raw_identity:
+            exception_semantically_remapped_observations += 1
+            exception_semantically_remapped_identity_keys.add(raw_identity)
+        exception_raw_identity_keys.add(raw_identity)
+        exception_semantic_identity_keys.add(identity)
+        anp_monitoring_groups[identity].append(raw)
     current_anp_index = defaultdict(list)
     for raw, record in zip(anp_brazil_source_rows, anp_brazil_records):
         current_anp_index[(
@@ -4184,6 +4210,7 @@ def main() -> None:
     anp_monitoring_added_identities = 0
     anp_monitoring_added_registered_identities = 0
     anp_monitoring_added_unregistered_identities = 0
+    anp_monitoring_added_identities_by_primary_source = Counter()
     for identity, occurrences in sorted(anp_monitoring_groups.items()):
         row = occurrences[0]
         base_key = (
@@ -4219,6 +4246,7 @@ def main() -> None:
             merge_anp_monitoring_evidence(target, occurrences, "historical_grade_absent_from_current_anp_snapshot", 0)
             input_records.append(target)
             anp_monitoring_added_identities += 1
+            anp_monitoring_added_identities_by_primary_source[row["source_id"]] += 1
             if row["registration_number"]:
                 anp_monitoring_added_registered_identities += 1
             else:
@@ -6187,6 +6215,7 @@ def main() -> None:
         "anp_brazil_input_sha256": hashlib.sha256(ANP_BRAZIL_JSONL.read_bytes()).hexdigest(),
         "anp_brazil_monitoring_input_sha256": hashlib.sha256(ANP_BRAZIL_MONITORING_JSONL.read_bytes()).hexdigest(),
         "anp_brazil_monitoring_pdf_input_sha256": hashlib.sha256(ANP_BRAZIL_MONITORING_PDF_JSONL.read_bytes()).hexdigest(),
+        "anp_brazil_monitoring_pdf_exceptions_input_sha256": hashlib.sha256(ANP_BRAZIL_MONITORING_PDF_EXCEPTIONS_JSONL.read_bytes()).hexdigest(),
         "indonesia_npt_input_sha256": hashlib.sha256(INDONESIA_NPT_JSONL.read_bytes()).hexdigest(),
         "thailand_doeb_input_sha256": hashlib.sha256(THAILAND_DOEB_JSONL.read_bytes()).hexdigest(),
         "dla_qpd_input_sha256": hashlib.sha256(DLA_QPD_JSONL.read_bytes()).hexdigest(),
@@ -6295,12 +6324,18 @@ def main() -> None:
         "anp_brazil_monitoring_source_observations": len(anp_monitoring_source_rows),
         "anp_brazil_monitoring_xlsx_source_observations": len(anp_monitoring_xlsx_source_rows),
         "anp_brazil_monitoring_pdf_source_observations": len(anp_monitoring_pdf_source_rows),
+        "anp_brazil_monitoring_pdf_exception_source_observations": len(anp_monitoring_pdf_exception_source_rows),
+        "anp_brazil_monitoring_pdf_exception_raw_identities": len(exception_raw_identity_keys),
+        "anp_brazil_monitoring_pdf_exception_semantic_target_identities": len(exception_semantic_identity_keys),
+        "anp_brazil_monitoring_pdf_exception_semantically_remapped_observations": exception_semantically_remapped_observations,
+        "anp_brazil_monitoring_pdf_exception_semantically_remapped_identities": len(exception_semantically_remapped_identity_keys),
         "anp_brazil_monitoring_product_grade_identities": len(anp_monitoring_groups),
         "anp_brazil_monitoring_identities_matched_to_current_registry": anp_monitoring_matched_identities,
         "anp_brazil_monitoring_ambiguous_current_registry_matches": anp_monitoring_ambiguous_match_identities,
         "anp_brazil_monitoring_historical_identities_added": anp_monitoring_added_identities,
         "anp_brazil_monitoring_registered_historical_identities_added": anp_monitoring_added_registered_identities,
         "anp_brazil_monitoring_unregistered_historical_identities_added": anp_monitoring_added_unregistered_identities,
+        "anp_brazil_monitoring_historical_identities_added_by_primary_source": dict(sorted(anp_monitoring_added_identities_by_primary_source.items())),
         "official_government_historical_market_monitoring_rows": sum(r["evidence_status"] == "official_government_historical_market_monitoring" for r in records),
         "indonesia_npt_source_rows": len(indonesia_npt_source_rows),
         "indonesia_npt_rows_with_registration_value": sum(bool(row["registration_number"]) for row in indonesia_npt_source_rows),

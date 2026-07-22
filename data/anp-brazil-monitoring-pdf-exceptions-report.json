@@ -1,0 +1,984 @@
+{
+  "schema_version": 1,
+  "status": "official_open_government_pdf_nonconformity_appendices_normalized",
+  "snapshot_date": "2026-07-22",
+  "source_page_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletins/boletim-de-monitoramento-de-lubrificantes",
+  "terms_url": "https://www.gov.br/pt-br/termos-de-uso",
+  "source_page_sha256": "daa5cb92161d80c602d431dca611fb4abe63ebc832c9a234f69fb1c90bb3b669",
+  "normalized_output_sha256": "82a77abe98c5bf591a49f98e4356d7be329e5600f7375bb4d96db38c47d34e76",
+  "official_pdf_files": 73,
+  "files": [
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2017/5-boletim-pml.pdf",
+      "source_file_name": "5-boletim-pml.pdf",
+      "source_sha256": "bbdd60071946ee53997cdfd66829d95b09901c7bd13b2209afdf80e6c33bc492",
+      "issue_year": 2017,
+      "appendix_row_occurrences": 114,
+      "sample_observations": 111,
+      "section_occurrences": {
+        "quality": 55,
+        "registration": 59
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2017/4-boletim-pml.pdf",
+      "source_file_name": "4-boletim-pml.pdf",
+      "source_sha256": "9cf776a6c37523adf2e0d01ee2e1dfc3af07338a30add8d9d11276a6b188b104",
+      "issue_year": 2017,
+      "appendix_row_occurrences": 78,
+      "sample_observations": 78,
+      "section_occurrences": {
+        "quality": 31,
+        "registration": 47
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2017/3-boletim-pml.pdf",
+      "source_file_name": "3-boletim-pml.pdf",
+      "source_sha256": "55c9b8111b463f0a149eed417d74297b2b9e94cb8741a02229ddf4a1278c597c",
+      "issue_year": 2017,
+      "appendix_row_occurrences": 52,
+      "sample_observations": 50,
+      "section_occurrences": {
+        "quality": 32,
+        "registration": 20
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2017/2-boletim-pml.pdf",
+      "source_file_name": "2-boletim-pml.pdf",
+      "source_sha256": "6296e5f5c037db820c9093c04931076b282fcdd636097573b0df15e95cfcdf1a",
+      "issue_year": 2017,
+      "appendix_row_occurrences": 71,
+      "sample_observations": 67,
+      "section_occurrences": {
+        "quality": 53,
+        "registration": 18
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2017/1-boletim-pml.pdf",
+      "source_file_name": "1-boletim-pml.pdf",
+      "source_sha256": "fee38c0b5ed472cc2680997de4d155a4efe6bb1645ddd30eddaf183e32207dcd",
+      "issue_year": 2017,
+      "appendix_row_occurrences": 147,
+      "sample_observations": 140,
+      "section_occurrences": {
+        "quality": 93,
+        "registration": 54
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2016/1-boletim-pml.pdf",
+      "source_file_name": "1-boletim-pml.pdf",
+      "source_sha256": "65f99a39dec8dffde0143d51984120254750e0a762ee171eac14e479ba653236",
+      "issue_year": 2016,
+      "appendix_row_occurrences": 42,
+      "sample_observations": 42,
+      "section_occurrences": {
+        "quality": 31,
+        "registration": 11
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2014/4-boletim-pml.pdf",
+      "source_file_name": "4-boletim-pml.pdf",
+      "source_sha256": "64ddbbeda4de3b07e01f805f3ca481dadeb96a4d0c2ad3fa57a1e5b28e9d2d00",
+      "issue_year": 2014,
+      "appendix_row_occurrences": 159,
+      "sample_observations": 138,
+      "section_occurrences": {
+        "label": 81,
+        "quality": 49,
+        "registration": 29
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2014/3-boletim-pml.pdf",
+      "source_file_name": "3-boletim-pml.pdf",
+      "source_sha256": "4ba6ddc5a272e5145f6e79d96b4fa51d55b413660f658290a000b67356740a6b",
+      "issue_year": 2014,
+      "appendix_row_occurrences": 124,
+      "sample_observations": 114,
+      "section_occurrences": {
+        "label": 45,
+        "quality": 37,
+        "registration": 42
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2014/2-boletim-pml.pdf",
+      "source_file_name": "2-boletim-pml.pdf",
+      "source_sha256": "5904a1d28e278c5ac5baf7ee77329cb73f2146e5404d5c0b7f614a02f2f1c91e",
+      "issue_year": 2014,
+      "appendix_row_occurrences": 131,
+      "sample_observations": 121,
+      "section_occurrences": {
+        "label": 47,
+        "quality": 41,
+        "registration": 43
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2014/1-boletim-pml.pdf",
+      "source_file_name": "1-boletim-pml.pdf",
+      "source_sha256": "145e6802a357afe013923abf7c595c0d33769784716eef711e6a088de44b6a97",
+      "issue_year": 2014,
+      "appendix_row_occurrences": 130,
+      "sample_observations": 116,
+      "section_occurrences": {
+        "label": 57,
+        "quality": 38,
+        "registration": 35
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2013/6-boletim-pml.pdf",
+      "source_file_name": "6-boletim-pml.pdf",
+      "source_sha256": "1f1c3ec308655ec7812c1bf9df71b34a213847bdf4d15b2a5d3ea9c2ddec8b21",
+      "issue_year": 2013,
+      "appendix_row_occurrences": 114,
+      "sample_observations": 101,
+      "section_occurrences": {
+        "label": 45,
+        "quality": 41,
+        "registration": 28
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2013/5-boletim-pml.pdf",
+      "source_file_name": "5-boletim-pml.pdf",
+      "source_sha256": "eef6eb8fadb75f2019c4900a089445e06ebba66706d5f1853561e3ff3d2287cf",
+      "issue_year": 2013,
+      "appendix_row_occurrences": 143,
+      "sample_observations": 134,
+      "section_occurrences": {
+        "label": 43,
+        "quality": 64,
+        "registration": 36
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2013/4-boletim-pml.pdf",
+      "source_file_name": "4-boletim-pml.pdf",
+      "source_sha256": "a549583cbf275a5ff71c9e7317bf6d88f3000476d7735f9585dad0c0607e091e",
+      "issue_year": 2013,
+      "appendix_row_occurrences": 116,
+      "sample_observations": 107,
+      "section_occurrences": {
+        "label": 43,
+        "quality": 42,
+        "registration": 31
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2013/3-boletim-pml.pdf",
+      "source_file_name": "3-boletim-pml.pdf",
+      "source_sha256": "fe5578cfb04d971c250411d6fa6df8260af9dacf73e1902cfe7176e4e826aeaa",
+      "issue_year": 2013,
+      "appendix_row_occurrences": 141,
+      "sample_observations": 126,
+      "section_occurrences": {
+        "label": 54,
+        "quality": 39,
+        "registration": 48
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2013/2-boletim-pml.pdf",
+      "source_file_name": "2-boletim-pml.pdf",
+      "source_sha256": "2eb1e70c181ca4fcb156bc912408547e8d5d7e1a15106dfe9038503c23f8977e",
+      "issue_year": 2013,
+      "appendix_row_occurrences": 117,
+      "sample_observations": 108,
+      "section_occurrences": {
+        "label": 44,
+        "quality": 33,
+        "registration": 40
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2013/1-boletim-pml.pdf",
+      "source_file_name": "1-boletim-pml.pdf",
+      "source_sha256": "a166fa37e8866781e071eca26710462debc728b0285ddceea7509d6ecb2081aa",
+      "issue_year": 2013,
+      "appendix_row_occurrences": 125,
+      "sample_observations": 115,
+      "section_occurrences": {
+        "label": 40,
+        "quality": 40,
+        "registration": 45
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2012/6-boletim-pml.pdf",
+      "source_file_name": "6-boletim-pml.pdf",
+      "source_sha256": "7564683e707cb04481d07f75acf26fd8ea24a7d2b289fd048bead3b93bfd4370",
+      "issue_year": 2012,
+      "appendix_row_occurrences": 108,
+      "sample_observations": 97,
+      "section_occurrences": {
+        "label": 39,
+        "quality": 45,
+        "registration": 24
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2012/5-boletim-pml.pdf",
+      "source_file_name": "5-boletim-pml.pdf",
+      "source_sha256": "8b328e2043cd8e04910a03d3687dccca58539ecbf0c34620cabafe5e56f87ec6",
+      "issue_year": 2012,
+      "appendix_row_occurrences": 94,
+      "sample_observations": 91,
+      "section_occurrences": {
+        "label": 38,
+        "quality": 27,
+        "registration": 29
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2012/4-boletim-pml.pdf",
+      "source_file_name": "4-boletim-pml.pdf",
+      "source_sha256": "41ed43f7b0d72788ab0de2bc6de08ec98319ba1d911bff28df8662f02ff4201c",
+      "issue_year": 2012,
+      "appendix_row_occurrences": 111,
+      "sample_observations": 97,
+      "section_occurrences": {
+        "label": 39,
+        "quality": 39,
+        "registration": 33
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2012/3-boletim-pml.pdf",
+      "source_file_name": "3-boletim-pml.pdf",
+      "source_sha256": "2f81f4a415ba7693346d4c7baec3882841e1f4a54d7bdfcacfa4078ced0209c9",
+      "issue_year": 2012,
+      "appendix_row_occurrences": 116,
+      "sample_observations": 103,
+      "section_occurrences": {
+        "label": 39,
+        "quality": 54,
+        "registration": 23
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2012/2-boletim-pml.pdf",
+      "source_file_name": "2-boletim-pml.pdf",
+      "source_sha256": "c0fa73110640cf2d34ba310c9e9e92c2a888c3a88562cb9d595851c3490e2590",
+      "issue_year": 2012,
+      "appendix_row_occurrences": 153,
+      "sample_observations": 133,
+      "section_occurrences": {
+        "label": 46,
+        "quality": 62,
+        "registration": 45
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2012/1-boletim-pml.pdf",
+      "source_file_name": "1-boletim-pml.pdf",
+      "source_sha256": "bfea90e1fae2970aca5235f644ef915fc357909dc17003086bf138694841e379",
+      "issue_year": 2012,
+      "appendix_row_occurrences": 134,
+      "sample_observations": 120,
+      "section_occurrences": {
+        "label": 37,
+        "quality": 47,
+        "registration": 50
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2011/9-boletim-pml.pdf",
+      "source_file_name": "9-boletim-pml.pdf",
+      "source_sha256": "2a1b32ca3a349e7ee541e74f22a6b745658ac07a0e169c40b7360e57373ab4d9",
+      "issue_year": 2011,
+      "appendix_row_occurrences": 161,
+      "sample_observations": 141,
+      "section_occurrences": {
+        "label": 47,
+        "quality": 62,
+        "registration": 52
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2011/8-boletim-pml.pdf",
+      "source_file_name": "8-boletim-pml.pdf",
+      "source_sha256": "cbd14888c6588820fc20aa7bdf9c986061e6735b8ed4de767b0409fb6467e673",
+      "issue_year": 2011,
+      "appendix_row_occurrences": 133,
+      "sample_observations": 117,
+      "section_occurrences": {
+        "label": 54,
+        "quality": 48,
+        "registration": 31
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2011/7-boletim-pml.pdf",
+      "source_file_name": "7-boletim-pml.pdf",
+      "source_sha256": "2874b8fe3ed426cc90cde1462ac146f9b87ffa92cf38a69ba469ffbebb9fb44e",
+      "issue_year": 2011,
+      "appendix_row_occurrences": 148,
+      "sample_observations": 126,
+      "section_occurrences": {
+        "label": 52,
+        "quality": 63,
+        "registration": 33
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2011/6-boletim-pml.pdf",
+      "source_file_name": "6-boletim-pml.pdf",
+      "source_sha256": "692ca8c2e5a1e1a0fb715ea1014c030f2615d4dfc0d33a67db4c7a31e9e0cb1d",
+      "issue_year": 2011,
+      "appendix_row_occurrences": 93,
+      "sample_observations": 84,
+      "section_occurrences": {
+        "label": 25,
+        "quality": 46,
+        "registration": 22
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2011/5-boletim-pml.pdf",
+      "source_file_name": "5-boletim-pml.pdf",
+      "source_sha256": "e748d97b91280b1a7536628209f0183e7a7104ca4fee308c7a0cfbfdef2947a0",
+      "issue_year": 2011,
+      "appendix_row_occurrences": 83,
+      "sample_observations": 75,
+      "section_occurrences": {
+        "label": 25,
+        "quality": 36,
+        "registration": 22
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2011/4-boletim-pml.pdf",
+      "source_file_name": "4-boletim-pml.pdf",
+      "source_sha256": "bda068ca8ce419748e4151a07f113abdfe8a54c30949a7281d42ad6aa0360642",
+      "issue_year": 2011,
+      "appendix_row_occurrences": 70,
+      "sample_observations": 60,
+      "section_occurrences": {
+        "label": 25,
+        "quality": 33,
+        "registration": 12
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2011/3-boletim-pml.pdf",
+      "source_file_name": "3-boletim-pml.pdf",
+      "source_sha256": "487aad3f23515bf5db549404d73b19c0b5f433925b00f7aa8fe314521bb89ec4",
+      "issue_year": 2011,
+      "appendix_row_occurrences": 83,
+      "sample_observations": 71,
+      "section_occurrences": {
+        "label": 24,
+        "quality": 41,
+        "registration": 18
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2011/2-boletim-pml.pdf",
+      "source_file_name": "2-boletim-pml.pdf",
+      "source_sha256": "807aa062b3d34be89798ad37d6d8b44560730cd5aa65b85ca72ffd995ec4c5c3",
+      "issue_year": 2011,
+      "appendix_row_occurrences": 80,
+      "sample_observations": 69,
+      "section_occurrences": {
+        "label": 14,
+        "quality": 50,
+        "registration": 16
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2011/1-boletim-pml.pdf",
+      "source_file_name": "1-boletim-pml.pdf",
+      "source_sha256": "428c6c4eb9b16cd018497f91b12bff9e6929900569b2049e9d1e04556646cf05",
+      "issue_year": 2011,
+      "appendix_row_occurrences": 76,
+      "sample_observations": 65,
+      "section_occurrences": {
+        "label": 15,
+        "quality": 36,
+        "registration": 25
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2010/12-boletim-pml.pdf",
+      "source_file_name": "12-boletim-pml.pdf",
+      "source_sha256": "0c88d77e10496350d08743c8decc80d3717c5eb798f85c4db7a889cb110f48a8",
+      "issue_year": 2010,
+      "appendix_row_occurrences": 68,
+      "sample_observations": 57,
+      "section_occurrences": {
+        "label": 13,
+        "quality": 36,
+        "registration": 19
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2010/11-boletim-pml.pdf",
+      "source_file_name": "11-boletim-pml.pdf",
+      "source_sha256": "e15ec43ad82660b4ad0a4a25d648412cc84841ac45723dfdfbc58c74dba1293d",
+      "issue_year": 2010,
+      "appendix_row_occurrences": 69,
+      "sample_observations": 52,
+      "section_occurrences": {
+        "label": 21,
+        "quality": 38,
+        "registration": 10
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2010/10-boletim-pml.pdf",
+      "source_file_name": "10-boletim-pml.pdf",
+      "source_sha256": "a6e9044f2cefed9dbfcaee0d46ee869ad2d351f7d1e07b5afca95a4d93d89a45",
+      "issue_year": 2010,
+      "appendix_row_occurrences": 49,
+      "sample_observations": 41,
+      "section_occurrences": {
+        "label": 12,
+        "quality": 27,
+        "registration": 10
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2010/9-boletim-pml.pdf",
+      "source_file_name": "9-boletim-pml.pdf",
+      "source_sha256": "e0cf2e7c03fd5e874475e3b73cda496c37f83e3633c99b0433dea8a9398cd1ce",
+      "issue_year": 2010,
+      "appendix_row_occurrences": 66,
+      "sample_observations": 48,
+      "section_occurrences": {
+        "label": 19,
+        "quality": 37,
+        "registration": 10
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2010/8-boletim-pml.pdf",
+      "source_file_name": "8-boletim-pml.pdf",
+      "source_sha256": "4591cb6dc7a211e4f5e491f515d8c1b987384205bbe29a679028410d9ddf0d5b",
+      "issue_year": 2010,
+      "appendix_row_occurrences": 45,
+      "sample_observations": 35,
+      "section_occurrences": {
+        "label": 16,
+        "quality": 20,
+        "registration": 9
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2010/7-boletim-pml.pdf",
+      "source_file_name": "7-boletim-pml.pdf",
+      "source_sha256": "5e2e4a74fbbbf046ade88b325f4b0c475188f52d2f7af7be8384aa5f825fcade",
+      "issue_year": 2010,
+      "appendix_row_occurrences": 51,
+      "sample_observations": 40,
+      "section_occurrences": {
+        "label": 14,
+        "quality": 27,
+        "registration": 10
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2010/6-boletim-pml.pdf",
+      "source_file_name": "6-boletim-pml.pdf",
+      "source_sha256": "46ffc1ac025ade6419fe3414abb4cecd32d8ec3a71b35c94c3cb52ce2e7e6453",
+      "issue_year": 2010,
+      "appendix_row_occurrences": 51,
+      "sample_observations": 41,
+      "section_occurrences": {
+        "label": 13,
+        "quality": 26,
+        "registration": 12
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2010/5-boletim-pml.pdf",
+      "source_file_name": "5-boletim-pml.pdf",
+      "source_sha256": "6d340fa27c0448ccb1b260e1bbd1b47ac36ce663487d486422e5a7fe7d64f4b8",
+      "issue_year": 2010,
+      "appendix_row_occurrences": 49,
+      "sample_observations": 41,
+      "section_occurrences": {
+        "label": 13,
+        "quality": 22,
+        "registration": 14
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2010/3-boletim-pml.pdf",
+      "source_file_name": "3-boletim-pml.pdf",
+      "source_sha256": "58ca719aecd6789eb0bb79804d5047a42e22e59a2533e75a1df343809be795d2",
+      "issue_year": 2010,
+      "appendix_row_occurrences": 42,
+      "sample_observations": 32,
+      "section_occurrences": {
+        "label": 12,
+        "quality": 19,
+        "registration": 11
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2010/2-boletim-pml.pdf",
+      "source_file_name": "2-boletim-pml.pdf",
+      "source_sha256": "6eb85e84ad885b0c51e0cf05fafe48eac65f92ccadaf884cfe17fd104fde24b0",
+      "issue_year": 2010,
+      "appendix_row_occurrences": 48,
+      "sample_observations": 41,
+      "section_occurrences": {
+        "label": 7,
+        "quality": 22,
+        "registration": 19
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2010/1-boletim-pml.pdf",
+      "source_file_name": "1-boletim-pml.pdf",
+      "source_sha256": "56e48e918c94cb3079157dd5888eacdd79df7cd97794dd9b721bbb2ed5d7d3f1",
+      "issue_year": 2010,
+      "appendix_row_occurrences": 38,
+      "sample_observations": 35,
+      "section_occurrences": {
+        "label": 7,
+        "quality": 19,
+        "registration": 12
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2009/12-boletim-pml.pdf",
+      "source_file_name": "12-boletim-pml.pdf",
+      "source_sha256": "79ff0c92eb0febc05b2b35d15f68606b3351839fe3bae7a9e8b598ddc0d97094",
+      "issue_year": 2009,
+      "appendix_row_occurrences": 42,
+      "sample_observations": 39,
+      "section_occurrences": {
+        "label": 5,
+        "quality": 19,
+        "registration": 18
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2009/11-boletim-pml.pdf",
+      "source_file_name": "11-boletim-pml.pdf",
+      "source_sha256": "0f038a1d6293e47475e2f7790bdd0efd545f7a077e901dbeada07d38699e9180",
+      "issue_year": 2009,
+      "appendix_row_occurrences": 53,
+      "sample_observations": 46,
+      "section_occurrences": {
+        "label": 11,
+        "quality": 31,
+        "registration": 11
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2009/10-boletim-pml.pdf",
+      "source_file_name": "10-boletim-pml.pdf",
+      "source_sha256": "6dd164aa44d59a82256b01bbcbc4eb52fff44eed33b0d2b56a4d82689e698f00",
+      "issue_year": 2009,
+      "appendix_row_occurrences": 30,
+      "sample_observations": 28,
+      "section_occurrences": {
+        "label": 4,
+        "quality": 15,
+        "registration": 11
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2009/9-boletim-pml.pdf",
+      "source_file_name": "9-boletim-pml.pdf",
+      "source_sha256": "85d1ce6a166b6a5fc05a7fc7bf1bc862e18229d8bcf8aae34dbd1680c5716638",
+      "issue_year": 2009,
+      "appendix_row_occurrences": 49,
+      "sample_observations": 42,
+      "section_occurrences": {
+        "label": 14,
+        "quality": 17,
+        "registration": 18
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2009/8-boletim-pml.pdf",
+      "source_file_name": "8-boletim-pml.pdf",
+      "source_sha256": "768e309b951cd13cf71be7d7d11f22f8d60e84fb99d89f7e802360ca55472f83",
+      "issue_year": 2009,
+      "appendix_row_occurrences": 45,
+      "sample_observations": 38,
+      "section_occurrences": {
+        "label": 10,
+        "quality": 22,
+        "registration": 13
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2009/7-boletim-pml.pdf",
+      "source_file_name": "7-boletim-pml.pdf",
+      "source_sha256": "d5c5024880a026d5558ff12766897389e09d27e5087c91d57e9d8bd07d93daa0",
+      "issue_year": 2009,
+      "appendix_row_occurrences": 58,
+      "sample_observations": 44,
+      "section_occurrences": {
+        "label": 22,
+        "quality": 23,
+        "registration": 13
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2009/6-boletim-pml.pdf",
+      "source_file_name": "6-boletim-pml.pdf",
+      "source_sha256": "e23bf386d8a6d225882735331a38e3693b0b48488702961df344afe45bb3ad3e",
+      "issue_year": 2009,
+      "appendix_row_occurrences": 58,
+      "sample_observations": 46,
+      "section_occurrences": {
+        "label": 16,
+        "quality": 28,
+        "registration": 14
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2009/5-boletim-pml.pdf",
+      "source_file_name": "5-boletim-pml.pdf",
+      "source_sha256": "98867c2ffb9c838394a692b5a4d083122a75ff5b41a76d74190dbe6698706022",
+      "issue_year": 2009,
+      "appendix_row_occurrences": 72,
+      "sample_observations": 56,
+      "section_occurrences": {
+        "label": 21,
+        "quality": 34,
+        "registration": 17
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2009/4-boletim-pml.pdf",
+      "source_file_name": "4-boletim-pml.pdf",
+      "source_sha256": "2173938226b710b8d153da5e416d0cef8c5383a2bd18df523a9d80301b1035cb",
+      "issue_year": 2009,
+      "appendix_row_occurrences": 65,
+      "sample_observations": 55,
+      "section_occurrences": {
+        "label": 14,
+        "quality": 31,
+        "registration": 20
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2009/3-boletim-pml.pdf",
+      "source_file_name": "3-boletim-pml.pdf",
+      "source_sha256": "2a0dfc06426cdc36131249990884fc8b3292b55031cb34524a712d7f7a399e4f",
+      "issue_year": 2009,
+      "appendix_row_occurrences": 46,
+      "sample_observations": 40,
+      "section_occurrences": {
+        "label": 10,
+        "quality": 25,
+        "registration": 11
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2009/1-boletim-pml.pdf",
+      "source_file_name": "1-boletim-pml.pdf",
+      "source_sha256": "f9fb9b93b85641334f4c00b9bdd9d07e241846ef64796f9027a13f9652f7fcaa",
+      "issue_year": 2009,
+      "appendix_row_occurrences": 60,
+      "sample_observations": 49,
+      "section_occurrences": {
+        "label": 14,
+        "quality": 29,
+        "registration": 17
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2008/12-boletim-pml.pdf",
+      "source_file_name": "12-boletim-pml.pdf",
+      "source_sha256": "6921430b2284a4a334e27a0948591cc2ddf2a73615374eade0a345bb1cb1dec9",
+      "issue_year": 2008,
+      "appendix_row_occurrences": 56,
+      "sample_observations": 43,
+      "section_occurrences": {
+        "label": 14,
+        "quality": 22,
+        "registration": 20
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2008/11-boletim-pml.pdf",
+      "source_file_name": "11-boletim-pml.pdf",
+      "source_sha256": "1630dc401bed280b769c511fa40d8046beee29629e010651fb1882c66cd43091",
+      "issue_year": 2008,
+      "appendix_row_occurrences": 34,
+      "sample_observations": 33,
+      "section_occurrences": {
+        "label": 8,
+        "quality": 17,
+        "registration": 9
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2008/10-boletim-pml.pdf",
+      "source_file_name": "10-boletim-pml.pdf",
+      "source_sha256": "d650762e1f6877763fc39b3a47f358a651f0c6734cce184a89b403080e3adced",
+      "issue_year": 2008,
+      "appendix_row_occurrences": 52,
+      "sample_observations": 47,
+      "section_occurrences": {
+        "label": 12,
+        "quality": 22,
+        "registration": 18
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2008/9-boletim-pml.pdf",
+      "source_file_name": "9-boletim-pml.pdf",
+      "source_sha256": "6c836c5ea05ad5c57872976168344ea763c0dc3203dd7610115470e2c774ce52",
+      "issue_year": 2008,
+      "appendix_row_occurrences": 47,
+      "sample_observations": 45,
+      "section_occurrences": {
+        "label": 18,
+        "quality": 14,
+        "registration": 15
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2008/8-boletim-pml.pdf",
+      "source_file_name": "8-boletim-pml.pdf",
+      "source_sha256": "7041fe45bd254e97d3f1a5cdcbec4e1cac9b231cdc23c6213186e710ec85e933",
+      "issue_year": 2008,
+      "appendix_row_occurrences": 53,
+      "sample_observations": 43,
+      "section_occurrences": {
+        "label": 12,
+        "quality": 15,
+        "registration": 26
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2008/7-boletim-pml.pdf",
+      "source_file_name": "7-boletim-pml.pdf",
+      "source_sha256": "ba424825e117e104e1d42529143fb6301b120a59200933a3e440fd2c61b2e53b",
+      "issue_year": 2008,
+      "appendix_row_occurrences": 38,
+      "sample_observations": 33,
+      "section_occurrences": {
+        "label": 13,
+        "quality": 7,
+        "registration": 18
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2008/6-boletim-pml.pdf",
+      "source_file_name": "6-boletim-pml.pdf",
+      "source_sha256": "0a2b6f15dad52dfd3b4d3097cd38fdaab890392f5f03c92f64f56bfdf8d4df98",
+      "issue_year": 2008,
+      "appendix_row_occurrences": 44,
+      "sample_observations": 32,
+      "section_occurrences": {
+        "label": 16,
+        "quality": 19,
+        "registration": 9
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2008/5-boletim-pml.pdf",
+      "source_file_name": "5-boletim-pml.pdf",
+      "source_sha256": "baa2f4c06767d88136a27a0322324e863ec42d47bb47a2ed3af5fe538be6861b",
+      "issue_year": 2008,
+      "appendix_row_occurrences": 49,
+      "sample_observations": 38,
+      "section_occurrences": {
+        "label": 12,
+        "quality": 17,
+        "registration": 20
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2008/4-boletim-pml.pdf",
+      "source_file_name": "4-boletim-pml.pdf",
+      "source_sha256": "463b69cbf384d67dfb3dbe48f339cd179af1fc51104fdb44d26488244bee5c69",
+      "issue_year": 2008,
+      "appendix_row_occurrences": 41,
+      "sample_observations": 31,
+      "section_occurrences": {
+        "label": 13,
+        "quality": 16,
+        "registration": 12
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2008/3-boletim-pml.pdf",
+      "source_file_name": "3-boletim-pml.pdf",
+      "source_sha256": "861f2936cf12c062bbd3f693c06cff3187680841405b4748a6d51ba72bfca058",
+      "issue_year": 2008,
+      "appendix_row_occurrences": 38,
+      "sample_observations": 28,
+      "section_occurrences": {
+        "label": 14,
+        "quality": 15,
+        "registration": 9
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2008/2-boletim-pml.pdf",
+      "source_file_name": "2-boletim-pml.pdf",
+      "source_sha256": "72a04152bf317e0534fe48d5502a0a14e452e1b06a020315c922c00c82e1e032",
+      "issue_year": 2008,
+      "appendix_row_occurrences": 42,
+      "sample_observations": 31,
+      "section_occurrences": {
+        "label": 15,
+        "quality": 16,
+        "registration": 11
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2008/1-boletim-pml.pdf",
+      "source_file_name": "1-boletim-pml.pdf",
+      "source_sha256": "59f01fa8f6e93725210e234c39550bdb2435b817690c8a42aa65b7d1c5884479",
+      "issue_year": 2008,
+      "appendix_row_occurrences": 40,
+      "sample_observations": 29,
+      "section_occurrences": {
+        "label": 12,
+        "quality": 15,
+        "registration": 13
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2007/8-boletim-pml.pdf",
+      "source_file_name": "8-boletim-pml.pdf",
+      "source_sha256": "f7f2fa1998372b884b109c2dcd875f9e6dbee0da4dece32f70a52711d441b972",
+      "issue_year": 2007,
+      "appendix_row_occurrences": 45,
+      "sample_observations": 41,
+      "section_occurrences": {
+        "label": 10,
+        "quality": 14,
+        "registration": 21
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2007/7-boletim-pml.pdf",
+      "source_file_name": "7-boletim-pml.pdf",
+      "source_sha256": "5c3d0c4044a70522738fcb6d07fe6ed68ed7e9c66771023d3b8e52f031e15e89",
+      "issue_year": 2007,
+      "appendix_row_occurrences": 44,
+      "sample_observations": 33,
+      "section_occurrences": {
+        "label": 11,
+        "quality": 21,
+        "registration": 12
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2007/6-boletim-pml.pdf",
+      "source_file_name": "6-boletim-pml.pdf",
+      "source_sha256": "15035a3e93f7cd0c9d7dceee8b95c9c0f2f4c25f782412b50821851699020642",
+      "issue_year": 2007,
+      "appendix_row_occurrences": 40,
+      "sample_observations": 32,
+      "section_occurrences": {
+        "label": 13,
+        "quality": 14,
+        "registration": 13
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2007/5-boletim-pml.pdf",
+      "source_file_name": "5-boletim-pml.pdf",
+      "source_sha256": "ba17de1d3e4bcb4e294cf30d4c5025cb1f8ee1cca7a18ec3674492c9b4e6450f",
+      "issue_year": 2007,
+      "appendix_row_occurrences": 62,
+      "sample_observations": 47,
+      "section_occurrences": {
+        "label": 17,
+        "quality": 23,
+        "registration": 22
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2007/4-boletim-pml.pdf",
+      "source_file_name": "4-boletim-pml.pdf",
+      "source_sha256": "faaa4e8c0222222bcaceec9b638dc17a9a450c46c7514cd5bb329a6914c15311",
+      "issue_year": 2007,
+      "appendix_row_occurrences": 65,
+      "sample_observations": 40,
+      "section_occurrences": {
+        "label": 33,
+        "quality": 14,
+        "registration": 18
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2007/3-boletim-pml.pdf",
+      "source_file_name": "3-boletim-pml.pdf",
+      "source_sha256": "7ac4eb714678ff52f0a007245f42082d130e628dfc4eb4f2de8e3e71641bcd5c",
+      "issue_year": 2007,
+      "appendix_row_occurrences": 70,
+      "sample_observations": 44,
+      "section_occurrences": {
+        "label": 29,
+        "quality": 29,
+        "registration": 12
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2007/2-boletim-pml.pdf",
+      "source_file_name": "2-boletim-pml.pdf",
+      "source_sha256": "a3ed83b0266b5d7993ad7ffcd72eed42ba94a908f41211d15dba130f4fbfe936",
+      "issue_year": 2007,
+      "appendix_row_occurrences": 85,
+      "sample_observations": 54,
+      "section_occurrences": {
+        "label": 41,
+        "quality": 23,
+        "registration": 21
+      }
+    },
+    {
+      "source_url": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/boletim-monitoramento-lubrificantes/2007/1-boletim-pml.pdf",
+      "source_file_name": "1-boletim-pml.pdf",
+      "source_sha256": "78e4a8d1927acbe91959bdf1d6a81764f83aa71d8b8ce71fb8b05b470311a3d0",
+      "issue_year": 2007,
+      "appendix_row_occurrences": 66,
+      "sample_observations": 50,
+      "section_occurrences": {
+        "label": 32,
+        "quality": 17,
+        "registration": 17
+      }
+    }
+  ],
+  "source_observations": 4837,
+  "appendix_row_occurrences": 5612,
+  "normalized_product_grade_holder_identities": 3566,
+  "observations_by_issue_year": {
+    "2007": 341,
+    "2008": 433,
+    "2009": 483,
+    "2010": 463,
+    "2011": 808,
+    "2012": 641,
+    "2013": 691,
+    "2014": 489,
+    "2016": 42,
+    "2017": 446
+  },
+  "quality_flags": {
+    "source_reported_label_nonconformity": 1649,
+    "source_reported_quality_nonconformity": 2304,
+    "source_reported_registration_nonconformity": 1633
+  },
+  "sample_id_normalization_methods": {
+    "issue_year_appended_from_report_context": 555,
+    "published_complete": 4048,
+    "split_year_fragments_rejoined_from_same_pdf_cell": 102,
+    "two_digit_year_expanded_from_report_context": 132
+  },
+  "rights_note": "ANP publishes the reports on gov.br. Only normalized factual fields and provenance are republished; PDF layout, narrative, CNPJ and collection-location fields are omitted.",
+  "scope_note": "The 2007-2017 PDF appendices publish products reported as nonconforming for registration, labelling or quality. They are an exception history, not the complete population sampled by PML.",
+  "lifecycle_note": "A row proves a historical sample and a source-reported nonconformity. It is not proof of current registration, current nonconformity or market availability."
+}

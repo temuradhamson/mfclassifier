@@ -150,6 +150,8 @@ def main() -> None:
     anp_monitoring_rows = [json.loads(line) for line in (ROOT / "data/anp-brazil-monitoring-observations.jsonl").read_text(encoding="utf-8").splitlines() if line]
     anp_monitoring_pdf_report = json.loads((ROOT / "data/anp-brazil-monitoring-pdf-report.json").read_text(encoding="utf-8"))
     anp_monitoring_pdf_rows = [json.loads(line) for line in (ROOT / "data/anp-brazil-monitoring-pdf-observations.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    anp_monitoring_pdf_exception_report = json.loads((ROOT / "data/anp-brazil-monitoring-pdf-exceptions-report.json").read_text(encoding="utf-8"))
+    anp_monitoring_pdf_exception_rows = [json.loads(line) for line in (ROOT / "data/anp-brazil-monitoring-pdf-exceptions.jsonl").read_text(encoding="utf-8").splitlines() if line]
     indonesia_report = json.loads((ROOT / "data/indonesia-npt-lubricant-products-report.json").read_text(encoding="utf-8"))
     indonesia_rows = [json.loads(line) for line in (ROOT / "data/indonesia-npt-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     thailand_doeb_report = json.loads((ROOT / "data/thailand-doeb-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -640,8 +642,8 @@ def main() -> None:
     assert report["liqui_moly_current_products_matched_to_2020"] == 295
     assert report["liqui_moly_current_products_added"] == 152
     assert report["liqui_moly_current_article_skus"] == liqui_moly_current_report["unique_article_skus"] == 985
-    assert report["duplicate_decisions"]["review_cross_source_identity"] == 6054
-    assert report["duplicate_decisions"]["keep_separate_specification_conflict"] == 10289
+    assert report["duplicate_decisions"]["review_cross_source_identity"] == 6269
+    assert report["duplicate_decisions"]["keep_separate_specification_conflict"] == 10706
     assert db.execute("""
         SELECT count(*) FROM duplicate_decisions d
         JOIN products a ON a.product_id=d.product_id_a
@@ -828,6 +830,12 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='ANP_BRAZIL_REGISTRATION_NUMBER'").fetchone()[0] == 12664 + report["anp_brazil_monitoring_registered_historical_identities_added"]
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='ANP_BRAZIL_LUBRICANT_MONITORING_HISTORY'").fetchone()[0] == 12048
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='ANP_BRAZIL_LUBRICANT_MONITORING_PDF_HISTORY'").fetchone()[0] == 1552
+    assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='ANP_BRAZIL_LUBRICANT_MONITORING_PDF_EXCEPTIONS'").fetchone()[0] == (
+        len(anp_monitoring_pdf_exception_rows)
+        + report["anp_brazil_monitoring_historical_identities_added_by_primary_source"].get(
+            "ANP_BRAZIL_LUBRICANT_MONITORING_PDF_EXCEPTIONS", 0
+        )
+    )
     assert len(anp_monitoring_rows) == 11026
     assert db.execute("SELECT count(*) FROM external_codes WHERE code_system='INDONESIA_NPT_REGISTRATION_NUMBER'").fetchone()[0] == 12575
     assert db.execute("SELECT count(*) FROM product_sources WHERE source_id='INDONESIA_NPT_LUBRICANT_REGISTRY'").fetchone()[0] == 12626
@@ -1698,7 +1706,9 @@ def main() -> None:
     assert [row["published_minus_reported"] for row in anp_monitoring_pdf_report["files"]] == [0, 0, -9]
     assert report["anp_brazil_monitoring_xlsx_source_observations"] == len(anp_monitoring_rows)
     assert report["anp_brazil_monitoring_pdf_source_observations"] == len(anp_monitoring_pdf_rows)
-    assert report["anp_brazil_monitoring_source_observations"] == len(anp_monitoring_rows) + len(anp_monitoring_pdf_rows)
+    assert report["anp_brazil_monitoring_source_observations"] == (
+        len(anp_monitoring_rows) + len(anp_monitoring_pdf_rows) + len(anp_monitoring_pdf_exception_rows)
+    )
     assert report["anp_brazil_monitoring_product_grade_identities"] == (
         report["anp_brazil_monitoring_identities_matched_to_current_registry"]
         + report["anp_brazil_monitoring_historical_identities_added"]
@@ -1710,6 +1720,21 @@ def main() -> None:
     assert all(row["published_scope"] == "complete_analyzed_products_list" for row in anp_monitoring_pdf_rows)
     assert all(row["lifecycle_status"] == "historical_market_sample_observation" for row in anp_monitoring_pdf_rows)
     assert all(not ({"cnpj", "registration_holder_cnpj", "collection_location", "address", "municipality", "retailer"} & set(row)) for row in anp_monitoring_pdf_rows)
+    assert policy_by_id["ANP_BRAZIL_LUBRICANT_MONITORING_PDF_EXCEPTIONS"]["source_sha256"] == anp_monitoring_pdf_exception_report["normalized_output_sha256"]
+    assert policy_by_id["ANP_BRAZIL_LUBRICANT_MONITORING_PDF_EXCEPTIONS"]["observed_count"] == len(anp_monitoring_pdf_exception_rows) == 4837
+    assert report["anp_brazil_monitoring_pdf_exceptions_input_sha256"] == hashlib.sha256((ROOT / "data/anp-brazil-monitoring-pdf-exceptions.jsonl").read_bytes()).hexdigest()
+    assert anp_monitoring_pdf_exception_report["official_pdf_files"] == 73
+    assert anp_monitoring_pdf_exception_report["appendix_row_occurrences"] == 5612
+    assert anp_monitoring_pdf_exception_report["normalized_product_grade_holder_identities"] == 3566
+    assert report["anp_brazil_monitoring_pdf_exception_source_observations"] == len(anp_monitoring_pdf_exception_rows)
+    assert report["anp_brazil_monitoring_pdf_exception_raw_identities"] == 3035
+    assert report["anp_brazil_monitoring_pdf_exception_semantic_target_identities"] == 3013
+    assert report["anp_brazil_monitoring_pdf_exception_semantically_remapped_observations"] == 356
+    assert report["anp_brazil_monitoring_pdf_exception_semantically_remapped_identities"] == 131
+    assert all(row["published_scope"] == "published_nonconforming_product_appendices_only" for row in anp_monitoring_pdf_exception_rows)
+    assert all(row["lifecycle_status"] == "historical_market_sample_nonconformity_observation" for row in anp_monitoring_pdf_exception_rows)
+    assert all(len(row["product_name"]) <= 100 for row in anp_monitoring_pdf_exception_rows)
+    assert all(not ({"cnpj", "registration_holder_cnpj", "collection_location", "address", "municipality", "retailer", "seller"} & set(row)) for row in anp_monitoring_pdf_exception_rows)
     forbidden_tables = {"users", "requests", "request_items", "prices", "oil_market_sales"}
     output_tables = {row[0] for row in db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
     assert not forbidden_tables & output_tables
