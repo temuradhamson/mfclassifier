@@ -1,0 +1,212 @@
+{
+  "status": "official_qingdao_2021_2025_automotive_fluid_inspections_normalized",
+  "snapshot_date": "2026-07-22",
+  "rights_url": "https://www.qingdao.gov.cn/zwgk/xxgk/bgt/gkzn/",
+  "source_pages": {
+    "2021": "https://amr.qingdao.gov.cn/zwgk/tzgg/202111/t20211112_3817314.shtml",
+    "2023": "https://amr.qingdao.gov.cn/zwgk/gggs/jgjcgs/202308/t20230822_7422566.shtml",
+    "2024": "https://amr.qingdao.gov.cn/zwgk/gggs/jgjcgs/202409/t20240911_8258621.shtml",
+    "2025_daily2": "https://amr.qingdao.gov.cn/zwgk/gggs/jgjcgs/202508/t20250804_9968842.shtml",
+    "2025_daily4": "https://amr.qingdao.gov.cn/zwgk/gggs/jgjcgs/202511/t20251120_10372861.shtml",
+    "2025_special4": "https://amr.qingdao.gov.cn/zwgk/gggs/jgjcgs/202512/t20251230_10426051.shtml",
+    "2025_special6": "https://amr.qingdao.gov.cn/zwgk/gggs/jgjcgs/202512/t20251218_10410754.shtml"
+  },
+  "source_files": [
+    {
+      "page_key": "2021",
+      "file_kind": "coolant",
+      "title": "2021年发动机冷却液产品质量市监督抽查结果",
+      "attachment_url": "https://amr.qingdao.gov.cn/zwgk/tzgg/202111/P020211112630106584956.xls",
+      "source_xls_sha256": "8ad7db962d9a237277c6e1512b0ed8ecee5c56a6f54478080cdbc82fc33a53b7",
+      "source_rows": 4
+    },
+    {
+      "page_key": "2021",
+      "file_kind": "brake_fluid",
+      "title": "2021年机动车辆制动液产品质量市监督抽查结果",
+      "attachment_url": "https://amr.qingdao.gov.cn/zwgk/tzgg/202111/P020211112630110704088.xls",
+      "source_xls_sha256": "4f65c28e38843cf41688f9ce5fbc7a377712c96acb2d7064bbb62a66239975a8",
+      "source_rows": 1
+    },
+    {
+      "page_key": "2021",
+      "file_kind": "engine_oil",
+      "title": "2021年润滑油产品质量市监督抽查结果",
+      "attachment_url": "https://amr.qingdao.gov.cn/zwgk/tzgg/202111/P020211112630118377847.xls",
+      "source_xls_sha256": "86ae45b7c16c86ef82dacdb6316f06bfca35dbf97d6bfd4c7de39fad174248cb",
+      "source_rows": 4
+    },
+    {
+      "page_key": "2023",
+      "file_kind": "urea",
+      "title": "2023年车用尿素产品质量市监督抽查结果",
+      "attachment_url": "https://amr.qingdao.gov.cn/zwgk/gggs/jgjcgs/202308/P020230822557282227031.xls",
+      "source_xls_sha256": "c509b5570105e87063dc1280147afe5da8f984ceeed991773b09a564cf7a1952",
+      "source_rows": 35
+    },
+    {
+      "page_key": "2023",
+      "file_kind": "coolant",
+      "title": "2023年发动机冷却液产品质量市监督抽查结果",
+      "attachment_url": "https://amr.qingdao.gov.cn/zwgk/gggs/jgjcgs/202308/P020230822557283243170.xls",
+      "source_xls_sha256": "5f4e96580c76da5816edfcb6e869b4af32088b8d2e76dd74b809e9dd8b1e2ab7",
+      "source_rows": 7
+    },
+    {
+      "page_key": "2023",
+      "file_kind": "brake_fluid",
+      "title": "2023年机动车辆制动液产品质量市监督抽查结果",
+      "attachment_url": "https://amr.qingdao.gov.cn/zwgk/gggs/jgjcgs/202308/P020230822557283569793.xls",
+      "source_xls_sha256": "b579f8c74d9614bd4d0b7f03320ab7e5f52ad480723f3b6d727cbe8ac0cabc08",
+      "source_rows": 1
+    },
+    {
+      "page_key": "2023",
+      "file_kind": "engine_oil",
+      "title": "2023年润滑油产品质量市监督抽查结果",
+      "attachment_url": "https://amr.qingdao.gov.cn/zwgk/gggs/jgjcgs/202308/P020230822557285339691.xls",
+      "source_xls_sha256": "6b0ea8977cd276769f47b705a31904985d1a6e0cd1183255b7e1cd722be2113f",
+      "source_rows": 6
+    },
+    {
+      "page_key": "2024",
+      "file_kind": "urea",
+      "title": "2024年柴油发动机氮氧化物还原剂 尿素水溶液产品质量市监督抽查结果",
+      "attachment_url": "https://amr.qingdao.gov.cn/zwgk/gggs/jgjcgs/202409/P020240911511444161658.xls",
+      "source_xls_sha256": "9944e5c1630109bd20d64cd918cef67e5dd3df864848cdd44c4d0a61968eadc1",
+      "source_rows": 25
+    },
+    {
+      "page_key": "2024",
+      "file_kind": "excluded_motor_fuel",
+      "title": "2024年车用油品（生产）产品质量市监督抽查结果",
+      "attachment_url": "https://amr.qingdao.gov.cn/zwgk/gggs/jgjcgs/202409/P020240911511444800035.xls",
+      "source_xls_sha256": "80a396cced87f97e242235a65ebb9f5bc3045116fbdc702f9d85b3d4384422ed",
+      "source_rows": 6
+    },
+    {
+      "page_key": "2024",
+      "file_kind": "brake_fluid",
+      "title": "2024年机动车辆制动液产品质量市监督抽查结果",
+      "attachment_url": "https://amr.qingdao.gov.cn/zwgk/gggs/jgjcgs/202409/P020240911511446188778.xls",
+      "source_xls_sha256": "d2f0e3ae0df1446c74247732c1283428c1792e8dbf8835be16a5ab4c2a438fb7",
+      "source_rows": 20
+    },
+    {
+      "page_key": "2025_daily2",
+      "file_kind": "diesel_engine_oil",
+      "title": "2025年柴油机油产品质量市监督抽查结果",
+      "attachment_url": "https://amr.qingdao.gov.cn/zwgk/gggs/jgjcgs/202508/P020250804505998053149.xls",
+      "source_xls_sha256": "af6f0c667365b59efa1be7e649f57d8f17c1246e77ec2a8862233dbdc08a00dc",
+      "source_rows": 15
+    },
+    {
+      "page_key": "2025_daily2",
+      "file_kind": "urea",
+      "title": "2025年车用尿素产品质量市监督抽查结果",
+      "attachment_url": "https://amr.qingdao.gov.cn/zwgk/gggs/jgjcgs/202508/P020250804505998188416.xls",
+      "source_xls_sha256": "a7078dbd4893cb04cdfb95725f8321342cf6f62df2a5a69a4c9734c9a7b3afda",
+      "source_rows": 46
+    },
+    {
+      "page_key": "2025_daily2",
+      "file_kind": "gasoline_engine_oil",
+      "title": "2025年汽油机油产品质量市监督抽查结果",
+      "attachment_url": "https://amr.qingdao.gov.cn/zwgk/gggs/jgjcgs/202508/P020250804506001661093.xls",
+      "source_xls_sha256": "22e2bbd650b27ef1aa118460414cf2b928277a975a966120cb96ac0bd43a5a5d",
+      "source_rows": 15
+    },
+    {
+      "page_key": "2025_daily4",
+      "file_kind": "washer_fluid",
+      "title": "2025年汽车风窗玻璃清洗液产品质量市监督抽查结果",
+      "attachment_url": "https://amr.qingdao.gov.cn/zwgk/gggs/jgjcgs/202511/P020251120349234072977.xls",
+      "source_xls_sha256": "f4085d082f4861b907be24917f82e8fec4f20e8f105149e660f839d590e77395",
+      "source_rows": 20
+    },
+    {
+      "page_key": "2025_special4",
+      "file_kind": "coolant",
+      "title": "2025年机动车发动机冷却液产品质量市监督抽查结果",
+      "attachment_url": "https://amr.qingdao.gov.cn/zwgk/gggs/jgjcgs/202512/P020251208785362257189.xls",
+      "source_xls_sha256": "adfb6a102ce55d9dfe09237440a4ffeb5a8ff481288d2975b189562d5260fff1",
+      "source_rows": 20
+    },
+    {
+      "page_key": "2025_special4",
+      "file_kind": "brake_fluid",
+      "title": "2025年机动车辆制动液产品质量市监督抽查结果",
+      "attachment_url": "https://amr.qingdao.gov.cn/zwgk/gggs/jgjcgs/202512/P020251208785362373318.xls",
+      "source_xls_sha256": "2a87656f2054750c6e196ffc8d393d5937e94899908364d97bbe4e82150277ff",
+      "source_rows": 20
+    },
+    {
+      "page_key": "2025_special6",
+      "file_kind": "gasoline_detergent_additive",
+      "title": "2025年车用汽油清净剂产品质量市监督抽查结果",
+      "attachment_url": "https://amr.qingdao.gov.cn/zwgk/gggs/jgjcgs/202512/P020251216787636134661.xls",
+      "source_xls_sha256": "91e409157ec73527a49ef64833dfb170f31a476113a72ec5033f76a05379d2e9",
+      "source_rows": 6
+    },
+    {
+      "page_key": "2025_special6",
+      "file_kind": "vehicle_lubricant",
+      "title": "2025年车用润滑油产品质量市监督抽查结果",
+      "attachment_url": "https://amr.qingdao.gov.cn/zwgk/gggs/jgjcgs/202512/P020251216787636233154.xls",
+      "source_xls_sha256": "c6efdabd90f0e9adc6919718c4c711c0c7c85af12e0583b57a844221cd81bf79",
+      "source_rows": 17
+    }
+  ],
+  "source_workbooks": 18,
+  "source_all_rows": 268,
+  "retained_product_observations": 262,
+  "excluded_motor_fuel_rows": 6,
+  "source_counts": {
+    "QINGDAO_CHINA_2021_AUTOMOTIVE_FLUID_INSPECTIONS": 9,
+    "QINGDAO_CHINA_2023_AUTOMOTIVE_FLUID_INSPECTIONS": 49,
+    "QINGDAO_CHINA_2024_AUTOMOTIVE_FLUID_INSPECTIONS": 45,
+    "QINGDAO_CHINA_2025_AUTOMOTIVE_FLUID_INSPECTIONS_DAILY_2": 76,
+    "QINGDAO_CHINA_2025_AUTOMOTIVE_FLUID_INSPECTIONS_DAILY_4": 20,
+    "QINGDAO_CHINA_2025_AUTOMOTIVE_FLUID_INSPECTIONS_SPECIAL_4": 40,
+    "QINGDAO_CHINA_2025_AUTOMOTIVE_FLUID_INSPECTIONS_SPECIAL_6": 23
+  },
+  "outcomes": {
+    "conforming": 261,
+    "nonconforming": 1
+  },
+  "product_kinds": {
+    "发动机冷却液": 31,
+    "抗磨液压油": 8,
+    "机动车辆制动液": 42,
+    "柴油机油": 15,
+    "汽油机油": 15,
+    "汽车风窗玻璃清洗液": 20,
+    "润滑油": 10,
+    "车用尿素": 106,
+    "车用汽油清净剂": 6,
+    "车辆齿轮油": 9
+  },
+  "families": {
+    "H": 8,
+    "M": 40,
+    "S": 6,
+    "T": 9,
+    "TF": 199
+  },
+  "rows_with_api": 40,
+  "rows_with_api_gl": 9,
+  "rows_with_sae": 49,
+  "rows_with_iso_vg": 8,
+  "rows_with_china_lubricant_class": 7,
+  "rows_with_brake_class": 42,
+  "rows_with_coolant_class": 24,
+  "rows_with_coolant_freezing_point": 30,
+  "rows_with_washer_class": 14,
+  "rows_with_washer_freezing_point": 18,
+  "rows_with_aus32": 106,
+  "normalized_output_sha256": "09989645e8c8cbe3f088f14b2e086d9d933c07fae269b83334c31109fb2abda6",
+  "grain_note": "One output row is one inspected batch observation. Strict product identity is resolved later while every batch occurrence remains linked.",
+  "scope_note": "All 262 relevant rows from 17 official workbooks are retained. Six gasoline/diesel-fuel rows in the eighteenth workbook are audited and excluded.",
+  "lifecycle_note": "A conforming result means only that the sampled batch passed this inspection; it is not a current offer, recommendation or blanket approval.",
+  "privacy_note": "Retail sellers, enterprise identifiers, addresses, districts, sampling dates and laboratories are excluded. A production-domain inspected enterprise is retained only when it is the product manufacturer and the nominal-producer cell is empty."
+}
