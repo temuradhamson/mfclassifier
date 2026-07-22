@@ -2446,6 +2446,21 @@
       "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_html_redistribution",
       "observed_count": 12,
       "notes": "All 67 product rows in the announcement table were audited; 12 lubricant product-grade rows are retained with holder, brand, product, SAE, API/API GL and one explicit JASO MA2 value."
+    },
+    {
+      "source_id": "ECUADOR_INEN_2026_07_CURRENT_CERTIFIED_LUBRICANTS",
+      "title": "Ecuador INEN current quality-seal certified lubricants",
+      "owner": "Servicio Ecuatoriano de Normalización (INEN)",
+      "source_type": "official_national_government_current_product_certification_registry_pdf",
+      "source_locator": "data/ecuador-inen-current-certified-lubricants.jsonl",
+      "source_url": "https://drive.google.com/file/d/1PpPul73S1hdaKy2ZG7Re76gV1nOw7IFP/view",
+      "terms_url": "https://www.normalizacion.gob.ec/direccion-tecnica-de-validacion-y-certificacion/1000/",
+      "source_sha256": "e54cc987ebe05725c16645ae8439b52c03c662385efd30fca3324efe3ca4920c",
+      "access_status": "public_official_government_information_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_pdf_redistribution",
+      "observed_count": 410,
+      "notes": "All 1,763 unique certificate rows across the 81-page current list were audited; 410 lubricant/base-oil certificates are retained with certificate number, validity, standard, holder, brand, SAE and API/API GL/JASO/ILSAC/ACEA where reported. All 410 are valid at the 2026-07-22 snapshot; one source product-family versus standard-family conflict remains explicit."
     }
   ]
 }

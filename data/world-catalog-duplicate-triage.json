@@ -11,12 +11,12 @@
     },
     {
       "decision": "review_cross_source_identity",
-      "pairs": 458,
+      "pairs": 469,
       "triage_status": "compatible_partial_specification_review"
     },
     {
       "decision": "review_cross_source_identity",
-      "pairs": 29,
+      "pairs": 30,
       "triage_status": "complete_exact_signature_candidate"
     },
     {
@@ -83,12 +83,12 @@
     },
     {
       "family_code": "M",
-      "pairs": 1101,
+      "pairs": 1112,
       "triage_status": "compatible_partial_specification_review"
     },
     {
       "family_code": "M",
-      "pairs": 190,
+      "pairs": 191,
       "triage_status": "complete_exact_signature_candidate"
     },
     {
@@ -132,9 +132,9 @@
       "triage_status": "insufficient_comparable_evidence"
     }
   ],
-  "canonical_products": 105714,
-  "compressed_database_sha256": "bbd9162efccc4661ac81b3ec46fa39ce7268baae854157de508d78a273e58a41",
-  "distinct_products_in_review": 1286,
+  "canonical_products": 106105,
+  "compressed_database_sha256": "09b78fbb708cb284c79a6c48f9de562332d35150cfbb875c58f48a16fa1daae6",
+  "distinct_products_in_review": 1306,
   "duplicate_decision_rows_collapsed": {
     "by_decision_combination": {
       "keep_separate_professional_signature_conflict + keep_separate_professional_signature_conflict": 11,
@@ -341,15 +341,15 @@
       "coolant_freezing_point_source_reported": 7,
       "iso_vg": 20,
       "jaso_family_detail": 3,
-      "sae_engine": 633,
-      "sae_gear": 42
+      "sae_engine": 658,
+      "sae_gear": 48
     },
-    "explicit_professional_signature_conflict": 699
+    "explicit_professional_signature_conflict": 730
   },
   "retained_source_code_collisions": {
     "gm_same_license_different_product_names": 1
   },
-  "review_pairs": 2569,
+  "review_pairs": 2581,
   "self_pairs_remaining": 0,
   "shared_code_system_counts": {
     "ANP_BRAZIL_REGISTRATION_NUMBER": 167
@@ -357,8 +357,8 @@
   "snapshot_date": "2026-07-22",
   "status": "offline_duplicate_triage_no_unproven_auto_merge",
   "triage_status_counts": {
-    "compatible_partial_specification_review": 1195,
-    "complete_exact_signature_candidate": 469,
+    "compatible_partial_specification_review": 1206,
+    "complete_exact_signature_candidate": 470,
     "insufficient_comparable_evidence": 905
   }
 }

@@ -218,6 +218,8 @@ def main() -> None:
     ghana_gsa_rows = [json.loads(line) for line in (ROOT / "data/ghana-gsa-certified-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     ecuador_inen_report = json.loads((ROOT / "data/ecuador-inen-certified-lubricants-report.json").read_text(encoding="utf-8"))
     ecuador_inen_rows = [json.loads(line) for line in (ROOT / "data/ecuador-inen-certified-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    ecuador_inen_current_report = json.loads((ROOT / "data/ecuador-inen-current-certified-lubricants-report.json").read_text(encoding="utf-8"))
+    ecuador_inen_current_rows = [json.loads(line) for line in (ROOT / "data/ecuador-inen-current-certified-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_report = json.loads((ROOT / "data/kebs-smark-lubricant-products-report.json").read_text(encoding="utf-8"))
     kebs_smark_rows = [json.loads(line) for line in (ROOT / "data/kebs-smark-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     east_africa_report = json.loads((ROOT / "data/east-africa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -266,7 +268,8 @@ def main() -> None:
         + report["jilin_china_products_added"]
         + report["wuxi_china_products_added"]
         + report["yantai_china_products_added"]
-        + report["ecuador_inen_certified_source_rows"]
+        + report["ecuador_inen_current_source_rows"]
+        + report["ecuador_inen_announcement_products_added"]
         - report["gm_dual_standard_license_rows_merged"]
         - report["fuchs_exact_payload_identity_rows_matched"]
         - report["fuchs_exact_content_identity_rows_matched"]
@@ -711,8 +714,8 @@ def main() -> None:
     assert report["liqui_moly_current_products_matched_to_2020"] == 295
     assert report["liqui_moly_current_products_added"] == 152
     assert report["liqui_moly_current_article_skus"] == liqui_moly_current_report["unique_article_skus"] == 985
-    assert report["duplicate_decisions"]["review_cross_source_identity"] == 585
-    assert report["duplicate_decisions"]["keep_separate_specification_conflict"] == 10780
+    assert report["duplicate_decisions"]["review_cross_source_identity"] == 597
+    assert report["duplicate_decisions"]["keep_separate_specification_conflict"] == 10960
     assert db.execute("""
         SELECT count(*) FROM duplicate_decisions d
         JOIN products a ON a.product_id=d.product_id_a
@@ -937,7 +940,7 @@ def main() -> None:
     }
     assert report["duplicate_decisions"]["review_fuchs_multi_registry_identity"] == 1929
     assert report["duplicate_decisions"]["keep_separate_fuchs_market_family_conflict"] == 482
-    assert report["duplicate_decisions"]["keep_separate_professional_signature_conflict"] == 699
+    assert report["duplicate_decisions"]["keep_separate_professional_signature_conflict"] == 730
     assert report["duplicate_decision_pair_rows_collapsed"] == {
         "keep_separate_professional_signature_conflict + keep_separate_professional_signature_conflict": 11,
         "review_cross_source_identity + review_fuchs_multi_registry_identity": 1196,
@@ -950,15 +953,15 @@ def main() -> None:
         "coolant_freezing_point_source_reported": 7,
         "iso_vg": 20,
         "jaso_family_detail": 3,
-        "sae_engine": 633,
-        "sae_gear": 42,
+        "sae_engine": 658,
+        "sae_gear": 48,
     }
     assert report["duplicate_decision_self_pairs_dropped"] == {
         "merged": 1, "review_fuchs_multi_registry_identity": 281,
     }
     assert report["canonical_input_rows_collapsed"] == 1
     assert db.execute("SELECT count(*) FROM duplicate_decisions WHERE product_id_a=product_id_b").fetchone()[0] == 0
-    assert db.execute("SELECT count(*) FROM duplicate_decisions").fetchone()[0] == 14564
+    assert db.execute("SELECT count(*) FROM duplicate_decisions").fetchone()[0] == 14787
     assert db.execute("""
         SELECT count(*) FROM (
             SELECT 1 FROM duplicate_decisions
@@ -972,17 +975,17 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 4973
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3044
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 105715
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 105714
-    assert report["quality_issues"]["professional_key_incomplete"] == 68385
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 106106
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 106105
+    assert report["quality_issues"]["professional_key_incomplete"] == 68406
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
         WHERE q.issue_code='professional_key_incomplete'
         GROUP BY p.family_code
     """)) == {
-        "C": 2060, "E": 148, "G": 10825, "H": 4761, "I": 3491,
-        "M": 22124, "S": 6855, "T": 10985, "TF": 6540, "U": 596,
+        "C": 2060, "E": 148, "G": 10825, "H": 4761, "I": 3493,
+        "M": 22143, "S": 6855, "T": 10985, "TF": 6540, "U": 596,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -993,8 +996,8 @@ def main() -> None:
     assert sum(row["products"] for row in offline_quality_audit["family_coverage"]) == report["canonical_rows"]
     assert duplicate_triage["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert duplicate_triage["canonical_products"] == report["canonical_rows"]
-    assert duplicate_triage["review_pairs"] == 2569
-    assert duplicate_triage["distinct_products_in_review"] == 1286
+    assert duplicate_triage["review_pairs"] == 2581
+    assert duplicate_triage["distinct_products_in_review"] == 1306
     assert duplicate_triage["self_pairs_remaining"] == 0
     assert duplicate_triage["already_applied_safe_merges"] == {
         "canonical_input_rows_collapsed": 1,
@@ -1004,7 +1007,7 @@ def main() -> None:
         "gm_same_license_different_product_names": 1,
     }
     assert duplicate_triage["resolved_keep_separate_pairs"] == {
-        "explicit_professional_signature_conflict": 699,
+        "explicit_professional_signature_conflict": 730,
         "conflicting_fields": report["duplicate_review_conflicts_resolved"],
     }
     assert duplicate_triage["duplicate_decision_rows_collapsed"] == {
@@ -1012,8 +1015,8 @@ def main() -> None:
         "total_extra_rows_removed": 1209,
     }
     assert duplicate_triage["triage_status_counts"] == {
-        "compatible_partial_specification_review": 1195,
-        "complete_exact_signature_candidate": 469,
+        "compatible_partial_specification_review": 1206,
+        "complete_exact_signature_candidate": 470,
         "insufficient_comparable_evidence": 905,
     }
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status='listed_current_catalog'").fetchone()[0] == report["current_catalog_listed_offers"] == 1589
@@ -1925,7 +1928,38 @@ def main() -> None:
         ).fetchone()[0] == post["relevant_rows"]
     assert db.execute(
         "SELECT count(*) FROM products WHERE evidence_status='official_government_product_certification_announcement'"
-    ).fetchone()[0] == 30
+    ).fetchone()[0] == 11
+    assert ecuador_inen_current_report["source_pdf_sha256"] == "42bac24e08c30af8966cce6025a24e7ba2ce84487c712afba2d303c9a8111c26"
+    assert ecuador_inen_current_report["source_pdf_pages"] == 81
+    assert ecuador_inen_current_report["audited_all_certificate_rows"] == 1763
+    assert ecuador_inen_current_report["normalized_products"] == len(ecuador_inen_current_rows) == 410
+    assert ecuador_inen_current_report["families"] == {"I": 2, "M": 288, "T": 120}
+    assert ecuador_inen_current_report["certified_standards"] == {
+        "NTE INEN 2027:2024": 156,
+        "NTE INEN 2028:2021": 119,
+        "NTE INEN 2029:2018": 2,
+        "NTE INEN 2030:2024": 133,
+    }
+    assert ecuador_inen_current_report["rows_with_sae"] == 408
+    assert ecuador_inen_current_report["rows_with_api"] == 288
+    assert ecuador_inen_current_report["rows_with_api_gl"] == 120
+    assert ecuador_inen_current_report["rows_with_jaso"] == 14
+    assert ecuador_inen_current_report["rows_with_ilsac"] == 3
+    assert ecuador_inen_current_report["rows_with_acea"] == 1
+    assert ecuador_inen_current_report["valid_at_snapshot"] == 410
+    assert ecuador_inen_current_report["source_standard_family_conflicts"] == 1
+    assert ecuador_inen_current_report["announcement_rows_exactly_matched_to_current"] == 19
+    assert ecuador_inen_current_report["announcement_rows_not_in_current_registry"] == 11
+    assert len({row["certificate_number"] for row in ecuador_inen_current_rows}) == 410
+    assert all(not ({"geographic_location", "address", "city", "phone", "email", "contact_person"} & set(row)) for row in ecuador_inen_current_rows)
+    assert policy_by_id["ECUADOR_INEN_2026_07_CURRENT_CERTIFIED_LUBRICANTS"]["source_sha256"] == ecuador_inen_current_report["normalized_output_sha256"]
+    assert policy_by_id["ECUADOR_INEN_2026_07_CURRENT_CERTIFIED_LUBRICANTS"]["observed_count"] == 410
+    assert db.execute(
+        "SELECT count(*) FROM products WHERE evidence_status='official_government_current_product_certification_registry'"
+    ).fetchone()[0] == 410
+    assert db.execute(
+        "SELECT count(*) FROM product_sources WHERE source_id='ECUADOR_INEN_2026_07_CURRENT_CERTIFIED_LUBRICANTS'"
+    ).fetchone()[0] == 410
     assert policy_by_id["nsf-white-book"]["bulk_ingest_allowed"] is False
     assert policy_by_id["FLENDER_T7300_APPROVED_LUBRICANTS"]["bulk_ingest_allowed"] is False
     chemexpo_names = {row["product_name"].casefold() for row in epa_chemexpo_rows}

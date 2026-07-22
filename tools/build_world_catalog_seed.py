@@ -90,6 +90,8 @@ YANTAI_CHINA_2025_JSONL = ROOT / "data" / "yantai-2025-gasoline-detergent-inspec
 PHILIPPINES_BPS_BRAKE_FLUID_JSONL = ROOT / "data" / "philippines-bps-brake-fluid-products.jsonl"
 GHANA_GSA_CERTIFIED_JSONL = ROOT / "data" / "ghana-gsa-certified-lubricant-products.jsonl"
 ECUADOR_INEN_CERTIFIED_JSONL = ROOT / "data" / "ecuador-inen-certified-lubricants.jsonl"
+ECUADOR_INEN_CURRENT_JSONL = ROOT / "data" / "ecuador-inen-current-certified-lubricants.jsonl"
+ECUADOR_INEN_CURRENT_REPORT = ROOT / "data" / "ecuador-inen-current-certified-lubricants-report.json"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
 SON_MANCAP_JSONL = ROOT / "data" / "son-mancap-chemical-lubricant-products.jsonl"
@@ -3038,6 +3040,72 @@ def ecuador_inen_certified_record(row: dict) -> dict:
     return record
 
 
+def ecuador_inen_current_record(row: dict) -> dict:
+    """Convert one current INEN quality-seal certificate product row."""
+    technical = row["technical"]
+    performance = [f"API {value}" for value in technical["api"]]
+    performance += [f"API {value}" for value in technical["api_gl"]]
+    performance += [f"JASO {value}" for value in technical["jaso"]]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["certificate_number"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Ecuador INEN current quality-seal certified lubricant",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": technical["sae"][0] if technical["sae"] else "",
+        "api_class": "; ".join(performance),
+        "viscosity": "",
+        "grease_class": "",
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer_or_certificate_holder"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": row["source_pdf_table_row"],
+        "evidence_status": row["evidence_status"],
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["dataset_snapshot_date"],
+        "certificate_status": row["lifecycle_status"],
+    })
+    record["specifications"].update({
+        "sae_source_reported": technical["sae"],
+        "api_source_reported": technical["api"],
+        "api_gl_source_reported": technical["api_gl"],
+        "jaso_source_reported": technical["jaso"],
+        "ilsac_source_reported": technical["ilsac"],
+        "acea_source_reported": technical["acea"],
+        "resource_conserving_source_reported": technical["resource_conserving"],
+        "ecuador_inen_source_product_field": row["source_product_field"],
+        "ecuador_inen_certified_standard": [row["certified_standard"]],
+        "ecuador_inen_source_pdf_page": row["source_pdf_page"],
+        "ecuador_inen_source_quality_flags": row["source_quality_flags"],
+        "source_url": row["source_url"],
+        "source_landing_url": row["source_landing_url"],
+        "source_facts_sha256": row["source_facts_sha256"],
+    })
+    record["codes"]["ecuador_inen_quality_seal_certificate"] = {
+        "system": "ECUADOR_INEN_QUALITY_SEAL_CERTIFICATE",
+        "value": row["certificate_number"],
+        "source_id": row["source_id"],
+        "status": row["lifecycle_status"],
+    }
+    record["certificate"].update({
+        "number": row["certificate_number"],
+        "issued_at": row["issued_at"],
+        "expires_at": row["expires_at"],
+        "technical_document": row["certified_standard"],
+    })
+    record["canonical_key"] += f"|ecuador_inen_certificate:{normalize(row['certificate_number'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    return record
+
+
 def kebs_smark_record(row: dict) -> dict:
     """Convert one normalized product identity from the public KEBS S-Mark directory."""
     technical = row["technical"]
@@ -4823,9 +4891,29 @@ def main() -> None:
     ghana_gsa_source_rows = [json.loads(line) for line in GHANA_GSA_CERTIFIED_JSONL.read_text(encoding="utf-8").splitlines() if line]
     ghana_gsa_records = [ghana_gsa_certified_record(row) for row in ghana_gsa_source_rows]
     input_records.extend(ghana_gsa_records)
+    ecuador_inen_current_source_rows = [json.loads(line) for line in ECUADOR_INEN_CURRENT_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    ecuador_inen_current_records = [ecuador_inen_current_record(row) for row in ecuador_inen_current_source_rows]
+    input_records.extend(ecuador_inen_current_records)
+    ecuador_inen_current_record_by_id = {
+        raw["source_record_id"]: record
+        for raw, record in zip(ecuador_inen_current_source_rows, ecuador_inen_current_records)
+    }
+    ecuador_inen_current_report = json.loads(ECUADOR_INEN_CURRENT_REPORT.read_text(encoding="utf-8"))
+    announcement_to_current_record = ecuador_inen_current_report["announcement_to_current_record"]
     ecuador_inen_source_rows = [json.loads(line) for line in ECUADOR_INEN_CERTIFIED_JSONL.read_text(encoding="utf-8").splitlines() if line]
-    ecuador_inen_records = [ecuador_inen_certified_record(row) for row in ecuador_inen_source_rows]
-    input_records.extend(ecuador_inen_records)
+    ecuador_inen_product_key = {}
+    ecuador_inen_announcement_rows_matched_to_current = 0
+    ecuador_inen_announcement_products_added = 0
+    for raw in ecuador_inen_source_rows:
+        current_record_id = announcement_to_current_record.get(raw["source_record_id"])
+        if current_record_id:
+            target = ecuador_inen_current_record_by_id[current_record_id]
+            ecuador_inen_announcement_rows_matched_to_current += 1
+        else:
+            target = ecuador_inen_certified_record(raw)
+            input_records.append(target)
+            ecuador_inen_announcement_products_added += 1
+        ecuador_inen_product_key[raw["source_record_id"]] = target["canonical_key"]
     kebs_smark_source_rows = [json.loads(line) for line in KEBS_SMARK_JSONL.read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_records = [kebs_smark_record(row) for row in kebs_smark_source_rows]
     input_records.extend(kebs_smark_records)
@@ -6146,6 +6234,19 @@ def main() -> None:
         if link_key not in source_link_keys:
             source_links.append(link)
             source_link_keys.add(link_key)
+    for raw in ecuador_inen_source_rows:
+        target = canonical_by_key[ecuador_inen_product_key[raw["source_record_id"]]]
+        link = {
+            "product_id": target["product_id"],
+            "source_id": raw["source_id"],
+            "source_record_id": raw["source_record_id"],
+            "source_row": raw["source_row"],
+            "relation": "official_government_product_certification_announcement",
+        }
+        link_key = (link["product_id"], link["source_id"], link["source_record_id"])
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     for raw in shenzhen_china_2016_2017_source_rows:
         target = canonical_by_key[shenzhen_china_2016_2017_product_key[raw["source_record_id"]]]
         link = {
@@ -7172,6 +7273,8 @@ def main() -> None:
         "philippines_bps_brake_fluid_input_sha256": hashlib.sha256(PHILIPPINES_BPS_BRAKE_FLUID_JSONL.read_bytes()).hexdigest(),
         "ghana_gsa_certified_input_sha256": hashlib.sha256(GHANA_GSA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "ecuador_inen_certified_input_sha256": hashlib.sha256(ECUADOR_INEN_CERTIFIED_JSONL.read_bytes()).hexdigest(),
+        "ecuador_inen_current_input_sha256": hashlib.sha256(ECUADOR_INEN_CURRENT_JSONL.read_bytes()).hexdigest(),
+        "ecuador_inen_current_report_sha256": hashlib.sha256(ECUADOR_INEN_CURRENT_REPORT.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "son_mancap_input_sha256": hashlib.sha256(SON_MANCAP_JSONL.read_bytes()).hexdigest(),
@@ -7329,6 +7432,9 @@ def main() -> None:
         "philippines_bps_icc_brake_fluid_rows": sum(r["source_id"] == "PHILIPPINES_BPS_ICC_BRAKE_FLUID_CERTIFICATES" for r in records),
         "ghana_gsa_certified_source_rows": len(ghana_gsa_source_rows),
         "ecuador_inen_certified_source_rows": len(ecuador_inen_source_rows),
+        "ecuador_inen_current_source_rows": len(ecuador_inen_current_source_rows),
+        "ecuador_inen_announcement_rows_matched_to_current": ecuador_inen_announcement_rows_matched_to_current,
+        "ecuador_inen_announcement_products_added": ecuador_inen_announcement_products_added,
         "kebs_smark_source_rows": len(kebs_smark_source_rows),
         "east_africa_certified_source_rows": len(east_africa_certified_source_rows),
         "east_africa_certified_source_rows_by_source": dict(sorted(Counter(row["source_id"] for row in east_africa_certified_source_rows).items())),
