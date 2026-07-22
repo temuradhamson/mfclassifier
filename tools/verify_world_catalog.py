@@ -206,6 +206,7 @@ def main() -> None:
     qingdao_china_rows = [json.loads(line) for line in (ROOT / "data/qingdao-2021-2025-automotive-fluid-inspections.jsonl").read_text(encoding="utf-8").splitlines() if line]
     jilin_china_report = json.loads((ROOT / "data/jilin-2024-2025-automotive-fluid-inspections-report.json").read_text(encoding="utf-8"))
     jilin_china_rows = [json.loads(line) for line in (ROOT / "data/jilin-2024-2025-automotive-fluid-inspections.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    offline_quality_audit = json.loads((ROOT / "data/world-catalog-offline-quality-audit.json").read_text(encoding="utf-8"))
     philippines_bps_report = json.loads((ROOT / "data/philippines-bps-brake-fluid-products-report.json").read_text(encoding="utf-8"))
     philippines_bps_rows = [json.loads(line) for line in (ROOT / "data/philippines-bps-brake-fluid-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     ghana_gsa_report = json.loads((ROOT / "data/ghana-gsa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -799,6 +800,15 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 4973
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3044
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 105957
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 105956
+    assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
+    assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
+    assert offline_quality_audit["canonical_products"] == report["canonical_rows"]
+    assert offline_quality_audit["active_offers"] == report["active_offers"]
+    assert offline_quality_audit["canonical_key_duplicates"] == 0
+    assert offline_quality_audit["products_with_at_least_one_source_link"] == report["canonical_rows"]
+    assert sum(row["products"] for row in offline_quality_audit["family_coverage"]) == report["canonical_rows"]
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status='listed_current_catalog'").fetchone()[0] == report["current_catalog_listed_offers"] == 1589
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_filed_registry'").fetchone()[0] == 3629
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_licensed_registry'").fetchone()[0] == 3037

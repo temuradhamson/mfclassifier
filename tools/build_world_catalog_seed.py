@@ -11,6 +11,7 @@ import re
 import shutil
 import sqlite3
 import unicodedata
+import zipfile
 from collections import Counter, defaultdict
 from datetime import date
 from itertools import combinations
@@ -1690,7 +1691,10 @@ def merge_anp_monitoring_evidence(target: dict, occurrences: list[dict], match_b
     years = sorted({row["issue_year"] for row in occurrences if row["issue_year"]})
     sample_ids = sorted({row["sample_id"] for row in occurrences if row["sample_id"]})
     flags = sorted({flag for row in occurrences for flag in row["quality_flags"]})
-    holders = sorted({row["registration_holder"] for row in occurrences if row["registration_holder"]}, key=str.casefold)
+    holders = sorted(
+        {row["registration_holder"] for row in occurrences if row["registration_holder"]},
+        key=lambda value: (value.casefold(), value),
+    )
     files = sorted({row["source_url"] for row in occurrences})
     source_ids = sorted({row["source_id"] for row in occurrences})
     published_scopes = sorted({row["published_scope"] for row in occurrences if row.get("published_scope")})
@@ -3508,7 +3512,7 @@ def quality_issues(records: list[dict]) -> list[dict]:
     return issues
 
 
-def build_sqlite(records: list[dict], candidates: list[dict], issues: list[dict], source_links: list[dict], offers: list[dict], policies: dict, run_id: str) -> None:
+def build_sqlite(records: list[dict], candidates: list[dict], issues: list[dict], source_links: list[dict], offers: list[dict], policies: dict, run_id: str, input_rows: int) -> None:
     if SQLITE_OUT.exists():
         SQLITE_OUT.unlink()
     db = sqlite3.connect(SQLITE_OUT)
@@ -3530,7 +3534,7 @@ def build_sqlite(records: list[dict], candidates: list[dict], issues: list[dict]
     CREATE INDEX codes_system_value_idx ON external_codes(code_system, code_value);
     CREATE INDEX offers_product_idx ON product_offers(product_id);
     """)
-    db.execute("INSERT INTO ingest_runs VALUES (?,?,?,?,?)", (run_id, SNAPSHOT_DATE, f"{SNAPSHOT_DATE}T00:00:00+00:00", len(records), len(records)))
+    db.execute("INSERT INTO ingest_runs VALUES (?,?,?,?,?)", (run_id, SNAPSHOT_DATE, f"{SNAPSHOT_DATE}T00:00:00+00:00", input_rows, len(records)))
     for source in policies["sources"]:
         db.execute("INSERT INTO sources VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", (
             source["source_id"], source["title"], source.get("owner"), source.get("source_type"),
@@ -3608,6 +3612,30 @@ def add_sheet(wb, title, headers, rows):
     style_sheet(ws)
 
 
+def normalize_xlsx_archive(path: Path) -> None:
+    """Remove wall-clock metadata so identical workbook content is byte-stable."""
+    fixed_zip_time = (2026, 7, 22, 0, 0, 0)
+    fixed_w3cdtf = b"2026-07-22T00:00:00Z"
+    temporary = path.with_suffix(path.suffix + ".deterministic")
+    with zipfile.ZipFile(path, "r") as source:
+        entries = [(info, source.read(info.filename)) for info in source.infolist()]
+    with zipfile.ZipFile(temporary, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as target:
+        for source_info, payload in entries:
+            if source_info.filename == "docProps/core.xml":
+                payload = re.sub(
+                    br"(<dcterms:(?:created|modified)[^>]*>)[^<]*(</dcterms:(?:created|modified)>)",
+                    lambda match: match.group(1) + fixed_w3cdtf + match.group(2),
+                    payload,
+                )
+            info = zipfile.ZipInfo(source_info.filename, fixed_zip_time)
+            info.compress_type = zipfile.ZIP_DEFLATED
+            info.create_system = source_info.create_system
+            info.external_attr = source_info.external_attr
+            info.comment = source_info.comment
+            target.writestr(info, payload, compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
+    temporary.replace(path)
+
+
 def build_workbook(records: list[dict], candidates: list[dict], issues: list[dict], offers: list[dict], exclusions: list[dict], policies: dict, report: dict) -> None:
     wb = Workbook()
     wb.remove(wb.active)
@@ -3663,6 +3691,7 @@ def build_workbook(records: list[dict], candidates: list[dict], issues: list[dic
     ] for e in exclusions])
     XLSX_OUT.parent.mkdir(parents=True, exist_ok=True)
     wb.save(XLSX_OUT)
+    normalize_xlsx_archive(XLSX_OUT)
 
 
 def main() -> None:
@@ -6816,7 +6845,7 @@ def main() -> None:
             f"fuchs_{slug}_cross_market_family_conflict_rows": data["conflicts"],
         })
     REPORT_OUT.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    build_sqlite(records, candidates, issues, source_links, offers, policies, run_id)
+    build_sqlite(records, candidates, issues, source_links, offers, policies, run_id, len(input_records))
     compress_sqlite()
     build_workbook(records, candidates, issues, offers, exclusions, policies, report)
     print(json.dumps(report, ensure_ascii=False))

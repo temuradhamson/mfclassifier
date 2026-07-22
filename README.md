@@ -58,8 +58,11 @@ python3 tools/build_analytics_demo.py \
 
 ## Мировой каталог и расширение ЕНКТ
 
-Отдельный provenance-aware слой содержит 104 750 канонических продуктовых строк
-на срез 22.07.2026. В него уже входят проектные источники, AIChilon, официальные
+Отдельный provenance-aware слой содержит 105 956 канонических продуктовых строк
+на срез 22.07.2026. Воспроизводимый офлайн-аудит покрытия спецификациями,
+provenance и очередей дедупликации сохранён в
+`deliverables/World_catalog_offline_quality_audit_2026-07-22.md`. В слой уже
+входят проектные источники, AIChilon, официальные
 реестры JASO, GM dexos, NMMA, NLGI, ZF TE-ML, Allison TES, Driventic DIWA,
 Mercedes-Benz Trucks DTFR, Mercedes-Benz BeVo, официальные каталоги Volvo Genuine,
 Mack Genuine и Scania Genuine Engine Oils, исторический Mack Service Bulletin
