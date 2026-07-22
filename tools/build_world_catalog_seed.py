@@ -79,6 +79,7 @@ SHENZHEN_CHINA_2021_JSONL = ROOT / "data" / "shenzhen-2021-nonconforming-automot
 SHENZHEN_CHINA_2020_JSONL = ROOT / "data" / "shenzhen-2020-automotive-fluid-inspection.jsonl"
 SHENZHEN_CHINA_2019_JSONL = ROOT / "data" / "shenzhen-2019-automotive-fluid-inspection.jsonl"
 SHENZHEN_CHINA_2025_JSONL = ROOT / "data" / "shenzhen-2025-automotive-fluid-inspection.jsonl"
+SHANGHAI_CHINA_2023_2025_JSONL = ROOT / "data" / "shanghai-2023-2025-lubricant-inspections.jsonl"
 PHILIPPINES_BPS_BRAKE_FLUID_JSONL = ROOT / "data" / "philippines-bps-brake-fluid-products.jsonl"
 GHANA_GSA_CERTIFIED_JSONL = ROOT / "data" / "ghana-gsa-certified-lubricant-products.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
@@ -2594,6 +2595,9 @@ def samr_china_inspection_record(row: dict) -> dict:
     technical = row["technical"]
     api = technical["api_source_reported"]
     sae = technical["sae_source_reported"]
+    api_gl = technical.get("api_gl_source_reported", [])
+    iso_vg = technical.get("iso_vg_source_reported", [])
+    china_classes = technical.get("china_lubricant_class_source_reported", [])
     brake_classes = technical["brake_fluid_dot_source_reported"] or technical["brake_fluid_hzy_source_reported"]
     generic = {
         "id": row["source_record_id"],
@@ -2604,8 +2608,11 @@ def samr_china_inspection_record(row: dict) -> dict:
         "category_code": row["family_code"],
         "family": FAMILY_NAMES[row["family_code"]],
         "sae_class": "; ".join(sae),
-        "api_class": "; ".join(f"API {value}" for value in api),
-        "viscosity": "",
+        "api_class": "; ".join(
+            [*(f"API {value}" for value in api), *(f"API {value}" for value in api_gl)]
+        ),
+        "viscosity": iso_vg[0] if iso_vg else "",
+        "din_gost_class": "; ".join(china_classes),
         "grease_class": "",
         "coolant_class": brake_classes[0] if brake_classes else "",
         "source": row["source_id"],
@@ -2637,6 +2644,9 @@ def samr_china_inspection_record(row: dict) -> dict:
         "samr_inspection_occurrences": [samr_inspection_occurrence(row)],
         "inspection_model_specifications_source_reported": [row["model_specification_source_reported"]],
         "api_source_reported": api,
+        "api_gl_source_reported": api_gl,
+        "iso_vg_source_reported": iso_vg,
+        "china_lubricant_class_source_reported": china_classes,
         "sae_engine_source_reported": sae,
         "brake_fluid_dot_source_reported": technical["brake_fluid_dot_source_reported"],
         "brake_fluid_hzy_source_reported": technical["brake_fluid_hzy_source_reported"],
@@ -2691,7 +2701,10 @@ def china_inspection_professional_signature(row: dict) -> tuple:
         brake_classes.add(("DOT_OR_HZY", grade) if grade in {"3", "4"} else ("HZY", grade))
     return (
         tuple(technical.get("api_source_reported", [])),
+        tuple(technical.get("api_gl_source_reported", [])),
         tuple(technical.get("sae_source_reported", [])),
+        tuple(technical.get("iso_vg_source_reported", [])),
+        tuple(technical.get("china_lubricant_class_source_reported", [])),
         tuple(technical.get("acea_source_reported", [])),
         tuple(technical.get("ilsac_source_reported", [])),
         tuple(sorted(brake_classes)),
@@ -2758,6 +2771,7 @@ def merge_china_inspection_evidence(target: dict, row: dict) -> None:
     ))
     for field in (
         "api_source_reported", "sae_engine_source_reported", "acea_source_reported",
+        "api_gl_source_reported", "iso_vg_source_reported", "china_lubricant_class_source_reported",
         "ilsac_source_reported", "brake_fluid_dot_source_reported",
         "brake_fluid_hzy_source_reported", "brake_fluid_env_source_reported", "coolant_class_source_reported",
         "coolant_freezing_point_source_reported", "washer_fluid_class_source_reported",
@@ -2779,6 +2793,9 @@ def shenzhen_inspection_identity(row: dict) -> tuple:
         normalize(row["manufacturer"]), normalize(row["brand"]), normalize(row["product_name"]),
         normalize(row["model_specification_without_package"]), row["family_code"],
         tuple(technical["api_source_reported"]), tuple(technical["sae_source_reported"]),
+        tuple(technical.get("api_gl_source_reported", [])),
+        tuple(technical.get("iso_vg_source_reported", [])),
+        tuple(technical.get("china_lubricant_class_source_reported", [])),
         tuple(technical["acea_source_reported"]), tuple(technical["ilsac_source_reported"]),
         tuple(technical["brake_fluid_dot_source_reported"]),
         tuple(technical["brake_fluid_hzy_source_reported"]),
@@ -3943,6 +3960,7 @@ def main() -> None:
     china_inspection_all_by_package_independent_identity = unique_inspection_target_map(china_inspection_package_independent_identity)
     shenzhen_china_2019_source_rows = [json.loads(line) for line in SHENZHEN_CHINA_2019_JSONL.read_text(encoding="utf-8").splitlines() if line]
     shenzhen_china_2019_product_key = {}
+    shenzhen_china_2019_target_by_record_id = {}
     shenzhen_china_2019_by_identity = {}
     shenzhen_china_2019_products_matched_to_existing = 0
     shenzhen_china_2019_duplicate_occurrences_merged = 0
@@ -3980,6 +3998,47 @@ def main() -> None:
                 shenzhen_china_2019_by_identity[identity] = target
                 shenzhen_china_2019_products_added += 1
         shenzhen_china_2019_product_key[raw["source_record_id"]] = target["canonical_key"]
+        shenzhen_china_2019_target_by_record_id[raw["source_record_id"]] = target
+    china_inspection_existing_entries.extend(
+        (raw, shenzhen_china_2019_target_by_record_id[raw["source_record_id"]])
+        for raw in shenzhen_china_2019_source_rows
+    )
+    shanghai_china_source_rows = [
+        json.loads(line)
+        for line in SHANGHAI_CHINA_2023_2025_JSONL.read_text(encoding="utf-8").splitlines()
+        if line
+    ]
+    shanghai_china_product_key = {}
+    shanghai_china_products_matched_to_existing = 0
+    shanghai_china_products_added = 0
+    for raw in shanghai_china_source_rows:
+        comparable_map = unique_inspection_target_map(china_inspection_comparable_identity)
+        professional_map = unique_inspection_target_map(china_inspection_professional_identity)
+        package_independent_map = unique_inspection_target_map(china_inspection_package_independent_identity)
+        target = comparable_map.get(china_inspection_comparable_identity(raw))
+        if target is None:
+            professional_identity = china_inspection_professional_identity(raw)
+            if professional_identity is not None:
+                target = professional_map.get(professional_identity)
+        if target is None:
+            target = package_independent_map.get(china_inspection_package_independent_identity(raw))
+        if target is None:
+            fallback_candidates = {
+                candidate_target["canonical_key"]: candidate_target
+                for candidate_raw, candidate_target in china_inspection_existing_entries
+                if china_inspection_fallback_brand_match(raw, candidate_raw)
+            }
+            if len(fallback_candidates) == 1:
+                target = next(iter(fallback_candidates.values()))
+        if target is not None:
+            merge_china_inspection_evidence(target, raw)
+            shanghai_china_products_matched_to_existing += 1
+        else:
+            target = samr_china_inspection_record(raw)
+            input_records.append(target)
+            shanghai_china_products_added += 1
+        china_inspection_existing_entries.append((raw, target))
+        shanghai_china_product_key[raw["source_record_id"]] = target["canonical_key"]
     philippines_bps_brake_fluid_source_rows = [json.loads(line) for line in PHILIPPINES_BPS_BRAKE_FLUID_JSONL.read_text(encoding="utf-8").splitlines() if line]
     philippines_bps_brake_fluid_records = [philippines_bps_brake_fluid_record(row) for row in philippines_bps_brake_fluid_source_rows]
     input_records.extend(philippines_bps_brake_fluid_records)
@@ -5329,6 +5388,17 @@ def main() -> None:
         if link_key not in source_link_keys:
             source_links.append(link)
             source_link_keys.add(link_key)
+    for raw in shanghai_china_source_rows:
+        target = canonical_by_key[shanghai_china_product_key[raw["source_record_id"]]]
+        link = {
+            "product_id": target["product_id"], "source_id": raw["source_id"],
+            "source_record_id": raw["source_record_id"], "source_row": raw["source_row"],
+            "relation": "official_government_product_inspection_observation",
+        }
+        link_key = (link["product_id"], link["source_id"], link["source_record_id"])
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     for raw in aichilon_products:
         target = canonical_by_key[aichilon_product_key[int(raw["source_number"])]]
         link = {
@@ -6185,6 +6255,7 @@ def main() -> None:
         "shenzhen_china_2020_input_sha256": hashlib.sha256(SHENZHEN_CHINA_2020_JSONL.read_bytes()).hexdigest(),
         "shenzhen_china_2019_input_sha256": hashlib.sha256(SHENZHEN_CHINA_2019_JSONL.read_bytes()).hexdigest(),
         "shenzhen_china_2025_input_sha256": hashlib.sha256(SHENZHEN_CHINA_2025_JSONL.read_bytes()).hexdigest(),
+        "shanghai_china_2023_2025_input_sha256": hashlib.sha256(SHANGHAI_CHINA_2023_2025_JSONL.read_bytes()).hexdigest(),
         "philippines_bps_brake_fluid_input_sha256": hashlib.sha256(PHILIPPINES_BPS_BRAKE_FLUID_JSONL.read_bytes()).hexdigest(),
         "ghana_gsa_certified_input_sha256": hashlib.sha256(GHANA_GSA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
@@ -6295,11 +6366,15 @@ def main() -> None:
         "shenzhen_china_2025_products_matched_to_existing": shenzhen_china_2025_products_matched_to_existing,
         "shenzhen_china_2025_duplicate_occurrences_merged": shenzhen_china_2025_duplicate_occurrences_merged,
         "shenzhen_china_2025_products_added": shenzhen_china_2025_products_added,
+        "shanghai_china_2023_2025_source_rows": len(shanghai_china_source_rows),
+        "shanghai_china_products_matched_to_existing": shanghai_china_products_matched_to_existing,
+        "shanghai_china_products_added": shanghai_china_products_added,
         "china_government_inspection_source_observations": sum(map(len, (
             samr_china_2025_source_rows, samr_china_2024_source_rows,
             samr_china_2023_source_rows, shenzhen_china_2021_source_rows,
             shenzhen_china_2025_source_rows, shenzhen_china_2020_source_rows,
             shenzhen_china_2019_source_rows,
+            shanghai_china_source_rows,
         ))),
         "samr_china_source_observations": len(samr_china_2025_source_rows) + len(samr_china_2024_source_rows) + len(samr_china_2023_source_rows),
         "official_government_nonconforming_product_inspection_observation_rows": sum(r["evidence_status"] == "official_government_nonconforming_product_inspection_observation" for r in records),

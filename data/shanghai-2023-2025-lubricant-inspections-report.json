@@ -1,0 +1,40 @@
+{
+  "status": "official_shanghai_2023_2025_complete_lubricant_inspections_normalized",
+  "snapshot_date": "2026-07-22",
+  "source_pages": 5,
+  "source_html_sha256": {
+    "SHANGHAI_CHINA_2023_INDUSTRIAL_LUBRICANT_INSPECTION_1": "3f2359c30b38c5e0b158bc2b25faad1fbc4b431c97ce7af2659cd7a2ebed2ed4",
+    "SHANGHAI_CHINA_2023_INDUSTRIAL_LUBRICANT_INSPECTION_2": "b7cfd6ea2ae3385eda74fc9870813408a93474933bb9a7a994477c33a630e64d",
+    "SHANGHAI_CHINA_2024_INDUSTRIAL_LUBRICANT_INSPECTION": "bc6ac7dfe55b9220f2cc68af18f74864a30b1aab674fb6428284714a417e1fb9",
+    "SHANGHAI_CHINA_2025_ENGINE_OIL_INSPECTION": "a162ba0813d7c6a728a26230ceb0ac3f60e4615aa95c4a4172cfe90b33582e71",
+    "SHANGHAI_CHINA_2025_INDUSTRIAL_LUBRICANT_INSPECTION": "727550023f5f72fe0bf7bad3feeb4149f0ec318b763788472813a0d419e6e7fc"
+  },
+  "source_observations": 390,
+  "source_counts": {
+    "SHANGHAI_CHINA_2023_INDUSTRIAL_LUBRICANT_INSPECTION_1": 64,
+    "SHANGHAI_CHINA_2023_INDUSTRIAL_LUBRICANT_INSPECTION_2": 35,
+    "SHANGHAI_CHINA_2024_INDUSTRIAL_LUBRICANT_INSPECTION": 131,
+    "SHANGHAI_CHINA_2025_ENGINE_OIL_INSPECTION": 30,
+    "SHANGHAI_CHINA_2025_INDUSTRIAL_LUBRICANT_INSPECTION": 130
+  },
+  "outcomes": {
+    "conforming": 376,
+    "nonconforming": 14
+  },
+  "families": {
+    "H": 170,
+    "I": 13,
+    "M": 30,
+    "T": 177
+  },
+  "rows_with_sae": 30,
+  "rows_with_api": 30,
+  "rows_with_api_gl": 131,
+  "rows_with_iso_vg": 158,
+  "rows_with_china_lubricant_class": 159,
+  "normalized_output_sha256": "70e607ca7053db8bfe2cfa78b26ea649c3cfb16ff45314676525c118e784af25",
+  "grain_note": "One row is one inspected batch observation. Strict package-independent product reconciliation is performed only by the catalog builder.",
+  "lifecycle_note": "A conforming result applies only to the sampled batch. No observation is treated as a current offer or blanket product approval.",
+  "privacy_note": "Sampled retailers, shopping centres, platforms and certification-agency columns are excluded.",
+  "rights_note": "Official source HTML is not redistributed; only attributed non-expressive product and inspection facts are normalized."
+}
