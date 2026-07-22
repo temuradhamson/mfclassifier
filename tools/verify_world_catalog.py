@@ -688,7 +688,7 @@ def main() -> None:
     assert report["liqui_moly_current_products_matched_to_2020"] == 295
     assert report["liqui_moly_current_products_added"] == 152
     assert report["liqui_moly_current_article_skus"] == liqui_moly_current_report["unique_article_skus"] == 985
-    assert report["duplicate_decisions"]["review_cross_source_identity"] == 5738
+    assert report["duplicate_decisions"]["review_cross_source_identity"] == 582
     assert report["duplicate_decisions"]["keep_separate_specification_conflict"] == 10769
     assert db.execute("""
         SELECT count(*) FROM duplicate_decisions d
@@ -849,7 +849,12 @@ def main() -> None:
     assert report["duplicate_decisions"]["review_liqui_moly_current_multiple_historical_candidates"] == 4
     assert report["duplicate_decisions"]["review_fuchs_multi_registry_identity"] == 6600
     assert report["duplicate_decisions"]["keep_separate_fuchs_market_family_conflict"] == 534
-    assert report["duplicate_decisions"]["keep_separate_professional_signature_conflict"] == 703
+    assert report["duplicate_decisions"]["keep_separate_professional_signature_conflict"] == 691
+    assert report["duplicate_decision_pair_rows_collapsed"] == {
+        "keep_separate_professional_signature_conflict + keep_separate_professional_signature_conflict": 12,
+        "review_cross_source_identity + review_fuchs_multi_registry_identity": 5154,
+        "review_cross_source_identity + review_liqui_moly_current_multiple_historical_candidates": 2,
+    }
     assert report["duplicate_review_conflicts_resolved"] == {
         "brake_fluid_hzy_source_reported": 2,
         "coolant_class": 4,
@@ -865,6 +870,15 @@ def main() -> None:
     }
     assert report["canonical_input_rows_collapsed"] == 1
     assert db.execute("SELECT count(*) FROM duplicate_decisions WHERE product_id_a=product_id_b").fetchone()[0] == 0
+    assert db.execute("SELECT count(*) FROM duplicate_decisions").fetchone()[0] == 19265
+    assert db.execute("""
+        SELECT count(*) FROM (
+            SELECT 1 FROM duplicate_decisions
+            GROUP BY min(product_id_a, product_id_b), max(product_id_a, product_id_b)
+            HAVING count(*) > 1
+        )
+    """).fetchone()[0] == 0
+    assert db.execute("SELECT count(*) FROM duplicate_decisions WHERE reason LIKE '% | %'").fetchone()[0] == 5156
     assert report["aichilon_products_matched_to_existing"] == 255
     assert report["aichilon_products_added"] == 60
     assert report["aichilon_rows_excluded"] == 2
@@ -891,7 +905,7 @@ def main() -> None:
     assert sum(row["products"] for row in offline_quality_audit["family_coverage"]) == report["canonical_rows"]
     assert duplicate_triage["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert duplicate_triage["canonical_products"] == report["canonical_rows"]
-    assert duplicate_triage["review_pairs"] == 12393
+    assert duplicate_triage["review_pairs"] == 7237
     assert duplicate_triage["distinct_products_in_review"] == 1568
     assert duplicate_triage["self_pairs_remaining"] == 0
     assert duplicate_triage["already_applied_safe_merges"] == {
@@ -902,13 +916,17 @@ def main() -> None:
         "gm_same_license_different_product_names": 1,
     }
     assert duplicate_triage["resolved_keep_separate_pairs"] == {
-        "explicit_professional_signature_conflict": 703,
+        "explicit_professional_signature_conflict": 691,
         "conflicting_fields": report["duplicate_review_conflicts_resolved"],
     }
+    assert duplicate_triage["duplicate_decision_rows_collapsed"] == {
+        "by_decision_combination": report["duplicate_decision_pair_rows_collapsed"],
+        "total_extra_rows_removed": 5168,
+    }
     assert duplicate_triage["triage_status_counts"] == {
-        "compatible_partial_specification_review": 4000,
-        "complete_exact_signature_candidate": 3523,
-        "insufficient_comparable_evidence": 4870,
+        "compatible_partial_specification_review": 2543,
+        "complete_exact_signature_candidate": 1840,
+        "insufficient_comparable_evidence": 2854,
     }
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status='listed_current_catalog'").fetchone()[0] == report["current_catalog_listed_offers"] == 1589
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_filed_registry'").fetchone()[0] == 3629

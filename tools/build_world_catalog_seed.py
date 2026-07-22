@@ -3513,6 +3513,43 @@ def exclusive_duplicate_conflicts(left: dict, right: dict) -> list[str]:
     return conflicts
 
 
+def duplicate_decision_priority(decision: str) -> tuple[int, str]:
+    """Prefer conclusive and source-specific decisions over generic reviews."""
+    if decision == "keep_separate_professional_signature_conflict":
+        return (500, decision)
+    if decision.startswith("keep_separate_"):
+        return (400, decision)
+    if decision == "review_liqui_moly_current_multiple_historical_candidates":
+        return (320, decision)
+    if decision == "review_fuchs_multi_registry_identity":
+        return (310, decision)
+    if decision == "review_cross_source_identity":
+        return (100, decision)
+    if decision.startswith("review_"):
+        return (200, decision)
+    return (0, decision)
+
+
+def collapse_duplicate_decision_pairs(candidates: list[dict]) -> tuple[list[dict], dict[str, int]]:
+    """Keep one evidence-rich decision for each unordered product pair."""
+    grouped = defaultdict(list)
+    for candidate in candidates:
+        pair = tuple(sorted((candidate["product_id_a"], candidate["product_id_b"])))
+        grouped[pair].append(candidate)
+    collapsed = []
+    combinations_dropped = Counter()
+    for group in grouped.values():
+        chosen = max(group, key=lambda candidate: duplicate_decision_priority(candidate["decision"])).copy()
+        if len(group) > 1:
+            combination = " + ".join(sorted(candidate["decision"] for candidate in group))
+            combinations_dropped[combination] += len(group) - 1
+            reasons = sorted({candidate["reason"] for candidate in group})
+            chosen["reason"] = " | ".join(reasons)
+            chosen["score"] = max(candidate["score"] for candidate in group)
+        collapsed.append(chosen)
+    return collapsed, dict(sorted(combinations_dropped.items()))
+
+
 def has_any_spec(specs: dict, *keys: str) -> bool:
     return any(bool(specs.get(key)) for key in keys)
 
@@ -6452,6 +6489,7 @@ def main() -> None:
         candidate["reason"] = "explicit_disjoint_professional_fields:" + ",".join(conflicts)
         candidate["score"] = 1.0
         duplicate_review_conflicts_resolved.update(conflicts)
+    candidates, duplicate_decision_pair_rows_collapsed = collapse_duplicate_decision_pairs(candidates)
     issues = quality_issues(records)
     cpc_issue_rules = {
         "source_multigrade_table_not_safely_aligned_to_listing_title": (
@@ -7026,6 +7064,7 @@ def main() -> None:
         "archived_offers": sum(o["lifecycle_status"] == "archived" for o in offers),
         "duplicate_decisions": dict(Counter(c["decision"] for c in candidates)),
         "duplicate_decision_self_pairs_dropped": duplicate_decision_self_pairs_dropped,
+        "duplicate_decision_pair_rows_collapsed": duplicate_decision_pair_rows_collapsed,
         "duplicate_review_conflicts_resolved": dict(sorted(duplicate_review_conflicts_resolved.items())),
         "canonical_input_rows_collapsed": len(input_records) - len(records),
         "quality_issues": dict(Counter(i["issue_code"] for i in issues)),

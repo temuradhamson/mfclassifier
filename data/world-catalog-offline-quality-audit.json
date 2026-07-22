@@ -2,7 +2,7 @@
   "active_offers": 3044,
   "canonical_key_duplicates": 0,
   "canonical_products": 105949,
-  "compressed_database_sha256": "edab9601f5a3a2ec031cd3ed89a97c74f7820214c386433be03ecf8f60c83d86",
+  "compressed_database_sha256": "c3b23c9af2ea1681d4550cf841a876dd5a33998982a8e179e5fde28053ebb177",
   "duplicate_review_queues": [
     {
       "candidate_pairs": 10769,
@@ -15,14 +15,14 @@
       "distinct_products_involved": 698
     },
     {
-      "candidate_pairs": 5738,
-      "decision": "review_cross_source_identity",
-      "distinct_products_involved": 1374
-    },
-    {
-      "candidate_pairs": 703,
+      "candidate_pairs": 691,
       "decision": "keep_separate_professional_signature_conflict",
       "distinct_products_involved": 736
+    },
+    {
+      "candidate_pairs": 582,
+      "decision": "review_cross_source_identity",
+      "distinct_products_involved": 797
     },
     {
       "candidate_pairs": 534,

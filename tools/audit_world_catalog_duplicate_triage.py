@@ -174,6 +174,10 @@ def audit(db: sqlite3.Connection, database: Path, build_report: dict) -> dict:
             ),
             "conflicting_fields": build_report.get("duplicate_review_conflicts_resolved", {}),
         },
+        "duplicate_decision_rows_collapsed": {
+            "by_decision_combination": build_report.get("duplicate_decision_pair_rows_collapsed", {}),
+            "total_extra_rows_removed": sum(build_report.get("duplicate_decision_pair_rows_collapsed", {}).values()),
+        },
         "triage_status_counts": dict(sorted(status_counts.items())),
         "by_decision_and_status": [
             {"decision": decision, "triage_status": status, "pairs": count}
@@ -209,6 +213,7 @@ def markdown(report: dict) -> str:
         f"- Доказательно объединены одинаковые GM dexos2/dexosD строки: {report['already_applied_safe_merges']['gm_dual_standard_same_license_manufacturer_name_family_viscosity']}.",
         f"- Сохранена несхлопнутой GM-коллизия одного license code с разными названиями: {report['retained_source_code_collisions']['gm_same_license_different_product_names']}.",
         f"- Доказательно переведено в `keep_separate` по конфликтующим профессиональным полям — пар: {fmt(report['resolved_keep_separate_pairs']['explicit_professional_signature_conflict'])}.",
+        f"- Повторных строк решений для тех же пар удалено: {fmt(report['duplicate_decision_rows_collapsed']['total_extra_rows_removed'])}; все причины объединены в единственной строке пары.",
         "",
         "## Классы оставшейся очереди",
         "",

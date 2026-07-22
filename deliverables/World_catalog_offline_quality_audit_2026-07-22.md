@@ -36,8 +36,8 @@
 - Quality issues: high — 311, medium — 68 642, low — 15.
 - `keep_separate_specification_conflict`: 10 769 пар, 16 604 затронутых карточек.
 - `review_fuchs_multi_registry_identity`: 6 600 пар, 698 затронутых карточек.
-- `review_cross_source_identity`: 5 738 пар, 1 374 затронутых карточек.
-- `keep_separate_professional_signature_conflict`: 703 пар, 736 затронутых карточек.
+- `keep_separate_professional_signature_conflict`: 691 пар, 736 затронутых карточек.
+- `review_cross_source_identity`: 582 пар, 797 затронутых карточек.
 - `keep_separate_fuchs_market_family_conflict`: 534 пар, 784 затронутых карточек.
 - `review_liqui_moly_multi_registry_identity`: 49 пар, 73 затронутых карточек.
 - `keep_separate_blue_angel_family_conflict`: 34 пар, 68 затронутых карточек.
@@ -54,4 +54,4 @@
 4. Сохранять разницу между явно указанным брендом и manufacturer/holder fallback — таких карточек много из-за гранулярности ЕАЭС.
 5. После снятия паузы получать TDS/PDS прежде всего для семейств с низким процентом обоих профессиональных признаков.
 
-SHA-256 проверенной сжатой SQLite: `edab9601f5a3a2ec031cd3ed89a97c74f7820214c386433be03ecf8f60c83d86`.
+SHA-256 проверенной сжатой SQLite: `c3b23c9af2ea1681d4550cf841a876dd5a33998982a8e179e5fde28053ebb177`.
