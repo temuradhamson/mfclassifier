@@ -1,8 +1,8 @@
 {
   "active_offers": 3044,
   "canonical_key_duplicates": 0,
-  "canonical_products": 105674,
-  "compressed_database_sha256": "db1c71d831d3a1c1358ed6c5a434ec2ca2ac77e7d896b1c355cf7736c8dc84e0",
+  "canonical_products": 105684,
+  "compressed_database_sha256": "fd7577ae9130b84fb61e1480baac218d6c59b8e495ab452dce078b8cd85edf29",
   "duplicate_review_queues": [
     {
       "candidate_pairs": 10769,
@@ -104,16 +104,16 @@
       "technical_basis_present": 771
     },
     {
-      "both_percent": 10.94,
+      "both_percent": 10.92,
       "both_selector_and_technical_basis_present": 862,
       "existing_professional_key_gate_implemented": true,
-      "existing_professional_key_issue": 6845,
+      "existing_professional_key_issue": 6855,
       "family": "Специальные продукты",
       "family_code": "S",
-      "products": 7881,
-      "selector_grade_or_class_percent": 11.09,
+      "products": 7891,
+      "selector_grade_or_class_percent": 11.08,
       "selector_grade_or_class_present": 874,
-      "technical_basis_percent": 10.94,
+      "technical_basis_percent": 10.92,
       "technical_basis_present": 862
     },
     {
@@ -182,25 +182,25 @@
       "technical_basis_present": 7
     }
   ],
-  "input_rows_before_canonicalization": 105675,
+  "input_rows_before_canonicalization": 105685,
   "interpretation": {
-    "confirmed_count": "105674 is the verified canonical row count of the current seed, not the final number of all products worldwide.",
+    "confirmed_count": "105684 is the verified canonical row count of the current seed, not the final number of all products worldwide.",
     "duplicate_metric": "Review pairs are candidates or conflicts, not proven removable duplicates.",
     "professional_gate_scope": "Family-specific professional_key_incomplete rules cover M/T/G/H/I/C/U/E/TF/S; source-level gaps remain explicit and are not filled by inference.",
     "selector_metric": "Presence is measured only from explicit normalized fields; absence may reflect source granularity rather than a parsing defect."
   },
-  "primary_sources_used": 122,
-  "products_using_explicitly_marked_brand_fallback": 36263,
-  "products_with_at_least_one_source_link": 105674,
-  "products_with_family": 105674,
+  "primary_sources_used": 123,
+  "products_using_explicitly_marked_brand_fallback": 36269,
+  "products_with_at_least_one_source_link": 105684,
+  "products_with_family": 105684,
   "products_with_missing_manufacturer": 85,
-  "products_with_normalized_name": 105674,
-  "products_with_primary_source_hash": 105674,
-  "products_with_primary_source_url": 105083,
+  "products_with_normalized_name": 105684,
+  "products_with_primary_source_hash": 105684,
+  "products_with_primary_source_url": 105093,
   "quality_issue_details": [
     {
       "issue_code": "professional_key_incomplete",
-      "rows": 68375,
+      "rows": 68385,
       "severity": "medium"
     },
     {
@@ -377,9 +377,9 @@
   "quality_issues_by_severity": {
     "high": 311,
     "low": 15,
-    "medium": 68493
+    "medium": 68503
   },
   "snapshot_date": "2026-07-22",
-  "source_registry_entries": 169,
+  "source_registry_entries": 170,
   "status": "offline_quality_audit_current_seed_not_worldwide_completion"
 }

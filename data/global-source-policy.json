@@ -2386,6 +2386,21 @@
       "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_document_redistribution",
       "observed_count": 10,
       "notes": "All ten official workbook rows are retained: eight engine oils and two hydraulic oils, all conforming at the sampled batch. Retailers, inspected units and addresses are omitted."
+    },
+    {
+      "source_id": "YANTAI_CHINA_2025_GASOLINE_DETERGENT_INSPECTION",
+      "title": "Yantai 2025 automotive gasoline-detergent inspection",
+      "owner": "Yantai Administration for Market Regulation",
+      "source_type": "official_municipal_government_complete_product_quality_inspection_html",
+      "source_locator": "data/yantai-2025-gasoline-detergent-inspection.jsonl",
+      "source_url": "https://www.yantai.gov.cn/col/col43304/art/2026/art_4583d515ea8241c287923bc9ca6480d8.html",
+      "terms_url": "https://www.yantai.gov.cn/",
+      "source_sha256": "d44b7d2553e77b25ac1bc8142f20653eee5426e9b946ad15bde8225609db7083",
+      "access_status": "public_official_government_information_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_document_redistribution",
+      "observed_count": 15,
+      "notes": "All 350 official table rows were audited; exactly 15 automotive gasoline-detergent observations are retained and 335 unrelated products are excluded. Sampled enterprises, social-credit codes and the laboratory are omitted."
     }
   ]
 }

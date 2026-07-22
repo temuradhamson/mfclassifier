@@ -208,6 +208,8 @@ def main() -> None:
     jilin_china_rows = [json.loads(line) for line in (ROOT / "data/jilin-2024-2025-automotive-fluid-inspections.jsonl").read_text(encoding="utf-8").splitlines() if line]
     wuxi_china_report = json.loads((ROOT / "data/wuxi-2024-lubricant-inspection-report.json").read_text(encoding="utf-8"))
     wuxi_china_rows = [json.loads(line) for line in (ROOT / "data/wuxi-2024-lubricant-inspection.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    yantai_china_report = json.loads((ROOT / "data/yantai-2025-gasoline-detergent-inspection-report.json").read_text(encoding="utf-8"))
+    yantai_china_rows = [json.loads(line) for line in (ROOT / "data/yantai-2025-gasoline-detergent-inspection.jsonl").read_text(encoding="utf-8").splitlines() if line]
     offline_quality_audit = json.loads((ROOT / "data/world-catalog-offline-quality-audit.json").read_text(encoding="utf-8"))
     duplicate_triage = json.loads((ROOT / "data/world-catalog-duplicate-triage.json").read_text(encoding="utf-8"))
     philippines_bps_report = json.loads((ROOT / "data/philippines-bps-brake-fluid-products-report.json").read_text(encoding="utf-8"))
@@ -261,6 +263,7 @@ def main() -> None:
         + report["qingdao_china_products_added"]
         + report["jilin_china_products_added"]
         + report["wuxi_china_products_added"]
+        + report["yantai_china_products_added"]
         - report["gm_dual_standard_license_rows_merged"]
         - report["fuchs_exact_payload_identity_rows_matched"]
         - report["fuchs_exact_content_identity_rows_matched"]
@@ -539,10 +542,15 @@ def main() -> None:
     assert report["wuxi_china_duplicate_occurrences_merged"] == 0
     assert report["wuxi_china_products_added"] == 8
     assert report["wuxi_china_products_matched_to_existing"] + report["wuxi_china_duplicate_occurrences_merged"] + report["wuxi_china_products_added"] == 10
+    assert report["yantai_china_2025_source_rows"] == yantai_china_report["retained_product_observations"] == len(yantai_china_rows) == 15
+    assert report["yantai_china_products_matched_to_existing"] == 0
+    assert report["yantai_china_duplicate_occurrences_merged"] == 5
+    assert report["yantai_china_products_added"] == 10
+    assert report["yantai_china_products_matched_to_existing"] + report["yantai_china_duplicate_occurrences_merged"] + report["yantai_china_products_added"] == 15
     assert report["samr_china_source_observations"] == 174
-    assert report["china_government_inspection_source_observations"] == 1952
+    assert report["china_government_inspection_source_observations"] == 1967
     assert report["official_government_nonconforming_product_inspection_observation_rows"] == 261
-    assert report["official_government_conforming_product_inspection_observation_rows"] == 1385
+    assert report["official_government_conforming_product_inspection_observation_rows"] == 1395
     assert report["philippines_bps_brake_fluid_source_rows"] == philippines_bps_report["normalized_products_or_brand_grade_scopes"] == len(philippines_bps_rows) == 123
     assert report["philippines_bps_ps_brake_fluid_rows"] == philippines_bps_report["rows_by_source"]["PHILIPPINES_BPS_PS_BRAKE_FLUID_LICENCES"] == 89
     assert report["philippines_bps_icc_brake_fluid_rows"] == philippines_bps_report["rows_by_source"]["PHILIPPINES_BPS_ICC_BRAKE_FLUID_CERTIFICATES"] == 34
@@ -961,9 +969,9 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 4973
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3044
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 105675
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 105674
-    assert report["quality_issues"]["professional_key_incomplete"] == 68375
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 105685
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 105684
+    assert report["quality_issues"]["professional_key_incomplete"] == 68385
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
@@ -971,7 +979,7 @@ def main() -> None:
         GROUP BY p.family_code
     """)) == {
         "C": 2060, "E": 148, "G": 10825, "H": 4761, "I": 3491,
-        "M": 22124, "S": 6845, "T": 10985, "TF": 6540, "U": 596,
+        "M": 22124, "S": 6855, "T": 10985, "TF": 6540, "U": 596,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -1822,6 +1830,23 @@ def main() -> None:
     assert db.execute(
         "SELECT count(*) FROM product_sources WHERE source_id='WUXI_CHINA_2024_LUBRICANT_INSPECTION'"
     ).fetchone()[0] == 10
+    assert yantai_china_report["source_html_sha256"] == "b87f4e6ff53c591878ea114f219b63b0a350c1a0ecd4be734ffe238d87000eb0"
+    assert yantai_china_report["source_all_product_rows"] == 350
+    assert yantai_china_report["excluded_out_of_scope_rows"] == 335
+    assert yantai_china_report["families"] == {"S": 15}
+    assert yantai_china_report["outcomes"] == {"conforming": 15}
+    assert yantai_china_report["distinct_nominal_producers"] == 10
+    assert len({row["source_record_id"] for row in yantai_china_rows}) == 15
+    assert all(row["market"] == "China / Yantai" and row["family_code"] == "S" for row in yantai_china_rows)
+    assert all(not ({
+        "retailer", "seller", "sampled_seller", "inspected_enterprise", "inspected_unit",
+        "social_credit_code", "unified_social_credit_code", "address", "laboratory", "phone", "email",
+    } & set(row)) for row in yantai_china_rows)
+    assert policy_by_id["YANTAI_CHINA_2025_GASOLINE_DETERGENT_INSPECTION"]["source_sha256"] == yantai_china_report["normalized_output_sha256"]
+    assert policy_by_id["YANTAI_CHINA_2025_GASOLINE_DETERGENT_INSPECTION"]["observed_count"] == 15
+    assert db.execute(
+        "SELECT count(*) FROM product_sources WHERE source_id='YANTAI_CHINA_2025_GASOLINE_DETERGENT_INSPECTION'"
+    ).fetchone()[0] == 15
     assert db.execute("""
         SELECT count(*) FROM products
         WHERE source_id='SAMR_CHINA_2025_NONCONFORMING_FLUIDS'

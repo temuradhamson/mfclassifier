@@ -86,6 +86,7 @@ SHENZHEN_CHINA_2016_2017_JSONL = ROOT / "data" / "shenzhen-2016-2017-lubricant-i
 QINGDAO_CHINA_2021_2025_JSONL = ROOT / "data" / "qingdao-2021-2025-automotive-fluid-inspections.jsonl"
 JILIN_CHINA_2024_2025_JSONL = ROOT / "data" / "jilin-2024-2025-automotive-fluid-inspections.jsonl"
 WUXI_CHINA_2024_JSONL = ROOT / "data" / "wuxi-2024-lubricant-inspection.jsonl"
+YANTAI_CHINA_2025_JSONL = ROOT / "data" / "yantai-2025-gasoline-detergent-inspection.jsonl"
 PHILIPPINES_BPS_BRAKE_FLUID_JSONL = ROOT / "data" / "philippines-bps-brake-fluid-products.jsonl"
 GHANA_GSA_CERTIFIED_JSONL = ROOT / "data" / "ghana-gsa-certified-lubricant-products.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
@@ -4722,6 +4723,48 @@ def main() -> None:
             wuxi_china_products_added += 1
         china_inspection_existing_entries.append((raw, target))
         wuxi_china_product_key[raw["source_record_id"]] = target["canonical_key"]
+    yantai_china_source_rows = [
+        json.loads(line)
+        for line in YANTAI_CHINA_2025_JSONL.read_text(encoding="utf-8").splitlines()
+        if line
+    ]
+    yantai_china_product_key = {}
+    yantai_china_products_matched_to_existing = 0
+    yantai_china_duplicate_occurrences_merged = 0
+    yantai_china_products_added = 0
+    yantai_created_keys = set()
+    for raw in yantai_china_source_rows:
+        comparable_map = unique_inspection_target_map(china_inspection_comparable_identity)
+        professional_map = unique_inspection_target_map(china_inspection_professional_identity)
+        package_independent_map = unique_inspection_target_map(china_inspection_package_independent_identity)
+        target = comparable_map.get(china_inspection_comparable_identity(raw))
+        if target is None:
+            professional_identity = china_inspection_professional_identity(raw)
+            if professional_identity is not None:
+                target = professional_map.get(professional_identity)
+        if target is None:
+            target = package_independent_map.get(china_inspection_package_independent_identity(raw))
+        if target is None:
+            fallback_candidates = {
+                candidate_target["canonical_key"]: candidate_target
+                for candidate_raw, candidate_target in china_inspection_existing_entries
+                if china_inspection_fallback_brand_match(raw, candidate_raw)
+            }
+            if len(fallback_candidates) == 1:
+                target = next(iter(fallback_candidates.values()))
+        if target is not None:
+            merge_china_inspection_evidence(target, raw)
+            if target["canonical_key"] in yantai_created_keys:
+                yantai_china_duplicate_occurrences_merged += 1
+            else:
+                yantai_china_products_matched_to_existing += 1
+        else:
+            target = samr_china_inspection_record(raw)
+            input_records.append(target)
+            yantai_created_keys.add(target["canonical_key"])
+            yantai_china_products_added += 1
+        china_inspection_existing_entries.append((raw, target))
+        yantai_china_product_key[raw["source_record_id"]] = target["canonical_key"]
     philippines_bps_brake_fluid_source_rows = [json.loads(line) for line in PHILIPPINES_BPS_BRAKE_FLUID_JSONL.read_text(encoding="utf-8").splitlines() if line]
     philippines_bps_brake_fluid_records = [philippines_bps_brake_fluid_record(row) for row in philippines_bps_brake_fluid_source_rows]
     input_records.extend(philippines_bps_brake_fluid_records)
@@ -6092,6 +6135,17 @@ def main() -> None:
         if link_key not in source_link_keys:
             source_links.append(link)
             source_link_keys.add(link_key)
+    for raw in yantai_china_source_rows:
+        target = canonical_by_key[yantai_china_product_key[raw["source_record_id"]]]
+        link = {
+            "product_id": target["product_id"], "source_id": raw["source_id"],
+            "source_record_id": raw["source_record_id"], "source_row": raw["source_row"],
+            "relation": "official_government_product_inspection_observation",
+        }
+        link_key = (link["product_id"], link["source_id"], link["source_record_id"])
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     for raw in beijing_china_source_rows:
         target = canonical_by_key[beijing_china_product_key[raw["source_record_id"]]]
         link = {
@@ -7059,6 +7113,7 @@ def main() -> None:
         "qingdao_china_2021_2025_input_sha256": hashlib.sha256(QINGDAO_CHINA_2021_2025_JSONL.read_bytes()).hexdigest(),
         "jilin_china_2024_2025_input_sha256": hashlib.sha256(JILIN_CHINA_2024_2025_JSONL.read_bytes()).hexdigest(),
         "wuxi_china_2024_input_sha256": hashlib.sha256(WUXI_CHINA_2024_JSONL.read_bytes()).hexdigest(),
+        "yantai_china_2025_input_sha256": hashlib.sha256(YANTAI_CHINA_2025_JSONL.read_bytes()).hexdigest(),
         "philippines_bps_brake_fluid_input_sha256": hashlib.sha256(PHILIPPINES_BPS_BRAKE_FLUID_JSONL.read_bytes()).hexdigest(),
         "ghana_gsa_certified_input_sha256": hashlib.sha256(GHANA_GSA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
@@ -7193,6 +7248,10 @@ def main() -> None:
         "wuxi_china_products_matched_to_existing": wuxi_china_products_matched_to_existing,
         "wuxi_china_duplicate_occurrences_merged": wuxi_china_duplicate_occurrences_merged,
         "wuxi_china_products_added": wuxi_china_products_added,
+        "yantai_china_2025_source_rows": len(yantai_china_source_rows),
+        "yantai_china_products_matched_to_existing": yantai_china_products_matched_to_existing,
+        "yantai_china_duplicate_occurrences_merged": yantai_china_duplicate_occurrences_merged,
+        "yantai_china_products_added": yantai_china_products_added,
         "china_government_inspection_source_observations": sum(map(len, (
             samr_china_2025_source_rows, samr_china_2024_source_rows,
             samr_china_2023_source_rows, shenzhen_china_2021_source_rows,
@@ -7204,6 +7263,7 @@ def main() -> None:
             qingdao_china_source_rows,
             jilin_china_source_rows,
             wuxi_china_source_rows,
+            yantai_china_source_rows,
         ))),
         "samr_china_source_observations": len(samr_china_2025_source_rows) + len(samr_china_2024_source_rows) + len(samr_china_2023_source_rows),
         "official_government_nonconforming_product_inspection_observation_rows": sum(r["evidence_status"] == "official_government_nonconforming_product_inspection_observation" for r in records),

@@ -1,0 +1,22 @@
+{
+  "status": "official_yantai_2025_gasoline_detergent_inspections_normalized",
+  "snapshot_date": "2026-07-22",
+  "source_id": "YANTAI_CHINA_2025_GASOLINE_DETERGENT_INSPECTION",
+  "source_url": "https://www.yantai.gov.cn/col/col43304/art/2026/art_4583d515ea8241c287923bc9ca6480d8.html",
+  "source_html_sha256": "b87f4e6ff53c591878ea114f219b63b0a350c1a0ecd4be734ffe238d87000eb0",
+  "source_all_product_rows": 350,
+  "retained_product_observations": 15,
+  "excluded_out_of_scope_rows": 335,
+  "outcomes": {
+    "conforming": 15
+  },
+  "families": {
+    "S": 15
+  },
+  "distinct_nominal_producers": 10,
+  "distinct_source_brands": 7,
+  "normalized_output_sha256": "d44b7d2553e77b25ac1bc8142f20653eee5426e9b946ad15bde8225609db7083",
+  "scope_note": "All 350 rows were audited; exactly 15 automotive gasoline detergent observations are retained and 335 unrelated industrial products are excluded.",
+  "privacy_note": "Sampled enterprises, social-credit codes and the laboratory are excluded; only product-side facts are retained.",
+  "lifecycle_note": "A conforming result applies only to the sampled batch and does not prove a current offer, recommendation or blanket approval."
+}
