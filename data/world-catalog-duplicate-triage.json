@@ -26,17 +26,17 @@
     },
     {
       "decision": "review_fuchs_multi_registry_identity",
-      "pairs": 938,
+      "pairs": 695,
       "triage_status": "compatible_partial_specification_review"
     },
     {
       "decision": "review_fuchs_multi_registry_identity",
-      "pairs": 576,
+      "pairs": 440,
       "triage_status": "complete_exact_signature_candidate"
     },
     {
       "decision": "review_fuchs_multi_registry_identity",
-      "pairs": 806,
+      "pairs": 794,
       "triage_status": "insufficient_comparable_evidence"
     },
     {
@@ -83,12 +83,12 @@
     },
     {
       "family_code": "M",
-      "pairs": 1326,
+      "pairs": 1098,
       "triage_status": "compatible_partial_specification_review"
     },
     {
       "family_code": "M",
-      "pairs": 307,
+      "pairs": 190,
       "triage_status": "complete_exact_signature_candidate"
     },
     {
@@ -103,17 +103,17 @@
     },
     {
       "family_code": "T",
-      "pairs": 106,
+      "pairs": 91,
       "triage_status": "compatible_partial_specification_review"
     },
     {
       "family_code": "T",
-      "pairs": 111,
+      "pairs": 92,
       "triage_status": "complete_exact_signature_candidate"
     },
     {
       "family_code": "T",
-      "pairs": 724,
+      "pairs": 712,
       "triage_status": "insufficient_comparable_evidence"
     },
     {
@@ -132,16 +132,16 @@
       "triage_status": "insufficient_comparable_evidence"
     }
   ],
-  "canonical_products": 105699,
-  "compressed_database_sha256": "0723848a0f9cd75eabdefb989699eb6577d05fa342a8a4dd7c21713ed4f2b879",
-  "distinct_products_in_review": 1318,
+  "canonical_products": 105666,
+  "compressed_database_sha256": "b8f159a75c22e1a341b9bddf2653e256598e506b491a0277489f733e895e4a5b",
+  "distinct_products_in_review": 1285,
   "duplicate_decision_rows_collapsed": {
     "by_decision_combination": {
       "keep_separate_professional_signature_conflict + keep_separate_professional_signature_conflict": 11,
-      "review_cross_source_identity + review_fuchs_multi_registry_identity": 1500,
+      "review_cross_source_identity + review_fuchs_multi_registry_identity": 1196,
       "review_cross_source_identity + review_liqui_moly_current_multiple_historical_candidates": 2
     },
-    "total_extra_rows_removed": 1513
+    "total_extra_rows_removed": 1209
   },
   "examples": {
     "compatible_partial_specification_review": [
@@ -349,7 +349,7 @@
   "retained_source_code_collisions": {
     "gm_same_license_different_product_names": 1
   },
-  "review_pairs": 2957,
+  "review_pairs": 2566,
   "self_pairs_remaining": 0,
   "shared_code_system_counts": {
     "ANP_BRAZIL_REGISTRATION_NUMBER": 167
@@ -357,8 +357,8 @@
   "snapshot_date": "2026-07-22",
   "status": "offline_duplicate_triage_no_unproven_auto_merge",
   "triage_status_counts": {
-    "compatible_partial_specification_review": 1435,
-    "complete_exact_signature_candidate": 605,
-    "insufficient_comparable_evidence": 917
+    "compatible_partial_specification_review": 1192,
+    "complete_exact_signature_candidate": 469,
+    "insufficient_comparable_evidence": 905
   }
 }
