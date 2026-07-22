@@ -116,23 +116,23 @@ def main() -> None:
     fuchs_hungary_report = json.loads((ROOT / "data/fuchs-hungary-products-report.json").read_text(encoding="utf-8"))
     fuchs_hungary_rows = [json.loads(line) for line in (ROOT / "data/fuchs-hungary-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     additional_fuchs_specs = {
-        "denmark": ("FUCHS_DENMARK_PRODUCT_FINDER", 641, 640, 1, 0, 0, 20, 615, 25, 638, 1, {"C": 35, "E": 1, "G": 137, "H": 66, "I": 65, "M": 66, "S": 47, "T": 93, "TF": 122, "U": 8}),
-        "finland": ("FUCHS_FINLAND_PRODUCT_FINDER", 639, 599, 38, 0, 2, 5, 559, 40, 581, 0, {"C": 33, "E": 2, "G": 133, "H": 63, "I": 37, "M": 79, "S": 33, "T": 85, "TF": 128, "U": 6}),
-        "portugal": ("FUCHS_PORTUGAL_PRODUCT_FINDER", 529, 484, 42, 2, 1, 2, 443, 41, 460, 10, {"C": 19, "E": 1, "G": 137, "H": 35, "I": 30, "M": 79, "S": 54, "T": 66, "TF": 62, "U": 1}),
-        "romania": ("FUCHS_ROMANIA_PRODUCT_FINDER", 794, 691, 91, 1, 11, 1, 679, 12, 690, 1, {"C": 19, "E": 3, "G": 176, "H": 42, "I": 29, "M": 76, "S": 56, "T": 85, "TF": 204, "U": 1}),
-        "austria": ("FUCHS_AUSTRIA_PRODUCT_FINDER", 1057, 952, 94, 6, 5, 0, 937, 15, 952, 0, {"C": 23, "E": 3, "G": 237, "H": 54, "I": 53, "M": 78, "S": 75, "T": 95, "TF": 333, "U": 1}),
-        "greece": ("FUCHS_GREECE_PRODUCT_FINDER", 1074, 966, 97, 6, 5, 0, 951, 15, 966, 0, {"C": 23, "E": 3, "G": 237, "H": 55, "I": 57, "M": 84, "S": 75, "T": 96, "TF": 335, "U": 1}),
+        "denmark": ("FUCHS_DENMARK_PRODUCT_FINDER", 641, 640, 1, 0, 0, 20, 624, 16, 638, 1, {"C": 35, "E": 1, "G": 137, "H": 66, "I": 65, "M": 66, "S": 47, "T": 93, "TF": 122, "U": 8}),
+        "finland": ("FUCHS_FINLAND_PRODUCT_FINDER", 639, 599, 38, 0, 2, 5, 568, 31, 581, 0, {"C": 33, "E": 2, "G": 133, "H": 63, "I": 37, "M": 79, "S": 33, "T": 85, "TF": 128, "U": 6}),
+        "portugal": ("FUCHS_PORTUGAL_PRODUCT_FINDER", 529, 484, 42, 2, 1, 2, 451, 33, 460, 10, {"C": 19, "E": 1, "G": 137, "H": 35, "I": 30, "M": 79, "S": 54, "T": 66, "TF": 62, "U": 1}),
+        "romania": ("FUCHS_ROMANIA_PRODUCT_FINDER", 794, 691, 91, 1, 11, 1, 687, 4, 690, 1, {"C": 19, "E": 3, "G": 176, "H": 42, "I": 29, "M": 76, "S": 56, "T": 85, "TF": 204, "U": 1}),
+        "austria": ("FUCHS_AUSTRIA_PRODUCT_FINDER", 1057, 952, 94, 6, 5, 0, 948, 4, 952, 0, {"C": 23, "E": 3, "G": 237, "H": 54, "I": 53, "M": 78, "S": 75, "T": 95, "TF": 333, "U": 1}),
+        "greece": ("FUCHS_GREECE_PRODUCT_FINDER", 1074, 966, 97, 6, 5, 0, 962, 4, 966, 0, {"C": 23, "E": 3, "G": 237, "H": 55, "I": 57, "M": 84, "S": 75, "T": 96, "TF": 335, "U": 1}),
         "switzerland": ("FUCHS_SWITZERLAND_PRODUCT_FINDER", 1466, 1464, 0, 2, 0, 234, 1458, 6, 1458, 1, {"C": 66, "G": 317, "H": 174, "I": 42, "M": 103, "S": 139, "T": 146, "TF": 471, "U": 6}),
-        "korea": ("FUCHS_KOREA_PRODUCT_FINDER", 249, 221, 28, 0, 0, 0, 174, 47, 181, 0, {"G": 12, "H": 11, "I": 3, "M": 67, "S": 16, "T": 34, "TF": 78}),
-        "uae": ("FUCHS_UAE_PRODUCT_FINDER", 1073, 965, 97, 6, 5, 0, 949, 16, 964, 0, {"C": 23, "E": 3, "G": 237, "H": 55, "I": 57, "M": 83, "S": 75, "T": 96, "TF": 335, "U": 1}),
+        "korea": ("FUCHS_KOREA_PRODUCT_FINDER", 249, 221, 28, 0, 0, 0, 179, 42, 181, 0, {"G": 12, "H": 11, "I": 3, "M": 67, "S": 16, "T": 34, "TF": 78}),
+        "uae": ("FUCHS_UAE_PRODUCT_FINDER", 1073, 965, 97, 6, 5, 0, 960, 5, 964, 0, {"C": 23, "E": 3, "G": 237, "H": 55, "I": 57, "M": 83, "S": 75, "T": 96, "TF": 335, "U": 1}),
         "argentina": ("FUCHS_ARGENTINA_PRODUCT_FINDER", 35, 5, 30, 0, 0, 0, 5, 0, 5, 0, {"G": 4, "TF": 1}),
-        "chile": ("FUCHS_CHILE_PRODUCT_FINDER", 549, 496, 49, 4, 0, 0, 484, 12, 494, 0, {"C": 16, "E": 3, "G": 173, "H": 72, "I": 34, "M": 30, "S": 31, "T": 72, "TF": 64, "U": 1}),
-        "ukraine": ("FUCHS_UKRAINE_PRODUCT_FINDER", 918, 842, 65, 6, 4, 0, 824, 18, 841, 0, {"C": 15, "E": 3, "G": 204, "H": 31, "I": 49, "M": 88, "S": 72, "T": 92, "TF": 288}),
-        "slovakia": ("FUCHS_SLOVAKIA_PRODUCT_FINDER", 1074, 966, 97, 6, 5, 0, 951, 15, 966, 0, {"C": 23, "E": 3, "G": 237, "H": 55, "I": 57, "M": 84, "S": 75, "T": 96, "TF": 335, "U": 1}),
+        "chile": ("FUCHS_CHILE_PRODUCT_FINDER", 549, 496, 49, 4, 0, 0, 492, 4, 494, 0, {"C": 16, "E": 3, "G": 173, "H": 72, "I": 34, "M": 30, "S": 31, "T": 72, "TF": 64, "U": 1}),
+        "ukraine": ("FUCHS_UKRAINE_PRODUCT_FINDER", 918, 842, 65, 6, 4, 0, 833, 9, 841, 0, {"C": 15, "E": 3, "G": 204, "H": 31, "I": 49, "M": 88, "S": 72, "T": 92, "TF": 288}),
+        "slovakia": ("FUCHS_SLOVAKIA_PRODUCT_FINDER", 1074, 966, 97, 6, 5, 0, 962, 4, 966, 0, {"C": 23, "E": 3, "G": 237, "H": 55, "I": 57, "M": 84, "S": 75, "T": 96, "TF": 335, "U": 1}),
         "slovenia": ("FUCHS_SLOVENIA_PRODUCT_FINDER", 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, {"M": 1}),
-        "croatia": ("FUCHS_CROATIA_PRODUCT_FINDER", 1082, 975, 96, 6, 5, 0, 954, 21, 971, 0, {"C": 23, "E": 3, "G": 238, "H": 52, "I": 57, "M": 89, "S": 74, "T": 103, "TF": 335, "U": 1}),
-        "saudi-arabia": ("FUCHS_SAUDI_ARABIA_PRODUCT_FINDER", 376, 360, 13, 0, 1, 1, 247, 113, 254, 1, {"C": 19, "E": 4, "G": 86, "H": 35, "I": 23, "M": 53, "S": 33, "T": 63, "TF": 42, "U": 2}),
-        "macedonia": ("FUCHS_MACEDONIA_PRODUCT_FINDER", 1075, 948, 97, 6, 24, 0, 934, 14, 948, 0, {"C": 23, "E": 3, "G": 236, "H": 55, "I": 57, "M": 77, "S": 75, "T": 95, "TF": 326, "U": 1}),
+        "croatia": ("FUCHS_CROATIA_PRODUCT_FINDER", 1082, 975, 96, 6, 5, 0, 964, 11, 971, 0, {"C": 23, "E": 3, "G": 238, "H": 52, "I": 57, "M": 89, "S": 74, "T": 103, "TF": 335, "U": 1}),
+        "saudi-arabia": ("FUCHS_SAUDI_ARABIA_PRODUCT_FINDER", 376, 360, 13, 0, 1, 1, 250, 110, 254, 1, {"C": 19, "E": 4, "G": 86, "H": 35, "I": 23, "M": 53, "S": 33, "T": 63, "TF": 42, "U": 2}),
+        "macedonia": ("FUCHS_MACEDONIA_PRODUCT_FINDER", 1075, 948, 97, 6, 24, 0, 944, 4, 948, 0, {"C": 23, "E": 3, "G": 236, "H": 55, "I": 57, "M": 77, "S": 75, "T": 95, "TF": 326, "U": 1}),
     }
     additional_fuchs = {
         slug: {
@@ -260,6 +260,7 @@ def main() -> None:
         + report["jilin_china_products_added"]
         - report["gm_dual_standard_license_rows_merged"]
         - report["fuchs_exact_payload_identity_rows_matched"]
+        - report["fuchs_unique_description_identity_rows_matched"]
     )
     assert report["jaso_source_rows"] == jaso_report["rows"] == 3630
     assert report["jaso_unique_oil_codes"] == jaso_report["unique_oil_codes"] == 3629
@@ -579,7 +580,7 @@ def main() -> None:
     assert dla_report["plant_rows_without_product_designation_excluded"] == 861
     assert report["zf_te_ml_source_rows"] == zf_report["unique_approval_numbers"] == 1498
     assert report["official_oem_approval_rows"] == 6495
-    assert report["official_manufacturer_catalog_rows"] == 6382
+    assert report["official_manufacturer_catalog_rows"] == 6210
     assert report["official_oem_service_recommendation_rows"] == 30
     assert report["allison_source_rows"] == allison_report["products"] == 104
     assert report["driventic_diwa_source_rows"] == driventic_report["products"] == 226
@@ -611,28 +612,28 @@ def main() -> None:
     assert report["fuchs_poland_cross_market_exact_name_family_rows"] == 560
     assert report["fuchs_poland_cross_market_family_conflict_rows"] == 59
     assert report["fuchs_italy_source_rows"] == fuchs_italy_report["products"] == 1007
-    assert report["fuchs_italy_products_matched_to_existing"] == 637
-    assert report["fuchs_italy_products_added"] == 370
+    assert report["fuchs_italy_products_matched_to_existing"] == 645
+    assert report["fuchs_italy_products_added"] == 362
     assert report["fuchs_italy_cross_market_exact_name_family_rows"] == 657
     assert report["fuchs_italy_cross_market_family_conflict_rows"] == 28
     assert report["fuchs_sweden_source_rows"] == fuchs_sweden_report["products"] == 675
-    assert report["fuchs_sweden_products_matched_to_existing"] == 358
-    assert report["fuchs_sweden_products_added"] == 317
+    assert report["fuchs_sweden_products_matched_to_existing"] == 360
+    assert report["fuchs_sweden_products_added"] == 315
     assert report["fuchs_sweden_cross_market_exact_name_family_rows"] == 379
     assert report["fuchs_sweden_cross_market_family_conflict_rows"] == 17
     assert report["fuchs_spain_source_rows"] == fuchs_spain_report["products"] == 938
-    assert report["fuchs_spain_products_matched_to_existing"] == 719
-    assert report["fuchs_spain_products_added"] == 219
+    assert report["fuchs_spain_products_matched_to_existing"] == 724
+    assert report["fuchs_spain_products_added"] == 214
     assert report["fuchs_spain_cross_market_exact_name_family_rows"] == 743
     assert report["fuchs_spain_cross_market_family_conflict_rows"] == 19
     assert report["fuchs_france_source_rows"] == fuchs_france_report["products"] == 705
-    assert report["fuchs_france_products_matched_to_existing"] == 499
-    assert report["fuchs_france_products_added"] == 206
+    assert report["fuchs_france_products_matched_to_existing"] == 502
+    assert report["fuchs_france_products_added"] == 203
     assert report["fuchs_france_cross_market_exact_name_family_rows"] == 532
     assert report["fuchs_france_cross_market_family_conflict_rows"] == 12
     assert report["fuchs_turkey_source_rows"] == fuchs_turkey_report["products"] == 583
-    assert report["fuchs_turkey_products_matched_to_existing"] == 414
-    assert report["fuchs_turkey_products_added"] == 169
+    assert report["fuchs_turkey_products_matched_to_existing"] == 421
+    assert report["fuchs_turkey_products_added"] == 162
     assert report["fuchs_turkey_cross_market_exact_name_family_rows"] == 423
     assert report["fuchs_turkey_cross_market_family_conflict_rows"] == 5
     assert report["fuchs_canada_source_rows"] == fuchs_canada_report["products"] == 289
@@ -641,13 +642,13 @@ def main() -> None:
     assert report["fuchs_canada_cross_market_exact_name_family_rows"] == 152
     assert report["fuchs_canada_cross_market_family_conflict_rows"] == 5
     assert report["fuchs_china_source_rows"] == fuchs_china_report["products"] == 278
-    assert report["fuchs_china_products_matched_to_existing"] == 198
-    assert report["fuchs_china_products_added"] == 80
+    assert report["fuchs_china_products_matched_to_existing"] == 204
+    assert report["fuchs_china_products_added"] == 74
     assert report["fuchs_china_cross_market_exact_name_family_rows"] == 202
     assert report["fuchs_china_cross_market_family_conflict_rows"] == 0
     assert report["fuchs_czech_source_rows"] == fuchs_czech_report["products"] == 1146
-    assert report["fuchs_czech_products_matched_to_existing"] == 1035
-    assert report["fuchs_czech_products_added"] == 111
+    assert report["fuchs_czech_products_matched_to_existing"] == 1040
+    assert report["fuchs_czech_products_added"] == 106
     assert report["fuchs_czech_cross_market_exact_name_family_rows"] == 1063
     assert report["fuchs_czech_cross_market_family_conflict_rows"] == 19
     assert report["fuchs_mexico_source_rows"] == fuchs_mexico_report["products"] == 314
@@ -656,18 +657,18 @@ def main() -> None:
     assert report["fuchs_mexico_cross_market_exact_name_family_rows"] == 258
     assert report["fuchs_mexico_cross_market_family_conflict_rows"] == 3
     assert report["fuchs_south_africa_source_rows"] == fuchs_south_africa_report["products"] == 756
-    assert report["fuchs_south_africa_products_matched_to_existing"] == 712
-    assert report["fuchs_south_africa_products_added"] == 44
+    assert report["fuchs_south_africa_products_matched_to_existing"] == 720
+    assert report["fuchs_south_africa_products_added"] == 36
     assert report["fuchs_south_africa_cross_market_exact_name_family_rows"] == 725
     assert report["fuchs_south_africa_cross_market_family_conflict_rows"] == 2
     assert report["fuchs_brazil_source_rows"] == fuchs_brazil_report["products"] == 182
-    assert report["fuchs_brazil_products_matched_to_existing"] == 176
-    assert report["fuchs_brazil_products_added"] == 6
+    assert report["fuchs_brazil_products_matched_to_existing"] == 180
+    assert report["fuchs_brazil_products_added"] == 2
     assert report["fuchs_brazil_cross_market_exact_name_family_rows"] == 182
     assert report["fuchs_brazil_cross_market_family_conflict_rows"] == 0
     assert report["fuchs_norway_source_rows"] == fuchs_norway_report["products"] == 649
-    assert report["fuchs_norway_products_matched_to_existing"] == 616
-    assert report["fuchs_norway_products_added"] == 33
+    assert report["fuchs_norway_products_matched_to_existing"] == 617
+    assert report["fuchs_norway_products_added"] == 32
     assert report["fuchs_norway_cross_market_exact_name_family_rows"] == 630
     assert report["fuchs_norway_cross_market_family_conflict_rows"] == 15
     assert report["fuchs_hungary_source_rows"] == fuchs_hungary_report["products"] == 506
@@ -855,12 +856,40 @@ def main() -> None:
         "FUCHS_NORWAY_PRODUCT_FINDER": 12,
         "FUCHS_SWITZERLAND_PRODUCT_FINDER": 24,
     }
-    assert report["duplicate_decisions"]["review_fuchs_multi_registry_identity"] == 5856
-    assert report["duplicate_decisions"]["keep_separate_fuchs_market_family_conflict"] == 515
+    assert report["fuchs_unique_description_hashes"] == 2432
+    assert report["fuchs_unique_description_identity_rows_matched"] == 172
+    assert report["fuchs_unique_description_identity_rows_matched_by_source"] == {
+        "FUCHS_AUSTRIA_PRODUCT_FINDER": 11,
+        "FUCHS_BRAZIL_PRODUCT_FINDER": 4,
+        "FUCHS_CHILE_PRODUCT_FINDER": 8,
+        "FUCHS_CHINA_PRODUCT_FINDER": 6,
+        "FUCHS_CROATIA_PRODUCT_FINDER": 10,
+        "FUCHS_CZECH_PRODUCT_FINDER": 5,
+        "FUCHS_DENMARK_PRODUCT_FINDER": 9,
+        "FUCHS_FINLAND_PRODUCT_FINDER": 9,
+        "FUCHS_FRANCE_PRODUCT_FINDER": 3,
+        "FUCHS_GREECE_PRODUCT_FINDER": 11,
+        "FUCHS_ITALY_PRODUCT_FINDER": 8,
+        "FUCHS_KOREA_PRODUCT_FINDER": 5,
+        "FUCHS_MACEDONIA_PRODUCT_FINDER": 10,
+        "FUCHS_NORWAY_PRODUCT_FINDER": 1,
+        "FUCHS_PORTUGAL_PRODUCT_FINDER": 8,
+        "FUCHS_ROMANIA_PRODUCT_FINDER": 8,
+        "FUCHS_SAUDI_ARABIA_PRODUCT_FINDER": 3,
+        "FUCHS_SLOVAKIA_PRODUCT_FINDER": 11,
+        "FUCHS_SOUTH_AFRICA_PRODUCT_FINDER": 8,
+        "FUCHS_SPAIN_PRODUCT_FINDER": 5,
+        "FUCHS_SWEDEN_PRODUCT_FINDER": 2,
+        "FUCHS_TURKEY_PRODUCT_FINDER": 7,
+        "FUCHS_UAE_PRODUCT_FINDER": 11,
+        "FUCHS_UKRAINE_PRODUCT_FINDER": 9,
+    }
+    assert report["duplicate_decisions"]["review_fuchs_multi_registry_identity"] == 2892
+    assert report["duplicate_decisions"]["keep_separate_fuchs_market_family_conflict"] == 484
     assert report["duplicate_decisions"]["keep_separate_professional_signature_conflict"] == 690
     assert report["duplicate_decision_pair_rows_collapsed"] == {
         "keep_separate_professional_signature_conflict + keep_separate_professional_signature_conflict": 11,
-        "review_cross_source_identity + review_fuchs_multi_registry_identity": 4513,
+        "review_cross_source_identity + review_fuchs_multi_registry_identity": 2002,
         "review_cross_source_identity + review_liqui_moly_current_multiple_historical_candidates": 2,
     }
     assert report["duplicate_review_conflicts_resolved"] == {
@@ -874,11 +903,11 @@ def main() -> None:
         "sae_gear": 42,
     }
     assert report["duplicate_decision_self_pairs_dropped"] == {
-        "merged": 1, "review_fuchs_multi_registry_identity": 521,
+        "merged": 1, "review_fuchs_multi_registry_identity": 349,
     }
     assert report["canonical_input_rows_collapsed"] == 1
     assert db.execute("SELECT count(*) FROM duplicate_decisions WHERE product_id_a=product_id_b").fetchone()[0] == 0
-    assert db.execute("SELECT count(*) FROM duplicate_decisions").fetchone()[0] == 18501
+    assert db.execute("SELECT count(*) FROM duplicate_decisions").fetchone()[0] == 15506
     assert db.execute("""
         SELECT count(*) FROM (
             SELECT 1 FROM duplicate_decisions
@@ -886,23 +915,23 @@ def main() -> None:
             HAVING count(*) > 1
         )
     """).fetchone()[0] == 0
-    assert db.execute("SELECT count(*) FROM duplicate_decisions WHERE reason LIKE '% | %'").fetchone()[0] == 4515
+    assert db.execute("SELECT count(*) FROM duplicate_decisions WHERE reason LIKE '% | %'").fetchone()[0] == 2004
     assert report["aichilon_products_matched_to_existing"] == 255
     assert report["aichilon_products_added"] == 60
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 4973
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3044
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 105907
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 105906
-    assert report["quality_issues"]["professional_key_incomplete"] == 68492
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 105735
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 105734
+    assert report["quality_issues"]["professional_key_incomplete"] == 68391
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
         WHERE q.issue_code='professional_key_incomplete'
         GROUP BY p.family_code
     """)) == {
-        "C": 2060, "E": 148, "G": 10892, "H": 4761, "I": 3491,
-        "M": 22138, "S": 6845, "T": 11021, "TF": 6540, "U": 596,
+        "C": 2060, "E": 148, "G": 10825, "H": 4761, "I": 3491,
+        "M": 22138, "S": 6845, "T": 10987, "TF": 6540, "U": 596,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -913,8 +942,8 @@ def main() -> None:
     assert sum(row["products"] for row in offline_quality_audit["family_coverage"]) == report["canonical_rows"]
     assert duplicate_triage["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert duplicate_triage["canonical_products"] == report["canonical_rows"]
-    assert duplicate_triage["review_pairs"] == 6493
-    assert duplicate_triage["distinct_products_in_review"] == 1525
+    assert duplicate_triage["review_pairs"] == 3529
+    assert duplicate_triage["distinct_products_in_review"] == 1353
     assert duplicate_triage["self_pairs_remaining"] == 0
     assert duplicate_triage["already_applied_safe_merges"] == {
         "canonical_input_rows_collapsed": 1,
@@ -929,12 +958,12 @@ def main() -> None:
     }
     assert duplicate_triage["duplicate_decision_rows_collapsed"] == {
         "by_decision_combination": report["duplicate_decision_pair_rows_collapsed"],
-        "total_extra_rows_removed": 4526,
+        "total_extra_rows_removed": 2015,
     }
     assert duplicate_triage["triage_status_counts"] == {
-        "compatible_partial_specification_review": 2424,
-        "complete_exact_signature_candidate": 1720,
-        "insufficient_comparable_evidence": 2349,
+        "compatible_partial_specification_review": 1842,
+        "complete_exact_signature_candidate": 770,
+        "insufficient_comparable_evidence": 917,
     }
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status='listed_current_catalog'").fetchone()[0] == report["current_catalog_listed_offers"] == 1589
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_filed_registry'").fetchone()[0] == 3629
@@ -950,7 +979,7 @@ def main() -> None:
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_registry_source_data_issue'").fetchone()[0] == 51
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_government_qualified_product_registry'").fetchone()[0] == 536
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_oem_approval_registry'").fetchone()[0] == 6495
-    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_manufacturer_product_catalog'").fetchone()[0] == 6382
+    assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_manufacturer_product_catalog'").fetchone()[0] == 6210
     assert db.execute("SELECT count(*) FROM specifications WHERE spec_type='fuchs_payload_identity_sha256'").fetchone()[0] == 21032
     assert db.execute("SELECT count(DISTINCT spec_value) FROM specifications WHERE spec_type='fuchs_payload_identity_sha256'").fetchone()[0] == 19691
     assert db.execute("SELECT count(*) FROM products WHERE source_id='BRAVA_LUBRICANTS_OFFICIAL_CATALOG'").fetchone()[0] == 69
