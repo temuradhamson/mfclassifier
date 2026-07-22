@@ -2401,6 +2401,51 @@
       "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_document_redistribution",
       "observed_count": 15,
       "notes": "All 350 official table rows were audited; exactly 15 automotive gasoline-detergent observations are retained and 335 unrelated products are excluded. Sampled enterprises, social-credit codes and the laboratory are omitted."
+    },
+    {
+      "source_id": "ECUADOR_INEN_2024_08_CERTIFIED_LUBRICANTS",
+      "title": "Ecuador INEN August 2024 certified lubricants announcement",
+      "owner": "Servicio Ecuatoriano de Normalización (INEN)",
+      "source_type": "official_national_government_product_certification_announcement_html",
+      "source_locator": "data/ecuador-inen-certified-lubricants.jsonl",
+      "source_url": "https://www.normalizacion.gob.ec/mas-empresas-se-suman-a-la-calidad-conoce-las-empresas-que-en-este-mes-han-accedido-a-las-certificaciones-del-inen-5/",
+      "terms_url": "https://www.normalizacion.gob.ec/",
+      "source_sha256": "cb2ff4bcca0cbf04fee957b2c5fd53a00c14d9b102084034abe9cdef327a9886",
+      "access_status": "public_official_government_information_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_html_redistribution",
+      "observed_count": 16,
+      "notes": "All 55 product rows in the announcement table were audited; 16 lubricant product-grade rows are retained with holder, brand, product, SAE and API/API GL. The announcement does not expose certificate numbers or expiry dates."
+    },
+    {
+      "source_id": "ECUADOR_INEN_2025_01_CERTIFIED_LUBRICANTS",
+      "title": "Ecuador INEN January 2025 certified lubricants announcement",
+      "owner": "Servicio Ecuatoriano de Normalización (INEN)",
+      "source_type": "official_national_government_product_certification_announcement_html",
+      "source_locator": "data/ecuador-inen-certified-lubricants.jsonl",
+      "source_url": "https://www.normalizacion.gob.ec/conoce-las-empresas-que-en-el-mes-de-enero-han-accedido-a-las-certificaciones-del-inen/",
+      "terms_url": "https://www.normalizacion.gob.ec/",
+      "source_sha256": "cb2ff4bcca0cbf04fee957b2c5fd53a00c14d9b102084034abe9cdef327a9886",
+      "access_status": "public_official_government_information_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_html_redistribution",
+      "observed_count": 2,
+      "notes": "All 33 product rows in the announcement table were audited; two engine-oil product-grade rows are retained with holder, product, SAE and API. No separate brand column, certificate number or expiry is published."
+    },
+    {
+      "source_id": "ECUADOR_INEN_2025_02_CERTIFIED_LUBRICANTS",
+      "title": "Ecuador INEN February 2025 certified lubricants announcement",
+      "owner": "Servicio Ecuatoriano de Normalización (INEN)",
+      "source_type": "official_national_government_product_certification_announcement_html",
+      "source_locator": "data/ecuador-inen-certified-lubricants.jsonl",
+      "source_url": "https://www.normalizacion.gob.ec/conoce-las-empresas-que-en-el-mes-de-febrero-accedieron-a-las-certificaciones-del-inen/",
+      "terms_url": "https://www.normalizacion.gob.ec/",
+      "source_sha256": "cb2ff4bcca0cbf04fee957b2c5fd53a00c14d9b102084034abe9cdef327a9886",
+      "access_status": "public_official_government_information_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_html_redistribution",
+      "observed_count": 12,
+      "notes": "All 67 product rows in the announcement table were audited; 12 lubricant product-grade rows are retained with holder, brand, product, SAE, API/API GL and one explicit JASO MA2 value."
     }
   ]
 }

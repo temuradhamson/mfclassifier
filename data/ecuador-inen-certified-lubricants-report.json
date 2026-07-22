@@ -1,0 +1,38 @@
+{
+  "audited_all_product_rows": 155,
+  "dataset_snapshot_date": "2026-07-22",
+  "families": {
+    "M": 25,
+    "T": 5
+  },
+  "method": "complete official announcement tables audited; exact holder, brand, product, SAE and API/JASO facts retained",
+  "normalized_output_sha256": "cb2ff4bcca0cbf04fee957b2c5fd53a00c14d9b102084034abe9cdef327a9886",
+  "normalized_products": 30,
+  "posts": {
+    "7405": {
+      "all_product_rows": 55,
+      "content_sha256": "8d5e8f7fac0423e75d1f333e24ce8619239f67982bf07f9b99354312802329ab",
+      "relevant_rows": 16,
+      "source_id": "ECUADOR_INEN_2024_08_CERTIFIED_LUBRICANTS",
+      "source_url": "https://www.normalizacion.gob.ec/mas-empresas-se-suman-a-la-calidad-conoce-las-empresas-que-en-este-mes-han-accedido-a-las-certificaciones-del-inen-5/"
+    },
+    "7649": {
+      "all_product_rows": 33,
+      "content_sha256": "7aa64dbac6e28c25973a895ec56c311573ee42e5792b647f979527cba67ab7c9",
+      "relevant_rows": 2,
+      "source_id": "ECUADOR_INEN_2025_01_CERTIFIED_LUBRICANTS",
+      "source_url": "https://www.normalizacion.gob.ec/conoce-las-empresas-que-en-el-mes-de-enero-han-accedido-a-las-certificaciones-del-inen/"
+    },
+    "7707": {
+      "all_product_rows": 67,
+      "content_sha256": "fad7a7df0fc0b08bbceb3a1a5d2105fb37ac5361ab306f1b261bf403622595ae",
+      "relevant_rows": 12,
+      "source_id": "ECUADOR_INEN_2025_02_CERTIFIED_LUBRICANTS",
+      "source_url": "https://www.normalizacion.gob.ec/conoce-las-empresas-que-en-el-mes-de-febrero-accedieron-a-las-certificaciones-del-inen/"
+    }
+  },
+  "rows_with_api": 25,
+  "rows_with_jaso": 1,
+  "rows_with_sae": 30,
+  "status": "official_ecuador_inen_certification_announcements_normalized"
+}

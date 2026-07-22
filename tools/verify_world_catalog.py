@@ -216,6 +216,8 @@ def main() -> None:
     philippines_bps_rows = [json.loads(line) for line in (ROOT / "data/philippines-bps-brake-fluid-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     ghana_gsa_report = json.loads((ROOT / "data/ghana-gsa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
     ghana_gsa_rows = [json.loads(line) for line in (ROOT / "data/ghana-gsa-certified-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    ecuador_inen_report = json.loads((ROOT / "data/ecuador-inen-certified-lubricants-report.json").read_text(encoding="utf-8"))
+    ecuador_inen_rows = [json.loads(line) for line in (ROOT / "data/ecuador-inen-certified-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_report = json.loads((ROOT / "data/kebs-smark-lubricant-products-report.json").read_text(encoding="utf-8"))
     kebs_smark_rows = [json.loads(line) for line in (ROOT / "data/kebs-smark-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     east_africa_report = json.loads((ROOT / "data/east-africa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -264,6 +266,7 @@ def main() -> None:
         + report["jilin_china_products_added"]
         + report["wuxi_china_products_added"]
         + report["yantai_china_products_added"]
+        + report["ecuador_inen_certified_source_rows"]
         - report["gm_dual_standard_license_rows_merged"]
         - report["fuchs_exact_payload_identity_rows_matched"]
         - report["fuchs_exact_content_identity_rows_matched"]
@@ -709,7 +712,7 @@ def main() -> None:
     assert report["liqui_moly_current_products_added"] == 152
     assert report["liqui_moly_current_article_skus"] == liqui_moly_current_report["unique_article_skus"] == 985
     assert report["duplicate_decisions"]["review_cross_source_identity"] == 585
-    assert report["duplicate_decisions"]["keep_separate_specification_conflict"] == 10769
+    assert report["duplicate_decisions"]["keep_separate_specification_conflict"] == 10780
     assert db.execute("""
         SELECT count(*) FROM duplicate_decisions d
         JOIN products a ON a.product_id=d.product_id_a
@@ -955,7 +958,7 @@ def main() -> None:
     }
     assert report["canonical_input_rows_collapsed"] == 1
     assert db.execute("SELECT count(*) FROM duplicate_decisions WHERE product_id_a=product_id_b").fetchone()[0] == 0
-    assert db.execute("SELECT count(*) FROM duplicate_decisions").fetchone()[0] == 14553
+    assert db.execute("SELECT count(*) FROM duplicate_decisions").fetchone()[0] == 14564
     assert db.execute("""
         SELECT count(*) FROM (
             SELECT 1 FROM duplicate_decisions
@@ -969,8 +972,8 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 4973
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3044
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 105685
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 105684
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 105715
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 105714
     assert report["quality_issues"]["professional_key_incomplete"] == 68385
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
@@ -1904,6 +1907,25 @@ def main() -> None:
     assert all(not ({"address", "phone", "email", "contact_person"} & set(row)) for row in ghana_gsa_rows)
     assert policy_by_id["GSA_GHANA_2025_CERTIFIED_LUBRICANT_PRODUCTS"]["source_sha256"] == ghana_gsa_report["normalized_output_sha256"]
     assert policy_by_id["GSA_GHANA_2025_CERTIFIED_LUBRICANT_PRODUCTS"]["observed_count"] == 16
+    assert ecuador_inen_report["audited_all_product_rows"] == 155
+    assert ecuador_inen_report["normalized_products"] == len(ecuador_inen_rows) == 30
+    assert ecuador_inen_report["families"] == {"M": 25, "T": 5}
+    assert ecuador_inen_report["rows_with_sae"] == 30
+    assert ecuador_inen_report["rows_with_api"] == 25
+    assert ecuador_inen_report["rows_with_jaso"] == 1
+    assert len({row["source_record_id"] for row in ecuador_inen_rows}) == 30
+    assert all(row["market"] == "Ecuador" for row in ecuador_inen_rows)
+    assert all(not ({"address", "city", "phone", "email", "contact_person"} & set(row)) for row in ecuador_inen_rows)
+    for post in ecuador_inen_report["posts"].values():
+        source_id = post["source_id"]
+        assert policy_by_id[source_id]["source_sha256"] == ecuador_inen_report["normalized_output_sha256"]
+        assert policy_by_id[source_id]["observed_count"] == post["relevant_rows"]
+        assert db.execute(
+            "SELECT count(*) FROM product_sources WHERE source_id=?", (source_id,)
+        ).fetchone()[0] == post["relevant_rows"]
+    assert db.execute(
+        "SELECT count(*) FROM products WHERE evidence_status='official_government_product_certification_announcement'"
+    ).fetchone()[0] == 30
     assert policy_by_id["nsf-white-book"]["bulk_ingest_allowed"] is False
     assert policy_by_id["FLENDER_T7300_APPROVED_LUBRICANTS"]["bulk_ingest_allowed"] is False
     chemexpo_names = {row["product_name"].casefold() for row in epa_chemexpo_rows}
