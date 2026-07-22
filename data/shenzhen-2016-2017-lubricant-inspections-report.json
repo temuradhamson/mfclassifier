@@ -1,0 +1,43 @@
+{
+  "status": "official_shenzhen_2016_2017_complete_lubricant_inspections_normalized",
+  "snapshot_date": "2026-07-22",
+  "source_docx_sha256": {
+    "2016_conforming": "c59935f376802184ee4940e75b713f649b1973ae499143e7b571510384702667",
+    "2016_nonconforming": "ae6eca3c2743e7818d788e72e49bb32e0d7791f9a67b0e25916a4a9d48d5b9b2",
+    "2017_conforming": "d479a8a3741f378d3c862f662568297c9ec0865d2f7ba6cfe0058804f55aac36",
+    "2017_nonconforming": "fe9b52eac18678cd2dc96cc3e02adbfaf56efc29c1397ad8cc398b8ede8b4e35"
+  },
+  "source_observations": 140,
+  "source_counts": {
+    "SHENZHEN_CHINA_2016_LUBRICANT_INSPECTION": 80,
+    "SHENZHEN_CHINA_2017_LUBRICANT_INSPECTION": 60
+  },
+  "outcomes": {
+    "conforming": 129,
+    "nonconforming": 11
+  },
+  "outcomes_by_source": {
+    "SHENZHEN_CHINA_2016_LUBRICANT_INSPECTION": {
+      "conforming": 72,
+      "nonconforming": 8
+    },
+    "SHENZHEN_CHINA_2017_LUBRICANT_INSPECTION": {
+      "conforming": 57,
+      "nonconforming": 3
+    }
+  },
+  "families": {
+    "M": 140
+  },
+  "rows_with_sae": 137,
+  "rows_with_api": 96,
+  "rows_with_acea": 4,
+  "rows_with_ilsac": 7,
+  "rows_with_oem_approval": 2,
+  "normalized_output_sha256": "4e1e0ebfe5bdf1a46ffaed2829cc88e6251f663c6d373eda946b95f9bfa6b6ff",
+  "grain_note": "One output row is one inspected batch observation; strict package-independent identity reconciliation happens in the catalog builder.",
+  "scope_note": "All 80 rows from 2016 and all 60 rows from 2017 are retained, matching the official 72+8 and 57+3 outcome totals.",
+  "lifecycle_note": "Inspection outcomes are historical batch evidence, never current offers or blanket approvals.",
+  "privacy_note": "Inspected retailers are excluded; only nominal producer, product, brand, model, production date, outcome and failure facts are retained.",
+  "rights_note": "The official DOCX files are not redistributed; only attributed non-expressive factual fields are normalized."
+}

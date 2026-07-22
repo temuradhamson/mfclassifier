@@ -2073,6 +2073,36 @@
       "notes": "The official 2025 national-inspection XLSX contains 28 relevant failed batches. Twenty-five exact nominal producer + product name + model/specification observations are normalized: nine brake fluids, ten automotive aqueous-urea products and six engine oils. Three rows explicitly marked counterfeit have no reported producer and remain report-only. SAMR reserves website copyright and prohibits commercial verbatim republication; the XLSX is not redistributed, narrative content is omitted, and only attributed non-expressive facts are retained. Every row remains explicitly nonconforming historical evidence and is never presented as approved or currently marketed."
     },
     {
+      "source_id": "SHENZHEN_CHINA_2016_LUBRICANT_INSPECTION",
+      "title": "Shenzhen 2016 complete lubricant inspection",
+      "owner": "Shenzhen Market and Quality Supervision Commission",
+      "source_type": "official_municipal_government_complete_product_quality_inspection_docx",
+      "source_locator": "data/shenzhen-2016-2017-lubricant-inspections.jsonl",
+      "source_url": "https://www.sz.gov.cn/szzt2010/zdlyzl/zlzscqjg/chcgg/content/post_1345944.html",
+      "terms_url": "https://www.sz.gov.cn/cn/qt/gywm/",
+      "source_sha256": "4e1e0ebfe5bdf1a46ffaed2829cc88e6251f663c6d373eda946b95f9bfa6b6ff",
+      "access_status": "public_official_government_information_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_document_redistribution",
+      "observed_count": 80,
+      "notes": "All 80 inspected lubricant batches are retained: 72 with no nonconforming item found and eight nonconforming. Nominal producer, product, brand, model/specification, production date, outcome and failed-test facts are normalized; inspected retailers and the source DOCX files are excluded. Historical inspection evidence is never represented as a current offer or blanket approval."
+    },
+    {
+      "source_id": "SHENZHEN_CHINA_2017_LUBRICANT_INSPECTION",
+      "title": "Shenzhen 2017 complete lubricant inspection",
+      "owner": "Shenzhen Market and Quality Supervision Commission",
+      "source_type": "official_municipal_government_complete_product_quality_inspection_docx",
+      "source_locator": "data/shenzhen-2016-2017-lubricant-inspections.jsonl",
+      "source_url": "https://www.sz.gov.cn/szzt2010/wgkzl/glgk/jgxxgk/zljg/content/post_1352727.html",
+      "terms_url": "https://www.sz.gov.cn/cn/qt/gywm/",
+      "source_sha256": "4e1e0ebfe5bdf1a46ffaed2829cc88e6251f663c6d373eda946b95f9bfa6b6ff",
+      "access_status": "public_official_government_information_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_document_redistribution",
+      "observed_count": 60,
+      "notes": "All 60 inspected lubricant batches are retained: 57 with no nonconforming item found and three nonconforming. Source forms such as letter-O `Ow40`, attached SAE/API notation and unhyphenated API grades are transparently normalized with quality flags while verbatim model text remains preserved."
+    },
+    {
       "source_id": "BEIJING_CHINA_2018_AUTOMOTIVE_FLUID_INSPECTION_1",
       "title": "Beijing 2018 automotive-fluid inspection — first release",
       "owner": "Beijing Administration for Market Regulation",

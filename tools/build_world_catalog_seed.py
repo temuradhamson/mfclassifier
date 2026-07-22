@@ -81,6 +81,7 @@ SHENZHEN_CHINA_2019_JSONL = ROOT / "data" / "shenzhen-2019-automotive-fluid-insp
 SHENZHEN_CHINA_2025_JSONL = ROOT / "data" / "shenzhen-2025-automotive-fluid-inspection.jsonl"
 SHANGHAI_CHINA_2023_2025_JSONL = ROOT / "data" / "shanghai-2023-2025-lubricant-inspections.jsonl"
 BEIJING_CHINA_2018_JSONL = ROOT / "data" / "beijing-2018-automotive-fluid-inspections.jsonl"
+SHENZHEN_CHINA_2016_2017_JSONL = ROOT / "data" / "shenzhen-2016-2017-lubricant-inspections.jsonl"
 PHILIPPINES_BPS_BRAKE_FLUID_JSONL = ROOT / "data" / "philippines-bps-brake-fluid-products.jsonl"
 GHANA_GSA_CERTIFIED_JSONL = ROOT / "data" / "ghana-gsa-certified-lubricant-products.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
@@ -2659,6 +2660,7 @@ def samr_china_inspection_record(row: dict) -> dict:
         "acea_source_reported": technical.get("acea_source_reported", []),
         "jaso_source_reported": technical.get("jaso_source_reported", []),
         "ilsac_source_reported": technical.get("ilsac_source_reported", []),
+        "oem_approval_source_reported": technical.get("oem_approval_source_reported", []),
         "source_url": row["source_url"],
         "attachment_url": row["attachment_url"],
         "rights_url": row["rights_url"],
@@ -2710,6 +2712,7 @@ def china_inspection_professional_signature(row: dict) -> tuple:
         tuple(technical.get("acea_source_reported", [])),
         tuple(technical.get("jaso_source_reported", [])),
         tuple(technical.get("ilsac_source_reported", [])),
+        tuple(technical.get("oem_approval_source_reported", [])),
         tuple(sorted(brake_classes)),
         tuple(technical.get("brake_fluid_env_source_reported", [])),
         tuple(technical.get("coolant_class_source_reported", [])),
@@ -2775,6 +2778,7 @@ def merge_china_inspection_evidence(target: dict, row: dict) -> None:
     for field in (
         "api_source_reported", "sae_engine_source_reported", "acea_source_reported",
         "jaso_source_reported",
+        "oem_approval_source_reported",
         "api_gl_source_reported", "iso_vg_source_reported", "china_lubricant_class_source_reported",
         "ilsac_source_reported", "brake_fluid_dot_source_reported",
         "brake_fluid_hzy_source_reported", "brake_fluid_env_source_reported", "coolant_class_source_reported",
@@ -4079,6 +4083,42 @@ def main() -> None:
             beijing_china_products_added += 1
         china_inspection_existing_entries.append((raw, target))
         beijing_china_product_key[raw["source_record_id"]] = target["canonical_key"]
+    shenzhen_china_2016_2017_source_rows = [
+        json.loads(line)
+        for line in SHENZHEN_CHINA_2016_2017_JSONL.read_text(encoding="utf-8").splitlines()
+        if line
+    ]
+    shenzhen_china_2016_2017_product_key = {}
+    shenzhen_china_2016_2017_products_matched_to_existing = 0
+    shenzhen_china_2016_2017_products_added = 0
+    for raw in shenzhen_china_2016_2017_source_rows:
+        comparable_map = unique_inspection_target_map(china_inspection_comparable_identity)
+        professional_map = unique_inspection_target_map(china_inspection_professional_identity)
+        package_independent_map = unique_inspection_target_map(china_inspection_package_independent_identity)
+        target = comparable_map.get(china_inspection_comparable_identity(raw))
+        if target is None:
+            professional_identity = china_inspection_professional_identity(raw)
+            if professional_identity is not None:
+                target = professional_map.get(professional_identity)
+        if target is None:
+            target = package_independent_map.get(china_inspection_package_independent_identity(raw))
+        if target is None:
+            fallback_candidates = {
+                candidate_target["canonical_key"]: candidate_target
+                for candidate_raw, candidate_target in china_inspection_existing_entries
+                if china_inspection_fallback_brand_match(raw, candidate_raw)
+            }
+            if len(fallback_candidates) == 1:
+                target = next(iter(fallback_candidates.values()))
+        if target is not None:
+            merge_china_inspection_evidence(target, raw)
+            shenzhen_china_2016_2017_products_matched_to_existing += 1
+        else:
+            target = samr_china_inspection_record(raw)
+            input_records.append(target)
+            shenzhen_china_2016_2017_products_added += 1
+        china_inspection_existing_entries.append((raw, target))
+        shenzhen_china_2016_2017_product_key[raw["source_record_id"]] = target["canonical_key"]
     philippines_bps_brake_fluid_source_rows = [json.loads(line) for line in PHILIPPINES_BPS_BRAKE_FLUID_JSONL.read_text(encoding="utf-8").splitlines() if line]
     philippines_bps_brake_fluid_records = [philippines_bps_brake_fluid_record(row) for row in philippines_bps_brake_fluid_source_rows]
     input_records.extend(philippines_bps_brake_fluid_records)
@@ -5373,6 +5413,17 @@ def main() -> None:
         if link_key not in source_link_keys:
             source_links.append(link)
             source_link_keys.add(link_key)
+    for raw in shenzhen_china_2016_2017_source_rows:
+        target = canonical_by_key[shenzhen_china_2016_2017_product_key[raw["source_record_id"]]]
+        link = {
+            "product_id": target["product_id"], "source_id": raw["source_id"],
+            "source_record_id": raw["source_record_id"], "source_row": raw["source_row"],
+            "relation": "official_government_product_inspection_observation",
+        }
+        link_key = (link["product_id"], link["source_id"], link["source_record_id"])
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     for raw in beijing_china_source_rows:
         target = canonical_by_key[beijing_china_product_key[raw["source_record_id"]]]
         link = {
@@ -6308,6 +6359,7 @@ def main() -> None:
         "shenzhen_china_2025_input_sha256": hashlib.sha256(SHENZHEN_CHINA_2025_JSONL.read_bytes()).hexdigest(),
         "shanghai_china_2023_2025_input_sha256": hashlib.sha256(SHANGHAI_CHINA_2023_2025_JSONL.read_bytes()).hexdigest(),
         "beijing_china_2018_input_sha256": hashlib.sha256(BEIJING_CHINA_2018_JSONL.read_bytes()).hexdigest(),
+        "shenzhen_china_2016_2017_input_sha256": hashlib.sha256(SHENZHEN_CHINA_2016_2017_JSONL.read_bytes()).hexdigest(),
         "philippines_bps_brake_fluid_input_sha256": hashlib.sha256(PHILIPPINES_BPS_BRAKE_FLUID_JSONL.read_bytes()).hexdigest(),
         "ghana_gsa_certified_input_sha256": hashlib.sha256(GHANA_GSA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
@@ -6424,6 +6476,9 @@ def main() -> None:
         "beijing_china_2018_source_rows": len(beijing_china_source_rows),
         "beijing_china_products_matched_to_existing": beijing_china_products_matched_to_existing,
         "beijing_china_products_added": beijing_china_products_added,
+        "shenzhen_china_2016_2017_source_rows": len(shenzhen_china_2016_2017_source_rows),
+        "shenzhen_china_2016_2017_products_matched_to_existing": shenzhen_china_2016_2017_products_matched_to_existing,
+        "shenzhen_china_2016_2017_products_added": shenzhen_china_2016_2017_products_added,
         "china_government_inspection_source_observations": sum(map(len, (
             samr_china_2025_source_rows, samr_china_2024_source_rows,
             samr_china_2023_source_rows, shenzhen_china_2021_source_rows,
@@ -6431,6 +6486,7 @@ def main() -> None:
             shenzhen_china_2019_source_rows,
             shanghai_china_source_rows,
             beijing_china_source_rows,
+            shenzhen_china_2016_2017_source_rows,
         ))),
         "samr_china_source_observations": len(samr_china_2025_source_rows) + len(samr_china_2024_source_rows) + len(samr_china_2023_source_rows),
         "official_government_nonconforming_product_inspection_observation_rows": sum(r["evidence_status"] == "official_government_nonconforming_product_inspection_observation" for r in records),
