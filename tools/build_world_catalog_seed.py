@@ -3343,6 +3343,8 @@ def fuchs_catalog_record(row: dict, source_id: str, market_name: str) -> dict:
         "source_product_dates": row["source_product_dates"],
         "source_urls": row["source_urls"],
         "grain_warning": row["grain_warning"],
+        "fuchs_source_description_sha256": row.get("source_description_sha256", []),
+        "fuchs_payload_identity_sha256": fuchs_payload_identity_sha256(row),
     })
     source_key = {
         "FUCHS_INDIA_PRODUCT_FINDER": "fuchs_india_record",
@@ -3392,6 +3394,27 @@ def fuchs_catalog_record(row: dict, source_id: str, market_name: str) -> dict:
     return record
 
 
+def fuchs_payload_identity_sha256(row: dict) -> str:
+    """Hash exact current-catalog evidence, excluding market-local IDs and URLs."""
+    empty_description_sha256 = hashlib.sha256(b"").hexdigest()
+    description_hashes = sorted(
+        value for value in row.get("source_description_sha256", [])
+        if value and value != empty_description_sha256
+    )
+    if not description_hashes:
+        return ""
+    payload = {
+        "source_description_sha256": description_hashes,
+        "source_product_dates": sorted(row.get("source_product_dates", [])),
+        "specifications": sorted(row.get("specifications", [])),
+        "approvals": sorted(row.get("approvals", [])),
+        "fuchs_recommendations": sorted(row.get("fuchs_recommendations", [])),
+        "technical": row.get("technical", {}),
+    }
+    serialized = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(serialized.encode()).hexdigest()
+
+
 def merge_fuchs_catalog_evidence(target: dict, source_record: dict, raw: dict) -> None:
     target["specifications"].setdefault("fuchs_catalog_entries", []).append({
         "source_id": raw["source_id"],
@@ -3403,7 +3426,16 @@ def merge_fuchs_catalog_evidence(target: dict, source_record: dict, raw: dict) -
         "recommendations": raw["fuchs_recommendations"],
         "technical": raw["technical"],
         "source_urls": raw["source_urls"],
+        "source_description_sha256": raw.get("source_description_sha256", []),
+        "source_product_dates": raw.get("source_product_dates", []),
     })
+    for field, values in {
+        "fuchs_source_description_sha256": raw.get("source_description_sha256", []),
+        "fuchs_payload_identity_sha256": [fuchs_payload_identity_sha256(raw)],
+    }.items():
+        existing = target["specifications"].get(field, [])
+        existing = existing if isinstance(existing, list) else [existing]
+        target["specifications"][field] = sorted(set(existing + [value for value in values if value]))
     for key, code in source_record["codes"].items():
         target["codes"][f"fuchs_{raw['source_id']}_{raw['source_record_id']}_{key}"] = code
 
@@ -3423,12 +3455,25 @@ def integrate_fuchs_market(input_records: list[dict], source_rows: list[dict], s
             existing_by_name_family[(row["product_name_normalized"], row["family_code"])].append(row)
             existing_by_name[row["product_name_normalized"]].append(row)
     product_key, review_keys, family_conflict_keys = {}, [], []
-    added_rows = matched_rows = 0
+    added_rows = matched_rows = payload_matched_rows = 0
     for raw, source_record in zip(source_rows, source_records):
         name = normalize(raw["product_name"])
         matches = existing_by_name_family[(name, raw["family_code"])]
-        if len(matches) == 1:
-            target = matches[0]
+        exact_payload_matches = []
+        payload_identity = fuchs_payload_identity_sha256(raw)
+        if payload_identity and len(matches) > 1:
+            exact_payload_matches = [
+                row for row in matches
+                if payload_identity in (
+                    row["specifications"].get("fuchs_payload_identity_sha256", [])
+                    if isinstance(row["specifications"].get("fuchs_payload_identity_sha256", []), list)
+                    else [row["specifications"].get("fuchs_payload_identity_sha256")]
+                )
+            ]
+        if len(matches) == 1 or len(exact_payload_matches) == 1:
+            target = matches[0] if len(matches) == 1 else exact_payload_matches[0]
+            if len(matches) > 1:
+                payload_matched_rows += 1
             merge_fuchs_catalog_evidence(target, source_record, raw)
             matched_rows += 1
         else:
@@ -3443,7 +3488,17 @@ def integrate_fuchs_market(input_records: list[dict], source_rows: list[dict], s
             if other_family_matches:
                 family_conflict_keys.append((target["canonical_key"], [row["canonical_key"] for row in other_family_matches]))
         product_key[raw["source_record_id"]] = target["canonical_key"]
-    return {"product_key": product_key, "added": added_rows, "matched": matched_rows, "review_keys": review_keys, "family_conflict_keys": family_conflict_keys, "exact": exact_rows, "conflicts": conflict_rows}
+    return {
+        "source_id": source_id,
+        "product_key": product_key,
+        "added": added_rows,
+        "matched": matched_rows,
+        "payload_matched": payload_matched_rows,
+        "review_keys": review_keys,
+        "family_conflict_keys": family_conflict_keys,
+        "exact": exact_rows,
+        "conflicts": conflict_rows,
+    }
 
 
 def deduplicate(records: list[dict]) -> tuple[list[dict], list[dict]]:
@@ -6704,6 +6759,15 @@ def main() -> None:
     run_id = f"seed-{SNAPSHOT_DATE}"
     JSONL_OUT.write_text("".join(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n" for row in records), encoding="utf-8")
     compress_jsonl()
+    fuchs_payload_integrations = [
+        fuchs_mexico, fuchs_south_africa, fuchs_brazil, fuchs_norway, fuchs_hungary,
+        *additional_fuchs.values(),
+    ]
+    fuchs_payload_matches_by_source = {
+        integration["source_id"]: integration["payload_matched"]
+        for integration in fuchs_payload_integrations
+        if integration["payload_matched"]
+    }
     report = {
         "schema_version": SCHEMA_VERSION,
         "run_id": run_id,
@@ -7052,6 +7116,8 @@ def main() -> None:
         "fuchs_hungary_products_added": fuchs_hungary_added_rows,
         "fuchs_hungary_cross_market_exact_name_family_rows": fuchs_hungary_cross_market_exact_name_family_rows,
         "fuchs_hungary_cross_market_family_conflict_rows": fuchs_hungary_cross_market_family_conflict_rows,
+        "fuchs_exact_payload_identity_rows_matched": sum(fuchs_payload_matches_by_source.values()),
+        "fuchs_exact_payload_identity_rows_matched_by_source": dict(sorted(fuchs_payload_matches_by_source.items())),
         "jaso_source_rows": len(jaso_source_rows),
         "jaso_unique_oil_codes": len({r["oil_code"] for r in jaso_source_rows}),
         "aichilon_source_products": len(aichilon_products) + len(exclusions),

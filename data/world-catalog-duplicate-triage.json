@@ -26,17 +26,17 @@
     },
     {
       "decision": "review_fuchs_multi_registry_identity",
-      "pairs": 2046,
+      "pairs": 1927,
       "triage_status": "compatible_partial_specification_review"
     },
     {
       "decision": "review_fuchs_multi_registry_identity",
-      "pairs": 1811,
+      "pairs": 1691,
       "triage_status": "complete_exact_signature_candidate"
     },
     {
       "decision": "review_fuchs_multi_registry_identity",
-      "pairs": 2743,
+      "pairs": 2238,
       "triage_status": "insufficient_comparable_evidence"
     },
     {
@@ -58,7 +58,7 @@
   "by_family_and_status": [
     {
       "family_code": "G",
-      "pairs": 1390,
+      "pairs": 1233,
       "triage_status": "insufficient_comparable_evidence"
     },
     {
@@ -83,12 +83,12 @@
     },
     {
       "family_code": "M",
-      "pairs": 2104,
+      "pairs": 1987,
       "triage_status": "compatible_partial_specification_review"
     },
     {
       "family_code": "M",
-      "pairs": 1180,
+      "pairs": 1099,
       "triage_status": "complete_exact_signature_candidate"
     },
     {
@@ -103,17 +103,17 @@
     },
     {
       "family_code": "T",
-      "pairs": 436,
+      "pairs": 434,
       "triage_status": "compatible_partial_specification_review"
     },
     {
       "family_code": "T",
-      "pairs": 473,
+      "pairs": 434,
       "triage_status": "complete_exact_signature_candidate"
     },
     {
       "family_code": "T",
-      "pairs": 1409,
+      "pairs": 1061,
       "triage_status": "insufficient_comparable_evidence"
     },
     {
@@ -132,16 +132,16 @@
       "triage_status": "insufficient_comparable_evidence"
     }
   ],
-  "canonical_products": 105949,
-  "compressed_database_sha256": "c3b23c9af2ea1681d4550cf841a876dd5a33998982a8e179e5fde28053ebb177",
-  "distinct_products_in_review": 1568,
+  "canonical_products": 105906,
+  "compressed_database_sha256": "b65721bd479cde097fc41a448a5ac2ba7e9200949728274dda3127b4281ecb95",
+  "distinct_products_in_review": 1525,
   "duplicate_decision_rows_collapsed": {
     "by_decision_combination": {
-      "keep_separate_professional_signature_conflict + keep_separate_professional_signature_conflict": 12,
-      "review_cross_source_identity + review_fuchs_multi_registry_identity": 5154,
+      "keep_separate_professional_signature_conflict + keep_separate_professional_signature_conflict": 11,
+      "review_cross_source_identity + review_fuchs_multi_registry_identity": 4513,
       "review_cross_source_identity + review_liqui_moly_current_multiple_historical_candidates": 2
     },
-    "total_extra_rows_removed": 5168
+    "total_extra_rows_removed": 4526
   },
   "examples": {
     "compatible_partial_specification_review": [
@@ -342,14 +342,14 @@
       "iso_vg": 20,
       "jaso_family_detail": 3,
       "sae_engine": 624,
-      "sae_gear": 44
+      "sae_gear": 42
     },
-    "explicit_professional_signature_conflict": 691
+    "explicit_professional_signature_conflict": 690
   },
   "retained_source_code_collisions": {
     "gm_same_license_different_product_names": 1
   },
-  "review_pairs": 7237,
+  "review_pairs": 6493,
   "self_pairs_remaining": 0,
   "shared_code_system_counts": {
     "ANP_BRAZIL_REGISTRATION_NUMBER": 167
@@ -357,8 +357,8 @@
   "snapshot_date": "2026-07-22",
   "status": "offline_duplicate_triage_no_unproven_auto_merge",
   "triage_status_counts": {
-    "compatible_partial_specification_review": 2543,
-    "complete_exact_signature_candidate": 1840,
-    "insufficient_comparable_evidence": 2854
+    "compatible_partial_specification_review": 2424,
+    "complete_exact_signature_candidate": 1720,
+    "insufficient_comparable_evidence": 2349
   }
 }
