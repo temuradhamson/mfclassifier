@@ -2073,6 +2073,36 @@
       "notes": "The official 2025 national-inspection XLSX contains 28 relevant failed batches. Twenty-five exact nominal producer + product name + model/specification observations are normalized: nine brake fluids, ten automotive aqueous-urea products and six engine oils. Three rows explicitly marked counterfeit have no reported producer and remain report-only. SAMR reserves website copyright and prohibits commercial verbatim republication; the XLSX is not redistributed, narrative content is omitted, and only attributed non-expressive facts are retained. Every row remains explicitly nonconforming historical evidence and is never presented as approved or currently marketed."
     },
     {
+      "source_id": "BEIJING_CHINA_2018_AUTOMOTIVE_FLUID_INSPECTION_1",
+      "title": "Beijing 2018 automotive-fluid inspection — first release",
+      "owner": "Beijing Administration for Market Regulation",
+      "source_type": "official_municipal_government_complete_product_quality_inspection_xls",
+      "source_locator": "data/beijing-2018-automotive-fluid-inspections.jsonl",
+      "source_url": "https://scjgj.beijing.gov.cn/zwxx/gs/cpzlgs/201909/t20190904_267303.html",
+      "terms_url": "https://www.beijing.gov.cn/zhengce/zhengcefagui/201905/t20190522_61986.html",
+      "source_sha256": "d08b61b049ed90f05ab3efed83aee3ef3845b770f22f7a1c3f0c683637cdcc8e",
+      "access_status": "public_official_government_information_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_document_redistribution",
+      "observed_count": 147,
+      "notes": "All 147 relevant inspected batches are retained: nine gasoline detergent additives, 22 automotive aqueous-urea products, 76 engine oils, 35 coolants and five brake fluids. The current official attachment is a later portal reissue of the 2018 report and is pinned by SHA-256. Producer-level product facts and outcomes are normalized; the source workbook is not redistributed."
+    },
+    {
+      "source_id": "BEIJING_CHINA_2018_AUTOMOTIVE_FLUID_INSPECTION_2",
+      "title": "Beijing 2018 automotive-fluid inspection — second release",
+      "owner": "Beijing Administration for Market Regulation",
+      "source_type": "official_municipal_government_complete_product_quality_inspection_html",
+      "source_locator": "data/beijing-2018-automotive-fluid-inspections.jsonl",
+      "source_url": "https://scjgj.beijing.gov.cn/zwxx/gs/cpzlgs/201909/t20190904_267220.html",
+      "terms_url": "https://www.beijing.gov.cn/zhengce/zhengcefagui/201905/t20190522_61986.html",
+      "source_sha256": "d08b61b049ed90f05ab3efed83aee3ef3845b770f22f7a1c3f0c683637cdcc8e",
+      "access_status": "public_official_government_information_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_document_redistribution",
+      "observed_count": 147,
+      "notes": "All 147 relevant inspected batches are retained: nine gasoline detergent additives, 47 automotive aqueous-urea products, 86 engine oils and five coolants. One source row omits its production-date cell; the normalized record preserves the field as missing instead of shifting or inventing values. Historical outcomes are never treated as current offers or blanket approvals."
+    },
+    {
       "source_id": "SHANGHAI_CHINA_2023_INDUSTRIAL_LUBRICANT_INSPECTION_1",
       "title": "Shanghai 2023 industrial-lubricant inspection — first batch",
       "owner": "Shanghai Municipal Administration for Market Regulation",

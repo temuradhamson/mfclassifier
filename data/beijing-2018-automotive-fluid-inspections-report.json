@@ -1,0 +1,41 @@
+{
+  "status": "official_beijing_2018_complete_automotive_fluid_inspections_normalized",
+  "snapshot_date": "2026-07-22",
+  "source_xls_sha256": "beb28359a68d509305cc5fc8efa4887007a4cf4e18c31e53a3505724b9bedaa7",
+  "source_html_sha256": "f79e58800a664df053d043fdea2b25679744f68fea2347e9976762a2238cd9b9",
+  "source_observations": 294,
+  "source_counts": {
+    "BEIJING_CHINA_2018_AUTOMOTIVE_FLUID_INSPECTION_1": 147,
+    "BEIJING_CHINA_2018_AUTOMOTIVE_FLUID_INSPECTION_2": 147
+  },
+  "source_product_types": {
+    "发动机冷却液": 40,
+    "机动车制动液": 5,
+    "柴油机油、汽油机油": 162,
+    "车用尿素溶液": 69,
+    "车用汽油清净剂": 18
+  },
+  "outcomes": {
+    "conforming": 283,
+    "nonconforming": 11
+  },
+  "families": {
+    "M": 162,
+    "S": 18,
+    "TF": 114
+  },
+  "rows_with_sae": 161,
+  "rows_with_api": 155,
+  "rows_with_ilsac": 5,
+  "rows_with_acea": 2,
+  "rows_with_jaso": 2,
+  "rows_with_coolant_class": 1,
+  "rows_with_coolant_freezing_point": 40,
+  "rows_with_brake_class": 5,
+  "rows_with_explicit_aus32": 5,
+  "normalized_output_sha256": "d08b61b049ed90f05ab3efed83aee3ef3845b770f22f7a1c3f0c683637cdcc8e",
+  "grain_note": "One row is one inspected batch observation; the catalog builder reconciles only strict package-independent product identities.",
+  "lifecycle_note": "Inspection outcomes are historical batch evidence, never current offers or blanket approvals.",
+  "privacy_note": "The releases contain producer-level product tables, not sampled retailer details; no contact or address fields are retained.",
+  "rights_note": "The official XLS/HTML documents are not redistributed; only attributed non-expressive product and inspection facts are normalized."
+}
