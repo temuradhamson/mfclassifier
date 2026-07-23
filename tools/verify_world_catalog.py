@@ -250,6 +250,8 @@ def main() -> None:
     trinidad_tobago_np_ultra_rows = [json.loads(line) for line in (ROOT / "data/trinidad-tobago-np-ultra-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     venezuela_pdv_report = json.loads((ROOT / "data/venezuela-pdv-current-lubricants-report.json").read_text(encoding="utf-8"))
     venezuela_pdv_rows = [json.loads(line) for line in (ROOT / "data/venezuela-pdv-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    jamaica_futroil_tek_report = json.loads((ROOT / "data/jamaica-futroil-tek-current-lubricants-report.json").read_text(encoding="utf-8"))
+    jamaica_futroil_tek_rows = [json.loads(line) for line in (ROOT / "data/jamaica-futroil-tek-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_report = json.loads((ROOT / "data/kebs-smark-lubricant-products-report.json").read_text(encoding="utf-8"))
     kebs_smark_rows = [json.loads(line) for line in (ROOT / "data/kebs-smark-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     east_africa_report = json.loads((ROOT / "data/east-africa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -324,6 +326,7 @@ def main() -> None:
         + len(suriname_powerfull_rows)
         + len(trinidad_tobago_np_ultra_rows)
         + len(venezuela_pdv_rows)
+        + len(jamaica_futroil_tek_rows)
         - report["gm_dual_standard_license_rows_merged"]
         - report["fuchs_exact_payload_identity_rows_matched"]
         - report["fuchs_exact_content_identity_rows_matched"]
@@ -1029,17 +1032,17 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 4973
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3044
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 116748
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 116747
-    assert report["quality_issues"]["professional_key_incomplete"] == 78505
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 116777
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 116776
+    assert report["quality_issues"]["professional_key_incomplete"] == 78522
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
         WHERE q.issue_code='professional_key_incomplete'
         GROUP BY p.family_code
     """)) == {
-        "C": 2281, "E": 149, "G": 12373, "H": 5257, "I": 3847,
-        "M": 23397, "S": 12117, "T": 11815, "TF": 6673, "U": 596,
+        "C": 2281, "E": 149, "G": 12375, "H": 5257, "I": 3847,
+        "M": 23404, "S": 12118, "T": 11817, "TF": 6677, "U": 597,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -2217,6 +2220,25 @@ def main() -> None:
     assert all(row["brand"] == "PDV" and row["market"] == "Venezuela" for row in venezuela_pdv_rows)
     assert all(not ({"address", "phone", "email", "contact_person"} & set(row)) for row in venezuela_pdv_rows)
     assert policy_by_id["VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG"]["source_sha256"] == venezuela_pdv_report["normalized_output_sha256"]
+
+    assert jamaica_futroil_tek_report["official_pages_audited"] == 2
+    assert jamaica_futroil_tek_report["official_product_card_images_audited"] == 20
+    assert jamaica_futroil_tek_report["futroil_normalized_product_grades"] == 8
+    assert jamaica_futroil_tek_report["tek_normalized_product_grades"] == 21
+    assert jamaica_futroil_tek_report["normalized_product_grade_identities"] == len(jamaica_futroil_tek_rows) == 29
+    assert jamaica_futroil_tek_report["families"] == {
+        "C": 2, "G": 2, "H": 4, "M": 11, "S": 1, "T": 4, "TF": 4, "U": 1,
+    }
+    assert jamaica_futroil_tek_report["rows_with_sae"] == 14
+    assert jamaica_futroil_tek_report["rows_with_api_or_api_gl"] == 6
+    assert jamaica_futroil_tek_report["rows_with_iso_vg"] == 6
+    assert sum(row["brand"] == "FUTROIL" for row in jamaica_futroil_tek_rows) == 8
+    assert sum(row["brand"] == "TEK" for row in jamaica_futroil_tek_rows) == 21
+    assert all(row["market"] == "Jamaica" for row in jamaica_futroil_tek_rows)
+    assert all(not ({"address", "phone", "email", "contact_person"} & set(row)) for row in jamaica_futroil_tek_rows)
+    assert all(row["source_image_sha256"] for row in jamaica_futroil_tek_rows)
+    assert policy_by_id["JAMAICA_FESCO_FUTROIL_CURRENT_LUBRICANT_CATALOG"]["source_sha256"] == jamaica_futroil_tek_report["normalized_output_sha256"]
+    assert policy_by_id["JAMAICA_LUBIT_TEK_CURRENT_LUBRICANT_CATALOG"]["source_sha256"] == jamaica_futroil_tek_report["normalized_output_sha256"]
     assert policy_by_id["VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG"]["observed_count"] == 23
     assert db.execute(
         "SELECT count(*) FROM products WHERE source_id='VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG'"

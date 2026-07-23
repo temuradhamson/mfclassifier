@@ -20,6 +20,7 @@ from itertools import combinations
 from pathlib import Path
 
 from openpyxl import Workbook
+from openpyxl.cell import WriteOnlyCell
 from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.utils import get_column_letter
 
@@ -105,6 +106,7 @@ GUYANA_GUYOIL_LUBRICANT_JSONL = ROOT / "data" / "guyana-guyoil-current-lubricant
 SURINAME_POWERFULL_LUBRICANT_JSONL = ROOT / "data" / "suriname-powerfull-current-lubricants.jsonl"
 TRINIDAD_TOBAGO_NP_ULTRA_JSONL = ROOT / "data" / "trinidad-tobago-np-ultra-current-lubricants.jsonl"
 VENEZUELA_PDV_JSONL = ROOT / "data" / "venezuela-pdv-current-lubricants.jsonl"
+JAMAICA_FUTROIL_TEK_JSONL = ROOT / "data" / "jamaica-futroil-tek-current-lubricants.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
 SON_MANCAP_JSONL = ROOT / "data" / "son-mancap-chemical-lubricant-products.jsonl"
@@ -3782,6 +3784,66 @@ def venezuela_pdv_record(row: dict) -> dict:
     return record
 
 
+def jamaica_futroil_tek_record(row: dict) -> dict:
+    """Convert one current Jamaican FUTROIL or TEK product-grade identity."""
+    technical = row["technical"]
+    performance = [
+        *(f"API {value}" for value in technical["api"]),
+        *(f"API {value}" for value in technical["api_gl"]),
+        *(f"ACEA {value}" for value in technical["acea"]),
+        *(f"ILSAC {value}" for value in technical["ilsac"]),
+        *technical["performance"],
+    ]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Current official Jamaican lubricant product cards",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": technical["sae_engine"] or technical["sae_gear"],
+        "api_class": "; ".join(performance),
+        "viscosity": f"ISO VG {technical['iso_vg']}" if technical["iso_vg"] else "",
+        "grease_class": technical["nlgi"],
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": row["evidence_status"],
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update({
+        "sae_engine": technical["sae_engine"],
+        "sae_gear": technical["sae_gear"],
+        "api": technical["api"],
+        "api_gl": technical["api_gl"],
+        "acea": technical["acea"],
+        "ilsac": technical["ilsac"],
+        "iso_vg_source_reported": technical["iso_vg"],
+        "nlgi_source_reported": technical["nlgi"],
+        "source_grade": technical["source_grade"],
+        "performance_source_reported": technical["performance"],
+        "brand_owner_and_distributor_source_reported": row["brand_owner_and_distributor"],
+        "source_url": row["source_url"],
+        "source_page_text_sha256": row["source_page_text_sha256"],
+        "source_image_url": row["source_image_url"],
+        "source_image_sha256": row["source_image_sha256"],
+        "source_facts_sha256": row["source_facts_sha256"],
+        "source_quality_flags": row["source_quality_flags"],
+    })
+    record["canonical_key"] += f"|jamaica_product:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    return record
+
+
 def kebs_smark_record(row: dict) -> dict:
     """Convert one normalized product identity from the public KEBS S-Mark directory."""
     technical = row["technical"]
@@ -4785,28 +4847,34 @@ def compress_jsonl() -> None:
             shutil.copyfileobj(source, archive, length=1024 * 1024)
 
 
-def style_sheet(ws) -> None:
+def add_sheet(wb, title, headers, rows):
+    """Append one worksheet without retaining its cells in process memory.
+
+    The complete world seed already exceeds 100k products and quality rows.
+    A regular openpyxl worksheet retained several million Cell objects and
+    repeatedly exhausted the host while all machine-readable outputs were
+    already complete.  Write-only sheets keep memory bounded per appended row.
+    """
+    ws = wb.create_sheet(title)
+    ws.freeze_panes = "A2"
+    for index, header in enumerate(headers, start=1):
+        ws.column_dimensions[get_column_letter(index)].width = min(
+            55, max(11, len(text(header)) + 2)
+        )
     fill = PatternFill("solid", fgColor="17365D")
-    for cell in ws[1]:
+    header_cells = []
+    for header in headers:
+        cell = WriteOnlyCell(ws, value=header)
         cell.fill = fill
         cell.font = Font(color="FFFFFF", bold=True)
         cell.alignment = Alignment(vertical="center", wrap_text=True)
-    ws.freeze_panes = "A2"
-    ws.auto_filter.ref = ws.dimensions
-    for column in ws.columns:
-        letter = get_column_letter(column[0].column)
-        ws.column_dimensions[letter].width = min(55, max(11, max(len(text(c.value)) for c in column) + 2))
-    for row in ws.iter_rows(min_row=2):
-        for cell in row:
-            cell.alignment = Alignment(vertical="top", wrap_text=True)
-
-
-def add_sheet(wb, title, headers, rows):
-    ws = wb.create_sheet(title)
-    ws.append(headers)
+        header_cells.append(cell)
+    ws.append(header_cells)
+    row_count = 1
     for row in rows:
         ws.append(row)
-    style_sheet(ws)
+        row_count += 1
+    ws.auto_filter.ref = f"A1:{get_column_letter(len(headers))}{row_count}"
 
 
 def normalize_xlsx_archive(path: Path) -> None:
@@ -4814,28 +4882,44 @@ def normalize_xlsx_archive(path: Path) -> None:
     fixed_zip_time = (2026, 7, 22, 0, 0, 0)
     fixed_w3cdtf = b"2026-07-22T00:00:00Z"
     temporary = path.with_suffix(path.suffix + ".deterministic")
-    with zipfile.ZipFile(path, "r") as source:
-        entries = [(info, source.read(info.filename)) for info in source.infolist()]
-    with zipfile.ZipFile(temporary, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as target:
-        for source_info, payload in entries:
-            if source_info.filename == "docProps/core.xml":
-                payload = re.sub(
-                    br"(<dcterms:(?:created|modified)[^>]*>)[^<]*(</dcterms:(?:created|modified)>)",
-                    lambda match: match.group(1) + fixed_w3cdtf + match.group(2),
-                    payload,
-                )
+    with (
+        zipfile.ZipFile(path, "r") as source,
+        zipfile.ZipFile(
+            temporary, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9
+        ) as target,
+    ):
+        for source_info in source.infolist():
+            filename = source_info.filename
             info = zipfile.ZipInfo(source_info.filename, fixed_zip_time)
             info.compress_type = zipfile.ZIP_DEFLATED
             info.create_system = source_info.create_system
             info.external_attr = source_info.external_attr
             info.comment = source_info.comment
-            target.writestr(info, payload, compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
+            if filename == "docProps/core.xml":
+                payload = source.read(filename)
+                payload = re.sub(
+                    br"(<dcterms:(?:created|modified)[^>]*>)[^<]*(</dcterms:(?:created|modified)>)",
+                    lambda match: match.group(1) + fixed_w3cdtf + match.group(2),
+                    payload,
+                )
+                target.writestr(
+                    info,
+                    payload,
+                    compress_type=zipfile.ZIP_DEFLATED,
+                    compresslevel=9,
+                )
+            else:
+                with source.open(filename, "r") as input_stream, target.open(
+                    info, "w", force_zip64=True
+                ) as output_stream:
+                    shutil.copyfileobj(
+                        input_stream, output_stream, length=1024 * 1024
+                    )
     temporary.replace(path)
 
 
 def build_workbook(records: list[dict], candidates: list[dict], issues: list[dict], offers: list[dict], exclusions: list[dict], policies: dict, report: dict) -> None:
-    wb = Workbook()
-    wb.remove(wb.active)
+    wb = Workbook(write_only=True)
     add_sheet(wb, "01_Паспорт", ["Показатель", "Значение"], [
         ("Статус", "Проверенный seed; мировой каталог ещё не завершён"),
         ("Дата среза", SNAPSHOT_DATE),
@@ -4848,13 +4932,13 @@ def build_workbook(records: list[dict], candidates: list[dict], issues: list[dic
         ("Подтверждённый мировой итог", "НЕ ОПРЕДЕЛЁН: подключён только проектный seed"),
     ])
     headers = ["Product ID", "Производитель/заявитель", "Бренд", "Исходное название", "Рынок", "Семейство", "Категория", "SAE", "SAE Gear", "ISO VG", "API", "API GL", "ACEA", "ILSAC", "JASO", "Кандидат техпрофиля", "Уверенность", "Источник", "Строка источника", "Статус доказательства"]
-    add_sheet(wb, "02_Продукты", headers, [[
+    add_sheet(wb, "02_Продукты", headers, ((
         r["product_id"], r["manufacturer"], r["brand"], r["product_name_raw"], r["market"], r["family"], r["category"],
         r["specifications"]["sae_engine"], r["specifications"]["sae_gear"], r["specifications"]["iso_vg"],
         "; ".join(r["specifications"]["api"]), "; ".join(r["specifications"]["api_gl"]),
         "; ".join(r["specifications"]["acea"]), "; ".join(r["specifications"]["ilsac"]), "; ".join(r["specifications"].get("jaso", [])),
         r["candidate_technical_profile_id"], r["profile_match_confidence"], r["source_id"], r["source_row"], r["evidence_status"],
-    ] for r in records])
+    ) for r in records))
     add_sheet(wb, "03_Источники_и_права", ["Source ID", "Название", "Владелец", "URL/файл", "SHA-256", "Статус доступа", "Bulk ingest", "Публикация", "Примечание"], [[
         s["source_id"], s["title"], s.get("owner"), s.get("source_url") or s.get("source_locator"), s.get("source_sha256"), s["access_status"],
         "да" if s["bulk_ingest_allowed"] else "нет", s.get("publication_status"), s.get("notes"),
@@ -4875,17 +4959,17 @@ def build_workbook(records: list[dict], candidates: list[dict], issues: list[dic
         ("Контактный вопрос", "Просим подтвердить допустимый объём использования, атрибуцию, частоту обновления и ограничения на публикацию."),
     ])
     by_id = {row["product_id"]: row for row in records}
-    add_sheet(wb, "08_Проблемы_качества", ["Product ID", "Бренд", "Продукт", "Код проблемы", "Уровень", "Поле", "Значение", "Ожидалось", "Действие"], [[
+    add_sheet(wb, "08_Проблемы_качества", ["Product ID", "Бренд", "Продукт", "Код проблемы", "Уровень", "Поле", "Значение", "Ожидалось", "Действие"], ((
         issue["product_id"], by_id[issue["product_id"]]["brand"], by_id[issue["product_id"]]["product_name_raw"],
         issue["issue_code"], issue["severity"], issue["field"], issue["value"], issue["expected"], issue["action"],
-    ] for issue in issues])
-    add_sheet(wb, "09_Упаковки_SKU", ["Offer ID", "Product ID", "Рынок", "Упаковка", "Единица", "Количество", "Вес, кг", "Плотность, кг/л", "Статус", "Архив", "Причина", "Source record"], [[
+    ) for issue in issues))
+    add_sheet(wb, "09_Упаковки_SKU", ["Offer ID", "Product ID", "Рынок", "Упаковка", "Единица", "Количество", "Вес, кг", "Плотность, кг/л", "Статус", "Архив", "Причина", "Source record"], ((
         o["offer_id"], o["product_id"], o["market"], o["package_name"], o["unit"], o["quantity_per_package"],
         o["weight_kg"], o["density_kg_per_l"], o["lifecycle_status"], o["archive_type"], o["archive_reason"], o["source_record_id"],
-    ] for o in offers])
-    add_sheet(wb, "10_Исключённые_строки", ["Source record", "Название", "Причина"], [[
+    ) for o in offers))
+    add_sheet(wb, "10_Исключённые_строки", ["Source record", "Название", "Причина"], ((
         e["source_record_id"], e["name"], e["reason"]
-    ] for e in exclusions])
+    ) for e in exclusions))
     XLSX_OUT.parent.mkdir(parents=True, exist_ok=True)
     wb.save(XLSX_OUT)
     normalize_xlsx_archive(XLSX_OUT)
@@ -5607,6 +5691,9 @@ def main() -> None:
     venezuela_pdv_source_rows = [json.loads(line) for line in VENEZUELA_PDV_JSONL.read_text(encoding="utf-8").splitlines() if line]
     venezuela_pdv_records = [venezuela_pdv_record(row) for row in venezuela_pdv_source_rows]
     input_records.extend(venezuela_pdv_records)
+    jamaica_futroil_tek_source_rows = [json.loads(line) for line in JAMAICA_FUTROIL_TEK_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    jamaica_futroil_tek_records = [jamaica_futroil_tek_record(row) for row in jamaica_futroil_tek_source_rows]
+    input_records.extend(jamaica_futroil_tek_records)
     ecuador_inen_current_record_by_id = {
         raw["source_record_id"]: record
         for raw, record in zip(ecuador_inen_current_source_rows, ecuador_inen_current_records)
@@ -8008,6 +8095,7 @@ def main() -> None:
         "suriname_powerfull_lubricant_input_sha256": hashlib.sha256(SURINAME_POWERFULL_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "trinidad_tobago_np_ultra_input_sha256": hashlib.sha256(TRINIDAD_TOBAGO_NP_ULTRA_JSONL.read_bytes()).hexdigest(),
         "venezuela_pdv_input_sha256": hashlib.sha256(VENEZUELA_PDV_JSONL.read_bytes()).hexdigest(),
+        "jamaica_futroil_tek_input_sha256": hashlib.sha256(JAMAICA_FUTROIL_TEK_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "son_mancap_input_sha256": hashlib.sha256(SON_MANCAP_JSONL.read_bytes()).hexdigest(),

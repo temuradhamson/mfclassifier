@@ -2626,6 +2626,36 @@
       "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_page_pdf_or_certificate_redistribution",
       "observed_count": 23,
       "notes": "The current CPE workbook is the denominator: 39 unique package certificates collapse to 23 current product-grade identities. All 21 linked technical PDFs and the current catalog, CPE, SENCAMER, quality and safety bundles were audited. The CJ-4-named TDS is byte-identical to the CI-4 TDS and describes CI-4/SL, so CJ-4/SN is retained only from current catalog/CPE evidence. Agrofluido 100 conflicts with the historical SAE 10W-30 TDS and remains source grade 100 without silent mapping."
+    },
+    {
+      "source_id": "JAMAICA_FESCO_FUTROIL_CURRENT_LUBRICANT_CATALOG",
+      "title": "Current official FESCO FUTROIL lubricant product cards for Jamaica",
+      "owner": "Future Energy Source Company Limited (FESCO)",
+      "source_type": "official_local_brand_product_page_and_product_card_artwork",
+      "source_locator": "data/jamaica-futroil-tek-current-lubricants.jsonl",
+      "source_url": "https://www.fescoja.com/lubricants",
+      "terms_url": "https://www.fescoja.com/",
+      "source_sha256": "9c9ffee91af53fa2f992eb12564a6735b70022475be856d10b30754406a41294",
+      "access_status": "public_official_local_brand_page_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_page_or_image_redistribution",
+      "observed_count": 8,
+      "notes": "The complete current official lubricant page and all six linked product-card images were audited. Six cards expand to eight product-grade identities because gear oil publishes SAE 90 and 140 and the synthetic card publishes 5W-30 SN Plus/GF-5 and 5W-40 CK-4. Exact image payloads are pinned by SHA-256. DEX 3 is preserved as the source label rather than silently represented as an independent GM approval; marketing prose and images are not redistributed."
+    },
+    {
+      "source_id": "JAMAICA_LUBIT_TEK_CURRENT_LUBRICANT_CATALOG",
+      "title": "Current TEK and TEKSTAR lubricant product cards distributed by Lubit Limited in Jamaica",
+      "owner": "Lubit Limited / Tekstar Lubricants",
+      "source_type": "official_authorized_local_distributor_product_page_and_product_card_artwork",
+      "source_locator": "data/jamaica-futroil-tek-current-lubricants.jsonl",
+      "source_url": "https://www.lubitltd.com/",
+      "terms_url": "https://www.lubitltd.com/",
+      "source_sha256": "9c9ffee91af53fa2f992eb12564a6735b70022475be856d10b30754406a41294",
+      "access_status": "public_official_authorized_distributor_page_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_page_or_image_redistribution",
+      "observed_count": 21,
+      "notes": "Fifteen current relevant product cards expand to 21 product-grade identities: four AW hydraulic ISO VG grades, two monograde engine oils, coolant, ATF, two refrigeration compressor oils, cutting oil, three synthetic-blend engine grades, two GL-5 gear grades, two greases, SAE 10W drive-train fluid and turbine oil. Fourteen exact artwork payloads are pinned by SHA-256. EP2 is retained as the product label without silently assigning NLGI 2; the 3% moly grease and turbine oil remain without invented viscosity grades."
     }
   ]
 }
