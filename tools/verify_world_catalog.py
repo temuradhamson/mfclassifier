@@ -226,6 +226,8 @@ def main() -> None:
     paraguay_dnit_rows = [json.loads(line) for line in (ROOT / "data/paraguay-dnit-lubricant-classifications.jsonl").read_text(encoding="utf-8").splitlines() if line]
     guatemala_siges_report = json.loads((ROOT / "data/guatemala-siges-lubricant-nomenclature-report.json").read_text(encoding="utf-8"))
     guatemala_siges_rows = [json.loads(line) for line in (ROOT / "data/guatemala-siges-lubricant-nomenclature.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    costa_rica_health_report = json.loads((ROOT / "data/costa-rica-health-registered-lubricants-report.json").read_text(encoding="utf-8"))
+    costa_rica_health_rows = [json.loads(line) for line in (ROOT / "data/costa-rica-health-registered-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_report = json.loads((ROOT / "data/kebs-smark-lubricant-products-report.json").read_text(encoding="utf-8"))
     kebs_smark_rows = [json.loads(line) for line in (ROOT / "data/kebs-smark-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     east_africa_report = json.loads((ROOT / "data/east-africa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -279,6 +281,7 @@ def main() -> None:
         + report["peru_sunat_noncontrolled_source_rows"]
         + report["paraguay_dnit_lubricant_source_rows"]
         + report["guatemala_siges_lubricant_source_rows"]
+        + report["costa_rica_health_lubricant_source_rows"]
         - report["gm_dual_standard_license_rows_merged"]
         - report["fuchs_exact_payload_identity_rows_matched"]
         - report["fuchs_exact_content_identity_rows_matched"]
@@ -724,7 +727,7 @@ def main() -> None:
     assert report["liqui_moly_current_products_added"] == 152
     assert report["liqui_moly_current_article_skus"] == liqui_moly_current_report["unique_article_skus"] == 985
     assert report["duplicate_decisions"]["review_cross_source_identity"] == 597
-    assert report["duplicate_decisions"]["keep_separate_specification_conflict"] == 10961
+    assert report["duplicate_decisions"]["keep_separate_specification_conflict"] == 11184
     assert db.execute("""
         SELECT count(*) FROM duplicate_decisions d
         JOIN products a ON a.product_id=d.product_id_a
@@ -970,7 +973,7 @@ def main() -> None:
     }
     assert report["canonical_input_rows_collapsed"] == 1
     assert db.execute("SELECT count(*) FROM duplicate_decisions WHERE product_id_a=product_id_b").fetchone()[0] == 0
-    assert db.execute("SELECT count(*) FROM duplicate_decisions").fetchone()[0] == 14788
+    assert db.execute("SELECT count(*) FROM duplicate_decisions").fetchone()[0] == 15011
     assert db.execute("""
         SELECT count(*) FROM (
             SELECT 1 FROM duplicate_decisions
@@ -984,17 +987,17 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 4973
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3044
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 106491
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 106490
-    assert report["quality_issues"]["professional_key_incomplete"] == 68775
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 116402
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 116401
+    assert report["quality_issues"]["professional_key_incomplete"] == 78396
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
         WHERE q.issue_code='professional_key_incomplete'
         GROUP BY p.family_code
     """)) == {
-        "C": 2067, "E": 148, "G": 10902, "H": 4792, "I": 3506,
-        "M": 22208, "S": 6967, "T": 11030, "TF": 6559, "U": 596,
+        "C": 2281, "E": 148, "G": 12352, "H": 5257, "I": 3837,
+        "M": 23365, "S": 12110, "T": 11802, "TF": 6648, "U": 596,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -2025,6 +2028,24 @@ def main() -> None:
     assert db.execute(
         "SELECT count(*) FROM product_sources WHERE source_id='GUATEMALA_SIGES_LUBRICANT_ITEM_NOMENCLATURE'"
     ).fetchone()[0] == 279
+    assert costa_rica_health_report["audited_total_rows"] == 106372
+    assert costa_rica_health_report["audited_source_rows"] == {"after_2007": 62532, "before_2007": 43840}
+    assert costa_rica_health_report["retained_source_rows"] == {"after_2007": 6176, "before_2007": 3735}
+    assert costa_rica_health_report["normalized_products"] == len(costa_rica_health_rows) == 9911
+    assert costa_rica_health_report["families"] == {"C": 214, "G": 1450, "H": 543, "I": 340, "M": 1195, "S": 5143, "T": 854, "TF": 172}
+    assert costa_rica_health_report["source_workbook_sha256"] == {
+        "after_2007": "ab5d966547dc81c6d485090411bf6ee7156ccb4414565a4305f880246f3c758e",
+        "before_2007": "5cc6ca26fa8baaebc416e324ac91aef146cb7837d0d25d0df4ec3385d74f7b6f",
+    }
+    assert all(not ({"REP_LEGAL", "CIA_USO_REG", "address", "phone", "email", "contact_person"} & set(row)) for row in costa_rica_health_rows)
+    assert policy_by_id["COSTA_RICA_HEALTH_HISTORICAL_CHEMICAL_PRODUCT_REGISTRATIONS"]["source_sha256"] == costa_rica_health_report["normalized_output_sha256"]
+    assert policy_by_id["COSTA_RICA_HEALTH_HISTORICAL_CHEMICAL_PRODUCT_REGISTRATIONS"]["observed_count"] == 9911
+    assert db.execute(
+        "SELECT count(*) FROM products WHERE source_id='COSTA_RICA_HEALTH_HISTORICAL_CHEMICAL_PRODUCT_REGISTRATIONS'"
+    ).fetchone()[0] == 9911
+    assert db.execute(
+        "SELECT count(*) FROM product_sources WHERE source_id='COSTA_RICA_HEALTH_HISTORICAL_CHEMICAL_PRODUCT_REGISTRATIONS'"
+    ).fetchone()[0] == 9911
     assert policy_by_id["nsf-white-book"]["bulk_ingest_allowed"] is False
     assert policy_by_id["FLENDER_T7300_APPROVED_LUBRICANTS"]["bulk_ingest_allowed"] is False
     chemexpo_names = {row["product_name"].casefold() for row in epa_chemexpo_rows}

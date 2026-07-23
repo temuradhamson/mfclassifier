@@ -2506,6 +2506,21 @@
       "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_html_redistribution",
       "observed_count": 279,
       "notes": "Catalog denominator is 206,416 rows, updated 2026-07-13. Complete paginated searches across eight Spanish lubricant terms yielded 2,973 unique presentation rows; official budget line 262 plus explicit engine-coolant rows retained 752 presentations normalized to 279 generic technical item identities. Coupon and aggregate service rows are excluded. These are government procurement specifications, not commercial brands, approvals or market-availability claims."
+    },
+    {
+      "source_id": "COSTA_RICA_HEALTH_HISTORICAL_CHEMICAL_PRODUCT_REGISTRATIONS",
+      "title": "Costa Rica Ministry of Health historical chemical-product registrations",
+      "owner": "Ministerio de Salud de Costa Rica",
+      "source_type": "official_national_government_open-data_product_registration_workbooks_archived_snapshot",
+      "source_locator": "data/costa-rica-health-registered-lubricants.jsonl",
+      "source_url": "https://www.ministeriodesalud.go.cr/index.php/biblioteca-de-archivos-left/documentos-ministerio-de-salud/tramites/registros/productos-registrados",
+      "terms_url": "https://www.ministeriodesalud.go.cr/index.php?id=1108&layout=edit&option=com_content&view=article",
+      "source_sha256": "25a41cf63a922ef77cf6b5d9d6a38fda328ebdc60422897c96ea02aba077b6f4",
+      "access_status": "public_official_government_open_data_cc_by_4_0_archived_official_workbook_snapshots",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_workbook_redistribution",
+      "observed_count": 9911,
+      "notes": "All 106,372 rows across the official before-2007 and after-2007 workbooks were audited. Strict generic-name scope retains 9,911 lubricant, grease, engine-coolant, hydraulic/transmission and brake-fluid registration observations while excluding cosmetics, food oils, paints, cleaners and HVAC refrigerant gases. Registration is historical regulatory identity evidence, not current availability or performance approval. Personal representative fields are excluded."
     }
   ]
 }

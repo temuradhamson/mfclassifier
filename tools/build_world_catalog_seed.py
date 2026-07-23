@@ -95,6 +95,7 @@ ECUADOR_INEN_CURRENT_REPORT = ROOT / "data" / "ecuador-inen-current-certified-lu
 PERU_SUNAT_NONCONTROLLED_JSONL = ROOT / "data" / "peru-sunat-noncontrolled-lubricants.jsonl"
 PARAGUAY_DNIT_LUBRICANT_JSONL = ROOT / "data" / "paraguay-dnit-lubricant-classifications.jsonl"
 GUATEMALA_SIGES_LUBRICANT_JSONL = ROOT / "data" / "guatemala-siges-lubricant-nomenclature.jsonl"
+COSTA_RICA_HEALTH_LUBRICANT_JSONL = ROOT / "data" / "costa-rica-health-registered-lubricants.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
 SON_MANCAP_JSONL = ROOT / "data" / "son-mancap-chemical-lubricant-products.jsonl"
@@ -3266,6 +3267,66 @@ def guatemala_siges_lubricant_record(row: dict) -> dict:
     return record
 
 
+def costa_rica_health_lubricant_record(row: dict) -> dict:
+    """Convert one historical Costa Rica chemical-product registration."""
+    technical = row["technical"]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Costa Rica historical chemical-product registration",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": technical["sae"][0] if technical["sae"] else "",
+        "api_class": "; ".join([*(f"API {value}" for value in technical["api"]), *(f"API {value}" for value in technical["api_gl"])]),
+        "viscosity": f"ISO VG {technical['iso_vg'][0]}" if technical["iso_vg"] else "",
+        "grease_class": technical["nlgi"][0] if technical["nlgi"] else "",
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": row["source_row"],
+        "evidence_status": row["evidence_status"],
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["dataset_snapshot_date"],
+    })
+    record["specifications"].update({
+        "sae_source_reported": technical["sae"],
+        "api_source_reported": technical["api"],
+        "api_gl_source_reported": technical["api_gl"],
+        "iso_vg_source_reported": technical["iso_vg"],
+        "dot_source_reported": technical["dot"],
+        "nlgi_source_reported": technical["nlgi"],
+        "costa_rica_registration_number": row["registration_number"],
+        "costa_rica_registration_date": row["registration_date"],
+        "costa_rica_registration_holder": row["registration_holder"],
+        "costa_rica_source_generic_name": row["source_generic_name"],
+        "costa_rica_source_country": row["source_country"],
+        "costa_rica_source_other_countries": row["source_other_countries"],
+        "costa_rica_source_class": row["source_class"],
+        "costa_rica_source_dataset_part": row["source_dataset_part"],
+        "costa_rica_source_quality_flags": row["source_quality_flags"],
+        "source_url": row["source_url"],
+        "source_archive_url": row["source_archive_url"],
+        "source_facts_sha256": row["source_facts_sha256"],
+    })
+    record["codes"]["costa_rica_health_registration"] = {
+        "system": "COSTA_RICA_HEALTH_CHEMICAL_PRODUCT_REGISTRATION",
+        "value": row["registration_number"],
+        "source_id": row["source_id"],
+        "status": row["lifecycle_status"],
+    }
+    record["canonical_key"] += f"|costa_rica_health_row:{row['source_dataset_part']}:{row['source_row']}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    return record
+
+
 def kebs_smark_record(row: dict) -> dict:
     """Convert one normalized product identity from the public KEBS S-Mark directory."""
     technical = row["technical"]
@@ -5063,6 +5124,8 @@ def main() -> None:
     guatemala_siges_lubricant_source_rows = [json.loads(line) for line in GUATEMALA_SIGES_LUBRICANT_JSONL.read_text(encoding="utf-8").splitlines() if line]
     guatemala_siges_lubricant_records = [guatemala_siges_lubricant_record(row) for row in guatemala_siges_lubricant_source_rows]
     input_records.extend(guatemala_siges_lubricant_records)
+    costa_rica_health_lubricant_source_rows = [json.loads(line) for line in COSTA_RICA_HEALTH_LUBRICANT_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    costa_rica_health_lubricant_records = [costa_rica_health_lubricant_record(row) for row in costa_rica_health_lubricant_source_rows]
     ecuador_inen_current_record_by_id = {
         raw["source_record_id"]: record
         for raw, record in zip(ecuador_inen_current_source_rows, ecuador_inen_current_records)
@@ -6050,6 +6113,9 @@ def main() -> None:
         pertamina_product_key[raw["source_record_id"]] = target["canonical_key"]
     input_records.extend(thailand_doeb_records)
     input_records.extend(dla_qpd_records)
+    # Historical health registrations must never become merge targets for
+    # later current catalogs or approvals.
+    input_records.extend(costa_rica_health_lubricant_records)
     # Historical Mack approvals are appended only after every current-catalog
     # matching pass, so they cannot become accidental lifecycle-merge targets.
     mack_2014_source_rows = [json.loads(line) for line in MACK_2014_APPROVED_JSONL.read_text(encoding="utf-8").splitlines() if line]
@@ -7447,6 +7513,7 @@ def main() -> None:
         "peru_sunat_noncontrolled_input_sha256": hashlib.sha256(PERU_SUNAT_NONCONTROLLED_JSONL.read_bytes()).hexdigest(),
         "paraguay_dnit_lubricant_input_sha256": hashlib.sha256(PARAGUAY_DNIT_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "guatemala_siges_lubricant_input_sha256": hashlib.sha256(GUATEMALA_SIGES_LUBRICANT_JSONL.read_bytes()).hexdigest(),
+        "costa_rica_health_lubricant_input_sha256": hashlib.sha256(COSTA_RICA_HEALTH_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "son_mancap_input_sha256": hashlib.sha256(SON_MANCAP_JSONL.read_bytes()).hexdigest(),
@@ -7610,6 +7677,7 @@ def main() -> None:
         "peru_sunat_noncontrolled_source_rows": len(peru_sunat_noncontrolled_source_rows),
         "paraguay_dnit_lubricant_source_rows": len(paraguay_dnit_lubricant_source_rows),
         "guatemala_siges_lubricant_source_rows": len(guatemala_siges_lubricant_source_rows),
+        "costa_rica_health_lubricant_source_rows": len(costa_rica_health_lubricant_source_rows),
         "kebs_smark_source_rows": len(kebs_smark_source_rows),
         "east_africa_certified_source_rows": len(east_africa_certified_source_rows),
         "east_africa_certified_source_rows_by_source": dict(sorted(Counter(row["source_id"] for row in east_africa_certified_source_rows).items())),

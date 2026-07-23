@@ -1,0 +1,36 @@
+{
+  "audited_source_rows": {
+    "after_2007": 62532,
+    "before_2007": 43840
+  },
+  "audited_total_rows": 106372,
+  "families": {
+    "C": 214,
+    "G": 1450,
+    "H": 543,
+    "I": 340,
+    "M": 1195,
+    "S": 5143,
+    "T": 854,
+    "TF": 172
+  },
+  "landing_url": "https://www.ministeriodesalud.go.cr/index.php/biblioteca-de-archivos-left/documentos-ministerio-de-salud/tramites/registros/productos-registrados",
+  "method": "all 106,372 rows in two official archived workbooks audited; strict Spanish generic-name inclusion with explicit cosmetic/food/paint/cleaner/HVAC-gas exclusions",
+  "normalized_output_sha256": "25a41cf63a922ef77cf6b5d9d6a38fda328ebdc60422897c96ea02aba077b6f4",
+  "normalized_products": 9911,
+  "retained_source_rows": {
+    "after_2007": 6176,
+    "before_2007": 3735
+  },
+  "rows_with_api": 137,
+  "rows_with_api_gl": 214,
+  "rows_with_dot": 119,
+  "rows_with_iso_vg": 230,
+  "rows_with_nlgi": 23,
+  "rows_with_sae": 1706,
+  "source_workbook_sha256": {
+    "after_2007": "ab5d966547dc81c6d485090411bf6ee7156ccb4414565a4305f880246f3c758e",
+    "before_2007": "5cc6ca26fa8baaebc416e324ac91aef146cb7837d0d25d0df4ec3385d74f7b6f"
+  },
+  "status": "official_costa_rica_historical_chemical_registrations_normalized"
+}
