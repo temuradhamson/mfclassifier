@@ -2596,6 +2596,21 @@
       "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_page_redistribution",
       "observed_count": 9,
       "notes": "All nine individual lubricant pages in the current product sitemap were audited: five engine oils, two gear oils, one hydraulic oil and one grease. Explicit SAE, API/API GL, ACEA, ILSAC, ISO VG and source-reported OEM performance claims are retained. EP-3 is preserved as a source grade and is not silently represented as NLGI 3. Marketing prose is excluded; brand claims are not represented as independent approvals."
+    },
+    {
+      "source_id": "TRINIDAD_TOBAGO_NP_ULTRA_CURRENT_LUBRICANT_CATALOG",
+      "title": "Current official NP ULTRA lubricant catalog for Trinidad and Tobago",
+      "owner": "Trinidad & Tobago National Petroleum Marketing Company Limited",
+      "source_type": "official_state_owned_manufacturer_product_pages_and_linked_technical_documents",
+      "source_locator": "data/trinidad-tobago-np-ultra-current-lubricants.jsonl",
+      "source_url": "https://www.np.co.tt/ultra-lubricants/",
+      "terms_url": "https://www.np.co.tt/",
+      "source_sha256": "e51f76480a9c0090fca3abf0d2f7f11e05dce54625c2d4320ad348c61659661c",
+      "access_status": "public_official_state_owned_manufacturer_pages_and_documents_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_page_or_pdf_redistribution",
+      "observed_count": 141,
+      "notes": "All 63 current product pages and 79 linked PDF URLs (76 unique payloads) were audited. Fifty-nine series expand to 141 product-grade identities using explicit SAE, ISO VG, NLGI, DOT and source grades. Three duplicate pages are collapsed; coolant concentrate and premix remain distinct. One unrelated turbine PDS linked from the hydraulic page is excluded. OEM and performance language remains source-reported rather than independent approval."
     }
   ]
 }

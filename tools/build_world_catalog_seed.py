@@ -7,9 +7,11 @@ import hashlib
 import gzip
 import json
 import lzma
+import os
 import re
 import shutil
 import sqlite3
+import sys
 import unicodedata
 import zipfile
 from collections import Counter, defaultdict
@@ -101,6 +103,7 @@ URUGUAY_ANCAP_LUBRICANT_JSONL = ROOT / "data" / "uruguay-ancap-current-lubricant
 COLOMBIA_TERPEL_LUBRICANT_JSONL = ROOT / "data" / "colombia-terpel-current-lubricants.jsonl"
 GUYANA_GUYOIL_LUBRICANT_JSONL = ROOT / "data" / "guyana-guyoil-current-lubricants.jsonl"
 SURINAME_POWERFULL_LUBRICANT_JSONL = ROOT / "data" / "suriname-powerfull-current-lubricants.jsonl"
+TRINIDAD_TOBAGO_NP_ULTRA_JSONL = ROOT / "data" / "trinidad-tobago-np-ultra-current-lubricants.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
 SON_MANCAP_JSONL = ROOT / "data" / "son-mancap-chemical-lubricant-products.jsonl"
@@ -3652,6 +3655,66 @@ def suriname_powerfull_lubricant_record(row: dict) -> dict:
     return record
 
 
+def trinidad_tobago_np_ultra_record(row: dict) -> dict:
+    """Convert one current official NP ULTRA product-grade identity."""
+    technical = row["technical"]
+    performance = [
+        *(f"API {value}" for value in technical["api"]),
+        *(f"API {value}" for value in technical["api_gl"]),
+        *(f"ACEA {value}" for value in technical["acea"]),
+        *(f"ILSAC {value}" for value in technical["ilsac"]),
+        *technical["performance"],
+    ]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Current official NP ULTRA Trinidad and Tobago lubricant catalog",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": technical["sae_engine"] or technical["sae_gear"],
+        "api_class": "; ".join(performance),
+        "viscosity": f"ISO VG {technical['iso_vg']}" if technical["iso_vg"] else "",
+        "grease_class": technical["nlgi"],
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": row["evidence_status"],
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update({
+        "sae_engine": technical["sae_engine"],
+        "sae_gear": technical["sae_gear"],
+        "api": technical["api"],
+        "api_gl": technical["api_gl"],
+        "acea": technical["acea"],
+        "ilsac": technical["ilsac"],
+        "iso_vg_source_reported": technical["iso_vg"],
+        "nlgi_source_reported": technical["nlgi"],
+        "source_grade": technical["source_grade"],
+        "performance_source_reported": technical["performance"],
+        "source_url": row["source_url"],
+        "source_urls": row["source_urls"],
+        "source_page_text_sha256": row["source_page_text_sha256"],
+        "source_document_urls": row["source_document_urls"],
+        "source_document_sha256": row["source_document_sha256"],
+        "source_facts_sha256": row["source_facts_sha256"],
+        "source_quality_flags": row["source_quality_flags"],
+    })
+    record["canonical_key"] += f"|trinidad_tobago_np_ultra_product:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    return record
+
+
 def kebs_smark_record(row: dict) -> dict:
     """Convert one normalized product identity from the public KEBS S-Mark directory."""
     technical = row["technical"]
@@ -5471,6 +5534,9 @@ def main() -> None:
     suriname_powerfull_lubricant_source_rows = [json.loads(line) for line in SURINAME_POWERFULL_LUBRICANT_JSONL.read_text(encoding="utf-8").splitlines() if line]
     suriname_powerfull_lubricant_records = [suriname_powerfull_lubricant_record(row) for row in suriname_powerfull_lubricant_source_rows]
     input_records.extend(suriname_powerfull_lubricant_records)
+    trinidad_tobago_np_ultra_source_rows = [json.loads(line) for line in TRINIDAD_TOBAGO_NP_ULTRA_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    trinidad_tobago_np_ultra_records = [trinidad_tobago_np_ultra_record(row) for row in trinidad_tobago_np_ultra_source_rows]
+    input_records.extend(trinidad_tobago_np_ultra_records)
     ecuador_inen_current_record_by_id = {
         raw["source_record_id"]: record
         for raw, record in zip(ecuador_inen_current_source_rows, ecuador_inen_current_records)
@@ -7870,6 +7936,7 @@ def main() -> None:
         "colombia_terpel_lubricant_input_sha256": hashlib.sha256(COLOMBIA_TERPEL_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "guyana_guyoil_lubricant_input_sha256": hashlib.sha256(GUYANA_GUYOIL_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "suriname_powerfull_lubricant_input_sha256": hashlib.sha256(SURINAME_POWERFULL_LUBRICANT_JSONL.read_bytes()).hexdigest(),
+        "trinidad_tobago_np_ultra_input_sha256": hashlib.sha256(TRINIDAD_TOBAGO_NP_ULTRA_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "son_mancap_input_sha256": hashlib.sha256(SON_MANCAP_JSONL.read_bytes()).hexdigest(),
@@ -8246,10 +8313,17 @@ def main() -> None:
         })
     REPORT_OUT.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     build_sqlite(records, candidates, issues, source_links, offers, policies, run_id, len(input_records))
-    compress_sqlite()
     build_workbook(records, candidates, issues, offers, exclusions, policies, report)
     print(json.dumps(report, ensure_ascii=False))
 
 
 if __name__ == "__main__":
-    main()
+    if "--compress-only" in sys.argv:
+        compress_sqlite()
+    else:
+        main()
+        # Replace the process instead of merely returning from main().  CPython
+        # may retain freed arenas after the large XLSX/catalog build; exec
+        # guarantees that LZMA starts with a fresh heap and no transient OOM
+        # overlap with the source matrices.
+        os.execv(sys.executable, [sys.executable, __file__, "--compress-only"])

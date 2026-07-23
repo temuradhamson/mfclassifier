@@ -1,0 +1,350 @@
+{
+  "catalog_2019_crosscheck": {
+    "role": "historical_secondary_crosscheck_only",
+    "sha256": "201b8498372da788739fa1e1d236646847c9fe8c22268711cf75d9d8bfba1375",
+    "url": "https://np-ultra.com/wp-content/uploads/2020/05/NP-Catalogue-Ultra-Lubricants-HQ-FAW_compressed.pdf"
+  },
+  "current_product_pages_audited": 63,
+  "document_payloads": {
+    "https://www.np.co.tt/wp-content/uploads/2020/05/CVT-Fluid.pdf": {
+      "bytes": 493163,
+      "sha256": "87b5169f24d3b84501d955f7dfe48cc14eb7e42be8b1bcdbdf1d6f642197a483"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/PLATINUM-BRAKE-FLUID-DOT-4-MSDS.pdf": {
+      "bytes": 42706,
+      "sha256": "0bbb364e43b98c71b7cd7d9cd860ce8e878f09c1421875e322a7f206af55939a"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/PLATINUM-BRAKE-FLUID-DOT-4.pdf": {
+      "bytes": 191269,
+      "sha256": "2a4fd26ac438e54cd9f77f0a153548830a241611df5c6449dc06b2b6c31310ca"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-BANANA-SPRAY-OIL-1.pdf": {
+      "bytes": 221039,
+      "sha256": "bcdbdbc4865fa7ddadc9b2af2f5ded77008f528163ad324e17581615ecf634b6"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-BANANA-SPRAY-OIL.pdf": {
+      "bytes": 242721,
+      "sha256": "b68ef2fd14873368c639d43dbd61497a681b9394f9bb6de436a244ea0fba629e"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-BAR-CHAIN-OIL-1.pdf": {
+      "bytes": 396032,
+      "sha256": "bb7343bc3f0455c6a5e26e3843e658b86aca69e09c2a63671875e71089e33ffa"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-BAR-CHAIN-OIL.pdf": {
+      "bytes": 171449,
+      "sha256": "bb8ea7e8620717d47ab1494869f5cce0a860fdc1dd5978e57cc658f36d4827ae"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-BEARING-GREASE-HT-2-1.pdf": {
+      "bytes": 331489,
+      "sha256": "64fa4e1aeb003c781f58dc49e11e55ee4043a1e7e319ada358bb8e6608f27f49"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-BEARING-GREASE-HTM-1.pdf": {
+      "bytes": 239014,
+      "sha256": "dde3d16650a0630506c55cc54ac79f3f1cd6a7768b2830c68934138e8d8d9627"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-BEARING-GREASE-HTM.pdf": {
+      "bytes": 314144,
+      "sha256": "abedeeed02df407c6e82107947b0355c37f95ba965ebe3b538b527c74a148829"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-CNG.pdf": {
+      "bytes": 47306,
+      "sha256": "6d582d1af8c04fd97fa4cf09a281bfb2f69bb485af4bc50f61ddc54545234f3a"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-CYLINDER-OIL-J.pdf": {
+      "bytes": 337113,
+      "sha256": "1a0dff1d15ee141e8a24ed2ecb3a92064d485dcb651e0e7c687d0dc8eeb3bfc3"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-CYLINDER-OIL.pdf": {
+      "bytes": 171552,
+      "sha256": "87b78f82976b73f8016ce548031fc47b63280e6c8366e77db0fc3f5b25958a97"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-DIESEL-PLUS-HIGH-MILEAGE-1.pdf": {
+      "bytes": 421543,
+      "sha256": "56472c95443975a7b74ad34167718ed9d5141621d09f0e89eae3b27e45d7502a"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-DIESEL-PLUS-HIGH-MILEAGE-v2.0.pdf": {
+      "bytes": 35157,
+      "sha256": "4ac37c1b1e09dac83849a61137bae7352bc5080ffaf6e722c83d6eed9ea761cf"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-DIESEL-SP-40.pdf": {
+      "bytes": 391968,
+      "sha256": "c9584510ce5da4c8f995ab6091709e1aadbb4f36384bc1232cec3a9ac6cbc6b9"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-DIESEL-SPECIAL-40.pdf": {
+      "bytes": 315126,
+      "sha256": "cf9357b023de72d5cdb5e8106cf5302ce92ae192f30ddd98de7c3d2578c0060e"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-DIESEL-TEC-1.pdf": {
+      "bytes": 445326,
+      "sha256": "1904fab423accddf359a36664e5e43d231a0e24d27bb36d37c62ed80dee9e9ea"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-DIESEL-TEC-v2_0.pdf": {
+      "bytes": 34717,
+      "sha256": "3e46a41f8ddc68b91761f3908c14344fe28eec134b8523d8df75c71de373705d"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-DTV-20W-50v2.0.pdf": {
+      "bytes": 48278,
+      "sha256": "b96a10c56d514c5a22f599f5e84f8d66841e55ed9d2412fcf339a3b5718f7f74"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-DUTY-15W40-1.pdf": {
+      "bytes": 341006,
+      "sha256": "db113e99412b6785c11ea2b93809d2f6b036e8347e97a1c1a8ec5a97df6638fe"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-DUTY-v2_0.pdf": {
+      "bytes": 35243,
+      "sha256": "529b1835239dcf366abc17e1016bb1135b66c103b8b92dfe587ad2094f829223"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-FORM-OIL-1.pdf": {
+      "bytes": 332546,
+      "sha256": "94cc7f9529641b71e139e17fa0df809dc7ef540cac0b6fae546caa3ffe063b32"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-FORM-OIL.pdf": {
+      "bytes": 171546,
+      "sha256": "779178db7b86911cdcbc5b234fa2fbfa9f40cb72a3e3ebbb9ee8ecf278521c73"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-FULL-SYNTHETIC-CVT-FLUID-MSDS.pdf": {
+      "bytes": 60443,
+      "sha256": "2a65937bc72785850a78a0eb3670b19d4388de34e14c540558cf178d6ce3ab6d"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-GEAR-OIL-HD-80W90-85W140-v2_0.pdf": {
+      "bytes": 34418,
+      "sha256": "b3b12600e5ab4e6553f0a143199ed6efb282136148e90e35e66ee368d633838f"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-GEAR-OIL-HD-LSD-1.pdf": {
+      "bytes": 173776,
+      "sha256": "c055dde977166566e3ec2d0420e451a004645065514f086eef6bd272e405e57a"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-HEAT-TRANSFER-OIL-1.pdf": {
+      "bytes": 227047,
+      "sha256": "ab895c79e1fe6e56d64d13cfbf5c5d0b2033905311a68fb6343fdc5b47f85386"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-HEAT-TRANSFER-OIL.pdf": {
+      "bytes": 242697,
+      "sha256": "da3bd8cf8c473437fcdd294ac096fdbbb7d1941a081f8ec80af40e183cd09646"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-HYDOIL-HV.pdf": {
+      "bytes": 243099,
+      "sha256": "044e959b8ad2f852c32cd14c7687449d17f18110a029a9b5c7e7ba5234a17fcf"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-HYDOIL.pdf": {
+      "bytes": 243105,
+      "sha256": "babb0177c3c2b617339051bf16d0f2bd653f652b414bdd7458c75a4e31e4334b"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-HYDRAULIC-OIL-HV.pdf": {
+      "bytes": 352687,
+      "sha256": "f23c0e58f1a719ffb96be6370cf32a9ba4b2cfceca22b070b3b01353a9fca269"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-INDUSTRIAL-GAS-ENGINE-OIL-1.pdf": {
+      "bytes": 337442,
+      "sha256": "7fc63575ea1226f48956f906f1a21367ed87fe538414d904fbe7c9de9d91afc0"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-INDUSTRIAL-GAS-ENGINE-OIL-30-40-1.pdf": {
+      "bytes": 315060,
+      "sha256": "d1b6d3784a44f787c8c916ec3e33f9c828fa5c7f854f816a9136cf3f4fa7e8a3"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-INDUSTRIAL-GAS-ENGINE-OIL-30-40.pdf": {
+      "bytes": 315060,
+      "sha256": "d1b6d3784a44f787c8c916ec3e33f9c828fa5c7f854f816a9136cf3f4fa7e8a3"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-INDUSTRIAL-GAS-ENGINE-OIL.pdf": {
+      "bytes": 337442,
+      "sha256": "7fc63575ea1226f48956f906f1a21367ed87fe538414d904fbe7c9de9d91afc0"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-INDUSTRIAL-GEAR-OIL-TK.pdf": {
+      "bytes": 404313,
+      "sha256": "0723b78631abbf94936e92099950447cbbd8f74ecaf8fa49a25130168bb1e721"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-INDUSTRIAL-GEAR-OIL.pdf": {
+      "bytes": 171686,
+      "sha256": "8e77ff6b3b75c08a4fa264a44db620e9a4a88c054fd97cd0a05da34614a3d3fb"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-INDUSTRIAL-GEAR-OILS-TK-8001000.pdf": {
+      "bytes": 243077,
+      "sha256": "fcfc762a4f9b54fe31ef04b09d512df26b748bab863640ebfa4c8a7237cb8160"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-INDUSTRIAL-SYN-TEC-GEAR-OIL-TK-1000-1500.pdf": {
+      "bytes": 171975,
+      "sha256": "82c5fd679a512251eae563a9be175c263b3742d9987fc3e75b00b33d1c5c3f70"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-INDUSTRIAL-SYN-TEC-GEAR-OIL.pdf": {
+      "bytes": 473026,
+      "sha256": "205dbb3eb31347937edddc38d9fb9ce3bc530a03e4fdb7fba35ffc52c2645efc"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-MOLYLUBE-2.pdf": {
+      "bytes": 226410,
+      "sha256": "452d95289f5ff01bbd44185612f3c0b890d5baf1385ae7d03c32b58c7d2d6afb"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-MOTOR-OIL-HD-1.pdf": {
+      "bytes": 473553,
+      "sha256": "d9263f26cc1c9c172263f2a6aeda1b15ae06522e73919707b9d779a571f3a118"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-MOTOR-OIL-HD-30-4050-v2_01.pdf": {
+      "bytes": 34354,
+      "sha256": "ce4f6c3dd63756532d3b51901240d1b2137c40be5b12782af66fcc347d004a91"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-MULTI-VEHICLE-ATF-FULLY-SYNTHETIC-DEXRON-VI-v2.0.pdf": {
+      "bytes": 47401,
+      "sha256": "be9181d05bf6bab1faace1a4840aa5705728a85ac07ae16e832a2259f73769ad"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-MULTIPLEX-RED-EP2-GREASE.pdf": {
+      "bytes": 171750,
+      "sha256": "dbef36e958e64ea121816a4e53e7befd0dd15b32de10dcf7c0d798ce592e52be"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-OPEN-GEAR-COMPOUND-1.pdf": {
+      "bytes": 239699,
+      "sha256": "75a75dc0bc95a56b6628d504f249b4ff0b9af66f37c6b59ed3e5df7b657cf306"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-OPEN-GEAR-COMPOUND.pdf": {
+      "bytes": 99982,
+      "sha256": "f75d989f15bc917f45ca7ab47e2833c836b694ba85d52c50fca2f52cef8971fb"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-PREMIUM-10W30-2.pdf": {
+      "bytes": 338968,
+      "sha256": "32e8c23d8281c38839230c653616259f91bbeb35826f8a95fd55ccf53ce7b14d"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-PREMIUM-v2_0-1.pdf": {
+      "bytes": 34688,
+      "sha256": "8172b5995fffd4f7b132216d0e4d191e1bedd199da9d66ecc789976fef621e22"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-PROCESS-OIL.pdf": {
+      "bytes": 171724,
+      "sha256": "f2e93020072c0cae84349b0e1136fd430e47db44ae268164e3dacf2b2bc53be9"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-RADOL-PREMIUM-LONG-LIFE-COOLANT.pdf": {
+      "bytes": 591715,
+      "sha256": "8a6fbbf23af4b80dbaef7443556fb63f419d935f0225bb63c5a6f197aa824407"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-RADOL-PREMIUM-LONG-LIFE-COOLANTv2_0.pdf": {
+      "bytes": 34045,
+      "sha256": "249e15a307de8bb0e804ce537e82e51b152d223ef08e73e4d4e314a98f523557"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-REF-COM-OIL-32-46-68-100.pdf": {
+      "bytes": 242824,
+      "sha256": "7552c29ff9a350bb711c4e49a3c1ea105fbb09ad7e56fdee11e4b513b1d91b20"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-REFCOM-OIL.pdf": {
+      "bytes": 246218,
+      "sha256": "952a709051cb375bf59d5d518a9952e256413b4430bdf9982037114b2ee69bb2"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-ROCK-DRILL-OIL.pdf": {
+      "bytes": 242864,
+      "sha256": "0e5d6b389d7c8b317e0b2d0dca08b52c996b2108659db184f6935c929a44a727"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-SEWING-MACHINE-OIL-1.pdf": {
+      "bytes": 247914,
+      "sha256": "c24311946a88920a27cbb292924559533889bf5513cbfbfa1e26311a2f55d91c"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-SEWING-MACHINE-OIL.pdf": {
+      "bytes": 314086,
+      "sha256": "2e6784a2fed73ca53c429c3707017632f1b2bb574aef4ade379110a44b98cf7c"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-SHOCK-ABSORBER-OIL.pdf": {
+      "bytes": 314161,
+      "sha256": "3d700f07bda1d019990e5a427930e7f07613e12e04f932973762111698c0932a"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-SOLUBLE-OIL-A.pdf": {
+      "bytes": 242961,
+      "sha256": "54ea287a6ba69edce915107eb10346f3af7c4613f523fe197426a94459bd1551"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-SPECTRUM-OIL-30-40-50.pdf": {
+      "bytes": 171664,
+      "sha256": "061502caf43cbe2e10133dd413fd49f5cbb1efdae0cf6abc58c9209d21f67b3f"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-SUPER-DUTY-2T-40.pdf": {
+      "bytes": 339734,
+      "sha256": "63201a68ff4cb5fe2440deab219922faeab63789eb7f64aa3206ad87dc5d995e"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-SUPER-DUTY-S3.pdf": {
+      "bytes": 351349,
+      "sha256": "ad6357270ed671c40d56c594f00a91e4c1ffea24095b512daf232baa993eda85"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-SUPER-STREAM.pdf": {
+      "bytes": 389516,
+      "sha256": "f440bc02a635e27507d1438dc4cc0aae070296badf553d8661d2f79fca3769b9"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-SUPER-TRACTOR-OIL-UNIVERSAL-C.pdf": {
+      "bytes": 430685,
+      "sha256": "01a7b8b3b99a71ac1965c35a32b813ae31a0bdac6a2aa5cf9abbd2da03c8d727"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-SUPER-TRACTOR-OIL.pdf": {
+      "bytes": 172641,
+      "sha256": "6518c785374d0199c41fb123eee9b203b48b748d6827d9112600b17073c0d0f7"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-SUPERDUTY-2T-40.pdf": {
+      "bytes": 172249,
+      "sha256": "f15150f206e26d4b360d7e68c662d9ff70a4639d1057c0b35e7f2899b261695f"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-SUPERDUTY-S3-10W-30-40-50-v1_0.pdf": {
+      "bytes": 35191,
+      "sha256": "e7508b30347c0147ebd61f2aefca62da7f4fd027167055c00a22bf3d8ccb9e42"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-SUPERMATIC-1.pdf": {
+      "bytes": 339328,
+      "sha256": "42a1e0cddca338bec8ded2d5768a75db3da615faa3fe5557c3f23583c0ef6656"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-SUPERMATIC-v1_0.pdf": {
+      "bytes": 34319,
+      "sha256": "72774c8528e2db70c0575a90e563e38a8a80b1e146dccb78e2801688ac911269"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-SUPERSTREAM-v2_0.pdf": {
+      "bytes": 34181,
+      "sha256": "aaa35cf226974ce0e9c4b3da6adad62e6a8a24255075b0148255e1ee17a020e0"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-TEC-1.pdf": {
+      "bytes": 335500,
+      "sha256": "a19773bc169032a6e38a3b4bdd8f51a7b9cbd83eee87405d7e922e25238f6310"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-TEC-v2_0.pdf": {
+      "bytes": 34698,
+      "sha256": "1f819c889fcf05e96e39aded06db2c3e49683828dcb003c4817a75143365b2f3"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-TURBINE-RO.pdf": {
+      "bytes": 409209,
+      "sha256": "282e0fd308ec158d02d26a9e5624c59b467f62ed524cc3cb9257a69fe286e432"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-TWO-STROKE-MOTOR-OIL-1.pdf": {
+      "bytes": 335829,
+      "sha256": "c3eaf8a7ca6a8084b5a4f5261c1746113ced914c26fc193879b85f690ac63ce0"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-TWO-STROKE-MOTOR-OIL.pdf": {
+      "bytes": 335829,
+      "sha256": "c3eaf8a7ca6a8084b5a4f5261c1746113ced914c26fc193879b85f690ac63ce0"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-Turbine-Oil-RO.pdf": {
+      "bytes": 574393,
+      "sha256": "b12aa80f997e3e627c2ad4987f71f2962186450ab4763d14ed3bbd57e2118903"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-UNIVERSAL-TRACTOR-TRANSMISSION-OIL.pdf": {
+      "bytes": 172475,
+      "sha256": "4ee91fdad7fd24ce8eccbb22f17a0aa212e8f3a73af15af18c7f6ad1a35f5360"
+    },
+    "https://www.np.co.tt/wp-content/uploads/2020/05/ULTRA-UTTO.pdf": {
+      "bytes": 340207,
+      "sha256": "a8f0953d8f2b59a55d7ac33c7c12068c39991797a1fd0c9bf0e5c9e44884b9b0"
+    }
+  },
+  "duplicate_pages_collapsed": 3,
+  "families": {
+    "C": 9,
+    "G": 8,
+    "H": 12,
+    "I": 51,
+    "M": 32,
+    "S": 7,
+    "T": 2,
+    "TF": 11,
+    "U": 9
+  },
+  "linked_document_bytes": 19442120,
+  "linked_document_urls_fetched": 79,
+  "normalized_output_sha256": "e51f76480a9c0090fca3abf0d2f7f11e05dce54625c2d4320ad348c61659661c",
+  "normalized_product_grade_identities": 141,
+  "normalized_series": 59,
+  "rows_with_iso_vg": 79,
+  "rows_with_nlgi": 8,
+  "rows_with_sae": 36,
+  "snapshot_date": "2026-07-23",
+  "source_facts_sha256": "09ceb1a32c543237ab4e124c66bae9fe218b40910585618a76c6232e6f0ac0f4",
+  "source_id": "TRINIDAD_TOBAGO_NP_ULTRA_CURRENT_LUBRICANT_CATALOG",
+  "unique_document_payloads": 76
+}

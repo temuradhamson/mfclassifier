@@ -16,6 +16,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def stream_sha256(stream) -> bytes:
+    """Hash a file-like object without materializing large artifacts in RAM."""
+    digest = hashlib.sha256()
+    while chunk := stream.read(1024 * 1024):
+        digest.update(chunk)
+    return digest.digest()
+
+
 def sqlite_catalog_projection_sha256(path: Path) -> str:
     """Hash only the AIChilon catalog projection, not its mutable operations data."""
     queries = [
@@ -238,6 +246,8 @@ def main() -> None:
     guyana_guyoil_rows = [json.loads(line) for line in (ROOT / "data/guyana-guyoil-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     suriname_powerfull_report = json.loads((ROOT / "data/suriname-powerfull-current-lubricants-report.json").read_text(encoding="utf-8"))
     suriname_powerfull_rows = [json.loads(line) for line in (ROOT / "data/suriname-powerfull-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    trinidad_tobago_np_ultra_report = json.loads((ROOT / "data/trinidad-tobago-np-ultra-current-lubricants-report.json").read_text(encoding="utf-8"))
+    trinidad_tobago_np_ultra_rows = [json.loads(line) for line in (ROOT / "data/trinidad-tobago-np-ultra-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_report = json.loads((ROOT / "data/kebs-smark-lubricant-products-report.json").read_text(encoding="utf-8"))
     kebs_smark_rows = [json.loads(line) for line in (ROOT / "data/kebs-smark-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     east_africa_report = json.loads((ROOT / "data/east-africa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -252,7 +262,7 @@ def main() -> None:
     local_jsonl_path = ROOT / "data/world-catalog-products.jsonl"
     if local_jsonl_path.exists():
         with local_jsonl_path.open("rb") as plain, gzip.open(jsonl_gz_path, "rb") as packed:
-            assert hashlib.sha256(plain.read()).digest() == hashlib.sha256(packed.read()).digest()
+            assert stream_sha256(plain) == stream_sha256(packed)
     assert report["status"] == "seed_only_world_catalog_incomplete"
     assert report["confirmed_world_total"] is None
     assert len(lines) == report["canonical_rows"]
@@ -275,7 +285,7 @@ def main() -> None:
 
     db = sqlite3.connect(ROOT / "data/world-catalog.sqlite3")
     with (ROOT / "data/world-catalog.sqlite3").open("rb") as plain, lzma.open(ROOT / "data/world-catalog.sqlite3.xz", "rb") as packed:
-        assert hashlib.sha256(plain.read()).digest() == hashlib.sha256(packed.read()).digest()
+        assert stream_sha256(plain) == stream_sha256(packed)
     assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
     assert not db.execute("PRAGMA foreign_key_check").fetchall()
     assert db.execute("SELECT count(*) FROM products").fetchone()[0] == len(lines)
@@ -297,6 +307,7 @@ def main() -> None:
         + len(colombia_terpel_rows)
         + len(guyana_guyoil_rows)
         + len(suriname_powerfull_rows)
+        + len(trinidad_tobago_np_ultra_rows)
         - report["gm_dual_standard_license_rows_merged"]
         - report["fuchs_exact_payload_identity_rows_matched"]
         - report["fuchs_exact_content_identity_rows_matched"]
@@ -1002,17 +1013,17 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 4973
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3044
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 116584
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 116583
-    assert report["quality_issues"]["professional_key_incomplete"] == 78461
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 116725
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 116724
+    assert report["quality_issues"]["professional_key_incomplete"] == 78499
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
         WHERE q.issue_code='professional_key_incomplete'
         GROUP BY p.family_code
     """)) == {
-        "C": 2281, "E": 149, "G": 12365, "H": 5257, "I": 3844,
-        "M": 23384, "S": 12110, "T": 11815, "TF": 6660, "U": 596,
+        "C": 2281, "E": 149, "G": 12373, "H": 5257, "I": 3847,
+        "M": 23393, "S": 12117, "T": 11815, "TF": 6671, "U": 596,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -2157,6 +2168,26 @@ def main() -> None:
     assert db.execute(
         "SELECT count(*) FROM product_sources WHERE source_id='SURINAME_POWERFULL_CURRENT_LUBRICANT_CATALOG'"
     ).fetchone()[0] == 9
+    assert trinidad_tobago_np_ultra_report["current_product_pages_audited"] == 63
+    assert trinidad_tobago_np_ultra_report["normalized_series"] == 59
+    assert trinidad_tobago_np_ultra_report["normalized_product_grade_identities"] == len(trinidad_tobago_np_ultra_rows) == 141
+    assert trinidad_tobago_np_ultra_report["linked_document_urls_fetched"] == 79
+    assert trinidad_tobago_np_ultra_report["unique_document_payloads"] == 76
+    assert trinidad_tobago_np_ultra_report["families"] == {
+        "C": 9, "G": 8, "H": 12, "I": 51, "M": 32,
+        "S": 7, "T": 2, "TF": 11, "U": 9,
+    }
+    assert all(row["brand"] == "ULTRA" and row["market"] == "Trinidad and Tobago" for row in trinidad_tobago_np_ultra_rows)
+    assert all(not ({"address", "phone", "email", "contact_person"} & set(row)) for row in trinidad_tobago_np_ultra_rows)
+    assert all(row["source_page_text_sha256"] for row in trinidad_tobago_np_ultra_rows)
+    assert policy_by_id["TRINIDAD_TOBAGO_NP_ULTRA_CURRENT_LUBRICANT_CATALOG"]["source_sha256"] == trinidad_tobago_np_ultra_report["normalized_output_sha256"]
+    assert policy_by_id["TRINIDAD_TOBAGO_NP_ULTRA_CURRENT_LUBRICANT_CATALOG"]["observed_count"] == 141
+    assert db.execute(
+        "SELECT count(*) FROM products WHERE source_id='TRINIDAD_TOBAGO_NP_ULTRA_CURRENT_LUBRICANT_CATALOG'"
+    ).fetchone()[0] == 141
+    assert db.execute(
+        "SELECT count(*) FROM product_sources WHERE source_id='TRINIDAD_TOBAGO_NP_ULTRA_CURRENT_LUBRICANT_CATALOG'"
+    ).fetchone()[0] == 141
     assert policy_by_id["nsf-white-book"]["bulk_ingest_allowed"] is False
     assert policy_by_id["FLENDER_T7300_APPROVED_LUBRICANTS"]["bulk_ingest_allowed"] is False
     chemexpo_names = {row["product_name"].casefold() for row in epa_chemexpo_rows}
