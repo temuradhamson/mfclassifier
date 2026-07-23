@@ -254,6 +254,8 @@ def main() -> None:
     jamaica_futroil_tek_rows = [json.loads(line) for line in (ROOT / "data/jamaica-futroil-tek-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     cuba_cubalub_2007_report = json.loads((ROOT / "data/cuba-cubalub-2007-official-products-report.json").read_text(encoding="utf-8"))
     cuba_cubalub_2007_rows = [json.loads(line) for line in (ROOT / "data/cuba-cubalub-2007-official-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    panama_acodeco_2020_report = json.loads((ROOT / "data/panama-acodeco-2020-lubricant-price-survey-report.json").read_text(encoding="utf-8"))
+    panama_acodeco_2020_rows = [json.loads(line) for line in (ROOT / "data/panama-acodeco-2020-lubricant-price-survey.jsonl").read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_report = json.loads((ROOT / "data/kebs-smark-lubricant-products-report.json").read_text(encoding="utf-8"))
     kebs_smark_rows = [json.loads(line) for line in (ROOT / "data/kebs-smark-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     east_africa_report = json.loads((ROOT / "data/east-africa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -330,6 +332,7 @@ def main() -> None:
         + len(venezuela_pdv_rows)
         + len(jamaica_futroil_tek_rows)
         + len(cuba_cubalub_2007_rows)
+        + len(panama_acodeco_2020_rows)
         - report["gm_dual_standard_license_rows_merged"]
         - report["fuchs_exact_payload_identity_rows_matched"]
         - report["fuchs_exact_content_identity_rows_matched"]
@@ -1035,9 +1038,9 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 4973
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3044
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 116882
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 116881
-    assert report["quality_issues"]["professional_key_incomplete"] == 78625
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 116927
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 116926
+    assert report["quality_issues"]["professional_key_incomplete"] == 78670
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
@@ -1045,7 +1048,7 @@ def main() -> None:
         GROUP BY p.family_code
     """)) == {
         "C": 2289, "E": 149, "G": 12383, "H": 5262, "I": 3847,
-        "M": 23431, "S": 12124, "T": 11830, "TF": 6678, "U": 632,
+        "M": 23476, "S": 12124, "T": 11830, "TF": 6678, "U": 632,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -2267,6 +2270,27 @@ def main() -> None:
     assert db.execute(
         "SELECT count(*) FROM products WHERE source_id='CUBA_CUBALUB_2007_OFFICIAL_PRICE_CATALOG'"
     ).fetchone()[0] == 105
+
+    assert panama_acodeco_2020_report["named_product_grade_rows"] == len(panama_acodeco_2020_rows) == 45
+    assert panama_acodeco_2020_report["pdf_pages"] == 2
+    assert panama_acodeco_2020_report["brands"] == 19
+    assert panama_acodeco_2020_report["retail_price_observations"] == 83
+    assert panama_acodeco_2020_report["sae_distribution"] == {
+        "10W-30": 19, "15W-40": 12, "20W-50": 12, "40": 1, "50": 1,
+    }
+    assert len(panama_acodeco_2020_report["generic_rows_report_only"]) == 9
+    assert all(row["family_code"] == "M" and row["market"] == "Panama" for row in panama_acodeco_2020_rows)
+    assert all(row["lifecycle_status"] == "historical_retail_price_observation_current_status_unverified" for row in panama_acodeco_2020_rows)
+    assert all(row["technical"]["sae_engine"] for row in panama_acodeco_2020_rows)
+    assert sum(len(row["observed_prices"]) for row in panama_acodeco_2020_rows) == 83
+    assert all(not ({"address", "phone", "email", "contact_person"} & set(row)) for row in panama_acodeco_2020_rows)
+    assert policy_by_id["PANAMA_ACODECO_2020_LUBRICANT_PRICE_SURVEY"]["source_sha256"] == hashlib.sha256(
+        (ROOT / "data/panama-acodeco-2020-lubricant-price-survey.jsonl").read_bytes()
+    ).hexdigest()
+    assert policy_by_id["PANAMA_ACODECO_2020_LUBRICANT_PRICE_SURVEY"]["observed_count"] == 45
+    assert db.execute(
+        "SELECT count(*) FROM products WHERE source_id='PANAMA_ACODECO_2020_LUBRICANT_PRICE_SURVEY'"
+    ).fetchone()[0] == 45
     assert policy_by_id["VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG"]["observed_count"] == 23
     assert db.execute(
         "SELECT count(*) FROM products WHERE source_id='VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG'"

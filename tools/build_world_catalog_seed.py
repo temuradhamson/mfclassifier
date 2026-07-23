@@ -108,6 +108,7 @@ TRINIDAD_TOBAGO_NP_ULTRA_JSONL = ROOT / "data" / "trinidad-tobago-np-ultra-curre
 VENEZUELA_PDV_JSONL = ROOT / "data" / "venezuela-pdv-current-lubricants.jsonl"
 JAMAICA_FUTROIL_TEK_JSONL = ROOT / "data" / "jamaica-futroil-tek-current-lubricants.jsonl"
 CUBA_CUBALUB_2007_JSONL = ROOT / "data" / "cuba-cubalub-2007-official-products.jsonl"
+PANAMA_ACODECO_2020_JSONL = ROOT / "data" / "panama-acodeco-2020-lubricant-price-survey.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
 SON_MANCAP_JSONL = ROOT / "data" / "son-mancap-chemical-lubricant-products.jsonl"
@@ -3898,6 +3899,53 @@ def cuba_cubalub_2007_record(row: dict) -> dict:
     return record
 
 
+def panama_acodeco_2020_record(row: dict) -> dict:
+    """Convert one named motor-oil row from ACODECO's January 2020 survey."""
+    technical = row["technical"]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Panama ACODECO historical retail price survey",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": technical["sae_engine"],
+        "api_class": "",
+        "viscosity": "",
+        "grease_class": "",
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": "official_government_historical_retail_price_observation",
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update({
+        "sae_engine": technical["sae_engine"],
+        "source_product_label": row["source_product_label"],
+        "survey_date": row["survey_date"],
+        "package_source_reported": row["package"],
+        "currency": row["currency"],
+        "observed_prices_source_reported": [str(value) for value in row["observed_prices"]],
+        "observed_price_min_source_reported": str(row["observed_price_min"]),
+        "observed_price_max_source_reported": str(row["observed_price_max"]),
+        "source_url": row["source_url"],
+        "source_pdf_sha256": row["source_pdf_sha256"],
+        "source_quality_flags": row["flags"],
+    })
+    record["canonical_key"] += f"|panama_acodeco_2020_observation:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    return record
+
+
 def kebs_smark_record(row: dict) -> dict:
     """Convert one normalized product identity from the public KEBS S-Mark directory."""
     technical = row["technical"]
@@ -5751,6 +5799,9 @@ def main() -> None:
     cuba_cubalub_2007_source_rows = [json.loads(line) for line in CUBA_CUBALUB_2007_JSONL.read_text(encoding="utf-8").splitlines() if line]
     cuba_cubalub_2007_records = [cuba_cubalub_2007_record(row) for row in cuba_cubalub_2007_source_rows]
     input_records.extend(cuba_cubalub_2007_records)
+    panama_acodeco_2020_source_rows = [json.loads(line) for line in PANAMA_ACODECO_2020_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    panama_acodeco_2020_records = [panama_acodeco_2020_record(row) for row in panama_acodeco_2020_source_rows]
+    input_records.extend(panama_acodeco_2020_records)
     ecuador_inen_current_record_by_id = {
         raw["source_record_id"]: record
         for raw, record in zip(ecuador_inen_current_source_rows, ecuador_inen_current_records)
@@ -8154,6 +8205,7 @@ def main() -> None:
         "venezuela_pdv_input_sha256": hashlib.sha256(VENEZUELA_PDV_JSONL.read_bytes()).hexdigest(),
         "jamaica_futroil_tek_input_sha256": hashlib.sha256(JAMAICA_FUTROIL_TEK_JSONL.read_bytes()).hexdigest(),
         "cuba_cubalub_2007_input_sha256": hashlib.sha256(CUBA_CUBALUB_2007_JSONL.read_bytes()).hexdigest(),
+        "panama_acodeco_2020_input_sha256": hashlib.sha256(PANAMA_ACODECO_2020_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "son_mancap_input_sha256": hashlib.sha256(SON_MANCAP_JSONL.read_bytes()).hexdigest(),

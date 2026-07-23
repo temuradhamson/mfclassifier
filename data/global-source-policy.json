@@ -2671,6 +2671,21 @@
       "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_pdf_redistribution",
       "observed_count": 105,
       "notes": "Resolution 122 of 30 April 2007 attributes the four published annexes to state producer CUBALUB/CUPET. The first annex gives the complete liquid-product denominator and later annexes repeat packages; Annex 4 gives grease packages. 105 historical lubricant identities are retained, while four rows explicitly headed non-lubricants are excluded. Numeric grades remain source grades unless API SJ, CD, GL-4 or GL-5 is printed. The source proves historical identities and packages, not current production, availability or approval."
+    },
+    {
+      "source_id": "PANAMA_ACODECO_2020_LUBRICANT_PRICE_SURVEY",
+      "title": "Panama ACODECO January 2020 motor-oil retail price survey",
+      "owner": "Autoridad de Protección al Consumidor y Defensa de la Competencia (ACODECO)",
+      "source_type": "official_government_historical_retail_price_survey",
+      "source_locator": "data/panama-acodeco-2020-lubricant-price-survey.jsonl",
+      "source_url": "https://tableroquejas.acodeco.gob.pa/uploads/pdf/estadisticas/LubricantesAutoRepuesto_Ene2020.02_07_2020_10_49_02_a.m..pdf",
+      "terms_url": "https://www.acodeco.gob.pa/",
+      "source_sha256": "5812dcfed063ad3821fb6b68774e61fccefa4101d00240682e03f91bbfea18ae",
+      "access_status": "public_official_government_price_survey_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_pdf_redistribution",
+      "observed_count": 45,
+      "notes": "The complete two-page January 2020 table was audited. Forty-five named motor-oil brand/grade rows create historical product observations with five explicit SAE grades and 83 retail prices in PAB. Nine generic rows such as ATF, coolant and brake fluid remain report-only because no product brand or grade is printed. Source spellings Penzoil and Shevron are retained alongside standardized Pennzoil and Chevron. The survey does not prove current availability, API licensing, quality or approval."
     }
   ]
 }

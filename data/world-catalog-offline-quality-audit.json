@@ -1,8 +1,8 @@
 {
   "active_offers": 3044,
   "canonical_key_duplicates": 0,
-  "canonical_products": 116881,
-  "compressed_database_sha256": "3c06de8df26897d7b0b279ca0db285670fe563a0de50600e8ea625dc414f294a",
+  "canonical_products": 116926,
+  "compressed_database_sha256": "cb062599952ac2b4f23d13abfb1d19fcd6884a7f4d72b2755df09e9a092906a4",
   "duplicate_review_queues": [
     {
       "candidate_pairs": 11184,
@@ -52,16 +52,16 @@
   ],
   "family_coverage": [
     {
-      "both_percent": 50.59,
+      "both_percent": 50.54,
       "both_selector_and_technical_basis_present": 24929,
       "existing_professional_key_gate_implemented": true,
-      "existing_professional_key_issue": 23431,
+      "existing_professional_key_issue": 23476,
       "family": "Моторные масла",
       "family_code": "M",
-      "products": 49281,
-      "selector_grade_or_class_percent": 88.88,
-      "selector_grade_or_class_present": 43801,
-      "technical_basis_percent": 52.63,
+      "products": 49326,
+      "selector_grade_or_class_percent": 88.89,
+      "selector_grade_or_class_present": 43846,
+      "technical_basis_percent": 52.58,
       "technical_basis_present": 25935
     },
     {
@@ -182,25 +182,25 @@
       "technical_basis_present": 7
     }
   ],
-  "input_rows_before_canonicalization": 116882,
+  "input_rows_before_canonicalization": 116927,
   "interpretation": {
-    "confirmed_count": "116881 is the verified canonical row count of the current seed, not the final number of all products worldwide.",
+    "confirmed_count": "116926 is the verified canonical row count of the current seed, not the final number of all products worldwide.",
     "duplicate_metric": "Review pairs are candidates or conflicts, not proven removable duplicates.",
     "professional_gate_scope": "Family-specific professional_key_incomplete rules cover M/T/G/H/I/C/U/E/TF/S; source-level gaps remain explicit and are not filled by inference.",
     "selector_metric": "Presence is measured only from explicit normalized fields; absence may reflect source granularity rather than a parsing defect."
   },
-  "primary_sources_used": 140,
+  "primary_sources_used": 141,
   "products_using_explicitly_marked_brand_fallback": 36269,
-  "products_with_at_least_one_source_link": 116881,
-  "products_with_family": 116881,
-  "products_with_missing_manufacturer": 569,
-  "products_with_normalized_name": 116881,
-  "products_with_primary_source_hash": 116881,
-  "products_with_primary_source_url": 116290,
+  "products_with_at_least_one_source_link": 116926,
+  "products_with_family": 116926,
+  "products_with_missing_manufacturer": 614,
+  "products_with_normalized_name": 116926,
+  "products_with_primary_source_hash": 116926,
+  "products_with_primary_source_url": 116335,
   "quality_issue_details": [
     {
       "issue_code": "professional_key_incomplete",
-      "rows": 78625,
+      "rows": 78670,
       "severity": "medium"
     },
     {
@@ -377,9 +377,9 @@
   "quality_issues_by_severity": {
     "high": 311,
     "low": 15,
-    "medium": 78743
+    "medium": 78788
   },
   "snapshot_date": "2026-07-22",
-  "source_registry_entries": 188,
+  "source_registry_entries": 189,
   "status": "offline_quality_audit_current_seed_not_worldwide_completion"
 }

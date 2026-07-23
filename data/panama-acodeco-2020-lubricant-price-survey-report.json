@@ -1,0 +1,31 @@
+{
+  "brands": 19,
+  "generic_rows_report_only": [
+    "outboard motor oil",
+    "ATF",
+    "coolant",
+    "tube grease",
+    "battery fluid",
+    "brake fluid",
+    "power steering fluid",
+    "diesel treatment",
+    "gasoline treatment"
+  ],
+  "lifecycle_note": "A January 2020 retail price observation proves a historical brand/grade occurrence. It does not prove current availability, API licensing, product quality or manufacturer approval.",
+  "named_product_grade_rows": 45,
+  "pdf_pages": 2,
+  "retail_price_observations": 83,
+  "sae_distribution": {
+    "10W-30": 19,
+    "15W-40": 12,
+    "20W-50": 12,
+    "40": 1,
+    "50": 1
+  },
+  "schema_version": 1,
+  "snapshot_date": "2026-07-23",
+  "source_id": "PANAMA_ACODECO_2020_LUBRICANT_PRICE_SURVEY",
+  "source_pdf_sha256": "052ce0cd74d9bf1892f90bdcfcd508bfb8810f16c4a83f4513ede5112a80b6a3",
+  "source_url": "https://tableroquejas.acodeco.gob.pa/uploads/pdf/estadisticas/LubricantesAutoRepuesto_Ene2020.02_07_2020_10_49_02_a.m..pdf",
+  "survey_date": "2020-01"
+}
