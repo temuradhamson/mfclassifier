@@ -2536,6 +2536,21 @@
       "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_page_or_pdf_redistribution",
       "observed_count": 47,
       "notes": "All 27 current automotive and industrial lubricant product cards were audited and multi-grade technical tables expanded to 47 product/grade identities. The 13 automotive and 34 industrial variants retain explicit SAE, API, ACEA, ILSAC, JASO, ISO VG, NLGI, DIN/performance and package facts where published. Marketing prose is excluded. The ANH public list exposes operators rather than product records; the authenticated SIREHIDRO/HYDRO layer is documented as an access boundary and is not presented as public product data."
+    },
+    {
+      "source_id": "URUGUAY_ANCAP_CURRENT_LUBRICANT_CATALOG",
+      "title": "Current official ANCAP lubricant and specialties catalog for Uruguay, 2024–2026",
+      "owner": "Administración Nacional de Combustibles, Alcohol y Pórtland (ANCAP)",
+      "source_type": "official_state_owned_manufacturer_product_catalog",
+      "source_locator": "data/uruguay-ancap-current-lubricants.jsonl",
+      "source_url": "https://www.ancap.com.uy/5990/4/catalogo-lubricantes.html",
+      "terms_url": "https://www.ancap.com.uy/",
+      "source_sha256": "715b3c7a20df420da36ca85a1036303c69db8bc734b9559c57cb2ca920f636e0",
+      "access_status": "public_official_state_owned_manufacturer_information_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_pdf_redistribution",
+      "observed_count": 88,
+      "notes": "All 56 commercial product families in ANCAP's official 2024–2026 lubricant and specialties catalog were audited and explicit multi-grade lines expanded to 88 product/grade identities. Published SAE, API, API GL, ACEA, ILSAC, JASO, NMMA, ATF, DOT, ISO VG, NLGI, DIN and performance claims are retained as source-reported facts. Proprietary marine grades 3012/3015/4015/4020 and cylinder class C460 are preserved without reinterpretation. Marketing prose is excluded and catalog presence is not represented as independent performance approval."
     }
   ]
 }

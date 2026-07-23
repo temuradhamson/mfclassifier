@@ -97,6 +97,7 @@ PARAGUAY_DNIT_LUBRICANT_JSONL = ROOT / "data" / "paraguay-dnit-lubricant-classif
 GUATEMALA_SIGES_LUBRICANT_JSONL = ROOT / "data" / "guatemala-siges-lubricant-nomenclature.jsonl"
 COSTA_RICA_HEALTH_LUBRICANT_JSONL = ROOT / "data" / "costa-rica-health-registered-lubricants.jsonl"
 BOLIVIA_YPFB_LUBRICANT_JSONL = ROOT / "data" / "bolivia-ypfb-current-lubricants.jsonl"
+URUGUAY_ANCAP_LUBRICANT_JSONL = ROOT / "data" / "uruguay-ancap-current-lubricants.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
 SON_MANCAP_JSONL = ROOT / "data" / "son-mancap-chemical-lubricant-products.jsonl"
@@ -3398,6 +3399,81 @@ def bolivia_ypfb_lubricant_record(row: dict) -> dict:
     return record
 
 
+def uruguay_ancap_lubricant_record(row: dict) -> dict:
+    """Convert one current official ANCAP product/grade identity."""
+    technical = row["technical"]
+    performance = [
+        *(f"API {value}" for value in technical["api"]),
+        *(f"API {value}" for value in technical["api_gl"]),
+        *(f"ACEA {value}" for value in technical["acea"]),
+        *(f"ILSAC {value}" for value in technical["ilsac"]),
+        *(f"JASO {value}" for value in technical["jaso"]),
+        *(f"NMMA {value}" for value in technical["nmma"]),
+        *technical["atf"],
+        *technical["brake_fluid_class"],
+        *technical["din"],
+        *technical["performance"],
+    ]
+    viscosity = (
+        f"ISO VG {technical['iso_vg']}" if technical["iso_vg"]
+        else technical["viscosity_source_reported"]
+    )
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Current official ANCAP Uruguay lubricant catalog",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": technical["sae_engine"] or technical["sae_gear"],
+        "api_class": "; ".join(performance),
+        "viscosity": viscosity,
+        "grease_class": technical["nlgi"],
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": row["evidence_status"],
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update({
+        "sae_engine": technical["sae_engine"],
+        "sae_gear": technical["sae_gear"],
+        "iso_vg": technical["iso_vg"],
+        "nlgi": technical["nlgi"],
+        "viscosity_source_reported": technical["viscosity_source_reported"],
+        "marine_grade_source_reported": technical["marine_grade_source_reported"],
+        "api": technical["api"],
+        "api_gl": technical["api_gl"],
+        "acea": technical["acea"],
+        "ilsac": technical["ilsac"],
+        "jaso": technical["jaso"],
+        "nmma_source_reported": technical["nmma"],
+        "atf_source_reported": technical["atf"],
+        "brake_fluid_class_source_reported": technical["brake_fluid_class"],
+        "din_source_reported": technical["din"],
+        "performance_source_reported": technical["performance"],
+        "coolant_type": technical["coolant_type"],
+        "product_line": row["product_line"],
+        "source_url": row["source_url"],
+        "catalog_page_url": row["catalog_page_url"],
+        "catalog_url": row["catalog_url"],
+        "catalog_sha256": row["catalog_sha256"],
+        "source_quality_flags": row["source_quality_flags"],
+    })
+    record["canonical_key"] += f"|uruguay_ancap_grade:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    return record
+
+
 def kebs_smark_record(row: dict) -> dict:
     """Convert one normalized product identity from the public KEBS S-Mark directory."""
     technical = row["technical"]
@@ -5200,6 +5276,9 @@ def main() -> None:
     bolivia_ypfb_lubricant_source_rows = [json.loads(line) for line in BOLIVIA_YPFB_LUBRICANT_JSONL.read_text(encoding="utf-8").splitlines() if line]
     bolivia_ypfb_lubricant_records = [bolivia_ypfb_lubricant_record(row) for row in bolivia_ypfb_lubricant_source_rows]
     input_records.extend(bolivia_ypfb_lubricant_records)
+    uruguay_ancap_lubricant_source_rows = [json.loads(line) for line in URUGUAY_ANCAP_LUBRICANT_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    uruguay_ancap_lubricant_records = [uruguay_ancap_lubricant_record(row) for row in uruguay_ancap_lubricant_source_rows]
+    input_records.extend(uruguay_ancap_lubricant_records)
     ecuador_inen_current_record_by_id = {
         raw["source_record_id"]: record
         for raw, record in zip(ecuador_inen_current_source_rows, ecuador_inen_current_records)
@@ -7589,6 +7668,7 @@ def main() -> None:
         "guatemala_siges_lubricant_input_sha256": hashlib.sha256(GUATEMALA_SIGES_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "costa_rica_health_lubricant_input_sha256": hashlib.sha256(COSTA_RICA_HEALTH_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "bolivia_ypfb_lubricant_input_sha256": hashlib.sha256(BOLIVIA_YPFB_LUBRICANT_JSONL.read_bytes()).hexdigest(),
+        "uruguay_ancap_lubricant_input_sha256": hashlib.sha256(URUGUAY_ANCAP_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "son_mancap_input_sha256": hashlib.sha256(SON_MANCAP_JSONL.read_bytes()).hexdigest(),

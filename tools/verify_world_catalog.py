@@ -230,6 +230,8 @@ def main() -> None:
     costa_rica_health_rows = [json.loads(line) for line in (ROOT / "data/costa-rica-health-registered-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     bolivia_ypfb_report = json.loads((ROOT / "data/bolivia-ypfb-current-lubricants-report.json").read_text(encoding="utf-8"))
     bolivia_ypfb_rows = [json.loads(line) for line in (ROOT / "data/bolivia-ypfb-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    uruguay_ancap_report = json.loads((ROOT / "data/uruguay-ancap-current-lubricants-report.json").read_text(encoding="utf-8"))
+    uruguay_ancap_rows = [json.loads(line) for line in (ROOT / "data/uruguay-ancap-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_report = json.loads((ROOT / "data/kebs-smark-lubricant-products-report.json").read_text(encoding="utf-8"))
     kebs_smark_rows = [json.loads(line) for line in (ROOT / "data/kebs-smark-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     east_africa_report = json.loads((ROOT / "data/east-africa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -285,6 +287,7 @@ def main() -> None:
         + report["guatemala_siges_lubricant_source_rows"]
         + report["costa_rica_health_lubricant_source_rows"]
         + report["bolivia_ypfb_lubricant_source_rows"]
+        + len(uruguay_ancap_rows)
         - report["gm_dual_standard_license_rows_merged"]
         - report["fuchs_exact_payload_identity_rows_matched"]
         - report["fuchs_exact_content_identity_rows_matched"]
@@ -990,17 +993,17 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 4973
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3044
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 116449
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 116448
-    assert report["quality_issues"]["professional_key_incomplete"] == 78410
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 116537
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 116536
+    assert report["quality_issues"]["professional_key_incomplete"] == 78442
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
         WHERE q.issue_code='professional_key_incomplete'
         GROUP BY p.family_code
     """)) == {
-        "C": 2281, "E": 148, "G": 12357, "H": 5257, "I": 3837,
-        "M": 23366, "S": 12110, "T": 11806, "TF": 6652, "U": 596,
+        "C": 2281, "E": 149, "G": 12364, "H": 5257, "I": 3844,
+        "M": 23375, "S": 12110, "T": 11811, "TF": 6655, "U": 596,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -2066,6 +2069,32 @@ def main() -> None:
     assert db.execute(
         "SELECT count(*) FROM product_sources WHERE source_id='BOLIVIA_YPFB_CURRENT_LUBRICANT_CATALOG'"
     ).fetchone()[0] == 47
+    assert uruguay_ancap_report["catalog_product_families"] == 56
+    assert uruguay_ancap_report["normalized_product_variants"] == len(uruguay_ancap_rows) == 88
+    assert uruguay_ancap_report["families"] == {
+        "E": 1, "G": 7, "H": 13, "I": 17, "M": 28, "T": 16, "TF": 3, "U": 3
+    }
+    assert uruguay_ancap_report["catalog_sha256"] == "a48cfd55716f8653ccd3f0bb34dc0d07a43eddf319b902c3a87aa40c151cd2a7"
+    assert all(row["brand"] == "ANCAP" and row["market"] == "Uruguay" for row in uruguay_ancap_rows)
+    assert all(not ({"address", "phone", "email", "contact_person"} & set(row)) for row in uruguay_ancap_rows)
+    assert {
+        row["technical"]["marine_grade_source_reported"]
+        for row in uruguay_ancap_rows
+        if row["technical"]["marine_grade_source_reported"]
+    } == {"3012", "3015", "4015", "4020"}
+    assert {
+        row["technical"]["viscosity_source_reported"]
+        for row in uruguay_ancap_rows
+        if row["technical"]["viscosity_source_reported"]
+    } == {"C460"}
+    assert policy_by_id["URUGUAY_ANCAP_CURRENT_LUBRICANT_CATALOG"]["source_sha256"] == uruguay_ancap_report["normalized_output_sha256"]
+    assert policy_by_id["URUGUAY_ANCAP_CURRENT_LUBRICANT_CATALOG"]["observed_count"] == 88
+    assert db.execute(
+        "SELECT count(*) FROM products WHERE source_id='URUGUAY_ANCAP_CURRENT_LUBRICANT_CATALOG'"
+    ).fetchone()[0] == 88
+    assert db.execute(
+        "SELECT count(*) FROM product_sources WHERE source_id='URUGUAY_ANCAP_CURRENT_LUBRICANT_CATALOG'"
+    ).fetchone()[0] == 88
     assert policy_by_id["nsf-white-book"]["bulk_ingest_allowed"] is False
     assert policy_by_id["FLENDER_T7300_APPROVED_LUBRICANTS"]["bulk_ingest_allowed"] is False
     chemexpo_names = {row["product_name"].casefold() for row in epa_chemexpo_rows}
