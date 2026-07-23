@@ -2521,6 +2521,21 @@
       "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_workbook_redistribution",
       "observed_count": 9911,
       "notes": "All 106,372 rows across the official before-2007 and after-2007 workbooks were audited. Strict generic-name scope retains 9,911 lubricant, grease, engine-coolant, hydraulic/transmission and brake-fluid registration observations while excluding cosmetics, food oils, paints, cleaners and HVAC refrigerant gases. Registration is historical regulatory identity evidence, not current availability or performance approval. Personal representative fields are excluded."
+    },
+    {
+      "source_id": "BOLIVIA_YPFB_CURRENT_LUBRICANT_CATALOG",
+      "title": "Current official YPFB Refinación lubricant catalog for Bolivia",
+      "owner": "YPFB Refinación S.A.",
+      "source_type": "official_state_owned_manufacturer_product_pages_and_technical_sheets",
+      "source_locator": "data/bolivia-ypfb-current-lubricants.jsonl",
+      "source_url": "https://www.ypfbrefinacion.com.bo/productos/",
+      "terms_url": "https://www.ypfbrefinacion.com.bo/",
+      "source_sha256": "8180aabe38788161ea4526c721649eec71c732dfd2594ff9747dda238e55f7c1",
+      "access_status": "public_official_state_owned_manufacturer_information_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_page_or_pdf_redistribution",
+      "observed_count": 47,
+      "notes": "All 27 current automotive and industrial lubricant product cards were audited and multi-grade technical tables expanded to 47 product/grade identities. The 13 automotive and 34 industrial variants retain explicit SAE, API, ACEA, ILSAC, JASO, ISO VG, NLGI, DIN/performance and package facts where published. Marketing prose is excluded. The ANH public list exposes operators rather than product records; the authenticated SIREHIDRO/HYDRO layer is documented as an access boundary and is not presented as public product data."
     }
   ]
 }

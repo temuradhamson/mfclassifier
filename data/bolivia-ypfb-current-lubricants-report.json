@@ -1,0 +1,23 @@
+{
+  "automotive_variants": 13,
+  "catalog_sha256": "1e97a275d2efc7e5f73bd607a5e9d3c521ab4b47652709ea493c2f41f97451fb",
+  "families": {
+    "G": 5,
+    "H": 10,
+    "I": 7,
+    "M": 12,
+    "T": 9,
+    "TF": 4
+  },
+  "industrial_variants": 34,
+  "normalized_output_sha256": "8180aabe38788161ea4526c721649eec71c732dfd2594ff9747dda238e55f7c1",
+  "normalized_product_variants": 47,
+  "selected_page_facts_sha256": "70999c695f92ea53a8f1e05f81f5da6bba3c31634686ebbec0a515b12dd27a6d",
+  "selected_product_pages": 27,
+  "snapshot_date": "2026-07-23",
+  "source_access_boundary": "The ANH public operator list exposes companies and licences, not product-level records; the authenticated SIREHIDRO/HYDRO product layer was not represented as public data.",
+  "source_id": "BOLIVIA_YPFB_CURRENT_LUBRICANT_CATALOG",
+  "unique_source_documents": 30,
+  "wp_api_response_sha256": "2590064f3007b7926e37ab2f5195e1435ce2442332dea28b52d2cf891b870ed2",
+  "wp_total_pages": 74
+}

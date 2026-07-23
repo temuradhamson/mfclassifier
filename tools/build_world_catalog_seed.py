@@ -96,6 +96,7 @@ PERU_SUNAT_NONCONTROLLED_JSONL = ROOT / "data" / "peru-sunat-noncontrolled-lubri
 PARAGUAY_DNIT_LUBRICANT_JSONL = ROOT / "data" / "paraguay-dnit-lubricant-classifications.jsonl"
 GUATEMALA_SIGES_LUBRICANT_JSONL = ROOT / "data" / "guatemala-siges-lubricant-nomenclature.jsonl"
 COSTA_RICA_HEALTH_LUBRICANT_JSONL = ROOT / "data" / "costa-rica-health-registered-lubricants.jsonl"
+BOLIVIA_YPFB_LUBRICANT_JSONL = ROOT / "data" / "bolivia-ypfb-current-lubricants.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
 SON_MANCAP_JSONL = ROOT / "data" / "son-mancap-chemical-lubricant-products.jsonl"
@@ -3327,6 +3328,76 @@ def costa_rica_health_lubricant_record(row: dict) -> dict:
     return record
 
 
+def bolivia_ypfb_lubricant_record(row: dict) -> dict:
+    """Convert one current official YPFB product/grade identity."""
+    technical = row["technical"]
+    performance = [
+        *(f"API {value}" for value in technical["api"]),
+        *(f"API {value}" for value in technical["api_gl"]),
+        *(f"ACEA {value}" for value in technical["acea"]),
+        *(f"ILSAC {value}" for value in technical["ilsac"]),
+        *(f"JASO {value}" for value in technical["jaso"]),
+        *technical["din"],
+        *technical["performance"],
+    ]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Current official YPFB Bolivia lubricant catalog",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": technical["sae_engine"] or technical["sae_gear"],
+        "api_class": "; ".join(performance),
+        "viscosity": f"ISO VG {technical['iso_vg']}" if technical["iso_vg"] else "",
+        "grease_class": technical["nlgi"],
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": row["source_page_id"],
+        "evidence_status": row["evidence_status"],
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update({
+        "sae_engine": technical["sae_engine"],
+        "sae_gear": technical["sae_gear"],
+        "iso_vg": technical["iso_vg"],
+        "nlgi": technical["nlgi"],
+        "api": technical["api"],
+        "api_gl": technical["api_gl"],
+        "acea": technical["acea"],
+        "ilsac": technical["ilsac"],
+        "jaso": technical["jaso"],
+        "din_source_reported": technical["din"],
+        "performance_source_reported": technical["performance"],
+        "packages": row["packages"],
+        "product_line": row["product_line"],
+        "application": row["application"],
+        "thickener": row["thickener"],
+        "source_url": row["source_url"],
+        "source_page_modified": row["source_page_modified"],
+        "source_page_facts_sha256": row["source_page_facts_sha256"],
+        "technical_sheet_url": row["technical_sheet_url"],
+        "technical_sheet_sha256": row["technical_sheet_sha256"],
+        "safety_sheet_urls": row["safety_sheet_urls"],
+        "safety_sheet_sha256": row["safety_sheet_sha256"],
+        "catalog_url": row["catalog_url"],
+        "catalog_sha256": row["catalog_sha256"],
+        "source_quality_flags": row["source_quality_flags"],
+    })
+    record["canonical_key"] += f"|bolivia_ypfb_grade:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    return record
+
+
 def kebs_smark_record(row: dict) -> dict:
     """Convert one normalized product identity from the public KEBS S-Mark directory."""
     technical = row["technical"]
@@ -5126,6 +5197,9 @@ def main() -> None:
     input_records.extend(guatemala_siges_lubricant_records)
     costa_rica_health_lubricant_source_rows = [json.loads(line) for line in COSTA_RICA_HEALTH_LUBRICANT_JSONL.read_text(encoding="utf-8").splitlines() if line]
     costa_rica_health_lubricant_records = [costa_rica_health_lubricant_record(row) for row in costa_rica_health_lubricant_source_rows]
+    bolivia_ypfb_lubricant_source_rows = [json.loads(line) for line in BOLIVIA_YPFB_LUBRICANT_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    bolivia_ypfb_lubricant_records = [bolivia_ypfb_lubricant_record(row) for row in bolivia_ypfb_lubricant_source_rows]
+    input_records.extend(bolivia_ypfb_lubricant_records)
     ecuador_inen_current_record_by_id = {
         raw["source_record_id"]: record
         for raw, record in zip(ecuador_inen_current_source_rows, ecuador_inen_current_records)
@@ -7514,6 +7588,7 @@ def main() -> None:
         "paraguay_dnit_lubricant_input_sha256": hashlib.sha256(PARAGUAY_DNIT_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "guatemala_siges_lubricant_input_sha256": hashlib.sha256(GUATEMALA_SIGES_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "costa_rica_health_lubricant_input_sha256": hashlib.sha256(COSTA_RICA_HEALTH_LUBRICANT_JSONL.read_bytes()).hexdigest(),
+        "bolivia_ypfb_lubricant_input_sha256": hashlib.sha256(BOLIVIA_YPFB_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "son_mancap_input_sha256": hashlib.sha256(SON_MANCAP_JSONL.read_bytes()).hexdigest(),
@@ -7678,6 +7753,7 @@ def main() -> None:
         "paraguay_dnit_lubricant_source_rows": len(paraguay_dnit_lubricant_source_rows),
         "guatemala_siges_lubricant_source_rows": len(guatemala_siges_lubricant_source_rows),
         "costa_rica_health_lubricant_source_rows": len(costa_rica_health_lubricant_source_rows),
+        "bolivia_ypfb_lubricant_source_rows": len(bolivia_ypfb_lubricant_source_rows),
         "kebs_smark_source_rows": len(kebs_smark_source_rows),
         "east_africa_certified_source_rows": len(east_africa_certified_source_rows),
         "east_africa_certified_source_rows_by_source": dict(sorted(Counter(row["source_id"] for row in east_africa_certified_source_rows).items())),
