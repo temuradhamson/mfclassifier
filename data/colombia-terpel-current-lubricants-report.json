@@ -1,0 +1,32 @@
+{
+  "duplicate_audience_cards_collapsed": 3,
+  "families": {
+    "M": 18,
+    "T": 4,
+    "TF": 5
+  },
+  "normalized_output_sha256": "6d279e1cf0fabc772f5a793bad92d555a9e96242f226b70b9ccea031fd387586",
+  "normalized_products": 27,
+  "product_cards_with_documents_observed": 30,
+  "product_lines": {
+    "automotive_gear": 4,
+    "battery_fluid": 1,
+    "brake_fluid": 2,
+    "coolant": 2,
+    "gas_engine": 2,
+    "heavy_duty_engine": 5,
+    "motorcycle": 3,
+    "passenger_car_engine": 6,
+    "two_stroke": 2
+  },
+  "rights_boundary": "Official public pages and documents are used for attributed non-expressive factual extraction only. Terpel source prose, page presentation and PDFs are not redistributed.",
+  "safety_sheet_links": 27,
+  "sitemap_rows": 280,
+  "sitemap_sha256": "537ec77f9c05d8be25cfaca078be031ddb0db7a33673ca3521d2a02f0d1d90c4",
+  "sitemap_url": "https://www.terpel.com/sitemap.xml",
+  "snapshot_date": "2026-07-23",
+  "source_id": "COLOMBIA_TERPEL_CURRENT_LUBRICANT_CATALOG",
+  "technical_sheet_links": 26,
+  "terms_url": "https://www.terpel.com/terminos-legales2",
+  "unique_source_documents": 53
+}

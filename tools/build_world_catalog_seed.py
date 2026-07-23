@@ -98,6 +98,7 @@ GUATEMALA_SIGES_LUBRICANT_JSONL = ROOT / "data" / "guatemala-siges-lubricant-nom
 COSTA_RICA_HEALTH_LUBRICANT_JSONL = ROOT / "data" / "costa-rica-health-registered-lubricants.jsonl"
 BOLIVIA_YPFB_LUBRICANT_JSONL = ROOT / "data" / "bolivia-ypfb-current-lubricants.jsonl"
 URUGUAY_ANCAP_LUBRICANT_JSONL = ROOT / "data" / "uruguay-ancap-current-lubricants.jsonl"
+COLOMBIA_TERPEL_LUBRICANT_JSONL = ROOT / "data" / "colombia-terpel-current-lubricants.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
 SON_MANCAP_JSONL = ROOT / "data" / "son-mancap-chemical-lubricant-products.jsonl"
@@ -3474,6 +3475,68 @@ def uruguay_ancap_lubricant_record(row: dict) -> dict:
     return record
 
 
+def colombia_terpel_lubricant_record(row: dict) -> dict:
+    """Convert one current official Terpel product identity."""
+    technical = row["technical"]
+    performance = [
+        *(f"API {value}" for value in technical["api"]),
+        *(f"API {value}" for value in technical["api_gl"]),
+        *(f"ACEA {value}" for value in technical["acea"]),
+        *(f"ILSAC {value}" for value in technical["ilsac"]),
+        *(f"JASO {value}" for value in technical["jaso"]),
+        *technical["brake_fluid_class"],
+        *technical["performance"],
+    ]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Current official Terpel Colombia lubricant catalog",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": technical["sae_engine"] or technical["sae_gear"],
+        "api_class": "; ".join(performance),
+        "viscosity": "",
+        "grease_class": "",
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": row["evidence_status"],
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update({
+        "sae_engine": technical["sae_engine"],
+        "sae_gear": technical["sae_gear"],
+        "api": technical["api"],
+        "api_gl": technical["api_gl"],
+        "acea": technical["acea"],
+        "ilsac": technical["ilsac"],
+        "jaso": technical["jaso"],
+        "brake_fluid_class_source_reported": technical["brake_fluid_class"],
+        "coolant_type": technical["coolant_type"],
+        "fluid_type_source_reported": technical["fluid_type"],
+        "performance_source_reported": technical["performance"],
+        "product_line": row["product_line"],
+        "source_url": row["source_url"],
+        "source_page_lastmod": row["source_page_lastmod"],
+        "source_page_sha256": row["source_page_sha256"],
+        "source_documents": row["documents"],
+        "source_quality_flags": row["source_quality_flags"],
+    })
+    record["canonical_key"] += f"|colombia_terpel_product:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    return record
+
+
 def kebs_smark_record(row: dict) -> dict:
     """Convert one normalized product identity from the public KEBS S-Mark directory."""
     technical = row["technical"]
@@ -5279,6 +5342,9 @@ def main() -> None:
     uruguay_ancap_lubricant_source_rows = [json.loads(line) for line in URUGUAY_ANCAP_LUBRICANT_JSONL.read_text(encoding="utf-8").splitlines() if line]
     uruguay_ancap_lubricant_records = [uruguay_ancap_lubricant_record(row) for row in uruguay_ancap_lubricant_source_rows]
     input_records.extend(uruguay_ancap_lubricant_records)
+    colombia_terpel_lubricant_source_rows = [json.loads(line) for line in COLOMBIA_TERPEL_LUBRICANT_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    colombia_terpel_lubricant_records = [colombia_terpel_lubricant_record(row) for row in colombia_terpel_lubricant_source_rows]
+    input_records.extend(colombia_terpel_lubricant_records)
     ecuador_inen_current_record_by_id = {
         raw["source_record_id"]: record
         for raw, record in zip(ecuador_inen_current_source_rows, ecuador_inen_current_records)
@@ -7669,6 +7735,7 @@ def main() -> None:
         "costa_rica_health_lubricant_input_sha256": hashlib.sha256(COSTA_RICA_HEALTH_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "bolivia_ypfb_lubricant_input_sha256": hashlib.sha256(BOLIVIA_YPFB_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "uruguay_ancap_lubricant_input_sha256": hashlib.sha256(URUGUAY_ANCAP_LUBRICANT_JSONL.read_bytes()).hexdigest(),
+        "colombia_terpel_lubricant_input_sha256": hashlib.sha256(COLOMBIA_TERPEL_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "son_mancap_input_sha256": hashlib.sha256(SON_MANCAP_JSONL.read_bytes()).hexdigest(),

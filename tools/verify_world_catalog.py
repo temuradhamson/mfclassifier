@@ -232,6 +232,8 @@ def main() -> None:
     bolivia_ypfb_rows = [json.loads(line) for line in (ROOT / "data/bolivia-ypfb-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     uruguay_ancap_report = json.loads((ROOT / "data/uruguay-ancap-current-lubricants-report.json").read_text(encoding="utf-8"))
     uruguay_ancap_rows = [json.loads(line) for line in (ROOT / "data/uruguay-ancap-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    colombia_terpel_report = json.loads((ROOT / "data/colombia-terpel-current-lubricants-report.json").read_text(encoding="utf-8"))
+    colombia_terpel_rows = [json.loads(line) for line in (ROOT / "data/colombia-terpel-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_report = json.loads((ROOT / "data/kebs-smark-lubricant-products-report.json").read_text(encoding="utf-8"))
     kebs_smark_rows = [json.loads(line) for line in (ROOT / "data/kebs-smark-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     east_africa_report = json.loads((ROOT / "data/east-africa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -288,6 +290,7 @@ def main() -> None:
         + report["costa_rica_health_lubricant_source_rows"]
         + report["bolivia_ypfb_lubricant_source_rows"]
         + len(uruguay_ancap_rows)
+        + len(colombia_terpel_rows)
         - report["gm_dual_standard_license_rows_merged"]
         - report["fuchs_exact_payload_identity_rows_matched"]
         - report["fuchs_exact_content_identity_rows_matched"]
@@ -993,9 +996,9 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 4973
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3044
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 116537
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 116536
-    assert report["quality_issues"]["professional_key_incomplete"] == 78442
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 116564
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 116563
+    assert report["quality_issues"]["professional_key_incomplete"] == 78449
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
@@ -1003,7 +1006,7 @@ def main() -> None:
         GROUP BY p.family_code
     """)) == {
         "C": 2281, "E": 149, "G": 12364, "H": 5257, "I": 3844,
-        "M": 23375, "S": 12110, "T": 11811, "TF": 6655, "U": 596,
+        "M": 23377, "S": 12110, "T": 11811, "TF": 6660, "U": 596,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -2095,6 +2098,24 @@ def main() -> None:
     assert db.execute(
         "SELECT count(*) FROM product_sources WHERE source_id='URUGUAY_ANCAP_CURRENT_LUBRICANT_CATALOG'"
     ).fetchone()[0] == 88
+    assert colombia_terpel_report["product_cards_with_documents_observed"] == 30
+    assert colombia_terpel_report["duplicate_audience_cards_collapsed"] == 3
+    assert colombia_terpel_report["normalized_products"] == len(colombia_terpel_rows) == 27
+    assert colombia_terpel_report["families"] == {"M": 18, "T": 4, "TF": 5}
+    assert colombia_terpel_report["unique_source_documents"] == 53
+    assert colombia_terpel_report["technical_sheet_links"] == 26
+    assert colombia_terpel_report["safety_sheet_links"] == 27
+    assert all(row["brand"] == "Terpel" and row["market"] == "Colombia" for row in colombia_terpel_rows)
+    assert all(not ({"address", "phone", "email", "contact_person"} & set(row)) for row in colombia_terpel_rows)
+    assert all(all(document["sha256"] for document in row["documents"]) for row in colombia_terpel_rows)
+    assert policy_by_id["COLOMBIA_TERPEL_CURRENT_LUBRICANT_CATALOG"]["source_sha256"] == colombia_terpel_report["normalized_output_sha256"]
+    assert policy_by_id["COLOMBIA_TERPEL_CURRENT_LUBRICANT_CATALOG"]["observed_count"] == 27
+    assert db.execute(
+        "SELECT count(*) FROM products WHERE source_id='COLOMBIA_TERPEL_CURRENT_LUBRICANT_CATALOG'"
+    ).fetchone()[0] == 27
+    assert db.execute(
+        "SELECT count(*) FROM product_sources WHERE source_id='COLOMBIA_TERPEL_CURRENT_LUBRICANT_CATALOG'"
+    ).fetchone()[0] == 27
     assert policy_by_id["nsf-white-book"]["bulk_ingest_allowed"] is False
     assert policy_by_id["FLENDER_T7300_APPROVED_LUBRICANTS"]["bulk_ingest_allowed"] is False
     chemexpo_names = {row["product_name"].casefold() for row in epa_chemexpo_rows}

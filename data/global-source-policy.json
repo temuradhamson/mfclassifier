@@ -2551,6 +2551,21 @@
       "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_pdf_redistribution",
       "observed_count": 88,
       "notes": "All 56 commercial product families in ANCAP's official 2024–2026 lubricant and specialties catalog were audited and explicit multi-grade lines expanded to 88 product/grade identities. Published SAE, API, API GL, ACEA, ILSAC, JASO, NMMA, ATF, DOT, ISO VG, NLGI, DIN and performance claims are retained as source-reported facts. Proprietary marine grades 3012/3015/4015/4020 and cylinder class C460 are preserved without reinterpretation. Marketing prose is excluded and catalog presence is not represented as independent performance approval."
+    },
+    {
+      "source_id": "COLOMBIA_TERPEL_CURRENT_LUBRICANT_CATALOG",
+      "title": "Current official Terpel lubricant product cards for Colombia",
+      "owner": "Organización Terpel S.A.",
+      "source_type": "official_manufacturer_product_cards_and_technical_safety_documents",
+      "source_locator": "data/colombia-terpel-current-lubricants.jsonl",
+      "source_url": "https://www.terpel.com/empresas/lubricantes/lubricantes-terpel",
+      "terms_url": "https://www.terpel.com/terminos-legales2",
+      "source_sha256": "6d279e1cf0fabc772f5a793bad92d555a9e96242f226b70b9ccea031fd387586",
+      "access_status": "public_official_manufacturer_pages_robots_allowed_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_page_or_pdf_redistribution",
+      "observed_count": 27,
+      "notes": "The complete official sitemap exposed 30 product cards with documents. Three duplicate audience-card occurrences were collapsed by identical document identity, yielding 27 unique current products backed by 26 technical-sheet and 27 safety-sheet links. Explicit SAE, API/API GL, ACEA, ILSAC, JASO, DOT and coolant-standard facts are retained. Marketing prose and source PDFs are excluded."
     }
   ]
 }
