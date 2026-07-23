@@ -1,0 +1,32 @@
+{
+  "families": {
+    "C": 7,
+    "G": 57,
+    "H": 38,
+    "I": 16,
+    "M": 54,
+    "S": 58,
+    "T": 43,
+    "TF": 6
+  },
+  "method": "complete paginated searches across eight Spanish lubricant terms; official budget line 262 plus explicit engine-coolant rows; coupon and aggregate event-service rows excluded; presentations collapsed by SIGES item code",
+  "normalized_item_identities": 279,
+  "normalized_output_sha256": "ed7bc024198281dc23e8284dec735335488c6f1c655bdfe33ed6741e7f7659ea",
+  "search_terms": [
+    "aceite",
+    "grasa",
+    "lubricante",
+    "refrigerante",
+    "anticongelante",
+    "hidráulico",
+    "fluido",
+    "líquido de frenos"
+  ],
+  "search_union_rows": 2973,
+  "selected_raw_sha256": "174380b63cef99959bb3c0132c763816b1ebc96bf3b197dc0cde900a0ff1568a",
+  "selected_source_presentations": 752,
+  "source_catalog_total_rows": 206416,
+  "source_catalog_updated_at": "13/07/2026 11:41",
+  "source_url": "https://apps.maga.gob.gt/compras/insumos",
+  "status": "official_guatemala_siges_lubricant_nomenclature_normalized"
+}
