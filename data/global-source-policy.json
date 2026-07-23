@@ -2581,6 +2581,21 @@
       "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_page_redistribution",
       "observed_count": 11,
       "notes": "The complete current official page was audited. Eleven explicit product/grade identities are normalized: seven engine/two-stroke lubricants and four gear-oil products. Four broader series (Edge, Magnatec, GTX and Actevo) are report-only because their portfolio grades are not printed. Published package sizes are retained for four monogrades; distributor listing is not represented as independent performance approval."
+    },
+    {
+      "source_id": "SURINAME_POWERFULL_CURRENT_LUBRICANT_CATALOG",
+      "title": "Current official POWERFULL lubricant product pages for Suriname",
+      "owner": "POWERFULL LUBRICATION N.V.",
+      "source_type": "official_local_brand_product_pages",
+      "source_locator": "data/suriname-powerfull-current-lubricants.jsonl",
+      "source_url": "https://powerfulllub.sr/index.php/producten/",
+      "terms_url": "https://powerfulllub.sr/index.php/privacy-policy-2/",
+      "source_sha256": "66ead39f239e2f5a1b0f46aa5db7185dc70d6f5076364e502959f12a17455212",
+      "access_status": "public_official_local_brand_pages_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_page_redistribution",
+      "observed_count": 9,
+      "notes": "All nine individual lubricant pages in the current product sitemap were audited: five engine oils, two gear oils, one hydraulic oil and one grease. Explicit SAE, API/API GL, ACEA, ILSAC, ISO VG and source-reported OEM performance claims are retained. EP-3 is preserved as a source grade and is not silently represented as NLGI 3. Marketing prose is excluded; brand claims are not represented as independent approvals."
     }
   ]
 }

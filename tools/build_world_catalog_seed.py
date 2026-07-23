@@ -100,6 +100,7 @@ BOLIVIA_YPFB_LUBRICANT_JSONL = ROOT / "data" / "bolivia-ypfb-current-lubricants.
 URUGUAY_ANCAP_LUBRICANT_JSONL = ROOT / "data" / "uruguay-ancap-current-lubricants.jsonl"
 COLOMBIA_TERPEL_LUBRICANT_JSONL = ROOT / "data" / "colombia-terpel-current-lubricants.jsonl"
 GUYANA_GUYOIL_LUBRICANT_JSONL = ROOT / "data" / "guyana-guyoil-current-lubricants.jsonl"
+SURINAME_POWERFULL_LUBRICANT_JSONL = ROOT / "data" / "suriname-powerfull-current-lubricants.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
 SON_MANCAP_JSONL = ROOT / "data" / "son-mancap-chemical-lubricant-products.jsonl"
@@ -3592,6 +3593,65 @@ def guyana_guyoil_lubricant_record(row: dict) -> dict:
     return record
 
 
+def suriname_powerfull_lubricant_record(row: dict) -> dict:
+    """Convert one current official POWERFULL product page."""
+    technical = row["technical"]
+    performance = [
+        *(f"API {value}" for value in technical["api"]),
+        *(f"API {value}" for value in technical["api_gl"]),
+        *(f"ACEA {value}" for value in technical["acea"]),
+        *(f"ILSAC {value}" for value in technical["ilsac"]),
+        *technical["performance"],
+    ]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Current official POWERFULL Suriname lubricant catalog",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": technical["sae_engine"] or technical["sae_gear"],
+        "api_class": "; ".join(performance),
+        "viscosity": f"ISO VG {technical['iso_vg']}" if technical["iso_vg"] else "",
+        "grease_class": technical["nlgi"],
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": row["evidence_status"],
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update({
+        "sae_engine": technical["sae_engine"],
+        "sae_gear": technical["sae_gear"],
+        "api": technical["api"],
+        "api_gl": technical["api_gl"],
+        "acea": technical["acea"],
+        "ilsac": technical["ilsac"],
+        "iso_vg_source_reported": technical["iso_vg"],
+        "nlgi_source_reported": technical["nlgi"],
+        "source_grade": technical["source_grade"],
+        "performance_source_reported": technical["performance"],
+        "brand_owner_and_distributor_source_reported": row["brand_owner_and_distributor"],
+        "source_url": row["source_url"],
+        "source_page_text_sha256": row["source_page_text_sha256"],
+        "source_sitemap_facts_sha256": row["source_sitemap_facts_sha256"],
+        "source_facts_sha256": row["source_facts_sha256"],
+        "source_quality_flags": row["source_quality_flags"],
+    })
+    record["canonical_key"] += f"|suriname_powerfull_product:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    return record
+
+
 def kebs_smark_record(row: dict) -> dict:
     """Convert one normalized product identity from the public KEBS S-Mark directory."""
     technical = row["technical"]
@@ -4576,9 +4636,14 @@ def build_sqlite(records: list[dict], candidates: list[dict], issues: list[dict]
 
 
 def compress_sqlite() -> None:
-    """Create a deterministic repository-safe copy of the generated SQLite database."""
+    """Create a deterministic repository-safe copy of the generated SQLite database.
+
+    Preset 6 keeps compression lossless while avoiding the very large encoder
+    dictionary allocated by preset 9.  The latter repeatedly triggered host
+    OOM kills after the complete 800+ MiB database had already been built.
+    """
     with SQLITE_OUT.open("rb") as source, lzma.open(
-        SQLITE_XZ_OUT, "wb", format=lzma.FORMAT_XZ, preset=9
+        SQLITE_XZ_OUT, "wb", format=lzma.FORMAT_XZ, preset=6
     ) as archive:
         shutil.copyfileobj(source, archive, length=1024 * 1024)
 
@@ -5403,6 +5468,9 @@ def main() -> None:
     guyana_guyoil_lubricant_source_rows = [json.loads(line) for line in GUYANA_GUYOIL_LUBRICANT_JSONL.read_text(encoding="utf-8").splitlines() if line]
     guyana_guyoil_lubricant_records = [guyana_guyoil_lubricant_record(row) for row in guyana_guyoil_lubricant_source_rows]
     input_records.extend(guyana_guyoil_lubricant_records)
+    suriname_powerfull_lubricant_source_rows = [json.loads(line) for line in SURINAME_POWERFULL_LUBRICANT_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    suriname_powerfull_lubricant_records = [suriname_powerfull_lubricant_record(row) for row in suriname_powerfull_lubricant_source_rows]
+    input_records.extend(suriname_powerfull_lubricant_records)
     ecuador_inen_current_record_by_id = {
         raw["source_record_id"]: record
         for raw, record in zip(ecuador_inen_current_source_rows, ecuador_inen_current_records)
@@ -7742,7 +7810,13 @@ def main() -> None:
         "action": "Retain the official row, but do not assert current validity until Parker publishes a corrected value.",
     } for row in records if row["source_id"] == "PARKER_DENISON_CURRENT_FLUID_RATINGS" and row["lifecycle_status"] == "source_validity_value_invalid_review_required")
     run_id = f"seed-{SNAPSHOT_DATE}"
-    JSONL_OUT.write_text("".join(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n" for row in records), encoding="utf-8")
+    # Stream the aggregate instead of constructing one multi-hundred-megabyte
+    # Unicode string.  The previous join caused avoidable peak RSS and OOM
+    # kills on the shared Agentbox while producing byte-identical JSONL.
+    with JSONL_OUT.open("w", encoding="utf-8") as stream:
+        for row in records:
+            stream.write(json.dumps(row, ensure_ascii=False, sort_keys=True))
+            stream.write("\n")
     compress_jsonl()
     fuchs_payload_matches_by_source = dict(sorted(fuchs_identity_match_counts["payload"].items()))
     fuchs_content_matches_by_source = dict(sorted(fuchs_identity_match_counts["content"].items()))
@@ -7795,6 +7869,7 @@ def main() -> None:
         "uruguay_ancap_lubricant_input_sha256": hashlib.sha256(URUGUAY_ANCAP_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "colombia_terpel_lubricant_input_sha256": hashlib.sha256(COLOMBIA_TERPEL_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "guyana_guyoil_lubricant_input_sha256": hashlib.sha256(GUYANA_GUYOIL_LUBRICANT_JSONL.read_bytes()).hexdigest(),
+        "suriname_powerfull_lubricant_input_sha256": hashlib.sha256(SURINAME_POWERFULL_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "son_mancap_input_sha256": hashlib.sha256(SON_MANCAP_JSONL.read_bytes()).hexdigest(),

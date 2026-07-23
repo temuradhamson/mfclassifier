@@ -1,0 +1,32 @@
+{
+  "deferred_sources": {
+    "SOL_SURINAME_ECOMMERCE": "Official catalog discovered with exact product codes, packages, stock and SRD prices; origin returned Cloudflare 525 during the reproducible fetch and remains pending."
+  },
+  "families": {
+    "G": 1,
+    "H": 1,
+    "M": 5,
+    "T": 2
+  },
+  "grease_source_grade_without_published_nlgi": 1,
+  "normalized_output_sha256": "66ead39f239e2f5a1b0f46aa5db7185dc70d6f5076364e502959f12a17455212",
+  "normalized_products": 9,
+  "rows_with_api_or_api_gl": 7,
+  "rows_with_iso_vg": 1,
+  "rows_with_sae": 7,
+  "snapshot_date": "2026-07-23",
+  "source_facts_sha256": "dbcb80c83bfa156972973cc4b16004bd8977d2c7d1e2fe46bbc2907f11568058",
+  "source_id": "SURINAME_POWERFULL_CURRENT_LUBRICANT_CATALOG",
+  "source_page_text_sha256": {
+    "https://powerfulllub.sr/index.php/services/15w40-synthetic/": "eb1db83832fa397f4539e7f157402405bbd581a263b00fe55241dc8958fa4a65",
+    "https://powerfulllub.sr/index.php/services/80w90-gear-oil/": "5a16764c19ededccfadf059dc9fa4916ca720c1346e76df2146070260d3ec410",
+    "https://powerfulllub.sr/index.php/services/85w140-gear-oils-gl5/": "ae3fdd6af46ed8e6156f7ed06b6a9d3797d6a7f556eb1ef782d2724de20e79e4",
+    "https://powerfulllub.sr/index.php/services/calcium-grease-ep-3/": "136b311042943a0cc71500da47b54f5feb863b5382c99c4e049b5ecee20c7f4d",
+    "https://powerfulllub.sr/index.php/services/hydraulic-oil-aw-68/": "88678ff76c43da135e20fbf84b4bdc1e7ae4329e0bb60dfc16a3ed4bb604f25d",
+    "https://powerfulllub.sr/index.php/services/powerfull-10w40/": "d087cf07a55189e5bafc39bba8587ceee6f3b7951e8c1dd5b63790e2f32e1528",
+    "https://powerfulllub.sr/index.php/services/sae-30-synthetic/": "ff17b40d980b1ed077e0e026b3efcf50c614c17dd0f0fadc6b3e89234ed1188e",
+    "https://powerfulllub.sr/index.php/services/sae-40-synthetic/": "bc706cb29a469743c7e851dba13b95ddc4818a38875b43df732c36b1c1e7aec0",
+    "https://powerfulllub.sr/index.php/services/sae-50-synthetic/": "0c5bb24dabb5a1bd9368edb4f8bbf36969b364da4eed3f12bca5b56fbaed95d4"
+  },
+  "source_sitemap_facts_sha256": "9ee5cd174cbf7cf7a454933c5c9208c3375fdc9d29dbe1a83603c538c63e62eb"
+}
