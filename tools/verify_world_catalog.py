@@ -248,6 +248,8 @@ def main() -> None:
     suriname_powerfull_rows = [json.loads(line) for line in (ROOT / "data/suriname-powerfull-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     trinidad_tobago_np_ultra_report = json.loads((ROOT / "data/trinidad-tobago-np-ultra-current-lubricants-report.json").read_text(encoding="utf-8"))
     trinidad_tobago_np_ultra_rows = [json.loads(line) for line in (ROOT / "data/trinidad-tobago-np-ultra-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    venezuela_pdv_report = json.loads((ROOT / "data/venezuela-pdv-current-lubricants-report.json").read_text(encoding="utf-8"))
+    venezuela_pdv_rows = [json.loads(line) for line in (ROOT / "data/venezuela-pdv-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_report = json.loads((ROOT / "data/kebs-smark-lubricant-products-report.json").read_text(encoding="utf-8"))
     kebs_smark_rows = [json.loads(line) for line in (ROOT / "data/kebs-smark-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     east_africa_report = json.loads((ROOT / "data/east-africa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -257,19 +259,32 @@ def main() -> None:
     rsb_smark_report = json.loads((ROOT / "data/rsb-smark-lubricant-products-report.json").read_text(encoding="utf-8"))
     rsb_smark_rows = [json.loads(line) for line in (ROOT / "data/rsb-smark-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     jsonl_gz_path = ROOT / "data/world-catalog-products.jsonl.gz"
+    jsonl_rows = 0
+    jsonl_product_ids = set()
+    jsonl_canonical_key_hashes = set()
     with gzip.open(jsonl_gz_path, "rt", encoding="utf-8") as stream:
-        lines = [json.loads(line) for line in stream if line.strip()]
+        for line in stream:
+            if not line.strip():
+                continue
+            row = json.loads(line)
+            jsonl_rows += 1
+            assert row["product_name_normalized"]
+            assert row["canonical_key"].split("|", 1)[0]
+            assert row["product_id"] not in jsonl_product_ids
+            jsonl_product_ids.add(row["product_id"])
+            canonical_key_hash = hashlib.sha256(row["canonical_key"].encode()).digest()
+            assert canonical_key_hash not in jsonl_canonical_key_hashes
+            jsonl_canonical_key_hashes.add(canonical_key_hash)
     local_jsonl_path = ROOT / "data/world-catalog-products.jsonl"
     if local_jsonl_path.exists():
         with local_jsonl_path.open("rb") as plain, gzip.open(jsonl_gz_path, "rb") as packed:
             assert stream_sha256(plain) == stream_sha256(packed)
     assert report["status"] == "seed_only_world_catalog_incomplete"
     assert report["confirmed_world_total"] is None
-    assert len(lines) == report["canonical_rows"]
-    assert len({row["product_id"] for row in lines}) == len(lines)
-    assert len({row["canonical_key"] for row in lines}) == len(lines)
-    assert all(row["product_name_normalized"] for row in lines)
-    assert all(row["canonical_key"].split("|", 1)[0] for row in lines)
+    assert jsonl_rows == report["canonical_rows"]
+    assert len(jsonl_product_ids) == jsonl_rows
+    assert len(jsonl_canonical_key_hashes) == jsonl_rows
+    del jsonl_product_ids, jsonl_canonical_key_hashes
     assert report["normalized_input_sha256"] == hashlib.sha256((ROOT / "data/catalog-v3.json").read_bytes()).hexdigest()
 
     for source in policy["sources"]:
@@ -288,8 +303,8 @@ def main() -> None:
         assert stream_sha256(plain) == stream_sha256(packed)
     assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
     assert not db.execute("PRAGMA foreign_key_check").fetchall()
-    assert db.execute("SELECT count(*) FROM products").fetchone()[0] == len(lines)
-    assert len(lines) == (
+    assert db.execute("SELECT count(*) FROM products").fetchone()[0] == jsonl_rows
+    assert jsonl_rows == (
         101505
         + report["anp_brazil_monitoring_historical_identities_added"]
         + report["qingdao_china_products_added"]
@@ -308,6 +323,7 @@ def main() -> None:
         + len(guyana_guyoil_rows)
         + len(suriname_powerfull_rows)
         + len(trinidad_tobago_np_ultra_rows)
+        + len(venezuela_pdv_rows)
         - report["gm_dual_standard_license_rows_merged"]
         - report["fuchs_exact_payload_identity_rows_matched"]
         - report["fuchs_exact_content_identity_rows_matched"]
@@ -1013,9 +1029,9 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 4973
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3044
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 116725
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 116724
-    assert report["quality_issues"]["professional_key_incomplete"] == 78499
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 116748
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 116747
+    assert report["quality_issues"]["professional_key_incomplete"] == 78505
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
@@ -1023,7 +1039,7 @@ def main() -> None:
         GROUP BY p.family_code
     """)) == {
         "C": 2281, "E": 149, "G": 12373, "H": 5257, "I": 3847,
-        "M": 23393, "S": 12117, "T": 11815, "TF": 6671, "U": 596,
+        "M": 23397, "S": 12117, "T": 11815, "TF": 6673, "U": 596,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -2188,6 +2204,26 @@ def main() -> None:
     assert db.execute(
         "SELECT count(*) FROM product_sources WHERE source_id='TRINIDAD_TOBAGO_NP_ULTRA_CURRENT_LUBRICANT_CATALOG'"
     ).fetchone()[0] == 141
+    assert venezuela_pdv_report["normalized_products"] == len(venezuela_pdv_rows) == 23
+    assert venezuela_pdv_report["cpe_package_rows"] == 39
+    assert venezuela_pdv_report["unique_cpe_codes"] == 39
+    assert venezuela_pdv_report["technical_pdfs_audited"] == 21
+    assert venezuela_pdv_report["families"] == {"H": 2, "M": 17, "T": 2, "TF": 2}
+    assert venezuela_pdv_report["rows_with_sae"] == 16
+    assert venezuela_pdv_report["rows_with_api_or_api_gl"] == 18
+    assert venezuela_pdv_report["rows_with_iso_vg"] == 2
+    assert sum(len(row["packages"]) for row in venezuela_pdv_rows) == 39
+    assert len({package["cpe"] for row in venezuela_pdv_rows for package in row["packages"]}) == 39
+    assert all(row["brand"] == "PDV" and row["market"] == "Venezuela" for row in venezuela_pdv_rows)
+    assert all(not ({"address", "phone", "email", "contact_person"} & set(row)) for row in venezuela_pdv_rows)
+    assert policy_by_id["VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG"]["source_sha256"] == venezuela_pdv_report["normalized_output_sha256"]
+    assert policy_by_id["VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG"]["observed_count"] == 23
+    assert db.execute(
+        "SELECT count(*) FROM products WHERE source_id='VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG'"
+    ).fetchone()[0] == 23
+    assert db.execute(
+        "SELECT count(*) FROM product_sources WHERE source_id='VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG'"
+    ).fetchone()[0] == 23
     assert policy_by_id["nsf-white-book"]["bulk_ingest_allowed"] is False
     assert policy_by_id["FLENDER_T7300_APPROVED_LUBRICANTS"]["bulk_ingest_allowed"] is False
     chemexpo_names = {row["product_name"].casefold() for row in epa_chemexpo_rows}
@@ -2617,7 +2653,7 @@ def main() -> None:
     db.close()
     print(json.dumps({
         "status": "ok",
-        "canonical_rows": len(lines),
+        "canonical_rows": jsonl_rows,
         "active_offers": report["active_offers"],
         "blocked_bulk_sources": len(report["bulk_sources_blocked"]),
         "flagged_legacy_motor_enkt_conflicts": flagged_motor_enkt,

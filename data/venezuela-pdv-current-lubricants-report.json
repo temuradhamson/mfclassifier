@@ -1,0 +1,36 @@
+{
+  "audited_not_ingested_as_current_products": [
+    "MOTO PREMIUM 4T SEMISINTETICO.pdf",
+    "SUPRA SN MX.pdf"
+  ],
+  "bundle_sha256": {
+    "catalog": "dabc454acaba307dbafbdc39d7bbd7e0fbe96f946bb24eccfb171b18fb8202bb",
+    "cpe": "cb476ea2deb5a42d3547c02edaae4f8815552e2c6244c023d203a1f93e4e2bb9",
+    "quality": "e145dcafeb49461c3ec8befe1d27e52a10e21093beb2727d597d2342d9378278",
+    "safety": "225884a222945a3a3ade30f9fd7d16028b8b5c74c1b027078a22b7977132d3d7",
+    "sencamer": "6b7cc4ddbf946f8989ed8dfbe7ecc5898d130517a6a16dbf6c7d01b57500048b",
+    "technical": "958881705b218a13f08f133b4ace1ed1b04adab16e7a343a39c85a2eb3c7c639"
+  },
+  "cpe_package_rows": 39,
+  "critical_source_conflicts": [
+    "ULTRADIESEL CJ-4 PDF is byte-identical to CI-4 PDF and its body describes CI-4/SL; CJ-4/SN is retained only from current catalogue/CPE evidence.",
+    "Current Agrofluido 100 CPE/catalog designation conflicts with linked historical SAE 10W-30 TDS; 100 is retained as source_grade and 10W-30 is not assigned."
+  ],
+  "families": {
+    "H": 2,
+    "M": 17,
+    "T": 2,
+    "TF": 2
+  },
+  "normalized_output_sha256": "8c781f1be1b10bedc518f6167f66e5bc776aae6423d10feb2f0e03465651ea73",
+  "normalized_products": 23,
+  "rows_with_api_or_api_gl": 18,
+  "rows_with_iso_vg": 2,
+  "rows_with_sae": 16,
+  "snapshot_date": "2026-07-23",
+  "source_facts_sha256": "be0fd3e6685738a75d2ca09fe6050eaf4394967e9ca8302ac5f5df3650029978",
+  "source_id": "VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG",
+  "source_page_text_sha256": "2ec92f982aba96b64c6682adf12239e553aed858202dc6e3948fd647f1c6e426",
+  "technical_pdfs_audited": 21,
+  "unique_cpe_codes": 39
+}

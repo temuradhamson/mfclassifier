@@ -2611,6 +2611,21 @@
       "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_page_or_pdf_redistribution",
       "observed_count": 141,
       "notes": "All 63 current product pages and 79 linked PDF URLs (76 unique payloads) were audited. Fifty-nine series expand to 141 product-grade identities using explicit SAE, ISO VG, NLGI, DOT and source grades. Three duplicate pages are collapsed; coolant concentrate and premix remain distinct. One unrelated turbine PDS linked from the hydraulic page is excluded. OEM and performance language remains source-reported rather than independent approval."
+    },
+    {
+      "source_id": "VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG",
+      "title": "Current official PDV lubricant CPE catalog for Venezuela",
+      "owner": "Lubricantes PDV Venezuela / PDVSA Ecuador",
+      "source_type": "official_current_distributor_cpe_workbook_catalog_and_linked_manufacturer_technical_documents",
+      "source_locator": "data/venezuela-pdv-current-lubricants.jsonl",
+      "source_url": "https://lubricantespdv.com/",
+      "terms_url": "https://lubricantespdv.com/",
+      "source_sha256": "8c781f1be1b10bedc518f6167f66e5bc776aae6423d10feb2f0e03465651ea73",
+      "access_status": "public_official_distributor_and_manufacturer_evidence_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_page_pdf_or_certificate_redistribution",
+      "observed_count": 23,
+      "notes": "The current CPE workbook is the denominator: 39 unique package certificates collapse to 23 current product-grade identities. All 21 linked technical PDFs and the current catalog, CPE, SENCAMER, quality and safety bundles were audited. The CJ-4-named TDS is byte-identical to the CI-4 TDS and describes CI-4/SL, so CJ-4/SN is retained only from current catalog/CPE evidence. Agrofluido 100 conflicts with the historical SAE 10W-30 TDS and remains source grade 100 without silent mapping."
     }
   ]
 }
