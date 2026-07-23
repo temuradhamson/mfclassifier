@@ -107,6 +107,7 @@ SURINAME_POWERFULL_LUBRICANT_JSONL = ROOT / "data" / "suriname-powerfull-current
 TRINIDAD_TOBAGO_NP_ULTRA_JSONL = ROOT / "data" / "trinidad-tobago-np-ultra-current-lubricants.jsonl"
 VENEZUELA_PDV_JSONL = ROOT / "data" / "venezuela-pdv-current-lubricants.jsonl"
 JAMAICA_FUTROIL_TEK_JSONL = ROOT / "data" / "jamaica-futroil-tek-current-lubricants.jsonl"
+CUBA_CUBALUB_2007_JSONL = ROOT / "data" / "cuba-cubalub-2007-official-products.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
 SON_MANCAP_JSONL = ROOT / "data" / "son-mancap-chemical-lubricant-products.jsonl"
@@ -3844,6 +3845,59 @@ def jamaica_futroil_tek_record(row: dict) -> dict:
     return record
 
 
+def cuba_cubalub_2007_record(row: dict) -> dict:
+    """Convert one historical CUBALUB identity from Resolution 122/2007."""
+    technical = row["technical"]
+    performance = [
+        *(f"API {value}" for value in technical["api"]),
+        *(f"API {value}" for value in technical["api_gl"]),
+        *technical["performance"],
+    ]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Cuba Official Gazette historical CUBALUB price catalog",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": "",
+        "api_class": "; ".join(performance),
+        "viscosity": "",
+        "grease_class": "",
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": "official_government_gazette_historical_product_price_catalog",
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update({
+        "api": technical["api"],
+        "api_gl": technical["api_gl"],
+        "source_grade": technical["source_grade"],
+        "performance_source_reported": technical["performance"],
+        "package_rows_source_reported": row["package_rows"],
+        "source_product_name": row["source_product_name"],
+        "document_date": row["document_date"],
+        "resolution_date": row["resolution_date"],
+        "source_pages": [str(value) for value in row["source_pages"]],
+        "source_url": row["source_url"],
+        "source_pdf_sha256": row["source_pdf_sha256"],
+        "source_quality_flags": row["flags"],
+    })
+    record["canonical_key"] += f"|cuba_cubalub_2007_product:{normalize(row['source_record_id'])}"
+    record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    return record
+
+
 def kebs_smark_record(row: dict) -> dict:
     """Convert one normalized product identity from the public KEBS S-Mark directory."""
     technical = row["technical"]
@@ -5694,6 +5748,9 @@ def main() -> None:
     jamaica_futroil_tek_source_rows = [json.loads(line) for line in JAMAICA_FUTROIL_TEK_JSONL.read_text(encoding="utf-8").splitlines() if line]
     jamaica_futroil_tek_records = [jamaica_futroil_tek_record(row) for row in jamaica_futroil_tek_source_rows]
     input_records.extend(jamaica_futroil_tek_records)
+    cuba_cubalub_2007_source_rows = [json.loads(line) for line in CUBA_CUBALUB_2007_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    cuba_cubalub_2007_records = [cuba_cubalub_2007_record(row) for row in cuba_cubalub_2007_source_rows]
+    input_records.extend(cuba_cubalub_2007_records)
     ecuador_inen_current_record_by_id = {
         raw["source_record_id"]: record
         for raw, record in zip(ecuador_inen_current_source_rows, ecuador_inen_current_records)
@@ -8096,6 +8153,7 @@ def main() -> None:
         "trinidad_tobago_np_ultra_input_sha256": hashlib.sha256(TRINIDAD_TOBAGO_NP_ULTRA_JSONL.read_bytes()).hexdigest(),
         "venezuela_pdv_input_sha256": hashlib.sha256(VENEZUELA_PDV_JSONL.read_bytes()).hexdigest(),
         "jamaica_futroil_tek_input_sha256": hashlib.sha256(JAMAICA_FUTROIL_TEK_JSONL.read_bytes()).hexdigest(),
+        "cuba_cubalub_2007_input_sha256": hashlib.sha256(CUBA_CUBALUB_2007_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "son_mancap_input_sha256": hashlib.sha256(SON_MANCAP_JSONL.read_bytes()).hexdigest(),

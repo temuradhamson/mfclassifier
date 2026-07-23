@@ -252,6 +252,8 @@ def main() -> None:
     venezuela_pdv_rows = [json.loads(line) for line in (ROOT / "data/venezuela-pdv-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     jamaica_futroil_tek_report = json.loads((ROOT / "data/jamaica-futroil-tek-current-lubricants-report.json").read_text(encoding="utf-8"))
     jamaica_futroil_tek_rows = [json.loads(line) for line in (ROOT / "data/jamaica-futroil-tek-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    cuba_cubalub_2007_report = json.loads((ROOT / "data/cuba-cubalub-2007-official-products-report.json").read_text(encoding="utf-8"))
+    cuba_cubalub_2007_rows = [json.loads(line) for line in (ROOT / "data/cuba-cubalub-2007-official-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_report = json.loads((ROOT / "data/kebs-smark-lubricant-products-report.json").read_text(encoding="utf-8"))
     kebs_smark_rows = [json.loads(line) for line in (ROOT / "data/kebs-smark-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     east_africa_report = json.loads((ROOT / "data/east-africa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -327,6 +329,7 @@ def main() -> None:
         + len(trinidad_tobago_np_ultra_rows)
         + len(venezuela_pdv_rows)
         + len(jamaica_futroil_tek_rows)
+        + len(cuba_cubalub_2007_rows)
         - report["gm_dual_standard_license_rows_merged"]
         - report["fuchs_exact_payload_identity_rows_matched"]
         - report["fuchs_exact_content_identity_rows_matched"]
@@ -1032,17 +1035,17 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 4973
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3044
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 116777
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 116776
-    assert report["quality_issues"]["professional_key_incomplete"] == 78522
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 116882
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 116881
+    assert report["quality_issues"]["professional_key_incomplete"] == 78625
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
         WHERE q.issue_code='professional_key_incomplete'
         GROUP BY p.family_code
     """)) == {
-        "C": 2281, "E": 149, "G": 12375, "H": 5257, "I": 3847,
-        "M": 23404, "S": 12118, "T": 11817, "TF": 6677, "U": 597,
+        "C": 2289, "E": 149, "G": 12383, "H": 5262, "I": 3847,
+        "M": 23431, "S": 12124, "T": 11830, "TF": 6678, "U": 632,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -2239,6 +2242,31 @@ def main() -> None:
     assert all(row["source_image_sha256"] for row in jamaica_futroil_tek_rows)
     assert policy_by_id["JAMAICA_FESCO_FUTROIL_CURRENT_LUBRICANT_CATALOG"]["source_sha256"] == jamaica_futroil_tek_report["normalized_output_sha256"]
     assert policy_by_id["JAMAICA_LUBIT_TEK_CURRENT_LUBRICANT_CATALOG"]["source_sha256"] == jamaica_futroil_tek_report["normalized_output_sha256"]
+
+    assert cuba_cubalub_2007_report["records"] == len(cuba_cubalub_2007_rows) == 105
+    assert cuba_cubalub_2007_report["pdf_pages"] == 17
+    assert cuba_cubalub_2007_report["resolution_number"] == "122"
+    assert cuba_cubalub_2007_report["families"] == {
+        "C": 8, "G": 8, "H": 5, "M": 29, "S": 6, "T": 13, "TF": 1, "U": 35,
+    }
+    assert cuba_cubalub_2007_report["rows_with_api"] == 4
+    assert cuba_cubalub_2007_report["rows_with_api_gl"] == 4
+    assert len(cuba_cubalub_2007_report["explicitly_excluded_non_lubricants"]) == 4
+    assert all(row["brand"] == "CUBALUB" and row["market"] == "CUBA" for row in cuba_cubalub_2007_rows)
+    assert all(row["lifecycle_status"] == "historical_official_price_catalog_current_status_unverified" for row in cuba_cubalub_2007_rows)
+    assert all(not ({"address", "phone", "email", "contact_person"} & set(row)) for row in cuba_cubalub_2007_rows)
+    assert not any(
+        row["technical"]["sae_engine"] or row["technical"]["sae_gear"]
+        or row["technical"]["iso_vg"] or row["technical"]["nlgi"]
+        for row in cuba_cubalub_2007_rows
+    )
+    assert policy_by_id["CUBA_CUBALUB_2007_OFFICIAL_PRICE_CATALOG"]["source_sha256"] == hashlib.sha256(
+        (ROOT / "data/cuba-cubalub-2007-official-products.jsonl").read_bytes()
+    ).hexdigest()
+    assert policy_by_id["CUBA_CUBALUB_2007_OFFICIAL_PRICE_CATALOG"]["observed_count"] == 105
+    assert db.execute(
+        "SELECT count(*) FROM products WHERE source_id='CUBA_CUBALUB_2007_OFFICIAL_PRICE_CATALOG'"
+    ).fetchone()[0] == 105
     assert policy_by_id["VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG"]["observed_count"] == 23
     assert db.execute(
         "SELECT count(*) FROM products WHERE source_id='VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG'"

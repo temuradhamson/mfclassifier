@@ -1,0 +1,34 @@
+{
+  "classification_note": "Unlabelled numeric grades remain source_grade. They are not silently converted into SAE, ISO VG or NLGI classifications.",
+  "explicitly_excluded_non_lubricants": [
+    "Caucho 32",
+    "Aceite Caucho 68",
+    "Caucho 100",
+    "Aceite Sigatoka"
+  ],
+  "families": {
+    "C": 8,
+    "G": 8,
+    "H": 5,
+    "M": 29,
+    "S": 6,
+    "T": 13,
+    "TF": 1,
+    "U": 35
+  },
+  "lifecycle_note": "The official 2007 price catalog proves historical product identities and packages. It does not prove current production, current sale, current specifications or current regulatory approval.",
+  "manufacturer": "Empresa Cubana de Lubricantes (CUBALUB)",
+  "parent_entity": "Unión Cubapetróleo (CUPET)",
+  "pdf_pages": 17,
+  "publication_date": "2007-05-18",
+  "records": 105,
+  "resolution_date": "2007-04-30",
+  "resolution_number": "122",
+  "rows_with_api": 4,
+  "rows_with_api_gl": 4,
+  "schema_version": 1,
+  "snapshot_date": "2026-07-23",
+  "source_id": "CUBA_CUBALUB_2007_OFFICIAL_PRICE_CATALOG",
+  "source_pdf_sha256": "e719cd5794badcb05d08f5404c34e642e712e4379548cf457642ff9036bbf22c",
+  "source_url": "https://www.cibercuba.com/s/gacetaoficial/pdf/go_o_039_2007.pdf"
+}

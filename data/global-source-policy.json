@@ -2656,6 +2656,21 @@
       "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_page_or_image_redistribution",
       "observed_count": 21,
       "notes": "Fifteen current relevant product cards expand to 21 product-grade identities: four AW hydraulic ISO VG grades, two monograde engine oils, coolant, ATF, two refrigeration compressor oils, cutting oil, three synthetic-blend engine grades, two GL-5 gear grades, two greases, SAE 10W drive-train fluid and turbine oil. Fourteen exact artwork payloads are pinned by SHA-256. EP2 is retained as the product label without silently assigning NLGI 2; the 3% moly grease and turbine oil remain without invented viscosity grades."
+    },
+    {
+      "source_id": "CUBA_CUBALUB_2007_OFFICIAL_PRICE_CATALOG",
+      "title": "Historical CUBALUB lubricant product and package catalog in Cuba's Official Gazette No. 039/2007",
+      "owner": "Ministerio de la Industria Básica / Empresa Cubana de Lubricantes (CUBALUB), CUPET",
+      "source_type": "official_government_gazette_historical_price_catalog_mirrored_copy",
+      "source_locator": "data/cuba-cubalub-2007-official-products.jsonl",
+      "source_url": "https://www.cibercuba.com/s/gacetaoficial/pdf/go_o_039_2007.pdf",
+      "terms_url": "https://www.cibercuba.com/",
+      "source_sha256": "e3cf3567d5cebd067e4b2d98a3cde81034cc5cf4bbf8efae81e14daf8dbe3df2",
+      "access_status": "public_mirrored_official_government_publication_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_pdf_redistribution",
+      "observed_count": 105,
+      "notes": "Resolution 122 of 30 April 2007 attributes the four published annexes to state producer CUBALUB/CUPET. The first annex gives the complete liquid-product denominator and later annexes repeat packages; Annex 4 gives grease packages. 105 historical lubricant identities are retained, while four rows explicitly headed non-lubricants are excluded. Numeric grades remain source grades unless API SJ, CD, GL-4 or GL-5 is printed. The source proves historical identities and packages, not current production, availability or approval."
     }
   ]
 }
