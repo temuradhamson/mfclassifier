@@ -1,0 +1,23 @@
+{
+  "audit_boundary": "Only explicit product/grade identities are normalized. Edge, Magnatec, GTX and Actevo are named as series but have no printed portfolio grades and therefore remain report-only.",
+  "families": {
+    "M": 7,
+    "T": 4
+  },
+  "normalized_output_sha256": "350836720cfa25c47350f03214fa59de384f80373fcb1a5d1a2f4d38f562079e",
+  "normalized_products": 11,
+  "rows_with_sae": 5,
+  "rows_with_source_packages": 4,
+  "series_without_published_grades_report_only": [
+    "Castrol Edge",
+    "Castrol Magnatec",
+    "Castrol GTX",
+    "Castrol Actevo"
+  ],
+  "snapshot_date": "2026-07-23",
+  "source_id": "GUYANA_GUYOIL_CURRENT_CASTROL_LUBRICANT_CATALOG",
+  "source_page_api_sha256": "fc86ef6d1ac5b7ec31d8f8c05eae3f30ce187d400cda93ca643b550793038c1b",
+  "source_page_facts_sha256": "f89a67e9a21654a2641b7d472fd906d7134870064252611ffced33fab5f0cd1e",
+  "source_page_id": 1817,
+  "source_page_modified": "2025-12-29T20:15:12"
+}

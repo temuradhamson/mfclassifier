@@ -2566,6 +2566,21 @@
       "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_page_or_pdf_redistribution",
       "observed_count": 27,
       "notes": "The complete official sitemap exposed 30 product cards with documents. Three duplicate audience-card occurrences were collapsed by identical document identity, yielding 27 unique current products backed by 26 technical-sheet and 27 safety-sheet links. Explicit SAE, API/API GL, ACEA, ILSAC, JASO, DOT and coolant-standard facts are retained. Marketing prose and source PDFs are excluded."
+    },
+    {
+      "source_id": "GUYANA_GUYOIL_CURRENT_CASTROL_LUBRICANT_CATALOG",
+      "title": "Current explicit lubricant products distributed by state-owned GUYOIL in Guyana",
+      "owner": "The Guyana Oil Company Limited (GUYOIL)",
+      "source_type": "official_state_owned_distributor_product_catalog_page",
+      "source_locator": "data/guyana-guyoil-current-lubricants.jsonl",
+      "source_url": "https://guyoil.gy/fuel-products/",
+      "terms_url": "https://guyoil.gy/privacy-policy/",
+      "source_sha256": "350836720cfa25c47350f03214fa59de384f80373fcb1a5d1a2f4d38f562079e",
+      "access_status": "public_official_state_owned_distributor_information_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_page_redistribution",
+      "observed_count": 11,
+      "notes": "The complete current official page was audited. Eleven explicit product/grade identities are normalized: seven engine/two-stroke lubricants and four gear-oil products. Four broader series (Edge, Magnatec, GTX and Actevo) are report-only because their portfolio grades are not printed. Published package sizes are retained for four monogrades; distributor listing is not represented as independent performance approval."
     }
   ]
 }
