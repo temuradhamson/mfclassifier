@@ -56,6 +56,7 @@
   "scope_global_input_sha256": "c1acad596643876ed24cb4855e6de71557cfa7eece5a7badd1f77e5256ab3b7a",
   "angola_sonangol_ngol_input_sha256": "76e4c2c45ee422872000eb415b2656cf613e539e0c3ae492ee6d472cc6ba8886",
   "madagascar_galana_mobil_input_sha256": "2329dc6c898f6912b3b7bcfa79bad1dfb8e89a2379a136a759e81b9daa540a26",
+  "comoros_sch_review_sha256": "868d3ae9e5f0edad72f309dabef671133a664cc14c9c5b16a3f58a18b50397f6",
   "uruguay_ancap_lubricant_input_sha256": "715b3c7a20df420da36ca85a1036303c69db8bc734b9559c57cb2ca920f636e0",
   "colombia_terpel_lubricant_input_sha256": "6d279e1cf0fabc772f5a793bad92d555a9e96242f226b70b9ccea031fd387586",
   "guyana_guyoil_lubricant_input_sha256": "350836720cfa25c47350f03214fa59de384f80373fcb1a5d1a2f4d38f562079e",
@@ -892,7 +893,8 @@
     "ETHIOPIA_NOC_CALTEX_RECOVERABLE_OFFICIAL_ARCHIVE",
     "SCOPE_GLOBAL_COMPLETE_LIVE_PRODUCT_CATALOG",
     "ANGOLA_SONANGOL_NGOL_OFFICIAL_44_PAGE_CATALOG",
-    "MADAGASCAR_GALANA_COMPLETE_MOBIL_PRODUCT_API"
+    "MADAGASCAR_GALANA_COMPLETE_MOBIL_PRODUCT_API",
+    "COMOROS_SCH_COMPLETE_PUBLIC_SITE_LUBRICANT_SCOPE_REVIEW"
   ],
   "bulk_sources_blocked": [
     "fuchs-benelux",

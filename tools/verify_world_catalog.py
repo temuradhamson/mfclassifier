@@ -266,6 +266,7 @@ def main() -> None:
     angola_ngol_rows = [json.loads(line) for line in (ROOT / "data/angola-sonangol-ngol-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     madagascar_galana_report = json.loads((ROOT / "data/madagascar-galana-mobil-report.json").read_text(encoding="utf-8"))
     madagascar_galana_rows = [json.loads(line) for line in (ROOT / "data/madagascar-galana-mobil-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    comoros_sch_report = json.loads((ROOT / "data/comoros-sch-lubricant-scope-review.json").read_text(encoding="utf-8"))
     uruguay_ancap_report = json.loads((ROOT / "data/uruguay-ancap-current-lubricants-report.json").read_text(encoding="utf-8"))
     uruguay_ancap_rows = [json.loads(line) for line in (ROOT / "data/uruguay-ancap-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     colombia_terpel_report = json.loads((ROOT / "data/colombia-terpel-current-lubricants-report.json").read_text(encoding="utf-8"))
@@ -3011,6 +3012,52 @@ def main() -> None:
         "SELECT count(*) FROM product_offers "
         "WHERE source_id='MADAGASCAR_GALANA_COMPLETE_MOBIL_PRODUCT_API'"
     ).fetchone()[0] == 0
+    assert comoros_sch_report["sitemap_urls"] == 280
+    assert comoros_sch_report["sitemap_url_counts"] == {
+        "actualite_detail": 23,
+        "documentation_detail": 4,
+        "point_of_sale_detail": 183,
+        "region_detail": 26,
+    }
+    assert comoros_sch_report["official_product_categories"] == [
+        "Kérosène", "Gaz butane", "Jet A1", "Essence & Gasoil",
+    ]
+    assert comoros_sch_report["relevant_lubricant_product_rows"] == 0
+    assert sum(
+        document["printed_pages"]
+        for document in comoros_sch_report["reviewed_documents"]
+    ) == 42
+    assert not any(
+        comoros_sch_report["reviewed_document_keyword_hits"].values()
+    )
+    assert comoros_sch_report[
+        "historical_shell_partnership_not_promoted_to_current_sku_evidence"
+    ] is True
+    assert comoros_sch_report["offers_created"] == 0
+    assert report["comoros_sch_review_sha256"] == hashlib.sha256(
+        (ROOT / "data/comoros-sch-lubricant-scope-review.json").read_bytes()
+    ).hexdigest()
+    assert policy_by_id[
+        "COMOROS_SCH_COMPLETE_PUBLIC_SITE_LUBRICANT_SCOPE_REVIEW"
+    ]["source_sha256"] == hashlib.sha256(
+        (ROOT / "data/comoros-sch-lubricant-scope-review.json").read_bytes()
+    ).hexdigest()
+    assert comoros_sch_report["review_facts_sha256"] == (
+        "74c9ec9c77c11780825fe1feaa4f30f1375d3c7b7c82718a651642064ab0b333"
+    )
+    assert policy_by_id[
+        "COMOROS_SCH_COMPLETE_PUBLIC_SITE_LUBRICANT_SCOPE_REVIEW"
+    ]["observed_count"] == 0
+    assert db.execute(
+        "SELECT count(*) FROM products "
+        "WHERE source_id="
+        "'COMOROS_SCH_COMPLETE_PUBLIC_SITE_LUBRICANT_SCOPE_REVIEW'"
+    ).fetchone()[0] == 0
+    assert db.execute(
+        "SELECT bulk_ingest_allowed FROM sources "
+        "WHERE source_id="
+        "'COMOROS_SCH_COMPLETE_PUBLIC_SITE_LUBRICANT_SCOPE_REVIEW'"
+    ).fetchone()[0] == 1
     assert uruguay_ancap_report["catalog_product_families"] == 56
     assert uruguay_ancap_report["normalized_product_variants"] == len(uruguay_ancap_rows) == 88
     assert uruguay_ancap_report["families"] == {

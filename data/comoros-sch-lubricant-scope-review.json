@@ -1,0 +1,52 @@
+{
+  "annual_report_sha256": "10d708d8b35caf886e63d77b51d0df7bd29db22a3342d860651c2d2b688e5237",
+  "historical_shell_partnership_not_promoted_to_current_sku_evidence": true,
+  "market": "Comoros",
+  "offers_created": 0,
+  "official_product_categories": [
+    "Kérosène",
+    "Gaz butane",
+    "Jet A1",
+    "Essence & Gasoil"
+  ],
+  "official_product_page_url": "https://www.sch-km.com/nos-produits",
+  "owner": "Société Comorienne des Hydrocarbures",
+  "product_page_sha256": "2aa7935cd296293668def154a33ba2924c8f5f0c910b4d27145babc7132378dd",
+  "prospectus_sha256": "d0c1c9107b182533d4bc5bcc867733a568da12bdd0bacf1a638cec243c249b06",
+  "relevant_lubricant_product_rows": 0,
+  "review_facts_sha256": "74c9ec9c77c11780825fe1feaa4f30f1375d3c7b7c82718a651642064ab0b333",
+  "reviewed_document_keyword_hits": {
+    "antifreeze": 0,
+    "brake_fluid": 0,
+    "grease": 0,
+    "huile": 0,
+    "lubricant": 0,
+    "shell": 0
+  },
+  "reviewed_documents": [
+    {
+      "printed_pages": 36,
+      "sha256": "10d708d8b35caf886e63d77b51d0df7bd29db22a3342d860651c2d2b688e5237",
+      "url": "https://www.sch-km.com/uploads/media/67b8296cc8ca0/rapport-sch-2023-compressed.pdf"
+    },
+    {
+      "printed_pages": 6,
+      "sha256": "d0c1c9107b182533d4bc5bcc867733a568da12bdd0bacf1a638cec243c249b06",
+      "url": "https://www.sch-km.com/uploads/media/68245a445aa51/depliant-sch-2024.pdf"
+    }
+  ],
+  "schema_version": 1,
+  "scope_limit": "Zero rows applies to the complete current official SCH public site and its two published corporate product documents, not to every possible third-party retail product in Comoros.",
+  "sitemap_sha256": "6d5e896381ee8254c2d40598bae7de4b63c2a65857231d2d8bd6e5769595a4eb",
+  "sitemap_url": "https://www.sch-km.com/sitemap-fr.xml",
+  "sitemap_url_counts": {
+    "actualite_detail": 23,
+    "documentation_detail": 4,
+    "point_of_sale_detail": 183,
+    "region_detail": 26
+  },
+  "sitemap_urls": 280,
+  "snapshot_date": "2026-07-24",
+  "source_id": "COMOROS_SCH_COMPLETE_PUBLIC_SITE_LUBRICANT_SCOPE_REVIEW",
+  "status": "reviewed_zero_relevant_product_rows"
+}
