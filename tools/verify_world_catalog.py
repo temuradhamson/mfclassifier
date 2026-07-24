@@ -242,6 +242,8 @@ def main() -> None:
     mozambique_petromoc_rows = [json.loads(line) for line in (ROOT / "data/mozambique-petromoc-legacy-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     uganda_mpower_report = json.loads((ROOT / "data/uganda-mpower-current-report.json").read_text(encoding="utf-8"))
     uganda_mpower_rows = [json.loads(line) for line in (ROOT / "data/uganda-mpower-current-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    rwanda_almc_report = json.loads((ROOT / "data/rwanda-almc-current-report.json").read_text(encoding="utf-8"))
+    rwanda_almc_rows = [json.loads(line) for line in (ROOT / "data/rwanda-almc-current-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     uruguay_ancap_report = json.loads((ROOT / "data/uruguay-ancap-current-lubricants-report.json").read_text(encoding="utf-8"))
     uruguay_ancap_rows = [json.loads(line) for line in (ROOT / "data/uruguay-ancap-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     colombia_terpel_report = json.loads((ROOT / "data/colombia-terpel-current-lubricants-report.json").read_text(encoding="utf-8"))
@@ -377,6 +379,7 @@ def main() -> None:
         + report["bolivia_ypfb_lubricant_source_rows"]
         + report["mozambique_petromoc_legacy_source_rows"]
         + report["uganda_mpower_current_source_rows"]
+        + report["rwanda_almc_current_source_rows"]
         + len(uruguay_ancap_rows)
         + len(colombia_terpel_rows)
         + len(guyana_guyoil_rows)
@@ -1102,8 +1105,8 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 5191
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3115
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 117675
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 117674
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 117698
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 117697
     assert report["quality_issues"]["professional_key_incomplete"] == 79011
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
@@ -2274,6 +2277,56 @@ def main() -> None:
     assert db.execute(
         "SELECT count(*) FROM product_offers "
         "WHERE source_id='UGANDA_MPOWER_CURRENT_COMPLETE_PRODUCT_PAGES'"
+    ).fetchone()[0] == 0
+    assert rwanda_almc_report[
+        "product_grade_identities"
+    ] == len(rwanda_almc_rows) == report[
+        "rwanda_almc_current_source_rows"
+    ] == 23
+    assert rwanda_almc_report["tds_documents"] == 11
+    assert rwanda_almc_report["tds_pages"] == 13
+    assert rwanda_almc_report["families"] == {
+        "G": 3, "H": 3, "I": 7, "M": 6, "T": 4,
+    }
+    assert rwanda_almc_report["quality_flags"] == {
+        "description_mentions_15w40_but_tds_type_and_property_table_only_publish_20w50": 1,
+        "hydraulic_iso_vg32_kv100_published_as_2_3_suspected_source_typo_retained": 1,
+        "landing_page_title_claims_ep_0_1_2_3_but_tds_only_publishes_nlgi_1_2_3": 3,
+    }
+    assert rwanda_almc_report[
+        "normalized_output_sha256"
+    ] == hashlib.sha256(
+        (ROOT / "data/rwanda-almc-current-products.jsonl").read_bytes()
+    ).hexdigest()
+    assert all(
+        row["lifecycle_status"] == "current_official_catalog"
+        and row["market"] == "Rwanda"
+        and row["brand"] == "ALMC"
+        for row in rwanda_almc_rows
+    )
+    assert all(
+        not ({"address", "phone", "email", "contact_person"} & set(row))
+        for row in rwanda_almc_rows
+    )
+    assert policy_by_id[
+        "RWANDA_ALMC_CURRENT_COMPLETE_TDS_CATALOG"
+    ]["source_sha256"] == rwanda_almc_report[
+        "normalized_output_sha256"
+    ]
+    assert policy_by_id[
+        "RWANDA_ALMC_CURRENT_COMPLETE_TDS_CATALOG"
+    ]["observed_count"] == 23
+    assert db.execute(
+        "SELECT count(*) FROM products "
+        "WHERE source_id='RWANDA_ALMC_CURRENT_COMPLETE_TDS_CATALOG'"
+    ).fetchone()[0] == 23
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id='RWANDA_ALMC_CURRENT_COMPLETE_TDS_CATALOG'"
+    ).fetchone()[0] == 23
+    assert db.execute(
+        "SELECT count(*) FROM product_offers "
+        "WHERE source_id='RWANDA_ALMC_CURRENT_COMPLETE_TDS_CATALOG'"
     ).fetchone()[0] == 0
     assert uruguay_ancap_report["catalog_product_families"] == 56
     assert uruguay_ancap_report["normalized_product_variants"] == len(uruguay_ancap_rows) == 88

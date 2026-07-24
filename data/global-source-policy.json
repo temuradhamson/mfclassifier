@@ -3001,6 +3001,21 @@
       "publication_status": "attributed_transformed_nonexpressive_product_package_specification_and_evidence_facts_only_no_marketing_text_contacts_or_images_redistributed",
       "observed_count": 16,
       "notes": "The two official listings expose a complete denominator of five Goldstar and eleven Lubex detail pages (G1/H1/M9/T5), with 33 package occurrences. Pages publish no prices, stock quantities or order actions, so no offers are created. Contradictions are explicit: two GL-4 titles conflict with GL-5 specifications, three descriptions/applications disagree on SAE 140 versus 85W-140, two 2T pages report MA-2-style performance, Truck Max reports SL versus SG, and one combined MP2/MP3 grease page explicitly specifies only NLGI 3. Disputed fields are retained as source-reported evidence and excluded from strict equivalence keys."
+    },
+    {
+      "source_id": "RWANDA_ALMC_CURRENT_COMPLETE_TDS_CATALOG",
+      "title": "Complete current ALMC Rwanda technical data sheet catalog",
+      "owner": "Africa Lubricants Manufacturing Company Ltd.",
+      "source_type": "current_local_manufacturer_complete_product_page_and_linked_tds_catalog",
+      "source_locator": "data/rwanda-almc-current-products.jsonl",
+      "source_url": "https://www.almc.rw/automotive-lubricants/",
+      "terms_url": "https://www.almc.rw/terms-and-conditions",
+      "source_sha256": "17b66a8bf86d85d618af21cd4faa457388ce2b9f4ec7334a869ebb30fb5c7a53",
+      "access_status": "public_current_local_manufacturer_page_and_eleven_linked_technical_data_sheets",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_transformed_nonexpressive_product_grade_specification_typical_property_and_evidence_facts_only_no_marketing_text_contacts_images_or_source_pdfs_redistributed",
+      "observed_count": 23,
+      "notes": "The sole product page listed in the official sitemap links 11 TDS documents (13 PDF pages), expanded into 23 explicitly published product-grade identities (G3/H3/I7/M6/T4). ALMC is retained only as a manufacturer-catalog label because the company also advertises private-label production; it is not asserted as the package brand. No packages, prices, stock quantities or order actions are published, so no offers are created. The HLP ISO VG 32 KV100 value of 2.3 cSt, a description-only SAE 15W-40 mention on the 20W-50 sheet and the landing-page EP 0 claim absent from the TDS are retained as explicit source-quality flags."
     }
   ]
 }

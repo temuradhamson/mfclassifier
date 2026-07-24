@@ -1,0 +1,43 @@
+{
+  "availability_note": "The manufacturer page publishes no packages, prices, stock quantities or order actions; no offers are created.",
+  "brand_note": "ALMC is retained as the manufacturer-catalog label, not asserted as the package brand; the same company explicitly offers private-label manufacturing.",
+  "denominator_note": "All 11 TDS links on the sole product page listed in the official sitemap are included and expanded into 23 explicitly published grades.",
+  "families": {
+    "G": 3,
+    "H": 3,
+    "I": 7,
+    "M": 6,
+    "T": 4
+  },
+  "landing_pages": 1,
+  "landing_tds_links_sha256": "7999743da537cedaef9605d8cdebffc5a3d12308085d0a0e41b2d85c00b957af",
+  "normalized_output_sha256": "17b66a8bf86d85d618af21cd4faa457388ce2b9f4ec7334a869ebb30fb5c7a53",
+  "pdf_sha256": {
+    "1": "ca5508a1393dc7b143ca493f30ae7839bf1e8a796596754b3736cbcdfcce0e4b",
+    "10": "257d3c12af26299ef299badcead0eef13f3b552734311cf448a6853c27d15853",
+    "11": "571901fb44d32ddb2a443bcd701216af245e7fabdfd5dbf79bf1f6d3b710cd2e",
+    "2": "5e9f5707b288bc055f009f8a0991eaa21ffbb9657f7e3ab6e1afcb75796daaa6",
+    "3": "71ebf83255a160f6ece1f4b3c5e0dd727af1f5a0ecb2d1ce0d0ca850fb9778e1",
+    "4": "6d5659bb1592986c0dde2c54107e21988266668fb142cbeacaa28c165a484401",
+    "5": "6714db25e3afd472394b16ad16a0b4fd03611f50833222e579e603908d41c89a",
+    "6": "1fae10d81010d04f56fc9b30b54456ba4a9ab04873ebffab7284a33e70e5ace5",
+    "7": "63ed63c2ee7623c9010c846338dd9c2b0106a70bec8768d5583d6b3c552b8b80",
+    "8": "e3d154e7aa290f5025c5b8087cebcbee90872bbe590af2a6fa52b580bff46d31",
+    "9": "4b8160951de2fccc692e7f995d98a8c196fabe981b9ef2bc8d315c58d4cd5ed8"
+  },
+  "product_grade_identities": 23,
+  "publication_scope": "Factual product names, grades, specifications, typical properties, evidence URLs and hashes only; descriptions, benefits, contacts, imagery and source PDFs are excluded.",
+  "quality_flags": {
+    "description_mentions_15w40_but_tds_type_and_property_table_only_publish_20w50": 1,
+    "hydraulic_iso_vg32_kv100_published_as_2_3_suspected_source_typo_retained": 1,
+    "landing_page_title_claims_ep_0_1_2_3_but_tds_only_publishes_nlgi_1_2_3": 3
+  },
+  "schema_version": 1,
+  "sitemap_locations_sha256": "6111d8599e866cf00db7108819c3f8a9e882428ab7b5ba8bfed7568d8989d8ea",
+  "sitemap_product_pages": 1,
+  "snapshot_date": "2026-07-24",
+  "source_id": "RWANDA_ALMC_CURRENT_COMPLETE_TDS_CATALOG",
+  "status": "current_local_manufacturer_complete_tds_catalog_normalized",
+  "tds_documents": 11,
+  "tds_pages": 13
+}
