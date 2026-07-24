@@ -254,6 +254,8 @@ def main() -> None:
     rwanda_rymax_rows = [json.loads(line) for line in (ROOT / "data/rwanda-rymax-current-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     afal_east_africa_report = json.loads((ROOT / "data/afal-east-africa-featured-products-report.json").read_text(encoding="utf-8"))
     afal_east_africa_rows = [json.loads(line) for line in (ROOT / "data/afal-east-africa-featured-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    south_sudan_taam_report = json.loads((ROOT / "data/south-sudan-taam-pakelo-report.json").read_text(encoding="utf-8"))
+    south_sudan_taam_rows = [json.loads(line) for line in (ROOT / "data/south-sudan-taam-pakelo-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     uruguay_ancap_report = json.loads((ROOT / "data/uruguay-ancap-current-lubricants-report.json").read_text(encoding="utf-8"))
     uruguay_ancap_rows = [json.loads(line) for line in (ROOT / "data/uruguay-ancap-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     colombia_terpel_report = json.loads((ROOT / "data/colombia-terpel-current-lubricants-report.json").read_text(encoding="utf-8"))
@@ -394,6 +396,7 @@ def main() -> None:
         + report["rwanda_akinawa_current_source_rows"]
         + report["rwanda_rymax_products_added"]
         + report["afal_east_africa_featured_source_rows"]
+        + report["south_sudan_taam_pakelo_products_added"]
         + len(uruguay_ancap_rows)
         + len(colombia_terpel_rows)
         + len(guyana_guyoil_rows)
@@ -1119,17 +1122,17 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 5191
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3115
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 117775
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 117774
-    assert report["quality_issues"]["professional_key_incomplete"] == 79039
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 117948
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 117947
+    assert report["quality_issues"]["professional_key_incomplete"] == 79138
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
         WHERE q.issue_code='professional_key_incomplete'
         GROUP BY p.family_code
     """)) == {
-        "C": 2298, "E": 151, "G": 12431, "H": 5273, "I": 3875,
-        "M": 23581, "S": 12164, "T": 11897, "TF": 6729, "U": 640,
+        "C": 2298, "E": 151, "G": 12454, "H": 5278, "I": 3875,
+        "M": 23614, "S": 12174, "T": 11905, "TF": 6749, "U": 640,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -2632,6 +2635,72 @@ def main() -> None:
     assert db.execute(
         "SELECT count(*) FROM product_offers "
         "WHERE source_id='AFAL_CALTEX_EAST_AFRICA_FEATURED_PRODUCTS'"
+    ).fetchone()[0] == 0
+    assert south_sudan_taam_report[
+        "category_pages"
+    ] == 10
+    assert south_sudan_taam_report["product_occurrences"] == 216
+    assert south_sudan_taam_report[
+        "duplicate_category_occurrences"
+    ] == 41
+    assert south_sudan_taam_report[
+        "unique_product_codes"
+    ] == len(south_sudan_taam_rows) == report[
+        "south_sudan_taam_pakelo_source_rows"
+    ] == 175
+    assert south_sudan_taam_report["product_code_collisions"] == 0
+    assert south_sudan_taam_report[
+        "exact_existing_zf_identity_matches"
+    ] == report[
+        "south_sudan_taam_pakelo_products_matched_to_existing"
+    ] == 2
+    assert south_sudan_taam_report[
+        "new_distributor_catalog_identities"
+    ] == report[
+        "south_sudan_taam_pakelo_products_added"
+    ] == 173
+    assert south_sudan_taam_report["families"] == {
+        "C": 27, "G": 23, "H": 29, "I": 23, "M": 33,
+        "S": 10, "T": 10, "TF": 20,
+    }
+    assert south_sudan_taam_report["records_with_sae"] == 32
+    assert south_sudan_taam_report["records_with_iso_vg"] == 78
+    assert south_sudan_taam_report["records_with_nlgi"] == 19
+    assert south_sudan_taam_report[
+        "normalized_output_sha256"
+    ] == hashlib.sha256(
+        (ROOT / "data/south-sudan-taam-pakelo-products.jsonl").read_bytes()
+    ).hexdigest()
+    assert all(
+        row["market"] == "South Sudan"
+        and row["brand"] == "PAKELO"
+        and row["specifications"]["product_code"]
+        and not ({"address", "phone", "email", "contact_person"} & set(row))
+        for row in south_sudan_taam_rows
+    )
+    assert policy_by_id[
+        "SOUTH_SUDAN_TAAM_PAKELO_COMPLETE_CATEGORY_CATALOG"
+    ]["source_sha256"] == south_sudan_taam_report[
+        "normalized_output_sha256"
+    ]
+    assert policy_by_id[
+        "SOUTH_SUDAN_TAAM_PAKELO_COMPLETE_CATEGORY_CATALOG"
+    ]["observed_count"] == 175
+    assert db.execute(
+        "SELECT count(*) FROM products "
+        "WHERE source_id='SOUTH_SUDAN_TAAM_PAKELO_COMPLETE_CATEGORY_CATALOG'"
+    ).fetchone()[0] == 173
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id='SOUTH_SUDAN_TAAM_PAKELO_COMPLETE_CATEGORY_CATALOG'"
+    ).fetchone()[0] == 175
+    assert db.execute(
+        "SELECT count(DISTINCT product_id) FROM product_sources "
+        "WHERE source_id='SOUTH_SUDAN_TAAM_PAKELO_COMPLETE_CATEGORY_CATALOG'"
+    ).fetchone()[0] == 175
+    assert db.execute(
+        "SELECT count(*) FROM product_offers "
+        "WHERE source_id='SOUTH_SUDAN_TAAM_PAKELO_COMPLETE_CATEGORY_CATALOG'"
     ).fetchone()[0] == 0
     assert uruguay_ancap_report["catalog_product_families"] == 56
     assert uruguay_ancap_report["normalized_product_variants"] == len(uruguay_ancap_rows) == 88

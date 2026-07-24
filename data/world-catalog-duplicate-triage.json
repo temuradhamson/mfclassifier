@@ -132,8 +132,8 @@
       "triage_status": "insufficient_comparable_evidence"
     }
   ],
-  "canonical_products": 117774,
-  "compressed_database_sha256": "183d4831e84d55eeaec05058a50cd2dfe2c68ec2d0b69bc9d021b8e018c6b8b0",
+  "canonical_products": 117947,
+  "compressed_database_sha256": "0042ae8d6831db982ab33983a297e4482fc59a123c3c62825cbe7420016a0778",
   "distinct_products_in_review": 1306,
   "duplicate_decision_rows_collapsed": {
     "by_decision_combination": {

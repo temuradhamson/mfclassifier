@@ -1,0 +1,53 @@
+{
+  "category_pages": 10,
+  "denominator_note": "Ten category pages publish 216 product occurrences. Exact product-code deduplication removes 41 repeated category occurrences, leaving 175 unique identities with no code/title/grade collision.",
+  "duplicate_category_occurrences": 41,
+  "exact_existing_zf_identity_matches": 2,
+  "families": {
+    "C": 27,
+    "G": 23,
+    "H": 29,
+    "I": 23,
+    "M": 33,
+    "S": 10,
+    "T": 10,
+    "TF": 20
+  },
+  "new_distributor_catalog_identities": 173,
+  "normalized_output_sha256": "da5c6cc7a3d233e1a574b427e7f9b5b5a1bea953db0f70cd5336dff2b1c04c38",
+  "page_counts": {
+    "Biodegradable": 8,
+    "Earth moving machinery": 40,
+    "Food Grade": 15,
+    "Industry": 60,
+    "Marine": 4,
+    "Motorbikes 2 stroke / 4 stroke": 18,
+    "Passenger cars and Vans": 31,
+    "Racing": 11,
+    "Sprays and Additives": 3,
+    "Truck and Bus": 26
+  },
+  "page_facts_sha256": {
+    "additives-and-spray.php": "9b08fe87eb45df8d4b504f85d07a45a9c504be135b39c1f32a1610f1c82207aa",
+    "biodegradable.php": "47d028c199c184589d4495239cd99b72e4d970442b56cd114637a808859056a7",
+    "cars-and-vans.php": "c62eea1f52b9a20224058256e2b3a91410c1fc151d309c40169efdf514a20f41",
+    "earth-moving-machinery.php": "3a257e2fea2a0de148c86c4112c94159529b3bd7207347ef9d61b3a940a4880b",
+    "food-grade.php": "0fbe1e0053bf2e9add4bbef16068c5d2d1fc060800c3144ff9abfdc44ed4d332",
+    "industry.php": "a353bc701a9f31750ad198a4599f7e4a7cc3046b6964edaf01fbc127982dba60",
+    "marine.php": "f1c9b961782f350ec2ffea51f163d6cc4646da0522ee10389c25aaae0166f078",
+    "motorbikes-2-stroke-4-stroke.php": "bd4c948e1d354be1d26a4cf5e6caf27df80a0450e43aca42dece76915b4ff900",
+    "racing.php": "b6ba50428e82b23e96cdc6b2e302e8169978a59dd7aba33359f1911597aa1b70",
+    "truck-bus.php": "368b5ed4681cf4772efecaab0f67fcc83354a0a3a378d7d07875a9159f257fc2"
+  },
+  "product_code_collisions": 0,
+  "product_occurrences": 216,
+  "publication_scope": "Factual product names, grades, product codes, category membership and evidence hashes only; descriptions, artwork and contacts are not redistributed.",
+  "records_with_iso_vg": 78,
+  "records_with_nlgi": 19,
+  "records_with_sae": 32,
+  "schema_version": 1,
+  "snapshot_date": "2026-07-24",
+  "source_id": "SOUTH_SUDAN_TAAM_PAKELO_COMPLETE_CATEGORY_CATALOG",
+  "status": "live_official_south_sudan_distributor_complete_category_catalog",
+  "unique_product_codes": 175
+}

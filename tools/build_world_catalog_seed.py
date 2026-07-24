@@ -108,6 +108,7 @@ MOGAS_GLOBAL_MARKET_SHOPS_JSONL = ROOT / "data" / "mogas-global-market-shop-obse
 RWANDA_AKINAWA_CURRENT_JSONL = ROOT / "data" / "rwanda-akinawa-current-products.jsonl"
 RWANDA_RYMAX_CURRENT_JSONL = ROOT / "data" / "rwanda-rymax-current-products.jsonl"
 AFAL_EAST_AFRICA_FEATURED_JSONL = ROOT / "data/afal-east-africa-featured-products.jsonl"
+SOUTH_SUDAN_TAAM_PAKELO_JSONL = ROOT / "data/south-sudan-taam-pakelo-products.jsonl"
 URUGUAY_ANCAP_LUBRICANT_JSONL = ROOT / "data" / "uruguay-ancap-current-lubricants.jsonl"
 COLOMBIA_TERPEL_LUBRICANT_JSONL = ROOT / "data" / "colombia-terpel-current-lubricants.jsonl"
 GUYANA_GUYOIL_LUBRICANT_JSONL = ROOT / "data" / "guyana-guyoil-current-lubricants.jsonl"
@@ -3774,6 +3775,82 @@ def afal_east_africa_featured_record(row: dict) -> dict:
         "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
     )
     return record
+
+
+def south_sudan_taam_pakelo_record(row: dict) -> dict:
+    """Convert one Pakelo product/code published by Taam South Sudan."""
+    specs = row["specifications"]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Complete Taam South Sudan Pakelo category catalog",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": specs.get("sae_engine", ""),
+        "api_class": "",
+        "viscosity": specs.get("iso_vg", ""),
+        "grease_class": specs.get("nlgi", ""),
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": int(row["source_record_id"].rsplit("-", 1)[-1]),
+        "evidence_status": row["evidence_status"],
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update(specs)
+    record["specifications"].update({
+        "source_url": row["source_url"],
+        "source_product_name": row["source_product_name"],
+        "source_facts_sha256": row["source_facts_sha256"],
+        "no_offer_created_no_price_package_stock_or_order_action": True,
+    })
+    record["canonical_key"] += (
+        f"|south_sudan_taam_pakelo:{normalize(row['source_record_id'])}"
+    )
+    record["product_id"] = (
+        "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    )
+    return record
+
+
+def merge_south_sudan_taam_pakelo_evidence(
+    target: dict,
+    source_record: dict,
+    raw: dict,
+) -> None:
+    """Attach Taam's live South Sudan card to an exact ZF Pakelo identity."""
+    target_specs = target["specifications"]
+    source_specs = source_record["specifications"]
+    for key in ("sae_engine", "sae_gear", "iso_vg", "nlgi"):
+        if source_specs.get(key) and not target_specs.get(key):
+            target_specs[key] = source_specs[key]
+    target_specs.setdefault(
+        "south_sudan_taam_pakelo_catalog_evidence", []
+    ).append({
+        "source_record_id": raw["source_record_id"],
+        "product_code": raw["specifications"]["product_code"],
+        "source_product_name": raw["source_product_name"],
+        "source_grade": raw["specifications"]["source_grade"],
+        "source_categories": raw["specifications"]["source_categories"],
+        "source_page_urls": raw["specifications"]["source_page_urls"],
+        "source_occurrences": raw["specifications"]["source_occurrences"],
+        "description_sha256": raw["specifications"]["description_sha256"],
+        "source_facts_sha256": raw["source_facts_sha256"],
+        "matched_zf_source_record_id": raw[
+            "existing_zf_source_record_id"
+        ],
+    })
+    target["lifecycle_status"] = "listed_on_live_official_distributor_catalog"
+    target["snapshot_date"] = raw["snapshot_date"]
 
 
 def uruguay_ancap_lubricant_record(row: dict) -> dict:
@@ -7453,6 +7530,69 @@ def main() -> None:
     zf_source_rows = [json.loads(line) for line in ZF_TE_ML_JSONL.read_text(encoding="utf-8").splitlines() if line]
     zf_records = [zf_te_ml_record(row) for row in zf_source_rows]
     input_records.extend(zf_records)
+    zf_record_by_source_record_id = {
+        row["source_record_id"]: record
+        for row, record in zip(zf_source_rows, zf_records)
+    }
+    south_sudan_taam_pakelo_source_rows = [
+        json.loads(line)
+        for line in SOUTH_SUDAN_TAAM_PAKELO_JSONL.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        if line
+    ]
+    south_sudan_taam_pakelo_records = [
+        south_sudan_taam_pakelo_record(row)
+        for row in south_sudan_taam_pakelo_source_rows
+    ]
+    south_sudan_taam_pakelo_product_key = {}
+    south_sudan_taam_pakelo_matched_to_existing = 0
+    south_sudan_taam_pakelo_products_added = 0
+    for raw, source_record in zip(
+        south_sudan_taam_pakelo_source_rows,
+        south_sudan_taam_pakelo_records,
+    ):
+        zf_source_record_id = raw["existing_zf_source_record_id"]
+        if zf_source_record_id:
+            target = zf_record_by_source_record_id.get(zf_source_record_id)
+            if target is None:
+                raise RuntimeError(
+                    "Taam exact ZF target disappeared: "
+                    + zf_source_record_id
+                )
+            source_name = re.sub(
+                r"^pakelo\s+", "", source_record["product_name_raw"],
+                flags=re.I,
+            )
+            if (
+                target["family_code"] != raw["family_code"]
+                or normalize(target["product_name_raw"])
+                != normalize(source_name)
+            ):
+                raise RuntimeError(
+                    "Taam exact ZF target technical drift: "
+                    + zf_source_record_id
+                )
+            merge_south_sudan_taam_pakelo_evidence(
+                target, source_record, raw
+            )
+            south_sudan_taam_pakelo_matched_to_existing += 1
+        else:
+            target = source_record
+            input_records.append(target)
+            south_sudan_taam_pakelo_products_added += 1
+        south_sudan_taam_pakelo_product_key[
+            raw["source_record_id"]
+        ] = target["canonical_key"]
+    if (
+        south_sudan_taam_pakelo_matched_to_existing,
+        south_sudan_taam_pakelo_products_added,
+    ) != (2, 173):
+        raise RuntimeError(
+            "Taam South Sudan denominator changed: "
+            f"{south_sudan_taam_pakelo_matched_to_existing} matched, "
+            f"{south_sudan_taam_pakelo_products_added} added"
+        )
     allison_source_rows = [json.loads(line) for line in ALLISON_JSONL.read_text(encoding="utf-8").splitlines() if line]
     allison_records = [allison_record(row) for row in allison_source_rows]
     input_records.extend(allison_records)
@@ -9318,6 +9458,25 @@ def main() -> None:
         if link_key not in source_link_keys:
             source_links.append(link)
             source_link_keys.add(link_key)
+    for raw in south_sudan_taam_pakelo_source_rows:
+        target = canonical_by_key[
+            south_sudan_taam_pakelo_product_key[raw["source_record_id"]]
+        ]
+        link = {
+            "product_id": target["product_id"],
+            "source_id": raw["source_id"],
+            "source_record_id": raw["source_record_id"],
+            "source_row": int(raw["source_record_id"].rsplit("-", 1)[-1]),
+            "relation": "official_south_sudan_distributor_product_code_identity",
+        }
+        link_key = (
+            link["product_id"],
+            link["source_id"],
+            link["source_record_id"],
+        )
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     for raw in dominican_imca_mobil_source_rows:
         target = canonical_by_key[
             dominican_imca_mobil_product_key[raw["source_record_id"]]
@@ -10633,6 +10792,7 @@ def main() -> None:
         "rwanda_akinawa_current_input_sha256": hashlib.sha256(RWANDA_AKINAWA_CURRENT_JSONL.read_bytes()).hexdigest(),
         "rwanda_rymax_current_input_sha256": hashlib.sha256(RWANDA_RYMAX_CURRENT_JSONL.read_bytes()).hexdigest(),
         "afal_east_africa_featured_input_sha256": hashlib.sha256(AFAL_EAST_AFRICA_FEATURED_JSONL.read_bytes()).hexdigest(),
+        "south_sudan_taam_pakelo_input_sha256": hashlib.sha256(SOUTH_SUDAN_TAAM_PAKELO_JSONL.read_bytes()).hexdigest(),
         "uruguay_ancap_lubricant_input_sha256": hashlib.sha256(URUGUAY_ANCAP_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "colombia_terpel_lubricant_input_sha256": hashlib.sha256(COLOMBIA_TERPEL_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "guyana_guyoil_lubricant_input_sha256": hashlib.sha256(GUYANA_GUYOIL_LUBRICANT_JSONL.read_bytes()).hexdigest(),
@@ -10973,6 +11133,15 @@ def main() -> None:
         "rwanda_rymax_products_added": rwanda_rymax_products_added,
         "afal_east_africa_featured_source_rows": len(
             afal_east_africa_featured_source_rows
+        ),
+        "south_sudan_taam_pakelo_source_rows": len(
+            south_sudan_taam_pakelo_source_rows
+        ),
+        "south_sudan_taam_pakelo_products_matched_to_existing": (
+            south_sudan_taam_pakelo_matched_to_existing
+        ),
+        "south_sudan_taam_pakelo_products_added": (
+            south_sudan_taam_pakelo_products_added
         ),
         "kebs_smark_source_rows": len(kebs_smark_source_rows),
         "east_africa_certified_source_rows": len(east_africa_certified_source_rows),
