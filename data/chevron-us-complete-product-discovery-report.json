@@ -1,0 +1,32 @@
+{
+  "excluded_fuel_system_cleaner_pages": 4,
+  "in_scope_candidate_pages": 162,
+  "index_sha256": "4a4a3e9d210bfffa6170cd72d527c4cb0e0ec6f4f62b9ec7b7a90c9a4fc64512",
+  "index_url": "https://www.chevronlubricants.com/en_us/home/products/by_brand.html",
+  "normalization_status": "Discovery complete; product-grade expansion, technical parsing and strict cross-source matching remain pending.",
+  "normalized_output_sha256": "fa97d516154e54283941499f932de73f892fcf90a85360aed29e3cf89e4a69ef",
+  "pages_with_pds": 164,
+  "pages_with_sds": 157,
+  "product_page_urls": 166,
+  "publication_scope": "Non-expressive product title, category, document URL and evidence hashes only; no descriptions, artwork or documents are redistributed.",
+  "schema_version": 1,
+  "snapshot_date": "2026-07-24",
+  "source_category_page_counts": {
+    "Coolants & antifreezes": 14,
+    "Engine oils": 36,
+    "Engine oils, Industrial oils": 5,
+    "Engine oils, Transmission/Gear oils": 1,
+    "Fuel additives": 4,
+    "Greases": 22,
+    "Hydraulic oils": 2,
+    "Hydraulic oils, Industrial oils": 7,
+    "Hydraulic oils, Industrial oils, Transmission/Gear oils": 1,
+    "Hydraulic oils, Transmission/Gear oils": 1,
+    "Industrial oils": 44,
+    "System Cleaner": 1,
+    "Transmission/Gear oils": 28
+  },
+  "source_id": "CHEVRON_US_COMPLETE_LIVE_PRODUCT_PAGE_DISCOVERY",
+  "status": "complete_live_product_page_denominator_discovered",
+  "unique_document_urls": 361
+}
