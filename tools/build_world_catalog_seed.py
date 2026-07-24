@@ -113,6 +113,7 @@ SUDAN_TAPPCO_JSONL = ROOT / "data/sudan-tappco-products.jsonl"
 ETHIOPIA_NOC_CALTEX_JSONL = ROOT / "data/ethiopia-noc-caltex-products.jsonl"
 SCOPE_GLOBAL_JSONL = ROOT / "data/scope-global-products.jsonl"
 ANGOLA_SONANGOL_NGOL_JSONL = ROOT / "data/angola-sonangol-ngol-products.jsonl"
+MADAGASCAR_GALANA_MOBIL_JSONL = ROOT / "data/madagascar-galana-mobil-products.jsonl"
 URUGUAY_ANCAP_LUBRICANT_JSONL = ROOT / "data" / "uruguay-ancap-current-lubricants.jsonl"
 COLOMBIA_TERPEL_LUBRICANT_JSONL = ROOT / "data" / "colombia-terpel-current-lubricants.jsonl"
 GUYANA_GUYOIL_LUBRICANT_JSONL = ROOT / "data" / "guyana-guyoil-current-lubricants.jsonl"
@@ -4093,6 +4094,86 @@ def angola_sonangol_ngol_record(row: dict) -> dict:
         "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
     )
     return record
+
+
+def madagascar_galana_mobil_record(row: dict) -> dict:
+    """Convert one reviewed live Galana Madagascar Mobil identity."""
+    specs = row["specifications"]
+    performance = [
+        *(f"API {value}" for value in specs.get("api", [])),
+        *(f"API {value}" for value in specs.get("api_gl", [])),
+        *(f"ACEA {value}" for value in specs.get("acea", [])),
+        *(f"JASO {value}" for value in specs.get("jaso", [])),
+    ]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Galana Madagascar complete live Mobil product API",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": specs.get("sae_engine", specs.get("sae_gear", "")),
+        "api_class": "; ".join(performance),
+        "viscosity": specs.get("iso_vg", ""),
+        "grease_class": specs.get("nlgi", ""),
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": 0,
+        "evidence_status": row["evidence_status"],
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update(specs)
+    record["specifications"].update({
+        "source_url": row["source_url"],
+        "source_product_name": row["source_product_name"],
+        "source_facts_sha256": row["source_facts_sha256"],
+        "no_offer_created_no_price_stock_or_order_action": True,
+    })
+    record["canonical_key"] += (
+        f"|madagascar_galana_mobil:{normalize(row['source_record_id'])}"
+    )
+    record["product_id"] = (
+        "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    )
+    return record
+
+
+def merge_madagascar_galana_mobil_evidence(
+    target: dict, source_record: dict, raw: dict
+) -> None:
+    """Attach one strict country-distributor identity to an existing product."""
+    target_specs = target["specifications"]
+    source_specs = source_record["specifications"]
+    for key in (
+        "sae_engine", "sae_gear", "api", "api_gl", "acea", "jaso",
+        "iso_vg", "nlgi",
+    ):
+        if source_specs.get(key) and not target_specs.get(key):
+            target_specs[key] = source_specs[key]
+    target_specs.setdefault("madagascar_galana_mobil_evidence", []).append({
+        "source_record_id": raw["source_record_id"],
+        "source_product_name": raw["source_product_name"],
+        "source_url": raw["source_url"],
+        "source_cards": source_specs["source_cards"],
+        "source_categories": source_specs["source_categories"],
+        "source_packages": source_specs["source_packages"],
+        "source_quality_flags": source_specs["source_quality_flags"],
+        "source_facts_sha256": raw["source_facts_sha256"],
+        "strict_target_source_id": raw["existing_target_source_id"],
+        "strict_target_source_record_id": raw[
+            "existing_target_source_record_id"
+        ],
+        "no_offer_created": True,
+    })
 
 
 def uruguay_ancap_lubricant_record(row: dict) -> dict:
@@ -9428,6 +9509,66 @@ def main() -> None:
         mag1_current_product_key[
             raw["source_record_id"]
         ] = target["canonical_key"]
+    # Resolve the country evidence only after every possible strict target,
+    # including later country catalogs, has been loaded.
+    madagascar_galana_mobil_source_rows = [
+        json.loads(line)
+        for line in MADAGASCAR_GALANA_MOBIL_JSONL.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        if line
+    ]
+    madagascar_galana_mobil_records = [
+        madagascar_galana_mobil_record(row)
+        for row in madagascar_galana_mobil_source_rows
+    ]
+    target_by_source_identity = {
+        (row["source_id"], row["source_record_id"]): row
+        for row in input_records
+    }
+    madagascar_galana_mobil_product_key = {}
+    madagascar_galana_mobil_matched_to_existing = 0
+    madagascar_galana_mobil_products_added = 0
+    for raw, source_record in zip(
+        madagascar_galana_mobil_source_rows,
+        madagascar_galana_mobil_records,
+    ):
+        target_source_id = raw["existing_target_source_id"]
+        target_source_record_id = raw["existing_target_source_record_id"]
+        if target_source_id:
+            target = target_by_source_identity.get(
+                (target_source_id, target_source_record_id)
+            )
+            if target is None:
+                raise RuntimeError(
+                    "Galana Madagascar strict target disappeared: "
+                    f"{target_source_id}/{target_source_record_id}"
+                )
+            if target["family_code"] != raw["family_code"]:
+                raise RuntimeError(
+                    "Galana Madagascar strict target family drift: "
+                    f"{target_source_id}/{target_source_record_id}"
+                )
+            merge_madagascar_galana_mobil_evidence(
+                target, source_record, raw
+            )
+            madagascar_galana_mobil_matched_to_existing += 1
+        else:
+            target = source_record
+            input_records.append(target)
+            madagascar_galana_mobil_products_added += 1
+        madagascar_galana_mobil_product_key[
+            raw["source_record_id"]
+        ] = target["canonical_key"]
+    if (
+        madagascar_galana_mobil_matched_to_existing,
+        madagascar_galana_mobil_products_added,
+    ) != (24, 16):
+        raise RuntimeError(
+            "Galana Madagascar denominator changed: "
+            f"{madagascar_galana_mobil_matched_to_existing} matched, "
+            f"{madagascar_galana_mobil_products_added} added"
+        )
     records, candidates = deduplicate(input_records)
     canonical_by_key = {row["canonical_key"]: row for row in records}
     mogas_global_market_link_targets = []
@@ -9942,6 +10083,25 @@ def main() -> None:
             "source_record_id": raw["source_record_id"],
             "source_row": raw["specifications"]["source_printed_page"],
             "relation": "official_angola_manufacturer_catalog_product_grade",
+        }
+        link_key = (
+            link["product_id"],
+            link["source_id"],
+            link["source_record_id"],
+        )
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
+    for raw in madagascar_galana_mobil_source_rows:
+        target = canonical_by_key[
+            madagascar_galana_mobil_product_key[raw["source_record_id"]]
+        ]
+        link = {
+            "product_id": target["product_id"],
+            "source_id": raw["source_id"],
+            "source_record_id": raw["source_record_id"],
+            "source_row": 0,
+            "relation": "official_exclusive_distributor_live_country_product",
         }
         link_key = (
             link["product_id"],
@@ -11271,6 +11431,7 @@ def main() -> None:
         "ethiopia_noc_caltex_input_sha256": hashlib.sha256(ETHIOPIA_NOC_CALTEX_JSONL.read_bytes()).hexdigest(),
         "scope_global_input_sha256": hashlib.sha256(SCOPE_GLOBAL_JSONL.read_bytes()).hexdigest(),
         "angola_sonangol_ngol_input_sha256": hashlib.sha256(ANGOLA_SONANGOL_NGOL_JSONL.read_bytes()).hexdigest(),
+        "madagascar_galana_mobil_input_sha256": hashlib.sha256(MADAGASCAR_GALANA_MOBIL_JSONL.read_bytes()).hexdigest(),
         "uruguay_ancap_lubricant_input_sha256": hashlib.sha256(URUGUAY_ANCAP_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "colombia_terpel_lubricant_input_sha256": hashlib.sha256(COLOMBIA_TERPEL_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "guyana_guyoil_lubricant_input_sha256": hashlib.sha256(GUYANA_GUYOIL_LUBRICANT_JSONL.read_bytes()).hexdigest(),
@@ -11642,6 +11803,15 @@ def main() -> None:
         ),
         "angola_sonangol_ngol_products_added": len(
             angola_sonangol_ngol_records
+        ),
+        "madagascar_galana_mobil_source_rows": len(
+            madagascar_galana_mobil_source_rows
+        ),
+        "madagascar_galana_mobil_products_matched_to_existing": (
+            madagascar_galana_mobil_matched_to_existing
+        ),
+        "madagascar_galana_mobil_products_added": (
+            madagascar_galana_mobil_products_added
         ),
         "kebs_smark_source_rows": len(kebs_smark_source_rows),
         "east_africa_certified_source_rows": len(east_africa_certified_source_rows),

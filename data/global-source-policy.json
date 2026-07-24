@@ -3166,6 +3166,21 @@
       "publication_status": "attributed_transformed_nonexpressive_product_grade_standard_and_source_page_facts_only_no_descriptions_artwork_contacts_source_pdf_or_package_offers_redistributed",
       "observed_count": 107,
       "notes": "The official 44-page catalog publishes 64 product series. Fifty-five lubricant, grease, brake/cooling and other in-scope technical-fluid series expand to 107 reviewed product-grade identities (C8/G11/H17/I19/M25/S4/T19/TF4); nine non-lubricant car-care and fuel-additive series are explicitly excluded. The official host returned HTTP 403 to direct PDF retrieval on the snapshot date, so no PDF-byte SHA is claimed: source URL, printed page and a normalized fact hash are retained, and the complete 44-page indexed reading copy was used only to verify the transcription. Current stock, price, package availability and offers are not inferred."
+    },
+    {
+      "source_id": "MADAGASCAR_GALANA_COMPLETE_MOBIL_PRODUCT_API",
+      "title": "Complete live Galana Madagascar Mobil product API catalog",
+      "owner": "Galana Raffinerie Terminal SA",
+      "source_type": "official_exclusive_country_distributor_complete_live_product_api_with_category_and_package_taxonomies",
+      "source_locator": "data/madagascar-galana-mobil-products.jsonl",
+      "source_url": "https://galana.mg/liste-lubrifiant/",
+      "terms_url": "https://galana.mg/",
+      "source_sha256": "2329dc6c898f6912b3b7bcfa79bad1dfb8e89a2379a136a759e81b9daa540a26",
+      "access_status": "public_live_official_exclusive_madagascar_distributor_product_api",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_transformed_nonexpressive_product_name_grade_standard_category_package_card_url_and_hash_facts_only_no_descriptions_artwork_or_contacts_redistributed",
+      "observed_count": 40,
+      "notes": "The complete public endpoint contains 45 published cards and collapses five exact-title category duplicates to 40 Mobil product identities (C4/G5/H3/I7/M11/T9/TF1), while retaining every card ID, URL, modified timestamp, category and package taxonomy. Twenty-four identities are strictly linked to existing product records and 16 are new. Package tags are evidence only and do not create offers because no price, stock or order action is published. Two visible 280 L body-text typos are isolated in favor of the 208 L taxonomy; the Mobil Agry Extra 10W-40 card's copied Delvac body is flagged and its copied performance claims are not promoted. No global series variants or Madagascar SKU availability beyond the published cards are inferred."
     }
   ]
 }

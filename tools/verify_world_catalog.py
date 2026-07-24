@@ -264,6 +264,8 @@ def main() -> None:
     scope_global_rows = [json.loads(line) for line in (ROOT / "data/scope-global-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     angola_ngol_report = json.loads((ROOT / "data/angola-sonangol-ngol-report.json").read_text(encoding="utf-8"))
     angola_ngol_rows = [json.loads(line) for line in (ROOT / "data/angola-sonangol-ngol-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    madagascar_galana_report = json.loads((ROOT / "data/madagascar-galana-mobil-report.json").read_text(encoding="utf-8"))
+    madagascar_galana_rows = [json.loads(line) for line in (ROOT / "data/madagascar-galana-mobil-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     uruguay_ancap_report = json.loads((ROOT / "data/uruguay-ancap-current-lubricants-report.json").read_text(encoding="utf-8"))
     uruguay_ancap_rows = [json.loads(line) for line in (ROOT / "data/uruguay-ancap-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     colombia_terpel_report = json.loads((ROOT / "data/colombia-terpel-current-lubricants-report.json").read_text(encoding="utf-8"))
@@ -409,6 +411,7 @@ def main() -> None:
         + report["ethiopia_noc_caltex_products_added"]
         + report["scope_global_products_added"]
         + report["angola_sonangol_ngol_products_added"]
+        + report["madagascar_galana_mobil_products_added"]
         + len(uruguay_ancap_rows)
         + len(colombia_terpel_rows)
         + len(guyana_guyoil_rows)
@@ -1134,17 +1137,17 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 5191
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3115
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 118359
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 118358
-    assert report["quality_issues"]["professional_key_incomplete"] == 79267
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 118375
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 118374
+    assert report["quality_issues"]["professional_key_incomplete"] == 79273
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
         WHERE q.issue_code='professional_key_incomplete'
         GROUP BY p.family_code
     """)) == {
-        "C": 2298, "E": 151, "G": 12491, "H": 5280, "I": 3882,
-        "M": 23649, "S": 12182, "T": 11933, "TF": 6761, "U": 640,
+        "C": 2299, "E": 151, "G": 12492, "H": 5282, "I": 3887,
+        "M": 23644, "S": 12182, "T": 11934, "TF": 6762, "U": 640,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -2946,6 +2949,67 @@ def main() -> None:
     assert db.execute(
         "SELECT count(*) FROM product_offers "
         "WHERE source_id='ANGOLA_SONANGOL_NGOL_OFFICIAL_44_PAGE_CATALOG'"
+    ).fetchone()[0] == 0
+    assert madagascar_galana_report["endpoint_rows"] == 45
+    assert madagascar_galana_report[
+        "duplicate_card_occurrences_collapsed"
+    ] == 5
+    assert madagascar_galana_report[
+        "unique_product_identities"
+    ] == len(madagascar_galana_rows) == report[
+        "madagascar_galana_mobil_source_rows"
+    ] == 40
+    assert madagascar_galana_report["family_identity_counts"] == {
+        "C": 4, "G": 5, "H": 3, "I": 7, "M": 11, "T": 9, "TF": 1,
+    }
+    assert madagascar_galana_report[
+        "exact_existing_identity_matches"
+    ] == report[
+        "madagascar_galana_mobil_products_matched_to_existing"
+    ] == 24
+    assert madagascar_galana_report[
+        "new_country_catalog_identities"
+    ] == report["madagascar_galana_mobil_products_added"] == 16
+    assert madagascar_galana_report["records_with_packages"] == 40
+    assert madagascar_galana_report["offers_created"] == 0
+    madagascar_card_ids = [
+        card["id"]
+        for row in madagascar_galana_rows
+        for card in row["specifications"]["source_cards"]
+    ]
+    assert len(madagascar_card_ids) == len(set(madagascar_card_ids)) == 45
+    assert madagascar_galana_report[
+        "normalized_output_sha256"
+    ] == hashlib.sha256(
+        (ROOT / "data/madagascar-galana-mobil-products.jsonl").read_bytes()
+    ).hexdigest()
+    assert all(
+        row["market"] == "Madagascar"
+        and row["brand"] == "MOBIL"
+        and row["specifications"]["source_cards"]
+        and row["specifications"]["source_packages"]
+        and not ({"address", "phone", "email", "contact_person"} & set(row))
+        for row in madagascar_galana_rows
+    )
+    assert policy_by_id[
+        "MADAGASCAR_GALANA_COMPLETE_MOBIL_PRODUCT_API"
+    ]["source_sha256"] == madagascar_galana_report[
+        "normalized_output_sha256"
+    ]
+    assert policy_by_id[
+        "MADAGASCAR_GALANA_COMPLETE_MOBIL_PRODUCT_API"
+    ]["observed_count"] == 40
+    assert db.execute(
+        "SELECT count(*) FROM products "
+        "WHERE source_id='MADAGASCAR_GALANA_COMPLETE_MOBIL_PRODUCT_API'"
+    ).fetchone()[0] == 16
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id='MADAGASCAR_GALANA_COMPLETE_MOBIL_PRODUCT_API'"
+    ).fetchone()[0] == 40
+    assert db.execute(
+        "SELECT count(*) FROM product_offers "
+        "WHERE source_id='MADAGASCAR_GALANA_COMPLETE_MOBIL_PRODUCT_API'"
     ).fetchone()[0] == 0
     assert uruguay_ancap_report["catalog_product_families"] == 56
     assert uruguay_ancap_report["normalized_product_variants"] == len(uruguay_ancap_rows) == 88

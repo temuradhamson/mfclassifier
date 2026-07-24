@@ -1,0 +1,56 @@
+{
+  "api_url": "https://galana.mg/wp-json/wp/v2/upcp_product?per_page=100",
+  "duplicate_card_occurrences_collapsed": 5,
+  "duplicate_titles": {
+    "Mobil ATF 220": [
+      5743,
+      5781
+    ],
+    "Mobil ATF 320": [
+      5733,
+      5774
+    ],
+    "Mobilube HD 80W-90": [
+      5727,
+      5784
+    ],
+    "Mobilux EP 2": [
+      5770,
+      5800
+    ],
+    "Nuto H Series": [
+      4638,
+      6999
+    ]
+  },
+  "endpoint_pages": 1,
+  "endpoint_rows": 45,
+  "exact_existing_identity_matches": 24,
+  "exclusive_distributor_claim_url": "https://galana.mg/lubrifiants/",
+  "family_identity_counts": {
+    "C": 4,
+    "G": 5,
+    "H": 3,
+    "I": 7,
+    "M": 11,
+    "T": 9,
+    "TF": 1
+  },
+  "new_country_catalog_identities": 16,
+  "normalized_output_sha256": "2329dc6c898f6912b3b7bcfa79bad1dfb8e89a2379a136a759e81b9daa540a26",
+  "offers_created": 0,
+  "package_display_conflicts_isolated": [
+    "Mobil 1 ESP 5W-30",
+    "Mobil Super 3000 X1 5W-40"
+  ],
+  "records_with_packages": 40,
+  "schema_version": 1,
+  "snapshot_date": "2026-07-24",
+  "source_id": "MADAGASCAR_GALANA_COMPLETE_MOBIL_PRODUCT_API",
+  "source_url": "https://galana.mg/liste-lubrifiant/",
+  "status": "ok",
+  "title_body_conflicts_isolated": [
+    "Mobil Agry Extra 10W-40"
+  ],
+  "unique_product_identities": 40
+}
