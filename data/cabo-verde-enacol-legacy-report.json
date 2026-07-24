@@ -1,0 +1,98 @@
+{
+  "brands": {
+    "": 1,
+    "Galp": 122,
+    "Total Lubmarine": 25
+  },
+  "catalog_product_rows": {
+    "auto": 59,
+    "industria": 48,
+    "marinha": 27,
+    "massa": 14
+  },
+  "documents": {
+    "auto": {
+      "bytes": 433201,
+      "etag": "\"69c31-588235f521100\"",
+      "last_modified": "Sun, 05 May 2019 12:46:28 GMT",
+      "pages": 6,
+      "raw_product_like_blocks": 66,
+      "sha256": "d7135269ae0e24a108c8fa7397ab2191c25ffe93e795ab84215bcd81aa383fad",
+      "url": "https://www.enacol.cv/wp-content/uploads/2019/05/lubrificantes_auto.pdf"
+    },
+    "industria": {
+      "bytes": 354811,
+      "etag": "\"569fb-588235f709580\"",
+      "last_modified": "Sun, 05 May 2019 12:46:30 GMT",
+      "pages": 3,
+      "raw_product_like_blocks": 48,
+      "sha256": "85e1a6dfcaf0d9c85478564661ecbc7253f415c9a9294ff5fa2232c546017909",
+      "url": "https://www.enacol.cv/wp-content/uploads/2019/05/lubrificantes_industria.pdf"
+    },
+    "marinha": {
+      "bytes": 109784,
+      "etag": "\"1acd8-588235f709580\"",
+      "last_modified": "Sun, 05 May 2019 12:46:30 GMT",
+      "pages": 1,
+      "raw_product_like_blocks": 27,
+      "sha256": "08aa2c0fd55f4b3418de2448b2d821407c52a42b1576dfa7f6f682a56fd77bca",
+      "url": "https://www.enacol.cv/wp-content/uploads/2019/05/lubrificantes_marinha.pdf"
+    },
+    "massa": {
+      "bytes": 71333,
+      "etag": "\"116a5-588235e20e400\"",
+      "last_modified": "Sun, 05 May 2019 12:46:08 GMT",
+      "pages": 3,
+      "raw_product_like_blocks": 14,
+      "sha256": "a6e98f7f02a6751ab4f7ad931baebaef497bfa159af5bb1cc6a143f8ca2cd90a",
+      "url": "https://www.enacol.cv/wp-content/uploads/2019/05/lubrificantes_massa.pdf"
+    }
+  },
+  "excluded_names": [
+    "Galp Care",
+    "Galp Care Anti-Furo",
+    "Galp Care Limpa Cockpit",
+    "Galp Care Limpa Estofos",
+    "Galp Care Shampoo Auto",
+    "Galp Expert - Fluídos para Travões",
+    "Galp Expert Limpeza Professional"
+  ],
+  "excluded_out_of_scope_or_heading_rows": 7,
+  "families": {
+    "C": 13,
+    "G": 16,
+    "H": 18,
+    "I": 23,
+    "M": 39,
+    "S": 6,
+    "T": 22,
+    "TF": 8,
+    "U": 3
+  },
+  "grain_note": "One product row per published product/grade line; one historical offer row per explicit package line. Case quantities are arithmetically normalized from the printed pack expression.",
+  "historical_package_offer_rows": 264,
+  "historical_priced_offer_rows": 263,
+  "historical_unpriced_package_rows": 1,
+  "landing_sha256": "79c4caf54d06e2f371fb2b64ebf17a07969dca21e4724dcd78b04d8921f70ee6",
+  "landing_url": "https://www.enacol.cv/lubrificantes/",
+  "lifecycle_note": "The four PDFs remain linked from the current official ENACOL page, but every PDF reports an HTTP Last-Modified date of 5 May 2019. Products and prices are historical evidence, not current offers.",
+  "market": "Cabo Verde",
+  "normalized_product_rows": 148,
+  "offer_output_sha256": "99d19d0d675f921318b98a7fb23c9a5eb0e94d0b117094587055dcbdc844d27a",
+  "owner": "ENACOL — Empresa Nacional de Combustíveis, S.A.",
+  "privacy_sha256": "91f3d982c66b3e1ab307cfb4a7df514ff0e01e5d794861e33ee913cfb1c619ab",
+  "privacy_url": "https://www.enacol.cv/privacidade/",
+  "product_output_sha256": "495b41e35cd50a6b8fb5fea13b2a4f25ad0a051f2ec222d144bf2852b56487f4",
+  "publication_scope": "Attributed factual product names, classifications, standards, package and historical price facts with URLs/hashes only; descriptions, artwork and page layout are not redistributed.",
+  "robots_sha256": "5de39313e14319d545ae6a90bdabca01ab907e5d4edbec959a0bd0a29e719700",
+  "robots_url": "https://www.enacol.cv/robots.txt",
+  "rows_with_api_or_api_gl": 43,
+  "rows_with_iso_vg": 51,
+  "rows_with_nlgi": 13,
+  "rows_with_sae": 49,
+  "schema_version": 1,
+  "snapshot_date": "2026-07-24",
+  "source_id": "CABO_VERDE_ENACOL_OFFICIALLY_LINKED_2019_PRICE_CATALOGS",
+  "source_product_like_blocks": 155,
+  "status": "officially_linked_complete_2019_price_catalogs_normalized"
+}
