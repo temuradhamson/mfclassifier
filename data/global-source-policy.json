@@ -2785,12 +2785,12 @@
       "source_locator": "data/barbados-sol-recent-availability.jsonl",
       "source_url": "https://barbados.solpetroleum.com/",
       "terms_url": "https://solpetroleum.com/",
-      "source_sha256": "fbbdfb5431af025ae39fa87cec19649ddea7ef92de885111ab04d75e2058172e",
+      "source_sha256": "81d0315bc677e85e6cdc7fa106c7b15c39dab2a48d77029564f05f43988f9094",
       "access_status": "intermittent_official_ecommerce_browser_observed_command_line_404_recorded",
       "bulk_ingest_allowed": true,
       "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_page_or_image_redistribution",
       "observed_count": 33,
-      "notes": "Nine professional product sections yield 36 Mobil listing-card occurrences collapsed to 33 product identities after three explicit package-only repeats. The layer covers gasoline and diesel engine oils, automotive and industrial gear oils, greases, compressor/circulating/hydraulic/transmission oils and Mobil Jet Oil 254. Four identities have contradictory in-stock/not-available observations between browser surfaces; both statuses are retained. Several category routes intermittently return 404 to command-line clients, so no unavailable page/image hash is claimed. These rows are Barbados availability evidence pending strict matching to global Mobil identities; they do not create country-specific manufacturer masters."
+      "notes": "Nine professional product sections yield 36 Mobil listing-card occurrences collapsed to 33 product identities after three explicit package-only repeats. The layer covers gasoline and diesel engine oils, automotive and industrial gear oils, greases, compressor/circulating/hydraulic/transmission oils and Mobil Jet Oil 254. Four identities have contradictory in-stock/not-available observations between browser surfaces; both statuses are retained. The three ATF/transmission rows use professional family T; TF remains reserved for cooling and technical fluids. Several category routes intermittently return 404 to command-line clients, so no unavailable page/image hash is claimed. These rows are Barbados availability evidence pending strict matching to global Mobil identities; they do not create country-specific manufacturer masters."
     },
     {
       "source_id": "SHELL_GLOBAL_CURRENT_APPROVED_DISTRIBUTOR_LOCATOR",
@@ -2821,6 +2821,21 @@
       "publication_status": "attributed_nonexpressive_factual_distributor_fields_only_no_source_page_redistribution",
       "observed_count": 368,
       "notes": "The current official page contains 106 market tables and 368 authorised distributor rows representing 345 unique case-folded distributor names; 35 markets list more than one row. Published sectors are preserved, while postal addresses and telephone numbers are deliberately omitted from normalized output and retained only indirectly in per-row source hashes. This layer proves authorised Castrol distribution by market and sector only; it cannot establish a local SKU, exact specification, stock status or the presence of Castrol's complete global range."
+    },
+    {
+      "source_id": "DOMINICAN_REPUBLIC_IMCA_MOBIL_2025_CATALOG",
+      "title": "Official December 2025 Mobil/IMCA Dominican Republic catalog",
+      "owner": "Implementos y Maquinarias S.A. (IMCA), authorised Mobil distributor",
+      "source_type": "official_authorized_distributor_country_product_grade_pdf_catalog",
+      "source_locator": "data/dominican-republic-imca-mobil-2025-products.jsonl",
+      "source_url": "https://lubricantesmobil.imcadom.com/wp-content/uploads/2025/12/0008982IMCARD_Catalogo-Completo.pdf",
+      "terms_url": "https://lubricantesmobil.imcadom.com/",
+      "source_sha256": "c1fcc19b78e380e3c0e0c56dd4bcbc0c72eaae1f538f6ddc9231fbc13fabacd5",
+      "access_status": "public_official_pdf_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_product_fields_only_no_pdf_or_image_redistribution",
+      "observed_count": 51,
+      "notes": "The 32-page PDF was created 2025-12-09 and has SHA-256 9e7c730837583042997e2a9c32ba9f4424bc53a025e2d8bc4bf6f4535aad50ab. Twenty-nine product pages yield 51 explicit product-grade rows: 41 engine oils, seven transmission/gear fluids and three coolants. API, API GL, ACEA, JASO and application statements are preserved only as source-reported claims. Exact name/family/grade matches and five explicit identity aliases attach country-catalog evidence to existing global Mobil identities; unmatched grades become new canonical identities without inventing specifications."
     }
   ]
 }

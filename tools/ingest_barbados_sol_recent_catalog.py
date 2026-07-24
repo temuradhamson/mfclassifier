@@ -174,14 +174,14 @@ PRODUCTS = [
         ["configurable"], {"iso_vg": "68"}),
 
     # Transmission oils: two ATF D/M package cards collapse to one identity.
-    row("Mobil Automatic Transmission Fluid D/M", "TF", "transmission-oils", [
+    row("Mobil Automatic Transmission Fluid D/M", "T", "transmission-oils", [
         ("M-ATFD / MPAIL 5 AG PAIL (221)", "M-ATFD/MPAIL221"),
         ("Mobil Automatic Transmission Fluid D / M", "M-ATFD/MCASE207"),
     ], ["in_stock"]),
-    row("Mobil Dexron-VI ATF", "TF", "transmission-oils",
+    row("Mobil Dexron-VI ATF", "T", "transmission-oils",
         [("M-DEXRONVIATFCASE 6x1 QT CARTON (207)", "M-DEXRONVIATFCASE207")],
         ["in_stock"]),
-    row("Mobiltrans HD 10W", "TF", "transmission-oils",
+    row("Mobiltrans HD 10W", "T", "transmission-oils",
         [("M-TRANSHD10WDRUM 55 AG DRUM (241)", "M-TRANSHD10WDRUM241")],
         ["in_stock"], {"sae_engine": "10W"}),
 

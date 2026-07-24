@@ -278,6 +278,8 @@ def main() -> None:
     shell_global_distributor_rows = [json.loads(line) for line in (ROOT / "data/shell-global-current-distributors.jsonl").read_text(encoding="utf-8").splitlines() if line]
     castrol_global_distributors_report = json.loads((ROOT / "data/castrol-global-current-distributors-report.json").read_text(encoding="utf-8"))
     castrol_global_distributor_rows = [json.loads(line) for line in (ROOT / "data/castrol-global-current-distributors.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    dominican_imca_mobil_report = json.loads((ROOT / "data/dominican-republic-imca-mobil-2025-report.json").read_text(encoding="utf-8"))
+    dominican_imca_mobil_rows = [json.loads(line) for line in (ROOT / "data/dominican-republic-imca-mobil-2025-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_report = json.loads((ROOT / "data/kebs-smark-lubricant-products-report.json").read_text(encoding="utf-8"))
     kebs_smark_rows = [json.loads(line) for line in (ROOT / "data/kebs-smark-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     east_africa_report = json.loads((ROOT / "data/east-africa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -361,6 +363,7 @@ def main() -> None:
             "new_manufacturer_catalog_identity_candidates"
         ]
         + len(belize_rymax_rows)
+        + report["dominican_imca_mobil_products_added"]
         - report["gm_dual_standard_license_rows_merged"]
         - report["fuchs_exact_payload_identity_rows_matched"]
         - report["fuchs_exact_content_identity_rows_matched"]
@@ -1066,9 +1069,9 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 4973
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3044
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 117332
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 117331
-    assert report["quality_issues"]["professional_key_incomplete"] == 78846
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 117355
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 117354
+    assert report["quality_issues"]["professional_key_incomplete"] == 78836
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
@@ -1076,7 +1079,7 @@ def main() -> None:
         GROUP BY p.family_code
     """)) == {
         "C": 2290, "E": 149, "G": 12417, "H": 5271, "I": 3861,
-        "M": 23495, "S": 12154, "T": 11853, "TF": 6724, "U": 632,
+        "M": 23483, "S": 12154, "T": 11852, "TF": 6727, "U": 632,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -2638,7 +2641,7 @@ def main() -> None:
     ] == 4
     assert barbados_sol_report["families"] == {
         "C": 2, "G": 2, "H": 3, "I": 5, "M": 14,
-        "T": 3, "TF": 3, "U": 1,
+        "T": 6, "U": 1,
     }
     assert barbados_sol_report["normalized_output_sha256"] == hashlib.sha256(
         (ROOT / "data/barbados-sol-recent-availability.jsonl").read_bytes()
@@ -2774,6 +2777,63 @@ def main() -> None:
         "SELECT count(*) FROM product_sources "
         "WHERE source_id='CASTROL_GLOBAL_CURRENT_AUTHORISED_DISTRIBUTORS'"
     ).fetchone()[0] == 0
+    assert dominican_imca_mobil_report[
+        "product_grade_rows"
+    ] == len(dominican_imca_mobil_rows) == report[
+        "dominican_imca_mobil_source_rows"
+    ] == 51
+    assert dominican_imca_mobil_report["source_pdf_pages"] == 32
+    assert dominican_imca_mobil_report[
+        "source_pages_with_products"
+    ] == 29
+    assert dominican_imca_mobil_report["source_pdf_creation_date"] == (
+        "2025-12-09"
+    )
+    assert dominican_imca_mobil_report["source_pdf_sha256"] == (
+        "9e7c730837583042997e2a9c32ba9f4424bc53a025e2d8bc4bf6f4535aad50ab"
+    )
+    assert dominican_imca_mobil_report["families"] == {
+        "M": 41, "T": 7, "TF": 3,
+    }
+    assert dominican_imca_mobil_report[
+        "normalized_output_sha256"
+    ] == hashlib.sha256(
+        (
+            ROOT / "data/dominican-republic-imca-mobil-2025-products.jsonl"
+        ).read_bytes()
+    ).hexdigest()
+    assert report["dominican_imca_mobil_input_sha256"] == (
+        dominican_imca_mobil_report["normalized_output_sha256"]
+    )
+    assert report[
+        "dominican_imca_mobil_products_matched_to_existing"
+    ] == 28
+    assert report["dominican_imca_mobil_products_added"] == 23
+    assert report["dominican_imca_mobil_explicit_alias_matches"] == 5
+    assert report["dominican_imca_mobil_multi_candidate_rows"] == 15
+    assert policy_by_id[
+        "DOMINICAN_REPUBLIC_IMCA_MOBIL_2025_CATALOG"
+    ]["source_sha256"] == dominican_imca_mobil_report[
+        "normalized_output_sha256"
+    ]
+    assert policy_by_id[
+        "DOMINICAN_REPUBLIC_IMCA_MOBIL_2025_CATALOG"
+    ]["observed_count"] == 51
+    assert all(
+        row["brand"] == "MOBIL"
+        and row["market"] == "Dominican Republic"
+        and row["source_page"] in range(3, 32)
+        and row["family_code"] in {"M", "T", "TF"}
+        for row in dominican_imca_mobil_rows
+    )
+    assert db.execute(
+        "SELECT count(*) FROM products "
+        "WHERE source_id='DOMINICAN_REPUBLIC_IMCA_MOBIL_2025_CATALOG'"
+    ).fetchone()[0] == report["dominican_imca_mobil_products_added"]
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id='DOMINICAN_REPUBLIC_IMCA_MOBIL_2025_CATALOG'"
+    ).fetchone()[0] == 51
     assert policy_by_id["VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG"]["observed_count"] == 23
     assert db.execute(
         "SELECT count(*) FROM products WHERE source_id='VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG'"

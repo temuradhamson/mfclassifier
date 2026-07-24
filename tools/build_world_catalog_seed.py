@@ -118,6 +118,7 @@ BAHAMAS_CBS_AVAILABILITY_JSONL = ROOT / "data" / "bahamas-cbs-current-availabili
 BARBADOS_SOL_AVAILABILITY_JSONL = ROOT / "data" / "barbados-sol-recent-availability.jsonl"
 SHELL_GLOBAL_DISTRIBUTORS_JSONL = ROOT / "data" / "shell-global-current-distributors.jsonl"
 CASTROL_GLOBAL_DISTRIBUTORS_JSONL = ROOT / "data" / "castrol-global-current-distributors.jsonl"
+DOMINICAN_REPUBLIC_IMCA_MOBIL_JSONL = ROOT / "data" / "dominican-republic-imca-mobil-2025-products.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
 SON_MANCAP_JSONL = ROOT / "data" / "son-mancap-chemical-lubricant-products.jsonl"
@@ -4229,6 +4230,100 @@ def belize_rymax_record(row: dict) -> dict:
     return record
 
 
+def dominican_republic_imca_mobil_record(row: dict) -> dict:
+    """Convert one explicit product/grade from IMCA's official Mobil catalog."""
+    technical = row["technical"]
+    api_class = "; ".join(
+        [f"API {value}" for value in technical["api"]]
+        + [f"API {value}" for value in technical["api_gl"]]
+        + [f"ACEA {value}" for value in technical["acea"]]
+        + [f"JASO {value}" for value in technical["jaso"]]
+    )
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Official Mobil IMCA Dominican Republic catalog",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": technical["sae_engine"] or technical["sae_gear"],
+        "api_class": api_class,
+        "viscosity": "",
+        "grease_class": "",
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": "ExxonMobil Product Solutions Company",
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": row["source_page"],
+        "evidence_status": "official_authorized_distributor_country_catalog",
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update({
+        "sae_engine": technical["sae_engine"],
+        "sae_gear": technical["sae_gear"],
+        "api": technical["api"],
+        "api_gl": technical["api_gl"],
+        "acea": technical["acea"],
+        "jaso": technical["jaso"],
+        "performance_source_reported": technical["performance"],
+        "source_category": row["source_category"],
+        "source_page": row["source_page"],
+        "source_url": row["source_url"],
+        "source_pdf_sha256": row["source_pdf_sha256"],
+        "source_pdf_creation_date": row["source_pdf_creation_date"],
+        "source_quality_flags": row["source_quality_flags"],
+    })
+    record["canonical_key"] += (
+        f"|dominican_imca_mobil:{normalize(row['source_record_id'])}"
+    )
+    record["product_id"] = (
+        "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    )
+    return record
+
+
+def merge_dominican_republic_imca_mobil_evidence(
+    target: dict,
+    source_record: dict,
+    raw: dict,
+    match_basis: str,
+) -> None:
+    """Attach one country-catalog grade to a strict existing Mobil identity."""
+    target_specs = target["specifications"]
+    source_specs = source_record["specifications"]
+    for key in ("api", "api_gl", "acea", "jaso"):
+        target_specs[key] = sorted(
+            set(target_specs.get(key, [])) | set(source_specs.get(key, []))
+        )
+    for key in ("sae_engine", "sae_gear"):
+        if not target_specs.get(key):
+            target_specs[key] = source_specs.get(key, "")
+    target_specs.setdefault(
+        "dominican_republic_imca_mobil_catalog_evidence", []
+    ).append({
+        "source_record_id": raw["source_record_id"],
+        "source_page": raw["source_page"],
+        "source_category": raw["source_category"],
+        "source_url": raw["source_url"],
+        "source_pdf_sha256": raw["source_pdf_sha256"],
+        "source_pdf_creation_date": raw["source_pdf_creation_date"],
+        "performance_source_reported": raw["technical"]["performance"],
+        "source_quality_flags": raw["source_quality_flags"],
+        "match_basis": match_basis,
+    })
+    target["snapshot_date"] = max(
+        target.get("snapshot_date", ""),
+        raw["snapshot_date"],
+    )
+
+
 def kebs_smark_record(row: dict) -> dict:
     """Convert one normalized product identity from the public KEBS S-Mark directory."""
     technical = row["technical"]
@@ -6153,6 +6248,17 @@ def main() -> None:
         belize_rymax_record(row) for row in belize_rymax_source_rows
     ]
     input_records.extend(belize_rymax_records)
+    dominican_imca_mobil_source_rows = [
+        json.loads(line)
+        for line in DOMINICAN_REPUBLIC_IMCA_MOBIL_JSONL.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        if line
+    ]
+    dominican_imca_mobil_records = [
+        dominican_republic_imca_mobil_record(row)
+        for row in dominican_imca_mobil_source_rows
+    ]
     bahamas_cbs_availability_rows = [
         json.loads(line)
         for line in BAHAMAS_CBS_AVAILABILITY_JSONL.read_text(
@@ -7182,6 +7288,131 @@ def main() -> None:
     cummins_valvoline_2022_source_rows = [json.loads(line) for line in CUMMINS_VALVOLINE_2022_JSONL.read_text(encoding="utf-8").splitlines() if line]
     cummins_valvoline_2022_records = [cummins_valvoline_2022_record(row) for row in cummins_valvoline_2022_source_rows]
     input_records.extend(cummins_valvoline_2022_records)
+    # Match this country catalog only after every manufacturer, government and
+    # approval corpus is present.  Otherwise an earlier pass would create
+    # avoidable Mobil duplicates merely because the best target is appended
+    # later in the build.
+    mobil_existing_by_name_family = defaultdict(list)
+    for row in input_records:
+        if normalize(row["product_name_raw"]).startswith("mobil "):
+            mobil_existing_by_name_family[
+                (row["product_name_normalized"], row["family_code"])
+            ].append(row)
+    dominican_alias_targets = {
+        normalize("Mobil 1 Synthetic Gear Lubricant LS 75W-90"): [
+            normalize("Mobil 1 Syn Gear Lube LS 75W-90"),
+        ],
+        normalize("Mobil Delvac Legend 15W-40"): [
+            normalize("Mobil Delvac Legend CH-4 15W-40 Heavy Duty"),
+        ],
+        normalize("Mobil Delvac Legend 20W-50"): [
+            normalize("Mobil Delvac Legend CH-4 20W-50 Heavy Duty"),
+        ],
+        normalize("Mobil Super Moto 4T 10W-40"): [
+            normalize("Mobil Super Motor 4T MX 10W-40"),
+        ],
+        normalize("Mobil Super Moto 4T 15W-50"): [
+            normalize("Mobil Super Motor 4T MX 15W-50"),
+        ],
+    }
+    source_priority = {
+        "NMMA_TCW3": 0,
+        "JASO_4T": 1,
+        "ANP_BRAZIL_LUBRICANT_REGISTRY": 2,
+        "INDONESIA_NPT_LUBRICANT_REGISTRY": 3,
+        "THAILAND_DOEB_LUBRICANT_REGISTRY": 4,
+        "MERCEDES_DTFR_APPROVED_FLUIDS": 5,
+        "MERCEDES_BENZ_BEVO_APPROVED_FLUIDS": 6,
+        "EPA_CHEMEXPO_CPDAT_LUBRICANTS": 20,
+    }
+    dominican_imca_mobil_product_key = {}
+    dominican_imca_mobil_matched_to_existing = 0
+    dominican_imca_mobil_products_added = 0
+    dominican_imca_mobil_alias_matches = 0
+    dominican_imca_mobil_multi_candidate_rows = 0
+    for raw, source_record in zip(
+        dominican_imca_mobil_source_rows,
+        dominican_imca_mobil_records,
+    ):
+        source_name = normalize(raw["product_name"])
+        family_code = raw["family_code"]
+        candidates = list(
+            mobil_existing_by_name_family[(source_name, family_code)]
+        )
+        match_basis = "exact_normalized_product_name_and_family"
+        if not candidates and source_name.startswith(
+            normalize("Mobil Full Synthetic ")
+        ):
+            base_name = normalize("Mobil Full Synthetic")
+            source_sae = normalize(raw["technical"]["sae_engine"])
+            candidates = [
+                row
+                for row in mobil_existing_by_name_family[
+                    (base_name, family_code)
+                ]
+                if normalize(
+                    row["specifications"].get("sae_engine")
+                ) == source_sae
+            ]
+            if candidates:
+                match_basis = "explicit_series_name_and_exact_sae"
+        if not candidates:
+            for alias_name in dominican_alias_targets.get(source_name, []):
+                candidates.extend(
+                    mobil_existing_by_name_family[
+                        (alias_name, family_code)
+                    ]
+                )
+            if candidates:
+                match_basis = "explicit_catalog_identity_alias"
+        source_sae_engine = normalize(raw["technical"]["sae_engine"])
+        source_sae_gear = normalize(raw["technical"]["sae_gear"])
+        candidates = [
+            row
+            for row in candidates
+            if (
+                not source_sae_engine
+                or not normalize(row["specifications"].get("sae_engine"))
+                or normalize(row["specifications"].get("sae_engine"))
+                == source_sae_engine
+            )
+            and (
+                not source_sae_gear
+                or not normalize(row["specifications"].get("sae_gear"))
+                or normalize(row["specifications"].get("sae_gear"))
+                == source_sae_gear
+            )
+        ]
+        if candidates:
+            if len(candidates) > 1:
+                dominican_imca_mobil_multi_candidate_rows += 1
+            target = min(
+                candidates,
+                key=lambda row: (
+                    "historical" in row.get("lifecycle_status", ""),
+                    source_priority.get(row["source_id"], 10),
+                    row["canonical_key"],
+                ),
+            )
+            merge_dominican_republic_imca_mobil_evidence(
+                target,
+                source_record,
+                raw,
+                match_basis,
+            )
+            dominican_imca_mobil_matched_to_existing += 1
+            if match_basis == "explicit_catalog_identity_alias":
+                dominican_imca_mobil_alias_matches += 1
+        else:
+            target = source_record
+            input_records.append(target)
+            mobil_existing_by_name_family[
+                (source_name, family_code)
+            ].append(target)
+            dominican_imca_mobil_products_added += 1
+        dominican_imca_mobil_product_key[
+            raw["source_record_id"]
+        ] = target["canonical_key"]
     records, candidates = deduplicate(input_records)
     canonical_by_key = {row["canonical_key"]: row for row in records}
     for source_key, match_keys in blue_angel_review_keys:
@@ -7521,6 +7752,25 @@ def main() -> None:
             "source_record_id": raw["source_record_id"],
             "source_row": None,
             "relation": "official_current_brand_catalog_product_identity",
+        }
+        link_key = (
+            link["product_id"],
+            link["source_id"],
+            link["source_record_id"],
+        )
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
+    for raw in dominican_imca_mobil_source_rows:
+        target = canonical_by_key[
+            dominican_imca_mobil_product_key[raw["source_record_id"]]
+        ]
+        link = {
+            "product_id": target["product_id"],
+            "source_id": raw["source_id"],
+            "source_record_id": raw["source_record_id"],
+            "source_row": raw["source_page"],
+            "relation": "official_authorized_distributor_country_catalog_grade",
         }
         link_key = (
             link["product_id"],
@@ -8613,6 +8863,7 @@ def main() -> None:
         "barbados_sol_availability_input_sha256": hashlib.sha256(BARBADOS_SOL_AVAILABILITY_JSONL.read_bytes()).hexdigest(),
         "shell_global_distributors_input_sha256": hashlib.sha256(SHELL_GLOBAL_DISTRIBUTORS_JSONL.read_bytes()).hexdigest(),
         "castrol_global_distributors_input_sha256": hashlib.sha256(CASTROL_GLOBAL_DISTRIBUTORS_JSONL.read_bytes()).hexdigest(),
+        "dominican_imca_mobil_input_sha256": hashlib.sha256(DOMINICAN_REPUBLIC_IMCA_MOBIL_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "son_mancap_input_sha256": hashlib.sha256(SON_MANCAP_JSONL.read_bytes()).hexdigest(),
@@ -8698,6 +8949,21 @@ def main() -> None:
         ),
         "castrol_global_distributors_source_rows": len(
             castrol_global_distributor_rows
+        ),
+        "dominican_imca_mobil_source_rows": len(
+            dominican_imca_mobil_source_rows
+        ),
+        "dominican_imca_mobil_products_matched_to_existing": (
+            dominican_imca_mobil_matched_to_existing
+        ),
+        "dominican_imca_mobil_products_added": (
+            dominican_imca_mobil_products_added
+        ),
+        "dominican_imca_mobil_explicit_alias_matches": (
+            dominican_imca_mobil_alias_matches
+        ),
+        "dominican_imca_mobil_multi_candidate_rows": (
+            dominican_imca_mobil_multi_candidate_rows
         ),
         "blue_angel_source_rows": len(blue_angel_source_rows),
         "blue_angel_products_matched_to_existing": blue_angel_matched_rows,

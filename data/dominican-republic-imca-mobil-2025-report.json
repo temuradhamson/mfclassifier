@@ -1,0 +1,29 @@
+{
+  "categories": {
+    "automatic_transmission_fluid": 3,
+    "automotive_gear_oil": 3,
+    "continuously_variable_transmission_fluid": 1,
+    "engine_coolant": 3,
+    "heavy_duty_engine_oil": 12,
+    "motorcycle_engine_oil": 6,
+    "passenger_car_engine_oil": 21,
+    "scooter_engine_oil": 1,
+    "two_stroke_marine_engine_oil": 1
+  },
+  "families": {
+    "M": 41,
+    "T": 7,
+    "TF": 3
+  },
+  "normalized_output_sha256": "c1fcc19b78e380e3c0e0c56dd4bcbc0c72eaae1f538f6ddc9231fbc13fabacd5",
+  "product_grade_rows": 51,
+  "quality_note": "Dominican Republic availability evidence for global Mobil identities; no country-specific manufacturer masters are created before strict matching.",
+  "snapshot_date": "2026-07-24",
+  "source_id": "DOMINICAN_REPUBLIC_IMCA_MOBIL_2025_CATALOG",
+  "source_pages_with_products": 29,
+  "source_pdf_bytes": 15201268,
+  "source_pdf_creation_date": "2025-12-09",
+  "source_pdf_pages": 32,
+  "source_pdf_sha256": "9e7c730837583042997e2a9c32ba9f4424bc53a025e2d8bc4bf6f4535aad50ab",
+  "source_url": "https://lubricantesmobil.imcadom.com/wp-content/uploads/2025/12/0008982IMCARD_Catalogo-Completo.pdf"
+}

@@ -10,8 +10,7 @@
     "H": 3,
     "I": 5,
     "M": 14,
-    "T": 3,
-    "TF": 3,
+    "T": 6,
     "U": 1
   },
   "identities_by_category": {
@@ -27,7 +26,7 @@
   },
   "identities_with_conflicting_status_observations": 4,
   "listing_card_occurrences": 36,
-  "normalized_output_sha256": "fbbdfb5431af025ae39fa87cec19649ddea7ef92de885111ab04d75e2058172e",
+  "normalized_output_sha256": "81d0315bc677e85e6cdc7fa106c7b15c39dab2a48d77029564f05f43988f9094",
   "normalized_product_identities": 33,
   "package_only_occurrences_collapsed": 3,
   "quality_note": "Barbados availability evidence for global Mobil identities. No country-specific manufacturer master products are created before strict matching.",
