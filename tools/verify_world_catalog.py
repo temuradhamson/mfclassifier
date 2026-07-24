@@ -280,6 +280,8 @@ def main() -> None:
     castrol_global_distributor_rows = [json.loads(line) for line in (ROOT / "data/castrol-global-current-distributors.jsonl").read_text(encoding="utf-8").splitlines() if line]
     dominican_imca_mobil_report = json.loads((ROOT / "data/dominican-republic-imca-mobil-2025-report.json").read_text(encoding="utf-8"))
     dominican_imca_mobil_rows = [json.loads(line) for line in (ROOT / "data/dominican-republic-imca-mobil-2025-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    dominican_imca_mobil_web_report = json.loads((ROOT / "data/dominican-republic-imca-mobil-web-report.json").read_text(encoding="utf-8"))
+    dominican_imca_mobil_web_rows = [json.loads(line) for line in (ROOT / "data/dominican-republic-imca-mobil-web-pages.jsonl").read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_report = json.loads((ROOT / "data/kebs-smark-lubricant-products-report.json").read_text(encoding="utf-8"))
     kebs_smark_rows = [json.loads(line) for line in (ROOT / "data/kebs-smark-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     east_africa_report = json.loads((ROOT / "data/east-africa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -2834,6 +2836,72 @@ def main() -> None:
         "SELECT count(*) FROM product_sources "
         "WHERE source_id='DOMINICAN_REPUBLIC_IMCA_MOBIL_2025_CATALOG'"
     ).fetchone()[0] == 51
+    assert dominican_imca_mobil_web_report[
+        "sitemap_product_pages"
+    ] == len(dominican_imca_mobil_web_rows) == report[
+        "dominican_imca_mobil_web_source_rows"
+    ] == 95
+    assert dominican_imca_mobil_web_report["http_200_pages"] == 95
+    assert dominican_imca_mobil_web_report[
+        "unique_factual_projection_hashes"
+    ] == 95
+    assert dominican_imca_mobil_web_report[
+        "unique_product_page_titles"
+    ] == 95
+    assert dominican_imca_mobil_web_report[
+        "sitemap_last_modified_date_counts"
+    ] == {"2021-04-27": 92, "2021-09-14": 1, "2026-04-01": 2}
+    assert dominican_imca_mobil_web_report["category_counts"] == {
+        "Automotriz": 27,
+        "Flotillas": 15,
+        "Grasas": 8,
+        "Industrial": 35,
+        "Maquinaria Pesada": 9,
+        "Marítimo / Aviación": 7,
+    }
+    assert dominican_imca_mobil_web_report["product_type_counts"] == {
+        "Mineral": 55,
+        "Refrigerante": 2,
+        "Semi-Sintético": 6,
+        "Sintético": 31,
+    }
+    assert dominican_imca_mobil_web_report[
+        "normalized_output_sha256"
+    ] == hashlib.sha256(
+        (
+            ROOT / "data/dominican-republic-imca-mobil-web-pages.jsonl"
+        ).read_bytes()
+    ).hexdigest()
+    assert report["dominican_imca_mobil_web_input_sha256"] == (
+        dominican_imca_mobil_web_report["normalized_output_sha256"]
+    )
+    assert policy_by_id[
+        "DOMINICAN_REPUBLIC_IMCA_MOBIL_LIVE_WEB_CATALOG"
+    ]["source_sha256"] == dominican_imca_mobil_web_report[
+        "normalized_output_sha256"
+    ]
+    assert policy_by_id[
+        "DOMINICAN_REPUBLIC_IMCA_MOBIL_LIVE_WEB_CATALOG"
+    ]["observed_count"] == 95
+    assert all(
+        row["brand"] == "MOBIL"
+        and row["http_status"] == 200
+        and row["source_url"].startswith(
+            "https://lubricantesmobil.imcadom.com/productos/"
+        )
+        and row["product_page_title"]
+        and row["factual_projection_sha256"]
+        and row["normalized_product_section_sha256"]
+        for row in dominican_imca_mobil_web_rows
+    )
+    assert db.execute(
+        "SELECT count(*) FROM products "
+        "WHERE source_id='DOMINICAN_REPUBLIC_IMCA_MOBIL_LIVE_WEB_CATALOG'"
+    ).fetchone()[0] == 0
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id='DOMINICAN_REPUBLIC_IMCA_MOBIL_LIVE_WEB_CATALOG'"
+    ).fetchone()[0] == 0
     assert policy_by_id["VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG"]["observed_count"] == 23
     assert db.execute(
         "SELECT count(*) FROM products WHERE source_id='VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG'"

@@ -1,0 +1,34 @@
+{
+  "category_counts": {
+    "Automotriz": 27,
+    "Flotillas": 15,
+    "Grasas": 8,
+    "Industrial": 35,
+    "Maquinaria Pesada": 9,
+    "Marítimo / Aviación": 7
+  },
+  "http_200_pages": 95,
+  "normalized_output_sha256": "80a5c698673eaf7c21262b9604d271ed63883f43d4bd98dcfb0efba1edd8d07a",
+  "pages_with_api_tokens": 2,
+  "pages_with_sae_tokens": 28,
+  "product_type_counts": {
+    "Mineral": 55,
+    "Refrigerante": 2,
+    "Semi-Sintético": 6,
+    "Sintético": 31
+  },
+  "quality_note": "Complete live page denominator. Sitemap dates are preserved; a live URL does not prove a recently reformulated product.",
+  "sitemap_last_modified_date_counts": {
+    "2021-04-27": 92,
+    "2021-09-14": 1,
+    "2026-04-01": 2
+  },
+  "sitemap_product_pages": 95,
+  "snapshot_date": "2026-07-24",
+  "source_id": "DOMINICAN_REPUBLIC_IMCA_MOBIL_LIVE_WEB_CATALOG",
+  "source_sitemap_sha256": "bf2886eb9a1336ea8ea697dc7e631b8e4c8597af0e5fbc0c5cb37fb9adb6b905",
+  "source_sitemap_url": "https://lubricantesmobil.imcadom.com/productos-sitemap.xml",
+  "source_url": "https://lubricantesmobil.imcadom.com/productos/",
+  "unique_factual_projection_hashes": 95,
+  "unique_product_page_titles": 95
+}

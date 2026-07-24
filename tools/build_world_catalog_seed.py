@@ -119,6 +119,7 @@ BARBADOS_SOL_AVAILABILITY_JSONL = ROOT / "data" / "barbados-sol-recent-availabil
 SHELL_GLOBAL_DISTRIBUTORS_JSONL = ROOT / "data" / "shell-global-current-distributors.jsonl"
 CASTROL_GLOBAL_DISTRIBUTORS_JSONL = ROOT / "data" / "castrol-global-current-distributors.jsonl"
 DOMINICAN_REPUBLIC_IMCA_MOBIL_JSONL = ROOT / "data" / "dominican-republic-imca-mobil-2025-products.jsonl"
+DOMINICAN_REPUBLIC_IMCA_MOBIL_WEB_JSONL = ROOT / "data" / "dominican-republic-imca-mobil-web-pages.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
 SON_MANCAP_JSONL = ROOT / "data" / "son-mancap-chemical-lubricant-products.jsonl"
@@ -6259,6 +6260,13 @@ def main() -> None:
         dominican_republic_imca_mobil_record(row)
         for row in dominican_imca_mobil_source_rows
     ]
+    dominican_imca_mobil_web_rows = [
+        json.loads(line)
+        for line in DOMINICAN_REPUBLIC_IMCA_MOBIL_WEB_JSONL.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        if line
+    ]
     bahamas_cbs_availability_rows = [
         json.loads(line)
         for line in BAHAMAS_CBS_AVAILABILITY_JSONL.read_text(
@@ -8864,6 +8872,7 @@ def main() -> None:
         "shell_global_distributors_input_sha256": hashlib.sha256(SHELL_GLOBAL_DISTRIBUTORS_JSONL.read_bytes()).hexdigest(),
         "castrol_global_distributors_input_sha256": hashlib.sha256(CASTROL_GLOBAL_DISTRIBUTORS_JSONL.read_bytes()).hexdigest(),
         "dominican_imca_mobil_input_sha256": hashlib.sha256(DOMINICAN_REPUBLIC_IMCA_MOBIL_JSONL.read_bytes()).hexdigest(),
+        "dominican_imca_mobil_web_input_sha256": hashlib.sha256(DOMINICAN_REPUBLIC_IMCA_MOBIL_WEB_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "son_mancap_input_sha256": hashlib.sha256(SON_MANCAP_JSONL.read_bytes()).hexdigest(),
@@ -8952,6 +8961,9 @@ def main() -> None:
         ),
         "dominican_imca_mobil_source_rows": len(
             dominican_imca_mobil_source_rows
+        ),
+        "dominican_imca_mobil_web_source_rows": len(
+            dominican_imca_mobil_web_rows
         ),
         "dominican_imca_mobil_products_matched_to_existing": (
             dominican_imca_mobil_matched_to_existing

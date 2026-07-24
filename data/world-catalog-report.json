@@ -61,6 +61,7 @@
   "shell_global_distributors_input_sha256": "6e0576a4d916eddfa5a5dcbabdd55cdddfff0fc6cbb3b327c253fa5c7e8387a1",
   "castrol_global_distributors_input_sha256": "44d79953d2e101f39e32b82975d5a51399d992ca8114e9950417b574829c7d6f",
   "dominican_imca_mobil_input_sha256": "c1fcc19b78e380e3c0e0c56dd4bcbc0c72eaae1f538f6ddc9231fbc13fabacd5",
+  "dominican_imca_mobil_web_input_sha256": "80a5c698673eaf7c21262b9604d271ed63883f43d4bd98dcfb0efba1edd8d07a",
   "kebs_smark_input_sha256": "629656be992d2fd2969db6839d22ff57c59017a36f8b402dd40b74702cb25df8",
   "east_africa_certified_input_sha256": "fa272e24f17a96b732c6edcf09914de0bbd4a245ccd94a33cab415213cf164ab",
   "son_mancap_input_sha256": "3728be0200a766f1a862f3c2bd0cf6b92bc6bf9b4d78e832e7c117a2d3a1ec36",
@@ -143,6 +144,7 @@
   "shell_global_distributors_source_rows": 118,
   "castrol_global_distributors_source_rows": 368,
   "dominican_imca_mobil_source_rows": 51,
+  "dominican_imca_mobil_web_source_rows": 95,
   "dominican_imca_mobil_products_matched_to_existing": 28,
   "dominican_imca_mobil_products_added": 23,
   "dominican_imca_mobil_explicit_alias_matches": 5,
@@ -788,7 +790,8 @@
     "BARBADOS_SOL_RECENT_ECOMMERCE_CATALOG",
     "SHELL_GLOBAL_CURRENT_APPROVED_DISTRIBUTOR_LOCATOR",
     "CASTROL_GLOBAL_CURRENT_AUTHORISED_DISTRIBUTORS",
-    "DOMINICAN_REPUBLIC_IMCA_MOBIL_2025_CATALOG"
+    "DOMINICAN_REPUBLIC_IMCA_MOBIL_2025_CATALOG",
+    "DOMINICAN_REPUBLIC_IMCA_MOBIL_LIVE_WEB_CATALOG"
   ],
   "bulk_sources_blocked": [
     "fuchs-benelux",

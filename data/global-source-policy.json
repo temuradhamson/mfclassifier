@@ -2836,6 +2836,21 @@
       "publication_status": "attributed_nonexpressive_factual_product_fields_only_no_pdf_or_image_redistribution",
       "observed_count": 51,
       "notes": "The 32-page PDF was created 2025-12-09 and has SHA-256 9e7c730837583042997e2a9c32ba9f4424bc53a025e2d8bc4bf6f4535aad50ab. Twenty-nine product pages yield 51 explicit product-grade rows: 41 engine oils, seven transmission/gear fluids and three coolants. API, API GL, ACEA, JASO and application statements are preserved only as source-reported claims. Exact name/family/grade matches and five explicit identity aliases attach country-catalog evidence to existing global Mobil identities; unmatched grades become new canonical identities without inventing specifications."
+    },
+    {
+      "source_id": "DOMINICAN_REPUBLIC_IMCA_MOBIL_LIVE_WEB_CATALOG",
+      "title": "Complete live Mobil/IMCA Dominican Republic product-page sitemap",
+      "owner": "Implementos y Maquinarias S.A. (IMCA), authorised Mobil distributor",
+      "source_type": "official_authorized_distributor_complete_live_product_sitemap",
+      "source_locator": "data/dominican-republic-imca-mobil-web-pages.jsonl",
+      "source_url": "https://lubricantesmobil.imcadom.com/productos/",
+      "terms_url": "https://lubricantesmobil.imcadom.com/",
+      "source_sha256": "80a5c698673eaf7c21262b9604d271ed63883f43d4bd98dcfb0efba1edd8d07a",
+      "access_status": "public_official_product_sitemap_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_page_fields_and_hashes_only_no_page_text_or_images_redistributed",
+      "observed_count": 95,
+      "notes": "All 95 product URLs in the official sitemap returned HTTP 200 on 2026-07-24. The layer preserves title, published taxonomy, sitemap last-modified timestamp, direct URL, conservative technical tokens and a stable hash of the normalized product section; expressive body text and images are not redistributed. The normalized output was reproduced byte-for-byte across independent live fetches despite dynamic WordPress nonces. Sitemap dates are 92 pages on 2021-04-27, one on 2021-09-14 and two on 2026-04-01, so a live URL is not treated as proof of a recently reformulated product. This is an evidence-only product/series-page denominator and does not create canonical rows or infer unprinted grades."
     }
   ]
 }
