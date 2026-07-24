@@ -119,6 +119,9 @@ CHEVRON_US_CURRENT_JSONL = ROOT / "data/chevron-us-current-products.jsonl"
 SEYCHELLES_SEYPEC_REVIEW = (
     ROOT / "data/seychelles-seypec-chevron-scope-review.json"
 )
+SAO_TOME_ENCO_JSONL = (
+    ROOT / "data/sao-tome-enco-current-galp-products.jsonl"
+)
 URUGUAY_ANCAP_LUBRICANT_JSONL = ROOT / "data" / "uruguay-ancap-current-lubricants.jsonl"
 COLOMBIA_TERPEL_LUBRICANT_JSONL = ROOT / "data" / "colombia-terpel-current-lubricants.jsonl"
 GUYANA_GUYOIL_LUBRICANT_JSONL = ROOT / "data" / "guyana-guyoil-current-lubricants.jsonl"
@@ -1406,6 +1409,82 @@ def chevron_us_current_record(row: dict) -> dict:
     record["canonical_key"] += (
         "|chevron_us_current_record:"
         + normalize(row["source_record_id"])
+    )
+    record["product_id"] = (
+        "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    )
+    return record
+
+
+def sao_tome_enco_record(row: dict) -> dict:
+    """Convert one current ENCO São Tomé Galp product-grade identity."""
+    technical = row["technical"]
+    performance = [
+        *(f"API {value}" for value in technical["api"]),
+        *technical["military_specifications"],
+    ]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Complete current ENCO São Tomé Galp product API",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": technical["sae_engine"],
+        "api_class": "; ".join(performance),
+        "viscosity": "",
+        "grease_class": "",
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": row["evidence_status"],
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update({
+        "sae_engine": technical["sae_engine"],
+        "sae_gear": technical["sae_gear"],
+        "api": technical["api"],
+        "api_gl": technical["api_gl"],
+        "acea": technical["acea"],
+        "ilsac": technical["ilsac"],
+        "jaso": technical["jaso"],
+        "military_specifications": technical[
+            "military_specifications"
+        ],
+        "local_distributor": row["local_distributor"],
+        "source_series": row["source_series"],
+        "source_grade": row["source_grade"],
+        "source_grade_kind": row["source_grade_kind"],
+        "source_grade_evidence": row["source_grade_evidence"],
+        "source_product_id": row["source_product_id"],
+        "source_slug": row["source_slug"],
+        "source_category": row["source_category"],
+        "source_url": row["source_url"],
+        "source_api_url": row["source_api_url"],
+        "source_detail_api_url": row["source_detail_api_url"],
+        "source_api_sha256": row["source_api_sha256"],
+        "source_detail_api_sha256": row["source_detail_api_sha256"],
+        "source_image_url": row["source_image_url"],
+        "source_image_sha256": row["source_image_sha256"],
+        "source_created_at": row["source_created_at"],
+        "source_updated_at": row["source_updated_at"],
+        "source_factual_projection_sha256": row[
+            "source_factual_projection_sha256"
+        ],
+        "source_quality_flags": row["source_quality_flags"],
+        "publication_scope": row["publication_scope"],
+    })
+    record["canonical_key"] += (
+        "|sao_tome_enco_product:" + normalize(row["source_record_id"])
     )
     record["product_id"] = (
         "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
@@ -9701,6 +9780,61 @@ def main() -> None:
             f"{chevron_us_matched_to_existing} matched, "
             f"{chevron_us_products_added} added"
         )
+    sao_tome_enco_source_rows = [
+        json.loads(line)
+        for line in SAO_TOME_ENCO_JSONL.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        if line
+    ]
+    sao_tome_enco_records = [
+        sao_tome_enco_record(row) for row in sao_tome_enco_source_rows
+    ]
+    sao_tome_enco_product_key = {}
+    sao_tome_enco_matched_to_existing = 0
+    sao_tome_enco_products_added = 0
+    for raw, source_record in zip(
+        sao_tome_enco_source_rows, sao_tome_enco_records
+    ):
+        source_specs = source_record["specifications"]
+        matches = [
+            row for row in input_records
+            if normalize(row["brand"]) == normalize(source_record["brand"])
+            and row["product_name_normalized"]
+            == source_record["product_name_normalized"]
+            and row["family_code"] == source_record["family_code"]
+            and all(
+                normalize(row["specifications"].get(field))
+                == normalize(source_specs.get(field))
+                for field in ("sae_engine", "sae_gear", "iso_vg", "nlgi")
+            )
+            and sorted(row["specifications"].get("api", []))
+            == sorted(source_specs.get("api", []))
+        ]
+        if len(matches) == 1:
+            target = matches[0]
+            sao_tome_enco_matched_to_existing += 1
+        else:
+            if matches:
+                raise RuntimeError(
+                    "ENCO São Tomé strict identity became ambiguous: "
+                    + raw["source_record_id"]
+                )
+            target = source_record
+            input_records.append(target)
+            sao_tome_enco_products_added += 1
+        sao_tome_enco_product_key[
+            raw["source_record_id"]
+        ] = target["canonical_key"]
+    if (
+        sao_tome_enco_matched_to_existing,
+        sao_tome_enco_products_added,
+    ) != (0, 1):
+        raise RuntimeError(
+            "ENCO São Tomé strict-match denominator changed: "
+            f"{sao_tome_enco_matched_to_existing} matched, "
+            f"{sao_tome_enco_products_added} added"
+        )
     records, candidates = deduplicate(input_records)
     canonical_by_key = {row["canonical_key"]: row for row in records}
     mogas_global_market_link_targets = []
@@ -10801,6 +10935,23 @@ def main() -> None:
         if link_key not in source_link_keys:
             source_links.append(link)
             source_link_keys.add(link_key)
+    for raw in sao_tome_enco_source_rows:
+        target = canonical_by_key[
+            sao_tome_enco_product_key[raw["source_record_id"]]
+        ]
+        link = {
+            "product_id": target["product_id"],
+            "source_id": raw["source_id"],
+            "source_record_id": raw["source_record_id"],
+            "source_row": None,
+            "relation": "official_country_distributor_complete_current_api",
+        }
+        link_key = (
+            link["product_id"], link["source_id"], link["source_record_id"]
+        )
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     for raw in pertamina_source_rows:
         target = canonical_by_key[pertamina_product_key[raw["source_record_id"]]]
         link = {
@@ -11585,6 +11736,9 @@ def main() -> None:
         "chevron_us_current_input_sha256": hashlib.sha256(
             CHEVRON_US_CURRENT_JSONL.read_bytes()
         ).hexdigest(),
+        "sao_tome_enco_input_sha256": hashlib.sha256(
+            SAO_TOME_ENCO_JSONL.read_bytes()
+        ).hexdigest(),
         "seychelles_seypec_review_sha256": hashlib.sha256(
             SEYCHELLES_SEYPEC_REVIEW.read_bytes()
         ).hexdigest(),
@@ -11723,6 +11877,11 @@ def main() -> None:
             chevron_us_matched_to_existing
         ),
         "chevron_us_current_products_added": chevron_us_products_added,
+        "sao_tome_enco_source_rows": len(sao_tome_enco_source_rows),
+        "sao_tome_enco_products_matched_to_existing": (
+            sao_tome_enco_matched_to_existing
+        ),
+        "sao_tome_enco_products_added": sao_tome_enco_products_added,
         "haiti_lubex_mag1_presence_source_rows": len(
             haiti_lubex_mag1_presence_rows
         ),

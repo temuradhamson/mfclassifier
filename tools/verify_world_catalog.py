@@ -88,6 +88,8 @@ def main() -> None:
     pso_rows = [json.loads(line) for line in (ROOT / "data/pso-official-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     chevron_us_report = json.loads((ROOT / "data/chevron-us-current-products-report.json").read_text(encoding="utf-8"))
     chevron_us_rows = [json.loads(line) for line in (ROOT / "data/chevron-us-current-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    sao_tome_enco_report = json.loads((ROOT / "data/sao-tome-enco-current-galp-products-report.json").read_text(encoding="utf-8"))
+    sao_tome_enco_rows = [json.loads(line) for line in (ROOT / "data/sao-tome-enco-current-galp-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     pertamina_report = json.loads((ROOT / "data/pertamina-official-lubricant-products-report.json").read_text(encoding="utf-8"))
     pertamina_rows = [json.loads(line) for line in (ROOT / "data/pertamina-official-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     man_report = json.loads((ROOT / "data/man-service-products-report.json").read_text(encoding="utf-8"))
@@ -417,6 +419,7 @@ def main() -> None:
         + report["angola_sonangol_ngol_products_added"]
         + report["madagascar_galana_mobil_products_added"]
         + report["chevron_us_current_products_added"]
+        + report["sao_tome_enco_products_added"]
         + len(uruguay_ancap_rows)
         + len(colombia_terpel_rows)
         + len(guyana_guyoil_rows)
@@ -1142,8 +1145,8 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 5191
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3115
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 118700
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 118699
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 118701
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 118700
     assert report["quality_issues"]["professional_key_incomplete"] == 79480
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
@@ -3183,6 +3186,65 @@ def main() -> None:
         "SELECT count(*) FROM product_offers "
         "WHERE source_id="
         "'SEYCHELLES_SEYPEC_CHEVRON_MARKET_PRESENCE_REVIEW'"
+    ).fetchone()[0] == 0
+    assert sao_tome_enco_report[
+        "normalized_product_grade_rows"
+    ] == len(sao_tome_enco_rows) == 1
+    assert sao_tome_enco_report["api_reported_total"] == 1
+    assert sao_tome_enco_report["api_reported_pages"] == 1
+    assert sao_tome_enco_report["api_product_rows"] == 1
+    assert sao_tome_enco_report["active_product_rows"] == 1
+    assert sao_tome_enco_report["product_categories"] == 1
+    assert sao_tome_enco_report["families"] == {"M": 1}
+    assert sao_tome_enco_report["rows_with_sae"] == 1
+    assert sao_tome_enco_report["rows_with_api"] == 1
+    assert sao_tome_enco_report[
+        "rows_with_military_specification"
+    ] == 1
+    assert sao_tome_enco_report["offers_created"] == 0
+    assert sao_tome_enco_report["products_api_sha256"] == (
+        sao_tome_enco_report["active_products_api_sha256"]
+    )
+    assert report["sao_tome_enco_source_rows"] == 1
+    assert report["sao_tome_enco_products_matched_to_existing"] == 0
+    assert report["sao_tome_enco_products_added"] == 1
+    assert report["sao_tome_enco_input_sha256"] == hashlib.sha256(
+        (
+            ROOT / "data/sao-tome-enco-current-galp-products.jsonl"
+        ).read_bytes()
+    ).hexdigest()
+    assert policy_by_id[
+        "SAO_TOME_ENCO_COMPLETE_CURRENT_GALP_PRODUCT_API"
+    ]["source_sha256"] == sao_tome_enco_report["output_sha256"]
+    assert policy_by_id[
+        "SAO_TOME_ENCO_COMPLETE_CURRENT_GALP_PRODUCT_API"
+    ]["observed_count"] == 1
+    assert all(
+        row["brand"] == "Galp"
+        and row["market"] == "São Tomé and Príncipe"
+        and row["family_code"] == "M"
+        and row["product_name"] == "Galp Formula 15W-40"
+        and row["technical"]["sae_engine"] == "15W-40"
+        and row["technical"]["api"] == ["CD", "SF"]
+        and row["technical"]["military_specifications"]
+        == ["MIL-L-2104C"]
+        and not ({"shortDesc", "html", "image"} & set(row))
+        for row in sao_tome_enco_rows
+    )
+    assert db.execute(
+        "SELECT count(*) FROM products "
+        "WHERE source_id="
+        "'SAO_TOME_ENCO_COMPLETE_CURRENT_GALP_PRODUCT_API'"
+    ).fetchone()[0] == 1
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id="
+        "'SAO_TOME_ENCO_COMPLETE_CURRENT_GALP_PRODUCT_API'"
+    ).fetchone()[0] == 1
+    assert db.execute(
+        "SELECT count(*) FROM product_offers "
+        "WHERE source_id="
+        "'SAO_TOME_ENCO_COMPLETE_CURRENT_GALP_PRODUCT_API'"
     ).fetchone()[0] == 0
     assert uruguay_ancap_report["catalog_product_families"] == 56
     assert uruguay_ancap_report["normalized_product_variants"] == len(uruguay_ancap_rows) == 88
