@@ -367,7 +367,7 @@ def main() -> None:
             if block["name"].startswith("Total Lubmarine")
             else "Galp"
             if block["name"].startswith("Galp ")
-            else ""
+            else "Brand not stated"
         )
         manufacturer = (
             "Total Lubmarine"
@@ -417,6 +417,10 @@ def main() -> None:
             "source_quality_flags": [
                 "catalog_http_last_modified_2019_not_current_availability",
                 "price_preserved_as_historical_offer_not_active_offer",
+                *(
+                    ["source_brand_not_stated"]
+                    if brand == "Brand not stated" else []
+                ),
             ],
         })
         for package_index, package_row in enumerate(block["package_price_rows"], 1):

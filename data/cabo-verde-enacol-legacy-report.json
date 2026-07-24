@@ -1,6 +1,6 @@
 {
   "brands": {
-    "": 1,
+    "Brand not stated": 1,
     "Galp": 122,
     "Total Lubmarine": 25
   },
@@ -82,7 +82,7 @@
   "owner": "ENACOL — Empresa Nacional de Combustíveis, S.A.",
   "privacy_sha256": "91f3d982c66b3e1ab307cfb4a7df514ff0e01e5d794861e33ee913cfb1c619ab",
   "privacy_url": "https://www.enacol.cv/privacidade/",
-  "product_output_sha256": "495b41e35cd50a6b8fb5fea13b2a4f25ad0a051f2ec222d144bf2852b56487f4",
+  "product_output_sha256": "252b1561a35095c860f98c905cdf85972369a25bcce8ef00a38976491eaac49b",
   "publication_scope": "Attributed factual product names, classifications, standards, package and historical price facts with URLs/hashes only; descriptions, artwork and page layout are not redistributed.",
   "robots_sha256": "5de39313e14319d545ae6a90bdabca01ab907e5d4edbec959a0bd0a29e719700",
   "robots_url": "https://www.enacol.cv/robots.txt",

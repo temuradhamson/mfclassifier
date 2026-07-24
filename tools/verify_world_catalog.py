@@ -90,6 +90,9 @@ def main() -> None:
     chevron_us_rows = [json.loads(line) for line in (ROOT / "data/chevron-us-current-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     sao_tome_enco_report = json.loads((ROOT / "data/sao-tome-enco-current-galp-products-report.json").read_text(encoding="utf-8"))
     sao_tome_enco_rows = [json.loads(line) for line in (ROOT / "data/sao-tome-enco-current-galp-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    cabo_verde_enacol_report = json.loads((ROOT / "data/cabo-verde-enacol-legacy-report.json").read_text(encoding="utf-8"))
+    cabo_verde_enacol_rows = [json.loads(line) for line in (ROOT / "data/cabo-verde-enacol-legacy-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    cabo_verde_enacol_offers = [json.loads(line) for line in (ROOT / "data/cabo-verde-enacol-legacy-offers.jsonl").read_text(encoding="utf-8").splitlines() if line]
     pertamina_report = json.loads((ROOT / "data/pertamina-official-lubricant-products-report.json").read_text(encoding="utf-8"))
     pertamina_rows = [json.loads(line) for line in (ROOT / "data/pertamina-official-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     man_report = json.loads((ROOT / "data/man-service-products-report.json").read_text(encoding="utf-8"))
@@ -420,6 +423,7 @@ def main() -> None:
         + report["madagascar_galana_mobil_products_added"]
         + report["chevron_us_current_products_added"]
         + report["sao_tome_enco_products_added"]
+        + report["cabo_verde_enacol_products_added"]
         + len(uruguay_ancap_rows)
         + len(colombia_terpel_rows)
         + len(guyana_guyoil_rows)
@@ -1143,19 +1147,19 @@ def main() -> None:
     assert report["aichilon_products_matched_to_existing"] == 255
     assert report["aichilon_products_added"] == 60
     assert report["aichilon_rows_excluded"] == 2
-    assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 5191
+    assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 5455
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3115
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 118701
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 118700
-    assert report["quality_issues"]["professional_key_incomplete"] == 79480
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 118836
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 118835
+    assert report["quality_issues"]["professional_key_incomplete"] == 79534
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
         WHERE q.issue_code='professional_key_incomplete'
         GROUP BY p.family_code
     """)) == {
-        "C": 2300, "E": 151, "G": 12528, "H": 5285, "I": 3903,
-        "M": 23721, "S": 12183, "T": 11982, "TF": 6783, "U": 644,
+        "C": 2300, "E": 151, "G": 12544, "H": 5286, "I": 3908,
+        "M": 23730, "S": 12189, "T": 11991, "TF": 6791, "U": 644,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -3245,6 +3249,98 @@ def main() -> None:
         "SELECT count(*) FROM product_offers "
         "WHERE source_id="
         "'SAO_TOME_ENCO_COMPLETE_CURRENT_GALP_PRODUCT_API'"
+    ).fetchone()[0] == 0
+    assert cabo_verde_enacol_report[
+        "normalized_product_rows"
+    ] == len(cabo_verde_enacol_rows) == 148
+    assert cabo_verde_enacol_report[
+        "historical_package_offer_rows"
+    ] == len(cabo_verde_enacol_offers) == 264
+    assert cabo_verde_enacol_report["historical_priced_offer_rows"] == 263
+    assert cabo_verde_enacol_report[
+        "historical_unpriced_package_rows"
+    ] == 1
+    assert cabo_verde_enacol_report["source_product_like_blocks"] == 155
+    assert cabo_verde_enacol_report[
+        "excluded_out_of_scope_or_heading_rows"
+    ] == 7
+    assert cabo_verde_enacol_report["catalog_product_rows"] == {
+        "auto": 59, "industria": 48, "marinha": 27, "massa": 14
+    }
+    assert cabo_verde_enacol_report["families"] == {
+        "C": 13, "G": 16, "H": 18, "I": 23, "M": 39,
+        "S": 6, "T": 22, "TF": 8, "U": 3,
+    }
+    assert {
+        key: value["pages"]
+        for key, value in cabo_verde_enacol_report["documents"].items()
+    } == {"auto": 6, "industria": 3, "marinha": 1, "massa": 3}
+    assert all(
+        "2019" in value["last_modified"]
+        for value in cabo_verde_enacol_report["documents"].values()
+    )
+    assert report["cabo_verde_enacol_source_rows"] == 148
+    assert report[
+        "cabo_verde_enacol_products_matched_to_existing"
+    ] == 13
+    assert report["cabo_verde_enacol_products_added"] == 135
+    assert report["cabo_verde_enacol_ambiguous_candidates"] == 2
+    assert report["cabo_verde_enacol_historical_offer_rows"] == 264
+    assert report[
+        "cabo_verde_enacol_products_input_sha256"
+    ] == hashlib.sha256(
+        (ROOT / "data/cabo-verde-enacol-legacy-products.jsonl").read_bytes()
+    ).hexdigest()
+    assert report[
+        "cabo_verde_enacol_offers_input_sha256"
+    ] == hashlib.sha256(
+        (ROOT / "data/cabo-verde-enacol-legacy-offers.jsonl").read_bytes()
+    ).hexdigest()
+    cabo_verde_policy = policy_by_id[
+        "CABO_VERDE_ENACOL_OFFICIALLY_LINKED_2019_PRICE_CATALOGS"
+    ]
+    assert cabo_verde_policy["source_sha256"] == (
+        cabo_verde_enacol_report["product_output_sha256"]
+    )
+    assert cabo_verde_policy["offer_source_sha256"] == (
+        cabo_verde_enacol_report["offer_output_sha256"]
+    )
+    assert cabo_verde_policy["observed_count"] == 148
+    assert all(
+        row["market"] == "Cabo Verde"
+        and row["lifecycle_status"]
+        == "officially_linked_legacy_price_catalog_2019"
+        and "catalog_http_last_modified_2019_not_current_availability"
+        in row["source_quality_flags"]
+        for row in cabo_verde_enacol_rows
+    )
+    assert all(
+        row["market"] == "Cabo Verde"
+        and row["price_currency"] == "CVE"
+        and row["lifecycle_status"]
+        == "historical_official_price_catalog_2019"
+        for row in cabo_verde_enacol_offers
+    )
+    assert db.execute(
+        "SELECT count(*) FROM products "
+        "WHERE source_id="
+        "'CABO_VERDE_ENACOL_OFFICIALLY_LINKED_2019_PRICE_CATALOGS'"
+    ).fetchone()[0] == 135
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id="
+        "'CABO_VERDE_ENACOL_OFFICIALLY_LINKED_2019_PRICE_CATALOGS'"
+    ).fetchone()[0] == 148
+    assert db.execute(
+        "SELECT count(*) FROM product_offers "
+        "WHERE source_id="
+        "'CABO_VERDE_ENACOL_OFFICIALLY_LINKED_2019_PRICE_CATALOGS'"
+    ).fetchone()[0] == 264
+    assert db.execute(
+        "SELECT count(*) FROM product_offers "
+        "WHERE source_id="
+        "'CABO_VERDE_ENACOL_OFFICIALLY_LINKED_2019_PRICE_CATALOGS' "
+        "AND lifecycle_status != 'archived'"
     ).fetchone()[0] == 0
     assert uruguay_ancap_report["catalog_product_families"] == 56
     assert uruguay_ancap_report["normalized_product_variants"] == len(uruguay_ancap_rows) == 88

@@ -3240,6 +3240,23 @@
       "publication_status": "attributed_transformed_nonexpressive_product_identity_grade_standard_category_date_source_link_and_hash_facts_only_no_descriptions_html_or_image_bytes_redistributed",
       "observed_count": 1,
       "notes": "ENCO identifies itself as the official Galp product distributor in São Tomé and Príncipe. Its frontend points to a public backend and the complete and active product queries both report exactly one page/one row: Galp Formula 15W-40, API CD/SF, MIL-L-2104C. The list and detail payloads agree and one Produtos Galp category is exposed. Nine hard-coded frontend fallback examples are not backend source records and are excluded. The one current identity is new after strict brand/name/family/SAE/API matching. Description, HTML and image bytes are fetched only for verification and are not redistributed; no package SKU, price or offer is inferred."
+    },
+    {
+      "source_id": "CABO_VERDE_ENACOL_OFFICIALLY_LINKED_2019_PRICE_CATALOGS",
+      "title": "ENACOL Cabo Verde officially linked 2019 lubricant price catalogs",
+      "owner": "ENACOL — Empresa Nacional de Combustíveis, S.A.",
+      "source_type": "official_country_distributor_current_landing_page_link_to_four_historical_product_and_price_catalog_pdfs",
+      "source_locator": "data/cabo-verde-enacol-legacy-products.jsonl",
+      "source_url": "https://www.enacol.cv/lubrificantes/",
+      "terms_url": "https://www.enacol.cv/privacidade/",
+      "source_sha256": "252b1561a35095c860f98c905cdf85972369a25bcce8ef00a38976491eaac49b",
+      "offer_source_locator": "data/cabo-verde-enacol-legacy-offers.jsonl",
+      "offer_source_sha256": "99d19d0d675f921318b98a7fb23c9a5eb0e94d0b117094587055dcbdc844d27a",
+      "access_status": "public_official_country_distributor_page_and_linked_pdfs_robots_allows_public_files",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_transformed_nonexpressive_historical_product_grade_standard_package_price_and_evidence_facts_only_no_catalog_prose_artwork_or_layout_redistributed",
+      "observed_count": 148,
+      "notes": "The current official ENACOL lubricant page links four complete automotive, industrial, marine and grease price PDFs. All four HTTP Last-Modified headers are dated 5 May 2019, so 148 in-scope product identities and 264 package observations (263 priced, one unpriced) are explicitly historical rather than current offers. Seven headings or consumer cleaning/care rows are excluded. The normalized set covers Galp, Total Lubmarine and one source-unbranded AdBlue row across C13/G16/H18/I23/M39/S6/T22/TF8/U3. Thirteen exact cross-source identities are linked to existing products; 135 local historical identities are added; two labels have multiple existing approval-scope candidates and are not auto-merged. Only factual fields, source links and hashes are redistributed."
     }
   ]
 }

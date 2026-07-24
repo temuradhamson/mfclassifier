@@ -122,6 +122,12 @@ SEYCHELLES_SEYPEC_REVIEW = (
 SAO_TOME_ENCO_JSONL = (
     ROOT / "data/sao-tome-enco-current-galp-products.jsonl"
 )
+CABO_VERDE_ENACOL_PRODUCTS_JSONL = (
+    ROOT / "data/cabo-verde-enacol-legacy-products.jsonl"
+)
+CABO_VERDE_ENACOL_OFFERS_JSONL = (
+    ROOT / "data/cabo-verde-enacol-legacy-offers.jsonl"
+)
 URUGUAY_ANCAP_LUBRICANT_JSONL = ROOT / "data" / "uruguay-ancap-current-lubricants.jsonl"
 COLOMBIA_TERPEL_LUBRICANT_JSONL = ROOT / "data" / "colombia-terpel-current-lubricants.jsonl"
 GUYANA_GUYOIL_LUBRICANT_JSONL = ROOT / "data" / "guyana-guyoil-current-lubricants.jsonl"
@@ -1490,6 +1496,131 @@ def sao_tome_enco_record(row: dict) -> dict:
         "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
     )
     return record
+
+
+def cabo_verde_enacol_legacy_record(row: dict) -> dict:
+    """Convert one historical ENACOL Cabo Verde product-grade identity."""
+    technical = row["technical"]
+    performance = [
+        *(f"API {value}" for value in technical["api"]),
+        *(f"API {value}" for value in technical["api_gl"]),
+        *(f"ACEA {value}" for value in technical["acea"]),
+        *(f"ILSAC {value}" for value in technical["ilsac"]),
+        *(f"JASO {value}" for value in technical["jaso"]),
+    ]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "ENACOL Cabo Verde officially linked 2019 price catalog",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": technical["sae_engine"] or technical["sae_gear"],
+        "api_class": "; ".join(performance),
+        "viscosity": (
+            f"ISO VG {technical['iso_vg']}" if technical["iso_vg"] else ""
+        ),
+        "grease_class": (
+            f"NLGI {technical['nlgi']}" if technical["nlgi"] else ""
+        ),
+        "coolant_class": technical["brake_fluid_class"],
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": row["source_page"],
+        "evidence_status": row["evidence_status"],
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update({
+        "sae_engine": technical["sae_engine"],
+        "sae_gear": technical["sae_gear"],
+        "iso_vg": technical["iso_vg"],
+        "nlgi": technical["nlgi"],
+        "api": technical["api"],
+        "api_gl": technical["api_gl"],
+        "acea": technical["acea"],
+        "ilsac": technical["ilsac"],
+        "jaso": technical["jaso"],
+        "brake_fluid_class": technical["brake_fluid_class"],
+        "standards_and_approvals_source_reported": technical[
+            "standards_and_approvals_source_reported"
+        ],
+        "local_distributor": row["local_distributor"],
+        "source_url": row["source_url"],
+        "technical_document_url": row["technical_document_url"],
+        "technical_document_sha256": row["technical_document_sha256"],
+        "source_page": row["source_page"],
+        "source_factual_projection_sha256": row[
+            "source_factual_projection_sha256"
+        ],
+        "source_quality_flags": row["source_quality_flags"],
+    })
+    for key in (
+        "coolant_concentration_percent",
+        "thickener_source_reported",
+        "grease_grade_source_reported",
+    ):
+        if key in technical:
+            record["specifications"][key] = technical[key]
+    record["canonical_key"] += (
+        "|cabo_verde_enacol_legacy:"
+        + normalize(row["source_record_id"])
+    )
+    record["product_id"] = (
+        "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    )
+    return record
+
+
+def compact_enacol_product_label(value: str) -> str:
+    """Compare ENACOL labels across hyphen and manufacturer-prefix variants."""
+    compact = normalize(value).replace(" ", "")
+    for prefix in ("totallubmarine", "galp"):
+        if compact.startswith(prefix):
+            return compact[len(prefix):]
+    return compact
+
+
+def enacol_brand_alias_matches(record: dict, source_brand: str) -> bool:
+    values = normalize(" ".join((
+        record.get("brand", ""),
+        record.get("manufacturer", ""),
+        record.get("product_name_raw", ""),
+    )))
+    if source_brand == "Galp":
+        return "galp" in values or "petrogal" in values
+    if source_brand == "Total Lubmarine":
+        return "lubmarine" in values or "total" in values
+    return False
+
+
+def merge_cabo_verde_enacol_legacy_evidence(
+    target: dict, raw: dict
+) -> None:
+    """Attach dated Cabo Verde assortment evidence without changing lifecycle."""
+    target["specifications"].setdefault(
+        "cabo_verde_enacol_legacy_evidence", []
+    ).append({
+        "source_record_id": raw["source_record_id"],
+        "source_product_name": raw["product_name"],
+        "source_url": raw["source_url"],
+        "technical_document_url": raw["technical_document_url"],
+        "technical_document_sha256": raw["technical_document_sha256"],
+        "source_page": raw["source_page"],
+        "source_factual_projection_sha256": raw[
+            "source_factual_projection_sha256"
+        ],
+        "source_lifecycle_status": raw["lifecycle_status"],
+        "source_quality_flags": raw["source_quality_flags"],
+    })
 
 
 def merge_chevron_us_current_evidence(
@@ -9835,6 +9966,85 @@ def main() -> None:
             f"{sao_tome_enco_matched_to_existing} matched, "
             f"{sao_tome_enco_products_added} added"
         )
+    cabo_verde_enacol_source_rows = [
+        json.loads(line)
+        for line in CABO_VERDE_ENACOL_PRODUCTS_JSONL.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        if line
+    ]
+    cabo_verde_enacol_offer_rows = [
+        json.loads(line)
+        for line in CABO_VERDE_ENACOL_OFFERS_JSONL.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        if line
+    ]
+    cabo_verde_enacol_records = [
+        cabo_verde_enacol_legacy_record(row)
+        for row in cabo_verde_enacol_source_rows
+    ]
+    cabo_verde_enacol_product_key = {}
+    cabo_verde_enacol_matched_to_existing = 0
+    cabo_verde_enacol_products_added = 0
+    cabo_verde_enacol_ambiguous_candidates = 0
+    for raw, source_record in zip(
+        cabo_verde_enacol_source_rows, cabo_verde_enacol_records
+    ):
+        source_specs = source_record["specifications"]
+        matches = [
+            row for row in input_records
+            if row["family_code"] == source_record["family_code"]
+            and enacol_brand_alias_matches(row, raw["brand"])
+            and compact_enacol_product_label(row["product_name_raw"])
+            == compact_enacol_product_label(raw["product_name"])
+            and all(
+                normalize(row["specifications"].get(field)).replace(" ", "")
+                == normalize(source_specs.get(field)).replace(" ", "")
+                for field in ("sae_engine", "sae_gear", "iso_vg", "nlgi")
+            )
+            and (
+                not source_specs.get("api")
+                or not row["specifications"].get("api")
+                or sorted(source_specs["api"])
+                == sorted(row["specifications"]["api"])
+            )
+            and (
+                not source_specs.get("api_gl")
+                or not row["specifications"].get("api_gl")
+                or sorted(source_specs["api_gl"])
+                == sorted(row["specifications"]["api_gl"])
+            )
+        ]
+        if len(matches) == 1:
+            target = matches[0]
+            merge_cabo_verde_enacol_legacy_evidence(target, raw)
+            cabo_verde_enacol_matched_to_existing += 1
+        else:
+            if len(matches) > 1:
+                cabo_verde_enacol_ambiguous_candidates += 1
+                source_record["specifications"][
+                    "source_quality_flags"
+                ].append(
+                    "multiple_existing_approval_scope_candidates_not_auto_merged"
+                )
+            target = source_record
+            input_records.append(target)
+            cabo_verde_enacol_products_added += 1
+        cabo_verde_enacol_product_key[
+            raw["source_record_id"]
+        ] = target["canonical_key"]
+    if (
+        cabo_verde_enacol_matched_to_existing,
+        cabo_verde_enacol_products_added,
+        cabo_verde_enacol_ambiguous_candidates,
+    ) != (13, 135, 2):
+        raise RuntimeError(
+            "ENACOL Cabo Verde strict-match denominator changed: "
+            f"{cabo_verde_enacol_matched_to_existing} matched, "
+            f"{cabo_verde_enacol_products_added} added, "
+            f"{cabo_verde_enacol_ambiguous_candidates} ambiguous"
+        )
     records, candidates = deduplicate(input_records)
     canonical_by_key = {row["canonical_key"]: row for row in records}
     mogas_global_market_link_targets = []
@@ -10952,6 +11162,25 @@ def main() -> None:
         if link_key not in source_link_keys:
             source_links.append(link)
             source_link_keys.add(link_key)
+    for raw in cabo_verde_enacol_source_rows:
+        target = canonical_by_key[
+            cabo_verde_enacol_product_key[raw["source_record_id"]]
+        ]
+        link = {
+            "product_id": target["product_id"],
+            "source_id": raw["source_id"],
+            "source_record_id": raw["source_record_id"],
+            "source_row": raw["source_page"],
+            "relation": (
+                "official_country_distributor_historical_product_and_price"
+            ),
+        }
+        link_key = (
+            link["product_id"], link["source_id"], link["source_record_id"]
+        )
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     for raw in pertamina_source_rows:
         target = canonical_by_key[pertamina_product_key[raw["source_record_id"]]]
         link = {
@@ -11139,6 +11368,37 @@ def main() -> None:
                 source_links.append(link)
                 source_link_keys.add(link_key)
     offers = []
+    for raw in cabo_verde_enacol_offer_rows:
+        target = canonical_by_key[
+            cabo_verde_enacol_product_key[
+                raw["product_source_record_id"]
+            ]
+        ]
+        offers.append({
+            "offer_id": "ENACOL-CV-" + hashlib.sha256(
+                raw["source_record_id"].encode()
+            ).hexdigest()[:20],
+            "product_id": target["product_id"],
+            "market": raw["market"],
+            "package_name": raw["package_name"],
+            "unit": raw["unit"],
+            "quantity_per_package": raw["quantity_per_package"],
+            "weight_kg": raw["weight_kg"],
+            "density_kg_per_l": None,
+            "lifecycle_status": "archived",
+            "archive_type": raw["archive_type"],
+            "archive_reason": raw["archive_reason"],
+            "source_id": raw["source_id"],
+            "source_record_id": raw["source_record_id"],
+            "price_amount": raw["price_amount"],
+            "price_currency": raw["price_currency"],
+            "price_currency_symbol": raw[
+                "price_currency_source_reported"
+            ],
+            "price_status": raw["price_status"],
+            "availability": "historical_catalog_observation_only",
+            "source_url": raw["source_url"],
+        })
     for package in aichilon_packages:
         canonical_key = aichilon_product_key.get(int(package["source_product_id"]))
         if not canonical_key:
@@ -11739,6 +11999,12 @@ def main() -> None:
         "sao_tome_enco_input_sha256": hashlib.sha256(
             SAO_TOME_ENCO_JSONL.read_bytes()
         ).hexdigest(),
+        "cabo_verde_enacol_products_input_sha256": hashlib.sha256(
+            CABO_VERDE_ENACOL_PRODUCTS_JSONL.read_bytes()
+        ).hexdigest(),
+        "cabo_verde_enacol_offers_input_sha256": hashlib.sha256(
+            CABO_VERDE_ENACOL_OFFERS_JSONL.read_bytes()
+        ).hexdigest(),
         "seychelles_seypec_review_sha256": hashlib.sha256(
             SEYCHELLES_SEYPEC_REVIEW.read_bytes()
         ).hexdigest(),
@@ -11882,6 +12148,21 @@ def main() -> None:
             sao_tome_enco_matched_to_existing
         ),
         "sao_tome_enco_products_added": sao_tome_enco_products_added,
+        "cabo_verde_enacol_source_rows": len(
+            cabo_verde_enacol_source_rows
+        ),
+        "cabo_verde_enacol_products_matched_to_existing": (
+            cabo_verde_enacol_matched_to_existing
+        ),
+        "cabo_verde_enacol_products_added": (
+            cabo_verde_enacol_products_added
+        ),
+        "cabo_verde_enacol_ambiguous_candidates": (
+            cabo_verde_enacol_ambiguous_candidates
+        ),
+        "cabo_verde_enacol_historical_offer_rows": len(
+            cabo_verde_enacol_offer_rows
+        ),
         "haiti_lubex_mag1_presence_source_rows": len(
             haiti_lubex_mag1_presence_rows
         ),
