@@ -110,6 +110,7 @@ JAMAICA_FUTROIL_TEK_JSONL = ROOT / "data" / "jamaica-futroil-tek-current-lubrica
 CUBA_CUBALUB_2007_JSONL = ROOT / "data" / "cuba-cubalub-2007-official-products.jsonl"
 PANAMA_ACODECO_2020_JSONL = ROOT / "data" / "panama-acodeco-2020-lubricant-price-survey.jsonl"
 NICARAGUA_LUBRINSA_LOCAL_JSONL = ROOT / "data" / "nicaragua-lubrinsa-current-local-fluids.jsonl"
+HONDURAS_HONDULUB_OIL_STAR_JSONL = ROOT / "data" / "honduras-hondulub-current-oil-star-products.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
 SON_MANCAP_JSONL = ROOT / "data" / "son-mancap-chemical-lubricant-products.jsonl"
@@ -3991,6 +3992,67 @@ def nicaragua_lubrinsa_local_record(row: dict) -> dict:
     return record
 
 
+def honduras_hondulub_oil_star_record(row: dict) -> dict:
+    """Convert one current OIL STAR identity from Hondulub's official tables."""
+    technical = row["technical"]
+    api_class = "; ".join(f"API {value}" for value in technical["api"])
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Current Honduras exclusive-distributor OIL STAR product table",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": technical["sae_engine"] or technical["sae_gear"],
+        "api_class": api_class,
+        "viscosity": technical["iso_vg"],
+        "grease_class": technical["nlgi"],
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": row["evidence_status"],
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update({
+        "sae_engine": technical["sae_engine"],
+        "sae_gear": technical["sae_gear"],
+        "iso_vg": technical["iso_vg"],
+        "nlgi": technical["nlgi"],
+        "source_grade": technical["source_grade"],
+        "api": technical["api"],
+        "api_gl": technical["api_gl"],
+        "acea": technical["acea"],
+        "ilsac": technical["ilsac"],
+        "jaso": technical["jaso"],
+        "dot": technical["dot"],
+        "coolant_class": technical["coolant_class"],
+        "performance_source_reported": technical["performance"],
+        "packages_source_reported": row["packages"],
+        "brand_owner_and_distributor": row["brand_owner_and_distributor"],
+        "source_url": row["source_url"],
+        "source_image_url": row["source_image_url"],
+        "source_image_sha256": row["source_image_sha256"],
+        "source_facts_sha256": row["source_facts_sha256"],
+        "source_quality_flags": row["source_quality_flags"],
+    })
+    record["canonical_key"] += (
+        f"|honduras_hondulub_oil_star:{normalize(row['source_record_id'])}"
+    )
+    record["product_id"] = (
+        "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    )
+    return record
+
+
 def kebs_smark_record(row: dict) -> dict:
     """Convert one normalized product identity from the public KEBS S-Mark directory."""
     technical = row["technical"]
@@ -5850,6 +5912,9 @@ def main() -> None:
     nicaragua_lubrinsa_local_source_rows = [json.loads(line) for line in NICARAGUA_LUBRINSA_LOCAL_JSONL.read_text(encoding="utf-8").splitlines() if line]
     nicaragua_lubrinsa_local_records = [nicaragua_lubrinsa_local_record(row) for row in nicaragua_lubrinsa_local_source_rows]
     input_records.extend(nicaragua_lubrinsa_local_records)
+    honduras_hondulub_oil_star_source_rows = [json.loads(line) for line in HONDURAS_HONDULUB_OIL_STAR_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    honduras_hondulub_oil_star_records = [honduras_hondulub_oil_star_record(row) for row in honduras_hondulub_oil_star_source_rows]
+    input_records.extend(honduras_hondulub_oil_star_records)
     ecuador_inen_current_record_by_id = {
         raw["source_record_id"]: record
         for raw, record in zip(ecuador_inen_current_source_rows, ecuador_inen_current_records)
@@ -8255,6 +8320,7 @@ def main() -> None:
         "cuba_cubalub_2007_input_sha256": hashlib.sha256(CUBA_CUBALUB_2007_JSONL.read_bytes()).hexdigest(),
         "panama_acodeco_2020_input_sha256": hashlib.sha256(PANAMA_ACODECO_2020_JSONL.read_bytes()).hexdigest(),
         "nicaragua_lubrinsa_local_input_sha256": hashlib.sha256(NICARAGUA_LUBRINSA_LOCAL_JSONL.read_bytes()).hexdigest(),
+        "honduras_hondulub_oil_star_input_sha256": hashlib.sha256(HONDURAS_HONDULUB_OIL_STAR_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "son_mancap_input_sha256": hashlib.sha256(SON_MANCAP_JSONL.read_bytes()).hexdigest(),

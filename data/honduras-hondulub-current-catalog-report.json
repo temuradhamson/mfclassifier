@@ -1,0 +1,111 @@
+{
+  "availability_output_sha256": "314ffdd3e462e0c0870ecc2f73211aff43ae2fb49c9da781cb27662fe74cceef",
+  "brands": {
+    "OIL STAR": 31,
+    "Phillips 66": 23,
+    "Pyroil": 4,
+    "Shell": 3,
+    "TEK STAR": 58,
+    "Ultrachem": 1
+  },
+  "canonical_oil_star_families": {
+    "G": 1,
+    "H": 6,
+    "I": 8,
+    "M": 9,
+    "T": 2,
+    "TF": 5
+  },
+  "canonical_oil_star_product_rows": 31,
+  "current_table_image_bytes": 1142546,
+  "current_table_images": 11,
+  "excluded_non_product_equipment": 1,
+  "families_in_scope": {
+    "C": 3,
+    "E": 1,
+    "G": 5,
+    "H": 12,
+    "I": 27,
+    "M": 43,
+    "S": 1,
+    "T": 3,
+    "TF": 18,
+    "U": 2
+  },
+  "global_brand_honduras_availability_occurrences": 84,
+  "homepage_sha256": "d1847ab52657db5deb1b40576f92adc633ddfa8b9c169e26e9d5957c77165591",
+  "identity_policy": "OIL STAR is the exclusive-distributor portfolio and is the only new canonical layer. TEK STAR, Phillips 66, Shell, Pyroil and Ultrachem remain Honduras availability occurrences until their global identity passes prevent cross-country duplication.",
+  "in_scope_product_grade_occurrences": 115,
+  "normalized_identity_hints_after_expansion_and_package_grouping": 120,
+  "normalized_product_output_sha256": "bcf57ce29a9d7c4326658779f42bd871b5de08f97311d75b4cb9577d1a6e539c",
+  "quality_note": "Explicit multi-grade rows are expanded. Package duplicates are collapsed. Nonstandard source grades such as SAE 40W/50W and EP #2 remain source labels; no SAE monograde, ISO VG, NLGI, licence or independent OEM approval is invented.",
+  "report_only_generic_series": 4,
+  "scope_status_counts": {
+    "canonical_oil_star_product": 31,
+    "excluded_non_product_equipment": 1,
+    "global_product_honduras_availability": 84,
+    "report_only_generic_series": 4
+  },
+  "snapshot_date": "2026-07-24",
+  "source_facts_sha256": "b19f50df220202036a19845b4c99701effff3faf3a647f1e0336a2d248d090dd",
+  "source_id": "HONDURAS_HONDULUB_CURRENT_PRODUCT_TABLES",
+  "source_image_facts": {
+    "1": {
+      "bytes": 306731,
+      "sha256": "91ea314ed97878a61cb2fb95a1e0cbd06ba098ae6eed2b6f7e8d9fe76a40605c",
+      "url": "https://hondulub.com/wp-content/uploads/2023/09/1-1.png"
+    },
+    "10": {
+      "bytes": 45845,
+      "sha256": "7a95bd241a303a474d2be9dd517cb804db24dbfcb11bc9dc8e225a7911234fb1",
+      "url": "https://hondulub.com/wp-content/uploads/2023/09/10-1.png"
+    },
+    "11": {
+      "bytes": 44626,
+      "sha256": "c46c2294234c942e40fe1b4b8aaa8dc21ee970e3a80d419fc6c80aabe11064fb",
+      "url": "https://hondulub.com/wp-content/uploads/2023/09/11-1.png"
+    },
+    "2": {
+      "bytes": 75671,
+      "sha256": "05f29bfb3595c15565aa5e7119899020ecde304b06e9f15c8a2828e86370564a",
+      "url": "https://hondulub.com/wp-content/uploads/2023/09/2-1.png"
+    },
+    "3": {
+      "bytes": 119782,
+      "sha256": "0fb73e879ac9896381898a369ad08e2761218bf1331d8436478de1777ad3151d",
+      "url": "https://hondulub.com/wp-content/uploads/2023/09/3-1.png"
+    },
+    "4": {
+      "bytes": 92308,
+      "sha256": "6c2130cbb4179c8c0f68d71da7dfdba0eb87d16909d7d98dd4d1bb6c8b222e5a",
+      "url": "https://hondulub.com/wp-content/uploads/2023/09/4-1.png"
+    },
+    "5": {
+      "bytes": 73817,
+      "sha256": "2ab6d10d3a10dcf3f6d9274e2c7b7b20ccfa54824be5cc4e75ec50f299e8ff3d",
+      "url": "https://hondulub.com/wp-content/uploads/2023/09/5-1.png"
+    },
+    "6": {
+      "bytes": 105514,
+      "sha256": "29c487a995d4f2193b0bddc229f864b7fc0818d0d96bd334883c4d720cd07696",
+      "url": "https://hondulub.com/wp-content/uploads/2023/09/6-1.png"
+    },
+    "7": {
+      "bytes": 151483,
+      "sha256": "275e78442988e2526790394c17974175c3c671e89efbe5675b6d38c4c8510e3d",
+      "url": "https://hondulub.com/wp-content/uploads/2023/09/7-1.png"
+    },
+    "8": {
+      "bytes": 68489,
+      "sha256": "ac35550c3869a9cd51c5a0580406b82394469216027ec20cec24dc66fbb55ce6",
+      "url": "https://hondulub.com/wp-content/uploads/2023/09/8-1.png"
+    },
+    "9": {
+      "bytes": 58280,
+      "sha256": "d9f771018910207a6753da8e3fbf805a02ad13b62d6b6d10872756f8fec6b6f3",
+      "url": "https://hondulub.com/wp-content/uploads/2023/09/9-1.png"
+    }
+  },
+  "source_printed_product_rows": 110,
+  "source_url": "https://hondulub.com/"
+}

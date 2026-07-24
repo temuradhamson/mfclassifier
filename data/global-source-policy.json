@@ -2701,6 +2701,21 @@
       "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_page_or_image_redistribution",
       "observed_count": 4,
       "notes": "The complete current WooCommerce denominator contains 55 seller cards: 42 Repsol and 13 AUTO. Forty-five are in scope. Forty-one Repsol occurrences collapse to 34 product-identity hints after package grouping and are retained only in the separate Nicaragua availability layer pending a global Repsol identity pass, preventing country-specific canonical duplicates. Four local AUTO product-card identities enter the canonical seed: green and red 32 oz coolants, power-steering fluid and brake fluid. Ten cleaners, dressings, wax, generic distilled water or insufficiently specified battery activator cards remain report-only. All 55 current image payloads are SHA-256 pinned; no unpublished DOT, coolant chemistry, OEM approval or manufacturer is inferred."
+    },
+    {
+      "source_id": "HONDURAS_HONDULUB_CURRENT_PRODUCT_TABLES",
+      "title": "Current Hondureña de Lubricantes OIL STAR and distributed-brand product tables for Honduras",
+      "owner": "Hondureña de Lubricantes S.R.L. de C.V.",
+      "source_type": "official_exclusive_distributor_current_product_table_images",
+      "source_locator": "data/honduras-hondulub-current-oil-star-products.jsonl",
+      "source_url": "https://hondulub.com/",
+      "terms_url": "https://hondulub.com/",
+      "source_sha256": "bcf57ce29a9d7c4326658779f42bd871b5de08f97311d75b4cb9577d1a6e539c",
+      "access_status": "public_official_exclusive_distributor_tables_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_page_or_image_redistribution",
+      "observed_count": 31,
+      "notes": "The complete current homepage denominator contains 110 printed table rows across 11 SHA-256-pinned product-table images. Explicit multi-grade rows expand and three exact package-only duplicate rows collapse to 120 identity hints: 115 in-scope product-grade occurrences, four generic series retained report-only and one automatic lubricator excluded as equipment. Thirty-one OIL STAR identities enter canonical product truth. Eighty-four TEK STAR, Phillips 66, Shell, Pyroil and Ultrachem occurrences remain a separate Honduras availability layer pending manufacturer-level global identity passes, preventing country-specific canonical duplicates. Nonstandard SAE 30W/40W/50W and EP #2 remain source labels; source-reported GM dexos and NSF H1 claims are not represented as independently verified approvals."
     }
   ]
 }

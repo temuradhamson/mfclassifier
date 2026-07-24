@@ -259,6 +259,9 @@ def main() -> None:
     nicaragua_lubrinsa_report = json.loads((ROOT / "data/nicaragua-lubrinsa-current-catalog-report.json").read_text(encoding="utf-8"))
     nicaragua_lubrinsa_rows = [json.loads(line) for line in (ROOT / "data/nicaragua-lubrinsa-current-local-fluids.jsonl").read_text(encoding="utf-8").splitlines() if line]
     nicaragua_lubrinsa_availability_rows = [json.loads(line) for line in (ROOT / "data/nicaragua-lubrinsa-current-availability.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    honduras_hondulub_report = json.loads((ROOT / "data/honduras-hondulub-current-catalog-report.json").read_text(encoding="utf-8"))
+    honduras_hondulub_rows = [json.loads(line) for line in (ROOT / "data/honduras-hondulub-current-oil-star-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    honduras_hondulub_availability_rows = [json.loads(line) for line in (ROOT / "data/honduras-hondulub-current-availability.jsonl").read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_report = json.loads((ROOT / "data/kebs-smark-lubricant-products-report.json").read_text(encoding="utf-8"))
     kebs_smark_rows = [json.loads(line) for line in (ROOT / "data/kebs-smark-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     east_africa_report = json.loads((ROOT / "data/east-africa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -337,6 +340,7 @@ def main() -> None:
         + len(cuba_cubalub_2007_rows)
         + len(panama_acodeco_2020_rows)
         + len(nicaragua_lubrinsa_rows)
+        + len(honduras_hondulub_rows)
         - report["gm_dual_standard_license_rows_merged"]
         - report["fuchs_exact_payload_identity_rows_matched"]
         - report["fuchs_exact_content_identity_rows_matched"]
@@ -1042,17 +1046,17 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 4973
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3044
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 116931
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 116930
-    assert report["quality_issues"]["professional_key_incomplete"] == 78674
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 116962
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 116961
+    assert report["quality_issues"]["professional_key_incomplete"] == 78690
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
         WHERE q.issue_code='professional_key_incomplete'
         GROUP BY p.family_code
     """)) == {
-        "C": 2289, "E": 149, "G": 12383, "H": 5262, "I": 3847,
-        "M": 23476, "S": 12124, "T": 11830, "TF": 6682, "U": 632,
+        "C": 2289, "E": 149, "G": 12384, "H": 5262, "I": 3854,
+        "M": 23479, "S": 12124, "T": 11830, "TF": 6687, "U": 632,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -2319,6 +2323,58 @@ def main() -> None:
     assert db.execute(
         "SELECT count(*) FROM products WHERE source_id='NICARAGUA_LUBRINSA_CURRENT_CATALOG'"
     ).fetchone()[0] == 4
+    assert honduras_hondulub_report["source_printed_product_rows"] == 110
+    assert honduras_hondulub_report[
+        "normalized_identity_hints_after_expansion_and_package_grouping"
+    ] == len(honduras_hondulub_availability_rows) == 120
+    assert honduras_hondulub_report["in_scope_product_grade_occurrences"] == 115
+    assert honduras_hondulub_report["canonical_oil_star_product_rows"] == len(
+        honduras_hondulub_rows
+    ) == 31
+    assert honduras_hondulub_report[
+        "global_brand_honduras_availability_occurrences"
+    ] == 84
+    assert honduras_hondulub_report["report_only_generic_series"] == 4
+    assert honduras_hondulub_report["excluded_non_product_equipment"] == 1
+    assert honduras_hondulub_report["scope_status_counts"] == {
+        "canonical_oil_star_product": 31,
+        "excluded_non_product_equipment": 1,
+        "global_product_honduras_availability": 84,
+        "report_only_generic_series": 4,
+    }
+    assert honduras_hondulub_report["brands"] == {
+        "OIL STAR": 31,
+        "Phillips 66": 23,
+        "Pyroil": 4,
+        "Shell": 3,
+        "TEK STAR": 58,
+        "Ultrachem": 1,
+    }
+    assert honduras_hondulub_report["canonical_oil_star_families"] == {
+        "G": 1, "H": 6, "I": 8, "M": 9, "T": 2, "TF": 5,
+    }
+    assert len(honduras_hondulub_report["source_image_facts"]) == 11
+    assert all(
+        row["brand"] == "OIL STAR" and row["market"] == "Honduras"
+        for row in honduras_hondulub_rows
+    )
+    assert all(row["source_image_sha256"] for row in honduras_hondulub_rows)
+    assert all(
+        not ({"address", "phone", "email", "contact_person"} & set(row))
+        for row in honduras_hondulub_rows
+    )
+    assert policy_by_id[
+        "HONDURAS_HONDULUB_CURRENT_PRODUCT_TABLES"
+    ]["source_sha256"] == hashlib.sha256(
+        (ROOT / "data/honduras-hondulub-current-oil-star-products.jsonl").read_bytes()
+    ).hexdigest()
+    assert policy_by_id[
+        "HONDURAS_HONDULUB_CURRENT_PRODUCT_TABLES"
+    ]["observed_count"] == 31
+    assert db.execute(
+        "SELECT count(*) FROM products "
+        "WHERE source_id='HONDURAS_HONDULUB_CURRENT_PRODUCT_TABLES'"
+    ).fetchone()[0] == 31
     assert policy_by_id["VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG"]["observed_count"] == 23
     assert db.execute(
         "SELECT count(*) FROM products WHERE source_id='VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG'"
