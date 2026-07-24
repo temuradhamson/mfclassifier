@@ -86,6 +86,8 @@ def main() -> None:
     ceypetco_rows = [json.loads(line) for line in (ROOT / "data/ceypetco-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     pso_report = json.loads((ROOT / "data/pso-official-lubricant-products-report.json").read_text(encoding="utf-8"))
     pso_rows = [json.loads(line) for line in (ROOT / "data/pso-official-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    chevron_us_report = json.loads((ROOT / "data/chevron-us-current-products-report.json").read_text(encoding="utf-8"))
+    chevron_us_rows = [json.loads(line) for line in (ROOT / "data/chevron-us-current-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     pertamina_report = json.loads((ROOT / "data/pertamina-official-lubricant-products-report.json").read_text(encoding="utf-8"))
     pertamina_rows = [json.loads(line) for line in (ROOT / "data/pertamina-official-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     man_report = json.loads((ROOT / "data/man-service-products-report.json").read_text(encoding="utf-8"))
@@ -413,6 +415,7 @@ def main() -> None:
         + report["scope_global_products_added"]
         + report["angola_sonangol_ngol_products_added"]
         + report["madagascar_galana_mobil_products_added"]
+        + report["chevron_us_current_products_added"]
         + len(uruguay_ancap_rows)
         + len(colombia_terpel_rows)
         + len(guyana_guyoil_rows)
@@ -1138,17 +1141,17 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 5191
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3115
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 118375
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 118374
-    assert report["quality_issues"]["professional_key_incomplete"] == 79273
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 118700
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 118699
+    assert report["quality_issues"]["professional_key_incomplete"] == 79480
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
         WHERE q.issue_code='professional_key_incomplete'
         GROUP BY p.family_code
     """)) == {
-        "C": 2299, "E": 151, "G": 12492, "H": 5282, "I": 3887,
-        "M": 23644, "S": 12182, "T": 11934, "TF": 6762, "U": 640,
+        "C": 2300, "E": 151, "G": 12528, "H": 5285, "I": 3903,
+        "M": 23721, "S": 12183, "T": 11982, "TF": 6783, "U": 644,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -3058,6 +3061,62 @@ def main() -> None:
         "WHERE source_id="
         "'COMOROS_SCH_COMPLETE_PUBLIC_SITE_LUBRICANT_SCOPE_REVIEW'"
     ).fetchone()[0] == 1
+    assert chevron_us_report[
+        "normalized_product_grade_rows"
+    ] == len(chevron_us_rows) == 326
+    assert chevron_us_report["source_product_pages"] == 162
+    assert chevron_us_report["normalized_unique_product_pages"] == 161
+    assert chevron_us_report[
+        "duplicate_orphan_product_page_occurrences_collapsed"
+    ] == 1
+    assert chevron_us_report["pages_expanded_to_multiple_grades"] == 69
+    assert chevron_us_report["pages_retained_as_ungraded_identity"] == 24
+    assert chevron_us_report["families"] == {
+        "C": 25, "G": 36, "H": 33, "I": 64, "M": 77,
+        "S": 1, "T": 48, "TF": 21, "U": 21,
+    }
+    assert chevron_us_report["grade_kinds"] == {
+        "concentration": 18, "iso_vg": 128, "nlgi": 34,
+        "sae_engine": 71, "sae_gear": 24, "source_variant": 27,
+        "ungraded": 24,
+    }
+    assert chevron_us_report["unique_linked_pds_urls"] == 204
+    assert chevron_us_report["rows_with_non_pdf_pds_flag"] == 6
+    assert report["chevron_us_current_source_rows"] == 326
+    assert report[
+        "chevron_us_current_products_matched_to_existing"
+    ] == 1
+    assert report["chevron_us_current_products_added"] == 325
+    assert report["chevron_us_current_input_sha256"] == hashlib.sha256(
+        (ROOT / "data/chevron-us-current-products.jsonl").read_bytes()
+    ).hexdigest()
+    assert policy_by_id[
+        "CHEVRON_US_COMPLETE_CURRENT_PRODUCT_GRADE_CATALOG"
+    ]["source_sha256"] == chevron_us_report["output_sha256"]
+    assert policy_by_id[
+        "CHEVRON_US_COMPLETE_CURRENT_PRODUCT_GRADE_CATALOG"
+    ]["observed_count"] == 326
+    assert db.execute(
+        "SELECT count(*) FROM products "
+        "WHERE source_id='CHEVRON_US_COMPLETE_CURRENT_PRODUCT_GRADE_CATALOG'"
+    ).fetchone()[0] == 325
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id='CHEVRON_US_COMPLETE_CURRENT_PRODUCT_GRADE_CATALOG'"
+    ).fetchone()[0] == 326
+    assert db.execute(
+        "SELECT count(*) FROM product_offers "
+        "WHERE source_id='CHEVRON_US_COMPLETE_CURRENT_PRODUCT_GRADE_CATALOG'"
+    ).fetchone()[0] == 0
+    assert sum(
+        bool(row["source_quality_flags"]) for row in chevron_us_rows
+    ) == 6
+    assert all(
+        row["publication_scope"]
+        == "attributed_nonexpressive_factual_fields_only"
+        and not ({"description", "artwork", "contact", "sku"} & set(row))
+        for row in chevron_us_rows
+    )
     assert uruguay_ancap_report["catalog_product_families"] == 56
     assert uruguay_ancap_report["normalized_product_variants"] == len(uruguay_ancap_rows) == 88
     assert uruguay_ancap_report["families"] == {

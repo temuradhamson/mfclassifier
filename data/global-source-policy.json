@@ -3196,6 +3196,21 @@
       "publication_status": "reviewed_zero_relevant_product_rows",
       "observed_count": 0,
       "notes": "The complete current official sitemap contains 280 URLs. Its sole product page publishes four energy categories: kerosene, butane gas, Jet A1, and petrol/diesel; no lubricant, grease, coolant or technical-fluid product identity is exposed. The official 36-page 2023 annual report and six-page 2024 prospectus were also reviewed by fixed payload SHA-256 and contain no lubricant, oil, grease, antifreeze, brake-fluid or Shell product claim. A 2017 third-party report about a planned Shell partnership is not promoted to current SKU evidence. Zero rows applies to this complete official SCH public-site contour, not to every possible third-party retail product in Comoros."
+    },
+    {
+      "source_id": "CHEVRON_US_COMPLETE_CURRENT_PRODUCT_GRADE_CATALOG",
+      "title": "Complete current Chevron Lubricants US product-grade catalog",
+      "owner": "Chevron U.S.A. Inc.",
+      "source_type": "official_manufacturer_complete_live_product_pages_and_linked_public_product_data_sheets",
+      "source_locator": "data/chevron-us-current-products.jsonl",
+      "source_url": "https://www.chevronlubricants.com/en_us/home/products/by_brand.html",
+      "terms_url": "https://www.chevron.com/terms-of-use",
+      "source_sha256": "8585b2d70dcd8ee2c32e1114969975261680d1e85518fc9e63280e0078e6c48a",
+      "access_status": "public_live_official_manufacturer_catalog_and_public_technical_documents",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_transformed_nonexpressive_product_name_grade_category_document_link_and_hash_facts_only_no_descriptions_documents_artwork_contacts_skus_or_page_copy_redistributed",
+      "observed_count": 326,
+      "notes": "The complete current by-brand denominator contains 166 live product URLs. Four Techron fuel-system cleaners are outside lubricant/technical-fluid scope, and one orphan page titled test duplicates the canonical Delo XLI product page, leaving 161 unique in-scope product pages. Explicit page and PDS headings/tables expand them to 326 product-grade identities (C25/G36/H33/I64/M77/S1/T48/TF21/U21). All 204 unique in-scope PDS URLs were audited: 202 PDFs/529 printed pages are locally hashed and text-extracted, while two official endpoints return Chevron's stable HTTP 200 temporary-difficulty HTML. One exact identity is strictly linked to an existing record and 325 are new. Per-grade API/ACEA/JASO/OEM table extraction remains pending, and series-level claims are not copied across grades. No descriptions, PDS/SDS files, artwork, contact data, package SKU lists or page copy are redistributed."
     }
   ]
 }

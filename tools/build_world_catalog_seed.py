@@ -115,6 +115,7 @@ SCOPE_GLOBAL_JSONL = ROOT / "data/scope-global-products.jsonl"
 ANGOLA_SONANGOL_NGOL_JSONL = ROOT / "data/angola-sonangol-ngol-products.jsonl"
 MADAGASCAR_GALANA_MOBIL_JSONL = ROOT / "data/madagascar-galana-mobil-products.jsonl"
 COMOROS_SCH_REVIEW = ROOT / "data/comoros-sch-lubricant-scope-review.json"
+CHEVRON_US_CURRENT_JSONL = ROOT / "data/chevron-us-current-products.jsonl"
 URUGUAY_ANCAP_LUBRICANT_JSONL = ROOT / "data" / "uruguay-ancap-current-lubricants.jsonl"
 COLOMBIA_TERPEL_LUBRICANT_JSONL = ROOT / "data" / "colombia-terpel-current-lubricants.jsonl"
 GUYANA_GUYOIL_LUBRICANT_JSONL = ROOT / "data" / "guyana-guyoil-current-lubricants.jsonl"
@@ -1350,6 +1351,79 @@ def pso_official_record(row: dict) -> dict:
     record["canonical_key"] += f"|pso_official_record:{normalize(row['source_record_id'])}"
     record["product_id"] = "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
     return record
+
+
+def chevron_us_current_record(row: dict) -> dict:
+    """Convert one current Chevron US product-grade identity."""
+    specs = row["specifications"]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Complete current Chevron US manufacturer catalog",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": specs.get("sae_engine") or specs.get("sae_gear") or "",
+        "api_class": "",
+        "viscosity": specs.get("iso_vg", ""),
+        "grease_class": specs.get("nlgi", ""),
+        "coolant_class": (
+            row["source_grade"]
+            if row["source_grade_kind"] == "concentration"
+            else ""
+        ),
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": "official_manufacturer_complete_current_catalog",
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update(specs)
+    record["specifications"].update({
+        "source_series": row["source_series"],
+        "source_grade": row["source_grade"],
+        "source_grade_kind": row["source_grade_kind"],
+        "source_grade_evidence": row["source_grade_evidence"],
+        "source_category": row["source_category"],
+        "source_url": row["source_url"],
+        "source_page_sha256": row["source_page_sha256"],
+        "technical_documents": row["technical_documents"],
+        "source_quality_flags": row["source_quality_flags"],
+        "publication_scope": row["publication_scope"],
+    })
+    record["canonical_key"] += (
+        "|chevron_us_current_record:"
+        + normalize(row["source_record_id"])
+    )
+    record["product_id"] = (
+        "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    )
+    return record
+
+
+def merge_chevron_us_current_evidence(
+    target: dict, source_record: dict
+) -> None:
+    """Attach an exact current manufacturer identity to an existing record."""
+    target_specs = target["specifications"]
+    source_specs = source_record["specifications"]
+    for key in (
+        "source_series", "source_grade", "source_grade_kind",
+        "source_grade_evidence", "source_category", "source_url",
+        "source_page_sha256", "technical_documents",
+        "source_quality_flags", "publication_scope",
+    ):
+        target_specs[f"chevron_us_{key}"] = source_specs[key]
+    target["lifecycle_status"] = "listed_on_current_official_catalog_page"
 
 
 def merge_pso_catalog_evidence(target: dict, source_record: dict) -> None:
@@ -9570,6 +9644,60 @@ def main() -> None:
             f"{madagascar_galana_mobil_matched_to_existing} matched, "
             f"{madagascar_galana_mobil_products_added} added"
         )
+    chevron_us_source_rows = [
+        json.loads(line)
+        for line in CHEVRON_US_CURRENT_JSONL.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        if line
+    ]
+    chevron_us_records = [
+        chevron_us_current_record(row) for row in chevron_us_source_rows
+    ]
+    chevron_us_product_key = {}
+    chevron_us_matched_to_existing = 0
+    chevron_us_products_added = 0
+    for raw, source_record in zip(
+        chevron_us_source_rows, chevron_us_records
+    ):
+        source_specs = source_record["specifications"]
+        matches = [
+            row for row in input_records
+            if normalize(row["brand"]) == normalize(source_record["brand"])
+            and row["product_name_normalized"]
+            == source_record["product_name_normalized"]
+            and row["family_code"] == source_record["family_code"]
+            and all(
+                normalize(row["specifications"].get(field))
+                == normalize(source_specs.get(field))
+                for field in ("sae_engine", "sae_gear", "iso_vg", "nlgi")
+            )
+        ]
+        if len(matches) == 1:
+            target = matches[0]
+            merge_chevron_us_current_evidence(target, source_record)
+            chevron_us_matched_to_existing += 1
+        else:
+            if matches:
+                raise RuntimeError(
+                    "Chevron US strict identity became ambiguous: "
+                    + raw["source_record_id"]
+                )
+            target = source_record
+            input_records.append(target)
+            chevron_us_products_added += 1
+        chevron_us_product_key[
+            raw["source_record_id"]
+        ] = target["canonical_key"]
+    if (
+        chevron_us_matched_to_existing,
+        chevron_us_products_added,
+    ) != (1, 325):
+        raise RuntimeError(
+            "Chevron US strict-match denominator changed: "
+            f"{chevron_us_matched_to_existing} matched, "
+            f"{chevron_us_products_added} added"
+        )
     records, candidates = deduplicate(input_records)
     canonical_by_key = {row["canonical_key"]: row for row in records}
     mogas_global_market_link_targets = []
@@ -10653,6 +10781,23 @@ def main() -> None:
         if link_key not in source_link_keys:
             source_links.append(link)
             source_link_keys.add(link_key)
+    for raw in chevron_us_source_rows:
+        target = canonical_by_key[
+            chevron_us_product_key[raw["source_record_id"]]
+        ]
+        link = {
+            "product_id": target["product_id"],
+            "source_id": raw["source_id"],
+            "source_record_id": raw["source_record_id"],
+            "source_row": None,
+            "relation": "official_manufacturer_complete_current_catalog",
+        }
+        link_key = (
+            link["product_id"], link["source_id"], link["source_record_id"]
+        )
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     for raw in pertamina_source_rows:
         target = canonical_by_key[pertamina_product_key[raw["source_record_id"]]]
         link = {
@@ -11434,6 +11579,9 @@ def main() -> None:
         "angola_sonangol_ngol_input_sha256": hashlib.sha256(ANGOLA_SONANGOL_NGOL_JSONL.read_bytes()).hexdigest(),
         "madagascar_galana_mobil_input_sha256": hashlib.sha256(MADAGASCAR_GALANA_MOBIL_JSONL.read_bytes()).hexdigest(),
         "comoros_sch_review_sha256": hashlib.sha256(COMOROS_SCH_REVIEW.read_bytes()).hexdigest(),
+        "chevron_us_current_input_sha256": hashlib.sha256(
+            CHEVRON_US_CURRENT_JSONL.read_bytes()
+        ).hexdigest(),
         "uruguay_ancap_lubricant_input_sha256": hashlib.sha256(URUGUAY_ANCAP_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "colombia_terpel_lubricant_input_sha256": hashlib.sha256(COLOMBIA_TERPEL_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "guyana_guyoil_lubricant_input_sha256": hashlib.sha256(GUYANA_GUYOIL_LUBRICANT_JSONL.read_bytes()).hexdigest(),
@@ -11564,6 +11712,11 @@ def main() -> None:
             mag1_current_matched_to_existing
         ),
         "mag1_current_products_added": mag1_current_products_added,
+        "chevron_us_current_source_rows": len(chevron_us_source_rows),
+        "chevron_us_current_products_matched_to_existing": (
+            chevron_us_matched_to_existing
+        ),
+        "chevron_us_current_products_added": chevron_us_products_added,
         "haiti_lubex_mag1_presence_source_rows": len(
             haiti_lubex_mag1_presence_rows
         ),

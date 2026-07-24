@@ -24,6 +24,7 @@ LANDING_PATHS = {
 }
 OUTPUT = ROOT / "data" / "chevron-us-complete-product-discovery.jsonl"
 REPORT = ROOT / "data" / "chevron-us-complete-product-discovery-report.json"
+CACHE = ROOT / ".cache" / "chevron-us-pages"
 PRODUCT_PATH_RE = re.compile(r"/en_us/home/products/[^/]+\.html$")
 TEchron_PATHS = {
     "/en_us/home/products/techron-complete-fuel-system-cleaner.html",
@@ -60,6 +61,8 @@ def first(pattern: str, html: str) -> str:
 def discover_one(path: str) -> dict:
     url = urljoin(BASE, path)
     payload = fetch(url)
+    cache_id = hashlib.sha256(path.encode()).hexdigest()[:20]
+    (CACHE / f"{cache_id}.html").write_bytes(payload)
     html = payload.decode("utf-8")
     titles = {
         clean_html(value)
@@ -127,6 +130,7 @@ def discover_one(path: str) -> dict:
 
 
 def main() -> None:
+    CACHE.mkdir(parents=True, exist_ok=True)
     index_payload = fetch(INDEX_URL)
     index_html = index_payload.decode("utf-8")
     paths = sorted({
