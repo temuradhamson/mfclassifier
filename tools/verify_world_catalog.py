@@ -260,6 +260,8 @@ def main() -> None:
     sudan_tappco_rows = [json.loads(line) for line in (ROOT / "data/sudan-tappco-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     ethiopia_noc_report = json.loads((ROOT / "data/ethiopia-noc-caltex-report.json").read_text(encoding="utf-8"))
     ethiopia_noc_rows = [json.loads(line) for line in (ROOT / "data/ethiopia-noc-caltex-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    scope_global_report = json.loads((ROOT / "data/scope-global-report.json").read_text(encoding="utf-8"))
+    scope_global_rows = [json.loads(line) for line in (ROOT / "data/scope-global-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     uruguay_ancap_report = json.loads((ROOT / "data/uruguay-ancap-current-lubricants-report.json").read_text(encoding="utf-8"))
     uruguay_ancap_rows = [json.loads(line) for line in (ROOT / "data/uruguay-ancap-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     colombia_terpel_report = json.loads((ROOT / "data/colombia-terpel-current-lubricants-report.json").read_text(encoding="utf-8"))
@@ -403,6 +405,7 @@ def main() -> None:
         + report["south_sudan_taam_pakelo_products_added"]
         + report["sudan_tappco_products_added"]
         + report["ethiopia_noc_caltex_products_added"]
+        + report["scope_global_products_added"]
         + len(uruguay_ancap_rows)
         + len(colombia_terpel_rows)
         + len(guyana_guyoil_rows)
@@ -868,7 +871,7 @@ def main() -> None:
     assert report["liqui_moly_current_products_added"] == 152
     assert report["liqui_moly_current_article_skus"] == liqui_moly_current_report["unique_article_skus"] == 985
     assert report["duplicate_decisions"]["review_cross_source_identity"] == 597
-    assert report["duplicate_decisions"]["keep_separate_specification_conflict"] == 11189
+    assert report["duplicate_decisions"]["keep_separate_specification_conflict"] == 11205
     assert db.execute("""
         SELECT count(*) FROM duplicate_decisions d
         JOIN products a ON a.product_id=d.product_id_a
@@ -1114,7 +1117,7 @@ def main() -> None:
     }
     assert report["canonical_input_rows_collapsed"] == 1
     assert db.execute("SELECT count(*) FROM duplicate_decisions WHERE product_id_a=product_id_b").fetchone()[0] == 0
-    assert db.execute("SELECT count(*) FROM duplicate_decisions").fetchone()[0] == 15016
+    assert db.execute("SELECT count(*) FROM duplicate_decisions").fetchone()[0] == 15032
     assert db.execute("""
         SELECT count(*) FROM (
             SELECT 1 FROM duplicate_decisions
@@ -1128,17 +1131,17 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 5191
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3115
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 118053
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 118052
-    assert report["quality_issues"]["professional_key_incomplete"] == 79171
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 118252
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 118251
+    assert report["quality_issues"]["professional_key_incomplete"] == 79232
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
         WHERE q.issue_code='professional_key_incomplete'
         GROUP BY p.family_code
     """)) == {
-        "C": 2298, "E": 151, "G": 12466, "H": 5280, "I": 3878,
-        "M": 23617, "S": 12175, "T": 11915, "TF": 6751, "U": 640,
+        "C": 2298, "E": 151, "G": 12480, "H": 5280, "I": 3878,
+        "M": 23645, "S": 12178, "T": 11925, "TF": 6757, "U": 640,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -2827,6 +2830,65 @@ def main() -> None:
     assert db.execute(
         "SELECT count(*) FROM product_offers "
         "WHERE source_id='ETHIOPIA_NOC_CALTEX_RECOVERABLE_OFFICIAL_ARCHIVE'"
+    ).fetchone()[0] == 0
+    assert scope_global_report["product_endpoint_rows"] == 62
+    assert scope_global_report["nonempty_product_categories"] == 12
+    assert scope_global_report["category_occurrences"] == 66
+    assert scope_global_report["multi_category_products"] == 4
+    assert scope_global_report["identity_rows"] == len(
+        scope_global_rows
+    ) == report["scope_global_source_rows"] == 200
+    assert scope_global_report["family_identity_counts"] == {
+        "C": 7, "G": 14, "H": 10, "I": 30, "M": 110,
+        "S": 3, "T": 20, "TF": 6,
+    }
+    assert scope_global_report["grade_field_counts"] == {
+        "dot": 4, "iso_vg": 47, "nlgi": 14, "sae_engine": 109,
+        "sae_gear": 14, "source_grade": 12,
+    }
+    assert scope_global_report["linked_document_observations"] == 61
+    assert scope_global_report["unique_linked_document_urls"] == 19
+    assert scope_global_report["unique_linked_document_payloads"] == 19
+    assert scope_global_report[
+        "exact_existing_identity_matches"
+    ] == report["scope_global_products_matched_to_existing"] == 1
+    assert scope_global_report[
+        "new_manufacturer_catalog_identities"
+    ] == report["scope_global_products_added"] == 199
+    assert scope_global_report[
+        "catalog_map_market_presence_observation"
+    ] == "Somalia"
+    assert scope_global_report["somalia_sku_availability_inferred"] is False
+    assert scope_global_report[
+        "normalized_output_sha256"
+    ] == hashlib.sha256(
+        (ROOT / "data/scope-global-products.jsonl").read_bytes()
+    ).hexdigest()
+    assert all(
+        row["market"] == "Global manufacturer catalog"
+        and row["brand"] == "SCOPE"
+        and "somalia_named_on_manufacturer_catalog_map_but_no_sku_availability_inferred"
+        in row["specifications"]["source_quality_flags"]
+        and not ({"address", "phone", "email", "contact_person"} & set(row))
+        for row in scope_global_rows
+    )
+    assert policy_by_id[
+        "SCOPE_GLOBAL_COMPLETE_LIVE_PRODUCT_CATALOG"
+    ]["source_sha256"] == scope_global_report["normalized_output_sha256"]
+    assert policy_by_id[
+        "SCOPE_GLOBAL_COMPLETE_LIVE_PRODUCT_CATALOG"
+    ]["observed_count"] == 200
+    assert db.execute(
+        "SELECT count(*) FROM products "
+        "WHERE source_id='SCOPE_GLOBAL_COMPLETE_LIVE_PRODUCT_CATALOG'"
+    ).fetchone()[0] == 199
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id='SCOPE_GLOBAL_COMPLETE_LIVE_PRODUCT_CATALOG'"
+    ).fetchone()[0] == 200
+    assert db.execute(
+        "SELECT count(*) FROM product_offers "
+        "WHERE source_id='SCOPE_GLOBAL_COMPLETE_LIVE_PRODUCT_CATALOG'"
     ).fetchone()[0] == 0
     assert uruguay_ancap_report["catalog_product_families"] == 56
     assert uruguay_ancap_report["normalized_product_variants"] == len(uruguay_ancap_rows) == 88

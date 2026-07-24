@@ -1,0 +1,1234 @@
+{
+  "catalog_map_market_presence_observation": "Somalia",
+  "catalog_pdf_bytes": 2882516,
+  "catalog_pdf_sha256": "00bcf8dcf800e92e77b3d632513f5e772aab0f12aa2e465beebed3238979d1ad",
+  "catalog_pdf_url": "https://scopelubricant.com/wp-content/uploads/2023/12/Scope-Lubricants-Products.pdf",
+  "category_occurrences": 66,
+  "denominator_note": "The live WordPress product endpoint contains 62 products in 12 non-empty technical categories and every card is included. Reviewed technical-table expansion produces 200 product-grade identities, including SAE×TBN marine combinations. The manufacturer catalog map names Somalia as market presence, but the 200 identities remain one global manufacturer catalog and are not multiplied into Somalia SKU availability or offers.",
+  "exact_existing_identity_matches": 1,
+  "family_identity_counts": {
+    "C": 7,
+    "G": 14,
+    "H": 10,
+    "I": 30,
+    "M": 110,
+    "S": 3,
+    "T": 20,
+    "TF": 6
+  },
+  "grade_field_counts": {
+    "dot": 4,
+    "iso_vg": 47,
+    "nlgi": 14,
+    "sae_engine": 109,
+    "sae_gear": 14,
+    "source_grade": 12
+  },
+  "identity_rows": 200,
+  "linked_document_observations": 61,
+  "multi_category_products": 4,
+  "new_manufacturer_catalog_identities": 199,
+  "nonempty_product_categories": 12,
+  "normalized_output_sha256": "c1acad596643876ed24cb4855e6de71557cfa7eece5a7badd1f77e5256ab3b7a",
+  "page_facts": [
+    {
+      "categories": [
+        "Synthetic Engine Oils"
+      ],
+      "documents": [
+        {
+          "bytes": 678762,
+          "sha256": "dc345e89de6bd92095f06e5fcc1b10ac8b4ce479eaad76b6aca13689aa97e8b0",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-Pegaso-grades.pdf"
+        }
+      ],
+      "modified": "2024-11-14T06:56:37",
+      "product_id": 743,
+      "slug": "scope-pegaso-sn",
+      "specification_text_sha256": "179167b6a0ec57bd9d7d71e486d3a50991d1e02e7c5543ae42f38baf2b4f55f3",
+      "table_sha256": "fa079c94f37875ac9fc639c77ea755ec6593239356f6cc65e5bbef0e3b43e929",
+      "title": "PEGASO 9050 | Fully Synthetic Gasoline Engine Oil | API SN",
+      "variant_rows": 2
+    },
+    {
+      "categories": [
+        "Synthetic Engine Oils"
+      ],
+      "documents": [
+        {
+          "bytes": 678762,
+          "sha256": "dc345e89de6bd92095f06e5fcc1b10ac8b4ce479eaad76b6aca13689aa97e8b0",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-Pegaso-grades.pdf"
+        }
+      ],
+      "modified": "2026-04-24T21:20:27",
+      "product_id": 762,
+      "slug": "scope-pegaso-sm-cf",
+      "specification_text_sha256": "b1e8ee2238ef9e3c34a543fb6d9e02126e14816a01bb6f0c781238c19c89ea05",
+      "table_sha256": "f0dab6cadc93d9731044eb09e40dc28341530fcc74ba4090d906af4a79e9ef77",
+      "title": "PEGASO 9000 | Fully Synthetic Gasoline Engine Oil | API SM/CF",
+      "variant_rows": 3
+    },
+    {
+      "categories": [
+        "Industrial Lubricants"
+      ],
+      "documents": [
+        {
+          "bytes": 629338,
+          "sha256": "1a24cc87d2d97c37cf563532818a7c920d5b9b6f4b6987dc0e8ef319bedd4b02",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-AGO-and-IGO.pdf"
+        }
+      ],
+      "modified": "2024-11-14T11:20:18",
+      "product_id": 775,
+      "slug": "iep-industrial-gear-oil",
+      "specification_text_sha256": "73e3d10680067547e5b086138b8f42a5bed24c5e33916cacc97313a805f4e20d",
+      "table_sha256": "2dc1bbef570eba0441e59700919a3ef976400f69e9b5788e2ac3c69799b9fff2",
+      "title": "IEP INDUSTRIAL GEAR OIL",
+      "variant_rows": 6
+    },
+    {
+      "categories": [
+        "Automotive Gear Oils"
+      ],
+      "documents": [
+        {
+          "bytes": 629338,
+          "sha256": "1a24cc87d2d97c37cf563532818a7c920d5b9b6f4b6987dc0e8ef319bedd4b02",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-AGO-and-IGO.pdf"
+        }
+      ],
+      "modified": "2024-11-14T11:17:19",
+      "product_id": 776,
+      "slug": "effol-ep-automotive-gear-oils-api-gl4",
+      "specification_text_sha256": "484b743811c821a2cdb984e4eccd1040974b427a0cecd350bcca7d2c372c02d3",
+      "table_sha256": "7adf39de6944a82c5b9f5001112334d1359a9a1b0440c1fd1cc78d493abc94c0",
+      "title": "EFFOL EP | Automotive Gear Oil | API GL-4",
+      "variant_rows": 5
+    },
+    {
+      "categories": [
+        "Automatic Transmission Fluids"
+      ],
+      "documents": [
+        {
+          "bytes": 635400,
+          "sha256": "edab1b376566e6b3a0abcd8e910450d9ff5742addd759aed28d91e32fdecbf99",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-ATF-CVT-DCT.pdf"
+        }
+      ],
+      "modified": "2025-04-13T07:13:13",
+      "product_id": 778,
+      "slug": "mercur-dexron-iii",
+      "specification_text_sha256": "b1a66807fdc77454c31b9286735e6640152dbbad3f7e41c1842066923a4706ae",
+      "table_sha256": "03b209f43889c355a24026939c43a84a9432e570ccc4736d53a9eed217ccdd6b",
+      "title": "MERCUR | Automatic Transmission Fluid | DX-III",
+      "variant_rows": 1
+    },
+    {
+      "categories": [
+        "Automatic Transmission Fluids"
+      ],
+      "documents": [
+        {
+          "bytes": 635400,
+          "sha256": "edab1b376566e6b3a0abcd8e910450d9ff5742addd759aed28d91e32fdecbf99",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-ATF-CVT-DCT.pdf"
+        }
+      ],
+      "modified": "2025-02-25T18:30:32",
+      "product_id": 781,
+      "slug": "mercur-dexron-ii",
+      "specification_text_sha256": "13bd770529c0fc10b252d097d8b52d4eed17d02fee19e33faeb5d71147ce68bc",
+      "table_sha256": "cbe7aaccf8e46e0362284e612e90bdff82a6aa3652c0a667f0fb4aa193a129ca",
+      "title": "MERCUR | Automatic Transmission Fluid | DX-II",
+      "variant_rows": 1
+    },
+    {
+      "categories": [
+        "Industrial Lubricants"
+      ],
+      "documents": [
+        {
+          "bytes": 629948,
+          "sha256": "2f5f8ea2090e8aacb01936c009cf96d81cad33e55d39d164ef280c83fc9587c6",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-hyd-turbine-compr-HT-Tr-oils.pdf"
+        }
+      ],
+      "modified": "2024-11-11T04:34:35",
+      "product_id": 782,
+      "slug": "textron-aw-hydraulic-oil",
+      "specification_text_sha256": "0baaadb0d5283f71c068ca6f7df0906c509e817fadf49b9257bf29b660b0b6d6",
+      "table_sha256": "158f4db94b2204fc0e5b04776daa946f3ceddc5253024ec47e97a24845b80aeb",
+      "title": "TEXTRON | AW HYDRAULIC OIL",
+      "variant_rows": 6
+    },
+    {
+      "categories": [
+        "Brake Fluids"
+      ],
+      "documents": [
+        {
+          "bytes": 626788,
+          "sha256": "4c860a01983dc022d383f672d35a1d853942f16ff64dfec1e31b3fddcd926fd1",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-brake-fluids.pdf"
+        }
+      ],
+      "modified": "2025-04-20T11:10:23",
+      "product_id": 794,
+      "slug": "super-3000-heavy-duty-brake-fluid-dot-3",
+      "specification_text_sha256": "30d8d11805df61b7793cdc3aa4accb3e76c4fe66753ca404dca113b3987fcf94",
+      "table_sha256": "5cb31cf10dfe4cd9f8b744350570f7e06b53329317d395bd8f0f87f6e2a866de",
+      "title": "SUPER 3000 | HEAVY DUTY BRAKE FLUID | DOT-3",
+      "variant_rows": 1
+    },
+    {
+      "categories": [
+        "Greases"
+      ],
+      "documents": [
+        {
+          "bytes": 570750,
+          "sha256": "e3c43fe6c5d63aef030791dc748782ed2947fcfd0ce0b1b94c01e28b457dbfb1",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-Lithium-based-greases.pdf"
+        }
+      ],
+      "modified": "2024-08-05T00:32:29",
+      "product_id": 796,
+      "slug": "ample-mp-mp-lithium-nlgi-2-3",
+      "specification_text_sha256": "d88a9cba575fa91ebf316305285f35f5c4e4885de545090ab6ec9855b471b7aa",
+      "table_sha256": "c04f5cae5bf4fd5a70c9967714600f775a1bc31b029e7f4fd711988fb99b4d0d",
+      "title": "AMPLE MP | Multi-Purpose Lithium Grease | NLGI 2 & 3",
+      "variant_rows": 2
+    },
+    {
+      "categories": [
+        "Greases"
+      ],
+      "documents": [
+        {
+          "bytes": 570750,
+          "sha256": "e3c43fe6c5d63aef030791dc748782ed2947fcfd0ce0b1b94c01e28b457dbfb1",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-Lithium-based-greases.pdf"
+        }
+      ],
+      "modified": "2025-01-01T20:39:20",
+      "product_id": 797,
+      "slug": "ample-ep-ep-grease-lithium-nlgi-1-2-3",
+      "specification_text_sha256": "23a05f11765fd9dad075f74a8753a48ab98fc8409acf409069b8095dc3dd6a88",
+      "table_sha256": "2430d4b8d05fc3a23678544e74663bd86658256fe1229bd88261792f82f15b8a",
+      "title": "AMPLE EP | EXTREME PRESSURE LITHIUM GREASE | NLGI 1, 2 & 3",
+      "variant_rows": 3
+    },
+    {
+      "categories": [
+        "Coolants"
+      ],
+      "documents": [
+        {
+          "bytes": 616450,
+          "sha256": "bc2b2d01d24d7b2d3d7d33e087b6a4b0050d98320356fc1ea7cdd3bd08995dd4",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-Coolants-1.pdf"
+        }
+      ],
+      "modified": "2024-03-24T20:34:58",
+      "product_id": 798,
+      "slug": "freezo-premium-quality-coolant",
+      "specification_text_sha256": "45d255a33fe961d134421ddb6472fbdd9aed4e5785bf4a2ea5928a0ad0e83a82",
+      "table_sha256": "e6909bc7a813ab5801520aa20adfb144e2c95c98f579ebe720ce656f8648ed08",
+      "title": "Freezo 100 | Premium Quality Coolant",
+      "variant_rows": 1
+    },
+    {
+      "categories": [
+        "Automatic Transmission Fluids"
+      ],
+      "documents": [
+        {
+          "bytes": 635400,
+          "sha256": "edab1b376566e6b3a0abcd8e910450d9ff5742addd759aed28d91e32fdecbf99",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-ATF-CVT-DCT.pdf"
+        }
+      ],
+      "modified": "2023-12-21T22:41:15",
+      "product_id": 1355,
+      "slug": "mercur-cvt-continuously-variable-transmission-fluid",
+      "specification_text_sha256": "cd0ffff08ffa2e3898eb63080f8044e6c30cf7a53054bdd3bb76c88f8144ad97",
+      "table_sha256": "a138ada6268ed2aab78b23bb77214346ba6fdf1d4680484fdb22b628003320e2",
+      "title": "MERCUR CVT | Continuously Variable Transmission Fluid | CVT Fluid",
+      "variant_rows": 1
+    },
+    {
+      "categories": [
+        "Industrial Lubricants"
+      ],
+      "documents": [
+        {
+          "bytes": 629948,
+          "sha256": "2f5f8ea2090e8aacb01936c009cf96d81cad33e55d39d164ef280c83fc9587c6",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-hyd-turbine-compr-HT-Tr-oils.pdf"
+        }
+      ],
+      "modified": "2023-12-22T22:58:49",
+      "product_id": 1363,
+      "slug": "textron-hydraulic-oil-high-viscosity-index",
+      "specification_text_sha256": "944b93325bcf23b69515bd22b35de36ee1d3dee219fb3b58d2c9d5feb63f2fb2",
+      "table_sha256": "b41a0217f16ee9016ea96bc8d183fcaddd4fd1ad7589b3a31e913230291c3b8e",
+      "title": "TEXTRON | HVI HYDRAULIC OIL | HIGH VISCOSITY INDEX",
+      "variant_rows": 4
+    },
+    {
+      "categories": [
+        "Greases"
+      ],
+      "documents": [
+        {
+          "bytes": 570750,
+          "sha256": "e3c43fe6c5d63aef030791dc748782ed2947fcfd0ce0b1b94c01e28b457dbfb1",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-Lithium-based-greases.pdf"
+        }
+      ],
+      "modified": "2023-12-14T06:11:17",
+      "product_id": 1364,
+      "slug": "hifo-lithium-multifunctional-grease",
+      "specification_text_sha256": "ceafac9f2e41a0c62b7a190348fe8203f2857cf62b4d8f9f1b02afdde31e1c65",
+      "table_sha256": "c2a8a98073a2ff3bca5bb8b10c2d4b7580f2948fddc50e82ccfa65805da7f5a2",
+      "title": "HIFO MULTIFUNCTIONAL | LITHIUM GREASE",
+      "variant_rows": 1
+    },
+    {
+      "categories": [
+        "Gasoline Engine Oils"
+      ],
+      "documents": [
+        {
+          "bytes": 719928,
+          "sha256": "bd7207d5749d78dff071deacc13f2318ab9308f21b7c627d04301e393ef87baf",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-Perfo-Grades-1.pdf"
+        }
+      ],
+      "modified": "2023-12-22T15:35:49",
+      "product_id": 1431,
+      "slug": "premium-gasoline-engine-oil-api-sn",
+      "specification_text_sha256": "a7c56979fb59f708881058c0ef557978f65e46cd53cf3377c0c6f01382e31d29",
+      "table_sha256": "e6bf7dbadd05e18006793e6b3850d702215f2e15d9079b6ed5ae74c5d8f714cb",
+      "title": "PERFO 9050 | Premium Grade Gasoline Engine Oil | API SN",
+      "variant_rows": 5
+    },
+    {
+      "categories": [
+        "Gasoline Engine Oils"
+      ],
+      "documents": [
+        {
+          "bytes": 719928,
+          "sha256": "bd7207d5749d78dff071deacc13f2318ab9308f21b7c627d04301e393ef87baf",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-Perfo-Grades-1.pdf"
+        }
+      ],
+      "modified": "2024-07-14T01:57:32",
+      "product_id": 1432,
+      "slug": "perfo-9000-api-sm",
+      "specification_text_sha256": "db1516ce0e69e39eba3aa6ac8f0597bd30a8846816cef16a53e13047e9caaef4",
+      "table_sha256": "8938980149b7b471df24900c37309e4e52562648e6ec8ed05f794909471880f9",
+      "title": "PERFO 9000 | Premium Grade Gasoline Engine Oil | API SM",
+      "variant_rows": 5
+    },
+    {
+      "categories": [
+        "Gasoline Engine Oils"
+      ],
+      "documents": [
+        {
+          "bytes": 719928,
+          "sha256": "bd7207d5749d78dff071deacc13f2318ab9308f21b7c627d04301e393ef87baf",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-Perfo-Grades-1.pdf"
+        }
+      ],
+      "modified": "2023-12-22T15:45:56",
+      "product_id": 1433,
+      "slug": "perfo-8000-premium-grade-gasoline-engine-oil-api-sl-cf",
+      "specification_text_sha256": "5157936cc6c32e3f4aee9a7671c8a60e85c44fcb092c4e83557c664260e778b1",
+      "table_sha256": "82a7d44fafdcc232ffb7a1c51a19073ecaa0c2388604b5181303764aee7f6d54",
+      "title": "PERFO 8000 | Premium Grade Gasoline Engine Oil | API SL/CF",
+      "variant_rows": 6
+    },
+    {
+      "categories": [
+        "Gasoline Engine Oils"
+      ],
+      "documents": [
+        {
+          "bytes": 719928,
+          "sha256": "bd7207d5749d78dff071deacc13f2318ab9308f21b7c627d04301e393ef87baf",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-Perfo-Grades-1.pdf"
+        }
+      ],
+      "modified": "2023-12-22T15:03:36",
+      "product_id": 1434,
+      "slug": "perfo-7000-premium-grade-gasoline-engine-oil-api-sj-cf",
+      "specification_text_sha256": "dbb9a3ae047d9bbba42a56a6539487ffc88a45669f364618fa932bb95f4ec591",
+      "table_sha256": "c25058e3e2c3782069140583bcfa46d2e8b2c77043493788906c09c01057d0cf",
+      "title": "PERFO 7000 | Premium Grade Gasoline Engine Oil | API SJ/CF",
+      "variant_rows": 6
+    },
+    {
+      "categories": [
+        "Gasoline Engine Oils"
+      ],
+      "documents": [
+        {
+          "bytes": 647019,
+          "sha256": "93f536b159882dec02083abbf97950448806e5651d5998105839348f2e51a63d",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-2T-and-TCW-oils.pdf"
+        }
+      ],
+      "modified": "2025-08-10T15:21:05",
+      "product_id": 1435,
+      "slug": "perfo-4t-four-stroke-engine-oil-api-sj-cf",
+      "specification_text_sha256": "d3bccaeb05431a80d55363eb77b1603aa4686c7c07c3ba429582e1361ddf297e",
+      "table_sha256": "4f16981482090e99446da2a13b878865cfae878ba55fc69f4b35094cb5d4f9bc",
+      "title": "PERFO 4T | Four Stroke Engine Oil | API SJ/CF",
+      "variant_rows": 4
+    },
+    {
+      "categories": [
+        "Gasoline Engine Oils"
+      ],
+      "documents": [
+        {
+          "bytes": 647019,
+          "sha256": "93f536b159882dec02083abbf97950448806e5651d5998105839348f2e51a63d",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-2T-and-TCW-oils.pdf"
+        }
+      ],
+      "modified": "2025-03-29T23:04:27",
+      "product_id": 1436,
+      "slug": "perfo-2t-two-stroke-engine-oil-api-tc",
+      "specification_text_sha256": "18ddecc3334f6f33e817a222b171daca66336ad1df2f05da0df0aa5e6fb94ee3",
+      "table_sha256": "f2c5063f43e0fd3a57e8958a7c0737e4a0612aea6d313c62c546059fb9bb2b5a",
+      "title": "PERFO 2T | Two Stroke Engine Oil | API TC",
+      "variant_rows": 2
+    },
+    {
+      "categories": [
+        "Gasoline Engine Oils"
+      ],
+      "documents": [
+        {
+          "bytes": 719928,
+          "sha256": "bd7207d5749d78dff071deacc13f2318ab9308f21b7c627d04301e393ef87baf",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-Perfo-Grades-1.pdf"
+        }
+      ],
+      "modified": "2025-01-19T18:18:19",
+      "product_id": 1437,
+      "slug": "scope-perfo-board-tcw",
+      "specification_text_sha256": "a0d7882a5d5ddedc5ffb075dea241b50da91d51effa3cfd75f6222cbb8d56365",
+      "table_sha256": "b0006ad69915a079ed00c5efbb8b29f8decfc3664d49039c314f50ae91741015",
+      "title": "SCOPE PERFO BOARD | TCW",
+      "variant_rows": 1
+    },
+    {
+      "categories": [
+        "Diesel Engine Oils"
+      ],
+      "documents": [
+        {
+          "bytes": 719672,
+          "sha256": "256f723c6af911da66aaad0bb0b3baf8b8aea0f0d330efbdc53b9aaa2aede71c",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-Denim-grades.pdf"
+        }
+      ],
+      "modified": "2025-02-14T15:09:56",
+      "product_id": 1438,
+      "slug": "denim-9050-heavy-duty-diesel-engine-oil-api-cj-4",
+      "specification_text_sha256": "077e2e594aadd6b2a0f744c1db7290c1d70d2d9977144afd3f47617b3298eadc",
+      "table_sha256": "a5f6dba41d4824b72a52dccfd56f6cc73ab99d8c5928a684600c18ce3c2a59ee",
+      "title": "Denim 9050 | Heavy Duty Diesel Engine Oil | API CJ-4",
+      "variant_rows": 3
+    },
+    {
+      "categories": [
+        "Diesel Engine Oils"
+      ],
+      "documents": [
+        {
+          "bytes": 719672,
+          "sha256": "256f723c6af911da66aaad0bb0b3baf8b8aea0f0d330efbdc53b9aaa2aede71c",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-Denim-grades.pdf"
+        }
+      ],
+      "modified": "2024-11-14T10:53:01",
+      "product_id": 1439,
+      "slug": "denim-9000-global-extra-super-diesel-api-ci4",
+      "specification_text_sha256": "c539fb1938302bfcd27158edacf5f9f208b34a1eef7449ca7a1eab67ddf70537",
+      "table_sha256": "756e3b09d12df4aefbaf1eb1f138b6629378c8224784fcc996b0dc471f3f5daf",
+      "title": "Denim 9000 | Heavy Duty Diesel Engine Oil | API CI-4/SL",
+      "variant_rows": 4
+    },
+    {
+      "categories": [
+        "Diesel Engine Oils"
+      ],
+      "documents": [
+        {
+          "bytes": 719672,
+          "sha256": "256f723c6af911da66aaad0bb0b3baf8b8aea0f0d330efbdc53b9aaa2aede71c",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-Denim-grades.pdf"
+        }
+      ],
+      "modified": "2024-11-14T10:55:06",
+      "product_id": 1440,
+      "slug": "denim-2090-api-ch4-sj",
+      "specification_text_sha256": "8ba3a7c1d78c9b7fd9a97f12c3814bf72233e68696a1b9a93e9312a5a3304530",
+      "table_sha256": "3a9b080006090c718b9837fd632a7c0ddd009a9f1e216439ca2c88573cf27cb3",
+      "title": "Denim 2090 | Heavy Duty Diesel Engine Oil | API CH-4/SJ",
+      "variant_rows": 4
+    },
+    {
+      "categories": [
+        "Diesel Engine Oils"
+      ],
+      "documents": [
+        {
+          "bytes": 719672,
+          "sha256": "256f723c6af911da66aaad0bb0b3baf8b8aea0f0d330efbdc53b9aaa2aede71c",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-Denim-grades.pdf"
+        }
+      ],
+      "modified": "2024-11-14T10:57:09",
+      "product_id": 1441,
+      "slug": "denim-2080-api-cg4-sj",
+      "specification_text_sha256": "2065f49c8a0ddb966d056c576fffb95d33b1433bb19d1caee6ed48534aab04c8",
+      "table_sha256": "b12f0f7b65c8644d6cc335f7d8e3adf5971abff0cb550d9fd7e2ed5fc1804d04",
+      "title": "DENIM 2080 | Heavy Duty Diesel Engine Oil | API-CG4/SJ",
+      "variant_rows": 5
+    },
+    {
+      "categories": [
+        "Diesel Engine Oils"
+      ],
+      "documents": [
+        {
+          "bytes": 719672,
+          "sha256": "256f723c6af911da66aaad0bb0b3baf8b8aea0f0d330efbdc53b9aaa2aede71c",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-Denim-grades.pdf"
+        }
+      ],
+      "modified": "2026-02-02T01:47:26",
+      "product_id": 1442,
+      "slug": "denim-2070-heavy-duty-diesel-engine-oil-api-cf4-sj",
+      "specification_text_sha256": "c69e69a1335c8cfa0e6ede08ad2398f0e559b4a3fdef05c2c494287fc925ccad",
+      "table_sha256": "11151b92b013d4518ad03e846bf52cd49cdffd5aff0f18b294e2ebae275a9bd8",
+      "title": "Denim 2070 | Heavy Duty Diesel Engine Oil | API-CF4/SJ",
+      "variant_rows": 5
+    },
+    {
+      "categories": [
+        "Diesel Engine Oils"
+      ],
+      "documents": [
+        {
+          "bytes": 719672,
+          "sha256": "256f723c6af911da66aaad0bb0b3baf8b8aea0f0d330efbdc53b9aaa2aede71c",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-Denim-grades.pdf"
+        }
+      ],
+      "modified": "2024-11-14T11:02:55",
+      "product_id": 1443,
+      "slug": "denim-2060-api-cf4-sg",
+      "specification_text_sha256": "8f22e81bc2623d9b4738b332375c0db998e942b0947d127ed430cc0594a0339f",
+      "table_sha256": "ccdb7690b39addf6315c05bb854f13229215121386834831a056c563a838c43d",
+      "title": "Denim 2060 | Heavy Duty Diesel Engine Oil | API-CF4/SG",
+      "variant_rows": 4
+    },
+    {
+      "categories": [
+        "Diesel Engine Oils"
+      ],
+      "documents": [
+        {
+          "bytes": 719672,
+          "sha256": "256f723c6af911da66aaad0bb0b3baf8b8aea0f0d330efbdc53b9aaa2aede71c",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-Denim-grades.pdf"
+        }
+      ],
+      "modified": "2024-11-14T11:04:21",
+      "product_id": 1444,
+      "slug": "denim-2050-api-cf-sf",
+      "specification_text_sha256": "ff686f3bf1b7cd941ceffe7449d91b3dd551a224e59d7b953d91ce879748e8b3",
+      "table_sha256": "7576537c1b90fb479e8fa525bcaf87684b8eb4f664fdffa31c7341cd6e014245",
+      "title": "Denim 2050 | Heavy Duty Diesel Engine Oil | API-CF/SF",
+      "variant_rows": 4
+    },
+    {
+      "categories": [
+        "Automotive Gear Oils"
+      ],
+      "documents": [
+        {
+          "bytes": 629338,
+          "sha256": "1a24cc87d2d97c37cf563532818a7c920d5b9b6f4b6987dc0e8ef319bedd4b02",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-AGO-and-IGO.pdf"
+        }
+      ],
+      "modified": "2024-11-14T11:09:27",
+      "product_id": 1445,
+      "slug": "effol-mp-gl5",
+      "specification_text_sha256": "4ebc004ee64ef608c5f5979911bd4300d85ec5cb644d000a1a375d5989794ac0",
+      "table_sha256": "79223f23b74866f621e1735c489bb2ab44c05ea1ec72a1f9718f356da10314b3",
+      "title": "EFFOL MP | Automotive Gear Oil | API GL-5",
+      "variant_rows": 5
+    },
+    {
+      "categories": [
+        "Automatic Transmission Fluids"
+      ],
+      "documents": [
+        {
+          "bytes": 635400,
+          "sha256": "edab1b376566e6b3a0abcd8e910450d9ff5742addd759aed28d91e32fdecbf99",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-ATF-CVT-DCT.pdf"
+        }
+      ],
+      "modified": "2024-03-23T18:37:24",
+      "product_id": 1465,
+      "slug": "transmission-fluid-to4",
+      "specification_text_sha256": "8b8b9f66089475601a1ce41287fe0d5728f56d0d1ca1d0724aca4c9d79589c46",
+      "table_sha256": "b8326277cf58b3355d571d490f3aa610d98543bad90f4e1bc82dd753d85e2ced",
+      "title": "TRANSMISSION FLUID | TO4",
+      "variant_rows": 4
+    },
+    {
+      "categories": [
+        "Industrial Lubricants"
+      ],
+      "documents": [
+        {
+          "bytes": 629948,
+          "sha256": "2f5f8ea2090e8aacb01936c009cf96d81cad33e55d39d164ef280c83fc9587c6",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-hyd-turbine-compr-HT-Tr-oils.pdf"
+        }
+      ],
+      "modified": "2023-12-21T23:07:59",
+      "product_id": 1468,
+      "slug": "textron-r-o-turbine-oil",
+      "specification_text_sha256": "1026d7dae736e7aed15e1211264740b54f76873d106df04f6c58f584b36a8f43",
+      "table_sha256": "f5ef769db465ec391515d5d3f3a1d0e1b1e85372907ab77d7576dc61da832fa1",
+      "title": "TEXTRON | R&O Turbine Oil",
+      "variant_rows": 4
+    },
+    {
+      "categories": [
+        "Industrial Lubricants"
+      ],
+      "documents": [
+        {
+          "bytes": 629948,
+          "sha256": "2f5f8ea2090e8aacb01936c009cf96d81cad33e55d39d164ef280c83fc9587c6",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-hyd-turbine-compr-HT-Tr-oils.pdf"
+        }
+      ],
+      "modified": "2025-04-03T13:32:59",
+      "product_id": 1469,
+      "slug": "textron-general-purpose-oil",
+      "specification_text_sha256": "6f1b2a8c24eb23bf09acec225ba87fa8066d169e1942f20b1988ce94b4d451e4",
+      "table_sha256": "8200e90147c8e44b7c7011cb691cd4098e011b791178592827b0f07b09603bd1",
+      "title": "TEXTRON | General Purpose Oil",
+      "variant_rows": 8
+    },
+    {
+      "categories": [
+        "Industrial Lubricants"
+      ],
+      "documents": [
+        {
+          "bytes": 629948,
+          "sha256": "2f5f8ea2090e8aacb01936c009cf96d81cad33e55d39d164ef280c83fc9587c6",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-hyd-turbine-compr-HT-Tr-oils.pdf"
+        }
+      ],
+      "modified": "2023-12-14T06:09:12",
+      "product_id": 1470,
+      "slug": "textron-circulating-oils",
+      "specification_text_sha256": "6b6794863417935bcce276d763e4e645d63b25956e458f71ff5b28d89215c8c5",
+      "table_sha256": "83268f9a04b5cb0fcd982641a7134ad0e1d7a800bf990fd468e83b5822a39abf",
+      "title": "TEXTRON | Circulating Oil",
+      "variant_rows": 8
+    },
+    {
+      "categories": [
+        "Industrial Lubricants"
+      ],
+      "documents": [
+        {
+          "bytes": 629948,
+          "sha256": "2f5f8ea2090e8aacb01936c009cf96d81cad33e55d39d164ef280c83fc9587c6",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-hyd-turbine-compr-HT-Tr-oils.pdf"
+        }
+      ],
+      "modified": "2024-07-19T13:42:10",
+      "product_id": 1471,
+      "slug": "textron-rpm-compressor-oil",
+      "specification_text_sha256": "052cb8bc6f0a39ea572bb064f8ffc8d74de6512bccb01108527600c71d79ec6e",
+      "table_sha256": "e9e5e1f3018aabd6cf2e75a07f02e850a40e40fade1ce846889de22bf8d8f9ee",
+      "title": "TEXTRON | RPM Compressor Oil",
+      "variant_rows": 4
+    },
+    {
+      "categories": [
+        "Specialty Lubricants"
+      ],
+      "documents": [
+        {
+          "bytes": 629948,
+          "sha256": "2f5f8ea2090e8aacb01936c009cf96d81cad33e55d39d164ef280c83fc9587c6",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-hyd-turbine-compr-HT-Tr-oils.pdf"
+        }
+      ],
+      "modified": "2024-07-17T08:02:46",
+      "product_id": 1472,
+      "slug": "ht-heat-transfer-fluid",
+      "specification_text_sha256": "0d5c8142e54982d81cd2ff421bc820ae33e8c51b0a72a1f3725e1109d2df63ea",
+      "table_sha256": "3dbc21b9b96a7ec51dd049532da469faf7890606a5ca064a4c5ffec20bec4f75",
+      "title": "Heat Transfer Fluid",
+      "variant_rows": 4
+    },
+    {
+      "categories": [
+        "Specialty Lubricants"
+      ],
+      "documents": [
+        {
+          "bytes": 645199,
+          "sha256": "0c41a98d4350f19a21785a724292e9b47119df1a19f2c037ab4d9ca31a21492a",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Soluble-cutting-oils.pdf"
+        }
+      ],
+      "modified": "2023-12-21T23:16:40",
+      "product_id": 1474,
+      "slug": "soluble-cutting-oil",
+      "specification_text_sha256": "a1e9b5a5fb4720292ddb3937001a122b2b4a458da0588cd5915c0afaaea35256",
+      "table_sha256": "5d705330bccd58a3c19b16c8a4254b490fc7df5ef2d83a322b3cc6f8b6794362",
+      "title": "Soluble Cutting Oil",
+      "variant_rows": 1
+    },
+    {
+      "categories": [
+        "Specialty Lubricants"
+      ],
+      "documents": [
+        {
+          "bytes": 659656,
+          "sha256": "7c99d0c2bd865a30ca2a43730bb14bb404b783383557266f6881912c06b5d8c8",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-Neat-Cutting-Oils.pdf"
+        }
+      ],
+      "modified": "2024-09-11T03:38:12",
+      "product_id": 1475,
+      "slug": "neat-cutting-oil",
+      "specification_text_sha256": "32210e349d0c4edf3a9d1a1115ee390b52c2015982f4b8152a363c66c0c3aacf",
+      "table_sha256": "d55d667103b302d913f015d858f2904c6b79cead64f9031e64713c784e84338c",
+      "title": "Neat Cutting Oil",
+      "variant_rows": 2
+    },
+    {
+      "categories": [
+        "Greases"
+      ],
+      "documents": [
+        {
+          "bytes": 570750,
+          "sha256": "e3c43fe6c5d63aef030791dc748782ed2947fcfd0ce0b1b94c01e28b457dbfb1",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-Lithium-based-greases.pdf"
+        }
+      ],
+      "modified": "2024-11-08T01:40:21",
+      "product_id": 1481,
+      "slug": "premium-lithium-complex-grease",
+      "specification_text_sha256": "087b3e21947c32354787ccdc0257d89e3b18b6661741e9d6b8a1902263a2d48d",
+      "table_sha256": "c5284c560782f6515d3ab0c8ae3119058dd77cbb5fc3dd146cd8ebbef00d5886",
+      "title": "LICO – Lithium Complex Grease",
+      "variant_rows": 1
+    },
+    {
+      "categories": [
+        "Greases"
+      ],
+      "documents": [
+        {
+          "bytes": 570750,
+          "sha256": "e3c43fe6c5d63aef030791dc748782ed2947fcfd0ce0b1b94c01e28b457dbfb1",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-Lithium-based-greases.pdf"
+        }
+      ],
+      "modified": "2025-03-29T07:46:43",
+      "product_id": 1482,
+      "slug": "premium-lithium-complex-grease-with-3-mos2",
+      "specification_text_sha256": "b55df1fc0200364883be58c609a0649eef47222daa4a2e1e1795f3f2b3636020",
+      "table_sha256": "806a5a0342e2bf3588a6f23225deb0001a81813c400ac8b9249ba29fde10fe6e",
+      "title": "Premium Lithium Complex Grease with 3% MoS2",
+      "variant_rows": 1
+    },
+    {
+      "categories": [
+        "Greases"
+      ],
+      "documents": [
+        {
+          "bytes": 570525,
+          "sha256": "10a4a7f6ee18c890bdfac732f284b058a047b9d761ff9c4f72591b5e20ccf393",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-calcium-based-greases.pdf"
+        }
+      ],
+      "modified": "2024-10-05T17:47:15",
+      "product_id": 1484,
+      "slug": "ample-gp-grease-nlgi-2-3",
+      "specification_text_sha256": "9db5194cd3ff1b9b83f46a826cb62b84d227536ac982fc731631c7102616fa96",
+      "table_sha256": "6b8e4dc58e7ad7564630e0fe105c6fdf101fcc1e5ab57088663bc35fc58d11a8",
+      "title": "AMPLE GP | CALCIUM GREASE | NLGI 2 & 3",
+      "variant_rows": 2
+    },
+    {
+      "categories": [
+        "Marine Lubricants"
+      ],
+      "documents": [],
+      "modified": "2023-12-14T06:31:21",
+      "product_id": 1485,
+      "slug": "centex-marine-engine-oil-6-tbn-9-tbn",
+      "specification_text_sha256": "7a980632892075ada3a08534765d7d6a3188ce399e52f5371f7ed01485787da0",
+      "table_sha256": "0fcd20d118add0cfdc68c75ed1d3dba5d599ce6aa03d425e094d73fdd5df55ec",
+      "title": "CENTEX | MARINE ENGINE OIL | 6 – TBN & 9 – TBN",
+      "variant_rows": 6
+    },
+    {
+      "categories": [
+        "Marine Lubricants"
+      ],
+      "documents": [
+        {
+          "bytes": 654088,
+          "sha256": "623f15a512da2b4e15a00be755babebd4f5f23342db8b0208b2d9615b9a60da5",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Marine-engine-oil.pdf"
+        }
+      ],
+      "modified": "2024-09-25T00:22:34",
+      "product_id": 1486,
+      "slug": "tbn",
+      "specification_text_sha256": "ebf721544071276cf81b9994ae341ff264d5a4620806cddcba2af3f54708d18c",
+      "table_sha256": "c7b97b7f81244bc363dae766c225042e62044689c29aefb54475cb1d90469173",
+      "title": "CENTEX TPEO | MARINE ENGINE OIL | 12 TBN & 15 TBN",
+      "variant_rows": 6
+    },
+    {
+      "categories": [
+        "Marine Lubricants"
+      ],
+      "documents": [
+        {
+          "bytes": 654088,
+          "sha256": "623f15a512da2b4e15a00be755babebd4f5f23342db8b0208b2d9615b9a60da5",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Marine-engine-oil.pdf"
+        }
+      ],
+      "modified": "2023-12-14T06:33:27",
+      "product_id": 1487,
+      "slug": "centex-heavy-duty-marine-engine-oil",
+      "specification_text_sha256": "618a4afacbbf89716c56b08ef3bc59a3ad629aa0eef0a026f11651ad65b56400",
+      "table_sha256": "c0048c0509175e9a0c63f97f682f5c26673a10a9ce3c245b819c9127e7ca86fc",
+      "title": "CENTEX | Heavy Duty | Marine Engine Oil",
+      "variant_rows": 3
+    },
+    {
+      "categories": [
+        "Synthetic Engine Oils"
+      ],
+      "documents": [
+        {
+          "bytes": 720464,
+          "sha256": "2a8279f5495e497f4316a39c4e1f52b18dfa1bc5140b8a3cf6a00746dd03c11c",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-Lumix-Grades-1.pdf"
+        }
+      ],
+      "modified": "2024-11-14T10:25:50",
+      "product_id": 2348,
+      "slug": "scope-lumix-sm-cf",
+      "specification_text_sha256": "80005ed5836dc5dec74ef6154c8e1ffc62cf3996e8ae23dceb8c86d14e02c3b8",
+      "table_sha256": "95337b01e0ca46f46a6be66ae850bffc07ba1600929258ffa4b5b7092fec69c0",
+      "title": "Lumix 9000 | Synthetic Gasoline Engine Oil | SM/CF",
+      "variant_rows": 3
+    },
+    {
+      "categories": [
+        "Synthetic Engine Oils"
+      ],
+      "documents": [
+        {
+          "bytes": 720464,
+          "sha256": "2a8279f5495e497f4316a39c4e1f52b18dfa1bc5140b8a3cf6a00746dd03c11c",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-Lumix-Grades-1.pdf"
+        }
+      ],
+      "modified": "2024-11-14T10:34:55",
+      "product_id": 2350,
+      "slug": "scope-lumix-sl-cf",
+      "specification_text_sha256": "23ffa0d194c501b4ccb92838364e90e2859b772df8c6aae598c769a2c0373d81",
+      "table_sha256": "3b62a720fb978c64675e3bb90b914499710c24ec15cceadbdae87c88ef706757",
+      "title": "Lumix 8000 | Synthetic Gasoline Engine Oil | SL/CF",
+      "variant_rows": 4
+    },
+    {
+      "categories": [
+        "Synthetic Engine Oils"
+      ],
+      "documents": [
+        {
+          "bytes": 692091,
+          "sha256": "ae328436df860543e1d82b8c68314d330e288af5ba75f21a41816fc4acccd611",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-Metric-Grades-1.pdf"
+        }
+      ],
+      "modified": "2026-04-13T04:26:26",
+      "product_id": 2351,
+      "slug": "scope-metric-ck-4-sn",
+      "specification_text_sha256": "9c5e933ec950cbc08a02896c46246625e617556fda25d0006f3e8f138ba9e873",
+      "table_sha256": "1dad341814fde3e7a6ee9f24cce5856c76c0d96337c28665e8d4ac4181fa71ca",
+      "title": "METRIC 10000 | Fully Synthetic Diesel Engine Oil | API CK-4",
+      "variant_rows": 3
+    },
+    {
+      "categories": [
+        "Synthetic Engine Oils"
+      ],
+      "documents": [
+        {
+          "bytes": 692091,
+          "sha256": "ae328436df860543e1d82b8c68314d330e288af5ba75f21a41816fc4acccd611",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-Metric-Grades-1.pdf"
+        }
+      ],
+      "modified": "2024-11-14T10:43:34",
+      "product_id": 2352,
+      "slug": "scope-metric-syntheic-diesel-engine-oil-ci-4-sl",
+      "specification_text_sha256": "7444e385fdfa4283ddbd1d11e46526233f1c1e293b26a635f5dc2f5e26860a6c",
+      "table_sha256": "b2fb348fe89bd62e34e5a27eb38e0e80a2926b4c94d1633c03bc84413fb8397b",
+      "title": "METRIC 9000 | Fully Synthetic Diesel Engine Oil | CI-4/SL",
+      "variant_rows": 3
+    },
+    {
+      "categories": [
+        "Coolants",
+        "E-Vehicle / Hybrid Fluid"
+      ],
+      "documents": [
+        {
+          "bytes": 616557,
+          "sha256": "0eec4e0a8dbd8087c98c0bb437849097dd47b8a06428ff236af3ceb74c357a9b",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Radiator-coolant-ev-fuids.pdf"
+        }
+      ],
+      "modified": "2024-11-14T06:39:46",
+      "product_id": 2618,
+      "slug": "synthetic-hybrid-thermal-management-fluid",
+      "specification_text_sha256": "484dadfbd1b30fee91b932cfc4f00b17cd8f1be778fe83cdfd34d023e58f90d1",
+      "table_sha256": "b2c8aabfdc399bef2b78ebab9e4fd092c913ac0df62bfacc33bc48edb61d3b39",
+      "title": "E-FREEZO | SYNTHETIC HYBRID/EV THERMAL MANAGEMENT FLUID | 100%",
+      "variant_rows": 1
+    },
+    {
+      "categories": [
+        "E-Vehicle / Hybrid Fluid"
+      ],
+      "documents": [
+        {
+          "bytes": 678762,
+          "sha256": "dc345e89de6bd92095f06e5fcc1b10ac8b4ce479eaad76b6aca13689aa97e8b0",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-Pegaso-grades.pdf"
+        }
+      ],
+      "modified": "2024-11-14T06:36:50",
+      "product_id": 2719,
+      "slug": "scope-epegasofully-fully-synthetic-hybrid-motor-oil",
+      "specification_text_sha256": "0413452f24e968205f456dd3b6e67bf415f04cd7ceb5d81e139a8d0415c22cd8",
+      "table_sha256": "c3d2408ad9e010ea8474e9bc530a2fbabc2d99f9d969725e54e8a9026f69b5a8",
+      "title": "E-PEGASO | Fully Synthetic Hybrid Motor Oil | API SP",
+      "variant_rows": 1
+    },
+    {
+      "categories": [
+        "Automatic Transmission Fluids",
+        "E-Vehicle / Hybrid Fluid"
+      ],
+      "documents": [
+        {
+          "bytes": 635400,
+          "sha256": "edab1b376566e6b3a0abcd8e910450d9ff5742addd759aed28d91e32fdecbf99",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-ATF-CVT-DCT.pdf"
+        }
+      ],
+      "modified": "2024-11-14T05:45:33",
+      "product_id": 2728,
+      "slug": "fully-synthetic-hybrid-automatic-transmission-fluid",
+      "specification_text_sha256": "a58f634e7f44599ca8e913c84364d042284044865b0a5fac153226c0c68e35b3",
+      "table_sha256": "727be0691e2e5e27d3f9fa8f20f54f65c20c2a9b622761d7e92b5b4dca750d59",
+      "title": "E-MERCUR | Fully Synthetic Hybrid/EV Automatic Transmission Fluid",
+      "variant_rows": 1
+    },
+    {
+      "categories": [
+        "Brake Fluids",
+        "E-Vehicle / Hybrid Fluid"
+      ],
+      "documents": [
+        {
+          "bytes": 626788,
+          "sha256": "4c860a01983dc022d383f672d35a1d853942f16ff64dfec1e31b3fddcd926fd1",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-brake-fluids.pdf"
+        }
+      ],
+      "modified": "2024-11-14T06:41:17",
+      "product_id": 2736,
+      "slug": "e-super-4000-brake-oil-dot-4",
+      "specification_text_sha256": "78a9b73827c18728383f9a38ada5a44104354fbdcca3363ac738fb8d34cdc32f",
+      "table_sha256": "1f650af6456442a5bde261db9e5d08d70bd985d3b255175bc663ba633ada51b7",
+      "title": "E-SUPER 4000 | ADVANCED BRAKE FLUID | DOT-4",
+      "variant_rows": 1
+    },
+    {
+      "categories": [
+        "E-Vehicle / Hybrid Fluid",
+        "Greases"
+      ],
+      "documents": [
+        {
+          "bytes": 570750,
+          "sha256": "e3c43fe6c5d63aef030791dc748782ed2947fcfd0ce0b1b94c01e28b457dbfb1",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-Lithium-based-greases.pdf"
+        }
+      ],
+      "modified": "2024-11-14T06:43:12",
+      "product_id": 2740,
+      "slug": "lica-hybrid_ev-lithium",
+      "specification_text_sha256": "eb61e56216da3bf0ad56b26efda2a931b58fb90044bf0c83addb9910a6dc88d9",
+      "table_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "title": "E-Lica | Hybrid Lithium Calcium Grease | NLGI-2",
+      "variant_rows": 1
+    },
+    {
+      "categories": [
+        "Synthetic Engine Oils"
+      ],
+      "documents": [
+        {
+          "bytes": 720464,
+          "sha256": "2a8279f5495e497f4316a39c4e1f52b18dfa1bc5140b8a3cf6a00746dd03c11c",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-Lumix-Grades-1.pdf"
+        }
+      ],
+      "modified": "2024-11-14T10:18:51",
+      "product_id": 3114,
+      "slug": "lumix-10000-sp",
+      "specification_text_sha256": "63edf992b72c97036dd3a02f05d7ae1fb5cf1d788528253369e4e8949ebeff5e",
+      "table_sha256": "6d250929f7c977048ce50e71fa165805b5e29ca8b9b0b65651178844d9c3e09c",
+      "title": "Lumix 10000 | Synthetic Gasoline Engine Oil | API SP",
+      "variant_rows": 1
+    },
+    {
+      "categories": [
+        "Greases"
+      ],
+      "documents": [
+        {
+          "bytes": 570525,
+          "sha256": "10a4a7f6ee18c890bdfac732f284b058a047b9d761ff9c4f72591b5e20ccf393",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-calcium-based-greases.pdf"
+        }
+      ],
+      "modified": "2025-03-28T21:34:39",
+      "product_id": 3123,
+      "slug": "mp-calcium-grease-nlgi-3",
+      "specification_text_sha256": "679afc82a2e40baceb0b67d9349b0252be6367c97b4776fc312e09fddf1bf4e3",
+      "table_sha256": "db118514bc9068911df91a1ca13b6389c6f55bc9e87131f4b332a906a85715d1",
+      "title": "Multi-Purpose Calcium Grease | NLGI-3",
+      "variant_rows": 2
+    },
+    {
+      "categories": [
+        "Industrial Lubricants"
+      ],
+      "documents": [
+        {
+          "bytes": 609574,
+          "sha256": "a488a4610cce5e45285f3daa66937f3f2032146b43dd902e0324c5e177c8f8f2",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Refrigeration-compressor-oil.pdf"
+        }
+      ],
+      "modified": "2024-09-27T05:06:29",
+      "product_id": 3125,
+      "slug": "rpm-refrigeration-oil",
+      "specification_text_sha256": "7793b46f701c097fc679485ffeda3253df90c2f3ee9f06d9f0b58921e6380e75",
+      "table_sha256": "77bcf0bace741d6a9018d0669d0596b45c517252181611087143e306f02b3565",
+      "title": "RPM Refrigeration Oil",
+      "variant_rows": 3
+    },
+    {
+      "categories": [
+        "Brake Fluids"
+      ],
+      "documents": [
+        {
+          "bytes": 626788,
+          "sha256": "4c860a01983dc022d383f672d35a1d853942f16ff64dfec1e31b3fddcd926fd1",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-brake-fluids.pdf"
+        }
+      ],
+      "modified": "2024-11-12T19:06:38",
+      "product_id": 3127,
+      "slug": "super-5100-brake-oil-dot-5-1",
+      "specification_text_sha256": "b7267666f9c650b2ac743f350f82da37913096840965331443455ec8c41ce43b",
+      "table_sha256": "9ac5e8a6993909dbab55aaa6b3b368192921d9b3274538399e3f50154c8658c6",
+      "title": "SUPER 5100 | HEAVY DUTY BRAKE FLUID | Dot-5.1",
+      "variant_rows": 1
+    },
+    {
+      "categories": [
+        "Brake Fluids"
+      ],
+      "documents": [
+        {
+          "bytes": 626788,
+          "sha256": "4c860a01983dc022d383f672d35a1d853942f16ff64dfec1e31b3fddcd926fd1",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-brake-fluids.pdf"
+        }
+      ],
+      "modified": "2025-03-14T12:49:59",
+      "product_id": 3156,
+      "slug": "super-4000-brake-oil",
+      "specification_text_sha256": "d266fdec8ca91351fbddc2cd8caf24392aba747ddafdf7b31e8999f6bf608642",
+      "table_sha256": "dae8515564f1ea09c04407a1ce1764ffa827daa40c8490f1ad2804bbd4cffaef",
+      "title": "SUPER 4000 | HEAVY DUTY BRAKE FLUID | Dot-4",
+      "variant_rows": 1
+    },
+    {
+      "categories": [
+        "Synthetic Engine Oils"
+      ],
+      "documents": [
+        {
+          "bytes": 678762,
+          "sha256": "dc345e89de6bd92095f06e5fcc1b10ac8b4ce479eaad76b6aca13689aa97e8b0",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-Pegaso-grades.pdf"
+        }
+      ],
+      "modified": "2024-11-17T18:43:24",
+      "product_id": 3158,
+      "slug": "fully-synthetic-engine-oil",
+      "specification_text_sha256": "54cece59812b13fd1e90735fbe7ca43037e6f4447f2685f35eef97dcf2bb4a8a",
+      "table_sha256": "b93df6fba24dbd4fbc3ce6e82e828b01a2a44a00c8faf4335aed79116dd3e754",
+      "title": "PEGASO 10000 | Fully Synthetic Gasoline Engine Oil | API SP",
+      "variant_rows": 5
+    },
+    {
+      "categories": [
+        "Automatic Transmission Fluids"
+      ],
+      "documents": [
+        {
+          "bytes": 635400,
+          "sha256": "edab1b376566e6b3a0abcd8e910450d9ff5742addd759aed28d91e32fdecbf99",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-ATF-CVT-DCT.pdf"
+        }
+      ],
+      "modified": "2023-12-21T22:31:38",
+      "product_id": 3163,
+      "slug": "mercur-automatic-transmission-fluid-dx-vi",
+      "specification_text_sha256": "f0466761739f8026e135e1f73748d9ec789a068f61040b6a6be7c76ade981c2c",
+      "table_sha256": "727be0691e2e5e27d3f9fa8f20f54f65c20c2a9b622761d7e92b5b4dca750d59",
+      "title": "MERCUR | Automatic Transmission Fluid | DX-VI",
+      "variant_rows": 1
+    },
+    {
+      "categories": [
+        "Marine Lubricants"
+      ],
+      "documents": [
+        {
+          "bytes": 722537,
+          "sha256": "728438e7fb80ab28164416d187bc3a189a7a4e3a0b8ed87959048d2fbf5ec1c6",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/MCO.pdf"
+        }
+      ],
+      "modified": "2024-05-04T21:56:59",
+      "product_id": 3308,
+      "slug": "heavy-duty-marine-cylinder-oil",
+      "specification_text_sha256": "b0d70f58eb71d7a3c22970512f7e47522dda770acdf014f938e04089a40231e6",
+      "table_sha256": "68db1a3c122485322ed691f5698a9aa4ae4749016d5619459c3a0bcbc7cd67f9",
+      "title": "CENTEX MCO | Heavy Duty Marine Cylinder Oil – 24, 30, 40, 50 TBN",
+      "variant_rows": 12
+    },
+    {
+      "categories": [
+        "Greases"
+      ],
+      "documents": [
+        {
+          "bytes": 570750,
+          "sha256": "e3c43fe6c5d63aef030791dc748782ed2947fcfd0ce0b1b94c01e28b457dbfb1",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-Lithium-based-greases.pdf"
+        }
+      ],
+      "modified": "2023-12-14T05:25:03",
+      "product_id": 3312,
+      "slug": "molycom-lithium-moly-complex-grease",
+      "specification_text_sha256": "f7a41c28246f6ccb12bfee8eb258ff22579d307e1e6b54531fe6fa54c20ab175",
+      "table_sha256": "6f73104d167567205cf958efe2b9586213a35a46cb2dfbcddb357b0c8e7e9ac6",
+      "title": "Molycom | Lithium Moly Complex Grease",
+      "variant_rows": 1
+    },
+    {
+      "categories": [
+        "Automatic Transmission Fluids"
+      ],
+      "documents": [
+        {
+          "bytes": 635400,
+          "sha256": "edab1b376566e6b3a0abcd8e910450d9ff5742addd759aed28d91e32fdecbf99",
+          "url": "https://scopelubricant.com/wp-content/uploads/2023/11/Scope-ATF-CVT-DCT.pdf"
+        }
+      ],
+      "modified": "2023-12-22T21:05:00",
+      "product_id": 3924,
+      "slug": "mercur-dual-clutch-transmission-fluid-dct-fluid",
+      "specification_text_sha256": "9fb2043236b0b9c16b266f32010f6e1e054d0bacbb4b3ffd17dd472e6c8bddd6",
+      "table_sha256": "edea21582f65159d03053217a5347a1212ebb42f2c6342796109a7bcbce27e29",
+      "title": "Mercur | Dual Clutch Transmission Fluid | DCT Fluid",
+      "variant_rows": 1
+    }
+  ],
+  "product_endpoint_rows": 62,
+  "publication_scope": "Factual product names, professional grades, source-reported API/GL classes, category membership, document links and evidence hashes only; descriptions, technical tables, TDS/MSDS files, artwork and contacts are not redistributed.",
+  "schema_version": 1,
+  "snapshot_date": "2026-07-24",
+  "somalia_sku_availability_inferred": false,
+  "source_id": "SCOPE_GLOBAL_COMPLETE_LIVE_PRODUCT_CATALOG",
+  "status": "complete_live_manufacturer_product_catalog",
+  "taxonomy_product_counts": {
+    "Automatic Transmission Fluids": 7,
+    "Automotive Gear Oils": 2,
+    "Brake Fluids": 4,
+    "Coolants": 2,
+    "Diesel Engine Oils": 7,
+    "E-Vehicle / Hybrid Fluid": 5,
+    "Gasoline Engine Oils": 7,
+    "Greases": 9,
+    "Industrial Lubricants": 8,
+    "Marine Lubricants": 4,
+    "Specialty Lubricants": 3,
+    "Synthetic Engine Oils": 8
+  },
+  "unique_linked_document_payloads": 19,
+  "unique_linked_document_urls": 19
+}
