@@ -238,6 +238,8 @@ def main() -> None:
     costa_rica_health_rows = [json.loads(line) for line in (ROOT / "data/costa-rica-health-registered-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     bolivia_ypfb_report = json.loads((ROOT / "data/bolivia-ypfb-current-lubricants-report.json").read_text(encoding="utf-8"))
     bolivia_ypfb_rows = [json.loads(line) for line in (ROOT / "data/bolivia-ypfb-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    mozambique_petromoc_report = json.loads((ROOT / "data/mozambique-petromoc-legacy-report.json").read_text(encoding="utf-8"))
+    mozambique_petromoc_rows = [json.loads(line) for line in (ROOT / "data/mozambique-petromoc-legacy-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     uruguay_ancap_report = json.loads((ROOT / "data/uruguay-ancap-current-lubricants-report.json").read_text(encoding="utf-8"))
     uruguay_ancap_rows = [json.loads(line) for line in (ROOT / "data/uruguay-ancap-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     colombia_terpel_report = json.loads((ROOT / "data/colombia-terpel-current-lubricants-report.json").read_text(encoding="utf-8"))
@@ -371,6 +373,7 @@ def main() -> None:
         + report["guatemala_siges_lubricant_source_rows"]
         + report["costa_rica_health_lubricant_source_rows"]
         + report["bolivia_ypfb_lubricant_source_rows"]
+        + report["mozambique_petromoc_legacy_source_rows"]
         + len(uruguay_ancap_rows)
         + len(colombia_terpel_rows)
         + len(guyana_guyoil_rows)
@@ -1096,17 +1099,17 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 5191
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3115
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 117599
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 117598
-    assert report["quality_issues"]["professional_key_incomplete"] == 79005
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 117659
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 117658
+    assert report["quality_issues"]["professional_key_incomplete"] == 79008
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
         WHERE q.issue_code='professional_key_incomplete'
         GROUP BY p.family_code
     """)) == {
-        "C": 2293, "E": 150, "G": 12430, "H": 5269, "I": 3873,
-        "M": 23561, "S": 12164, "T": 11896, "TF": 6729, "U": 640,
+        "C": 2294, "E": 150, "G": 12430, "H": 5269, "I": 3873,
+        "M": 23563, "S": 12164, "T": 11896, "TF": 6729, "U": 640,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -2172,6 +2175,58 @@ def main() -> None:
     assert db.execute(
         "SELECT count(*) FROM product_sources WHERE source_id='BOLIVIA_YPFB_CURRENT_LUBRICANT_CATALOG'"
     ).fetchone()[0] == 47
+    assert mozambique_petromoc_report[
+        "normalized_product_grade_rows"
+    ] == len(mozambique_petromoc_rows) == report[
+        "mozambique_petromoc_legacy_source_rows"
+    ] == 60
+    assert mozambique_petromoc_report["technical_document_pages"] == 39
+    assert mozambique_petromoc_report["source_product_sheets"] == 29
+    assert mozambique_petromoc_report["families"] == {
+        "C": 1, "E": 1, "G": 3, "H": 10,
+        "I": 20, "M": 15, "T": 9, "TF": 1,
+    }
+    assert mozambique_petromoc_report[
+        "technical_document_sha256"
+    ] == "145f5ff42aae8fded1a543795ad8aa163dc86a5c79188c0246ed84a40b67890d"
+    assert mozambique_petromoc_report[
+        "normalized_output_sha256"
+    ] == hashlib.sha256(
+        (ROOT / "data/mozambique-petromoc-legacy-products.jsonl").read_bytes()
+    ).hexdigest()
+    assert all(
+        row["lifecycle_status"] == "officially_linked_legacy_catalog"
+        for row in mozambique_petromoc_rows
+    )
+    assert all(
+        row["market"] == "Mozambique"
+        and row["brand"] == "PETROMOC"
+        for row in mozambique_petromoc_rows
+    )
+    assert all(
+        not ({"address", "phone", "email", "contact_person"} & set(row))
+        for row in mozambique_petromoc_rows
+    )
+    assert policy_by_id[
+        "MOZAMBIQUE_PETROMOC_OFFICIALLY_LINKED_LEGACY_CATALOG"
+    ]["source_sha256"] == mozambique_petromoc_report[
+        "normalized_output_sha256"
+    ]
+    assert policy_by_id[
+        "MOZAMBIQUE_PETROMOC_OFFICIALLY_LINKED_LEGACY_CATALOG"
+    ]["observed_count"] == 60
+    assert db.execute(
+        "SELECT count(*) FROM products "
+        "WHERE source_id='MOZAMBIQUE_PETROMOC_OFFICIALLY_LINKED_LEGACY_CATALOG'"
+    ).fetchone()[0] == 60
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id='MOZAMBIQUE_PETROMOC_OFFICIALLY_LINKED_LEGACY_CATALOG'"
+    ).fetchone()[0] == 60
+    assert db.execute(
+        "SELECT count(*) FROM product_offers "
+        "WHERE source_id='MOZAMBIQUE_PETROMOC_OFFICIALLY_LINKED_LEGACY_CATALOG'"
+    ).fetchone()[0] == 0
     assert uruguay_ancap_report["catalog_product_families"] == 56
     assert uruguay_ancap_report["normalized_product_variants"] == len(uruguay_ancap_rows) == 88
     assert uruguay_ancap_report["families"] == {

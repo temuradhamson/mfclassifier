@@ -2971,6 +2971,21 @@
       "publication_status": "attributed_transformed_nonexpressive_product_package_price_approval_requirement_and_evidence_link_facts_only_no_marketing_text_or_images_redistributed",
       "observed_count": 15,
       "notes": "The complete public shop contains 22 unique orderable package cards collapsed into 15 Mobil/Centlube product-grade identities (C1/H3/I2/M6/T3). All 22 cards publish a price and linked PDS; 18 show sale prices, 16 approvals, 18 requirements and 17 recommendations. The source displays a dollar symbol but does not identify an ISO currency, so the normalized offers retain '$' as source_currency_symbol and leave price_currency blank. An order action is present, but stock quantity is not published. Product descriptions and images are not redistributed."
+    },
+    {
+      "source_id": "MOZAMBIQUE_PETROMOC_OFFICIALLY_LINKED_LEGACY_CATALOG",
+      "title": "PETROMOC Mozambique officially linked legacy lubricant guide",
+      "owner": "Petróleos de Moçambique, S.A.",
+      "source_type": "official_state_owned_supplier_current_landing_page_link_to_legacy_product_grade_technical_catalog",
+      "source_locator": "data/mozambique-petromoc-legacy-products.jsonl",
+      "source_url": "https://www.petromoc.co.mz/product-service/lubrificantes/",
+      "terms_url": "https://www.petromoc.co.mz/product-service/lubrificantes/",
+      "source_sha256": "0240db90f8a19537958f1e8fa68f5a5c048243f8d369a003a148d2490b9f0e6a",
+      "access_status": "public_official_state_owned_supplier_page_and_linked_pdf",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_transformed_nonexpressive_product_grade_specification_typical_property_and_evidence_facts_only_no_brochure_prose_artwork_or_layout_redistributed",
+      "observed_count": 60,
+      "notes": "The current official PETROMOC lubricant page links a 39-page guide whose artwork identifies it as a 2011-era document. Its 29 product sheets are conservatively expanded into 60 explicit product-grade identities (C1/E1/G3/H10/I20/M15/T9/TF1). Every row is labelled officially_linked_legacy_catalog and must not be treated as current availability, stock or price. One nonstandard SAE range is retained verbatim outside the strict equivalence key; one probable IEC/ICE source typo is flagged rather than silently corrected."
     }
   ]
 }

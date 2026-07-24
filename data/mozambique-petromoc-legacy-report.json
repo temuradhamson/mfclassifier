@@ -1,0 +1,31 @@
+{
+  "families": {
+    "C": 1,
+    "E": 1,
+    "G": 3,
+    "H": 10,
+    "I": 20,
+    "M": 15,
+    "T": 9,
+    "TF": 1
+  },
+  "grain_note": "One row per explicitly published product-grade variant; multi-grade technical tables are expanded and package variants are not invented.",
+  "landing_page_sha256": "1e49584f0b7e1153542a211d29af78f2297bfe54ae9770f79f421ef87299153e",
+  "lifecycle_note": "The 2026 official PETROMOC page links the brochure, but the brochure artwork identifies it as a 2011-era guide. Rows are historical evidence, not current availability.",
+  "normalized_output_sha256": "0240db90f8a19537958f1e8fa68f5a5c048243f8d369a003a148d2490b9f0e6a",
+  "normalized_product_grade_rows": 60,
+  "publication_scope": "Factual product names, technical classifications, typical values, evidence URLs and hashes only; brochure prose, artwork and layout are excluded.",
+  "quality_flags": {
+    "nonstandard_sae_range_retained_verbatim_not_promoted_to_strict_key": 1,
+    "source_uses_ice_where_iec_is_probable_retained_as_published_in_raw_evidence": 1
+  },
+  "schema_version": 1,
+  "snapshot_date": "2026-07-24",
+  "source_id": "MOZAMBIQUE_PETROMOC_OFFICIALLY_LINKED_LEGACY_CATALOG",
+  "source_product_sheets": 29,
+  "source_url": "https://www.petromoc.co.mz/product-service/lubrificantes/",
+  "status": "officially_linked_legacy_state_owned_supplier_catalog_normalized",
+  "technical_document_pages": 39,
+  "technical_document_sha256": "145f5ff42aae8fded1a543795ad8aa163dc86a5c79188c0246ed84a40b67890d",
+  "technical_document_url": "https://www.petromoc.co.mz/wp-content/uploads/2021/12/BROCHURA-DE-LUBRIFICANTES-PORTUGUES-.pdf"
+}
