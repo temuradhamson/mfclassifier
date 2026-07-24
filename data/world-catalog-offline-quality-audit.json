@@ -2,7 +2,7 @@
   "active_offers": 3115,
   "canonical_key_duplicates": 0,
   "canonical_products": 118699,
-  "compressed_database_sha256": "7cf0adb56f5a8f27f17ffcd42cb97c8b567226f337e58e51dff18e911b5577c2",
+  "compressed_database_sha256": "632e0059fef90b7aa2b046ec3f6dc2ddb6f72ad9d9bd6bc80d1b390aa2de4285",
   "duplicate_review_queues": [
     {
       "candidate_pairs": 11205,
@@ -380,6 +380,6 @@
     "medium": 79598
   },
   "snapshot_date": "2026-07-22",
-  "source_registry_entries": 224,
+  "source_registry_entries": 225,
   "status": "offline_quality_audit_current_seed_not_worldwide_completion"
 }

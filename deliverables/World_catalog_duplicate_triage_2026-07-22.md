@@ -29,4 +29,4 @@
 3. Partial-пары сопоставлять только после получения недостающего профессионального поля.
 4. ANP registration number не использовать как уникальный product-grade key: один номер может включать несколько исполнений.
 
-SHA-256 проверенной SQLite.xz: `7cf0adb56f5a8f27f17ffcd42cb97c8b567226f337e58e51dff18e911b5577c2`.
+SHA-256 проверенной SQLite.xz: `632e0059fef90b7aa2b046ec3f6dc2ddb6f72ad9d9bd6bc80d1b390aa2de4285`.

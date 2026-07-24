@@ -116,6 +116,9 @@ ANGOLA_SONANGOL_NGOL_JSONL = ROOT / "data/angola-sonangol-ngol-products.jsonl"
 MADAGASCAR_GALANA_MOBIL_JSONL = ROOT / "data/madagascar-galana-mobil-products.jsonl"
 COMOROS_SCH_REVIEW = ROOT / "data/comoros-sch-lubricant-scope-review.json"
 CHEVRON_US_CURRENT_JSONL = ROOT / "data/chevron-us-current-products.jsonl"
+SEYCHELLES_SEYPEC_REVIEW = (
+    ROOT / "data/seychelles-seypec-chevron-scope-review.json"
+)
 URUGUAY_ANCAP_LUBRICANT_JSONL = ROOT / "data" / "uruguay-ancap-current-lubricants.jsonl"
 COLOMBIA_TERPEL_LUBRICANT_JSONL = ROOT / "data" / "colombia-terpel-current-lubricants.jsonl"
 GUYANA_GUYOIL_LUBRICANT_JSONL = ROOT / "data" / "guyana-guyoil-current-lubricants.jsonl"
@@ -11581,6 +11584,9 @@ def main() -> None:
         "comoros_sch_review_sha256": hashlib.sha256(COMOROS_SCH_REVIEW.read_bytes()).hexdigest(),
         "chevron_us_current_input_sha256": hashlib.sha256(
             CHEVRON_US_CURRENT_JSONL.read_bytes()
+        ).hexdigest(),
+        "seychelles_seypec_review_sha256": hashlib.sha256(
+            SEYCHELLES_SEYPEC_REVIEW.read_bytes()
         ).hexdigest(),
         "uruguay_ancap_lubricant_input_sha256": hashlib.sha256(URUGUAY_ANCAP_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "colombia_terpel_lubricant_input_sha256": hashlib.sha256(COLOMBIA_TERPEL_LUBRICANT_JSONL.read_bytes()).hexdigest(),

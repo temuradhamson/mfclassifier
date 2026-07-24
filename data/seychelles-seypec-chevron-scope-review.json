@@ -1,0 +1,71 @@
+{
+  "current_local_price_rows": 0,
+  "explicit_local_package_skus": 0,
+  "explicit_local_product_grade_rows": 0,
+  "explicit_local_product_series": 0,
+  "facts_sha256": "df7e9a82dacc6cb51d65d770d7225569c481463472d203d50160c83480026d4d",
+  "illustrative_image": {
+    "filename_scope": "Delo Family Shot NA 2016",
+    "sha256": "9f852df3b07ff67739cb7752376f2c191688b3d372c8f62f2eaa36b5fd82b035",
+    "url": "https://www.seypec.com/sites/default/files/2018-03/Delo%20Family%20Shot%20NA%202016.png",
+    "used_as_local_sku_evidence": false
+  },
+  "listed_service_station_cards": [
+    "Beau Vallon SS",
+    "La Digue SS",
+    "Victoria South SS",
+    "Grand Anse Praslin SS",
+    "Airport SS",
+    "Baie Lazare SS",
+    "Anse Royale SS",
+    "Baie Ste Anne Praslin SS",
+    "Grand Anse Mahe SS",
+    "Victoria North SS",
+    "Belombre Marine Refuelling Station"
+  ],
+  "market": "Seychelles",
+  "market_presence": {
+    "applications_source_reported": [
+      "automotive",
+      "hydraulic equipment",
+      "turbines",
+      "compressors",
+      "agricultural equipment",
+      "construction equipment",
+      "electrical generators",
+      "pumps",
+      "marine engines"
+    ],
+    "availability_channels": [
+      "SEYPEC headquarters",
+      "SEYPEC service-station retail outlets"
+    ],
+    "brand": "Chevron",
+    "market": "Seychelles"
+  },
+  "offers_created": 0,
+  "owner": "Seychelles Petroleum Company Limited",
+  "publication_status": "count_and_market_presence_evidence_only_permission_required",
+  "schema_version": 1,
+  "scope_limit": "SEYPEC confirms current Chevron lubricant availability and broad applications, but directs customers to contact it for type, brand and grade. The embedded 2016 North America Delo family image is illustrative and is not a Seychelles SKU denominator.",
+  "snapshot_date": "2026-07-24",
+  "source_id": "SEYCHELLES_SEYPEC_CHEVRON_MARKET_PRESENCE_REVIEW",
+  "source_sha256": {
+    "lubricants": "0b9b43a3da5c381495255a89cdb82e26bc260cbb0616608ce2e03009a22e3cec",
+    "robots": "3200f655bd0e859a4fb1a7237cc64d4cec38824f6f5ee914c37d0b9de0f9c554",
+    "service_stations": "827d962f881c8c4b02a2b2fa5e691409c2f9770d1dec1b4ed01977cb36baf124",
+    "terms": "388441fe120c83b58780a40222a1993052140107cc9c2facac555a5266fecca2"
+  },
+  "source_urls": {
+    "lubricants": "https://www.seypec.com/services/chevron-lubricants",
+    "robots": "https://www.seypec.com/robots.txt",
+    "service_stations": "https://www.seypec.com/services/service-stations",
+    "terms": "https://www.seypec.com/terms-conditions"
+  },
+  "station_count_source_conflict": {
+    "body_island_arithmetic": "8 Mahe + 2 Praslin + 1 La Digue = 11",
+    "header_summary": "Ten service stations are spread across the islands of Mahe, Praslin and La Digue, offering a reliable fuelling point and a host of additional services.",
+    "listed_station_cards": 11
+  },
+  "status": "current_brand_market_presence_confirmed_no_local_sku_denominator"
+}

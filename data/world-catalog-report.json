@@ -58,6 +58,7 @@
   "madagascar_galana_mobil_input_sha256": "2329dc6c898f6912b3b7bcfa79bad1dfb8e89a2379a136a759e81b9daa540a26",
   "comoros_sch_review_sha256": "868d3ae9e5f0edad72f309dabef671133a664cc14c9c5b16a3f58a18b50397f6",
   "chevron_us_current_input_sha256": "8585b2d70dcd8ee2c32e1114969975261680d1e85518fc9e63280e0078e6c48a",
+  "seychelles_seypec_review_sha256": "26461b558bb275c779cdfbd382b5ffa288bd00fdc0e6bbc8a6c4fe7485b9a142",
   "uruguay_ancap_lubricant_input_sha256": "715b3c7a20df420da36ca85a1036303c69db8bc734b9559c57cb2ca920f636e0",
   "colombia_terpel_lubricant_input_sha256": "6d279e1cf0fabc772f5a793bad92d555a9e96242f226b70b9ccea031fd387586",
   "guyana_guyoil_lubricant_input_sha256": "350836720cfa25c47350f03214fa59de384f80373fcb1a5d1a2f4d38f562079e",
@@ -931,7 +932,8 @@
     "VALVOLINE_GLOBAL_CURRENT_PRODUCT_CATALOG",
     "LUBRAX_CURRENT_PRODUCT_CATALOG",
     "GULF_OIL_INTERNATIONAL_PDS_CATALOG",
-    "ENEOS_ENGLISH_LUBRICANT_PRODUCT_CATALOG"
+    "ENEOS_ENGLISH_LUBRICANT_PRODUCT_CATALOG",
+    "SEYCHELLES_SEYPEC_CHEVRON_MARKET_PRESENCE_REVIEW"
   ],
   "confirmed_world_total": null,
   "completion_note": "The seed proves the pipeline, not worldwide coverage. Exact worldwide count remains pending licensed/authorized source ingestion.",

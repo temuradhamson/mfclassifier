@@ -269,6 +269,7 @@ def main() -> None:
     madagascar_galana_report = json.loads((ROOT / "data/madagascar-galana-mobil-report.json").read_text(encoding="utf-8"))
     madagascar_galana_rows = [json.loads(line) for line in (ROOT / "data/madagascar-galana-mobil-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     comoros_sch_report = json.loads((ROOT / "data/comoros-sch-lubricant-scope-review.json").read_text(encoding="utf-8"))
+    seychelles_seypec_report = json.loads((ROOT / "data/seychelles-seypec-chevron-scope-review.json").read_text(encoding="utf-8"))
     uruguay_ancap_report = json.loads((ROOT / "data/uruguay-ancap-current-lubricants-report.json").read_text(encoding="utf-8"))
     uruguay_ancap_rows = [json.loads(line) for line in (ROOT / "data/uruguay-ancap-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     colombia_terpel_report = json.loads((ROOT / "data/colombia-terpel-current-lubricants-report.json").read_text(encoding="utf-8"))
@@ -3117,6 +3118,72 @@ def main() -> None:
         and not ({"description", "artwork", "contact", "sku"} & set(row))
         for row in chevron_us_rows
     )
+    assert seychelles_seypec_report["status"] == (
+        "current_brand_market_presence_confirmed_no_local_sku_denominator"
+    )
+    assert seychelles_seypec_report[
+        "explicit_local_product_series"
+    ] == 0
+    assert seychelles_seypec_report[
+        "explicit_local_product_grade_rows"
+    ] == 0
+    assert seychelles_seypec_report[
+        "explicit_local_package_skus"
+    ] == 0
+    assert seychelles_seypec_report["current_local_price_rows"] == 0
+    assert seychelles_seypec_report["offers_created"] == 0
+    assert len(
+        seychelles_seypec_report["listed_service_station_cards"]
+    ) == 11
+    assert len(set(
+        seychelles_seypec_report["listed_service_station_cards"]
+    )) == 11
+    assert seychelles_seypec_report[
+        "station_count_source_conflict"
+    ]["listed_station_cards"] == 11
+    assert seychelles_seypec_report[
+        "illustrative_image"
+    ]["filename_scope"] == "Delo Family Shot NA 2016"
+    assert seychelles_seypec_report[
+        "illustrative_image"
+    ]["used_as_local_sku_evidence"] is False
+    assert seychelles_seypec_report["facts_sha256"] == (
+        "df7e9a82dacc6cb51d65d770d7225569c481463472d203d50160c83480026d4d"
+    )
+    assert report["seychelles_seypec_review_sha256"] == hashlib.sha256(
+        (
+            ROOT / "data/seychelles-seypec-chevron-scope-review.json"
+        ).read_bytes()
+    ).hexdigest()
+    assert policy_by_id[
+        "SEYCHELLES_SEYPEC_CHEVRON_MARKET_PRESENCE_REVIEW"
+    ]["source_sha256"] == report["seychelles_seypec_review_sha256"]
+    assert policy_by_id[
+        "SEYCHELLES_SEYPEC_CHEVRON_MARKET_PRESENCE_REVIEW"
+    ]["bulk_ingest_allowed"] is False
+    assert policy_by_id[
+        "SEYCHELLES_SEYPEC_CHEVRON_MARKET_PRESENCE_REVIEW"
+    ]["observed_count"] == 0
+    assert db.execute(
+        "SELECT bulk_ingest_allowed FROM sources "
+        "WHERE source_id="
+        "'SEYCHELLES_SEYPEC_CHEVRON_MARKET_PRESENCE_REVIEW'"
+    ).fetchone()[0] == 0
+    assert db.execute(
+        "SELECT count(*) FROM products "
+        "WHERE source_id="
+        "'SEYCHELLES_SEYPEC_CHEVRON_MARKET_PRESENCE_REVIEW'"
+    ).fetchone()[0] == 0
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id="
+        "'SEYCHELLES_SEYPEC_CHEVRON_MARKET_PRESENCE_REVIEW'"
+    ).fetchone()[0] == 0
+    assert db.execute(
+        "SELECT count(*) FROM product_offers "
+        "WHERE source_id="
+        "'SEYCHELLES_SEYPEC_CHEVRON_MARKET_PRESENCE_REVIEW'"
+    ).fetchone()[0] == 0
     assert uruguay_ancap_report["catalog_product_families"] == 56
     assert uruguay_ancap_report["normalized_product_variants"] == len(uruguay_ancap_rows) == 88
     assert uruguay_ancap_report["families"] == {
