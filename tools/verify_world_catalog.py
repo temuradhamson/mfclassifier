@@ -266,6 +266,10 @@ def main() -> None:
     el_salvador_mecha_tool_rows = [json.loads(line) for line in (ROOT / "data/el-salvador-mecha-tool-current-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     belize_ilb_report = json.loads((ROOT / "data/belize-ilb-current-catalog-report.json").read_text(encoding="utf-8"))
     belize_ilb_rows = [json.loads(line) for line in (ROOT / "data/belize-ilb-current-availability.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    belize_rymax_catalog_report = json.loads((ROOT / "data/belize-rymax-current-catalog-report.json").read_text(encoding="utf-8"))
+    belize_rymax_assets_report = json.loads((ROOT / "data/belize-rymax-current-assets-report.json").read_text(encoding="utf-8"))
+    belize_rymax_products_report = json.loads((ROOT / "data/belize-rymax-current-products-report.json").read_text(encoding="utf-8"))
+    belize_rymax_rows = [json.loads(line) for line in (ROOT / "data/belize-rymax-current-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_report = json.loads((ROOT / "data/kebs-smark-lubricant-products-report.json").read_text(encoding="utf-8"))
     kebs_smark_rows = [json.loads(line) for line in (ROOT / "data/kebs-smark-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     east_africa_report = json.loads((ROOT / "data/east-africa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -348,6 +352,7 @@ def main() -> None:
         + el_salvador_mecha_tool_report[
             "new_manufacturer_catalog_identity_candidates"
         ]
+        + len(belize_rymax_rows)
         - report["gm_dual_standard_license_rows_merged"]
         - report["fuchs_exact_payload_identity_rows_matched"]
         - report["fuchs_exact_content_identity_rows_matched"]
@@ -793,7 +798,7 @@ def main() -> None:
     assert report["liqui_moly_current_products_added"] == 152
     assert report["liqui_moly_current_article_skus"] == liqui_moly_current_report["unique_article_skus"] == 985
     assert report["duplicate_decisions"]["review_cross_source_identity"] == 597
-    assert report["duplicate_decisions"]["keep_separate_specification_conflict"] == 11184
+    assert report["duplicate_decisions"]["keep_separate_specification_conflict"] == 11189
     assert db.execute("""
         SELECT count(*) FROM duplicate_decisions d
         JOIN products a ON a.product_id=d.product_id_a
@@ -1039,7 +1044,7 @@ def main() -> None:
     }
     assert report["canonical_input_rows_collapsed"] == 1
     assert db.execute("SELECT count(*) FROM duplicate_decisions WHERE product_id_a=product_id_b").fetchone()[0] == 0
-    assert db.execute("SELECT count(*) FROM duplicate_decisions").fetchone()[0] == 15011
+    assert db.execute("SELECT count(*) FROM duplicate_decisions").fetchone()[0] == 15016
     assert db.execute("""
         SELECT count(*) FROM (
             SELECT 1 FROM duplicate_decisions
@@ -1053,17 +1058,17 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 4973
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3044
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 117019
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 117018
-    assert report["quality_issues"]["professional_key_incomplete"] == 78702
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 117332
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 117331
+    assert report["quality_issues"]["professional_key_incomplete"] == 78846
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
         WHERE q.issue_code='professional_key_incomplete'
         GROUP BY p.family_code
     """)) == {
-        "C": 2289, "E": 149, "G": 12384, "H": 5262, "I": 3854,
-        "M": 23483, "S": 12126, "T": 11830, "TF": 6693, "U": 632,
+        "C": 2290, "E": 149, "G": 12417, "H": 5271, "I": 3861,
+        "M": 23495, "S": 12154, "T": 11853, "TF": 6724, "U": 632,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -2503,6 +2508,69 @@ def main() -> None:
         "SELECT count(*) FROM product_sources "
         "WHERE source_id='BELIZE_ILB_CURRENT_PRODUCT_CATALOG'"
     ).fetchone()[0] == 0
+    assert belize_rymax_catalog_report["listing_pages"] == 22
+    assert belize_rymax_catalog_report["listing_occurrences"] == 339
+    assert belize_rymax_catalog_report["unique_product_urls"] == 325
+    assert belize_rymax_catalog_report["highlight_repeat_occurrences"] == 14
+    assert belize_rymax_catalog_report["cards_with_specifications"] == 266
+    assert belize_rymax_catalog_report["cards_with_segments"] == 304
+    assert belize_rymax_catalog_report["cards_with_viscosity_grades"] == 228
+    assert belize_rymax_catalog_report["cards_with_images"] == 325
+    assert belize_rymax_catalog_report["unique_document_urls"] == 588
+    assert belize_rymax_assets_report["asset_urls_audited"] == 823
+    assert belize_rymax_assets_report["image_urls_audited"] == 235
+    assert belize_rymax_assets_report["document_urls_audited"] == 588
+    assert belize_rymax_assets_report["image_bytes"] == 10663692
+    assert belize_rymax_assets_report["document_bytes"] == 294091818
+    assert belize_rymax_assets_report["unique_document_payloads"] == 587
+    assert belize_rymax_products_report[
+        "normalized_product_identities"
+    ] == len(belize_rymax_rows) == report[
+        "belize_rymax_source_rows"
+    ] == 313
+    assert belize_rymax_products_report[
+        "duplicate_url_occurrences_collapsed"
+    ] == 12
+    assert belize_rymax_products_report["families"] == {
+        "C": 10, "G": 33, "H": 38, "I": 23, "M": 108,
+        "S": 28, "T": 39, "TF": 31, "U": 3,
+    }
+    assert all(
+        row["brand"] == "RYMAX"
+        and row["market"] == "Belize"
+        and row["source_card_urls"]
+        and row["source_image_sha256"]
+        for row in belize_rymax_rows
+    )
+    assert {
+        tuple(row["technical"]["api"])
+        for row in belize_rymax_rows
+        if row["product_name"] == "Motrax 2T"
+    } == {("TA",), ("TB",), ("TC",)}
+    assert belize_rymax_products_report[
+        "normalized_output_sha256"
+    ] == hashlib.sha256(
+        (ROOT / "data/belize-rymax-current-products.jsonl").read_bytes()
+    ).hexdigest()
+    assert report["belize_rymax_products_input_sha256"] == (
+        belize_rymax_products_report["normalized_output_sha256"]
+    )
+    assert policy_by_id[
+        "BELIZE_RYMAX_CURRENT_PRODUCT_CATALOG"
+    ]["source_sha256"] == belize_rymax_products_report[
+        "normalized_output_sha256"
+    ]
+    assert policy_by_id[
+        "BELIZE_RYMAX_CURRENT_PRODUCT_CATALOG"
+    ]["observed_count"] == 313
+    assert db.execute(
+        "SELECT count(*) FROM products "
+        "WHERE source_id='BELIZE_RYMAX_CURRENT_PRODUCT_CATALOG'"
+    ).fetchone()[0] == 313
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id='BELIZE_RYMAX_CURRENT_PRODUCT_CATALOG'"
+    ).fetchone()[0] == 313
     assert policy_by_id["VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG"]["observed_count"] == 23
     assert db.execute(
         "SELECT count(*) FROM products WHERE source_id='VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG'"

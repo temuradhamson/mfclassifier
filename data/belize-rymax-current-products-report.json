@@ -1,0 +1,30 @@
+{
+  "brands": {
+    "RYMAX": 313
+  },
+  "duplicate_url_occurrences_collapsed": 12,
+  "families": {
+    "C": 10,
+    "G": 33,
+    "H": 38,
+    "I": 23,
+    "M": 108,
+    "S": 28,
+    "T": 39,
+    "TF": 31,
+    "U": 3
+  },
+  "multi_url_identity_groups": 6,
+  "normalized_output_sha256": "6ba88fb1fe6eb963690465d2be385fa3bf3834511fdcde7186293c021b12f317",
+  "normalized_product_identities": 313,
+  "rows_with_acea": 42,
+  "rows_with_api": 107,
+  "rows_with_api_gl": 25,
+  "rows_with_iso_vg": 77,
+  "rows_with_jaso": 30,
+  "rows_with_nlgi": 26,
+  "rows_with_sae": 138,
+  "snapshot_date": "2026-07-24",
+  "source_cards": 325,
+  "source_id": "BELIZE_RYMAX_CURRENT_PRODUCT_CATALOG"
+}

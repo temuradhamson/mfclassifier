@@ -113,6 +113,7 @@ NICARAGUA_LUBRINSA_LOCAL_JSONL = ROOT / "data" / "nicaragua-lubrinsa-current-loc
 HONDURAS_HONDULUB_OIL_STAR_JSONL = ROOT / "data" / "honduras-hondulub-current-oil-star-products.jsonl"
 EL_SALVADOR_MECHA_TOOL_JSONL = ROOT / "data" / "el-salvador-mecha-tool-current-products.jsonl"
 BELIZE_ILB_AVAILABILITY_JSONL = ROOT / "data" / "belize-ilb-current-availability.jsonl"
+BELIZE_RYMAX_PRODUCTS_JSONL = ROOT / "data" / "belize-rymax-current-products.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
 SON_MANCAP_JSONL = ROOT / "data" / "son-mancap-chemical-lubricant-products.jsonl"
@@ -4154,6 +4155,76 @@ def merge_el_salvador_mecha_tool_evidence(
     target["snapshot_date"] = SNAPSHOT_DATE
 
 
+def belize_rymax_record(row: dict) -> dict:
+    """Convert one current Rymax manufacturer product identity."""
+    technical = row["technical"]
+    api_class = "; ".join(
+        [f"API {value}" for value in technical["api"]]
+        + [f"API {value}" for value in technical["api_gl"]]
+        + [f"ACEA {value}" for value in technical["acea"]]
+        + [f"ILSAC {value}" for value in technical["ilsac"]]
+        + [f"JASO {value}" for value in technical["jaso"]]
+    )
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Current official Rymax Belize product catalog",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": technical["sae_engine"] or technical["sae_gear"],
+        "api_class": api_class,
+        "viscosity": technical["iso_vg"],
+        "grease_class": technical["nlgi"],
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": "Rymax Lubricants",
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": "official_manufacturer_current_catalog",
+        "lifecycle_status": "listed_on_current_official_country_catalog",
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update({
+        "sae_engine": technical["sae_engine"],
+        "sae_gear": technical["sae_gear"],
+        "iso_vg": technical["iso_vg"],
+        "nlgi": technical["nlgi"],
+        "source_grade": technical["source_grade"],
+        "api": technical["api"],
+        "api_gl": technical["api_gl"],
+        "acea": technical["acea"],
+        "ilsac": technical["ilsac"],
+        "jaso": technical["jaso"],
+        "dot": technical["dot"],
+        "coolant_class": technical["coolant_class"],
+        "performance_source_reported": technical["performance"],
+        "product_subtitle": row["product_subtitle"],
+        "segments": row["segments"],
+        "source_card_urls": row["source_card_urls"],
+        "source_page_sha256": row["source_page_sha256"],
+        "source_image_urls": row["source_image_urls"],
+        "source_image_sha256": row["source_image_sha256"],
+        "document_urls": row["document_urls"],
+        "document_sha256": row["document_sha256"],
+        "description_factual_excerpt": row["description_factual_excerpt"],
+        "source_quality_flags": row["source_quality_flags"],
+    })
+    record["canonical_key"] += (
+        f"|belize_rymax:{normalize(row['source_record_id'])}"
+    )
+    record["product_id"] = (
+        "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    )
+    return record
+
+
 def kebs_smark_record(row: dict) -> dict:
     """Convert one normalized product identity from the public KEBS S-Mark directory."""
     technical = row["technical"]
@@ -6067,6 +6138,17 @@ def main() -> None:
         el_salvador_mecha_tool_product_key[
             raw["source_record_id"]
         ] = target["canonical_key"]
+    belize_rymax_source_rows = [
+        json.loads(line)
+        for line in BELIZE_RYMAX_PRODUCTS_JSONL.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        if line
+    ]
+    belize_rymax_records = [
+        belize_rymax_record(row) for row in belize_rymax_source_rows
+    ]
+    input_records.extend(belize_rymax_records)
     ecuador_inen_current_record_by_id = {
         raw["source_record_id"]: record
         for raw, record in zip(ecuador_inen_current_source_rows, ecuador_inen_current_records)
@@ -8494,6 +8576,7 @@ def main() -> None:
         "honduras_hondulub_oil_star_input_sha256": hashlib.sha256(HONDURAS_HONDULUB_OIL_STAR_JSONL.read_bytes()).hexdigest(),
         "el_salvador_mecha_tool_input_sha256": hashlib.sha256(EL_SALVADOR_MECHA_TOOL_JSONL.read_bytes()).hexdigest(),
         "belize_ilb_availability_input_sha256": hashlib.sha256(BELIZE_ILB_AVAILABILITY_JSONL.read_bytes()).hexdigest(),
+        "belize_rymax_products_input_sha256": hashlib.sha256(BELIZE_RYMAX_PRODUCTS_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "son_mancap_input_sha256": hashlib.sha256(SON_MANCAP_JSONL.read_bytes()).hexdigest(),
@@ -8567,6 +8650,7 @@ def main() -> None:
         "belize_ilb_availability_source_rows": len(
             belize_ilb_availability_rows
         ),
+        "belize_rymax_source_rows": len(belize_rymax_source_rows),
         "blue_angel_source_rows": len(blue_angel_source_rows),
         "blue_angel_products_matched_to_existing": blue_angel_matched_rows,
         "blue_angel_products_added": blue_angel_added_rows,

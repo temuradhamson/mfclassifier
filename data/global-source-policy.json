@@ -2746,6 +2746,21 @@
       "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_page_or_image_redistribution",
       "observed_count": 77,
       "notes": "The complete current WordPress denominator contains 112 cards. Thirty-five package-only variants collapse to 77 exact printed product-label identities: 76 Chevron and one Revolub. All 112 card-image payloads are downloaded and SHA-256 audited. The rows remain a separate Belize availability layer pending or linking to manufacturer-level global identity passes, preventing country-specific Chevron duplicates. SAE, API, API GL, ISO, NLGI, DOT, coolant premix and TC-W3 values are extracted only when explicitly present in the product title; no unseen approval, formulation or current manufacturer licence is inferred."
+    },
+    {
+      "source_id": "BELIZE_RYMAX_CURRENT_PRODUCT_CATALOG",
+      "title": "Current official Rymax Lubricants product catalog for Belize",
+      "owner": "Rymax Lubricants",
+      "source_type": "official_manufacturer_country_catalog_product_cards_images_tds_and_sds",
+      "source_locator": "data/belize-rymax-current-products.jsonl",
+      "source_url": "https://rymax-lubricants.bz/products",
+      "terms_url": "https://rymax-lubricants.bz/",
+      "source_sha256": "6ba88fb1fe6eb963690465d2be385fa3bf3834511fdcde7186293c021b12f317",
+      "access_status": "public_official_manufacturer_country_catalog_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_page_image_tds_or_sds_redistribution",
+      "observed_count": 313,
+      "notes": "The complete current 22-page catalog contains 339 listing occurrences, 14 highlighted repeats and 325 unique product URLs. Six same-identity URL groups collapse 12 occurrences, while Motrax 2T TSC-1/TSC-2/TSC-3 remain separate because their API identities differ, leaving 313 manufacturer product identities. The pass preserves structured specifications, segments and viscosities and audits 823 linked assets: 235 image URLs plus 588 TDS/SDS URLs, totalling 304,755,510 downloaded bytes for SHA-256 verification. Source-listed API, ACEA, ILSAC, JASO, OEM and industry specifications are represented as source-reported claims, not independent approvals."
     }
   ]
 }
