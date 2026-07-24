@@ -1,0 +1,11 @@
+{
+  "evidence_rows": 1,
+  "markets": [
+    "Antigua and Barbuda"
+  ],
+  "normalized_output_sha256": "3ee6a470456d57eb86aba171610f97bad605899c0f0cfb1ca30cc77f1bef802c",
+  "quality_note": "V.A. Derrick's first-party statement confirms authorised Shell agent presence in Antigua and Barbuda only; no SKU inference.",
+  "snapshot_date": "2026-07-24",
+  "source_id": "ANTIGUA_VADD_SHELL_CURRENT_DISTRIBUTOR_PRESENCE",
+  "source_url": "https://vaderrick.com/"
+}

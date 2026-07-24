@@ -2881,6 +2881,36 @@
       "publication_status": "attributed_nonexpressive_brand_presence_fact_and_evidence_links_only_no_marketing_text_or_images_redistributed",
       "observed_count": 1,
       "notes": "Lubex's first-party home and automotive-chemicals pages state that it is the authorised/exclusive MAG 1 product distributor in Haiti. The normalized row confirms only distributor and brand presence. It does not establish any specific local SKU, stock state, price, formulation or the availability of MAG 1's complete global catalog in Haiti."
+    },
+    {
+      "source_id": "ANTIGUA_VADD_SHELL_CURRENT_DISTRIBUTOR_PRESENCE",
+      "title": "Current first-party V.A. Derrick Shell distributor presence in Antigua and Barbuda",
+      "owner": "V.A. Derrick Distributors",
+      "source_type": "official_country_distributor_first_party_brand_presence_statement",
+      "source_locator": "data/antigua-vadd-shell-current-presence.jsonl",
+      "source_url": "https://vaderrick.com/",
+      "terms_url": "https://vaderrick.com/",
+      "source_sha256": "3ee6a470456d57eb86aba171610f97bad605899c0f0cfb1ca30cc77f1bef802c",
+      "access_status": "public_official_distributor_web_page",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_brand_presence_fact_and_evidence_link_only_no_marketing_text_or_images_redistributed",
+      "observed_count": 1,
+      "notes": "V.A. Derrick's first-party page states that it is the authorised agent for Shell engine oils and lubricants in Antigua and Barbuda. The normalized row proves only distributor and brand presence; it does not establish a local SKU, stock state, price, formulation or availability of Shell's complete global catalog."
+    },
+    {
+      "source_id": "RUBIS_CARIBBEAN_TOTAL_CURRENT_RETAIL_PRESENCE",
+      "title": "Current first-party RUBIS Total Lubricants retail presence in six Caribbean markets",
+      "owner": "RUBIS Caribbean",
+      "source_type": "official_regional_retailer_first_party_brand_and_market_presence_statement",
+      "source_locator": "data/rubis-caribbean-total-current-presence.jsonl",
+      "source_url": "https://www.rubis-caribbean.com/total-lubricants/",
+      "terms_url": "https://www.rubis-caribbean.com/",
+      "source_sha256": "51b4379b3875f376929245e79ac3fdad896d444fec117349839cf01612088b27",
+      "access_status": "public_official_regional_retailer_web_page",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_brand_market_and_channel_facts_only_no_marketing_text_or_images_redistributed",
+      "observed_count": 6,
+      "notes": "RUBIS explicitly states that Total Lubricants are sold at its service stations in Antigua, Barbados, Grenada, Guyana, Saint Lucia and Saint Vincent. The six normalized rows prove brand/channel presence only; they do not establish local SKU, stock, price, formulation or availability of TotalEnergies' complete global catalog."
     }
   ]
 }

@@ -1,0 +1,16 @@
+{
+  "evidence_rows": 6,
+  "markets": [
+    "Antigua and Barbuda",
+    "Barbados",
+    "Grenada",
+    "Guyana",
+    "Saint Lucia",
+    "Saint Vincent and the Grenadines"
+  ],
+  "normalized_output_sha256": "51b4379b3875f376929245e79ac3fdad896d444fec117349839cf01612088b27",
+  "quality_note": "RUBIS explicitly names six Total Lubricants retail markets. The rows prove brand/channel presence, not local SKU or stock.",
+  "snapshot_date": "2026-07-24",
+  "source_id": "RUBIS_CARIBBEAN_TOTAL_CURRENT_RETAIL_PRESENCE",
+  "source_url": "https://www.rubis-caribbean.com/total-lubricants/"
+}

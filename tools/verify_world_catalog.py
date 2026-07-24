@@ -287,6 +287,10 @@ def main() -> None:
     mag1_current_exclusions = [json.loads(line) for line in (ROOT / "data/mag1-current-official-exclusions.jsonl").read_text(encoding="utf-8").splitlines() if line]
     haiti_lubex_mag1_report = json.loads((ROOT / "data/haiti-lubex-mag1-current-presence-report.json").read_text(encoding="utf-8"))
     haiti_lubex_mag1_rows = [json.loads(line) for line in (ROOT / "data/haiti-lubex-mag1-current-presence.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    antigua_vadd_shell_report = json.loads((ROOT / "data/antigua-vadd-shell-current-presence-report.json").read_text(encoding="utf-8"))
+    antigua_vadd_shell_rows = [json.loads(line) for line in (ROOT / "data/antigua-vadd-shell-current-presence.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    rubis_caribbean_total_report = json.loads((ROOT / "data/rubis-caribbean-total-current-presence-report.json").read_text(encoding="utf-8"))
+    rubis_caribbean_total_rows = [json.loads(line) for line in (ROOT / "data/rubis-caribbean-total-current-presence.jsonl").read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_report = json.loads((ROOT / "data/kebs-smark-lubricant-products-report.json").read_text(encoding="utf-8"))
     kebs_smark_rows = [json.loads(line) for line in (ROOT / "data/kebs-smark-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     east_africa_report = json.loads((ROOT / "data/east-africa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -3026,6 +3030,70 @@ def main() -> None:
         "SELECT count(*) FROM product_sources "
         "WHERE source_id='HAITI_LUBEX_MAG1_CURRENT_DISTRIBUTOR_PRESENCE'"
     ).fetchone()[0] == 0
+    assert antigua_vadd_shell_report[
+        "evidence_rows"
+    ] == len(antigua_vadd_shell_rows) == report[
+        "antigua_vadd_shell_presence_source_rows"
+    ] == 1
+    assert rubis_caribbean_total_report[
+        "evidence_rows"
+    ] == len(rubis_caribbean_total_rows) == report[
+        "rubis_caribbean_total_presence_source_rows"
+    ] == 6
+    assert antigua_vadd_shell_report[
+        "normalized_output_sha256"
+    ] == hashlib.sha256(
+        (ROOT / "data/antigua-vadd-shell-current-presence.jsonl").read_bytes()
+    ).hexdigest() == report["antigua_vadd_shell_presence_input_sha256"]
+    assert rubis_caribbean_total_report[
+        "normalized_output_sha256"
+    ] == hashlib.sha256(
+        (ROOT / "data/rubis-caribbean-total-current-presence.jsonl").read_bytes()
+    ).hexdigest() == report["rubis_caribbean_total_presence_input_sha256"]
+    assert policy_by_id[
+        "ANTIGUA_VADD_SHELL_CURRENT_DISTRIBUTOR_PRESENCE"
+    ]["source_sha256"] == antigua_vadd_shell_report[
+        "normalized_output_sha256"
+    ]
+    assert policy_by_id[
+        "RUBIS_CARIBBEAN_TOTAL_CURRENT_RETAIL_PRESENCE"
+    ]["source_sha256"] == rubis_caribbean_total_report[
+        "normalized_output_sha256"
+    ]
+    assert policy_by_id[
+        "ANTIGUA_VADD_SHELL_CURRENT_DISTRIBUTOR_PRESENCE"
+    ]["observed_count"] == 1
+    assert policy_by_id[
+        "RUBIS_CARIBBEAN_TOTAL_CURRENT_RETAIL_PRESENCE"
+    ]["observed_count"] == 6
+    assert {row["market"] for row in antigua_vadd_shell_rows} == {
+        "Antigua and Barbuda"
+    }
+    assert {row["market"] for row in rubis_caribbean_total_rows} == {
+        "Antigua and Barbuda",
+        "Barbados",
+        "Grenada",
+        "Guyana",
+        "Saint Lucia",
+        "Saint Vincent and the Grenadines",
+    }
+    assert all(
+        row["product_scope_status"]
+        == "no_local_sku_stock_or_full_global_range_inference_permitted"
+        for row in antigua_vadd_shell_rows + rubis_caribbean_total_rows
+    )
+    for evidence_source_id in (
+        "ANTIGUA_VADD_SHELL_CURRENT_DISTRIBUTOR_PRESENCE",
+        "RUBIS_CARIBBEAN_TOTAL_CURRENT_RETAIL_PRESENCE",
+    ):
+        assert db.execute(
+            "SELECT count(*) FROM products WHERE source_id=?",
+            (evidence_source_id,),
+        ).fetchone()[0] == 0
+        assert db.execute(
+            "SELECT count(*) FROM product_sources WHERE source_id=?",
+            (evidence_source_id,),
+        ).fetchone()[0] == 0
     assert policy_by_id["VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG"]["observed_count"] == 23
     assert db.execute(
         "SELECT count(*) FROM products WHERE source_id='VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG'"

@@ -64,6 +64,8 @@
   "dominican_imca_mobil_web_input_sha256": "80a5c698673eaf7c21262b9604d271ed63883f43d4bd98dcfb0efba1edd8d07a",
   "mag1_current_official_input_sha256": "3d59390036e271de6e96d0142696e978f61055734dd2d9dd54b59d19b36b61d3",
   "haiti_lubex_mag1_presence_input_sha256": "01478d54d9d7cd407fafe4592249d759bef4c4c22470a8d536ce43b2f84a6132",
+  "antigua_vadd_shell_presence_input_sha256": "3ee6a470456d57eb86aba171610f97bad605899c0f0cfb1ca30cc77f1bef802c",
+  "rubis_caribbean_total_presence_input_sha256": "51b4379b3875f376929245e79ac3fdad896d444fec117349839cf01612088b27",
   "kebs_smark_input_sha256": "629656be992d2fd2969db6839d22ff57c59017a36f8b402dd40b74702cb25df8",
   "east_africa_certified_input_sha256": "fa272e24f17a96b732c6edcf09914de0bbd4a245ccd94a33cab415213cf164ab",
   "son_mancap_input_sha256": "3728be0200a766f1a862f3c2bd0cf6b92bc6bf9b4d78e832e7c117a2d3a1ec36",
@@ -151,6 +153,8 @@
   "mag1_current_products_matched_to_existing": 3,
   "mag1_current_products_added": 103,
   "haiti_lubex_mag1_presence_source_rows": 1,
+  "antigua_vadd_shell_presence_source_rows": 1,
+  "rubis_caribbean_total_presence_source_rows": 6,
   "dominican_imca_mobil_products_matched_to_existing": 28,
   "dominican_imca_mobil_products_added": 23,
   "dominican_imca_mobil_explicit_alias_matches": 5,
@@ -799,7 +803,9 @@
     "DOMINICAN_REPUBLIC_IMCA_MOBIL_2025_CATALOG",
     "DOMINICAN_REPUBLIC_IMCA_MOBIL_LIVE_WEB_CATALOG",
     "MAG1_CURRENT_OFFICIAL_PRODUCT_CATALOG",
-    "HAITI_LUBEX_MAG1_CURRENT_DISTRIBUTOR_PRESENCE"
+    "HAITI_LUBEX_MAG1_CURRENT_DISTRIBUTOR_PRESENCE",
+    "ANTIGUA_VADD_SHELL_CURRENT_DISTRIBUTOR_PRESENCE",
+    "RUBIS_CARIBBEAN_TOTAL_CURRENT_RETAIL_PRESENCE"
   ],
   "bulk_sources_blocked": [
     "fuchs-benelux",

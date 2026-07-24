@@ -122,6 +122,8 @@ DOMINICAN_REPUBLIC_IMCA_MOBIL_JSONL = ROOT / "data" / "dominican-republic-imca-m
 DOMINICAN_REPUBLIC_IMCA_MOBIL_WEB_JSONL = ROOT / "data" / "dominican-republic-imca-mobil-web-pages.jsonl"
 MAG1_CURRENT_OFFICIAL_JSONL = ROOT / "data" / "mag1-current-official-products.jsonl"
 HAITI_LUBEX_MAG1_PRESENCE_JSONL = ROOT / "data" / "haiti-lubex-mag1-current-presence.jsonl"
+ANTIGUA_VADD_SHELL_PRESENCE_JSONL = ROOT / "data" / "antigua-vadd-shell-current-presence.jsonl"
+RUBIS_CARIBBEAN_TOTAL_PRESENCE_JSONL = ROOT / "data" / "rubis-caribbean-total-current-presence.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
 SON_MANCAP_JSONL = ROOT / "data" / "son-mancap-chemical-lubricant-products.jsonl"
@@ -6399,6 +6401,20 @@ def main() -> None:
         ).splitlines()
         if line
     ]
+    antigua_vadd_shell_presence_rows = [
+        json.loads(line)
+        for line in ANTIGUA_VADD_SHELL_PRESENCE_JSONL.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        if line
+    ]
+    rubis_caribbean_total_presence_rows = [
+        json.loads(line)
+        for line in RUBIS_CARIBBEAN_TOTAL_PRESENCE_JSONL.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        if line
+    ]
     bahamas_cbs_availability_rows = [
         json.loads(line)
         for line in BAHAMAS_CBS_AVAILABILITY_JSONL.read_text(
@@ -9080,6 +9096,8 @@ def main() -> None:
         "dominican_imca_mobil_web_input_sha256": hashlib.sha256(DOMINICAN_REPUBLIC_IMCA_MOBIL_WEB_JSONL.read_bytes()).hexdigest(),
         "mag1_current_official_input_sha256": hashlib.sha256(MAG1_CURRENT_OFFICIAL_JSONL.read_bytes()).hexdigest(),
         "haiti_lubex_mag1_presence_input_sha256": hashlib.sha256(HAITI_LUBEX_MAG1_PRESENCE_JSONL.read_bytes()).hexdigest(),
+        "antigua_vadd_shell_presence_input_sha256": hashlib.sha256(ANTIGUA_VADD_SHELL_PRESENCE_JSONL.read_bytes()).hexdigest(),
+        "rubis_caribbean_total_presence_input_sha256": hashlib.sha256(RUBIS_CARIBBEAN_TOTAL_PRESENCE_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "son_mancap_input_sha256": hashlib.sha256(SON_MANCAP_JSONL.read_bytes()).hexdigest(),
@@ -9181,6 +9199,12 @@ def main() -> None:
         "mag1_current_products_added": mag1_current_products_added,
         "haiti_lubex_mag1_presence_source_rows": len(
             haiti_lubex_mag1_presence_rows
+        ),
+        "antigua_vadd_shell_presence_source_rows": len(
+            antigua_vadd_shell_presence_rows
+        ),
+        "rubis_caribbean_total_presence_source_rows": len(
+            rubis_caribbean_total_presence_rows
         ),
         "dominican_imca_mobil_products_matched_to_existing": (
             dominican_imca_mobil_matched_to_existing
