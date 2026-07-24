@@ -1,0 +1,29 @@
+{
+  "brands": {
+    "CENTLUBE": 1,
+    "MOBIL": 14
+  },
+  "families": {
+    "C": 1,
+    "H": 3,
+    "I": 2,
+    "M": 6,
+    "T": 3
+  },
+  "normalized_products_sha256": "c6c5af10d724536f5e7c799418eadf96fa0eea2c36436bd6997e0f2d076d3614",
+  "normalized_skus_sha256": "46a7ce440d93d84c499b42769fa5110b63abdca78462e8e37c3fbb6de47c4f58",
+  "package_skus_collapsed": 7,
+  "priced_skus": 22,
+  "product_grade_identities": 15,
+  "quality_note": "The complete public shop page contains 22 orderable product cards. The dollar symbol is retained verbatim while ISO currency is left blank because the page does not state it.",
+  "sale_skus": 18,
+  "shop_cards": 22,
+  "skus_with_approvals": 16,
+  "skus_with_pds": 22,
+  "skus_with_recommendations": 17,
+  "skus_with_requirements": 18,
+  "snapshot_date": "2026-07-24",
+  "source_id": "ZAMBIA_GEARPROS_CURRENT_LUBRICANT_SHOP",
+  "source_url": "https://gearpros.co.zm/pages/shop.php",
+  "unique_source_product_ids": 22
+}

@@ -129,6 +129,8 @@ GRENADA_SOL_CURRENT_PRODUCTS_JSONL = ROOT / "data" / "grenada-sol-current-produc
 NP_ULTRA_EXPORT_PRESENCE_JSONL = ROOT / "data" / "np-ultra-current-export-presence.jsonl"
 CAYMAN_ACE_CURRENT_SKUS_JSONL = ROOT / "data" / "cayman-ace-current-automotive-fluids.jsonl"
 CAYMAN_ACE_CURRENT_PRODUCTS_JSONL = ROOT / "data" / "cayman-ace-current-automotive-products.jsonl"
+ZAMBIA_GEARPROS_CURRENT_SKUS_JSONL = ROOT / "data" / "zambia-gearpros-current-skus.jsonl"
+ZAMBIA_GEARPROS_CURRENT_PRODUCTS_JSONL = ROOT / "data" / "zambia-gearpros-current-products.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
 SON_MANCAP_JSONL = ROOT / "data" / "son-mancap-chemical-lubricant-products.jsonl"
@@ -4539,6 +4541,113 @@ def merge_cayman_ace_current_evidence(
     )
 
 
+def zambia_gearpros_current_product_record(row: dict) -> dict:
+    """Convert one package-collapsed GearPros Zambia shop identity."""
+    specs = row["specifications"]
+    sae_values = specs.get("sae_engine", []) or specs.get("sae_gear", [])
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Current GearPros Zambia lubricant shop",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": sae_values[0] if sae_values else "",
+        "api_class": "",
+        "viscosity": (
+            f"ISO VG {specs['iso_vg'][0]}"
+            if specs.get("iso_vg") else ""
+        ),
+        "grease_class": "",
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": (
+            "ExxonMobil Product Solutions Company"
+            if row["brand"] == "MOBIL" else ""
+        ),
+        "brand": row["brand"],
+        "market": row["country"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": "official_country_distributor_current_shop_identity",
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update({
+        "sae_engine": (
+            specs.get("sae_engine", [""])[0]
+            if specs.get("sae_engine") else ""
+        ),
+        "sae_gear": (
+            specs.get("sae_gear", [""])[0]
+            if specs.get("sae_gear") else ""
+        ),
+        "iso_vg": (
+            specs.get("iso_vg", [""])[0]
+            if specs.get("iso_vg") else ""
+        ),
+        "source_product_ids": row["source_product_ids"],
+        "source_sku_record_ids": row["source_sku_record_ids"],
+        "packages": row["packages"],
+        "source_urls": row["source_urls"],
+        "approvals_source_reported": row["approvals_source_reported"],
+        "recommendations_source_reported": row[
+            "recommendations_source_reported"
+        ],
+        "requirements_source_reported": row[
+            "requirements_source_reported"
+        ],
+        "pds_evidence": row["pds_evidence"],
+        "source_quality_flags": row["source_quality_flags"],
+    })
+    record["canonical_key"] += (
+        f"|zambia_gearpros:{normalize(row['source_record_id'])}"
+    )
+    record["product_id"] = (
+        "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    )
+    return record
+
+
+def merge_zambia_gearpros_current_evidence(
+    target: dict,
+    source_record: dict,
+    raw: dict,
+    match_basis: str,
+) -> None:
+    """Attach current Zambia distributor shop/PDS evidence."""
+    target_specs = target["specifications"]
+    source_specs = source_record["specifications"]
+    for key in ("sae_engine", "sae_gear", "iso_vg"):
+        if not target_specs.get(key):
+            target_specs[key] = source_specs.get(key, "")
+    target_specs.setdefault("zambia_gearpros_shop_evidence", []).append({
+        "source_record_id": raw["source_record_id"],
+        "source_product_ids": raw["source_product_ids"],
+        "source_sku_record_ids": raw["source_sku_record_ids"],
+        "packages": raw["packages"],
+        "source_urls": raw["source_urls"],
+        "approvals_source_reported": raw["approvals_source_reported"],
+        "recommendations_source_reported": raw[
+            "recommendations_source_reported"
+        ],
+        "requirements_source_reported": raw[
+            "requirements_source_reported"
+        ],
+        "pds_evidence": raw["pds_evidence"],
+        "source_quality_flags": raw["source_quality_flags"],
+        "match_basis": match_basis,
+    })
+    target["snapshot_date"] = max(
+        target.get("snapshot_date", ""),
+        raw["snapshot_date"],
+    )
+
+
 def mag1_current_official_record(row: dict) -> dict:
     """Convert one current official MAG 1 product/PDS identity."""
     technical = row["technical"]
@@ -5588,7 +5697,7 @@ def build_sqlite(records: list[dict], candidates: list[dict], issues: list[dict]
     CREATE TABLE certificates(product_id TEXT NOT NULL REFERENCES products(product_id), certificate_number TEXT, issued_at TEXT, expires_at TEXT, local_producer_certificate TEXT, technical_document TEXT, certificate_status TEXT);
     CREATE TABLE duplicate_decisions(product_id_a TEXT NOT NULL, product_id_b TEXT NOT NULL, reason TEXT NOT NULL, score REAL NOT NULL, decision TEXT NOT NULL);
     CREATE TABLE quality_issues(product_id TEXT NOT NULL REFERENCES products(product_id), issue_code TEXT NOT NULL, severity TEXT NOT NULL, field TEXT NOT NULL, value TEXT, expected TEXT, action TEXT NOT NULL);
-    CREATE TABLE product_offers(offer_id TEXT PRIMARY KEY, product_id TEXT NOT NULL REFERENCES products(product_id), market TEXT NOT NULL, package_name TEXT NOT NULL, unit TEXT NOT NULL, quantity_per_package REAL, weight_kg REAL, density_kg_per_l REAL, lifecycle_status TEXT NOT NULL, archive_type TEXT, archive_reason TEXT, source_id TEXT NOT NULL REFERENCES sources(source_id), source_record_id TEXT NOT NULL, price_amount REAL, price_currency TEXT, price_status TEXT, availability TEXT, source_url TEXT);
+    CREATE TABLE product_offers(offer_id TEXT PRIMARY KEY, product_id TEXT NOT NULL REFERENCES products(product_id), market TEXT NOT NULL, package_name TEXT NOT NULL, unit TEXT NOT NULL, quantity_per_package REAL, weight_kg REAL, density_kg_per_l REAL, lifecycle_status TEXT NOT NULL, archive_type TEXT, archive_reason TEXT, source_id TEXT NOT NULL REFERENCES sources(source_id), source_record_id TEXT NOT NULL, price_amount REAL, price_currency TEXT, price_currency_symbol TEXT, price_status TEXT, availability TEXT, source_url TEXT);
     CREATE INDEX products_brand_name_idx ON products(brand, product_name_normalized);
     CREATE INDEX products_family_idx ON products(family_code);
     CREATE INDEX specs_type_value_idx ON specifications(spec_type, spec_value);
@@ -5632,10 +5741,11 @@ def build_sqlite(records: list[dict], candidates: list[dict], issues: list[dict]
     for offer in offers:
         offer.setdefault("price_amount", None)
         offer.setdefault("price_currency", "")
+        offer.setdefault("price_currency_symbol", "")
         offer.setdefault("price_status", "")
         offer.setdefault("availability", "")
         offer.setdefault("source_url", "")
-    db.executemany("INSERT INTO product_offers VALUES (:offer_id,:product_id,:market,:package_name,:unit,:quantity_per_package,:weight_kg,:density_kg_per_l,:lifecycle_status,:archive_type,:archive_reason,:source_id,:source_record_id,:price_amount,:price_currency,:price_status,:availability,:source_url)", offers)
+    db.executemany("INSERT INTO product_offers VALUES (:offer_id,:product_id,:market,:package_name,:unit,:quantity_per_package,:weight_kg,:density_kg_per_l,:lifecycle_status,:archive_type,:archive_reason,:source_id,:source_record_id,:price_amount,:price_currency,:price_currency_symbol,:price_status,:availability,:source_url)", offers)
     db.commit()
     db.close()
 
@@ -5776,10 +5886,10 @@ def build_workbook(records: list[dict], candidates: list[dict], issues: list[dic
         issue["product_id"], by_id[issue["product_id"]]["brand"], by_id[issue["product_id"]]["product_name_raw"],
         issue["issue_code"], issue["severity"], issue["field"], issue["value"], issue["expected"], issue["action"],
     ) for issue in issues))
-    add_sheet(wb, "09_Упаковки_SKU", ["Offer ID", "Product ID", "Рынок", "Упаковка", "Единица", "Количество", "Вес, кг", "Плотность, кг/л", "Статус", "Архив", "Причина", "Source record", "Цена", "Валюта", "Статус цены", "Наличие", "URL источника"], ((
+    add_sheet(wb, "09_Упаковки_SKU", ["Offer ID", "Product ID", "Рынок", "Упаковка", "Единица", "Количество", "Вес, кг", "Плотность, кг/л", "Статус", "Архив", "Причина", "Source record", "Цена", "Валюта ISO", "Символ валюты", "Статус цены", "Наличие", "URL источника"], ((
         o["offer_id"], o["product_id"], o["market"], o["package_name"], o["unit"], o["quantity_per_package"],
         o["weight_kg"], o["density_kg_per_l"], o["lifecycle_status"], o["archive_type"], o["archive_reason"], o["source_record_id"],
-        o.get("price_amount"), o.get("price_currency"), o.get("price_status"), o.get("availability"), o.get("source_url"),
+        o.get("price_amount"), o.get("price_currency"), o.get("price_currency_symbol"), o.get("price_status"), o.get("availability"), o.get("source_url"),
     ) for o in offers))
     add_sheet(wb, "10_Исключённые_строки", ["Source record", "Название", "Причина"], ((
         e["source_record_id"], e["name"], e["reason"]
@@ -6667,6 +6777,20 @@ def main() -> None:
         ).splitlines()
         if line
     ]
+    zambia_gearpros_current_sku_rows = [
+        json.loads(line)
+        for line in ZAMBIA_GEARPROS_CURRENT_SKUS_JSONL.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        if line
+    ]
+    zambia_gearpros_current_product_rows = [
+        json.loads(line)
+        for line in ZAMBIA_GEARPROS_CURRENT_PRODUCTS_JSONL.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        if line
+    ]
     grenada_sol_current_product_records = [
         grenada_sol_current_product_record(row)
         for row in grenada_sol_current_product_rows
@@ -6674,6 +6798,10 @@ def main() -> None:
     cayman_ace_current_product_records = [
         cayman_ace_current_product_record(row)
         for row in cayman_ace_current_product_rows
+    ]
+    zambia_gearpros_current_product_records = [
+        zambia_gearpros_current_product_record(row)
+        for row in zambia_gearpros_current_product_rows
     ]
     bahamas_cbs_availability_rows = [
         json.loads(line)
@@ -8035,6 +8163,95 @@ def main() -> None:
         cayman_ace_product_key[
             raw["source_record_id"]
         ] = target["canonical_key"]
+    zambia_gearpros_existing_by_name = defaultdict(list)
+    for row in input_records:
+        brand_key = normalize(row.get("brand"))
+        if brand_key not in {"mobil", "centlube"}:
+            continue
+        compact_name = cayman_ace_compact_name(row["product_name_raw"])
+        keys = {compact_name}
+        if compact_name.startswith(brand_key):
+            keys.add(compact_name[len(brand_key):])
+        for key in keys:
+            zambia_gearpros_existing_by_name[(brand_key, key)].append(row)
+    zambia_gearpros_product_key = {}
+    zambia_gearpros_products_matched_to_existing = 0
+    zambia_gearpros_products_added = 0
+    zambia_gearpros_multi_candidate_rows = 0
+    for raw, source_record in zip(
+        zambia_gearpros_current_product_rows,
+        zambia_gearpros_current_product_records,
+    ):
+        brand_key = normalize(raw["brand"])
+        source_name = cayman_ace_compact_name(raw["product_name"])
+        source_names = {source_name}
+        if source_name.startswith(brand_key):
+            source_names.add(source_name[len(brand_key):])
+        candidates = [
+            candidate
+            for name_key in source_names
+            for candidate in zambia_gearpros_existing_by_name[
+                (brand_key, name_key)
+            ]
+        ]
+        candidates = [
+            candidate
+            for candidate in candidates
+            if candidate["family_code"] == raw["family_code"]
+        ]
+        for spec_key in ("sae_engine", "sae_gear", "iso_vg"):
+            source_values = {
+                normalize(value)
+                for value in raw["specifications"].get(spec_key, [])
+                if normalize(value)
+            }
+            if not source_values:
+                continue
+            candidates = [
+                candidate
+                for candidate in candidates
+                if not normalize(
+                    candidate["specifications"].get(spec_key)
+                )
+                or normalize(
+                    candidate["specifications"].get(spec_key)
+                ) in source_values
+            ]
+        candidates = list({
+            candidate["canonical_key"]: candidate for candidate in candidates
+        }.values())
+        match_basis = (
+            "exact_compact_brand_product_name_family_and_compatible_grade"
+        )
+        if candidates:
+            if len(candidates) > 1:
+                zambia_gearpros_multi_candidate_rows += 1
+            target = min(
+                candidates,
+                key=lambda row: (
+                    "historical" in row.get("lifecycle_status", ""),
+                    source_priority.get(row["source_id"], 10),
+                    row["canonical_key"],
+                ),
+            )
+            merge_zambia_gearpros_current_evidence(
+                target,
+                source_record,
+                raw,
+                match_basis,
+            )
+            zambia_gearpros_products_matched_to_existing += 1
+        else:
+            target = source_record
+            input_records.append(target)
+            for name_key in source_names:
+                zambia_gearpros_existing_by_name[
+                    (brand_key, name_key)
+                ].append(target)
+            zambia_gearpros_products_added += 1
+        zambia_gearpros_product_key[
+            raw["source_record_id"]
+        ] = target["canonical_key"]
     mag1_exact_existing_targets = {
         "MAG1-E2B79A248C5D": ("JASO_4T", "2332"),
         "MAG1-D32932ABC9C6": ("JASO_4T", "2331"),
@@ -8486,6 +8703,27 @@ def main() -> None:
             "source_row": None,
             "relation": (
                 "official_country_retailer_product_identity_and_lifecycle"
+            ),
+        }
+        link_key = (
+            link["product_id"],
+            link["source_id"],
+            link["source_record_id"],
+        )
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
+    for raw in zambia_gearpros_current_product_rows:
+        target = canonical_by_key[
+            zambia_gearpros_product_key[raw["source_record_id"]]
+        ]
+        link = {
+            "product_id": target["product_id"],
+            "source_id": raw["source_id"],
+            "source_record_id": raw["source_record_id"],
+            "source_row": None,
+            "relation": (
+                "official_country_distributor_current_shop_product_identity"
             ),
         }
         link_key = (
@@ -9261,6 +9499,52 @@ def main() -> None:
             "availability": raw["listing_availability"],
             "source_url": raw["source_url"],
         })
+    zambia_gearpros_sku_to_product = {
+        sku_record_id: product_row["source_record_id"]
+        for product_row in zambia_gearpros_current_product_rows
+        for sku_record_id in product_row["source_sku_record_ids"]
+    }
+    for raw in zambia_gearpros_current_sku_rows:
+        product_source_record_id = zambia_gearpros_sku_to_product[
+            raw["source_record_id"]
+        ]
+        target = canonical_by_key[
+            zambia_gearpros_product_key[product_source_record_id]
+        ]
+        package_match = re.fullmatch(
+            r"([0-9]+(?:\.[0-9]+)?)\s*([A-Za-z]+)",
+            raw["package"],
+        )
+        quantity = float(package_match.group(1)) if package_match else None
+        unit = (
+            package_match.group(2).lower()
+            if package_match else raw["package"]
+        )
+        offers.append({
+            "offer_id": "GEARPROS-ZM-" + hashlib.sha256(
+                raw["source_record_id"].encode()
+            ).hexdigest()[:20],
+            "product_id": target["product_id"],
+            "market": "Zambia",
+            "package_name": raw["package"],
+            "unit": unit,
+            "quantity_per_package": quantity,
+            "weight_kg": None,
+            "density_kg_per_l": None,
+            "lifecycle_status": "listed_current_catalog",
+            "archive_type": "",
+            "archive_reason": "",
+            "source_id": raw["source_id"],
+            "source_record_id": raw["source_record_id"],
+            "price_amount": raw["price_amount"],
+            "price_currency": raw["price_currency"],
+            "price_currency_symbol": raw["price_currency_symbol"],
+            "price_status": raw["price_status"],
+            "availability": (
+                "order_action_present_stock_quantity_not_published"
+            ),
+            "source_url": raw["source_url"],
+        })
     for raw in liqui_moly_current_source_rows:
         target = canonical_by_key[liqui_moly_current_product_key[raw["source_record_id"]]]
         for article in raw["articles"]:
@@ -9706,6 +9990,8 @@ def main() -> None:
         "np_ultra_export_presence_input_sha256": hashlib.sha256(NP_ULTRA_EXPORT_PRESENCE_JSONL.read_bytes()).hexdigest(),
         "cayman_ace_current_skus_input_sha256": hashlib.sha256(CAYMAN_ACE_CURRENT_SKUS_JSONL.read_bytes()).hexdigest(),
         "cayman_ace_current_products_input_sha256": hashlib.sha256(CAYMAN_ACE_CURRENT_PRODUCTS_JSONL.read_bytes()).hexdigest(),
+        "zambia_gearpros_current_skus_input_sha256": hashlib.sha256(ZAMBIA_GEARPROS_CURRENT_SKUS_JSONL.read_bytes()).hexdigest(),
+        "zambia_gearpros_current_products_input_sha256": hashlib.sha256(ZAMBIA_GEARPROS_CURRENT_PRODUCTS_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "son_mancap_input_sha256": hashlib.sha256(SON_MANCAP_JSONL.read_bytes()).hexdigest(),
@@ -9837,6 +10123,23 @@ def main() -> None:
         "cayman_ace_priced_skus": sum(
             row["price_amount"] is not None
             for row in cayman_ace_current_sku_rows
+        ),
+        "zambia_gearpros_current_sku_rows": len(
+            zambia_gearpros_current_sku_rows
+        ),
+        "zambia_gearpros_current_product_rows": len(
+            zambia_gearpros_current_product_rows
+        ),
+        "zambia_gearpros_products_matched_to_existing": (
+            zambia_gearpros_products_matched_to_existing
+        ),
+        "zambia_gearpros_products_added": zambia_gearpros_products_added,
+        "zambia_gearpros_multi_candidate_rows": (
+            zambia_gearpros_multi_candidate_rows
+        ),
+        "zambia_gearpros_priced_skus": sum(
+            row["price_amount"] > 0
+            for row in zambia_gearpros_current_sku_rows
         ),
         "grenada_sol_products_matched_to_existing": (
             grenada_sol_products_matched_to_existing

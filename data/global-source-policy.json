@@ -2956,6 +2956,21 @@
       "publication_status": "attributed_transformed_nonexpressive_product_sku_price_lifecycle_and_specification_facts_only_no_marketing_text_or_images_redistributed",
       "observed_count": 116,
       "notes": "The complete current automotive class contains 157 unique listing rows across 11 pages. Fifteen explicit parts, cleaning aerosols and one merchandising item are excluded, leaving 142 lubricant, grease, additive and technical-fluid SKUs collapsed conservatively into 116 product-grade identities. Detail pages explicitly mark 141 SKUs Discontinued; one remains listed but all 142 listing badges report outstock. Prices are present for 139 SKUs and are retained with historical/current-unavailable status, never represented as in-stock prices. Source descriptions are hashed and used only for factual parsing; prose and images are not redistributed."
+    },
+    {
+      "source_id": "ZAMBIA_GEARPROS_CURRENT_LUBRICANT_SHOP",
+      "title": "Complete current GearPros Zambia online lubricant shop",
+      "owner": "GearPros Zambia",
+      "source_type": "official_country_distributor_complete_shop_cards_packages_prices_approvals_requirements_and_pds",
+      "source_locator": "data/zambia-gearpros-current-products.jsonl",
+      "source_url": "https://gearpros.co.zm/pages/shop.php",
+      "terms_url": "https://gearpros.co.zm/pages/privacy-policy.php",
+      "source_sha256": "c6c5af10d724536f5e7c799418eadf96fa0eea2c36436bd6997e0f2d076d3614",
+      "access_status": "public_official_country_distributor_shop_and_linked_pds",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_transformed_nonexpressive_product_package_price_approval_requirement_and_evidence_link_facts_only_no_marketing_text_or_images_redistributed",
+      "observed_count": 15,
+      "notes": "The complete public shop contains 22 unique orderable package cards collapsed into 15 Mobil/Centlube product-grade identities (C1/H3/I2/M6/T3). All 22 cards publish a price and linked PDS; 18 show sale prices, 16 approvals, 18 requirements and 17 recommendations. The source displays a dollar symbol but does not identify an ISO currency, so the normalized offers retain '$' as source_currency_symbol and leave price_currency blank. An order action is present, but stock quantity is not published. Product descriptions and images are not redistributed."
     }
   ]
 }

@@ -300,6 +300,9 @@ def main() -> None:
     cayman_ace_sku_rows = [json.loads(line) for line in (ROOT / "data/cayman-ace-current-automotive-fluids.jsonl").read_text(encoding="utf-8").splitlines() if line]
     cayman_ace_product_rows = [json.loads(line) for line in (ROOT / "data/cayman-ace-current-automotive-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     cayman_ace_exclusions = [json.loads(line) for line in (ROOT / "data/cayman-ace-current-automotive-exclusions.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    zambia_gearpros_report = json.loads((ROOT / "data/zambia-gearpros-current-report.json").read_text(encoding="utf-8"))
+    zambia_gearpros_sku_rows = [json.loads(line) for line in (ROOT / "data/zambia-gearpros-current-skus.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    zambia_gearpros_product_rows = [json.loads(line) for line in (ROOT / "data/zambia-gearpros-current-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_report = json.loads((ROOT / "data/kebs-smark-lubricant-products-report.json").read_text(encoding="utf-8"))
     kebs_smark_rows = [json.loads(line) for line in (ROOT / "data/kebs-smark-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     east_africa_report = json.loads((ROOT / "data/east-africa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -387,6 +390,7 @@ def main() -> None:
         + report["mag1_current_products_added"]
         + report["grenada_sol_products_added"]
         + report["cayman_ace_products_added"]
+        + report["zambia_gearpros_products_added"]
         - report["gm_dual_standard_license_rows_merged"]
         - report["fuchs_exact_payload_identity_rows_matched"]
         - report["fuchs_exact_content_identity_rows_matched"]
@@ -1090,19 +1094,19 @@ def main() -> None:
     assert report["aichilon_products_matched_to_existing"] == 255
     assert report["aichilon_products_added"] == 60
     assert report["aichilon_rows_excluded"] == 2
-    assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 5169
-    assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3093
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 117586
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 117585
-    assert report["quality_issues"]["professional_key_incomplete"] == 78996
+    assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 5191
+    assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3115
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 117599
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 117598
+    assert report["quality_issues"]["professional_key_incomplete"] == 79005
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
         WHERE q.issue_code='professional_key_incomplete'
         GROUP BY p.family_code
     """)) == {
-        "C": 2292, "E": 150, "G": 12430, "H": 5269, "I": 3873,
-        "M": 23555, "S": 12164, "T": 11894, "TF": 6729, "U": 640,
+        "C": 2293, "E": 150, "G": 12430, "H": 5269, "I": 3873,
+        "M": 23561, "S": 12164, "T": 11896, "TF": 6729, "U": 640,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -1136,7 +1140,7 @@ def main() -> None:
         "complete_exact_signature_candidate": 470,
         "insufficient_comparable_evidence": 905,
     }
-    assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status='listed_current_catalog'").fetchone()[0] == report["current_catalog_listed_offers"] == 1638
+    assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status='listed_current_catalog'").fetchone()[0] == report["current_catalog_listed_offers"] == 1660
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_filed_registry'").fetchone()[0] == 3629
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_licensed_registry'").fetchone()[0] == 3030
     assert db.execute("SELECT count(*) FROM specifications WHERE spec_type='gm_license_occurrences'").fetchone()[0] == 1705
@@ -3161,7 +3165,7 @@ def main() -> None:
         row[1]
         for row in db.execute("PRAGMA table_info(product_offers)")
     } >= {
-        "price_amount", "price_currency", "price_status",
+        "price_amount", "price_currency", "price_currency_symbol", "price_status",
         "availability", "source_url",
     }
     assert np_ultra_export_presence_report[
@@ -3295,6 +3299,80 @@ def main() -> None:
         "WHERE source_id='CAYMAN_ACE_CURRENT_AUTOMOTIVE_FLUID_CATALOG' "
         "AND availability='outstock'"
     ).fetchone()[0] == 142
+    assert zambia_gearpros_report[
+        "shop_cards"
+    ] == len(zambia_gearpros_sku_rows) == report[
+        "zambia_gearpros_current_sku_rows"
+    ] == 22
+    assert zambia_gearpros_report[
+        "product_grade_identities"
+    ] == len(zambia_gearpros_product_rows) == report[
+        "zambia_gearpros_current_product_rows"
+    ] == 15
+    assert zambia_gearpros_report["package_skus_collapsed"] == 7
+    assert zambia_gearpros_report["families"] == {
+        "C": 1, "H": 3, "I": 2, "M": 6, "T": 3,
+    }
+    assert zambia_gearpros_report["brands"] == {
+        "CENTLUBE": 1, "MOBIL": 14,
+    }
+    assert zambia_gearpros_report["priced_skus"] == report[
+        "zambia_gearpros_priced_skus"
+    ] == 22
+    assert zambia_gearpros_report["sale_skus"] == 18
+    assert zambia_gearpros_report["skus_with_pds"] == 22
+    assert zambia_gearpros_report["skus_with_approvals"] == 16
+    assert zambia_gearpros_report["skus_with_requirements"] == 18
+    assert zambia_gearpros_report["skus_with_recommendations"] == 17
+    assert zambia_gearpros_report[
+        "normalized_skus_sha256"
+    ] == hashlib.sha256(
+        (ROOT / "data/zambia-gearpros-current-skus.jsonl").read_bytes()
+    ).hexdigest() == report["zambia_gearpros_current_skus_input_sha256"]
+    assert zambia_gearpros_report[
+        "normalized_products_sha256"
+    ] == hashlib.sha256(
+        (ROOT / "data/zambia-gearpros-current-products.jsonl").read_bytes()
+    ).hexdigest() == report["zambia_gearpros_current_products_input_sha256"]
+    assert policy_by_id[
+        "ZAMBIA_GEARPROS_CURRENT_LUBRICANT_SHOP"
+    ]["source_sha256"] == zambia_gearpros_report[
+        "normalized_products_sha256"
+    ]
+    assert policy_by_id[
+        "ZAMBIA_GEARPROS_CURRENT_LUBRICANT_SHOP"
+    ]["observed_count"] == 15
+    assert report["zambia_gearpros_products_matched_to_existing"] + report[
+        "zambia_gearpros_products_added"
+    ] == 15
+    assert report["zambia_gearpros_products_matched_to_existing"] == 2
+    assert report["zambia_gearpros_products_added"] == 13
+    assert report["zambia_gearpros_multi_candidate_rows"] == 0
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id='ZAMBIA_GEARPROS_CURRENT_LUBRICANT_SHOP'"
+    ).fetchone()[0] == 15
+    assert db.execute(
+        "SELECT count(*) FROM product_offers "
+        "WHERE source_id='ZAMBIA_GEARPROS_CURRENT_LUBRICANT_SHOP'"
+    ).fetchone()[0] == 22
+    assert db.execute(
+        "SELECT count(*) FROM product_offers "
+        "WHERE source_id='ZAMBIA_GEARPROS_CURRENT_LUBRICANT_SHOP' "
+        "AND lifecycle_status='listed_current_catalog'"
+    ).fetchone()[0] == 22
+    assert db.execute(
+        "SELECT count(*) FROM product_offers "
+        "WHERE source_id='ZAMBIA_GEARPROS_CURRENT_LUBRICANT_SHOP' "
+        "AND price_amount>0 AND price_currency='' "
+        "AND price_currency_symbol='$'"
+    ).fetchone()[0] == 22
+    assert db.execute(
+        "SELECT count(*) FROM product_offers "
+        "WHERE source_id='ZAMBIA_GEARPROS_CURRENT_LUBRICANT_SHOP' "
+        "AND availability="
+        "'order_action_present_stock_quantity_not_published'"
+    ).fetchone()[0] == 22
     assert policy_by_id["VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG"]["observed_count"] == 23
     assert db.execute(
         "SELECT count(*) FROM products WHERE source_id='VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG'"
