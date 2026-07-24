@@ -262,6 +262,8 @@ def main() -> None:
     ethiopia_noc_rows = [json.loads(line) for line in (ROOT / "data/ethiopia-noc-caltex-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     scope_global_report = json.loads((ROOT / "data/scope-global-report.json").read_text(encoding="utf-8"))
     scope_global_rows = [json.loads(line) for line in (ROOT / "data/scope-global-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    angola_ngol_report = json.loads((ROOT / "data/angola-sonangol-ngol-report.json").read_text(encoding="utf-8"))
+    angola_ngol_rows = [json.loads(line) for line in (ROOT / "data/angola-sonangol-ngol-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     uruguay_ancap_report = json.loads((ROOT / "data/uruguay-ancap-current-lubricants-report.json").read_text(encoding="utf-8"))
     uruguay_ancap_rows = [json.loads(line) for line in (ROOT / "data/uruguay-ancap-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     colombia_terpel_report = json.loads((ROOT / "data/colombia-terpel-current-lubricants-report.json").read_text(encoding="utf-8"))
@@ -406,6 +408,7 @@ def main() -> None:
         + report["sudan_tappco_products_added"]
         + report["ethiopia_noc_caltex_products_added"]
         + report["scope_global_products_added"]
+        + report["angola_sonangol_ngol_products_added"]
         + len(uruguay_ancap_rows)
         + len(colombia_terpel_rows)
         + len(guyana_guyoil_rows)
@@ -1131,17 +1134,17 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 5191
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3115
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 118252
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 118251
-    assert report["quality_issues"]["professional_key_incomplete"] == 79232
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 118359
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 118358
+    assert report["quality_issues"]["professional_key_incomplete"] == 79267
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
         WHERE q.issue_code='professional_key_incomplete'
         GROUP BY p.family_code
     """)) == {
-        "C": 2298, "E": 151, "G": 12480, "H": 5280, "I": 3878,
-        "M": 23645, "S": 12178, "T": 11925, "TF": 6757, "U": 640,
+        "C": 2298, "E": 151, "G": 12491, "H": 5280, "I": 3882,
+        "M": 23649, "S": 12182, "T": 11933, "TF": 6761, "U": 640,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -2889,6 +2892,60 @@ def main() -> None:
     assert db.execute(
         "SELECT count(*) FROM product_offers "
         "WHERE source_id='SCOPE_GLOBAL_COMPLETE_LIVE_PRODUCT_CATALOG'"
+    ).fetchone()[0] == 0
+    assert angola_ngol_report["official_pdf_pages"] == 44
+    assert angola_ngol_report["catalog_product_series"] == 64
+    assert angola_ngol_report["target_scope_series"] == 55
+    assert len(
+        angola_ngol_report["excluded_non_lubricant_car_care_series"]
+    ) == 9
+    assert angola_ngol_report["identity_rows"] == len(
+        angola_ngol_rows
+    ) == report["angola_sonangol_ngol_source_rows"] == report[
+        "angola_sonangol_ngol_products_added"
+    ] == 107
+    assert angola_ngol_report["family_identity_counts"] == {
+        "C": 8, "G": 11, "H": 17, "I": 19, "M": 25,
+        "S": 4, "T": 19, "TF": 4,
+    }
+    assert angola_ngol_report["grade_field_counts"] == {
+        "dot": 1, "iso_vg": 40, "nlgi": 11, "sae_engine": 23,
+        "sae_gear": 16, "source_grade": 16,
+    }
+    assert angola_ngol_report[
+        "official_pdf_direct_download_status"
+    ] == "HTTP 403"
+    assert angola_ngol_report["official_pdf_sha256"] is None
+    assert angola_ngol_report[
+        "normalized_output_sha256"
+    ] == hashlib.sha256(
+        (ROOT / "data/angola-sonangol-ngol-products.jsonl").read_bytes()
+    ).hexdigest()
+    assert all(
+        row["market"] == "Angola"
+        and row["brand"] == "NGOL"
+        and "official_pdf_direct_download_http_403_at_snapshot"
+        in row["specifications"]["source_quality_flags"]
+        and not ({"address", "phone", "email", "contact_person"} & set(row))
+        for row in angola_ngol_rows
+    )
+    assert policy_by_id[
+        "ANGOLA_SONANGOL_NGOL_OFFICIAL_44_PAGE_CATALOG"
+    ]["source_sha256"] == angola_ngol_report["normalized_output_sha256"]
+    assert policy_by_id[
+        "ANGOLA_SONANGOL_NGOL_OFFICIAL_44_PAGE_CATALOG"
+    ]["observed_count"] == 107
+    assert db.execute(
+        "SELECT count(*) FROM products "
+        "WHERE source_id='ANGOLA_SONANGOL_NGOL_OFFICIAL_44_PAGE_CATALOG'"
+    ).fetchone()[0] == 107
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id='ANGOLA_SONANGOL_NGOL_OFFICIAL_44_PAGE_CATALOG'"
+    ).fetchone()[0] == 107
+    assert db.execute(
+        "SELECT count(*) FROM product_offers "
+        "WHERE source_id='ANGOLA_SONANGOL_NGOL_OFFICIAL_44_PAGE_CATALOG'"
     ).fetchone()[0] == 0
     assert uruguay_ancap_report["catalog_product_families"] == 56
     assert uruguay_ancap_report["normalized_product_variants"] == len(uruguay_ancap_rows) == 88

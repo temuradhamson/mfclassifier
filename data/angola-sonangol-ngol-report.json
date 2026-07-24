@@ -1,0 +1,45 @@
+{
+  "catalog_product_series": 64,
+  "excluded_non_lubricant_car_care_series": [
+    "NGOL MAX TOPCYCL D",
+    "NGOL MAX TOPCYCL G",
+    "NGOL MAX BRILHO",
+    "NGOL MAX PROTECTOR DE BATERIA",
+    "NGOL MAX REPARADOR DE CORREIAS",
+    "NGOL MAX SHAMPOO",
+    "NGOL MAX LIMPA TABLIER",
+    "NGOL MAX LIMPA JANTES",
+    "NGOL MAX TAPA FUROS"
+  ],
+  "family_identity_counts": {
+    "C": 8,
+    "G": 11,
+    "H": 17,
+    "I": 19,
+    "M": 25,
+    "S": 4,
+    "T": 19,
+    "TF": 4
+  },
+  "grade_field_counts": {
+    "dot": 1,
+    "iso_vg": 40,
+    "nlgi": 11,
+    "sae_engine": 23,
+    "sae_gear": 16,
+    "source_grade": 16
+  },
+  "identity_rows": 107,
+  "normalized_output_sha256": "76e4c2c45ee422872000eb415b2656cf613e539e0c3ae492ee6d472cc6ba8886",
+  "offers_created": 0,
+  "official_pdf_direct_download_status": "HTTP 403",
+  "official_pdf_pages": 44,
+  "official_pdf_sha256": null,
+  "official_pdf_sha256_note": "Unavailable because the official host blocks direct retrieval; the PDF URL, page number and normalized source-fact hash are kept.",
+  "schema_version": 1,
+  "snapshot_date": "2026-07-24",
+  "source_id": "ANGOLA_SONANGOL_NGOL_OFFICIAL_44_PAGE_CATALOG",
+  "source_url": "https://observatoriom-dc.sonangol.co.ao/wp-content/uploads/2024/06/Catalogo_NGol-3.pdf",
+  "status": "ok",
+  "target_scope_series": 55
+}

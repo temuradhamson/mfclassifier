@@ -3151,6 +3151,21 @@
       "publication_status": "attributed_transformed_nonexpressive_product_grade_standard_document_link_and_hash_facts_only_no_descriptions_documents_artwork_contacts_or_quote_requests_redistributed",
       "observed_count": 200,
       "notes": "The complete live WordPress product endpoint contains 62 product cards in 12 nonempty categories; four multi-category cards produce 66 taxonomy occurrences. Reviewed technical tables expand the cards to 200 product-grade identities (C7/G14/H10/I30/M110/S3/T20/TF6). Sixty-one document observations resolve to 19 unique public document URLs and payloads, fetched for SHA-256 verification but not redistributed. One exact Scope Perfo 4T SAE 20W-50 JASO identity is linked to existing JASO evidence and 199 identities are new. Zero-price quote workflows are not retail offers. Somalia is named on the manufacturer's catalog map, but individual SKU availability, stock, prices, packages and offers are not inferred or multiplied by country."
+    },
+    {
+      "source_id": "ANGOLA_SONANGOL_NGOL_OFFICIAL_44_PAGE_CATALOG",
+      "title": "Official Sonangol NGOL 44-page Angola lubricant catalog",
+      "owner": "Sonangol Distribuição e Comercialização",
+      "source_type": "official_national_manufacturer_complete_44_page_catalog_indexed_page_fact_transcription",
+      "source_locator": "data/angola-sonangol-ngol-products.jsonl",
+      "source_url": "https://observatoriom-dc.sonangol.co.ao/wp-content/uploads/2024/06/Catalogo_NGol-3.pdf",
+      "terms_url": "https://observatoriom-dc.sonangol.co.ao/",
+      "source_sha256": "76e4c2c45ee422872000eb415b2656cf613e539e0c3ae492ee6d472cc6ba8886",
+      "access_status": "public_official_pdf_fully_indexed_direct_download_http_403_at_snapshot",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_transformed_nonexpressive_product_grade_standard_and_source_page_facts_only_no_descriptions_artwork_contacts_source_pdf_or_package_offers_redistributed",
+      "observed_count": 107,
+      "notes": "The official 44-page catalog publishes 64 product series. Fifty-five lubricant, grease, brake/cooling and other in-scope technical-fluid series expand to 107 reviewed product-grade identities (C8/G11/H17/I19/M25/S4/T19/TF4); nine non-lubricant car-care and fuel-additive series are explicitly excluded. The official host returned HTTP 403 to direct PDF retrieval on the snapshot date, so no PDF-byte SHA is claimed: source URL, printed page and a normalized fact hash are retained, and the complete 44-page indexed reading copy was used only to verify the transcription. Current stock, price, package availability and offers are not inferred."
     }
   ]
 }

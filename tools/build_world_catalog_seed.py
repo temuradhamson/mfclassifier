@@ -112,6 +112,7 @@ SOUTH_SUDAN_TAAM_PAKELO_JSONL = ROOT / "data/south-sudan-taam-pakelo-products.js
 SUDAN_TAPPCO_JSONL = ROOT / "data/sudan-tappco-products.jsonl"
 ETHIOPIA_NOC_CALTEX_JSONL = ROOT / "data/ethiopia-noc-caltex-products.jsonl"
 SCOPE_GLOBAL_JSONL = ROOT / "data/scope-global-products.jsonl"
+ANGOLA_SONANGOL_NGOL_JSONL = ROOT / "data/angola-sonangol-ngol-products.jsonl"
 URUGUAY_ANCAP_LUBRICANT_JSONL = ROOT / "data" / "uruguay-ancap-current-lubricants.jsonl"
 COLOMBIA_TERPEL_LUBRICANT_JSONL = ROOT / "data" / "colombia-terpel-current-lubricants.jsonl"
 GUYANA_GUYOIL_LUBRICANT_JSONL = ROOT / "data" / "guyana-guyoil-current-lubricants.jsonl"
@@ -4047,6 +4048,51 @@ def merge_scope_global_evidence(
         ],
         "somalia_sku_availability_inferred": False,
     })
+
+
+def angola_sonangol_ngol_record(row: dict) -> dict:
+    """Convert one reviewed Sonangol NGOL catalog product/grade identity."""
+    specs = row["specifications"]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Sonangol NGOL official 44-page catalog",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": specs.get("sae_engine", specs.get("sae_gear", "")),
+        "api_class": "/".join(specs.get("api", [])),
+        "viscosity": specs.get("iso_vg", ""),
+        "grease_class": specs.get("nlgi", ""),
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": row["specifications"]["source_printed_page"],
+        "evidence_status": row["evidence_status"],
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update(specs)
+    record["specifications"].update({
+        "source_url": row["source_url"],
+        "source_product_name": row["source_product_name"],
+        "source_facts_sha256": row["source_facts_sha256"],
+        "no_offer_created_no_price_package_stock_or_order_action": True,
+    })
+    record["canonical_key"] += (
+        f"|angola_sonangol_ngol:{normalize(row['source_record_id'])}"
+    )
+    record["product_id"] = (
+        "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    )
+    return record
 
 
 def uruguay_ancap_lubricant_record(row: dict) -> dict:
@@ -8878,6 +8924,30 @@ def main() -> None:
             f"{scope_global_matched_to_existing} matched, "
             f"{scope_global_products_added} added"
         )
+    angola_sonangol_ngol_source_rows = [
+        json.loads(line)
+        for line in ANGOLA_SONANGOL_NGOL_JSONL.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        if line
+    ]
+    angola_sonangol_ngol_records = [
+        angola_sonangol_ngol_record(row)
+        for row in angola_sonangol_ngol_source_rows
+    ]
+    if len(angola_sonangol_ngol_records) != 107:
+        raise RuntimeError(
+            "Sonangol NGOL reviewed denominator changed: "
+            f"{len(angola_sonangol_ngol_records)}"
+        )
+    input_records.extend(angola_sonangol_ngol_records)
+    angola_sonangol_ngol_product_key = {
+        raw["source_record_id"]: record["canonical_key"]
+        for raw, record in zip(
+            angola_sonangol_ngol_source_rows,
+            angola_sonangol_ngol_records,
+        )
+    }
     # This is a dated corporate catalog, not the login-gated current Cummins
     # registration list. Append it after all current matching passes so its
     # historical lifecycle can never overwrite a current product identity.
@@ -9853,6 +9923,25 @@ def main() -> None:
             "source_record_id": raw["source_record_id"],
             "source_row": 0,
             "relation": "official_global_manufacturer_product_grade_identity",
+        }
+        link_key = (
+            link["product_id"],
+            link["source_id"],
+            link["source_record_id"],
+        )
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
+    for raw in angola_sonangol_ngol_source_rows:
+        target = canonical_by_key[
+            angola_sonangol_ngol_product_key[raw["source_record_id"]]
+        ]
+        link = {
+            "product_id": target["product_id"],
+            "source_id": raw["source_id"],
+            "source_record_id": raw["source_record_id"],
+            "source_row": raw["specifications"]["source_printed_page"],
+            "relation": "official_angola_manufacturer_catalog_product_grade",
         }
         link_key = (
             link["product_id"],
@@ -11181,6 +11270,7 @@ def main() -> None:
         "sudan_tappco_input_sha256": hashlib.sha256(SUDAN_TAPPCO_JSONL.read_bytes()).hexdigest(),
         "ethiopia_noc_caltex_input_sha256": hashlib.sha256(ETHIOPIA_NOC_CALTEX_JSONL.read_bytes()).hexdigest(),
         "scope_global_input_sha256": hashlib.sha256(SCOPE_GLOBAL_JSONL.read_bytes()).hexdigest(),
+        "angola_sonangol_ngol_input_sha256": hashlib.sha256(ANGOLA_SONANGOL_NGOL_JSONL.read_bytes()).hexdigest(),
         "uruguay_ancap_lubricant_input_sha256": hashlib.sha256(URUGUAY_ANCAP_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "colombia_terpel_lubricant_input_sha256": hashlib.sha256(COLOMBIA_TERPEL_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "guyana_guyoil_lubricant_input_sha256": hashlib.sha256(GUYANA_GUYOIL_LUBRICANT_JSONL.read_bytes()).hexdigest(),
@@ -11547,6 +11637,12 @@ def main() -> None:
             scope_global_matched_to_existing
         ),
         "scope_global_products_added": scope_global_products_added,
+        "angola_sonangol_ngol_source_rows": len(
+            angola_sonangol_ngol_source_rows
+        ),
+        "angola_sonangol_ngol_products_added": len(
+            angola_sonangol_ngol_records
+        ),
         "kebs_smark_source_rows": len(kebs_smark_source_rows),
         "east_africa_certified_source_rows": len(east_africa_certified_source_rows),
         "east_africa_certified_source_rows_by_source": dict(sorted(Counter(row["source_id"] for row in east_africa_certified_source_rows).items())),

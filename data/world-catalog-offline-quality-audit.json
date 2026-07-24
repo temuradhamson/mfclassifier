@@ -1,8 +1,8 @@
 {
   "active_offers": 3115,
   "canonical_key_duplicates": 0,
-  "canonical_products": 118251,
-  "compressed_database_sha256": "a2de4fd2e77b5595b158c3bb958fa8cf10e11571fd3da3e11aff0fbf1bbd18d4",
+  "canonical_products": 118358,
+  "compressed_database_sha256": "f44417480b645942a61fbf653dfb404d8ac5fe518d450422872daef3dc8a393b",
   "duplicate_review_queues": [
     {
       "candidate_pairs": 11205,
@@ -52,39 +52,39 @@
   ],
   "family_coverage": [
     {
-      "both_percent": 50.69,
-      "both_selector_and_technical_basis_present": 25251,
+      "both_percent": 50.7,
+      "both_selector_and_technical_basis_present": 25272,
       "existing_professional_key_gate_implemented": true,
-      "existing_professional_key_issue": 23645,
+      "existing_professional_key_issue": 23649,
       "family": "Моторные масла",
       "family_code": "M",
-      "products": 49817,
+      "products": 49842,
       "selector_grade_or_class_percent": 88.91,
-      "selector_grade_or_class_present": 44290,
-      "technical_basis_percent": 52.75,
-      "technical_basis_present": 26277
+      "selector_grade_or_class_present": 44313,
+      "technical_basis_percent": 52.76,
+      "technical_basis_present": 26299
     },
     {
-      "both_percent": 36.26,
-      "both_selector_and_technical_basis_present": 6788,
+      "both_percent": 36.28,
+      "both_selector_and_technical_basis_present": 6800,
       "existing_professional_key_gate_implemented": true,
-      "existing_professional_key_issue": 11925,
+      "existing_professional_key_issue": 11933,
       "family": "Трансмиссионные масла",
       "family_code": "T",
-      "products": 18722,
-      "selector_grade_or_class_percent": 55.86,
-      "selector_grade_or_class_present": 10458,
-      "technical_basis_percent": 38.42,
-      "technical_basis_present": 7193
+      "products": 18741,
+      "selector_grade_or_class_percent": 55.9,
+      "selector_grade_or_class_present": 10477,
+      "technical_basis_percent": 38.45,
+      "technical_basis_present": 7205
     },
     {
       "both_percent": 6.52,
       "both_selector_and_technical_basis_present": 862,
       "existing_professional_key_gate_implemented": true,
-      "existing_professional_key_issue": 12178,
+      "existing_professional_key_issue": 12182,
       "family": "Специальные продукты",
       "family_code": "S",
-      "products": 13214,
+      "products": 13218,
       "selector_grade_or_class_percent": 6.61,
       "selector_grade_or_class_present": 874,
       "technical_basis_percent": 6.52,
@@ -94,26 +94,26 @@
       "both_percent": 1.14,
       "both_selector_and_technical_basis_present": 145,
       "existing_professional_key_gate_implemented": true,
-      "existing_professional_key_issue": 12480,
+      "existing_professional_key_issue": 12491,
       "family": "Пластичные смазки",
       "family_code": "G",
-      "products": 12696,
-      "selector_grade_or_class_percent": 15.24,
-      "selector_grade_or_class_present": 1935,
-      "technical_basis_percent": 4.24,
+      "products": 12707,
+      "selector_grade_or_class_percent": 15.31,
+      "selector_grade_or_class_present": 1946,
+      "technical_basis_percent": 4.23,
       "technical_basis_present": 538
     },
     {
       "both_percent": 7.14,
       "both_selector_and_technical_basis_present": 589,
       "existing_professional_key_gate_implemented": true,
-      "existing_professional_key_issue": 6757,
+      "existing_professional_key_issue": 6761,
       "family": "Охлаждающие и технические жидкости",
       "family_code": "TF",
-      "products": 8250,
-      "selector_grade_or_class_percent": 9.08,
+      "products": 8254,
+      "selector_grade_or_class_percent": 9.07,
       "selector_grade_or_class_present": 749,
-      "technical_basis_percent": 9.54,
+      "technical_basis_percent": 9.53,
       "technical_basis_present": 787
     },
     {
@@ -123,22 +123,22 @@
       "existing_professional_key_issue": 5280,
       "family": "Гидравлические масла",
       "family_code": "H",
-      "products": 6733,
-      "selector_grade_or_class_percent": 22.95,
-      "selector_grade_or_class_present": 1545,
-      "technical_basis_percent": 5.72,
+      "products": 6750,
+      "selector_grade_or_class_percent": 23.14,
+      "selector_grade_or_class_present": 1562,
+      "technical_basis_percent": 5.7,
       "technical_basis_present": 385
     },
     {
-      "both_percent": 0.54,
+      "both_percent": 0.53,
       "both_selector_and_technical_basis_present": 27,
       "existing_professional_key_gate_implemented": true,
-      "existing_professional_key_issue": 3878,
+      "existing_professional_key_issue": 3882,
       "family": "Индустриальные масла",
       "family_code": "I",
-      "products": 5045,
-      "selector_grade_or_class_percent": 23.51,
-      "selector_grade_or_class_present": 1186,
+      "products": 5064,
+      "selector_grade_or_class_percent": 23.72,
+      "selector_grade_or_class_present": 1201,
       "technical_basis_percent": 0.73,
       "technical_basis_present": 37
     },
@@ -149,9 +149,9 @@
       "existing_professional_key_issue": 2298,
       "family": "Компрессорные масла",
       "family_code": "C",
-      "products": 2792,
-      "selector_grade_or_class_percent": 19.23,
-      "selector_grade_or_class_present": 537,
+      "products": 2800,
+      "selector_grade_or_class_percent": 19.46,
+      "selector_grade_or_class_present": 545,
       "technical_basis_percent": 0.36,
       "technical_basis_present": 10
     },
@@ -182,25 +182,25 @@
       "technical_basis_present": 8
     }
   ],
-  "input_rows_before_canonicalization": 118252,
+  "input_rows_before_canonicalization": 118359,
   "interpretation": {
-    "confirmed_count": "118251 is the verified canonical row count of the current seed, not the final number of all products worldwide.",
+    "confirmed_count": "118358 is the verified canonical row count of the current seed, not the final number of all products worldwide.",
     "duplicate_metric": "Review pairs are candidates or conflicts, not proven removable duplicates.",
     "professional_gate_scope": "Family-specific professional_key_incomplete rules cover M/T/G/H/I/C/U/E/TF/S; source-level gaps remain explicit and are not filled by inference.",
     "selector_metric": "Presence is measured only from explicit normalized fields; absence may reflect source granularity rather than a parsing defect."
   },
-  "primary_sources_used": 161,
+  "primary_sources_used": 162,
   "products_using_explicitly_marked_brand_fallback": 36269,
-  "products_with_at_least_one_source_link": 118251,
-  "products_with_family": 118251,
+  "products_with_at_least_one_source_link": 118358,
+  "products_with_family": 118358,
   "products_with_missing_manufacturer": 660,
-  "products_with_normalized_name": 118251,
-  "products_with_primary_source_hash": 118251,
-  "products_with_primary_source_url": 117660,
+  "products_with_normalized_name": 118358,
+  "products_with_primary_source_hash": 118358,
+  "products_with_primary_source_url": 117767,
   "quality_issue_details": [
     {
       "issue_code": "professional_key_incomplete",
-      "rows": 79232,
+      "rows": 79267,
       "severity": "medium"
     },
     {
@@ -377,9 +377,9 @@
   "quality_issues_by_severity": {
     "high": 311,
     "low": 15,
-    "medium": 79350
+    "medium": 79385
   },
   "snapshot_date": "2026-07-22",
-  "source_registry_entries": 220,
+  "source_registry_entries": 221,
   "status": "offline_quality_audit_current_seed_not_worldwide_completion"
 }
