@@ -250,6 +250,8 @@ def main() -> None:
     mogas_global_market_rows = [json.loads(line) for line in (ROOT / "data/mogas-global-market-shop-observations.jsonl").read_text(encoding="utf-8").splitlines() if line]
     rwanda_akinawa_report = json.loads((ROOT / "data/rwanda-akinawa-current-report.json").read_text(encoding="utf-8"))
     rwanda_akinawa_rows = [json.loads(line) for line in (ROOT / "data/rwanda-akinawa-current-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    rwanda_rymax_report = json.loads((ROOT / "data/rwanda-rymax-current-report.json").read_text(encoding="utf-8"))
+    rwanda_rymax_rows = [json.loads(line) for line in (ROOT / "data/rwanda-rymax-current-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     uruguay_ancap_report = json.loads((ROOT / "data/uruguay-ancap-current-lubricants-report.json").read_text(encoding="utf-8"))
     uruguay_ancap_rows = [json.loads(line) for line in (ROOT / "data/uruguay-ancap-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     colombia_terpel_report = json.loads((ROOT / "data/colombia-terpel-current-lubricants-report.json").read_text(encoding="utf-8"))
@@ -388,6 +390,7 @@ def main() -> None:
         + report["rwanda_almc_current_source_rows"]
         + report["burundi_mogas_current_source_rows"]
         + report["rwanda_akinawa_current_source_rows"]
+        + report["rwanda_rymax_products_added"]
         + len(uruguay_ancap_rows)
         + len(colombia_terpel_rows)
         + len(guyana_guyoil_rows)
@@ -1113,16 +1116,16 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 5191
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3115
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 117753
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 117752
-    assert report["quality_issues"]["professional_key_incomplete"] == 79028
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 117769
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 117768
+    assert report["quality_issues"]["professional_key_incomplete"] == 79033
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
         WHERE q.issue_code='professional_key_incomplete'
         GROUP BY p.family_code
     """)) == {
-        "C": 2296, "E": 150, "G": 12430, "H": 5272, "I": 3875,
+        "C": 2298, "E": 151, "G": 12431, "H": 5273, "I": 3875,
         "M": 23575, "S": 12164, "T": 11897, "TF": 6729, "U": 640,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
@@ -2518,6 +2521,62 @@ def main() -> None:
     assert db.execute(
         "SELECT count(*) FROM product_offers "
         "WHERE source_id='RWANDA_LEADWAY_AKINAWA_CURRENT_COMPLETE_CATALOG'"
+    ).fetchone()[0] == 0
+    assert rwanda_rymax_report[
+        "unique_product_pages"
+    ] == len(rwanda_rymax_rows) == report[
+        "rwanda_rymax_current_source_rows"
+    ] == 68
+    assert rwanda_rymax_report["listing_pages"] == 6
+    assert rwanda_rymax_report["listing_card_occurrences"] == 81
+    assert rwanda_rymax_report["duplicate_listing_occurrences"] == 13
+    assert rwanda_rymax_report["families"] == {
+        "C": 2, "E": 1, "G": 6, "H": 6, "I": 9,
+        "M": 19, "T": 20, "TF": 1, "U": 4,
+    }
+    assert rwanda_rymax_report["products_with_approvals"] == 59
+    assert rwanda_rymax_report["products_with_documents"] == 67
+    assert rwanda_rymax_report["technical_documents"] == 123
+    assert rwanda_rymax_report["document_types"] == {
+        "SDS": 56, "TDS": 67,
+    }
+    assert rwanda_rymax_report[
+        "normalized_output_sha256"
+    ] == hashlib.sha256(
+        (ROOT / "data/rwanda-rymax-current-products.jsonl").read_bytes()
+    ).hexdigest()
+    assert report["rwanda_rymax_products_matched_to_existing"] == 52
+    assert report["rwanda_rymax_products_added"] == 16
+    assert all(
+        row["market"] == "Rwanda"
+        and row["brand"] == "RYMAX"
+        and row["manufacturer"] == "Rymax Lubricants"
+        and not ({"address", "phone", "email", "contact_person"} & set(row))
+        for row in rwanda_rymax_rows
+    )
+    assert policy_by_id[
+        "RWANDA_RYMAX_CURRENT_COMPLETE_PAGINATED_CATALOG"
+    ]["source_sha256"] == rwanda_rymax_report[
+        "normalized_output_sha256"
+    ]
+    assert policy_by_id[
+        "RWANDA_RYMAX_CURRENT_COMPLETE_PAGINATED_CATALOG"
+    ]["observed_count"] == 68
+    assert db.execute(
+        "SELECT count(*) FROM products "
+        "WHERE source_id='RWANDA_RYMAX_CURRENT_COMPLETE_PAGINATED_CATALOG'"
+    ).fetchone()[0] == 16
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id='RWANDA_RYMAX_CURRENT_COMPLETE_PAGINATED_CATALOG'"
+    ).fetchone()[0] == 68
+    assert db.execute(
+        "SELECT count(DISTINCT product_id) FROM product_sources "
+        "WHERE source_id='RWANDA_RYMAX_CURRENT_COMPLETE_PAGINATED_CATALOG'"
+    ).fetchone()[0] == 68
+    assert db.execute(
+        "SELECT count(*) FROM product_offers "
+        "WHERE source_id='RWANDA_RYMAX_CURRENT_COMPLETE_PAGINATED_CATALOG'"
     ).fetchone()[0] == 0
     assert uruguay_ancap_report["catalog_product_families"] == 56
     assert uruguay_ancap_report["normalized_product_variants"] == len(uruguay_ancap_rows) == 88

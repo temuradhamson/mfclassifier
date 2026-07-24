@@ -3061,6 +3061,21 @@
       "publication_status": "attributed_transformed_nonexpressive_product_grade_specification_catalog_state_and_evidence_facts_only_no_marketing_descriptions_contacts_or_images_redistributed",
       "observed_count": 10,
       "notes": "All ten public Store API cards are included (G1/M6/T3). Four have an agreed professional key; six retain title/body conflicts without promoting disputed API, JASO, ILSAC or TC-W3 claims. All cards publish a zero configured price and are not purchasable, so stock badges remain catalog evidence and no offers are created. The product manufacturer is not published by the current distributor catalog and is left blank."
+    },
+    {
+      "source_id": "RWANDA_RYMAX_CURRENT_COMPLETE_PAGINATED_CATALOG",
+      "title": "Complete current Rymax Lubricants Rwanda product and technical-document catalog",
+      "owner": "Rymax Lubricants",
+      "source_type": "official_manufacturer_country_complete_paginated_catalog_with_linked_tds_and_sds",
+      "source_locator": "data/rwanda-rymax-current-products.jsonl",
+      "source_url": "https://rymax-lubricants.rw/products",
+      "terms_url": "https://rymax-lubricants.rw/",
+      "source_sha256": "c5390734f3d68eac8b7cd22159195160f30d07d154d13f518ec5fdfa6ea5b1e7",
+      "access_status": "public_current_official_manufacturer_country_catalog_and_public_technical_documents",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_transformed_nonexpressive_product_grade_approval_document_link_and_hash_facts_only_no_descriptions_artwork_contacts_or_source_documents_redistributed",
+      "observed_count": 68,
+      "notes": "Six server-rendered listing responses contain 81 card occurrences and 13 repeated URLs, leaving 68 unique detail pages (C2/E1/G6/H6/I9/M19/T20/TF1/U4). Sixty-seven products link documents: 67 TDS and 56 SDS, all fetched for SHA-256 verification but not redistributed. Cross-market identity matching links 52 cards to the already captured Belize Rymax manufacturer catalog and adds only 16 Rwanda-specific variants. No prices, packages or analytical offers are created."
     }
   ]
 }

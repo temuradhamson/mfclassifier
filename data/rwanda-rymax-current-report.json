@@ -1,0 +1,59 @@
+{
+  "denominator_note": "Six listing responses contain 81 card occurrences (16×5 + 1); thirteen repeat an existing URL, leaving 68 unique product detail pages normalized once.",
+  "document_types": {
+    "SDS": 56,
+    "TDS": 67
+  },
+  "duplicate_listing_occurrences": 13,
+  "families": {
+    "C": 2,
+    "E": 1,
+    "G": 6,
+    "H": 6,
+    "I": 9,
+    "M": 19,
+    "T": 20,
+    "TF": 1,
+    "U": 4
+  },
+  "listing_card_occurrences": 81,
+  "listing_page_link_occurrences_sha256": {
+    "1": "a33eeb419fc27f112121456d406d284d1c25b38c0fc4d14a6518061d80d630a7",
+    "2": "3f8a78feee77bb77527e78b4efecedc4a35f3db97a4f80e27dd10784b5eaf46c",
+    "3": "2f26d88a97eb114305d70903c6c3f1f45ab1a409810923b01e23eea1c3ea9675",
+    "4": "886f0d90af3e572cfdb12de5b3b84e2b6f4452742927cfd3b31c7ebe52e4f5f6",
+    "5": "12b8113b8900bf68651f008a9df859804fea3b5c0820927b0ac8bdd907ce535e",
+    "6": "5ebef6a78a46ab674d5041a5f95656b529f491169db72ec9f57ad0713c6aea0f"
+  },
+  "listing_pages": 6,
+  "normalized_output_sha256": "c5390734f3d68eac8b7cd22159195160f30d07d154d13f518ec5fdfa6ea5b1e7",
+  "products_with_approvals": 59,
+  "products_with_documents": 67,
+  "publication_scope": "Factual product names, categories, grades, approvals, document links and hashes only; descriptions, artwork, contacts and source documents are excluded.",
+  "schema_version": 1,
+  "snapshot_date": "2026-07-24",
+  "source_categories": {
+    "ATFs": 6,
+    "Additives": 1,
+    "Agricultural Oils": 1,
+    "AntiFreeze & Coolants": 2,
+    "Fluids": 1,
+    "Gear Oil": 1,
+    "Gear Oils": 12,
+    "Greases": 5,
+    "Heat Transfer Fluids": 1,
+    "Hydraulic Oils": 6,
+    "Industrial Gear Oils": 5,
+    "Marine Oils": 3,
+    "Miscellaneous": 3,
+    "Motorcycle Engine Oils": 3,
+    "Passenger Car Engine Oils": 10,
+    "Spray Cans": 3,
+    "Truck Engine Oils": 2,
+    "Turbine Oils": 2
+  },
+  "source_id": "RWANDA_RYMAX_CURRENT_COMPLETE_PAGINATED_CATALOG",
+  "status": "current_official_country_complete_paginated_catalog_normalized",
+  "technical_documents": 123,
+  "unique_product_pages": 68
+}

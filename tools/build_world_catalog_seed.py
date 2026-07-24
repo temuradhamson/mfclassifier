@@ -106,6 +106,7 @@ RWANDA_ALMC_CURRENT_JSONL = ROOT / "data" / "rwanda-almc-current-products.jsonl"
 BURUNDI_MOGAS_CURRENT_JSONL = ROOT / "data" / "burundi-mogas-current-products.jsonl"
 MOGAS_GLOBAL_MARKET_SHOPS_JSONL = ROOT / "data" / "mogas-global-market-shop-observations.jsonl"
 RWANDA_AKINAWA_CURRENT_JSONL = ROOT / "data" / "rwanda-akinawa-current-products.jsonl"
+RWANDA_RYMAX_CURRENT_JSONL = ROOT / "data" / "rwanda-rymax-current-products.jsonl"
 URUGUAY_ANCAP_LUBRICANT_JSONL = ROOT / "data" / "uruguay-ancap-current-lubricants.jsonl"
 COLOMBIA_TERPEL_LUBRICANT_JSONL = ROOT / "data" / "colombia-terpel-current-lubricants.jsonl"
 GUYANA_GUYOIL_LUBRICANT_JSONL = ROOT / "data" / "guyana-guyoil-current-lubricants.jsonl"
@@ -4539,6 +4540,96 @@ def belize_rymax_record(row: dict) -> dict:
     return record
 
 
+def rwanda_rymax_current_record(row: dict) -> dict:
+    """Convert one current Rymax Rwanda product identity."""
+    specs = row["specifications"]
+    performance = [
+        *(f"API {value}" for value in specs.get("api", [])),
+        *(f"API {value}" for value in specs.get("api_gl", [])),
+        *(f"ACEA {value}" for value in specs.get("acea", [])),
+        *(f"JASO {value}" for value in specs.get("jaso", [])),
+        *specs.get("approvals_source_reported", []),
+    ]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Current complete Rymax Rwanda manufacturer catalog",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": specs.get("sae_engine", "") or specs.get("sae_gear", ""),
+        "api_class": "; ".join(performance),
+        "viscosity": specs.get("iso_vg", ""),
+        "grease_class": specs.get("nlgi", ""),
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": int(row["source_record_id"].rsplit("-", 1)[-1]),
+        "evidence_status": row["evidence_status"],
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update(specs)
+    record["specifications"].update({
+        "source_url": row["source_url"],
+        "listing_url": row["listing_url"],
+        "listing_occurrences": row["listing_occurrences"],
+        "technical_documents": row["technical_documents"],
+        "source_page_facts_sha256": row["source_page_facts_sha256"],
+        "source_facts_sha256": row["source_facts_sha256"],
+    })
+    record["canonical_key"] += (
+        f"|rwanda_rymax_current:{normalize(row['source_record_id'])}"
+    )
+    record["product_id"] = (
+        "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    )
+    return record
+
+
+def merge_rwanda_rymax_current_evidence(
+    target: dict,
+    source_record: dict,
+    raw: dict,
+) -> None:
+    """Attach one Rwanda market card to an existing Rymax identity."""
+    target_specs = target["specifications"]
+    source_specs = source_record["specifications"]
+    for key in ("api", "api_gl", "acea", "ilsac", "jaso"):
+        target_specs[key] = sorted(
+            set(target_specs.get(key, [])) | set(source_specs.get(key, []))
+        )
+    for key in (
+        "sae_engine", "sae_gear", "iso_vg", "nlgi", "coolant_class",
+        "brake_fluid_class", "engine_cycle", "thickener",
+    ):
+        if source_specs.get(key) and not target_specs.get(key):
+            target_specs[key] = source_specs[key]
+    target_specs.setdefault("rwanda_rymax_current_catalog_evidence", []).append({
+        "source_record_id": raw["source_record_id"],
+        "source_product_name": raw["source_product_name"],
+        "source_url": raw["source_url"],
+        "listing_occurrences": raw["listing_occurrences"],
+        "source_categories": raw["specifications"]["source_categories"],
+        "product_type": raw["specifications"]["product_type"],
+        "approvals_source_reported": raw["specifications"][
+            "approvals_source_reported"
+        ],
+        "technical_documents": raw["technical_documents"],
+        "source_page_facts_sha256": raw["source_page_facts_sha256"],
+        "source_facts_sha256": raw["source_facts_sha256"],
+    })
+    target["lifecycle_status"] = "listed_on_current_official_country_catalog"
+    target["snapshot_date"] = raw["snapshot_date"]
+
+
 def dominican_republic_imca_mobil_record(row: dict) -> dict:
     """Convert one explicit product/grade from IMCA's official Mobil catalog."""
     technical = row["technical"]
@@ -7063,6 +7154,70 @@ def main() -> None:
         belize_rymax_record(row) for row in belize_rymax_source_rows
     ]
     input_records.extend(belize_rymax_records)
+    rwanda_rymax_current_source_rows = [
+        json.loads(line)
+        for line in RWANDA_RYMAX_CURRENT_JSONL.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        if line
+    ]
+    rwanda_rymax_current_records = [
+        rwanda_rymax_current_record(row)
+        for row in rwanda_rymax_current_source_rows
+    ]
+    belize_rymax_by_name = defaultdict(list)
+    for raw, record in zip(belize_rymax_source_rows, belize_rymax_records):
+        belize_rymax_by_name[normalize(raw["product_name"])].append(
+            (raw, record)
+        )
+    rwanda_rymax_product_key = {}
+    rwanda_rymax_products_matched_to_existing = 0
+    rwanda_rymax_products_added = 0
+    for raw, source_record in zip(
+        rwanda_rymax_current_source_rows,
+        rwanda_rymax_current_records,
+    ):
+        source_name = re.sub(
+            r"^rymax\s+", "", raw["product_name"], flags=re.I
+        )
+        candidates = belize_rymax_by_name.get(normalize(source_name), [])
+        if len(candidates) > 1:
+            source_path = re.sub(r"^https?://[^/]+", "", raw["source_url"])
+            candidates = [
+                candidate
+                for candidate in candidates
+                if source_path in {
+                    re.sub(r"^https?://[^/]+", "", url)
+                    for url in candidate[0]["source_card_urls"]
+                }
+            ]
+        if len(candidates) == 1:
+            _, target = candidates[0]
+            merge_rwanda_rymax_current_evidence(
+                target, source_record, raw
+            )
+            rwanda_rymax_products_matched_to_existing += 1
+        elif not candidates:
+            target = source_record
+            input_records.append(target)
+            rwanda_rymax_products_added += 1
+        else:
+            raise RuntimeError(
+                "Ambiguous Rwanda-to-Belize Rymax identity: "
+                + raw["source_record_id"]
+            )
+        rwanda_rymax_product_key[
+            raw["source_record_id"]
+        ] = target["canonical_key"]
+    if (
+        rwanda_rymax_products_matched_to_existing,
+        rwanda_rymax_products_added,
+    ) != (52, 16):
+        raise RuntimeError(
+            "Rymax Rwanda cross-market denominator changed: "
+            f"{rwanda_rymax_products_matched_to_existing} matched, "
+            f"{rwanda_rymax_products_added} added"
+        )
     dominican_imca_mobil_source_rows = [
         json.loads(line)
         for line in DOMINICAN_REPUBLIC_IMCA_MOBIL_JSONL.read_text(
@@ -9086,6 +9241,25 @@ def main() -> None:
         if link_key not in source_link_keys:
             source_links.append(link)
             source_link_keys.add(link_key)
+    for raw in rwanda_rymax_current_source_rows:
+        target = canonical_by_key[
+            rwanda_rymax_product_key[raw["source_record_id"]]
+        ]
+        link = {
+            "product_id": target["product_id"],
+            "source_id": raw["source_id"],
+            "source_record_id": raw["source_record_id"],
+            "source_row": int(raw["source_record_id"].rsplit("-", 1)[-1]),
+            "relation": "official_current_manufacturer_country_catalog_identity",
+        }
+        link_key = (
+            link["product_id"],
+            link["source_id"],
+            link["source_record_id"],
+        )
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     for raw in dominican_imca_mobil_source_rows:
         target = canonical_by_key[
             dominican_imca_mobil_product_key[raw["source_record_id"]]
@@ -10399,6 +10573,7 @@ def main() -> None:
         "burundi_mogas_current_input_sha256": hashlib.sha256(BURUNDI_MOGAS_CURRENT_JSONL.read_bytes()).hexdigest(),
         "mogas_global_market_shops_input_sha256": hashlib.sha256(MOGAS_GLOBAL_MARKET_SHOPS_JSONL.read_bytes()).hexdigest(),
         "rwanda_akinawa_current_input_sha256": hashlib.sha256(RWANDA_AKINAWA_CURRENT_JSONL.read_bytes()).hexdigest(),
+        "rwanda_rymax_current_input_sha256": hashlib.sha256(RWANDA_RYMAX_CURRENT_JSONL.read_bytes()).hexdigest(),
         "uruguay_ancap_lubricant_input_sha256": hashlib.sha256(URUGUAY_ANCAP_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "colombia_terpel_lubricant_input_sha256": hashlib.sha256(COLOMBIA_TERPEL_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "guyana_guyoil_lubricant_input_sha256": hashlib.sha256(GUYANA_GUYOIL_LUBRICANT_JSONL.read_bytes()).hexdigest(),
@@ -10730,6 +10905,13 @@ def main() -> None:
         "rwanda_akinawa_current_source_rows": len(
             rwanda_akinawa_current_source_rows
         ),
+        "rwanda_rymax_current_source_rows": len(
+            rwanda_rymax_current_source_rows
+        ),
+        "rwanda_rymax_products_matched_to_existing": (
+            rwanda_rymax_products_matched_to_existing
+        ),
+        "rwanda_rymax_products_added": rwanda_rymax_products_added,
         "kebs_smark_source_rows": len(kebs_smark_source_rows),
         "east_africa_certified_source_rows": len(east_africa_certified_source_rows),
         "east_africa_certified_source_rows_by_source": dict(sorted(Counter(row["source_id"] for row in east_africa_certified_source_rows).items())),
