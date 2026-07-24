@@ -133,7 +133,7 @@
     }
   ],
   "canonical_products": 117331,
-  "compressed_database_sha256": "cae7fbf85168966e37149d6e092b642bb48a010b38a014eb08d71879b84188be",
+  "compressed_database_sha256": "a5996fbeb496e497fe481c01e4cabf6438daab05cf0b9da53ca3131b78ffb137",
   "distinct_products_in_review": 1306,
   "duplicate_decision_rows_collapsed": {
     "by_decision_combination": {

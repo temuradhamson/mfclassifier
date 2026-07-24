@@ -114,6 +114,7 @@ HONDURAS_HONDULUB_OIL_STAR_JSONL = ROOT / "data" / "honduras-hondulub-current-oi
 EL_SALVADOR_MECHA_TOOL_JSONL = ROOT / "data" / "el-salvador-mecha-tool-current-products.jsonl"
 BELIZE_ILB_AVAILABILITY_JSONL = ROOT / "data" / "belize-ilb-current-availability.jsonl"
 BELIZE_RYMAX_PRODUCTS_JSONL = ROOT / "data" / "belize-rymax-current-products.jsonl"
+BAHAMAS_CBS_AVAILABILITY_JSONL = ROOT / "data" / "bahamas-cbs-current-availability.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
 SON_MANCAP_JSONL = ROOT / "data" / "son-mancap-chemical-lubricant-products.jsonl"
@@ -6149,6 +6150,13 @@ def main() -> None:
         belize_rymax_record(row) for row in belize_rymax_source_rows
     ]
     input_records.extend(belize_rymax_records)
+    bahamas_cbs_availability_rows = [
+        json.loads(line)
+        for line in BAHAMAS_CBS_AVAILABILITY_JSONL.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        if line
+    ]
     ecuador_inen_current_record_by_id = {
         raw["source_record_id"]: record
         for raw, record in zip(ecuador_inen_current_source_rows, ecuador_inen_current_records)
@@ -8577,6 +8585,7 @@ def main() -> None:
         "el_salvador_mecha_tool_input_sha256": hashlib.sha256(EL_SALVADOR_MECHA_TOOL_JSONL.read_bytes()).hexdigest(),
         "belize_ilb_availability_input_sha256": hashlib.sha256(BELIZE_ILB_AVAILABILITY_JSONL.read_bytes()).hexdigest(),
         "belize_rymax_products_input_sha256": hashlib.sha256(BELIZE_RYMAX_PRODUCTS_JSONL.read_bytes()).hexdigest(),
+        "bahamas_cbs_availability_input_sha256": hashlib.sha256(BAHAMAS_CBS_AVAILABILITY_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "son_mancap_input_sha256": hashlib.sha256(SON_MANCAP_JSONL.read_bytes()).hexdigest(),
@@ -8651,6 +8660,9 @@ def main() -> None:
             belize_ilb_availability_rows
         ),
         "belize_rymax_source_rows": len(belize_rymax_source_rows),
+        "bahamas_cbs_availability_source_rows": len(
+            bahamas_cbs_availability_rows
+        ),
         "blue_angel_source_rows": len(blue_angel_source_rows),
         "blue_angel_products_matched_to_existing": blue_angel_matched_rows,
         "blue_angel_products_added": blue_angel_added_rows,

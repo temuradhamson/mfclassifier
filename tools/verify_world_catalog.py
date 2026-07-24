@@ -270,6 +270,8 @@ def main() -> None:
     belize_rymax_assets_report = json.loads((ROOT / "data/belize-rymax-current-assets-report.json").read_text(encoding="utf-8"))
     belize_rymax_products_report = json.loads((ROOT / "data/belize-rymax-current-products-report.json").read_text(encoding="utf-8"))
     belize_rymax_rows = [json.loads(line) for line in (ROOT / "data/belize-rymax-current-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    bahamas_cbs_report = json.loads((ROOT / "data/bahamas-cbs-current-catalog-report.json").read_text(encoding="utf-8"))
+    bahamas_cbs_rows = [json.loads(line) for line in (ROOT / "data/bahamas-cbs-current-availability.jsonl").read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_report = json.loads((ROOT / "data/kebs-smark-lubricant-products-report.json").read_text(encoding="utf-8"))
     kebs_smark_rows = [json.loads(line) for line in (ROOT / "data/kebs-smark-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     east_africa_report = json.loads((ROOT / "data/east-africa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -2571,6 +2573,53 @@ def main() -> None:
         "SELECT count(*) FROM product_sources "
         "WHERE source_id='BELIZE_RYMAX_CURRENT_PRODUCT_CATALOG'"
     ).fetchone()[0] == 313
+    assert bahamas_cbs_report["in_scope_unique_availability_cards"] == len(
+        bahamas_cbs_rows
+    ) == report["bahamas_cbs_availability_source_rows"] == 51
+    assert bahamas_cbs_report["official_category_reported_counts"] == {
+        "Grease & Lubricants": 17,
+        "Motor Oils": 16,
+        "Other Fluids, Treatments, & Chemicals": 23,
+    }
+    assert bahamas_cbs_report["in_scope_by_category"] == {
+        "Auto Solvents & Cleaners": 1,
+        "Electrical Grease & Lubricants": 1,
+        "Grease & Lubricants": 17,
+        "Motor Oils": 16,
+        "Other Fluids, Treatments, & Chemicals": 16,
+    }
+    assert bahamas_cbs_report["families"] == {
+        "C": 3, "G": 6, "H": 3, "M": 15,
+        "S": 12, "TF": 3, "U": 9,
+    }
+    assert bahamas_cbs_report["normalized_output_sha256"] == hashlib.sha256(
+        (ROOT / "data/bahamas-cbs-current-availability.jsonl").read_bytes()
+    ).hexdigest()
+    assert report["bahamas_cbs_availability_input_sha256"] == (
+        bahamas_cbs_report["normalized_output_sha256"]
+    )
+    assert policy_by_id[
+        "BAHAMAS_CBS_CURRENT_AVAILABILITY"
+    ]["source_sha256"] == bahamas_cbs_report["normalized_output_sha256"]
+    assert policy_by_id[
+        "BAHAMAS_CBS_CURRENT_AVAILABILITY"
+    ]["observed_count"] == 51
+    assert all(
+        row["market"] == "Bahamas"
+        and row["item_sku"]
+        and row["manufacturer_ref"]
+        and row["source_card_url"]
+        and "no_access_control_bypass" in row["source_quality_flags"]
+        for row in bahamas_cbs_rows
+    )
+    assert db.execute(
+        "SELECT count(*) FROM products "
+        "WHERE source_id='BAHAMAS_CBS_CURRENT_AVAILABILITY'"
+    ).fetchone()[0] == 0
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id='BAHAMAS_CBS_CURRENT_AVAILABILITY'"
+    ).fetchone()[0] == 0
     assert policy_by_id["VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG"]["observed_count"] == 23
     assert db.execute(
         "SELECT count(*) FROM products WHERE source_id='VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG'"

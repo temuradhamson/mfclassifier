@@ -2761,6 +2761,21 @@
       "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_page_image_tds_or_sds_redistribution",
       "observed_count": 313,
       "notes": "The complete current 22-page catalog contains 339 listing occurrences, 14 highlighted repeats and 325 unique product URLs. Six same-identity URL groups collapse 12 occurrences, while Motrax 2T TSC-1/TSC-2/TSC-3 remain separate because their API identities differ, leaving 313 manufacturer product identities. The pass preserves structured specifications, segments and viscosities and audits 823 linked assets: 235 image URLs plus 588 TDS/SDS URLs, totalling 304,755,510 downloaded bytes for SHA-256 verification. Source-listed API, ACEA, ILSAC, JASO, OEM and industry specifications are represented as source-reported claims, not independent approvals."
+    },
+    {
+      "source_id": "BAHAMAS_CBS_CURRENT_AVAILABILITY",
+      "title": "Current CBS Bahamas lubricant and technical-fluid retail availability",
+      "owner": "Commonwealth Building Supplies Ltd.",
+      "source_type": "official_bahamas_retailer_browser_observed_category_and_product_cards",
+      "source_locator": "data/bahamas-cbs-current-availability.jsonl",
+      "source_url": "https://www.cbsbahamas.com/",
+      "terms_url": "https://www.cbsbahamas.com/",
+      "source_sha256": "c2aa64a6096e34716c52b6ec62f28a26d6ca70aa03fe49daa3a9be6d660191d1",
+      "access_status": "public_official_retailer_browser_observed_http_455_to_command_line_clients_no_bypass",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_page_or_image_redistribution",
+      "observed_count": 51,
+      "notes": "The official pages report 16 Motor Oils, 17 Grease & Lubricants and 23 Other Fluids/Treatments/Chemicals. One equipment card and five cleaner-only cards are excluded; MM13 appearing in two categories is counted once. Two relevant cards were found elsewhere in the store. The live grease page and recent official-page search snapshot disagree on L112 versus MM12R, so their transparent temporal union is retained. Direct command-line requests return HTTP 455; evidence was transcribed through ordinary browser rendering without bypassing access control, and no unavailable page/image hash is claimed. These 51 rows are Bahamas retail availability evidence, not new manufacturer master identities."
     }
   ]
 }

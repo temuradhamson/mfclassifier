@@ -1,0 +1,83 @@
+{
+  "access_observation": "Direct command-line requests returned HTTP 455; official pages were observed through browser rendering and a recent search snapshot without bypassing access controls.",
+  "duplicate_category_occurrences_collapsed": [
+    {
+      "categories": [
+        "Motor Oils",
+        "Other Fluids, Treatments, & Chemicals"
+      ],
+      "item_sku": "6272371",
+      "product_name": "Marvel Mystery Oil Enhancer & Fuel Treatment, 32 oz Bottle"
+    }
+  ],
+  "excluded_cards": [
+    {
+      "item_sku": "6366264",
+      "product_name": "LubriMatic 30-132 Mini Grease Gun Kit",
+      "reason": "equipment"
+    },
+    {
+      "item_sku": "6786107",
+      "product_name": "LubriMatic 30-200 Grease Gun",
+      "reason": "equipment"
+    },
+    {
+      "item_sku": "2258630",
+      "product_name": "GUNK Carburetor Parts Cleaner",
+      "reason": "cleaner"
+    },
+    {
+      "item_sku": "6711816",
+      "product_name": "CRC QD Contact Cleaner",
+      "reason": "cleaner"
+    },
+    {
+      "item_sku": "9490277",
+      "product_name": "GUNK Battery Terminal Cleaner & Protector",
+      "reason": "cleaner"
+    },
+    {
+      "item_sku": "5959739",
+      "product_name": "GUNK Battery Terminal Cleaner",
+      "reason": "cleaner"
+    },
+    {
+      "item_sku": "6290258",
+      "product_name": "Gumout Jet Spray Carb/Choke & Parts Cleaner",
+      "reason": "cleaner"
+    }
+  ],
+  "families": {
+    "C": 3,
+    "G": 6,
+    "H": 3,
+    "M": 15,
+    "S": 12,
+    "TF": 3,
+    "U": 9
+  },
+  "in_scope_by_category": {
+    "Auto Solvents & Cleaners": 1,
+    "Electrical Grease & Lubricants": 1,
+    "Grease & Lubricants": 17,
+    "Motor Oils": 16,
+    "Other Fluids, Treatments, & Chemicals": 16
+  },
+  "in_scope_unique_availability_cards": 51,
+  "normalized_output_sha256": "c2aa64a6096e34716c52b6ec62f28a26d6ca70aa03fe49daa3a9be6d660191d1",
+  "official_category_reported_counts": {
+    "Grease & Lubricants": 17,
+    "Motor Oils": 16,
+    "Other Fluids, Treatments, & Chemicals": 23
+  },
+  "quality_note": "Evidence-only Bahamas retailer availability layer. It creates no manufacturer master identities until strict brand/ref/spec matching is completed.",
+  "snapshot_date": "2026-07-24",
+  "source_id": "BAHAMAS_CBS_CURRENT_AVAILABILITY",
+  "source_url": "https://www.cbsbahamas.com/",
+  "temporal_category_union": {
+    "live_browser_only_card": "LIQUID WRENCH L112",
+    "recent_official_page_snapshot_only_card": "Marvel Mystery Oil MM12R",
+    "reported_category_count": 17,
+    "union_in_scope_cards_after_equipment_exclusion": 17
+  }
+}
