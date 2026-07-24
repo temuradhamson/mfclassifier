@@ -1,0 +1,150 @@
+{
+  "cards_with_images": 325,
+  "cards_with_segments": 304,
+  "cards_with_specifications": 266,
+  "cards_with_viscosity_grades": 228,
+  "catalog_url": "https://rymax-lubricants.bz/products",
+  "document_references": 605,
+  "highlight_repeat_occurrences": 14,
+  "listing_occurrences": 339,
+  "listing_page_facts": [
+    {
+      "bytes": 518681,
+      "page": 1,
+      "sha256": "e2af4c9818c2a34cd648a7f51829da4d86d2734d3fd1491b649457fe2529ab88",
+      "url": "https://rymax-lubricants.bz/products"
+    },
+    {
+      "bytes": 29755,
+      "page": 2,
+      "sha256": "11688d51c7df9fccc0cae93731531fb1e6ce118377895ec5725a2f4fcc06fbc9",
+      "url": "https://rymax-lubricants.bz/products/p2"
+    },
+    {
+      "bytes": 29771,
+      "page": 3,
+      "sha256": "49970b41cdb75e9fb5f5d6e82f1d8562dfd7db0877aad116fa79df725bb775ba",
+      "url": "https://rymax-lubricants.bz/products/p3"
+    },
+    {
+      "bytes": 29931,
+      "page": 4,
+      "sha256": "25b6674aca57eeed9d59f5097cf52a9f0d822f073ee5f7517bd8c406f8da62eb",
+      "url": "https://rymax-lubricants.bz/products/p4"
+    },
+    {
+      "bytes": 29927,
+      "page": 5,
+      "sha256": "3daf9cbb0c0e0f337947b2d6e01917aa09b699a899be0d3d570b55493635b839",
+      "url": "https://rymax-lubricants.bz/products/p5"
+    },
+    {
+      "bytes": 29995,
+      "page": 6,
+      "sha256": "f115d6b902121dc11dd6b6488fe99b16d1698b8eee05e7428bf97f4c7bf23c9e",
+      "url": "https://rymax-lubricants.bz/products/p6"
+    },
+    {
+      "bytes": 29757,
+      "page": 7,
+      "sha256": "c8e2cf92c48e99380da4e55f1486d1a972b1061dad2c28c824e94751b060ff7f",
+      "url": "https://rymax-lubricants.bz/products/p7"
+    },
+    {
+      "bytes": 29961,
+      "page": 8,
+      "sha256": "5aebc6eb33cd04e8bb747b979bf0491041272c4d7b2f223467d9b2f394d1e17e",
+      "url": "https://rymax-lubricants.bz/products/p8"
+    },
+    {
+      "bytes": 29949,
+      "page": 9,
+      "sha256": "0938d28654279b838e0ea5481085acb422a6769e47fc90ea87ac5d2fd5fb994a",
+      "url": "https://rymax-lubricants.bz/products/p9"
+    },
+    {
+      "bytes": 29892,
+      "page": 10,
+      "sha256": "e21bc4acc0f3f4c9ddf1837172ed5f2893f8815aa12890380c7e4f3d1738e2f2",
+      "url": "https://rymax-lubricants.bz/products/p10"
+    },
+    {
+      "bytes": 29984,
+      "page": 11,
+      "sha256": "cde5b265f85ad5c33b185ee3cff36892af399c850bd31abbb48edfa1e2174a4d",
+      "url": "https://rymax-lubricants.bz/products/p11"
+    },
+    {
+      "bytes": 30379,
+      "page": 12,
+      "sha256": "1bf1a2133ee7d36397fc1e8e3e032966b77bfefc96c096909fe57a72e4e55663",
+      "url": "https://rymax-lubricants.bz/products/p12"
+    },
+    {
+      "bytes": 29829,
+      "page": 13,
+      "sha256": "5e936c69377d2a6c25503f1894ea5b374d2036b2b4d0eb12efcc610bae6bb96c",
+      "url": "https://rymax-lubricants.bz/products/p13"
+    },
+    {
+      "bytes": 29796,
+      "page": 14,
+      "sha256": "52276707c53b257a126b98e731f6ded34f1a0cb257a13b9ae0f25985f5c350a5",
+      "url": "https://rymax-lubricants.bz/products/p14"
+    },
+    {
+      "bytes": 29658,
+      "page": 15,
+      "sha256": "98bf8d9a409e9d40819cf6afa5f19a1b207abb7cdc91be44d939fd6c9f11a3ee",
+      "url": "https://rymax-lubricants.bz/products/p15"
+    },
+    {
+      "bytes": 29772,
+      "page": 16,
+      "sha256": "2d24f059c4b37a1cdc37543ef90fddd8ab6e2493c93998651a0e35eb977b495f",
+      "url": "https://rymax-lubricants.bz/products/p16"
+    },
+    {
+      "bytes": 30064,
+      "page": 17,
+      "sha256": "e3a05cc8934487c5136f3fe572e1b9d3608abeb82b67646e0af79f4b355496e7",
+      "url": "https://rymax-lubricants.bz/products/p17"
+    },
+    {
+      "bytes": 30360,
+      "page": 18,
+      "sha256": "0768163513bedd8ab76f6bc984e758a6fcbed5f87dae8c9315734496d48036e2",
+      "url": "https://rymax-lubricants.bz/products/p18"
+    },
+    {
+      "bytes": 29775,
+      "page": 19,
+      "sha256": "89ba942739544a67cc045646a262d6a59dbe0e666799a7bb2f0a0bc2c6d9a793",
+      "url": "https://rymax-lubricants.bz/products/p19"
+    },
+    {
+      "bytes": 29849,
+      "page": 20,
+      "sha256": "bc780a049c0ea4d423a6831e0c29119f3c7f416020c2a6fe0e36fcfb64728a6d",
+      "url": "https://rymax-lubricants.bz/products/p20"
+    },
+    {
+      "bytes": 29663,
+      "page": 21,
+      "sha256": "75579488ae50d22f60ead51a6369568ec005183a253392336c0b520d1f1b5eab",
+      "url": "https://rymax-lubricants.bz/products/p21"
+    },
+    {
+      "bytes": 5674,
+      "page": 22,
+      "sha256": "c9dcfd370606ac26dd8b2d7022e2ab277bf4b7547b60e4b2fdc2a85f58e553e0",
+      "url": "https://rymax-lubricants.bz/products/p22"
+    }
+  ],
+  "listing_pages": 22,
+  "normalized_cards_sha256": "8546ac306eb1d988dacb63a635f3b37cddbc4add8929bedf1627c881f5ec641d",
+  "snapshot_date": "2026-07-24",
+  "source_id": "BELIZE_RYMAX_CURRENT_PRODUCT_CATALOG",
+  "unique_document_urls": 588,
+  "unique_product_urls": 325
+}

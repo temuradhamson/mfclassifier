@@ -1,0 +1,55 @@
+{
+  "api_url": "https://mechatoolsv.com/wp-json/wp/v2/product?per_page=100&_embed=1",
+  "brands": {
+    "MECHA-TOOL": 56,
+    "VALGAB": 3
+  },
+  "catalog_url": "https://mechatoolsv.com/catalogo-de-productos/",
+  "current_card_categories": {
+    "Automotriz": 12,
+    "Industrial": 12,
+    "Valgab": 2
+  },
+  "current_product_cards": 26,
+  "document_facts_sha256": "58e53c10e3e4b80d2438ad995345460b77c8f5c863111def06abd70096e030fa",
+  "duplicate_forza_language_page_grade_occurrences_collapsed": 8,
+  "existing_gm_dexos_identity_match_candidates": 2,
+  "existing_gm_matches": [
+    {
+      "gm_source_record_id": "D330AAEI170",
+      "product_name": "MECHA TOOL FULL SYNTHETIC",
+      "sae_engine": "5W-30",
+      "source_record_id": "MECHA-SV-003"
+    },
+    {
+      "gm_source_record_id": "D330BAFL170",
+      "product_name": "MECHA TOOL FULL SYNTHETIC",
+      "sae_engine": "0W-20",
+      "source_record_id": "MECHA-SV-004"
+    }
+  ],
+  "expanded_page_grade_occurrences": 67,
+  "families": {
+    "H": 13,
+    "I": 5,
+    "M": 21,
+    "S": 2,
+    "TF": 6,
+    "U": 12
+  },
+  "image_facts_sha256": "690f33fe3993a1604bc443cd98de4368b53e49a0ff18aaeccb01bc7ec4b16ff5",
+  "linked_pdf_reference_bytes": 73144324,
+  "linked_pdf_references_audited": 37,
+  "new_manufacturer_catalog_identity_candidates": 57,
+  "normalized_output_sha256": "0d5db0d37f1a54bd625b2fc0235e9c207f1a0cbd41b3897c130f0178e7c77fc8",
+  "normalized_product_identities": 59,
+  "page_facts_sha256": "2d27e15fc0bb678bc8fd4cd9c819597aecf0dce80ea4a845925826424f5dbd55",
+  "product_image_bytes": 11916774,
+  "product_images_audited": 26,
+  "quality_note": "The source denominator is the complete current WordPress product catalog. Product cards are expanded only by explicit current card, image or linked-TDS grades. Conflicting or mislinked documents are flagged rather than used to silently upgrade API, OEM approval, ISO VG or licence status.",
+  "snapshot_date": "2026-07-24",
+  "source_facts_sha256": "09a3cd8d0dd681298be99b127a85c747a94aab02fa4c820dfd64be6635250d90",
+  "source_id": "EL_SALVADOR_MECHA_TOOL_CURRENT_CATALOG",
+  "source_url": "https://mechatoolsv.com/",
+  "unique_linked_pdf_payloads": 33
+}

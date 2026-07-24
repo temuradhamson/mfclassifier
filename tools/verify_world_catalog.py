@@ -262,6 +262,10 @@ def main() -> None:
     honduras_hondulub_report = json.loads((ROOT / "data/honduras-hondulub-current-catalog-report.json").read_text(encoding="utf-8"))
     honduras_hondulub_rows = [json.loads(line) for line in (ROOT / "data/honduras-hondulub-current-oil-star-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     honduras_hondulub_availability_rows = [json.loads(line) for line in (ROOT / "data/honduras-hondulub-current-availability.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    el_salvador_mecha_tool_report = json.loads((ROOT / "data/el-salvador-mecha-tool-current-catalog-report.json").read_text(encoding="utf-8"))
+    el_salvador_mecha_tool_rows = [json.loads(line) for line in (ROOT / "data/el-salvador-mecha-tool-current-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    belize_ilb_report = json.loads((ROOT / "data/belize-ilb-current-catalog-report.json").read_text(encoding="utf-8"))
+    belize_ilb_rows = [json.loads(line) for line in (ROOT / "data/belize-ilb-current-availability.jsonl").read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_report = json.loads((ROOT / "data/kebs-smark-lubricant-products-report.json").read_text(encoding="utf-8"))
     kebs_smark_rows = [json.loads(line) for line in (ROOT / "data/kebs-smark-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     east_africa_report = json.loads((ROOT / "data/east-africa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -341,6 +345,9 @@ def main() -> None:
         + len(panama_acodeco_2020_rows)
         + len(nicaragua_lubrinsa_rows)
         + len(honduras_hondulub_rows)
+        + el_salvador_mecha_tool_report[
+            "new_manufacturer_catalog_identity_candidates"
+        ]
         - report["gm_dual_standard_license_rows_merged"]
         - report["fuchs_exact_payload_identity_rows_matched"]
         - report["fuchs_exact_content_identity_rows_matched"]
@@ -1046,9 +1053,9 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 4973
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3044
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 116962
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 116961
-    assert report["quality_issues"]["professional_key_incomplete"] == 78690
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 117019
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 117018
+    assert report["quality_issues"]["professional_key_incomplete"] == 78702
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
@@ -1056,7 +1063,7 @@ def main() -> None:
         GROUP BY p.family_code
     """)) == {
         "C": 2289, "E": 149, "G": 12384, "H": 5262, "I": 3854,
-        "M": 23479, "S": 12124, "T": 11830, "TF": 6687, "U": 632,
+        "M": 23483, "S": 12126, "T": 11830, "TF": 6693, "U": 632,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -2375,6 +2382,127 @@ def main() -> None:
         "SELECT count(*) FROM products "
         "WHERE source_id='HONDURAS_HONDULUB_CURRENT_PRODUCT_TABLES'"
     ).fetchone()[0] == 31
+    assert el_salvador_mecha_tool_report["current_product_cards"] == 26
+    assert el_salvador_mecha_tool_report["current_card_categories"] == {
+        "Automotriz": 12,
+        "Industrial": 12,
+        "Valgab": 2,
+    }
+    assert el_salvador_mecha_tool_report[
+        "expanded_page_grade_occurrences"
+    ] == 67
+    assert el_salvador_mecha_tool_report[
+        "duplicate_forza_language_page_grade_occurrences_collapsed"
+    ] == 8
+    assert el_salvador_mecha_tool_report[
+        "normalized_product_identities"
+    ] == len(el_salvador_mecha_tool_rows) == 59
+    assert el_salvador_mecha_tool_report[
+        "existing_gm_dexos_identity_match_candidates"
+    ] == report["el_salvador_mecha_tool_products_matched_to_existing"] == 2
+    assert el_salvador_mecha_tool_report[
+        "new_manufacturer_catalog_identity_candidates"
+    ] == report["el_salvador_mecha_tool_products_added"] == 57
+    assert report["el_salvador_mecha_tool_source_rows"] == 59
+    assert el_salvador_mecha_tool_report["product_images_audited"] == 26
+    assert el_salvador_mecha_tool_report[
+        "linked_pdf_references_audited"
+    ] == 37
+    assert el_salvador_mecha_tool_report[
+        "unique_linked_pdf_payloads"
+    ] == 33
+    assert el_salvador_mecha_tool_report["brands"] == {
+        "MECHA-TOOL": 56,
+        "VALGAB": 3,
+    }
+    assert el_salvador_mecha_tool_report["families"] == {
+        "H": 13,
+        "I": 5,
+        "M": 21,
+        "S": 2,
+        "TF": 6,
+        "U": 12,
+    }
+    assert all(
+        row["market"] == "El Salvador"
+        and row["source_images"]
+        and row["source_page_urls"]
+        for row in el_salvador_mecha_tool_rows
+    )
+    assert all(
+        not ({"address", "phone", "email", "contact_person"} & set(row))
+        for row in el_salvador_mecha_tool_rows
+    )
+    assert policy_by_id[
+        "EL_SALVADOR_MECHA_TOOL_CURRENT_CATALOG"
+    ]["source_sha256"] == hashlib.sha256(
+        (ROOT / "data/el-salvador-mecha-tool-current-products.jsonl").read_bytes()
+    ).hexdigest()
+    assert policy_by_id[
+        "EL_SALVADOR_MECHA_TOOL_CURRENT_CATALOG"
+    ]["observed_count"] == 59
+    assert db.execute(
+        "SELECT count(*) FROM products "
+        "WHERE source_id='EL_SALVADOR_MECHA_TOOL_CURRENT_CATALOG'"
+    ).fetchone()[0] == 57
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id='EL_SALVADOR_MECHA_TOOL_CURRENT_CATALOG'"
+    ).fetchone()[0] == 59
+    assert db.execute(
+        "SELECT count(*) FROM product_sources ps "
+        "JOIN products p USING(product_id) "
+        "WHERE ps.source_id='EL_SALVADOR_MECHA_TOOL_CURRENT_CATALOG' "
+        "AND p.source_id='GM_DEXOS1_GEN3'"
+    ).fetchone()[0] == 2
+    assert belize_ilb_report["current_product_cards"] == 112
+    assert belize_ilb_report[
+        "normalized_product_label_identities"
+    ] == len(belize_ilb_rows) == report[
+        "belize_ilb_availability_source_rows"
+    ] == 77
+    assert belize_ilb_report[
+        "package_only_card_duplicates_collapsed"
+    ] == 35
+    assert belize_ilb_report["product_images_referenced"] == 112
+    assert belize_ilb_report["unique_product_image_payloads"] == 112
+    assert belize_ilb_report["product_image_bytes"] == 7728126
+    assert belize_ilb_report["brands"] == {"CHEVRON": 76, "REVOLUB": 1}
+    assert belize_ilb_report["families"] == {
+        "C": 2, "G": 10, "H": 6, "I": 15, "M": 19,
+        "T": 14, "TF": 11,
+    }
+    assert all(
+        row["market"] == "Belize"
+        and row["source_card_ids"]
+        and row["source_card_urls"]
+        and row["source_image_sha256"]
+        for row in belize_ilb_rows
+    )
+    assert all(
+        not ({"address", "phone", "email", "contact_person"} & set(row))
+        for row in belize_ilb_rows
+    )
+    assert belize_ilb_report["normalized_output_sha256"] == hashlib.sha256(
+        (ROOT / "data/belize-ilb-current-availability.jsonl").read_bytes()
+    ).hexdigest()
+    assert report["belize_ilb_availability_input_sha256"] == (
+        belize_ilb_report["normalized_output_sha256"]
+    )
+    assert policy_by_id[
+        "BELIZE_ILB_CURRENT_PRODUCT_CATALOG"
+    ]["source_sha256"] == belize_ilb_report["normalized_output_sha256"]
+    assert policy_by_id[
+        "BELIZE_ILB_CURRENT_PRODUCT_CATALOG"
+    ]["observed_count"] == 77
+    assert db.execute(
+        "SELECT count(*) FROM products "
+        "WHERE source_id='BELIZE_ILB_CURRENT_PRODUCT_CATALOG'"
+    ).fetchone()[0] == 0
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id='BELIZE_ILB_CURRENT_PRODUCT_CATALOG'"
+    ).fetchone()[0] == 0
     assert policy_by_id["VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG"]["observed_count"] == 23
     assert db.execute(
         "SELECT count(*) FROM products WHERE source_id='VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG'"

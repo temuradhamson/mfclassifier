@@ -1,0 +1,52 @@
+{
+  "api_urls": [
+    "https://ilb.bz/wp-json/wp/v2/product?per_page=100&page=1&_embed=1",
+    "https://ilb.bz/wp-json/wp/v2/product?per_page=100&page=2&_embed=1"
+  ],
+  "brands": {
+    "CHEVRON": 76,
+    "REVOLUB": 1
+  },
+  "catalog_url": "https://ilb.bz/shop/",
+  "categories": {
+    "Aceites para Motores Diesel de Servicio Pesado/Flotas Mixtas": 1,
+    "Aceites para Transmisiones y Diferenciales Automotrices": 14,
+    "Coolants and Specialties": 5,
+    "Heavy Duty Motor Oils for Diesel and Gasoline": 20,
+    "Industrial Circulating and Turbine Oils": 4,
+    "Industrial Greases": 6,
+    "Industrial Oils for Gears": 7,
+    "Industrial and Automotive Grease": 9,
+    "Non-detergent Oils": 3,
+    "Other Industrial Oils": 6,
+    "Other Industrial Oils 2": 4,
+    "Passenger Car Motor Oils": 5,
+    "Premium Heavy Duty Motor Oils for Diesel and Gasoline": 3,
+    "Premium Motorcycle, Outboard and two cycle engine oils": 4,
+    "Premium Oil for Passenger Car": 11,
+    "Synthethic Compressor Oils": 1,
+    "Transmission Fluids": 9
+  },
+  "current_product_cards": 112,
+  "families": {
+    "C": 2,
+    "G": 10,
+    "H": 6,
+    "I": 15,
+    "M": 19,
+    "T": 14,
+    "TF": 11
+  },
+  "image_facts_sha256": "1ada8003f9f13d07fd8ae1b3726651bf5567642c4eb30a4d027b91dcbd53bf1f",
+  "normalized_output_sha256": "05f12ea8d3ef174c3e102b53c9e0ab4f107539dc356028de484570e56245299a",
+  "normalized_product_label_identities": 77,
+  "package_only_card_duplicates_collapsed": 35,
+  "page_facts_sha256": "a959b266891a7492fe3c8fc56607fe86c86b8a6b2872939d3f8e66d330c0c552",
+  "product_image_bytes": 7728126,
+  "product_images_referenced": 112,
+  "quality_note": "Complete current ILB distributor catalog. Package variants are collapsed only when their normalized printed product labels match. Chevron and Revolub rows are Belize availability evidence, not new manufacturer master identities; specifications are limited to values printed in product titles.",
+  "snapshot_date": "2026-07-24",
+  "source_id": "BELIZE_ILB_CURRENT_PRODUCT_CATALOG",
+  "source_url": "https://ilb.bz/",
+  "unique_product_image_payloads": 112
+}

@@ -1,8 +1,8 @@
 {
   "active_offers": 3044,
   "canonical_key_duplicates": 0,
-  "canonical_products": 116961,
-  "compressed_database_sha256": "daa794ddc00cb70d07fe87055c7323ffa16537183e28947a3131dbbc6a297480",
+  "canonical_products": 117018,
+  "compressed_database_sha256": "65dbcdb66be32b40f48ad6033c9a73481f0f41fad6fb4d9046140485359ce94e",
   "duplicate_review_queues": [
     {
       "candidate_pairs": 11184,
@@ -52,17 +52,17 @@
   ],
   "family_coverage": [
     {
-      "both_percent": 50.54,
-      "both_selector_and_technical_basis_present": 24935,
+      "both_percent": 50.55,
+      "both_selector_and_technical_basis_present": 24950,
       "existing_professional_key_gate_implemented": true,
-      "existing_professional_key_issue": 23479,
+      "existing_professional_key_issue": 23483,
       "family": "Моторные масла",
       "family_code": "M",
-      "products": 49335,
+      "products": 49354,
       "selector_grade_or_class_percent": 88.89,
-      "selector_grade_or_class_present": 43852,
-      "technical_basis_percent": 52.59,
-      "technical_basis_present": 25944
+      "selector_grade_or_class_present": 43871,
+      "technical_basis_percent": 52.6,
+      "technical_basis_present": 25959
     },
     {
       "both_percent": 36.17,
@@ -81,10 +81,10 @@
       "both_percent": 6.55,
       "both_selector_and_technical_basis_present": 862,
       "existing_professional_key_gate_implemented": true,
-      "existing_professional_key_issue": 12124,
+      "existing_professional_key_issue": 12126,
       "family": "Специальные продукты",
       "family_code": "S",
-      "products": 13160,
+      "products": 13162,
       "selector_grade_or_class_percent": 6.64,
       "selector_grade_or_class_present": 874,
       "technical_basis_percent": 6.55,
@@ -104,17 +104,17 @@
       "technical_basis_present": 516
     },
     {
-      "both_percent": 7.01,
-      "both_selector_and_technical_basis_present": 573,
+      "both_percent": 7.06,
+      "both_selector_and_technical_basis_present": 578,
       "existing_professional_key_gate_implemented": true,
-      "existing_professional_key_issue": 6687,
+      "existing_professional_key_issue": 6693,
       "family": "Охлаждающие и технические жидкости",
       "family_code": "TF",
-      "products": 8178,
-      "selector_grade_or_class_percent": 8.96,
-      "selector_grade_or_class_present": 733,
-      "technical_basis_percent": 9.43,
-      "technical_basis_present": 771
+      "products": 8184,
+      "selector_grade_or_class_percent": 9.02,
+      "selector_grade_or_class_present": 738,
+      "technical_basis_percent": 9.48,
+      "technical_basis_present": 776
     },
     {
       "both_percent": 0.61,
@@ -123,10 +123,10 @@
       "existing_professional_key_issue": 5262,
       "family": "Гидравлические масла",
       "family_code": "H",
-      "products": 6583,
-      "selector_grade_or_class_percent": 21.39,
-      "selector_grade_or_class_present": 1408,
-      "technical_basis_percent": 5.62,
+      "products": 6596,
+      "selector_grade_or_class_percent": 21.54,
+      "selector_grade_or_class_present": 1421,
+      "technical_basis_percent": 5.61,
       "technical_basis_present": 370
     },
     {
@@ -136,9 +136,9 @@
       "existing_professional_key_issue": 3854,
       "family": "Индустриальные масла",
       "family_code": "I",
-      "products": 4894,
-      "selector_grade_or_class_percent": 21.64,
-      "selector_grade_or_class_present": 1059,
+      "products": 4899,
+      "selector_grade_or_class_percent": 21.72,
+      "selector_grade_or_class_present": 1064,
       "technical_basis_percent": 0.22,
       "technical_basis_present": 11
     },
@@ -162,9 +162,9 @@
       "existing_professional_key_issue": 632,
       "family": "Турбинные масла",
       "family_code": "U",
-      "products": 800,
-      "selector_grade_or_class_percent": 21.38,
-      "selector_grade_or_class_present": 171,
+      "products": 812,
+      "selector_grade_or_class_percent": 22.54,
+      "selector_grade_or_class_present": 183,
       "technical_basis_percent": 0.25,
       "technical_basis_present": 2
     },
@@ -182,25 +182,25 @@
       "technical_basis_present": 7
     }
   ],
-  "input_rows_before_canonicalization": 116962,
+  "input_rows_before_canonicalization": 117019,
   "interpretation": {
-    "confirmed_count": "116961 is the verified canonical row count of the current seed, not the final number of all products worldwide.",
+    "confirmed_count": "117018 is the verified canonical row count of the current seed, not the final number of all products worldwide.",
     "duplicate_metric": "Review pairs are candidates or conflicts, not proven removable duplicates.",
     "professional_gate_scope": "Family-specific professional_key_incomplete rules cover M/T/G/H/I/C/U/E/TF/S; source-level gaps remain explicit and are not filled by inference.",
     "selector_metric": "Presence is measured only from explicit normalized fields; absence may reflect source granularity rather than a parsing defect."
   },
-  "primary_sources_used": 143,
+  "primary_sources_used": 144,
   "products_using_explicitly_marked_brand_fallback": 36269,
-  "products_with_at_least_one_source_link": 116961,
-  "products_with_family": 116961,
+  "products_with_at_least_one_source_link": 117018,
+  "products_with_family": 117018,
   "products_with_missing_manufacturer": 649,
-  "products_with_normalized_name": 116961,
-  "products_with_primary_source_hash": 116961,
-  "products_with_primary_source_url": 116370,
+  "products_with_normalized_name": 117018,
+  "products_with_primary_source_hash": 117018,
+  "products_with_primary_source_url": 116427,
   "quality_issue_details": [
     {
       "issue_code": "professional_key_incomplete",
-      "rows": 78690,
+      "rows": 78702,
       "severity": "medium"
     },
     {
@@ -377,9 +377,9 @@
   "quality_issues_by_severity": {
     "high": 311,
     "low": 15,
-    "medium": 78808
+    "medium": 78820
   },
   "snapshot_date": "2026-07-22",
-  "source_registry_entries": 191,
+  "source_registry_entries": 193,
   "status": "offline_quality_audit_current_seed_not_worldwide_completion"
 }

@@ -2716,6 +2716,36 @@
       "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_page_or_image_redistribution",
       "observed_count": 31,
       "notes": "The complete current homepage denominator contains 110 printed table rows across 11 SHA-256-pinned product-table images. Explicit multi-grade rows expand and three exact package-only duplicate rows collapse to 120 identity hints: 115 in-scope product-grade occurrences, four generic series retained report-only and one automatic lubricator excluded as equipment. Thirty-one OIL STAR identities enter canonical product truth. Eighty-four TEK STAR, Phillips 66, Shell, Pyroil and Ultrachem occurrences remain a separate Honduras availability layer pending manufacturer-level global identity passes, preventing country-specific canonical duplicates. Nonstandard SAE 30W/40W/50W and EP #2 remain source labels; source-reported GM dexos and NSF H1 claims are not represented as independently verified approvals."
+    },
+    {
+      "source_id": "EL_SALVADOR_MECHA_TOOL_CURRENT_CATALOG",
+      "title": "Current official Mecha-Tool and Valgab lubricant catalog for El Salvador",
+      "owner": "Mecha-Tool El Salvador / M & J Sunshine, Corporation",
+      "source_type": "official_brand_wordpress_product_catalog_and_linked_technical_documents",
+      "source_locator": "data/el-salvador-mecha-tool-current-products.jsonl",
+      "source_url": "https://mechatoolsv.com/catalogo-de-productos/",
+      "terms_url": "https://mechatoolsv.com/",
+      "source_sha256": "0d5db0d37f1a54bd625b2fc0235e9c207f1a0cbd41b3897c130f0178e7c77fc8",
+      "access_status": "public_official_brand_catalog_and_documents_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_page_image_or_pdf_redistribution",
+      "observed_count": 59,
+      "notes": "The complete current WordPress denominator contains 26 cards: 12 automotive, 12 industrial and two Valgab. All 26 product images and 37 linked PDF references (33 unique payloads) are SHA-256 audited. Explicit card/image/TDS grades create 67 page-grade occurrences; eight duplicate English/Spanish FORZA turbine occurrences collapse to 59 product identities. Two exact Mecha Tool Full Synthetic 0W-20 and 5W-30 identities enrich existing current GM dexos1 Gen3 licence records; 57 identities are added. Mislinked or conflicting documents are flagged: the CI-4 page links a CK-4 renewal letter, two semi-synthetic card grades are absent from the linked TDS table, hydraulic AW lists ISO 220 while its property table prints 22, and synthetic AW 68 repeats ISO 46 properties. No conflict is silently converted into API, OEM approval, ISO VG or licence truth."
+    },
+    {
+      "source_id": "BELIZE_ILB_CURRENT_PRODUCT_CATALOG",
+      "title": "Current International Lubricants of Belize distributor product catalog",
+      "owner": "International Lubricants of Belize",
+      "source_type": "official_authorized_distributor_wordpress_product_catalog_and_card_images",
+      "source_locator": "data/belize-ilb-current-availability.jsonl",
+      "source_url": "https://ilb.bz/shop/",
+      "terms_url": "https://ilb.bz/",
+      "source_sha256": "05f12ea8d3ef174c3e102b53c9e0ab4f107539dc356028de484570e56245299a",
+      "access_status": "public_official_distributor_catalog_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_page_or_image_redistribution",
+      "observed_count": 77,
+      "notes": "The complete current WordPress denominator contains 112 cards. Thirty-five package-only variants collapse to 77 exact printed product-label identities: 76 Chevron and one Revolub. All 112 card-image payloads are downloaded and SHA-256 audited. The rows remain a separate Belize availability layer pending or linking to manufacturer-level global identity passes, preventing country-specific Chevron duplicates. SAE, API, API GL, ISO, NLGI, DOT, coolant premix and TC-W3 values are extracted only when explicitly present in the product title; no unseen approval, formulation or current manufacturer licence is inferred."
     }
   ]
 }

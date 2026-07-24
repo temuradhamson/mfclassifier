@@ -111,6 +111,8 @@ CUBA_CUBALUB_2007_JSONL = ROOT / "data" / "cuba-cubalub-2007-official-products.j
 PANAMA_ACODECO_2020_JSONL = ROOT / "data" / "panama-acodeco-2020-lubricant-price-survey.jsonl"
 NICARAGUA_LUBRINSA_LOCAL_JSONL = ROOT / "data" / "nicaragua-lubrinsa-current-local-fluids.jsonl"
 HONDURAS_HONDULUB_OIL_STAR_JSONL = ROOT / "data" / "honduras-hondulub-current-oil-star-products.jsonl"
+EL_SALVADOR_MECHA_TOOL_JSONL = ROOT / "data" / "el-salvador-mecha-tool-current-products.jsonl"
+BELIZE_ILB_AVAILABILITY_JSONL = ROOT / "data" / "belize-ilb-current-availability.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
 SON_MANCAP_JSONL = ROOT / "data" / "son-mancap-chemical-lubricant-products.jsonl"
@@ -4053,6 +4055,105 @@ def honduras_hondulub_oil_star_record(row: dict) -> dict:
     return record
 
 
+def el_salvador_mecha_tool_record(row: dict) -> dict:
+    """Convert one current Mecha-Tool/Valgab manufacturer product identity."""
+    technical = row["technical"]
+    api_class = "; ".join(
+        [f"API {value}" for value in technical["api"]]
+        + [f"API {value}" for value in technical["api_gl"]]
+        + [f"ACEA {value}" for value in technical["acea"]]
+        + [f"ILSAC {value}" for value in technical["ilsac"]]
+    )
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Current official Mecha-Tool El Salvador product catalog",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": technical["sae_engine"] or technical["sae_gear"],
+        "api_class": api_class,
+        "viscosity": technical["iso_vg"],
+        "grease_class": technical["nlgi"],
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": row["evidence_status"],
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update({
+        "sae_engine": technical["sae_engine"],
+        "sae_gear": technical["sae_gear"],
+        "iso_vg": technical["iso_vg"],
+        "nlgi": technical["nlgi"],
+        "source_grade": technical["source_grade"],
+        "api": technical["api"],
+        "api_gl": technical["api_gl"],
+        "acea": technical["acea"],
+        "ilsac": technical["ilsac"],
+        "jaso": technical["jaso"],
+        "dot": technical["dot"],
+        "coolant_class": technical["coolant_class"],
+        "performance_source_reported": technical["performance"],
+        "packages_source_reported": row["packages"],
+        "source_page_ids": row["source_page_ids"],
+        "source_page_urls": row["source_page_urls"],
+        "source_page_titles": row["source_page_titles"],
+        "source_page_modified_gmt": row["source_page_modified_gmt"],
+        "source_categories": row["source_categories"],
+        "source_images": row["source_images"],
+        "supporting_documents": row["supporting_documents"],
+        "source_facts_sha256": row["source_facts_sha256"],
+        "source_quality_flags": row["source_quality_flags"],
+    })
+    record["canonical_key"] += (
+        f"|el_salvador_mecha_tool:{normalize(row['source_record_id'])}"
+    )
+    record["product_id"] = (
+        "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    )
+    return record
+
+
+def merge_el_salvador_mecha_tool_evidence(
+    target: dict,
+    source_record: dict,
+    raw: dict,
+) -> None:
+    """Attach a current local product card to one exact GM licence identity."""
+    target_specs = target["specifications"]
+    source_specs = source_record["specifications"]
+    for key in ("api", "api_gl", "acea", "ilsac", "jaso"):
+        target_specs[key] = sorted(
+            set(target_specs.get(key, [])) | set(source_specs.get(key, []))
+        )
+    target_specs.setdefault("el_salvador_mecha_tool_catalog_evidence", []).append({
+        "source_record_id": raw["source_record_id"],
+        "source_page_ids": raw["source_page_ids"],
+        "source_page_urls": raw["source_page_urls"],
+        "source_page_titles": raw["source_page_titles"],
+        "source_page_modified_gmt": raw["source_page_modified_gmt"],
+        "source_images": raw["source_images"],
+        "supporting_documents": raw["supporting_documents"],
+        "packages_source_reported": raw["packages"],
+        "performance_source_reported": raw["technical"]["performance"],
+        "source_quality_flags": raw["source_quality_flags"],
+        "source_facts_sha256": raw["source_facts_sha256"],
+        "matched_gm_source_record_id": raw["existing_gm_source_record_id"],
+    })
+    target["lifecycle_status"] = "listed_on_current_official_brand_catalog"
+    target["snapshot_date"] = SNAPSHOT_DATE
+
+
 def kebs_smark_record(row: dict) -> dict:
     """Convert one normalized product identity from the public KEBS S-Mark directory."""
     technical = row["technical"]
@@ -5915,6 +6016,57 @@ def main() -> None:
     honduras_hondulub_oil_star_source_rows = [json.loads(line) for line in HONDURAS_HONDULUB_OIL_STAR_JSONL.read_text(encoding="utf-8").splitlines() if line]
     honduras_hondulub_oil_star_records = [honduras_hondulub_oil_star_record(row) for row in honduras_hondulub_oil_star_source_rows]
     input_records.extend(honduras_hondulub_oil_star_records)
+    belize_ilb_availability_rows = [
+        json.loads(line)
+        for line in BELIZE_ILB_AVAILABILITY_JSONL.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        if line
+    ]
+    el_salvador_mecha_tool_source_rows = [json.loads(line) for line in EL_SALVADOR_MECHA_TOOL_JSONL.read_text(encoding="utf-8").splitlines() if line]
+    el_salvador_mecha_tool_records = [el_salvador_mecha_tool_record(row) for row in el_salvador_mecha_tool_source_rows]
+    gm_record_by_source_record_id = {
+        row["source_record_id"]: row
+        for row in unique_licensed_records
+        if row["source_id"].startswith("GM_")
+    }
+    el_salvador_mecha_tool_product_key = {}
+    el_salvador_mecha_tool_matched_to_existing = 0
+    el_salvador_mecha_tool_products_added = 0
+    for raw, source_record in zip(
+        el_salvador_mecha_tool_source_rows,
+        el_salvador_mecha_tool_records,
+    ):
+        gm_source_record_id = raw["existing_gm_source_record_id"]
+        if gm_source_record_id:
+            target = gm_record_by_source_record_id.get(gm_source_record_id)
+            if target is None:
+                raise RuntimeError(
+                    "Mecha-Tool exact GM licence target disappeared: "
+                    + gm_source_record_id
+                )
+            if (
+                target["family_code"] != raw["family_code"]
+                or normalize(target["specifications"]["sae_engine"])
+                != normalize(raw["technical"]["sae_engine"])
+            ):
+                raise RuntimeError(
+                    "Mecha-Tool exact GM licence target technical drift: "
+                    + gm_source_record_id
+                )
+            merge_el_salvador_mecha_tool_evidence(
+                target,
+                source_record,
+                raw,
+            )
+            el_salvador_mecha_tool_matched_to_existing += 1
+        else:
+            target = source_record
+            input_records.append(target)
+            el_salvador_mecha_tool_products_added += 1
+        el_salvador_mecha_tool_product_key[
+            raw["source_record_id"]
+        ] = target["canonical_key"]
     ecuador_inen_current_record_by_id = {
         raw["source_record_id"]: record
         for raw, record in zip(ecuador_inen_current_source_rows, ecuador_inen_current_records)
@@ -7245,6 +7397,25 @@ def main() -> None:
         "source_row": row["source_row"], "relation": "primary_seed_record",
     } for row in records]
     source_link_keys = {(link["product_id"], link["source_id"], link["source_record_id"]) for link in source_links}
+    for raw in el_salvador_mecha_tool_source_rows:
+        target = canonical_by_key[
+            el_salvador_mecha_tool_product_key[raw["source_record_id"]]
+        ]
+        link = {
+            "product_id": target["product_id"],
+            "source_id": raw["source_id"],
+            "source_record_id": raw["source_record_id"],
+            "source_row": None,
+            "relation": "official_current_brand_catalog_product_identity",
+        }
+        link_key = (
+            link["product_id"],
+            link["source_id"],
+            link["source_record_id"],
+        )
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     for raw in anp_monitoring_source_rows:
         target = canonical_by_key[anp_monitoring_product_key[raw["source_record_id"]]]
         link = {
@@ -8321,6 +8492,8 @@ def main() -> None:
         "panama_acodeco_2020_input_sha256": hashlib.sha256(PANAMA_ACODECO_2020_JSONL.read_bytes()).hexdigest(),
         "nicaragua_lubrinsa_local_input_sha256": hashlib.sha256(NICARAGUA_LUBRINSA_LOCAL_JSONL.read_bytes()).hexdigest(),
         "honduras_hondulub_oil_star_input_sha256": hashlib.sha256(HONDURAS_HONDULUB_OIL_STAR_JSONL.read_bytes()).hexdigest(),
+        "el_salvador_mecha_tool_input_sha256": hashlib.sha256(EL_SALVADOR_MECHA_TOOL_JSONL.read_bytes()).hexdigest(),
+        "belize_ilb_availability_input_sha256": hashlib.sha256(BELIZE_ILB_AVAILABILITY_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "son_mancap_input_sha256": hashlib.sha256(SON_MANCAP_JSONL.read_bytes()).hexdigest(),
@@ -8382,6 +8555,18 @@ def main() -> None:
         "official_licensed_canonical_records_before_global_deduplication": len(unique_licensed_records),
         "gm_dual_standard_license_rows_merged": gm_dual_standard_license_rows_merged,
         "gm_license_code_name_collisions_retained": gm_license_code_name_collisions_retained,
+        "el_salvador_mecha_tool_source_rows": len(
+            el_salvador_mecha_tool_source_rows
+        ),
+        "el_salvador_mecha_tool_products_matched_to_existing": (
+            el_salvador_mecha_tool_matched_to_existing
+        ),
+        "el_salvador_mecha_tool_products_added": (
+            el_salvador_mecha_tool_products_added
+        ),
+        "belize_ilb_availability_source_rows": len(
+            belize_ilb_availability_rows
+        ),
         "blue_angel_source_rows": len(blue_angel_source_rows),
         "blue_angel_products_matched_to_existing": blue_angel_matched_rows,
         "blue_angel_products_added": blue_angel_added_rows,

@@ -1,0 +1,14 @@
+{
+  "asset_facts_sha256": "e34ae5fa3e53e1b5473f259b3f5e7ca4b4058388f2d33b19208e6dfae5e9b318",
+  "asset_urls_audited": 823,
+  "document_bytes": 294091818,
+  "document_urls_audited": 588,
+  "image_bytes": 10663692,
+  "image_urls_audited": 235,
+  "product_cards": 325,
+  "snapshot_date": "2026-07-24",
+  "source_id": "BELIZE_RYMAX_CURRENT_PRODUCT_CATALOG",
+  "unique_asset_payloads": 815,
+  "unique_document_payloads": 587,
+  "unique_image_payloads": 228
+}
