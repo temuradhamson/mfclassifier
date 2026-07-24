@@ -1,0 +1,28 @@
+{
+  "markets": [
+    "Anguilla",
+    "Antigua and Barbuda",
+    "Barbados",
+    "Grenada",
+    "Guyana",
+    "Montserrat",
+    "Saint Lucia",
+    "Saint Kitts and Nevis",
+    "Saint Vincent and the Grenadines",
+    "Jamaica",
+    "Sint Maarten (Dutch part)",
+    "Suriname",
+    "British Virgin Islands"
+  ],
+  "normalized_output_sha256": "14ea7c9bc6d05c2a138c5ef1145febb4f835145dabc83b9adefb0b05b9af78a0",
+  "quality_note": "The official page identifies export territories for NPMC non-fuel products. Rows prove NP ULTRA market presence only; they do not assert local availability of any specific SKU.",
+  "repeated_source_labels": {
+    "Grenada": 2
+  },
+  "snapshot_date": "2026-07-24",
+  "source_id": "NP_ULTRA_CURRENT_EXPORT_MARKET_PRESENCE",
+  "source_market_occurrences": 14,
+  "source_page_modified_gmt": "2025-07-07T09:25:58",
+  "source_url": "https://www.np.co.tt/ultra-lubricants/",
+  "unique_market_rows": 13
+}

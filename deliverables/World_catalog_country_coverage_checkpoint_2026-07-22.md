@@ -255,6 +255,15 @@ source links; старых product ID удалено 0.
   без JSON-LD используют явно помеченный fallback к фактическому tracking-блоку
   той же страницы. Два полных прохода дали байт-в-байт одинаковые SKU, product
   и report hashes; маркетинговые тексты и изображения не перераспространяются.
+- NP ULTRA — текущая официальная страница NPMC называет 14 появлений экспортных
+  рынков, соответствующих 13 уникальным нормализованным территориям: Anguilla,
+  Antigua and Barbuda, Barbados, Grenada, Guyana, Montserrat, Saint Lucia,
+  Saint Kitts and Nevis, Saint Vincent and the Grenadines, Jamaica,
+  Sint Maarten, Suriname и British Virgin Islands (source label Tortola).
+  Grenada дважды повторена в исходном предложении и сохранена как два source
+  occurrence, но одна market row. Это только manufacturer-stated presence:
+  уже интегрированные 141 product-grade identities NP ULTRA не копируются
+  в каждую страну, наличие конкретных SKU не утверждается.
 - Глобальный официальный Shell distributor locator — 118 страновых разделов,
   117 уникальных market labels и 167 явно названных distributor identities.
   Cook Islands опубликованы двумя отдельными разделами и сохранены как два
@@ -376,7 +385,7 @@ source links; старых product ID удалено 0.
 
 - Текущий подтверждённый seed после интеграции Sol Grenada: 117 469
   канонических продуктовых строк и 5 027 offer/SKU-записей.
-- Source policy: 205 записей, из них 175 разрешены для фактического bulk-ingest
+- Source policy: 206 записей, из них 176 разрешены для фактического bulk-ingest
   и 30 заблокированы политикой/правами/доступом.
 - Все исходные документы закрепляются SHA-256; PDF/XLS/DOCX не
   перераспространяются, публикуются только атрибутированные фактические поля.

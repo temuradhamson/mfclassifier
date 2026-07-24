@@ -294,6 +294,8 @@ def main() -> None:
     grenada_sol_report = json.loads((ROOT / "data/grenada-sol-current-catalog-report.json").read_text(encoding="utf-8"))
     grenada_sol_sku_rows = [json.loads(line) for line in (ROOT / "data/grenada-sol-current-skus.jsonl").read_text(encoding="utf-8").splitlines() if line]
     grenada_sol_product_rows = [json.loads(line) for line in (ROOT / "data/grenada-sol-current-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    np_ultra_export_presence_report = json.loads((ROOT / "data/np-ultra-current-export-presence-report.json").read_text(encoding="utf-8"))
+    np_ultra_export_presence_rows = [json.loads(line) for line in (ROOT / "data/np-ultra-current-export-presence.jsonl").read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_report = json.loads((ROOT / "data/kebs-smark-lubricant-products-report.json").read_text(encoding="utf-8"))
     kebs_smark_rows = [json.loads(line) for line in (ROOT / "data/kebs-smark-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     east_africa_report = json.loads((ROOT / "data/east-africa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -3157,6 +3159,58 @@ def main() -> None:
         "price_amount", "price_currency", "price_status",
         "availability", "source_url",
     }
+    assert np_ultra_export_presence_report[
+        "source_market_occurrences"
+    ] == 14
+    assert np_ultra_export_presence_report[
+        "unique_market_rows"
+    ] == len(np_ultra_export_presence_rows) == report[
+        "np_ultra_export_presence_source_rows"
+    ] == 13
+    assert np_ultra_export_presence_report["repeated_source_labels"] == {
+        "Grenada": 2,
+    }
+    assert np_ultra_export_presence_report[
+        "normalized_output_sha256"
+    ] == hashlib.sha256(
+        (ROOT / "data/np-ultra-current-export-presence.jsonl").read_bytes()
+    ).hexdigest() == report["np_ultra_export_presence_input_sha256"]
+    assert policy_by_id[
+        "NP_ULTRA_CURRENT_EXPORT_MARKET_PRESENCE"
+    ]["source_sha256"] == np_ultra_export_presence_report[
+        "normalized_output_sha256"
+    ]
+    assert policy_by_id[
+        "NP_ULTRA_CURRENT_EXPORT_MARKET_PRESENCE"
+    ]["observed_count"] == 13
+    assert {row["market"] for row in np_ultra_export_presence_rows} == {
+        "Anguilla",
+        "Antigua and Barbuda",
+        "Barbados",
+        "British Virgin Islands",
+        "Grenada",
+        "Guyana",
+        "Jamaica",
+        "Montserrat",
+        "Saint Kitts and Nevis",
+        "Saint Lucia",
+        "Saint Vincent and the Grenadines",
+        "Sint Maarten (Dutch part)",
+        "Suriname",
+    }
+    assert all(
+        row["product_scope_status"]
+        == "existing_np_ultra_product_catalog_not_replicated_by_market"
+        for row in np_ultra_export_presence_rows
+    )
+    assert db.execute(
+        "SELECT count(*) FROM products "
+        "WHERE source_id='NP_ULTRA_CURRENT_EXPORT_MARKET_PRESENCE'"
+    ).fetchone()[0] == 0
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id='NP_ULTRA_CURRENT_EXPORT_MARKET_PRESENCE'"
+    ).fetchone()[0] == 0
     assert policy_by_id["VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG"]["observed_count"] == 23
     assert db.execute(
         "SELECT count(*) FROM products WHERE source_id='VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG'"

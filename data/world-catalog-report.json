@@ -68,6 +68,7 @@
   "rubis_caribbean_total_presence_input_sha256": "51b4379b3875f376929245e79ac3fdad896d444fec117349839cf01612088b27",
   "grenada_sol_current_skus_input_sha256": "4f3a9bf70c842d68e03d02c54ab256ecb639830b42bb27bcff537bc7f88f722c",
   "grenada_sol_current_products_input_sha256": "b97b601b8b9d6c5b37fa408e6353f6b1b6034170ea7173eb85c6a26fe5a5fa89",
+  "np_ultra_export_presence_input_sha256": "14ea7c9bc6d05c2a138c5ef1145febb4f835145dabc83b9adefb0b05b9af78a0",
   "kebs_smark_input_sha256": "629656be992d2fd2969db6839d22ff57c59017a36f8b402dd40b74702cb25df8",
   "east_africa_certified_input_sha256": "fa272e24f17a96b732c6edcf09914de0bbd4a245ccd94a33cab415213cf164ab",
   "son_mancap_input_sha256": "3728be0200a766f1a862f3c2bd0cf6b92bc6bf9b4d78e832e7c117a2d3a1ec36",
@@ -159,6 +160,7 @@
   "rubis_caribbean_total_presence_source_rows": 6,
   "grenada_sol_current_sku_rows": 54,
   "grenada_sol_current_product_rows": 43,
+  "np_ultra_export_presence_source_rows": 13,
   "grenada_sol_products_matched_to_existing": 31,
   "grenada_sol_products_added": 12,
   "grenada_sol_multi_candidate_rows": 14,
@@ -816,7 +818,8 @@
     "HAITI_LUBEX_MAG1_CURRENT_DISTRIBUTOR_PRESENCE",
     "ANTIGUA_VADD_SHELL_CURRENT_DISTRIBUTOR_PRESENCE",
     "RUBIS_CARIBBEAN_TOTAL_CURRENT_RETAIL_PRESENCE",
-    "GRENADA_SOL_CURRENT_ECOMMERCE_CATALOG"
+    "GRENADA_SOL_CURRENT_ECOMMERCE_CATALOG",
+    "NP_ULTRA_CURRENT_EXPORT_MARKET_PRESENCE"
   ],
   "bulk_sources_blocked": [
     "fuchs-benelux",

@@ -2926,6 +2926,21 @@
       "publication_status": "attributed_transformed_nonexpressive_product_specification_price_and_availability_facts_only_no_marketing_text_or_images_redistributed",
       "observed_count": 43,
       "notes": "Nine official lubricant leaf categories contain 57 listing occurrences and 54 unique Mobil package SKUs, collapsed by full professional signature into 43 product-grade identities (G2/H5/I5/M24/T7). Forty-nine SKUs have positive published XCD prices; five source pages expose zero-price placeholders without currency and are excluded from usable price analytics. Availability is retained as 49 InStock, four OutOfStock and one NotAvailable. Five pages omit JSON-LD and use a flagged same-page factual tracking fallback. Independent complete reruns reproduced byte-identical SKU, product and report outputs. Package SKUs remain offers; no availability of Mobil's unlisted global range is inferred."
+    },
+    {
+      "source_id": "NP_ULTRA_CURRENT_EXPORT_MARKET_PRESENCE",
+      "title": "Current first-party NP ULTRA export-market presence in 13 Caribbean markets",
+      "owner": "Trinidad & Tobago National Petroleum Marketing Company Limited",
+      "source_type": "official_manufacturer_first_party_export_market_presence_statement",
+      "source_locator": "data/np-ultra-current-export-presence.jsonl",
+      "source_url": "https://www.np.co.tt/ultra-lubricants/",
+      "terms_url": "https://www.np.co.tt/ultra-lubricants/",
+      "source_sha256": "14ea7c9bc6d05c2a138c5ef1145febb4f835145dabc83b9adefb0b05b9af78a0",
+      "access_status": "public_official_manufacturer_web_page",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_brand_and_export_market_facts_only_no_marketing_text_or_images_redistributed",
+      "observed_count": 13,
+      "notes": "The official NP ULTRA page names 14 export-market occurrences for NPMC non-fuel products, representing 13 unique normalized markets because Grenada is repeated verbatim. The rows prove current manufacturer-stated market presence only. They do not replicate the already integrated 141 NP ULTRA product-grade identities into each country or establish availability, stock, price or formulation for a specific local SKU."
     }
   ]
 }

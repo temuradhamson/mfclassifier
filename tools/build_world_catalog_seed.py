@@ -126,6 +126,7 @@ ANTIGUA_VADD_SHELL_PRESENCE_JSONL = ROOT / "data" / "antigua-vadd-shell-current-
 RUBIS_CARIBBEAN_TOTAL_PRESENCE_JSONL = ROOT / "data" / "rubis-caribbean-total-current-presence.jsonl"
 GRENADA_SOL_CURRENT_SKUS_JSONL = ROOT / "data" / "grenada-sol-current-skus.jsonl"
 GRENADA_SOL_CURRENT_PRODUCTS_JSONL = ROOT / "data" / "grenada-sol-current-products.jsonl"
+NP_ULTRA_EXPORT_PRESENCE_JSONL = ROOT / "data" / "np-ultra-current-export-presence.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
 SON_MANCAP_JSONL = ROOT / "data" / "son-mancap-chemical-lubricant-products.jsonl"
@@ -6542,6 +6543,13 @@ def main() -> None:
         ).splitlines()
         if line
     ]
+    np_ultra_export_presence_rows = [
+        json.loads(line)
+        for line in NP_ULTRA_EXPORT_PRESENCE_JSONL.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        if line
+    ]
     grenada_sol_current_product_records = [
         grenada_sol_current_product_record(row)
         for row in grenada_sol_current_product_rows
@@ -9393,6 +9401,7 @@ def main() -> None:
         "rubis_caribbean_total_presence_input_sha256": hashlib.sha256(RUBIS_CARIBBEAN_TOTAL_PRESENCE_JSONL.read_bytes()).hexdigest(),
         "grenada_sol_current_skus_input_sha256": hashlib.sha256(GRENADA_SOL_CURRENT_SKUS_JSONL.read_bytes()).hexdigest(),
         "grenada_sol_current_products_input_sha256": hashlib.sha256(GRENADA_SOL_CURRENT_PRODUCTS_JSONL.read_bytes()).hexdigest(),
+        "np_ultra_export_presence_input_sha256": hashlib.sha256(NP_ULTRA_EXPORT_PRESENCE_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "son_mancap_input_sha256": hashlib.sha256(SON_MANCAP_JSONL.read_bytes()).hexdigest(),
@@ -9504,6 +9513,9 @@ def main() -> None:
         "grenada_sol_current_sku_rows": len(grenada_sol_current_sku_rows),
         "grenada_sol_current_product_rows": len(
             grenada_sol_current_product_rows
+        ),
+        "np_ultra_export_presence_source_rows": len(
+            np_ultra_export_presence_rows
         ),
         "grenada_sol_products_matched_to_existing": (
             grenada_sol_products_matched_to_existing
