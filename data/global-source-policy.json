@@ -2791,6 +2791,36 @@
       "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_page_or_image_redistribution",
       "observed_count": 33,
       "notes": "Nine professional product sections yield 36 Mobil listing-card occurrences collapsed to 33 product identities after three explicit package-only repeats. The layer covers gasoline and diesel engine oils, automotive and industrial gear oils, greases, compressor/circulating/hydraulic/transmission oils and Mobil Jet Oil 254. Four identities have contradictory in-stock/not-available observations between browser surfaces; both statuses are retained. Several category routes intermittently return 404 to command-line clients, so no unavailable page/image hash is claimed. These rows are Barbados availability evidence pending strict matching to global Mobil identities; they do not create country-specific manufacturer masters."
+    },
+    {
+      "source_id": "SHELL_GLOBAL_CURRENT_APPROVED_DISTRIBUTOR_LOCATOR",
+      "title": "Current Shell global approved distributor locator",
+      "owner": "Shell plc",
+      "source_type": "official_global_structured_country_distributor_locator",
+      "source_locator": "data/shell-global-current-distributors.jsonl",
+      "source_url": "https://www.shell.com/motorist/oils-lubricants/distributor-locator.html",
+      "terms_url": "https://www.shell.com/terms-of-use.html",
+      "source_sha256": "6e0576a4d916eddfa5a5dcbabdd55cdddfff0fc6cbb3b327c253fa5c7e8387a1",
+      "access_status": "public_official_structured_model_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_distributor_fields_only_no_source_page_or_model_redistribution",
+      "observed_count": 118,
+      "notes": "The official page, last modified 2026-07-21T18:30Z, contains 118 country-section rows covering 117 unique market labels; Cook Islands appears twice and is retained as two source sections. 117 sections contain distributor details, while the listed Tajikistan section is empty and therefore is not treated as confirmed availability. The normalized layer records 167 explicitly labelled distributor identities plus public business links and block hashes. It proves only approved distributor market presence and must never be expanded into country-level SKU, stock or full-range availability claims."
+    },
+    {
+      "source_id": "CASTROL_GLOBAL_CURRENT_AUTHORISED_DISTRIBUTORS",
+      "title": "Current Castrol global authorised distributor registry",
+      "owner": "Castrol Limited",
+      "source_type": "official_global_country_and_sector_distributor_tables",
+      "source_locator": "data/castrol-global-current-distributors.jsonl",
+      "source_url": "https://www.castrol.com/en/global/corporate/about-castrol/distributors.html",
+      "terms_url": "https://www.castrol.com/en/global/corporate/legal-notice.html",
+      "source_sha256": "44d79953d2e101f39e32b82975d5a51399d992ca8114e9950417b574829c7d6f",
+      "access_status": "public_official_html_tables_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_distributor_fields_only_no_source_page_redistribution",
+      "observed_count": 368,
+      "notes": "The current official page contains 106 market tables and 368 authorised distributor rows representing 345 unique case-folded distributor names; 35 markets list more than one row. Published sectors are preserved, while postal addresses and telephone numbers are deliberately omitted from normalized output and retained only indirectly in per-row source hashes. This layer proves authorised Castrol distribution by market and sector only; it cannot establish a local SKU, exact specification, stock status or the presence of Castrol's complete global range."
     }
   ]
 }

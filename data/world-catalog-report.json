@@ -58,6 +58,8 @@
   "belize_rymax_products_input_sha256": "6ba88fb1fe6eb963690465d2be385fa3bf3834511fdcde7186293c021b12f317",
   "bahamas_cbs_availability_input_sha256": "c2aa64a6096e34716c52b6ec62f28a26d6ca70aa03fe49daa3a9be6d660191d1",
   "barbados_sol_availability_input_sha256": "fbbdfb5431af025ae39fa87cec19649ddea7ef92de885111ab04d75e2058172e",
+  "shell_global_distributors_input_sha256": "6e0576a4d916eddfa5a5dcbabdd55cdddfff0fc6cbb3b327c253fa5c7e8387a1",
+  "castrol_global_distributors_input_sha256": "44d79953d2e101f39e32b82975d5a51399d992ca8114e9950417b574829c7d6f",
   "kebs_smark_input_sha256": "629656be992d2fd2969db6839d22ff57c59017a36f8b402dd40b74702cb25df8",
   "east_africa_certified_input_sha256": "fa272e24f17a96b732c6edcf09914de0bbd4a245ccd94a33cab415213cf164ab",
   "son_mancap_input_sha256": "3728be0200a766f1a862f3c2bd0cf6b92bc6bf9b4d78e832e7c117a2d3a1ec36",
@@ -137,6 +139,8 @@
   "belize_rymax_source_rows": 313,
   "bahamas_cbs_availability_source_rows": 51,
   "barbados_sol_availability_source_rows": 33,
+  "shell_global_distributors_source_rows": 118,
+  "castrol_global_distributors_source_rows": 368,
   "blue_angel_source_rows": 148,
   "blue_angel_products_matched_to_existing": 21,
   "blue_angel_products_added": 127,
@@ -775,7 +779,9 @@
     "BELIZE_ILB_CURRENT_PRODUCT_CATALOG",
     "BELIZE_RYMAX_CURRENT_PRODUCT_CATALOG",
     "BAHAMAS_CBS_CURRENT_AVAILABILITY",
-    "BARBADOS_SOL_RECENT_ECOMMERCE_CATALOG"
+    "BARBADOS_SOL_RECENT_ECOMMERCE_CATALOG",
+    "SHELL_GLOBAL_CURRENT_APPROVED_DISTRIBUTOR_LOCATOR",
+    "CASTROL_GLOBAL_CURRENT_AUTHORISED_DISTRIBUTORS"
   ],
   "bulk_sources_blocked": [
     "fuchs-benelux",

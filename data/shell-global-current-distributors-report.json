@@ -1,0 +1,29 @@
+{
+  "country_section_rows": 118,
+  "duplicate_market_section_counts": {
+    "Cook Islands": 2
+  },
+  "normalized_output_sha256": "6e0576a4d916eddfa5a5dcbabdd55cdddfff0fc6cbb3b327c253fa5c7e8387a1",
+  "official_page_last_modified": "2026-07-21T18:30Z",
+  "published_brand_label_counts": {
+    "Pennzoil": 2,
+    "Shell": 107,
+    "Shell / Pennzoil": 1,
+    "Shell Lubricants, Pennzoil": 1,
+    "Shell, Pennzoil": 1,
+    "Shell/Pennzoil": 2,
+    "Shell/Pennzoil/Quaker": 1,
+    "Shell/Quaker": 1
+  },
+  "quality_note": "Approved-distributor market evidence only. It must not be expanded into country-level SKU availability or stock claims.",
+  "sections_with_distributor_details": 117,
+  "sections_without_distributor_details": [
+    "Tajikistan"
+  ],
+  "snapshot_date": "2026-07-24",
+  "source_id": "SHELL_GLOBAL_CURRENT_APPROVED_DISTRIBUTOR_LOCATOR",
+  "source_model_sha256": "71f621ed274d7914dca5faf2dea4f1657446c14fb136a115266fb0666598d9ad",
+  "source_model_url": "https://www.shell.com/motorist/oils-lubricants/distributor-locator.model.json",
+  "source_url": "https://www.shell.com/motorist/oils-lubricants/distributor-locator.html",
+  "unique_market_labels": 117
+}

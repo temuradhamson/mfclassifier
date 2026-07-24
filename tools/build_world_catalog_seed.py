@@ -116,6 +116,8 @@ BELIZE_ILB_AVAILABILITY_JSONL = ROOT / "data" / "belize-ilb-current-availability
 BELIZE_RYMAX_PRODUCTS_JSONL = ROOT / "data" / "belize-rymax-current-products.jsonl"
 BAHAMAS_CBS_AVAILABILITY_JSONL = ROOT / "data" / "bahamas-cbs-current-availability.jsonl"
 BARBADOS_SOL_AVAILABILITY_JSONL = ROOT / "data" / "barbados-sol-recent-availability.jsonl"
+SHELL_GLOBAL_DISTRIBUTORS_JSONL = ROOT / "data" / "shell-global-current-distributors.jsonl"
+CASTROL_GLOBAL_DISTRIBUTORS_JSONL = ROOT / "data" / "castrol-global-current-distributors.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
 SON_MANCAP_JSONL = ROOT / "data" / "son-mancap-chemical-lubricant-products.jsonl"
@@ -6165,6 +6167,20 @@ def main() -> None:
         ).splitlines()
         if line
     ]
+    shell_global_distributor_rows = [
+        json.loads(line)
+        for line in SHELL_GLOBAL_DISTRIBUTORS_JSONL.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        if line
+    ]
+    castrol_global_distributor_rows = [
+        json.loads(line)
+        for line in CASTROL_GLOBAL_DISTRIBUTORS_JSONL.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        if line
+    ]
     ecuador_inen_current_record_by_id = {
         raw["source_record_id"]: record
         for raw, record in zip(ecuador_inen_current_source_rows, ecuador_inen_current_records)
@@ -8595,6 +8611,8 @@ def main() -> None:
         "belize_rymax_products_input_sha256": hashlib.sha256(BELIZE_RYMAX_PRODUCTS_JSONL.read_bytes()).hexdigest(),
         "bahamas_cbs_availability_input_sha256": hashlib.sha256(BAHAMAS_CBS_AVAILABILITY_JSONL.read_bytes()).hexdigest(),
         "barbados_sol_availability_input_sha256": hashlib.sha256(BARBADOS_SOL_AVAILABILITY_JSONL.read_bytes()).hexdigest(),
+        "shell_global_distributors_input_sha256": hashlib.sha256(SHELL_GLOBAL_DISTRIBUTORS_JSONL.read_bytes()).hexdigest(),
+        "castrol_global_distributors_input_sha256": hashlib.sha256(CASTROL_GLOBAL_DISTRIBUTORS_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "son_mancap_input_sha256": hashlib.sha256(SON_MANCAP_JSONL.read_bytes()).hexdigest(),
@@ -8674,6 +8692,12 @@ def main() -> None:
         ),
         "barbados_sol_availability_source_rows": len(
             barbados_sol_availability_rows
+        ),
+        "shell_global_distributors_source_rows": len(
+            shell_global_distributor_rows
+        ),
+        "castrol_global_distributors_source_rows": len(
+            castrol_global_distributor_rows
         ),
         "blue_angel_source_rows": len(blue_angel_source_rows),
         "blue_angel_products_matched_to_existing": blue_angel_matched_rows,

@@ -274,6 +274,10 @@ def main() -> None:
     bahamas_cbs_rows = [json.loads(line) for line in (ROOT / "data/bahamas-cbs-current-availability.jsonl").read_text(encoding="utf-8").splitlines() if line]
     barbados_sol_report = json.loads((ROOT / "data/barbados-sol-recent-catalog-report.json").read_text(encoding="utf-8"))
     barbados_sol_rows = [json.loads(line) for line in (ROOT / "data/barbados-sol-recent-availability.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    shell_global_distributors_report = json.loads((ROOT / "data/shell-global-current-distributors-report.json").read_text(encoding="utf-8"))
+    shell_global_distributor_rows = [json.loads(line) for line in (ROOT / "data/shell-global-current-distributors.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    castrol_global_distributors_report = json.loads((ROOT / "data/castrol-global-current-distributors-report.json").read_text(encoding="utf-8"))
+    castrol_global_distributor_rows = [json.loads(line) for line in (ROOT / "data/castrol-global-current-distributors.jsonl").read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_report = json.loads((ROOT / "data/kebs-smark-lubricant-products-report.json").read_text(encoding="utf-8"))
     kebs_smark_rows = [json.loads(line) for line in (ROOT / "data/kebs-smark-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     east_africa_report = json.loads((ROOT / "data/east-africa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -2665,6 +2669,110 @@ def main() -> None:
     assert db.execute(
         "SELECT count(*) FROM product_sources "
         "WHERE source_id='BARBADOS_SOL_RECENT_ECOMMERCE_CATALOG'"
+    ).fetchone()[0] == 0
+    assert shell_global_distributors_report[
+        "country_section_rows"
+    ] == len(shell_global_distributor_rows) == report[
+        "shell_global_distributors_source_rows"
+    ] == 118
+    assert shell_global_distributors_report["unique_market_labels"] == 117
+    assert shell_global_distributors_report[
+        "duplicate_market_section_counts"
+    ] == {"Cook Islands": 2}
+    assert shell_global_distributors_report[
+        "sections_with_distributor_details"
+    ] == 117
+    assert shell_global_distributors_report[
+        "sections_without_distributor_details"
+    ] == ["Tajikistan"]
+    assert shell_global_distributors_report[
+        "official_page_last_modified"
+    ] == "2026-07-21T18:30Z"
+    assert shell_global_distributors_report[
+        "normalized_output_sha256"
+    ] == hashlib.sha256(
+        (ROOT / "data/shell-global-current-distributors.jsonl").read_bytes()
+    ).hexdigest()
+    assert report["shell_global_distributors_input_sha256"] == (
+        shell_global_distributors_report["normalized_output_sha256"]
+    )
+    assert policy_by_id[
+        "SHELL_GLOBAL_CURRENT_APPROVED_DISTRIBUTOR_LOCATOR"
+    ]["source_sha256"] == shell_global_distributors_report[
+        "normalized_output_sha256"
+    ]
+    assert policy_by_id[
+        "SHELL_GLOBAL_CURRENT_APPROVED_DISTRIBUTOR_LOCATOR"
+    ]["observed_count"] == 118
+    assert len({
+        row["source_record_id"] for row in shell_global_distributor_rows
+    }) == 118
+    assert sum(
+        len(row["distributor_names"])
+        for row in shell_global_distributor_rows
+    ) == 167
+    assert all(
+        row["product_scope_status"]
+        == "no_country_sku_or_stock_inference_permitted"
+        for row in shell_global_distributor_rows
+    )
+    assert db.execute(
+        "SELECT count(*) FROM products "
+        "WHERE source_id='SHELL_GLOBAL_CURRENT_APPROVED_DISTRIBUTOR_LOCATOR'"
+    ).fetchone()[0] == 0
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id='SHELL_GLOBAL_CURRENT_APPROVED_DISTRIBUTOR_LOCATOR'"
+    ).fetchone()[0] == 0
+    assert castrol_global_distributors_report[
+        "distributor_rows"
+    ] == len(castrol_global_distributor_rows) == report[
+        "castrol_global_distributors_source_rows"
+    ] == 368
+    assert castrol_global_distributors_report["market_tables"] == 106
+    assert castrol_global_distributors_report["unique_market_labels"] == 106
+    assert castrol_global_distributors_report[
+        "unique_distributor_names_casefolded"
+    ] == 345
+    assert castrol_global_distributors_report[
+        "markets_with_multiple_distributor_rows"
+    ] == 35
+    assert castrol_global_distributors_report[
+        "normalized_output_sha256"
+    ] == hashlib.sha256(
+        (ROOT / "data/castrol-global-current-distributors.jsonl").read_bytes()
+    ).hexdigest()
+    assert report["castrol_global_distributors_input_sha256"] == (
+        castrol_global_distributors_report["normalized_output_sha256"]
+    )
+    assert policy_by_id[
+        "CASTROL_GLOBAL_CURRENT_AUTHORISED_DISTRIBUTORS"
+    ]["source_sha256"] == castrol_global_distributors_report[
+        "normalized_output_sha256"
+    ]
+    assert policy_by_id[
+        "CASTROL_GLOBAL_CURRENT_AUTHORISED_DISTRIBUTORS"
+    ]["observed_count"] == 368
+    assert len({
+        (
+            row["market_label_as_published"],
+            row["source_table_row"],
+        )
+        for row in castrol_global_distributor_rows
+    }) == 368
+    assert all(
+        row["distributor_name"]
+        and row["product_scope_status"]
+        == "no_country_sku_or_stock_inference_permitted"
+        for row in castrol_global_distributor_rows
+    )
+    assert db.execute(
+        "SELECT count(*) FROM products "
+        "WHERE source_id='CASTROL_GLOBAL_CURRENT_AUTHORISED_DISTRIBUTORS'"
+    ).fetchone()[0] == 0
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id='CASTROL_GLOBAL_CURRENT_AUTHORISED_DISTRIBUTORS'"
     ).fetchone()[0] == 0
     assert policy_by_id["VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG"]["observed_count"] == 23
     assert db.execute(
