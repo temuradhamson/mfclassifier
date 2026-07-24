@@ -127,6 +127,8 @@ RUBIS_CARIBBEAN_TOTAL_PRESENCE_JSONL = ROOT / "data" / "rubis-caribbean-total-cu
 GRENADA_SOL_CURRENT_SKUS_JSONL = ROOT / "data" / "grenada-sol-current-skus.jsonl"
 GRENADA_SOL_CURRENT_PRODUCTS_JSONL = ROOT / "data" / "grenada-sol-current-products.jsonl"
 NP_ULTRA_EXPORT_PRESENCE_JSONL = ROOT / "data" / "np-ultra-current-export-presence.jsonl"
+CAYMAN_ACE_CURRENT_SKUS_JSONL = ROOT / "data" / "cayman-ace-current-automotive-fluids.jsonl"
+CAYMAN_ACE_CURRENT_PRODUCTS_JSONL = ROOT / "data" / "cayman-ace-current-automotive-products.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
 SON_MANCAP_JSONL = ROOT / "data" / "son-mancap-chemical-lubricant-products.jsonl"
@@ -4436,6 +4438,107 @@ def merge_grenada_sol_current_evidence(
     )
 
 
+def cayman_ace_current_product_record(row: dict) -> dict:
+    """Convert one package-collapsed ACE Cayman product-grade identity."""
+    specs = row["specifications"]
+    api_class = "; ".join(
+        [f"API {value}" for value in specs.get("api", [])]
+        + [f"DOT {value.removeprefix('DOT ')}" for value in specs.get("dot", [])]
+    )
+    sae_values = specs.get("sae_engine", []) or specs.get("sae_gear", [])
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "ACE Cayman automotive lubricant and fluid catalog",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": sae_values[0] if sae_values else "",
+        "api_class": api_class,
+        "viscosity": (
+            f"ISO VG {specs['iso_vg'][0]}"
+            if specs.get("iso_vg") else ""
+        ),
+        "grease_class": "",
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": "; ".join(row["manufacturers"]),
+        "brand": row["brand"],
+        "market": row["country"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": (
+            "official_country_retailer_historical_product_identity"
+            if "historical" in row["lifecycle_status"]
+            else "official_country_retailer_product_identity"
+        ),
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update({
+        "sae_engine": (
+            specs.get("sae_engine", [""])[0]
+            if specs.get("sae_engine") else ""
+        ),
+        "sae_gear": (
+            specs.get("sae_gear", [""])[0]
+            if specs.get("sae_gear") else ""
+        ),
+        "iso_vg": (
+            specs.get("iso_vg", [""])[0]
+            if specs.get("iso_vg") else ""
+        ),
+        "api": specs.get("api", []),
+        "dot": specs.get("dot", []),
+        "source_product_names": row["source_product_names"],
+        "source_skus": row["source_skus"],
+        "source_urls": row["source_urls"],
+        "source_quality_flags": row["source_quality_flags"],
+    })
+    record["canonical_key"] += (
+        f"|cayman_ace:{normalize(row['source_record_id'])}"
+    )
+    record["product_id"] = (
+        "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    )
+    return record
+
+
+def merge_cayman_ace_current_evidence(
+    target: dict,
+    source_record: dict,
+    raw: dict,
+    match_basis: str,
+) -> None:
+    """Attach Cayman retailer evidence without changing a product lifecycle."""
+    target_specs = target["specifications"]
+    source_specs = source_record["specifications"]
+    for key in ("api", "dot"):
+        target_specs[key] = sorted(
+            set(target_specs.get(key, [])) | set(source_specs.get(key, []))
+        )
+    for key in ("sae_engine", "sae_gear", "iso_vg"):
+        if not target_specs.get(key):
+            target_specs[key] = source_specs.get(key, "")
+    target_specs.setdefault("cayman_ace_catalog_evidence", []).append({
+        "source_record_id": raw["source_record_id"],
+        "source_product_names": raw["source_product_names"],
+        "source_skus": raw["source_skus"],
+        "source_urls": raw["source_urls"],
+        "source_lifecycle_status": raw["lifecycle_status"],
+        "source_quality_flags": raw["source_quality_flags"],
+        "match_basis": match_basis,
+    })
+    target["snapshot_date"] = max(
+        target.get("snapshot_date", ""),
+        raw["snapshot_date"],
+    )
+
+
 def mag1_current_official_record(row: dict) -> dict:
     """Convert one current official MAG 1 product/PDS identity."""
     technical = row["technical"]
@@ -6550,9 +6653,27 @@ def main() -> None:
         ).splitlines()
         if line
     ]
+    cayman_ace_current_sku_rows = [
+        json.loads(line)
+        for line in CAYMAN_ACE_CURRENT_SKUS_JSONL.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        if line
+    ]
+    cayman_ace_current_product_rows = [
+        json.loads(line)
+        for line in CAYMAN_ACE_CURRENT_PRODUCTS_JSONL.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        if line
+    ]
     grenada_sol_current_product_records = [
         grenada_sol_current_product_record(row)
         for row in grenada_sol_current_product_rows
+    ]
+    cayman_ace_current_product_records = [
+        cayman_ace_current_product_record(row)
+        for row in cayman_ace_current_product_rows
     ]
     bahamas_cbs_availability_rows = [
         json.loads(line)
@@ -7810,6 +7931,110 @@ def main() -> None:
         grenada_sol_product_key[
             raw["source_record_id"]
         ] = target["canonical_key"]
+    def cayman_ace_compact_name(value: str) -> str:
+        value = str(value).replace("™", "").replace("®", "")
+        return re.sub(r"[^\w]+", "", normalize(value), flags=re.UNICODE)
+
+    cayman_ace_existing_by_name = defaultdict(list)
+    cayman_brand_tokens = {
+        "valvoline": "valvoline",
+        "motul": "motul",
+        "lucas oil": "lucasoil",
+        "wd-40": "wd40",
+    }
+    for row in input_records:
+        brand_key = normalize(row.get("brand"))
+        brand_token = cayman_brand_tokens.get(brand_key)
+        if not brand_token:
+            continue
+        compact_name = cayman_ace_compact_name(row["product_name_raw"])
+        keys = {compact_name}
+        if compact_name.startswith(brand_token):
+            keys.add(compact_name[len(brand_token):])
+        for key in keys:
+            cayman_ace_existing_by_name[(brand_key, key)].append(row)
+    cayman_ace_product_key = {}
+    cayman_ace_products_matched_to_existing = 0
+    cayman_ace_products_added = 0
+    cayman_ace_multi_candidate_rows = 0
+    for raw, source_record in zip(
+        cayman_ace_current_product_rows,
+        cayman_ace_current_product_records,
+    ):
+        brand_key = normalize(raw["brand"])
+        source_names = {
+            cayman_ace_compact_name(raw["product_name"]),
+            *(
+                cayman_ace_compact_name(value)
+                for value in raw["source_product_names"]
+            ),
+        }
+        candidates = [
+            candidate
+            for source_name in source_names
+            for candidate in cayman_ace_existing_by_name[
+                (brand_key, source_name)
+            ]
+        ]
+        candidates = [
+            candidate
+            for candidate in candidates
+            if candidate["family_code"] == raw["family_code"]
+        ]
+        for spec_key in ("sae_engine", "sae_gear", "iso_vg"):
+            source_values = {
+                normalize(value)
+                for value in raw["specifications"].get(spec_key, [])
+                if normalize(value)
+            }
+            if not source_values:
+                continue
+            candidates = [
+                candidate
+                for candidate in candidates
+                if not normalize(
+                    candidate["specifications"].get(spec_key)
+                )
+                or normalize(
+                    candidate["specifications"].get(spec_key)
+                ) in source_values
+            ]
+        unique_candidates = {
+            candidate["canonical_key"]: candidate for candidate in candidates
+        }
+        candidates = list(unique_candidates.values())
+        match_basis = (
+            "exact_compact_brand_product_name_family_and_compatible_grade"
+        )
+        if candidates:
+            if len(candidates) > 1:
+                cayman_ace_multi_candidate_rows += 1
+            target = min(
+                candidates,
+                key=lambda row: (
+                    "historical" in row.get("lifecycle_status", ""),
+                    source_priority.get(row["source_id"], 10),
+                    row["canonical_key"],
+                ),
+            )
+            merge_cayman_ace_current_evidence(
+                target,
+                source_record,
+                raw,
+                match_basis,
+            )
+            cayman_ace_products_matched_to_existing += 1
+        else:
+            target = source_record
+            input_records.append(target)
+            for source_name in source_names:
+                cayman_ace_existing_by_name[
+                    (brand_key, source_name)
+                ].append(target)
+            cayman_ace_products_added += 1
+        cayman_ace_product_key[
+            raw["source_record_id"]
+        ] = target["canonical_key"]
     mag1_exact_existing_targets = {
         "MAG1-E2B79A248C5D": ("JASO_4T", "2332"),
         "MAG1-D32932ABC9C6": ("JASO_4T", "2331"),
@@ -8241,6 +8466,27 @@ def main() -> None:
             "source_record_id": raw["source_record_id"],
             "source_row": None,
             "relation": "official_country_ecommerce_product_identity",
+        }
+        link_key = (
+            link["product_id"],
+            link["source_id"],
+            link["source_record_id"],
+        )
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
+    for raw in cayman_ace_current_product_rows:
+        target = canonical_by_key[
+            cayman_ace_product_key[raw["source_record_id"]]
+        ]
+        link = {
+            "product_id": target["product_id"],
+            "source_id": raw["source_id"],
+            "source_record_id": raw["source_record_id"],
+            "source_row": None,
+            "relation": (
+                "official_country_retailer_product_identity_and_lifecycle"
+            ),
         }
         link_key = (
             link["product_id"],
@@ -8959,6 +9205,62 @@ def main() -> None:
             "availability": raw["availability"],
             "source_url": raw["source_url"],
         })
+    cayman_ace_sku_to_product = {
+        sku: product_row["source_record_id"]
+        for product_row in cayman_ace_current_product_rows
+        for sku in product_row["source_skus"]
+    }
+    for raw in cayman_ace_current_sku_rows:
+        product_source_record_id = cayman_ace_sku_to_product[
+            raw["source_sku"]
+        ]
+        target = canonical_by_key[
+            cayman_ace_product_key[product_source_record_id]
+        ]
+        is_discontinued = (
+            raw["lifecycle_status"]
+            == "discontinued_current_detail_page"
+        )
+        offers.append({
+            "offer_id": "ACE-CAYMAN-" + hashlib.sha256(
+                raw["source_record_id"].encode()
+            ).hexdigest()[:20],
+            "product_id": target["product_id"],
+            "market": "Cayman Islands",
+            "package_name": raw["source_product_name"],
+            "unit": raw["unit_of_measure"] or "catalog_package",
+            "quantity_per_package": None,
+            "weight_kg": None,
+            "density_kg_per_l": None,
+            "lifecycle_status": (
+                "historical_discontinued_retail_catalog"
+                if is_discontinued
+                else "listed_current_catalog_unavailable"
+            ),
+            "archive_type": (
+                "source_detail_page_discontinued"
+                if is_discontinued
+                else "current_out_of_stock"
+            ),
+            "archive_reason": (
+                "Source detail page explicitly says Discontinued"
+                if is_discontinued
+                else "Current listing badge reports outstock"
+            ),
+            "source_id": raw["source_id"],
+            "source_record_id": raw["source_record_id"],
+            "price_amount": raw["price_amount"],
+            "price_currency": raw["price_currency"],
+            "price_status": (
+                "published_on_discontinued_detail_page_snapshot"
+                if raw["price_amount"] is not None and is_discontinued
+                else "published_current_out_of_stock_price"
+                if raw["price_amount"] is not None
+                else "source_price_missing"
+            ),
+            "availability": raw["listing_availability"],
+            "source_url": raw["source_url"],
+        })
     for raw in liqui_moly_current_source_rows:
         target = canonical_by_key[liqui_moly_current_product_key[raw["source_record_id"]]]
         for article in raw["articles"]:
@@ -9402,6 +9704,8 @@ def main() -> None:
         "grenada_sol_current_skus_input_sha256": hashlib.sha256(GRENADA_SOL_CURRENT_SKUS_JSONL.read_bytes()).hexdigest(),
         "grenada_sol_current_products_input_sha256": hashlib.sha256(GRENADA_SOL_CURRENT_PRODUCTS_JSONL.read_bytes()).hexdigest(),
         "np_ultra_export_presence_input_sha256": hashlib.sha256(NP_ULTRA_EXPORT_PRESENCE_JSONL.read_bytes()).hexdigest(),
+        "cayman_ace_current_skus_input_sha256": hashlib.sha256(CAYMAN_ACE_CURRENT_SKUS_JSONL.read_bytes()).hexdigest(),
+        "cayman_ace_current_products_input_sha256": hashlib.sha256(CAYMAN_ACE_CURRENT_PRODUCTS_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "son_mancap_input_sha256": hashlib.sha256(SON_MANCAP_JSONL.read_bytes()).hexdigest(),
@@ -9516,6 +9820,23 @@ def main() -> None:
         ),
         "np_ultra_export_presence_source_rows": len(
             np_ultra_export_presence_rows
+        ),
+        "cayman_ace_current_sku_rows": len(
+            cayman_ace_current_sku_rows
+        ),
+        "cayman_ace_current_product_rows": len(
+            cayman_ace_current_product_rows
+        ),
+        "cayman_ace_products_matched_to_existing": (
+            cayman_ace_products_matched_to_existing
+        ),
+        "cayman_ace_products_added": cayman_ace_products_added,
+        "cayman_ace_multi_candidate_rows": (
+            cayman_ace_multi_candidate_rows
+        ),
+        "cayman_ace_priced_skus": sum(
+            row["price_amount"] is not None
+            for row in cayman_ace_current_sku_rows
         ),
         "grenada_sol_products_matched_to_existing": (
             grenada_sol_products_matched_to_existing

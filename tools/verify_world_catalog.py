@@ -296,6 +296,10 @@ def main() -> None:
     grenada_sol_product_rows = [json.loads(line) for line in (ROOT / "data/grenada-sol-current-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     np_ultra_export_presence_report = json.loads((ROOT / "data/np-ultra-current-export-presence-report.json").read_text(encoding="utf-8"))
     np_ultra_export_presence_rows = [json.loads(line) for line in (ROOT / "data/np-ultra-current-export-presence.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    cayman_ace_report = json.loads((ROOT / "data/cayman-ace-current-automotive-report.json").read_text(encoding="utf-8"))
+    cayman_ace_sku_rows = [json.loads(line) for line in (ROOT / "data/cayman-ace-current-automotive-fluids.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    cayman_ace_product_rows = [json.loads(line) for line in (ROOT / "data/cayman-ace-current-automotive-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    cayman_ace_exclusions = [json.loads(line) for line in (ROOT / "data/cayman-ace-current-automotive-exclusions.jsonl").read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_report = json.loads((ROOT / "data/kebs-smark-lubricant-products-report.json").read_text(encoding="utf-8"))
     kebs_smark_rows = [json.loads(line) for line in (ROOT / "data/kebs-smark-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     east_africa_report = json.loads((ROOT / "data/east-africa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -382,6 +386,7 @@ def main() -> None:
         + report["dominican_imca_mobil_products_added"]
         + report["mag1_current_products_added"]
         + report["grenada_sol_products_added"]
+        + report["cayman_ace_products_added"]
         - report["gm_dual_standard_license_rows_merged"]
         - report["fuchs_exact_payload_identity_rows_matched"]
         - report["fuchs_exact_content_identity_rows_matched"]
@@ -1085,19 +1090,19 @@ def main() -> None:
     assert report["aichilon_products_matched_to_existing"] == 255
     assert report["aichilon_products_added"] == 60
     assert report["aichilon_rows_excluded"] == 2
-    assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 5027
+    assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 5169
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3093
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 117470
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 117469
-    assert report["quality_issues"]["professional_key_incomplete"] == 78885
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 117586
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 117585
+    assert report["quality_issues"]["professional_key_incomplete"] == 78996
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
         WHERE q.issue_code='professional_key_incomplete'
         GROUP BY p.family_code
     """)) == {
-        "C": 2290, "E": 149, "G": 12419, "H": 5269, "I": 3873,
-        "M": 23490, "S": 12163, "T": 11868, "TF": 6729, "U": 635,
+        "C": 2292, "E": 150, "G": 12430, "H": 5269, "I": 3873,
+        "M": 23555, "S": 12164, "T": 11894, "TF": 6729, "U": 640,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -3211,6 +3216,85 @@ def main() -> None:
         "SELECT count(*) FROM product_sources "
         "WHERE source_id='NP_ULTRA_CURRENT_EXPORT_MARKET_PRESENCE'"
     ).fetchone()[0] == 0
+    assert cayman_ace_report["listing_denominator"] == 157
+    assert cayman_ace_report["listing_pages"] == 11
+    assert cayman_ace_report[
+        "normalized_fluid_skus"
+    ] == len(cayman_ace_sku_rows) == report[
+        "cayman_ace_current_sku_rows"
+    ] == 142
+    assert cayman_ace_report[
+        "product_grade_identities"
+    ] == len(cayman_ace_product_rows) == report[
+        "cayman_ace_current_product_rows"
+    ] == 116
+    assert cayman_ace_report["package_skus_collapsed"] == 26
+    assert cayman_ace_report[
+        "excluded_rows"
+    ] == len(cayman_ace_exclusions) == 15
+    assert cayman_ace_report["families"] == {
+        "C": 2, "E": 1, "G": 15, "H": 5, "I": 1,
+        "M": 81, "S": 1, "T": 31, "U": 5,
+    }
+    assert cayman_ace_report["lifecycle"] == {
+        "discontinued_current_detail_page": 141,
+        "listed_current_catalog": 1,
+    }
+    assert cayman_ace_report["listing_availability"] == {
+        "outstock": 142,
+    }
+    assert cayman_ace_report["priced_skus"] == report[
+        "cayman_ace_priced_skus"
+    ] == 139
+    assert cayman_ace_report[
+        "normalized_output_sha256"
+    ] == hashlib.sha256(
+        (ROOT / "data/cayman-ace-current-automotive-fluids.jsonl").read_bytes()
+    ).hexdigest() == report["cayman_ace_current_skus_input_sha256"]
+    assert cayman_ace_report[
+        "normalized_products_sha256"
+    ] == hashlib.sha256(
+        (ROOT / "data/cayman-ace-current-automotive-products.jsonl").read_bytes()
+    ).hexdigest() == report["cayman_ace_current_products_input_sha256"]
+    assert policy_by_id[
+        "CAYMAN_ACE_CURRENT_AUTOMOTIVE_FLUID_CATALOG"
+    ]["source_sha256"] == cayman_ace_report[
+        "normalized_products_sha256"
+    ]
+    assert policy_by_id[
+        "CAYMAN_ACE_CURRENT_AUTOMOTIVE_FLUID_CATALOG"
+    ]["observed_count"] == 116
+    assert report["cayman_ace_products_matched_to_existing"] == 0
+    assert report["cayman_ace_products_added"] == 116
+    assert report["cayman_ace_multi_candidate_rows"] == 0
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id='CAYMAN_ACE_CURRENT_AUTOMOTIVE_FLUID_CATALOG'"
+    ).fetchone()[0] == 116
+    assert db.execute(
+        "SELECT count(*) FROM product_offers "
+        "WHERE source_id='CAYMAN_ACE_CURRENT_AUTOMOTIVE_FLUID_CATALOG'"
+    ).fetchone()[0] == 142
+    assert db.execute(
+        "SELECT count(*) FROM product_offers "
+        "WHERE source_id='CAYMAN_ACE_CURRENT_AUTOMOTIVE_FLUID_CATALOG' "
+        "AND lifecycle_status='historical_discontinued_retail_catalog'"
+    ).fetchone()[0] == 141
+    assert db.execute(
+        "SELECT count(*) FROM product_offers "
+        "WHERE source_id='CAYMAN_ACE_CURRENT_AUTOMOTIVE_FLUID_CATALOG' "
+        "AND lifecycle_status='listed_current_catalog_unavailable'"
+    ).fetchone()[0] == 1
+    assert db.execute(
+        "SELECT count(*) FROM product_offers "
+        "WHERE source_id='CAYMAN_ACE_CURRENT_AUTOMOTIVE_FLUID_CATALOG' "
+        "AND price_amount>0 AND price_currency='KYD'"
+    ).fetchone()[0] == 139
+    assert db.execute(
+        "SELECT count(*) FROM product_offers "
+        "WHERE source_id='CAYMAN_ACE_CURRENT_AUTOMOTIVE_FLUID_CATALOG' "
+        "AND availability='outstock'"
+    ).fetchone()[0] == 142
     assert policy_by_id["VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG"]["observed_count"] == 23
     assert db.execute(
         "SELECT count(*) FROM products WHERE source_id='VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG'"

@@ -1,0 +1,40 @@
+{
+  "excluded_rows": 15,
+  "exclusion_reasons": {
+    "automotive_part_outside_scope": 11,
+    "brake_parts_cleaner_outside_scope": 1,
+    "cleaning_aerosol_outside_scope": 2,
+    "non_product_merchandising_item": 1
+  },
+  "exclusions_sha256": "c4ab906b99e8c8b5888665b81e9b092314cdbe14eaa5c22c4321893498488290",
+  "families": {
+    "C": 2,
+    "E": 1,
+    "G": 15,
+    "H": 5,
+    "I": 1,
+    "M": 81,
+    "S": 1,
+    "T": 31,
+    "U": 5
+  },
+  "lifecycle": {
+    "discontinued_current_detail_page": 141,
+    "listed_current_catalog": 1
+  },
+  "listing_availability": {
+    "outstock": 142
+  },
+  "listing_denominator": 157,
+  "listing_pages": 11,
+  "normalized_fluid_skus": 142,
+  "normalized_output_sha256": "d6c92e23ee182a2fbf5338aa08a77fd2c4d3f322062608f7f87d744ddf216270",
+  "normalized_products_sha256": "ffadf71749ff5259ad375576d15e28ca9b468e9da49b37927c30800979fd7a98",
+  "package_skus_collapsed": 26,
+  "priced_skus": 139,
+  "product_grade_identities": 116,
+  "quality_note": "The complete current automotive class was enumerated. Explicit parts and cleaning aerosols are excluded; source descriptions are hashed and used only for factual parsing, not redistributed.",
+  "snapshot_date": "2026-07-24",
+  "source_id": "CAYMAN_ACE_CURRENT_AUTOMOTIVE_FLUID_CATALOG",
+  "source_url": "https://shop.acecayman.com/inet/storefront/store.php?top=0&class=125&department=08&mode=browsecategory&refine=Y"
+}

@@ -2941,6 +2941,21 @@
       "publication_status": "attributed_nonexpressive_brand_and_export_market_facts_only_no_marketing_text_or_images_redistributed",
       "observed_count": 13,
       "notes": "The official NP ULTRA page names 14 export-market occurrences for NPMC non-fuel products, representing 13 unique normalized markets because Grenada is repeated verbatim. The rows prove current manufacturer-stated market presence only. They do not replicate the already integrated 141 NP ULTRA product-grade identities into each country or establish availability, stock, price or formulation for a specific local SKU."
+    },
+    {
+      "source_id": "CAYMAN_ACE_CURRENT_AUTOMOTIVE_FLUID_CATALOG",
+      "title": "Complete current ACE Cayman automotive lubricant and technical-fluid class",
+      "owner": "ACE Cayman",
+      "source_type": "official_country_retailer_complete_class_listing_product_pages_prices_and_lifecycle",
+      "source_locator": "data/cayman-ace-current-automotive-products.jsonl",
+      "source_url": "https://shop.acecayman.com/inet/storefront/store.php?top=0&class=125&department=08&mode=browsecategory&refine=Y",
+      "terms_url": "https://www.acecayman.com/privacy-policy/",
+      "source_sha256": "ffadf71749ff5259ad375576d15e28ca9b468e9da49b37927c30800979fd7a98",
+      "access_status": "public_official_country_retailer_listing_and_detail_pages_rate_limited_sequential_fetch",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_transformed_nonexpressive_product_sku_price_lifecycle_and_specification_facts_only_no_marketing_text_or_images_redistributed",
+      "observed_count": 116,
+      "notes": "The complete current automotive class contains 157 unique listing rows across 11 pages. Fifteen explicit parts, cleaning aerosols and one merchandising item are excluded, leaving 142 lubricant, grease, additive and technical-fluid SKUs collapsed conservatively into 116 product-grade identities. Detail pages explicitly mark 141 SKUs Discontinued; one remains listed but all 142 listing badges report outstock. Prices are present for 139 SKUs and are retained with historical/current-unavailable status, never represented as in-stock prices. Source descriptions are hashed and used only for factual parsing; prose and images are not redistributed."
     }
   ]
 }
