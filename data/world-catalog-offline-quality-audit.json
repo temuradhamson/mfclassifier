@@ -1,8 +1,8 @@
 {
   "active_offers": 3044,
   "canonical_key_duplicates": 0,
-  "canonical_products": 116926,
-  "compressed_database_sha256": "cb062599952ac2b4f23d13abfb1d19fcd6884a7f4d72b2755df09e9a092906a4",
+  "canonical_products": 116930,
+  "compressed_database_sha256": "06f7aa325622b32f8e72e5471aa660322b8df7d90aed97f48505653c0d4ea2a9",
   "duplicate_review_queues": [
     {
       "candidate_pairs": 11184,
@@ -107,13 +107,13 @@
       "both_percent": 7.01,
       "both_selector_and_technical_basis_present": 573,
       "existing_professional_key_gate_implemented": true,
-      "existing_professional_key_issue": 6678,
+      "existing_professional_key_issue": 6682,
       "family": "Охлаждающие и технические жидкости",
       "family_code": "TF",
-      "products": 8169,
+      "products": 8173,
       "selector_grade_or_class_percent": 8.97,
       "selector_grade_or_class_present": 733,
-      "technical_basis_percent": 9.44,
+      "technical_basis_percent": 9.43,
       "technical_basis_present": 771
     },
     {
@@ -182,25 +182,25 @@
       "technical_basis_present": 7
     }
   ],
-  "input_rows_before_canonicalization": 116927,
+  "input_rows_before_canonicalization": 116931,
   "interpretation": {
-    "confirmed_count": "116926 is the verified canonical row count of the current seed, not the final number of all products worldwide.",
+    "confirmed_count": "116930 is the verified canonical row count of the current seed, not the final number of all products worldwide.",
     "duplicate_metric": "Review pairs are candidates or conflicts, not proven removable duplicates.",
     "professional_gate_scope": "Family-specific professional_key_incomplete rules cover M/T/G/H/I/C/U/E/TF/S; source-level gaps remain explicit and are not filled by inference.",
     "selector_metric": "Presence is measured only from explicit normalized fields; absence may reflect source granularity rather than a parsing defect."
   },
-  "primary_sources_used": 141,
+  "primary_sources_used": 142,
   "products_using_explicitly_marked_brand_fallback": 36269,
-  "products_with_at_least_one_source_link": 116926,
-  "products_with_family": 116926,
-  "products_with_missing_manufacturer": 614,
-  "products_with_normalized_name": 116926,
-  "products_with_primary_source_hash": 116926,
-  "products_with_primary_source_url": 116335,
+  "products_with_at_least_one_source_link": 116930,
+  "products_with_family": 116930,
+  "products_with_missing_manufacturer": 618,
+  "products_with_normalized_name": 116930,
+  "products_with_primary_source_hash": 116930,
+  "products_with_primary_source_url": 116339,
   "quality_issue_details": [
     {
       "issue_code": "professional_key_incomplete",
-      "rows": 78670,
+      "rows": 78674,
       "severity": "medium"
     },
     {
@@ -377,9 +377,9 @@
   "quality_issues_by_severity": {
     "high": 311,
     "low": 15,
-    "medium": 78788
+    "medium": 78792
   },
   "snapshot_date": "2026-07-22",
-  "source_registry_entries": 189,
+  "source_registry_entries": 190,
   "status": "offline_quality_audit_current_seed_not_worldwide_completion"
 }

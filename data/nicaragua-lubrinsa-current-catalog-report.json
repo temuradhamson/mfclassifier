@@ -1,0 +1,341 @@
+{
+  "availability_output_sha256": "58065be77287bacd5ac1d47afcf4e171de6af24332c5051805e734b3acf05bab",
+  "canonical_local_product_rows": 4,
+  "category_occurrences": {
+    "auto": 13,
+    "motos": 15,
+    "repsol": 42,
+    "vehiculo-livianos": 8,
+    "vehiculo-pesados": 19
+  },
+  "current_auto_seller_cards": 13,
+  "current_in_scope_availability_occurrences": 45,
+  "current_in_scope_identity_hints_after_package_grouping": 38,
+  "current_repsol_seller_cards": 42,
+  "current_seller_cards": 55,
+  "home_url": "https://www.lubrinsa.com/",
+  "identity_policy": "Repsol cards are retained as Nicaragua availability occurrences for a later global Repsol identity pass. They do not create country-specific canonical duplicates.",
+  "image_bytes_audited": 1779395,
+  "image_facts": {
+    "4504": {
+      "bytes": 34555,
+      "sha256": "1701a0d9448c91f108a0fba88e4a29f0a59d867766e658de34e10d5b38585d74",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/GUARD-REFRIGERANTE-30-5L-VERDE.jpg"
+    },
+    "4506": {
+      "bytes": 43580,
+      "sha256": "d80dbcc70f30a63e53669b009aaef6e742e75d46283085c4d91548452cbe97e2",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/GUARD-REFRIGERANTE-MQ-30-5L.jpg"
+    },
+    "4508": {
+      "bytes": 42555,
+      "sha256": "9aa14aa7e5aa9c404529774b503702efa72c5ef0ef28ca75da062636e37a5c2a",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/GUARD-REFRIGERANTE-MQ-50-5L.jpg"
+    },
+    "4515": {
+      "bytes": 36321,
+      "sha256": "fd73b7acac48eeddd3ee7ae329016a4e3355860b92d89d157b9bd89e021aeb54",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/LEADER-Super-20W-50_4L-galon.jpg"
+    },
+    "4518": {
+      "bytes": 32469,
+      "sha256": "ba18b576a1395dc28d5acd11fff00d471005497cd70ed8a9b2bd3b78d8a10b1e",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/LEADER-SUPER-20W-50-LITRO.jpg"
+    },
+    "4520": {
+      "bytes": 16478,
+      "sha256": "a6e12e5aef4e2567453c373e3ccf05a494df5155e4117ca007a60811f8f23f95",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/REPSOL-GRASA-LITICA-EP-2-CARTUCHO-DE-400-GRS.jpg"
+    },
+    "4523": {
+      "bytes": 26344,
+      "sha256": "f20520126249599920f1bdf136564d7fd059bea829fd263ba491f32de552278c",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/repsol-protector-lithium-ep-r2-v150-18-kg.jpg"
+    },
+    "4526": {
+      "bytes": 24011,
+      "sha256": "acb77f6cd8af14491b9285f4286457a0fdde31570725363140621c7d368e5204",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/QUALIFIER-CHAIN-400ml.jpg"
+    },
+    "4528": {
+      "bytes": 23985,
+      "sha256": "b1fa4b826ab3fdd6945db1182d44bdff42ccd7c3af7e21d19e2ea0a559266760",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/QUALIFIER-CLEANER-POLISH-400ml.jpg"
+    },
+    "4530": {
+      "bytes": 36556,
+      "sha256": "47b936730b801970f6c7ea496da1090a03a6dd3355418370e19ccc9240e50ab3",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/RACING-4T-10W-50-1L.jpg"
+    },
+    "4532": {
+      "bytes": 34469,
+      "sha256": "6abaff96f3c07b106d0406fa6f7a7a4e68196794869f87088a181070052517a0",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/racing-4t-15w-50.jpg"
+    },
+    "4534": {
+      "bytes": 41958,
+      "sha256": "029d55a44f959d081636f9576debab36dbcd8c10bd7f062f5e6785966bb8a5e5",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/repsol-qualifier-moto-fork-oil-10w.jpg"
+    },
+    "4536": {
+      "bytes": 36083,
+      "sha256": "f17a021abd84f8cedf6b63d4360f7757c8cc5167ac2368551c90b1195c67a7f6",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/RIDER-4T-20W-50-1L.jpg"
+    },
+    "4538": {
+      "bytes": 35580,
+      "sha256": "d469468372c32704e4c5b36df303745443169eb0db1506b2a4d577b4f9194270",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/RIDER-HIGH-MILEAGE-4T-25W-60-1L.jpg"
+    },
+    "4540": {
+      "bytes": 33821,
+      "sha256": "53b415eb1f056d2cacc0dbd03e60ea2e6e9ba4d404de64e768564e9f5b0263fd",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/RIDER-TOWN-2T-1L.jpg"
+    },
+    "4542": {
+      "bytes": 33545,
+      "sha256": "5e206c8698496d498e3d18f321b1a26b4697c199473393e8341ea7ed36af9b63",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/RIDER-TOWN-4T-20W-50-1L.jpg"
+    },
+    "4544": {
+      "bytes": 41515,
+      "sha256": "27ae23a2030be3f1d5319f5c3203ef676efe37ebe4ab9c4d0eb09081f1897904",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/SMARTER-CUSTOM-V-TWIN-4T-20W-50-1L.jpg"
+    },
+    "4546": {
+      "bytes": 41440,
+      "sha256": "d40e2b7fbd57cdd5cadadabaf31c3c4e641771d71905b6143ea75392f6530070",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/SMARTER-MATIC-MB-4T-10W-30-1L.jpg"
+    },
+    "4548": {
+      "bytes": 39719,
+      "sha256": "5ee95bae46fdf70cd133883d14bd01fe9113bf8f4ecf89796788f6f4f1402e98",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/SMARTER-SCOOTER-MB-4T-10W-40-1L.jpg"
+    },
+    "4550": {
+      "bytes": 38923,
+      "sha256": "ee5928c75a2adb1059f8120f7f86722fb5a9cdbb8f6c3a79d698c3a00fcb6941",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/SMARTER-SPORT-4T-20W-50-1L.jpg"
+    },
+    "4552": {
+      "bytes": 39322,
+      "sha256": "3efb7ab2c659f50db3a88693cb4fcc733860770559fc5a35bce62b9b66df00f6",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/SMARTER-SYNTHETIC-4T-10W-40-1L.jpg"
+    },
+    "4554": {
+      "bytes": 32389,
+      "sha256": "f9e8019c83b66f44ace6751ce2d5e7f481dd57927e942a56ccefd790c583f65c",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/GIANT-1020-SAE-50-20L.jpg"
+    },
+    "4556": {
+      "bytes": 18524,
+      "sha256": "3dc70b005be4362744708a4478f2af67b9f38c27497206bc173cc32faa82f459",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/GIANT-3010-25W50-1x208L.jpg"
+    },
+    "4558": {
+      "bytes": 37072,
+      "sha256": "b625425c7e4855689889cf6a9973b0d0d196eacd59fa9dd00277f4d214ed5047",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/GIANT-3020-25W-60-20L.jpg"
+    },
+    "4560": {
+      "bytes": 19005,
+      "sha256": "32c048bb33fe4092ddd585068f879ebf854d26756264f1b935299d9fd876e004",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/GIANT-3020-25W60-MULTIGRADO-DIESEL-1x208L.jpg"
+    },
+    "4562": {
+      "bytes": 23954,
+      "sha256": "9aa9762ba9c12fe005753e499cc3de45db8147b75271aca1ec03812b95726727",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/GIANT-3050-20W50-1x208L.jpg"
+    },
+    "4564": {
+      "bytes": 32413,
+      "sha256": "49ea35aa15e990b70b801f1d68d59c6603bc700a297c5a4ffbd7a17fd8c1ea1a",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/GIANT-5510-15W-40-20L-BIDON.jpg"
+    },
+    "4566": {
+      "bytes": 18524,
+      "sha256": "3dc70b005be4362744708a4478f2af67b9f38c27497206bc173cc32faa82f459",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/GIANT-5510-15W40-MULTIGRADO-THPD-1x208L.jpg"
+    },
+    "4568": {
+      "bytes": 43091,
+      "sha256": "3775ed52247c9fdd04c2cba6aa7c6141ebf62a945b9bf422661298f28db4a6b0",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/GIANT-7530-10W40-SEMI-SINTETICO-GALON.jpg"
+    },
+    "4570": {
+      "bytes": 21314,
+      "sha256": "84e9e04b4f06c6ef4681f474565a9daa58046c3c62fbd1c1af0152d476a67a6b",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/GIANT-7530-10W40-SINTETICO-THPD-DIESEL-1X208L.jpg"
+    },
+    "4572": {
+      "bytes": 27780,
+      "sha256": "26e55d7ac0d12052ed5fae306217024300599ab267daa41af2775b2fd529cfdb",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/GIANT-7530-15W-40-1L-LITRO.jpg"
+    },
+    "4574": {
+      "bytes": 34033,
+      "sha256": "3e81e76bfdc72824bc3682c958278d395e071763c045d06120d0d5cb936497d7",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/GIANT-7530-15W-40-4L-GALON.jpg"
+    },
+    "4576": {
+      "bytes": 26001,
+      "sha256": "5dffabf49fa603bd82231589ed55792bc3e73aa60046318fd8276a5efabfc6fa",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/NAVIGATOR-HQ-GL-5-85W-140-1L.jpg"
+    },
+    "4578": {
+      "bytes": 35306,
+      "sha256": "fb0952f5c461694cd07ae9e8158d28b8eac80186f6359ce1061b41c7e1bd7d79",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/NAVIGATOR-HQ-GL-5-85W-140-5L.jpg"
+    },
+    "4580": {
+      "bytes": 31363,
+      "sha256": "0697ea492f0a90d6d1b520294e60d789bf0154595ae01989f09e9a2be01d1569",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/NAVIGATOR-HQ-GL-5-85W-140-20L.jpg"
+    },
+    "4582": {
+      "bytes": 31984,
+      "sha256": "d6dcf2872cc99b2b3e589733214a624109c507ed82997c6d76ad033bf4f3f6cf",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/NAVIGATOR-LSD-80W-90-5L.jpg"
+    },
+    "4584": {
+      "bytes": 25476,
+      "sha256": "5a6fbe23d6f64385699858cfdb556d507228f6868ee688be9e7d0a79cc284215",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/repsol-cartago-multigrado-ep-80w90-GARRAFA.jpg"
+    },
+    "4586": {
+      "bytes": 23958,
+      "sha256": "dcb0250d6ae33038cd4961f58c4993c5a704b1229ef99ab7d468318383340d9b",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/REPSOL-TRANSMISSIONS-GL-5-80W90-CP-1.jpg"
+    },
+    "4588": {
+      "bytes": 40832,
+      "sha256": "5e4eb890f399873c2ecce3379b2a82481971acad10597fff6cb6865cc2b8eda2",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/ABRILLANTADOR-LLANTAS.jpg"
+    },
+    "4590": {
+      "bytes": 42199,
+      "sha256": "e429c5fc206b21fa3fb4614fd7e8d1e03fafa6e28b3d868f162c9618d3f03e63",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/ABRILLANTADOR-TAPICERIA.jpg"
+    },
+    "4592": {
+      "bytes": 22211,
+      "sha256": "89407bc37629772b46df5c2c4ef9cec37ad4764ec2a3797b43bac681809e95fc",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/ACTIVADOR-ELECTROLITICO.jpg"
+    },
+    "4594": {
+      "bytes": 28603,
+      "sha256": "2460bcfc6f30a461adf749cf6dee06015663001bd0b4382abbea3e8b70cac343",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/AGUA-DESTILADA.jpg"
+    },
+    "4596": {
+      "bytes": 34882,
+      "sha256": "f96cf412e77250ec85104ef38d7ccedcc357d0874db09f6071bb645a2e2f8c40",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/CERA-EN-PASTA.jpg"
+    },
+    "4598": {
+      "bytes": 20704,
+      "sha256": "ec66dcef2c43d0f0459a496f1e2ef1ac6f30a1f3ada604399ac186d6c023a29f",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/LIMPIA-INYECTORES-DIESEL.jpg"
+    },
+    "4600": {
+      "bytes": 20011,
+      "sha256": "3ed3bf9a6ae39e041a967bb600c51afbb7c8adff836ce2445254c28685e9579f",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/LIMPIA-INYECTORES-GASOLINA.jpg"
+    },
+    "4602": {
+      "bytes": 26656,
+      "sha256": "b3cc1d53dabcccd6f509cae5860a44b0c7a7cf688c24bf0cc355a939ffdd3d5b",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/LIM-VIDRIOS.jpg"
+    },
+    "4604": {
+      "bytes": 23699,
+      "sha256": "b114fa5a990527951660ae2562fb0a865bdacfc927c261bb431aeb63722c2158",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/LIQUIDO-FRENOS-ROJO-o-BLANCO.jpg"
+    },
+    "4606": {
+      "bytes": 18819,
+      "sha256": "89a7307d370679a3df67fb4bae98d584833de34591a4db7263f9579a37de7ece",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/POWER-STERING.jpg"
+    },
+    "4608": {
+      "bytes": 37850,
+      "sha256": "b58ee19fb1edd746b19c8f5f90a1e6249aae0c6ff8969bb5846e300789b3f981",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/REF-ROJO.jpg"
+    },
+    "4610": {
+      "bytes": 40461,
+      "sha256": "5a04a2f9cc6dda7f78953c93a5db418d157aefd0c5e1ba9d358690893eeb6dda",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/REF-VERDE-32-ONZ.jpg"
+    },
+    "4612": {
+      "bytes": 22023,
+      "sha256": "7c50d45a6da749781b2159487419ccc9e631f1d68c96933fbf2c09cc0b53ea88",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/VINIL.jpg"
+    },
+    "4657": {
+      "bytes": 19610,
+      "sha256": "e89f6569fad24c6124e2ba1033ec63327c7735e6a93d0a7bf1453e9878ff8568",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/GIANT-3010-25W50-BIDON.jpg"
+    },
+    "4711": {
+      "bytes": 62404,
+      "sha256": "0c84f08a9ef9b0afc1dd859d8f6c5573c441ac5b82e57896ae144b6b8dd19592",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/NAVIGATOR-GL-5-85W-140-MULTIGRADO-20L.jpg"
+    },
+    "4713": {
+      "bytes": 51325,
+      "sha256": "368a02ec9a5231781027b6044569ed82ba64f7371978e120d0686526b3dd3a21",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/ELITE-Evolution-DX2-5W-30.jpg"
+    },
+    "4716": {
+      "bytes": 51690,
+      "sha256": "63140f2831c5814a0d3230a14adcc8f136cd2d40c6952735ff56e4559793bd7c",
+      "url": "https://www.lubrinsa.com/wp-content/uploads/2023/06/SMARTER-HMEOC-4T-10W-30-1L.jpg"
+    }
+  },
+  "image_payloads_audited": 55,
+  "multi_offer_identity_groups": {
+    "REPSOL Giant 3010 25W-50": [
+      4556,
+      4657
+    ],
+    "REPSOL Giant 3020 25W-60": [
+      4558,
+      4560
+    ],
+    "REPSOL Giant 5510 15W-40": [
+      4564,
+      4566
+    ],
+    "REPSOL Giant 7530 15W-40 THPD": [
+      4572,
+      4574
+    ],
+    "REPSOL Leader Super 20W-50": [
+      4515,
+      4518
+    ],
+    "REPSOL Navigator HQ GL-5 85W-140": [
+      4576,
+      4578,
+      4580
+    ]
+  },
+  "normalized_product_output_sha256": "dbdf0cca7bb3f0596b967aa094673ee2f89aa0dcba0ef204ec5cedce5dee1908",
+  "quality_note": "AUTO product-card artwork proves labels and current seller presence only. No DOT class, coolant chemistry, OEM approval or manufacturer identity is inferred where the source does not publish it.",
+  "regulatory_context": {
+    "finding": "RTCA 75.01.15.04 requires each manufacturer or importer to register a quality profile with classification and viscosity grade, but no public product-level register was located in this audit.",
+    "official_rtca_url": "https://www.ine.gob.ni/DGE/digesto/2021/NTON_14_008-04_RTCA_75.01.15.04._Aceite_lubricantes.pdf"
+  },
+  "repsol_identity_hints_after_package_grouping": 34,
+  "scope_status_counts": {
+    "canonical_local_product": 4,
+    "global_product_nicaragua_availability": 41,
+    "report_only_excluded": 10
+  },
+  "snapshot_date": "2026-07-23",
+  "source_facts_sha256": "e9792c6670c89d774576a9a2d7daa99dcc7241600e30aa4bcce2ea77dca1ec10",
+  "source_id": "NICARAGUA_LUBRINSA_CURRENT_CATALOG",
+  "store_api_sha256": "027c48a3b7aac727ed24c7db7ec31a9e5d9b8df4153560a1ec79e5bdf1f2b7e6",
+  "store_api_url": "https://www.lubrinsa.com/wp-json/wc/store/v1/products?per_page=100"
+}

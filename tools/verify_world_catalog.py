@@ -256,6 +256,9 @@ def main() -> None:
     cuba_cubalub_2007_rows = [json.loads(line) for line in (ROOT / "data/cuba-cubalub-2007-official-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     panama_acodeco_2020_report = json.loads((ROOT / "data/panama-acodeco-2020-lubricant-price-survey-report.json").read_text(encoding="utf-8"))
     panama_acodeco_2020_rows = [json.loads(line) for line in (ROOT / "data/panama-acodeco-2020-lubricant-price-survey.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    nicaragua_lubrinsa_report = json.loads((ROOT / "data/nicaragua-lubrinsa-current-catalog-report.json").read_text(encoding="utf-8"))
+    nicaragua_lubrinsa_rows = [json.loads(line) for line in (ROOT / "data/nicaragua-lubrinsa-current-local-fluids.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    nicaragua_lubrinsa_availability_rows = [json.loads(line) for line in (ROOT / "data/nicaragua-lubrinsa-current-availability.jsonl").read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_report = json.loads((ROOT / "data/kebs-smark-lubricant-products-report.json").read_text(encoding="utf-8"))
     kebs_smark_rows = [json.loads(line) for line in (ROOT / "data/kebs-smark-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     east_africa_report = json.loads((ROOT / "data/east-africa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -333,6 +336,7 @@ def main() -> None:
         + len(jamaica_futroil_tek_rows)
         + len(cuba_cubalub_2007_rows)
         + len(panama_acodeco_2020_rows)
+        + len(nicaragua_lubrinsa_rows)
         - report["gm_dual_standard_license_rows_merged"]
         - report["fuchs_exact_payload_identity_rows_matched"]
         - report["fuchs_exact_content_identity_rows_matched"]
@@ -1038,9 +1042,9 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 4973
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3044
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 116927
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 116926
-    assert report["quality_issues"]["professional_key_incomplete"] == 78670
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 116931
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 116930
+    assert report["quality_issues"]["professional_key_incomplete"] == 78674
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
@@ -1048,7 +1052,7 @@ def main() -> None:
         GROUP BY p.family_code
     """)) == {
         "C": 2289, "E": 149, "G": 12383, "H": 5262, "I": 3847,
-        "M": 23476, "S": 12124, "T": 11830, "TF": 6678, "U": 632,
+        "M": 23476, "S": 12124, "T": 11830, "TF": 6682, "U": 632,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -2291,6 +2295,30 @@ def main() -> None:
     assert db.execute(
         "SELECT count(*) FROM products WHERE source_id='PANAMA_ACODECO_2020_LUBRICANT_PRICE_SURVEY'"
     ).fetchone()[0] == 45
+    assert nicaragua_lubrinsa_report["current_seller_cards"] == len(nicaragua_lubrinsa_availability_rows) == 55
+    assert nicaragua_lubrinsa_report["current_repsol_seller_cards"] == 42
+    assert nicaragua_lubrinsa_report["current_auto_seller_cards"] == 13
+    assert nicaragua_lubrinsa_report["scope_status_counts"] == {
+        "canonical_local_product": 4,
+        "global_product_nicaragua_availability": 41,
+        "report_only_excluded": 10,
+    }
+    assert nicaragua_lubrinsa_report["current_in_scope_availability_occurrences"] == 45
+    assert nicaragua_lubrinsa_report["current_in_scope_identity_hints_after_package_grouping"] == 38
+    assert nicaragua_lubrinsa_report["repsol_identity_hints_after_package_grouping"] == 34
+    assert nicaragua_lubrinsa_report["canonical_local_product_rows"] == len(nicaragua_lubrinsa_rows) == 4
+    assert nicaragua_lubrinsa_report["image_payloads_audited"] == 55
+    assert all(row["brand"] == "AUTO" and row["family_code"] == "TF" for row in nicaragua_lubrinsa_rows)
+    assert all(row["market"] == "Nicaragua" for row in nicaragua_lubrinsa_rows)
+    assert all(row["source_image_sha256"] for row in nicaragua_lubrinsa_rows)
+    assert all(not ({"address", "phone", "email", "contact_person"} & set(row)) for row in nicaragua_lubrinsa_rows)
+    assert policy_by_id["NICARAGUA_LUBRINSA_CURRENT_CATALOG"]["source_sha256"] == hashlib.sha256(
+        (ROOT / "data/nicaragua-lubrinsa-current-local-fluids.jsonl").read_bytes()
+    ).hexdigest()
+    assert policy_by_id["NICARAGUA_LUBRINSA_CURRENT_CATALOG"]["observed_count"] == 4
+    assert db.execute(
+        "SELECT count(*) FROM products WHERE source_id='NICARAGUA_LUBRINSA_CURRENT_CATALOG'"
+    ).fetchone()[0] == 4
     assert policy_by_id["VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG"]["observed_count"] == 23
     assert db.execute(
         "SELECT count(*) FROM products WHERE source_id='VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG'"

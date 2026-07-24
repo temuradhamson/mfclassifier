@@ -2686,6 +2686,21 @@
       "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_pdf_redistribution",
       "observed_count": 45,
       "notes": "The complete two-page January 2020 table was audited. Forty-five named motor-oil brand/grade rows create historical product observations with five explicit SAE grades and 83 retail prices in PAB. Nine generic rows such as ATF, coolant and brake fluid remain report-only because no product brand or grade is printed. Source spellings Penzoil and Shevron are retained alongside standardized Pennzoil and Chevron. The survey does not prove current availability, API licensing, quality or approval."
+    },
+    {
+      "source_id": "NICARAGUA_LUBRINSA_CURRENT_CATALOG",
+      "title": "Current Lubrinsa lubricant and automotive-fluid catalog for Nicaragua",
+      "owner": "Lubrinsa",
+      "source_type": "official_local_distributor_woocommerce_catalog_and_product_card_artwork",
+      "source_locator": "data/nicaragua-lubrinsa-current-local-fluids.jsonl",
+      "source_url": "https://www.lubrinsa.com/",
+      "terms_url": "https://www.lubrinsa.com/",
+      "source_sha256": "dbdf0cca7bb3f0596b967aa094673ee2f89aa0dcba0ef204ec5cedce5dee1908",
+      "access_status": "public_official_local_distributor_catalog_transformed_factual_extraction_only",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_page_or_image_redistribution",
+      "observed_count": 4,
+      "notes": "The complete current WooCommerce denominator contains 55 seller cards: 42 Repsol and 13 AUTO. Forty-five are in scope. Forty-one Repsol occurrences collapse to 34 product-identity hints after package grouping and are retained only in the separate Nicaragua availability layer pending a global Repsol identity pass, preventing country-specific canonical duplicates. Four local AUTO product-card identities enter the canonical seed: green and red 32 oz coolants, power-steering fluid and brake fluid. Ten cleaners, dressings, wax, generic distilled water or insufficiently specified battery activator cards remain report-only. All 55 current image payloads are SHA-256 pinned; no unpublished DOT, coolant chemistry, OEM approval or manufacturer is inferred."
     }
   ]
 }
