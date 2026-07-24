@@ -46,6 +46,7 @@
   "uganda_mpower_current_input_sha256": "38a82f3644aa2b97c1d90288a41ed517f92152010f3e29570bca2caac8ba56c2",
   "rwanda_almc_current_input_sha256": "17b66a8bf86d85d618af21cd4faa457388ce2b9f4ec7334a869ebb30fb5c7a53",
   "burundi_mogas_current_input_sha256": "ec5d846e5c6fbbd1feb450ead23d8cd63c1b16b0eef1bfa9c21c8aeb043801fa",
+  "mogas_global_market_shops_input_sha256": "edb47b76a7d9d91f5e0607f9d34ec053cf451be69a723aac4e57574c0076669a",
   "uruguay_ancap_lubricant_input_sha256": "715b3c7a20df420da36ca85a1036303c69db8bc734b9559c57cb2ca920f636e0",
   "colombia_terpel_lubricant_input_sha256": "6d279e1cf0fabc772f5a793bad92d555a9e96242f226b70b9ccea031fd387586",
   "guyana_guyoil_lubricant_input_sha256": "350836720cfa25c47350f03214fa59de384f80373fcb1a5d1a2f4d38f562079e",
@@ -287,6 +288,8 @@
   "uganda_mpower_current_source_rows": 16,
   "rwanda_almc_current_source_rows": 23,
   "burundi_mogas_current_source_rows": 45,
+  "mogas_global_market_shop_observations": 221,
+  "mogas_global_market_product_identity_links": 277,
   "kebs_smark_source_rows": 750,
   "east_africa_certified_source_rows": 229,
   "east_africa_certified_source_rows_by_source": {
@@ -849,7 +852,8 @@
     "MOZAMBIQUE_PETROMOC_OFFICIALLY_LINKED_LEGACY_CATALOG",
     "UGANDA_MPOWER_CURRENT_COMPLETE_PRODUCT_PAGES",
     "RWANDA_ALMC_CURRENT_COMPLETE_TDS_CATALOG",
-    "BURUNDI_MOGAS_CURRENT_COMPLETE_SHOP_API"
+    "BURUNDI_MOGAS_CURRENT_COMPLETE_SHOP_API",
+    "MOGAS_GLOBAL_OFFICIAL_COUNTRY_SHOP_APIS"
   ],
   "bulk_sources_blocked": [
     "fuchs-benelux",

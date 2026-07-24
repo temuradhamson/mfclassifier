@@ -104,6 +104,7 @@ MOZAMBIQUE_PETROMOC_LEGACY_JSONL = ROOT / "data" / "mozambique-petromoc-legacy-p
 UGANDA_MPOWER_CURRENT_JSONL = ROOT / "data" / "uganda-mpower-current-products.jsonl"
 RWANDA_ALMC_CURRENT_JSONL = ROOT / "data" / "rwanda-almc-current-products.jsonl"
 BURUNDI_MOGAS_CURRENT_JSONL = ROOT / "data" / "burundi-mogas-current-products.jsonl"
+MOGAS_GLOBAL_MARKET_SHOPS_JSONL = ROOT / "data" / "mogas-global-market-shop-observations.jsonl"
 URUGUAY_ANCAP_LUBRICANT_JSONL = ROOT / "data" / "uruguay-ancap-current-lubricants.jsonl"
 COLOMBIA_TERPEL_LUBRICANT_JSONL = ROOT / "data" / "colombia-terpel-current-lubricants.jsonl"
 GUYANA_GUYOIL_LUBRICANT_JSONL = ROOT / "data" / "guyana-guyoil-current-lubricants.jsonl"
@@ -6884,6 +6885,20 @@ def main() -> None:
         for row in burundi_mogas_current_source_rows
     ]
     input_records.extend(burundi_mogas_current_records)
+    burundi_mogas_record_key_by_source_id = {
+        raw["source_record_id"]: record["canonical_key"]
+        for raw, record in zip(
+            burundi_mogas_current_source_rows,
+            burundi_mogas_current_records,
+        )
+    }
+    mogas_global_market_shop_rows = [
+        json.loads(line)
+        for line in MOGAS_GLOBAL_MARKET_SHOPS_JSONL.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        if line
+    ]
     uruguay_ancap_lubricant_source_rows = [json.loads(line) for line in URUGUAY_ANCAP_LUBRICANT_JSONL.read_text(encoding="utf-8").splitlines() if line]
     uruguay_ancap_lubricant_records = [uruguay_ancap_lubricant_record(row) for row in uruguay_ancap_lubricant_source_rows]
     input_records.extend(uruguay_ancap_lubricant_records)
@@ -8595,6 +8610,49 @@ def main() -> None:
         ] = target["canonical_key"]
     records, candidates = deduplicate(input_records)
     canonical_by_key = {row["canonical_key"]: row for row in records}
+    mogas_global_market_link_targets = []
+    for observation in mogas_global_market_shop_rows:
+        for target_source_record_id in observation[
+            "target_burundi_source_record_ids"
+        ]:
+            target = canonical_by_key[
+                burundi_mogas_record_key_by_source_id[
+                    target_source_record_id
+                ]
+            ]
+            target["specifications"].setdefault(
+                "mogas_global_market_shop_evidence", []
+            ).append({
+                "source_record_id": observation["source_record_id"],
+                "market": observation["market"],
+                "source_product_id": observation["source_product_id"],
+                "source_product_name": observation["source_product_name"],
+                "source_url": observation["source_url"],
+                "source_attributes": observation["source_attributes"],
+                "source_price_minor_units": observation[
+                    "source_price_minor_units"
+                ],
+                "source_price_range": observation["source_price_range"],
+                "source_currency_code": observation[
+                    "source_currency_code"
+                ],
+                "source_currency_minor_unit": observation[
+                    "source_currency_minor_unit"
+                ],
+                "currency_evidence_status": observation[
+                    "currency_evidence_status"
+                ],
+                "source_is_in_stock": observation["source_is_in_stock"],
+                "source_is_purchasable": observation[
+                    "source_is_purchasable"
+                ],
+                "source_quality_flags": observation[
+                    "source_quality_flags"
+                ],
+            })
+            mogas_global_market_link_targets.append(
+                (observation, target["product_id"])
+            )
     for source_key, match_keys in blue_angel_review_keys:
         source_product = canonical_by_key[source_key]
         for match_key in match_keys:
@@ -8922,6 +8980,24 @@ def main() -> None:
         "source_row": row["source_row"], "relation": "primary_seed_record",
     } for row in records]
     source_link_keys = {(link["product_id"], link["source_id"], link["source_record_id"]) for link in source_links}
+    for observation, product_id in mogas_global_market_link_targets:
+        link = {
+            "product_id": product_id,
+            "source_id": observation["source_id"],
+            "source_record_id": observation["source_record_id"],
+            "source_row": None,
+            "relation": (
+                "official_manufacturer_country_shop_market_observation"
+            ),
+        }
+        link_key = (
+            link["product_id"],
+            link["source_id"],
+            link["source_record_id"],
+        )
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     for raw in el_salvador_mecha_tool_source_rows:
         target = canonical_by_key[
             el_salvador_mecha_tool_product_key[raw["source_record_id"]]
@@ -10252,6 +10328,7 @@ def main() -> None:
         "uganda_mpower_current_input_sha256": hashlib.sha256(UGANDA_MPOWER_CURRENT_JSONL.read_bytes()).hexdigest(),
         "rwanda_almc_current_input_sha256": hashlib.sha256(RWANDA_ALMC_CURRENT_JSONL.read_bytes()).hexdigest(),
         "burundi_mogas_current_input_sha256": hashlib.sha256(BURUNDI_MOGAS_CURRENT_JSONL.read_bytes()).hexdigest(),
+        "mogas_global_market_shops_input_sha256": hashlib.sha256(MOGAS_GLOBAL_MARKET_SHOPS_JSONL.read_bytes()).hexdigest(),
         "uruguay_ancap_lubricant_input_sha256": hashlib.sha256(URUGUAY_ANCAP_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "colombia_terpel_lubricant_input_sha256": hashlib.sha256(COLOMBIA_TERPEL_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "guyana_guyoil_lubricant_input_sha256": hashlib.sha256(GUYANA_GUYOIL_LUBRICANT_JSONL.read_bytes()).hexdigest(),
@@ -10573,6 +10650,12 @@ def main() -> None:
         ),
         "burundi_mogas_current_source_rows": len(
             burundi_mogas_current_source_rows
+        ),
+        "mogas_global_market_shop_observations": len(
+            mogas_global_market_shop_rows
+        ),
+        "mogas_global_market_product_identity_links": len(
+            mogas_global_market_link_targets
         ),
         "kebs_smark_source_rows": len(kebs_smark_source_rows),
         "east_africa_certified_source_rows": len(east_africa_certified_source_rows),

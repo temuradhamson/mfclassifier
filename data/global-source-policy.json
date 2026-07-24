@@ -3031,6 +3031,21 @@
       "publication_status": "attributed_transformed_nonexpressive_product_grade_specification_shop_state_and_evidence_facts_only_no_descriptions_reviews_contacts_or_images_redistributed",
       "observed_count": 45,
       "notes": "All 39 Store API cards are accounted for: 36 lubricant/fluid cards expanded into 45 grade identities (C2/G14/H5/I2/M15/T6/TF1), while three LPG cylinder cards are excluded. The URL and page title say Burundi but the footer publishes a Uganda contact; WooCommerce reports USD for amounts whose scale and country context make the currency configuration implausible. Raw configured price/order/stock facts remain in source specifications, but no analytical offers are created and no price is admitted to average-price calculations."
+    },
+    {
+      "source_id": "MOGAS_GLOBAL_OFFICIAL_COUNTRY_SHOP_APIS",
+      "title": "All official MOGAS country-section shop APIs and market observations",
+      "owner": "MOGAS Group",
+      "source_type": "official_manufacturer_global_market_directory_and_complete_country_shop_api_observations",
+      "source_locator": "data/mogas-global-market-shop-observations.jsonl",
+      "source_url": "https://mogasoil.com/#locations",
+      "terms_url": "https://mogasoil.com/",
+      "source_sha256": "edb47b76a7d9d91f5e0607f9d34ec053cf451be69a723aac4e57574c0076669a",
+      "access_status": "public_official_manufacturer_market_directory_and_seven_public_store_apis",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_transformed_nonexpressive_market_product_shop_state_price_configuration_and_evidence_facts_only_no_descriptions_reviews_contacts_or_images_redistributed",
+      "observed_count": 221,
+      "notes": "The official MOGAS homepage lists seven markets: Burundi, DRC, Kenya, Rwanda, Tanzania, UAE and Uganda. Six country APIs expose the same 39-card set (36 relevant lubricant/fluid cards after three LPG exclusions); Rwanda exposes five local cards. The 221 market-card observations create 277 links to the existing 45 MOGAS product identities and no duplicate products. UGX/RWF prices remain pending variant-level offer audit; 180 observations with conflicted configured currencies are excluded from analytics."
     }
   ]
 }

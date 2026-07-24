@@ -312,6 +312,14 @@ source links; старых product ID удалено 0.
   Raw price/order/stock facts сохранены в source evidence, но analytical offers
   не создаются и эти цены не попадают в средние. Десять строк без опубликованной
   ISO VG либо coolant class/freezing point остаются честно неполными.
+- Глобальный MOGAS country-shop contour — обработаны все семь рынков,
+  перечисленных официальной главной страницей: Burundi, DRC, Kenya, Rwanda,
+  Tanzania, UAE и Uganda. Шесть полных API дают один и тот же набор 39 карточек
+  (36 ГСМ после LPG exclusions), Rwanda — 5 локальных карточек. 221 market-card
+  observation создаёт 277 evidence links к существующим 45 MOGAS identities;
+  ни один страновой клон не создаёт новый продукт. UGX/RWF оставлены на
+  variant-level price audit, 180 наблюдений с конфликтной валютой исключены из
+  аналитики.
 - Глобальный официальный Shell distributor locator — 118 страновых разделов,
   117 уникальных market labels и 167 явно названных distributor identities.
   Cook Islands опубликованы двумя отдельными разделами и сохранены как два
@@ -433,7 +441,7 @@ source links; старых product ID удалено 0.
 
 - Текущий подтверждённый seed после интеграции MOGAS Burundi: 117 742
   канонических продуктовых строк и 5 191 offer/SKU-запись.
-- Source policy: 212 записей, из них 182 разрешены для фактического bulk-ingest
+- Source policy: 213 записей, из них 183 разрешены для фактического bulk-ingest
   и 30 заблокированы политикой/правами/доступом.
 - Все исходные документы закрепляются SHA-256; PDF/XLS/DOCX не
   перераспространяются, публикуются только атрибутированные фактические поля.

@@ -1,0 +1,69 @@
+{
+  "api_payload_sha256": {
+    "burundi": "1f454dbaf454dc616d318a4495d50851e5bfbc1661b0912e83c085a4fd99fedb",
+    "drc": "5bb33b1d39a72ff9c4d395b2f9d93463d39bb797a12a07437247d84af6661b2a",
+    "kenya": "30db2ad3864c6d3c54ac6f97f626e8669e55446b22123cb9dcfebc4d8c7a0c6d",
+    "rwanda": "9d39661a9df1d2558a7dc74cece4fbd163aefc5502771b9f153fbde55addbc7b",
+    "tanzania": "55240ea9ec15e348bf6673fc4d80799b1860967b8b0aa24580620d5f29eaaaae",
+    "uae": "90c2f0a9139286cb13b01ac8088ac7eccc5735dac47e661b84be7ec5cd72d899",
+    "uganda": "141e2e0f9eae33c162b7048c02327f1a748e80081c9c4702c8b554bd9c34c3d6"
+  },
+  "configured_currency_conflict_observations": 180,
+  "currency_codes_by_market": {
+    "Burundi": [
+      "USD"
+    ],
+    "Democratic Republic of the Congo": [
+      "USD"
+    ],
+    "Kenya": [
+      "USD"
+    ],
+    "Rwanda": [
+      "RWF"
+    ],
+    "Tanzania": [
+      "USD"
+    ],
+    "Uganda": [
+      "UGX"
+    ],
+    "United Arab Emirates": [
+      "USD"
+    ]
+  },
+  "deduplication_note": "Market cards link to the 45 normalized MOGAS identities created from the complete Burundi-section technical catalog; no country copy creates a new canonical product.",
+  "full_catalog_api_cards_per_market": 39,
+  "full_catalog_markets": 6,
+  "full_catalog_relevant_cards_per_market": 36,
+  "home_market_links_sha256": "2fde0b363f8b58f11c769f7f20a630ee2f1e568530f69d24157e8a25ace4e5dd",
+  "local_currency_pending_offer_audit_observations": 41,
+  "market_card_observations": 221,
+  "market_names": [
+    "Burundi",
+    "Democratic Republic of the Congo",
+    "Kenya",
+    "Rwanda",
+    "Tanzania",
+    "United Arab Emirates",
+    "Uganda"
+  ],
+  "normalized_output_sha256": "edb47b76a7d9d91f5e0607f9d34ec053cf451be69a723aac4e57574c0076669a",
+  "observations_by_market": {
+    "Burundi": 36,
+    "Democratic Republic of the Congo": 36,
+    "Kenya": 36,
+    "Rwanda": 5,
+    "Tanzania": 36,
+    "Uganda": 36,
+    "United Arab Emirates": 36
+  },
+  "official_markets": 7,
+  "price_note": "UGX and RWF observations remain pending variant-level offer normalization. All other configured currencies are retained as raw evidence and excluded from analytics.",
+  "product_identity_links": 277,
+  "rwanda_api_cards": 5,
+  "schema_version": 1,
+  "snapshot_date": "2026-07-24",
+  "source_id": "MOGAS_GLOBAL_OFFICIAL_COUNTRY_SHOP_APIS",
+  "status": "all_officially_listed_mogas_country_shop_apis_normalized"
+}

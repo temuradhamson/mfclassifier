@@ -246,6 +246,8 @@ def main() -> None:
     rwanda_almc_rows = [json.loads(line) for line in (ROOT / "data/rwanda-almc-current-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     burundi_mogas_report = json.loads((ROOT / "data/burundi-mogas-current-report.json").read_text(encoding="utf-8"))
     burundi_mogas_rows = [json.loads(line) for line in (ROOT / "data/burundi-mogas-current-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    mogas_global_market_report = json.loads((ROOT / "data/mogas-global-market-shop-report.json").read_text(encoding="utf-8"))
+    mogas_global_market_rows = [json.loads(line) for line in (ROOT / "data/mogas-global-market-shop-observations.jsonl").read_text(encoding="utf-8").splitlines() if line]
     uruguay_ancap_report = json.loads((ROOT / "data/uruguay-ancap-current-lubricants-report.json").read_text(encoding="utf-8"))
     uruguay_ancap_rows = [json.loads(line) for line in (ROOT / "data/uruguay-ancap-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     colombia_terpel_report = json.loads((ROOT / "data/colombia-terpel-current-lubricants-report.json").read_text(encoding="utf-8"))
@@ -2393,6 +2395,73 @@ def main() -> None:
     assert db.execute(
         "SELECT count(*) FROM product_offers "
         "WHERE source_id='BURUNDI_MOGAS_CURRENT_COMPLETE_SHOP_API'"
+    ).fetchone()[0] == 0
+    assert mogas_global_market_report["official_markets"] == 7
+    assert mogas_global_market_report["full_catalog_markets"] == 6
+    assert mogas_global_market_report[
+        "full_catalog_api_cards_per_market"
+    ] == 39
+    assert mogas_global_market_report[
+        "full_catalog_relevant_cards_per_market"
+    ] == 36
+    assert mogas_global_market_report["rwanda_api_cards"] == 5
+    assert mogas_global_market_report[
+        "market_card_observations"
+    ] == len(mogas_global_market_rows) == report[
+        "mogas_global_market_shop_observations"
+    ] == 221
+    assert mogas_global_market_report[
+        "product_identity_links"
+    ] == report[
+        "mogas_global_market_product_identity_links"
+    ] == 277
+    assert mogas_global_market_report["observations_by_market"] == {
+        "Burundi": 36,
+        "Democratic Republic of the Congo": 36,
+        "Kenya": 36,
+        "Rwanda": 5,
+        "Tanzania": 36,
+        "Uganda": 36,
+        "United Arab Emirates": 36,
+    }
+    assert mogas_global_market_report[
+        "configured_currency_conflict_observations"
+    ] == 180
+    assert mogas_global_market_report[
+        "local_currency_pending_offer_audit_observations"
+    ] == 41
+    assert mogas_global_market_report[
+        "normalized_output_sha256"
+    ] == hashlib.sha256(
+        (
+            ROOT / "data/mogas-global-market-shop-observations.jsonl"
+        ).read_bytes()
+    ).hexdigest()
+    assert all(
+        row["target_burundi_source_record_ids"]
+        and row["source_is_in_stock"] is True
+        and row["source_is_purchasable"] is True
+        for row in mogas_global_market_rows
+    )
+    assert policy_by_id[
+        "MOGAS_GLOBAL_OFFICIAL_COUNTRY_SHOP_APIS"
+    ]["source_sha256"] == mogas_global_market_report[
+        "normalized_output_sha256"
+    ]
+    assert policy_by_id[
+        "MOGAS_GLOBAL_OFFICIAL_COUNTRY_SHOP_APIS"
+    ]["observed_count"] == 221
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id='MOGAS_GLOBAL_OFFICIAL_COUNTRY_SHOP_APIS'"
+    ).fetchone()[0] == 277
+    assert db.execute(
+        "SELECT count(DISTINCT product_id) FROM product_sources "
+        "WHERE source_id='MOGAS_GLOBAL_OFFICIAL_COUNTRY_SHOP_APIS'"
+    ).fetchone()[0] == 45
+    assert db.execute(
+        "SELECT count(*) FROM product_offers "
+        "WHERE source_id='MOGAS_GLOBAL_OFFICIAL_COUNTRY_SHOP_APIS'"
     ).fetchone()[0] == 0
     assert uruguay_ancap_report["catalog_product_families"] == 56
     assert uruguay_ancap_report["normalized_product_variants"] == len(uruguay_ancap_rows) == 88
