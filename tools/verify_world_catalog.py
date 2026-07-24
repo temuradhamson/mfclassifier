@@ -240,6 +240,8 @@ def main() -> None:
     bolivia_ypfb_rows = [json.loads(line) for line in (ROOT / "data/bolivia-ypfb-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     mozambique_petromoc_report = json.loads((ROOT / "data/mozambique-petromoc-legacy-report.json").read_text(encoding="utf-8"))
     mozambique_petromoc_rows = [json.loads(line) for line in (ROOT / "data/mozambique-petromoc-legacy-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    uganda_mpower_report = json.loads((ROOT / "data/uganda-mpower-current-report.json").read_text(encoding="utf-8"))
+    uganda_mpower_rows = [json.loads(line) for line in (ROOT / "data/uganda-mpower-current-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     uruguay_ancap_report = json.loads((ROOT / "data/uruguay-ancap-current-lubricants-report.json").read_text(encoding="utf-8"))
     uruguay_ancap_rows = [json.loads(line) for line in (ROOT / "data/uruguay-ancap-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     colombia_terpel_report = json.loads((ROOT / "data/colombia-terpel-current-lubricants-report.json").read_text(encoding="utf-8"))
@@ -374,6 +376,7 @@ def main() -> None:
         + report["costa_rica_health_lubricant_source_rows"]
         + report["bolivia_ypfb_lubricant_source_rows"]
         + report["mozambique_petromoc_legacy_source_rows"]
+        + report["uganda_mpower_current_source_rows"]
         + len(uruguay_ancap_rows)
         + len(colombia_terpel_rows)
         + len(guyana_guyoil_rows)
@@ -1099,17 +1102,17 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 5191
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3115
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 117659
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 117658
-    assert report["quality_issues"]["professional_key_incomplete"] == 79008
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 117675
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 117674
+    assert report["quality_issues"]["professional_key_incomplete"] == 79011
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
         WHERE q.issue_code='professional_key_incomplete'
         GROUP BY p.family_code
     """)) == {
-        "C": 2294, "E": 150, "G": 12430, "H": 5269, "I": 3873,
-        "M": 23563, "S": 12164, "T": 11896, "TF": 6729, "U": 640,
+        "C": 2294, "E": 150, "G": 12430, "H": 5270, "I": 3873,
+        "M": 23565, "S": 12164, "T": 11896, "TF": 6729, "U": 640,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -2226,6 +2229,51 @@ def main() -> None:
     assert db.execute(
         "SELECT count(*) FROM product_offers "
         "WHERE source_id='MOZAMBIQUE_PETROMOC_OFFICIALLY_LINKED_LEGACY_CATALOG'"
+    ).fetchone()[0] == 0
+    assert uganda_mpower_report[
+        "detail_pages"
+    ] == len(uganda_mpower_rows) == report[
+        "uganda_mpower_current_source_rows"
+    ] == 16
+    assert uganda_mpower_report["listing_pages"] == 2
+    assert uganda_mpower_report["brands"] == {"GOLDSTAR": 5, "LUBEX": 11}
+    assert uganda_mpower_report["families"] == {
+        "G": 1, "H": 1, "M": 9, "T": 5,
+    }
+    assert uganda_mpower_report["package_occurrences"] == 33
+    assert uganda_mpower_report[
+        "normalized_output_sha256"
+    ] == hashlib.sha256(
+        (ROOT / "data/uganda-mpower-current-products.jsonl").read_bytes()
+    ).hexdigest()
+    assert all(
+        row["lifecycle_status"] == "current_official_catalog"
+        and row["market"] == "Uganda"
+        for row in uganda_mpower_rows
+    )
+    assert all(
+        not ({"address", "phone", "email", "contact_person"} & set(row))
+        for row in uganda_mpower_rows
+    )
+    assert policy_by_id[
+        "UGANDA_MPOWER_CURRENT_COMPLETE_PRODUCT_PAGES"
+    ]["source_sha256"] == uganda_mpower_report[
+        "normalized_output_sha256"
+    ]
+    assert policy_by_id[
+        "UGANDA_MPOWER_CURRENT_COMPLETE_PRODUCT_PAGES"
+    ]["observed_count"] == 16
+    assert db.execute(
+        "SELECT count(*) FROM products "
+        "WHERE source_id='UGANDA_MPOWER_CURRENT_COMPLETE_PRODUCT_PAGES'"
+    ).fetchone()[0] == 16
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id='UGANDA_MPOWER_CURRENT_COMPLETE_PRODUCT_PAGES'"
+    ).fetchone()[0] == 16
+    assert db.execute(
+        "SELECT count(*) FROM product_offers "
+        "WHERE source_id='UGANDA_MPOWER_CURRENT_COMPLETE_PRODUCT_PAGES'"
     ).fetchone()[0] == 0
     assert uruguay_ancap_report["catalog_product_families"] == 56
     assert uruguay_ancap_report["normalized_product_variants"] == len(uruguay_ancap_rows) == 88

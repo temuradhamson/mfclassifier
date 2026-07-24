@@ -1,0 +1,54 @@
+{
+  "availability_note": "Pages identify packages but publish no price, stock quantity or order action; no offers are created.",
+  "brands": {
+    "GOLDSTAR": 5,
+    "LUBEX": 11
+  },
+  "denominator_note": "All 5 Goldstar and 11 Lubex detail pages linked from the two official product listings are included.",
+  "detail_page_sha256": {
+    "gearoilgl4.html": "cfcf259428e782585e9d41fb0b7bdda8d43244d245bc007ecc0e32b7469fa029",
+    "goldstar2toil.html": "d1d35cb237b8c2b18a2bbaffeb29b227058e73c7870fbe83ebdb556cbd16e440",
+    "goldstardeiselengine.html": "fb8600a5b1ce60f9713431f37014b6e038707af6c20bcf7a19d9981957e269b8",
+    "goldstardextron2.html": "ad5c52f08f12ff8cb14342235e429c6a20ffef7b27b07d5fa1b4397a7d3d03da",
+    "goldstargearoil.html": "124626cb53e8e13ff204c20a2ceeb72d7536adc5cb219ed67e43de0fa4a2ce9b",
+    "goldstarpetrolengine.html": "ced1b412d852649b01bb31bcf529ab5ec64209c6eb3991176eb0b0f86d1b8f6b",
+    "lubex2toil.html": "5df73495f70ff2da0147b8a9dda5b5e1c92243394a85d2b6367d6c99bdf77fd8",
+    "lubexATFdextron.html": "bd3c622c9eab201c2803c6b1a63a6ce940480dc586073f1922009db81a5ea6ef",
+    "lubexDieselEngine.html": "366c15a668d5c374fb4c95ed44bdc7894fdb9237872210b3fac4887863324087",
+    "lubexgearoilgl5.html": "f77a9f6763d31a91f46c56cdf27a5efc22f3b9086d2f18dea4e71cbb30266097",
+    "lubexgrease.html": "2a3436a66e602142c955caca28015f7aabd5baaeaa8a3d631fe400b8291e52ff",
+    "lubexhydraulic.html": "5232b523a74b02e1005ea0eadf0f2817a3f57e902ce5ad0778c53871a7004ad0",
+    "lubexmagum40.html": "752b6b984abfcb2cd3c596fe902da9599fc5c61c1fe2486667731394fa89cffc",
+    "lubexpetrolengine.html": "52a4465f2b38f11657f301dcda302a7bd3a775105f6a5444750c4f187bfda511",
+    "lubextruckmax.html": "b04ba8a6a3df4e606234900b5ee03ccf1d7aa87777bceb50138a56fa2b4011eb",
+    "lubexturbomax.html": "f981d1414f95a8d947d03cb44e7f7c623b7297811364d7aa1bbe0da3aa8d0345"
+  },
+  "detail_pages": 16,
+  "families": {
+    "G": 1,
+    "H": 1,
+    "M": 9,
+    "T": 5
+  },
+  "listing_page_sha256": {
+    "GOLDSTAR": "5635fc66d61ba8325623ded044bd01436335708775979221a4cb9bc953f4f48e",
+    "LUBEX": "bdc6165ef6816aa9e35927dda9e85144083ee7e65061b572b22726c3fd3a23fa"
+  },
+  "listing_pages": 2,
+  "normalized_output_sha256": "38a82f3644aa2b97c1d90288a41ed517f92152010f3e29570bca2caac8ba56c2",
+  "package_occurrences": 33,
+  "publication_scope": "Factual product names, packages, specifications, evidence URLs and hashes only; descriptions, benefits, contacts and images are excluded.",
+  "quality_flags": {
+    "combined_mp2_mp3_title_but_only_nlgi3_is_explicitly_specified": 1,
+    "description_c14_typo_resolved_by_explicit_meets_specifications_ci4": 1,
+    "product_page_publishes_no_iso_vg_grade": 1,
+    "product_title_gl4_conflicts_with_published_gl5_specification": 2,
+    "published_secondary_api_class_conflict_sl_vs_sg_not_promoted_to_strict_key": 1,
+    "source_description_sae140_conflicts_with_application_sae85w140": 3,
+    "two_stroke_product_page_reports_four_stroke_jaso_ma2_style_performance_not_promoted_to_strict_key": 2
+  },
+  "schema_version": 1,
+  "snapshot_date": "2026-07-24",
+  "source_id": "UGANDA_MPOWER_CURRENT_COMPLETE_PRODUCT_PAGES",
+  "status": "current_local_manufacturer_complete_product_pages_normalized"
+}

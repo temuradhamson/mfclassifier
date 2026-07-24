@@ -101,6 +101,7 @@ GUATEMALA_SIGES_LUBRICANT_JSONL = ROOT / "data" / "guatemala-siges-lubricant-nom
 COSTA_RICA_HEALTH_LUBRICANT_JSONL = ROOT / "data" / "costa-rica-health-registered-lubricants.jsonl"
 BOLIVIA_YPFB_LUBRICANT_JSONL = ROOT / "data" / "bolivia-ypfb-current-lubricants.jsonl"
 MOZAMBIQUE_PETROMOC_LEGACY_JSONL = ROOT / "data" / "mozambique-petromoc-legacy-products.jsonl"
+UGANDA_MPOWER_CURRENT_JSONL = ROOT / "data" / "uganda-mpower-current-products.jsonl"
 URUGUAY_ANCAP_LUBRICANT_JSONL = ROOT / "data" / "uruguay-ancap-current-lubricants.jsonl"
 COLOMBIA_TERPEL_LUBRICANT_JSONL = ROOT / "data" / "colombia-terpel-current-lubricants.jsonl"
 GUYANA_GUYOIL_LUBRICANT_JSONL = ROOT / "data" / "guyana-guyoil-current-lubricants.jsonl"
@@ -3492,6 +3493,64 @@ def mozambique_petromoc_legacy_record(row: dict) -> dict:
     return record
 
 
+def uganda_mpower_current_record(row: dict) -> dict:
+    """Convert one current MPower Uganda product-page identity."""
+    specs = row["specifications"]
+    performance = [
+        *(f"API {value}" for value in specs.get("api", [])),
+        *(f"API {value}" for value in specs.get("api_gl", [])),
+        *(f"ACEA {value}" for value in specs.get("acea", [])),
+        *specs.get("standards", []),
+        *specs.get("oem_specifications", []),
+        *specs.get("atf_specifications", []),
+    ]
+    sae = specs.get("sae_engine", "") or specs.get("sae_gear", "")
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Current complete MPower Oil Uganda product pages",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": sae,
+        "api_class": "; ".join(performance),
+        "viscosity": (
+            f"ISO VG {specs['iso_vg']}" if specs.get("iso_vg") else ""
+        ),
+        "grease_class": specs.get("nlgi", ""),
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": int(row["source_record_id"].rsplit("-", 1)[-1]),
+        "evidence_status": row["evidence_status"],
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update(specs)
+    record["specifications"].update({
+        "packages": row["packages"],
+        "source_url": row["source_url"],
+        "listing_url": row["listing_url"],
+        "source_page_sha256": row["source_page_sha256"],
+        "source_facts_sha256": row["source_facts_sha256"],
+        "no_price_stock_or_order_action_published": True,
+    })
+    record["canonical_key"] += (
+        f"|uganda_mpower_current:{normalize(row['source_record_id'])}"
+    )
+    record["product_id"] = (
+        "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    )
+    return record
+
+
 def uruguay_ancap_lubricant_record(row: dict) -> dict:
     """Convert one current official ANCAP product/grade identity."""
     technical = row["technical"]
@@ -6669,6 +6728,18 @@ def main() -> None:
         for row in mozambique_petromoc_legacy_source_rows
     ]
     input_records.extend(mozambique_petromoc_legacy_records)
+    uganda_mpower_current_source_rows = [
+        json.loads(line)
+        for line in UGANDA_MPOWER_CURRENT_JSONL.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        if line
+    ]
+    uganda_mpower_current_records = [
+        uganda_mpower_current_record(row)
+        for row in uganda_mpower_current_source_rows
+    ]
+    input_records.extend(uganda_mpower_current_records)
     uruguay_ancap_lubricant_source_rows = [json.loads(line) for line in URUGUAY_ANCAP_LUBRICANT_JSONL.read_text(encoding="utf-8").splitlines() if line]
     uruguay_ancap_lubricant_records = [uruguay_ancap_lubricant_record(row) for row in uruguay_ancap_lubricant_source_rows]
     input_records.extend(uruguay_ancap_lubricant_records)
@@ -10034,6 +10105,7 @@ def main() -> None:
         "costa_rica_health_lubricant_input_sha256": hashlib.sha256(COSTA_RICA_HEALTH_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "bolivia_ypfb_lubricant_input_sha256": hashlib.sha256(BOLIVIA_YPFB_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "mozambique_petromoc_legacy_input_sha256": hashlib.sha256(MOZAMBIQUE_PETROMOC_LEGACY_JSONL.read_bytes()).hexdigest(),
+        "uganda_mpower_current_input_sha256": hashlib.sha256(UGANDA_MPOWER_CURRENT_JSONL.read_bytes()).hexdigest(),
         "uruguay_ancap_lubricant_input_sha256": hashlib.sha256(URUGUAY_ANCAP_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "colombia_terpel_lubricant_input_sha256": hashlib.sha256(COLOMBIA_TERPEL_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "guyana_guyoil_lubricant_input_sha256": hashlib.sha256(GUYANA_GUYOIL_LUBRICANT_JSONL.read_bytes()).hexdigest(),
@@ -10346,6 +10418,9 @@ def main() -> None:
         "bolivia_ypfb_lubricant_source_rows": len(bolivia_ypfb_lubricant_source_rows),
         "mozambique_petromoc_legacy_source_rows": len(
             mozambique_petromoc_legacy_source_rows
+        ),
+        "uganda_mpower_current_source_rows": len(
+            uganda_mpower_current_source_rows
         ),
         "kebs_smark_source_rows": len(kebs_smark_source_rows),
         "east_africa_certified_source_rows": len(east_africa_certified_source_rows),

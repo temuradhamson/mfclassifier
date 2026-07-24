@@ -3,7 +3,7 @@
   "run_id": "seed-2026-07-22",
   "snapshot_date": "2026-07-22",
   "status": "seed_only_world_catalog_incomplete",
-  "input_rows": 117659,
+  "input_rows": 117675,
   "normalized_input_sha256": "819d11779ffccddf9683a9b18a70e39bd5a1b8d72d9811fb5bb46d136b0f8073",
   "jaso_normalized_input_sha256": "b664fea5aee78de7303c33bf13d3c9ac26c8779b78beac24c54295b4d58603d3",
   "official_licensed_input_sha256": "533183ffbc755268ef12b54a556d1f3ea78db4fc80b564e12c391a10a8e2075e",
@@ -43,6 +43,7 @@
   "costa_rica_health_lubricant_input_sha256": "25a41cf63a922ef77cf6b5d9d6a38fda328ebdc60422897c96ea02aba077b6f4",
   "bolivia_ypfb_lubricant_input_sha256": "8180aabe38788161ea4526c721649eec71c732dfd2594ff9747dda238e55f7c1",
   "mozambique_petromoc_legacy_input_sha256": "0240db90f8a19537958f1e8fa68f5a5c048243f8d369a003a148d2490b9f0e6a",
+  "uganda_mpower_current_input_sha256": "38a82f3644aa2b97c1d90288a41ed517f92152010f3e29570bca2caac8ba56c2",
   "uruguay_ancap_lubricant_input_sha256": "715b3c7a20df420da36ca85a1036303c69db8bc734b9559c57cb2ca920f636e0",
   "colombia_terpel_lubricant_input_sha256": "6d279e1cf0fabc772f5a793bad92d555a9e96242f226b70b9ccea031fd387586",
   "guyana_guyoil_lubricant_input_sha256": "350836720cfa25c47350f03214fa59de384f80373fcb1a5d1a2f4d38f562079e",
@@ -123,17 +124,17 @@
   "fuchs_brazil_input_sha256": "4554ef1b651617a4a810d945bc519bed1e809ace1cda4246d6b63c7fff99affc",
   "fuchs_norway_input_sha256": "7ef62a3216e7f497ed96512202b7d386673fd01a4c6273ae1cc8fff6e026801a",
   "fuchs_hungary_input_sha256": "8a82b90335bc58ab44734be7541daaad051707258b5fbcb5346f8c2a2bf66ed4",
-  "canonical_rows": 117658,
-  "brands": 18480,
+  "canonical_rows": 117674,
+  "brands": 18481,
   "families": {
     "C": 2743,
     "E": 158,
-    "G": 12627,
-    "H": 6658,
+    "G": 12628,
+    "H": 6659,
     "I": 4967,
-    "M": 49611,
+    "M": 49620,
     "S": 13200,
-    "T": 18650,
+    "T": 18655,
     "TF": 8221,
     "U": 823
   },
@@ -281,6 +282,7 @@
   "costa_rica_health_lubricant_source_rows": 9911,
   "bolivia_ypfb_lubricant_source_rows": 47,
   "mozambique_petromoc_legacy_source_rows": 60,
+  "uganda_mpower_current_source_rows": 16,
   "kebs_smark_source_rows": 750,
   "east_africa_certified_source_rows": 229,
   "east_africa_certified_source_rows_by_source": {
@@ -626,7 +628,7 @@
   },
   "canonical_input_rows_collapsed": 1,
   "quality_issues": {
-    "professional_key_incomplete": 79008,
+    "professional_key_incomplete": 79011,
     "classification_family_conflict": 214,
     "source_multigrade_table_not_safely_aligned_to_listing_title": 27,
     "source_registration_number_missing": 51,
@@ -840,7 +842,8 @@
     "NP_ULTRA_CURRENT_EXPORT_MARKET_PRESENCE",
     "CAYMAN_ACE_CURRENT_AUTOMOTIVE_FLUID_CATALOG",
     "ZAMBIA_GEARPROS_CURRENT_LUBRICANT_SHOP",
-    "MOZAMBIQUE_PETROMOC_OFFICIALLY_LINKED_LEGACY_CATALOG"
+    "MOZAMBIQUE_PETROMOC_OFFICIALLY_LINKED_LEGACY_CATALOG",
+    "UGANDA_MPOWER_CURRENT_COMPLETE_PRODUCT_PAGES"
   ],
   "bulk_sources_blocked": [
     "fuchs-benelux",
