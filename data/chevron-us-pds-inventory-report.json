@@ -1,0 +1,21 @@
+{
+  "cache_scope": "PDF payloads and extracted text remain under ignored .cache; only non-expressive document metadata, hashes and product-page links are retained in the repository.",
+  "discovery_product_pages": 166,
+  "downloaded_pdf_documents": 202,
+  "in_scope_candidate_pages": 162,
+  "non_pdf_official_responses": 2,
+  "normalized_output_sha256": "8364ff35c1302a7aeb0feb86714dfbc6d1796c597445f3fe40af4ae1e865f6ca",
+  "pdf_documents_with_no_extracted_text": 0,
+  "pds_url_occurrences": 211,
+  "pypdf_version": "6.1.3",
+  "schema_version": 1,
+  "snapshot_date": "2026-07-24",
+  "source_id": "CHEVRON_US_COMPLETE_LIVE_PRODUCT_PDS_CORPUS",
+  "status": "complete_pds_corpus_downloaded_hashed_and_text_extracted",
+  "total_pdf_bytes": 27999148,
+  "total_printed_pages": 529,
+  "total_response_bytes": 27999938,
+  "unique_pdf_payloads": 200,
+  "unique_pds_urls": 204,
+  "unique_response_payloads": 201
+}
