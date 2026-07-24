@@ -248,6 +248,8 @@ def main() -> None:
     burundi_mogas_rows = [json.loads(line) for line in (ROOT / "data/burundi-mogas-current-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     mogas_global_market_report = json.loads((ROOT / "data/mogas-global-market-shop-report.json").read_text(encoding="utf-8"))
     mogas_global_market_rows = [json.loads(line) for line in (ROOT / "data/mogas-global-market-shop-observations.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    rwanda_akinawa_report = json.loads((ROOT / "data/rwanda-akinawa-current-report.json").read_text(encoding="utf-8"))
+    rwanda_akinawa_rows = [json.loads(line) for line in (ROOT / "data/rwanda-akinawa-current-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     uruguay_ancap_report = json.loads((ROOT / "data/uruguay-ancap-current-lubricants-report.json").read_text(encoding="utf-8"))
     uruguay_ancap_rows = [json.loads(line) for line in (ROOT / "data/uruguay-ancap-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     colombia_terpel_report = json.loads((ROOT / "data/colombia-terpel-current-lubricants-report.json").read_text(encoding="utf-8"))
@@ -385,6 +387,7 @@ def main() -> None:
         + report["uganda_mpower_current_source_rows"]
         + report["rwanda_almc_current_source_rows"]
         + report["burundi_mogas_current_source_rows"]
+        + report["rwanda_akinawa_current_source_rows"]
         + len(uruguay_ancap_rows)
         + len(colombia_terpel_rows)
         + len(guyana_guyoil_rows)
@@ -1110,9 +1113,9 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 5191
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3115
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 117743
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 117742
-    assert report["quality_issues"]["professional_key_incomplete"] == 79021
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 117753
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 117752
+    assert report["quality_issues"]["professional_key_incomplete"] == 79028
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
@@ -1120,7 +1123,7 @@ def main() -> None:
         GROUP BY p.family_code
     """)) == {
         "C": 2296, "E": 150, "G": 12430, "H": 5272, "I": 3875,
-        "M": 23569, "S": 12164, "T": 11896, "TF": 6729, "U": 640,
+        "M": 23575, "S": 12164, "T": 11897, "TF": 6729, "U": 640,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -2462,6 +2465,59 @@ def main() -> None:
     assert db.execute(
         "SELECT count(*) FROM product_offers "
         "WHERE source_id='MOGAS_GLOBAL_OFFICIAL_COUNTRY_SHOP_APIS'"
+    ).fetchone()[0] == 0
+    assert rwanda_akinawa_report[
+        "api_cards"
+    ] == rwanda_akinawa_report[
+        "product_identities"
+    ] == len(rwanda_akinawa_rows) == report[
+        "rwanda_akinawa_current_source_rows"
+    ] == 10
+    assert rwanda_akinawa_report["families"] == {
+        "G": 1, "M": 6, "T": 3,
+    }
+    assert rwanda_akinawa_report["unambiguous_source_spec_rows"] == 4
+    assert rwanda_akinawa_report[
+        "expected_current_classifier_professional_key_complete_rows"
+    ] == 3
+    assert rwanda_akinawa_report["conflict_limited_rows"] == 6
+    assert len(rwanda_akinawa_report["quality_flags"]) == 8
+    assert rwanda_akinawa_report["cards_source_reported_in_stock"] == 10
+    assert rwanda_akinawa_report["cards_source_reported_purchasable"] == 0
+    assert rwanda_akinawa_report[
+        "source_reported_price_minor_units"
+    ] == {"0": 10}
+    assert rwanda_akinawa_report[
+        "normalized_output_sha256"
+    ] == hashlib.sha256(
+        (ROOT / "data/rwanda-akinawa-current-products.jsonl").read_bytes()
+    ).hexdigest()
+    assert all(
+        row["market"] == "Rwanda"
+        and row["brand"] == "AKINAWA"
+        and row["manufacturer"] == ""
+        and row["specifications"]["source_is_purchasable"] is False
+        for row in rwanda_akinawa_rows
+    )
+    assert policy_by_id[
+        "RWANDA_LEADWAY_AKINAWA_CURRENT_COMPLETE_CATALOG"
+    ]["source_sha256"] == rwanda_akinawa_report[
+        "normalized_output_sha256"
+    ]
+    assert policy_by_id[
+        "RWANDA_LEADWAY_AKINAWA_CURRENT_COMPLETE_CATALOG"
+    ]["observed_count"] == 10
+    assert db.execute(
+        "SELECT count(*) FROM products "
+        "WHERE source_id='RWANDA_LEADWAY_AKINAWA_CURRENT_COMPLETE_CATALOG'"
+    ).fetchone()[0] == 10
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id='RWANDA_LEADWAY_AKINAWA_CURRENT_COMPLETE_CATALOG'"
+    ).fetchone()[0] == 10
+    assert db.execute(
+        "SELECT count(*) FROM product_offers "
+        "WHERE source_id='RWANDA_LEADWAY_AKINAWA_CURRENT_COMPLETE_CATALOG'"
     ).fetchone()[0] == 0
     assert uruguay_ancap_report["catalog_product_families"] == 56
     assert uruguay_ancap_report["normalized_product_variants"] == len(uruguay_ancap_rows) == 88

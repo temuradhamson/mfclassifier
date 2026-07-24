@@ -3046,6 +3046,21 @@
       "publication_status": "attributed_transformed_nonexpressive_market_product_shop_state_price_configuration_and_evidence_facts_only_no_descriptions_reviews_contacts_or_images_redistributed",
       "observed_count": 221,
       "notes": "The official MOGAS homepage lists seven markets: Burundi, DRC, Kenya, Rwanda, Tanzania, UAE and Uganda. Six country APIs expose the same 39-card set (36 relevant lubricant/fluid cards after three LPG exclusions); Rwanda exposes five local cards. The 221 market-card observations create 277 links to the existing 45 MOGAS product identities and no duplicate products. UGX/RWF prices remain pending variant-level offer audit; 180 observations with conflicted configured currencies are excluded from analytics."
+    },
+    {
+      "source_id": "RWANDA_LEADWAY_AKINAWA_CURRENT_COMPLETE_CATALOG",
+      "title": "Complete current Akinawa catalog from exclusive Rwanda distributor Leadway",
+      "owner": "Leadway Distribution",
+      "source_type": "current_exclusive_country_distributor_complete_public_store_api_catalog",
+      "source_locator": "data/rwanda-akinawa-current-products.jsonl",
+      "source_url": "https://leadwaydistribution.com/products/",
+      "terms_url": "https://leadwaydistribution.com/",
+      "source_sha256": "0835ac318f7dcd2ece33986231915b7380723f0f41db0ee7bb50ce007d837501",
+      "access_status": "public_current_exclusive_country_distributor_product_page_and_store_api",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_transformed_nonexpressive_product_grade_specification_catalog_state_and_evidence_facts_only_no_marketing_descriptions_contacts_or_images_redistributed",
+      "observed_count": 10,
+      "notes": "All ten public Store API cards are included (G1/M6/T3). Four have an agreed professional key; six retain title/body conflicts without promoting disputed API, JASO, ILSAC or TC-W3 claims. All cards publish a zero configured price and are not purchasable, so stock badges remain catalog evidence and no offers are created. The product manufacturer is not published by the current distributor catalog and is left blank."
     }
   ]
 }

@@ -1,0 +1,37 @@
+{
+  "api_cards": 10,
+  "api_normalized_card_names_sha256": "8e9cc509bfef8c37fc4c3926c86439d9a6cd89d2f056d8ce48361ba913b336c7",
+  "cards_source_reported_in_stock": 10,
+  "cards_source_reported_purchasable": 0,
+  "conflict_limited_rows": 6,
+  "conflict_note": "Only fields agreed by title and body enter strict professional keys. Conflicting API/JASO/TC-W3 and product-line statements remain source-reported.",
+  "denominator_note": "All ten cards in the public Leadway Store API are included.",
+  "expected_current_classifier_professional_key_complete_rows": 3,
+  "families": {
+    "G": 1,
+    "M": 6,
+    "T": 3
+  },
+  "landing_product_names_sha256": "d8762f4e4f1abdf42460f5d3ee0f9bc711f3d2eed3f37525d5eadbc6109e1060",
+  "normalized_output_sha256": "0835ac318f7dcd2ece33986231915b7380723f0f41db0ee7bb50ce007d837501",
+  "offer_note": "All cards report zero price and are not purchasable; stock badges remain source evidence and no offers are created.",
+  "product_identities": 10,
+  "quality_flags": {
+    "marine_2t_tcw3_title_conflicts_with_hybrid_0w30_sp_gf6a_body_no_strict_key": 1,
+    "motorcycle_ma2_title_conflicts_with_passenger_car_sn_cf_body_not_promoted_to_strict_performance": 1,
+    "title_ci4_conflicts_with_body_sn_cf_not_promoted_to_strict_api": 1,
+    "title_product_line_conflicts_with_body_platinum5": 1,
+    "title_sn_cf_conflicts_with_body_sp_not_promoted_to_strict_api": 1,
+    "title_sn_conflicts_with_body_sp_not_promoted_to_strict_api": 1,
+    "title_sn_gf5_conflicts_with_body_sp_gf6a_not_promoted_to_strict_performance": 1,
+    "title_synthetic_blended_conflicts_with_body_fully_synthetic": 1
+  },
+  "schema_version": 1,
+  "snapshot_date": "2026-07-24",
+  "source_id": "RWANDA_LEADWAY_AKINAWA_CURRENT_COMPLETE_CATALOG",
+  "source_reported_price_minor_units": {
+    "0": 10
+  },
+  "status": "current_exclusive_distributor_complete_catalog_conflicts_explicit",
+  "unambiguous_source_spec_rows": 4
+}
