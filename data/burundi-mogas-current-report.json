@@ -1,0 +1,31 @@
+{
+  "api_cards": 39,
+  "api_normalized_facts_sha256": "0e52c1d3f0391c54ab613ec52bfefbfbe14815ace942147c09b5138d4d7eff7f",
+  "cards_expanded_to_multiple_grades": 8,
+  "cards_source_reported_in_stock": 36,
+  "cards_source_reported_purchasable": 36,
+  "cards_with_order_action": 36,
+  "denominator_note": "All 39 Store API cards are accounted for: 36 lubricant/fluid cards normalized and three LPG cylinder cards excluded.",
+  "excluded_non_lubricant_lpg_cylinders": 3,
+  "families": {
+    "C": 2,
+    "G": 14,
+    "H": 5,
+    "I": 2,
+    "M": 15,
+    "T": 6,
+    "TF": 1
+  },
+  "normalized_output_sha256": "ec5d846e5c6fbbd1feb450ead23d8cd63c1b16b0eef1bfa9c21c8aeb043801fa",
+  "offer_note": "Orderability and raw configured prices remain in source specifications, but no analytical offers are created because the Burundi section has a Uganda footer and the WooCommerce USD configuration is implausible for the published amounts.",
+  "product_grade_identities": 45,
+  "publication_scope": "Factual product names, variants, specifications, shop state, evidence URLs and hashes only; descriptions, reviews, contacts and images are excluded.",
+  "relevant_shop_cards": 36,
+  "schema_version": 1,
+  "snapshot_date": "2026-07-24",
+  "source_id": "BURUNDI_MOGAS_CURRENT_COMPLETE_SHOP_API",
+  "source_reported_currency_codes": {
+    "USD": 36
+  },
+  "status": "current_complete_shop_api_country_currency_conflicts_explicit"
+}

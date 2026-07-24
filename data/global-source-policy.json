@@ -3016,6 +3016,21 @@
       "publication_status": "attributed_transformed_nonexpressive_product_grade_specification_typical_property_and_evidence_facts_only_no_marketing_text_contacts_images_or_source_pdfs_redistributed",
       "observed_count": 23,
       "notes": "The sole product page listed in the official sitemap links 11 TDS documents (13 PDF pages), expanded into 23 explicitly published product-grade identities (G3/H3/I7/M6/T4). ALMC is retained only as a manufacturer-catalog label because the company also advertises private-label production; it is not asserted as the package brand. No packages, prices, stock quantities or order actions are published, so no offers are created. The HLP ISO VG 32 KV100 value of 2.3 cSt, a description-only SAE 15W-40 mention on the 20W-50 sheet and the landing-page EP 0 claim absent from the TDS are retained as explicit source-quality flags."
+    },
+    {
+      "source_id": "BURUNDI_MOGAS_CURRENT_COMPLETE_SHOP_API",
+      "title": "Complete current MOGAS Burundi-section WooCommerce shop API",
+      "owner": "MOGAS Group",
+      "source_type": "official_manufacturer_country_section_complete_public_shop_api_with_country_and_currency_conflicts",
+      "source_locator": "data/burundi-mogas-current-products.jsonl",
+      "source_url": "https://mogasoil.com/burundi/shop/",
+      "terms_url": "https://mogasoil.com/burundi/",
+      "source_sha256": "ec5d846e5c6fbbd1feb450ead23d8cd63c1b16b0eef1bfa9c21c8aeb043801fa",
+      "access_status": "public_current_official_manufacturer_country_section_and_woocommerce_store_api",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_transformed_nonexpressive_product_grade_specification_shop_state_and_evidence_facts_only_no_descriptions_reviews_contacts_or_images_redistributed",
+      "observed_count": 45,
+      "notes": "All 39 Store API cards are accounted for: 36 lubricant/fluid cards expanded into 45 grade identities (C2/G14/H5/I2/M15/T6/TF1), while three LPG cylinder cards are excluded. The URL and page title say Burundi but the footer publishes a Uganda contact; WooCommerce reports USD for amounts whose scale and country context make the currency configuration implausible. Raw configured price/order/stock facts remain in source specifications, but no analytical offers are created and no price is admitted to average-price calculations."
     }
   ]
 }

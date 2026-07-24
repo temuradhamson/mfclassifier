@@ -244,6 +244,8 @@ def main() -> None:
     uganda_mpower_rows = [json.loads(line) for line in (ROOT / "data/uganda-mpower-current-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     rwanda_almc_report = json.loads((ROOT / "data/rwanda-almc-current-report.json").read_text(encoding="utf-8"))
     rwanda_almc_rows = [json.loads(line) for line in (ROOT / "data/rwanda-almc-current-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    burundi_mogas_report = json.loads((ROOT / "data/burundi-mogas-current-report.json").read_text(encoding="utf-8"))
+    burundi_mogas_rows = [json.loads(line) for line in (ROOT / "data/burundi-mogas-current-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     uruguay_ancap_report = json.loads((ROOT / "data/uruguay-ancap-current-lubricants-report.json").read_text(encoding="utf-8"))
     uruguay_ancap_rows = [json.loads(line) for line in (ROOT / "data/uruguay-ancap-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     colombia_terpel_report = json.loads((ROOT / "data/colombia-terpel-current-lubricants-report.json").read_text(encoding="utf-8"))
@@ -380,6 +382,7 @@ def main() -> None:
         + report["mozambique_petromoc_legacy_source_rows"]
         + report["uganda_mpower_current_source_rows"]
         + report["rwanda_almc_current_source_rows"]
+        + report["burundi_mogas_current_source_rows"]
         + len(uruguay_ancap_rows)
         + len(colombia_terpel_rows)
         + len(guyana_guyoil_rows)
@@ -1105,17 +1108,17 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 5191
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3115
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 117698
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 117697
-    assert report["quality_issues"]["professional_key_incomplete"] == 79011
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 117743
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 117742
+    assert report["quality_issues"]["professional_key_incomplete"] == 79021
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
         WHERE q.issue_code='professional_key_incomplete'
         GROUP BY p.family_code
     """)) == {
-        "C": 2294, "E": 150, "G": 12430, "H": 5270, "I": 3873,
-        "M": 23565, "S": 12164, "T": 11896, "TF": 6729, "U": 640,
+        "C": 2296, "E": 150, "G": 12430, "H": 5272, "I": 3875,
+        "M": 23569, "S": 12164, "T": 11896, "TF": 6729, "U": 640,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -2327,6 +2330,69 @@ def main() -> None:
     assert db.execute(
         "SELECT count(*) FROM product_offers "
         "WHERE source_id='RWANDA_ALMC_CURRENT_COMPLETE_TDS_CATALOG'"
+    ).fetchone()[0] == 0
+    assert burundi_mogas_report["api_cards"] == 39
+    assert burundi_mogas_report["excluded_non_lubricant_lpg_cylinders"] == 3
+    assert burundi_mogas_report["relevant_shop_cards"] == 36
+    assert burundi_mogas_report[
+        "product_grade_identities"
+    ] == len(burundi_mogas_rows) == report[
+        "burundi_mogas_current_source_rows"
+    ] == 45
+    assert burundi_mogas_report["families"] == {
+        "C": 2, "G": 14, "H": 5, "I": 2, "M": 15, "T": 6, "TF": 1,
+    }
+    assert burundi_mogas_report["cards_expanded_to_multiple_grades"] == 8
+    assert burundi_mogas_report["cards_with_order_action"] == 36
+    assert burundi_mogas_report["cards_source_reported_in_stock"] == 36
+    assert burundi_mogas_report["cards_source_reported_purchasable"] == 36
+    assert burundi_mogas_report["source_reported_currency_codes"] == {
+        "USD": 36,
+    }
+    assert burundi_mogas_report[
+        "normalized_output_sha256"
+    ] == hashlib.sha256(
+        (ROOT / "data/burundi-mogas-current-products.jsonl").read_bytes()
+    ).hexdigest()
+    assert all(
+        row["lifecycle_status"]
+        == "current_shop_listing_country_and_currency_conflicted"
+        and row["market"] == "Burundi"
+        and row["brand"] == "MOGAS"
+        and row["market_evidence_status"].endswith(
+            "uganda_footer_conflict"
+        )
+        for row in burundi_mogas_rows
+    )
+    assert all(
+        row["specifications"]["source_currency_code"] == "USD"
+        and "source_price_excluded_from_analytical_offer_layer"
+        in row["specifications"]["source_quality_flags"]
+        for row in burundi_mogas_rows
+    )
+    assert all(
+        not ({"address", "phone", "email", "contact_person"} & set(row))
+        for row in burundi_mogas_rows
+    )
+    assert policy_by_id[
+        "BURUNDI_MOGAS_CURRENT_COMPLETE_SHOP_API"
+    ]["source_sha256"] == burundi_mogas_report[
+        "normalized_output_sha256"
+    ]
+    assert policy_by_id[
+        "BURUNDI_MOGAS_CURRENT_COMPLETE_SHOP_API"
+    ]["observed_count"] == 45
+    assert db.execute(
+        "SELECT count(*) FROM products "
+        "WHERE source_id='BURUNDI_MOGAS_CURRENT_COMPLETE_SHOP_API'"
+    ).fetchone()[0] == 45
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id='BURUNDI_MOGAS_CURRENT_COMPLETE_SHOP_API'"
+    ).fetchone()[0] == 45
+    assert db.execute(
+        "SELECT count(*) FROM product_offers "
+        "WHERE source_id='BURUNDI_MOGAS_CURRENT_COMPLETE_SHOP_API'"
     ).fetchone()[0] == 0
     assert uruguay_ancap_report["catalog_product_families"] == 56
     assert uruguay_ancap_report["normalized_product_variants"] == len(uruguay_ancap_rows) == 88
