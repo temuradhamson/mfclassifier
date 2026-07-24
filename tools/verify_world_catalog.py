@@ -272,6 +272,8 @@ def main() -> None:
     belize_rymax_rows = [json.loads(line) for line in (ROOT / "data/belize-rymax-current-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     bahamas_cbs_report = json.loads((ROOT / "data/bahamas-cbs-current-catalog-report.json").read_text(encoding="utf-8"))
     bahamas_cbs_rows = [json.loads(line) for line in (ROOT / "data/bahamas-cbs-current-availability.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    barbados_sol_report = json.loads((ROOT / "data/barbados-sol-recent-catalog-report.json").read_text(encoding="utf-8"))
+    barbados_sol_rows = [json.loads(line) for line in (ROOT / "data/barbados-sol-recent-availability.jsonl").read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_report = json.loads((ROOT / "data/kebs-smark-lubricant-products-report.json").read_text(encoding="utf-8"))
     kebs_smark_rows = [json.loads(line) for line in (ROOT / "data/kebs-smark-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     east_africa_report = json.loads((ROOT / "data/east-africa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -2619,6 +2621,50 @@ def main() -> None:
     assert db.execute(
         "SELECT count(*) FROM product_sources "
         "WHERE source_id='BAHAMAS_CBS_CURRENT_AVAILABILITY'"
+    ).fetchone()[0] == 0
+    assert barbados_sol_report[
+        "normalized_product_identities"
+    ] == len(barbados_sol_rows) == report[
+        "barbados_sol_availability_source_rows"
+    ] == 33
+    assert barbados_sol_report["listing_card_occurrences"] == 36
+    assert barbados_sol_report["package_only_occurrences_collapsed"] == 3
+    assert barbados_sol_report[
+        "identities_with_conflicting_status_observations"
+    ] == 4
+    assert barbados_sol_report["families"] == {
+        "C": 2, "G": 2, "H": 3, "I": 5, "M": 14,
+        "T": 3, "TF": 3, "U": 1,
+    }
+    assert barbados_sol_report["normalized_output_sha256"] == hashlib.sha256(
+        (ROOT / "data/barbados-sol-recent-availability.jsonl").read_bytes()
+    ).hexdigest()
+    assert report["barbados_sol_availability_input_sha256"] == (
+        barbados_sol_report["normalized_output_sha256"]
+    )
+    assert policy_by_id[
+        "BARBADOS_SOL_RECENT_ECOMMERCE_CATALOG"
+    ]["source_sha256"] == barbados_sol_report["normalized_output_sha256"]
+    assert policy_by_id[
+        "BARBADOS_SOL_RECENT_ECOMMERCE_CATALOG"
+    ]["observed_count"] == 33
+    assert all(
+        row["brand"] == "MOBIL"
+        and row["market"] == "Barbados"
+        and row["listing_cards"]
+        and row["technical"]
+        for row in barbados_sol_rows
+    )
+    assert sum(
+        len(row["listing_cards"]) for row in barbados_sol_rows
+    ) == 36
+    assert db.execute(
+        "SELECT count(*) FROM products "
+        "WHERE source_id='BARBADOS_SOL_RECENT_ECOMMERCE_CATALOG'"
+    ).fetchone()[0] == 0
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id='BARBADOS_SOL_RECENT_ECOMMERCE_CATALOG'"
     ).fetchone()[0] == 0
     assert policy_by_id["VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG"]["observed_count"] == 23
     assert db.execute(

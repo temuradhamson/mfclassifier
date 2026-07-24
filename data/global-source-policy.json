@@ -2776,6 +2776,21 @@
       "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_page_or_image_redistribution",
       "observed_count": 51,
       "notes": "The official pages report 16 Motor Oils, 17 Grease & Lubricants and 23 Other Fluids/Treatments/Chemicals. One equipment card and five cleaner-only cards are excluded; MM13 appearing in two categories is counted once. Two relevant cards were found elsewhere in the store. The live grease page and recent official-page search snapshot disagree on L112 versus MM12R, so their transparent temporal union is retained. Direct command-line requests return HTTP 455; evidence was transcribed through ordinary browser rendering without bypassing access control, and no unavailable page/image hash is claimed. These 51 rows are Bahamas retail availability evidence, not new manufacturer master identities."
+    },
+    {
+      "source_id": "BARBADOS_SOL_RECENT_ECOMMERCE_CATALOG",
+      "title": "Recent official Sol Barbados Mobil ecommerce catalog",
+      "owner": "Sol Barbados Ltd.",
+      "source_type": "official_country_ecommerce_browser_observed_product_categories_and_cards",
+      "source_locator": "data/barbados-sol-recent-availability.jsonl",
+      "source_url": "https://barbados.solpetroleum.com/",
+      "terms_url": "https://solpetroleum.com/",
+      "source_sha256": "fbbdfb5431af025ae39fa87cec19649ddea7ef92de885111ab04d75e2058172e",
+      "access_status": "intermittent_official_ecommerce_browser_observed_command_line_404_recorded",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_factual_fields_only_no_source_page_or_image_redistribution",
+      "observed_count": 33,
+      "notes": "Nine professional product sections yield 36 Mobil listing-card occurrences collapsed to 33 product identities after three explicit package-only repeats. The layer covers gasoline and diesel engine oils, automotive and industrial gear oils, greases, compressor/circulating/hydraulic/transmission oils and Mobil Jet Oil 254. Four identities have contradictory in-stock/not-available observations between browser surfaces; both statuses are retained. Several category routes intermittently return 404 to command-line clients, so no unavailable page/image hash is claimed. These rows are Barbados availability evidence pending strict matching to global Mobil identities; they do not create country-specific manufacturer masters."
     }
   ]
 }

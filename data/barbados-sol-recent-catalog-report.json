@@ -1,0 +1,37 @@
+{
+  "empty_or_intermittently_unavailable_category_routes": [
+    "industrial-gear-oils",
+    "outboard-motorcycle-oils",
+    "turbine-oils"
+  ],
+  "families": {
+    "C": 2,
+    "G": 2,
+    "H": 3,
+    "I": 5,
+    "M": 14,
+    "T": 3,
+    "TF": 3,
+    "U": 1
+  },
+  "identities_by_category": {
+    "air-compressor-oils": 2,
+    "circulating-oils": 2,
+    "diesel-engine-oils": 6,
+    "gasoline-engine-oils": 8,
+    "gear-oils": 6,
+    "greases": 2,
+    "hydraulic-oils": 3,
+    "transmission-oils": 3,
+    "turbine-oils": 1
+  },
+  "identities_with_conflicting_status_observations": 4,
+  "listing_card_occurrences": 36,
+  "normalized_output_sha256": "fbbdfb5431af025ae39fa87cec19649ddea7ef92de885111ab04d75e2058172e",
+  "normalized_product_identities": 33,
+  "package_only_occurrences_collapsed": 3,
+  "quality_note": "Barbados availability evidence for global Mobil identities. No country-specific manufacturer master products are created before strict matching.",
+  "snapshot_date": "2026-07-24",
+  "source_id": "BARBADOS_SOL_RECENT_ECOMMERCE_CATALOG",
+  "source_url": "https://barbados.solpetroleum.com"
+}
