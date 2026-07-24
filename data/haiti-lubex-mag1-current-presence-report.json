@@ -1,0 +1,9 @@
+{
+  "evidence_rows": 1,
+  "normalized_output_sha256": "01478d54d9d7cd407fafe4592249d759bef4c4c22470a8d536ce43b2f84a6132",
+  "quality_note": "First-party Lubex evidence confirms MAG 1 distributor/brand presence in Haiti only. It does not prove any specific SKU, stock state or the complete global MAG 1 range in Haiti.",
+  "snapshot_date": "2026-07-24",
+  "source_id": "HAITI_LUBEX_MAG1_CURRENT_DISTRIBUTOR_PRESENCE",
+  "source_product_url": "https://www.lubex.net/market-sectors/automotive-chemicals/",
+  "source_url": "https://www.lubex.net/"
+}

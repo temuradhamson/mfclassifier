@@ -2851,6 +2851,36 @@
       "publication_status": "attributed_nonexpressive_factual_page_fields_and_hashes_only_no_page_text_or_images_redistributed",
       "observed_count": 95,
       "notes": "All 95 product URLs in the official sitemap returned HTTP 200 on 2026-07-24. The layer preserves title, published taxonomy, sitemap last-modified timestamp, direct URL, conservative technical tokens and a stable hash of the normalized product section; expressive body text and images are not redistributed. The normalized output was reproduced byte-for-byte across independent live fetches despite dynamic WordPress nonces. Sitemap dates are 92 pages on 2021-04-27, one on 2021-09-14 and two on 2026-04-01, so a live URL is not treated as proof of a recently reformulated product. This is an evidence-only product/series-page denominator and does not create canonical rows or infer unprinted grades."
+    },
+    {
+      "source_id": "MAG1_CURRENT_OFFICIAL_PRODUCT_CATALOG",
+      "title": "Complete current official MAG 1 product and PDS catalog",
+      "owner": "Highline Warren",
+      "source_type": "official_manufacturer_complete_leaf_product_sitemap_and_product_data_sheets",
+      "source_locator": "data/mag1-current-official-products.jsonl",
+      "source_url": "https://mag1.com/products/",
+      "terms_url": "https://mag1.com/about-us/terms-and-conditions/",
+      "source_sha256": "3d59390036e271de6e96d0142696e978f61055734dd2d9dd54b59d19b36b61d3",
+      "access_status": "public_official_product_pages_and_intentionally_available_pds_views",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_transformed_nonexpressive_factual_product_and_technical_fields_only_no_marketing_text_page_or_image_redistribution",
+      "observed_count": 106,
+      "notes": "The complete official sitemap contains 114 leaf product pages and 114 unique product-level PDS links. Eight cleaner, degreaser, belt-dressing or tire-inflator pages are transparently excluded, leaving 106 lubricant, grease, transmission, brake-fluid, maintenance-fluid and additive identities. The normalized layer preserves product identity, direct evidence links, source-reported specification/status pairs, selected factual property and package tables, and evidence hashes; marketing prose, page layout and images are not redistributed. Terms were reviewed and the transformation is deliberately limited to attributed nonexpressive facts intentionally exposed by the official product/PDS interfaces. Three exact current products attach to existing JASO/NMMA filed identities; no broad Haiti SKU inference is permitted from Lubex's separate brand-distributor statement."
+    },
+    {
+      "source_id": "HAITI_LUBEX_MAG1_CURRENT_DISTRIBUTOR_PRESENCE",
+      "title": "Current first-party Lubex MAG 1 distributor presence in Haiti",
+      "owner": "Lubex S.A.",
+      "source_type": "official_country_distributor_first_party_brand_presence_statement",
+      "source_locator": "data/haiti-lubex-mag1-current-presence.jsonl",
+      "source_url": "https://www.lubex.net/",
+      "terms_url": "https://www.lubex.net/",
+      "source_sha256": "01478d54d9d7cd407fafe4592249d759bef4c4c22470a8d536ce43b2f84a6132",
+      "access_status": "public_official_distributor_web_pages",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_nonexpressive_brand_presence_fact_and_evidence_links_only_no_marketing_text_or_images_redistributed",
+      "observed_count": 1,
+      "notes": "Lubex's first-party home and automotive-chemicals pages state that it is the authorised/exclusive MAG 1 product distributor in Haiti. The normalized row confirms only distributor and brand presence. It does not establish any specific local SKU, stock state, price, formulation or the availability of MAG 1's complete global catalog in Haiti."
     }
   ]
 }

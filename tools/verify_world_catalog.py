@@ -282,6 +282,11 @@ def main() -> None:
     dominican_imca_mobil_rows = [json.loads(line) for line in (ROOT / "data/dominican-republic-imca-mobil-2025-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     dominican_imca_mobil_web_report = json.loads((ROOT / "data/dominican-republic-imca-mobil-web-report.json").read_text(encoding="utf-8"))
     dominican_imca_mobil_web_rows = [json.loads(line) for line in (ROOT / "data/dominican-republic-imca-mobil-web-pages.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    mag1_current_report = json.loads((ROOT / "data/mag1-current-official-catalog-report.json").read_text(encoding="utf-8"))
+    mag1_current_rows = [json.loads(line) for line in (ROOT / "data/mag1-current-official-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    mag1_current_exclusions = [json.loads(line) for line in (ROOT / "data/mag1-current-official-exclusions.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    haiti_lubex_mag1_report = json.loads((ROOT / "data/haiti-lubex-mag1-current-presence-report.json").read_text(encoding="utf-8"))
+    haiti_lubex_mag1_rows = [json.loads(line) for line in (ROOT / "data/haiti-lubex-mag1-current-presence.jsonl").read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_report = json.loads((ROOT / "data/kebs-smark-lubricant-products-report.json").read_text(encoding="utf-8"))
     kebs_smark_rows = [json.loads(line) for line in (ROOT / "data/kebs-smark-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     east_africa_report = json.loads((ROOT / "data/east-africa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -366,6 +371,7 @@ def main() -> None:
         ]
         + len(belize_rymax_rows)
         + report["dominican_imca_mobil_products_added"]
+        + report["mag1_current_products_added"]
         - report["gm_dual_standard_license_rows_merged"]
         - report["fuchs_exact_payload_identity_rows_matched"]
         - report["fuchs_exact_content_identity_rows_matched"]
@@ -1071,17 +1077,17 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 4973
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3044
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 117355
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 117354
-    assert report["quality_issues"]["professional_key_incomplete"] == 78836
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 117458
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 117457
+    assert report["quality_issues"]["professional_key_incomplete"] == 78893
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
         WHERE q.issue_code='professional_key_incomplete'
         GROUP BY p.family_code
     """)) == {
-        "C": 2290, "E": 149, "G": 12417, "H": 5271, "I": 3861,
-        "M": 23483, "S": 12154, "T": 11852, "TF": 6727, "U": 632,
+        "C": 2290, "E": 149, "G": 12418, "H": 5272, "I": 3871,
+        "M": 23494, "S": 12163, "T": 11872, "TF": 6729, "U": 635,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -2901,6 +2907,124 @@ def main() -> None:
     assert db.execute(
         "SELECT count(*) FROM product_sources "
         "WHERE source_id='DOMINICAN_REPUBLIC_IMCA_MOBIL_LIVE_WEB_CATALOG'"
+    ).fetchone()[0] == 0
+    assert mag1_current_report["leaf_product_pages"] == 114
+    assert mag1_current_report[
+        "included_products"
+    ] == len(mag1_current_rows) == report[
+        "mag1_current_official_source_rows"
+    ] == 106
+    assert mag1_current_report[
+        "excluded_pages"
+    ] == len(mag1_current_exclusions) == 8
+    assert mag1_current_report["unique_pds_urls"] == 114
+    assert mag1_current_report["unique_product_titles"] == 106
+    assert mag1_current_report["families"] == {
+        "G": 1, "H": 6, "I": 17, "M": 42, "S": 9,
+        "T": 26, "TF": 2, "U": 3,
+    }
+    assert mag1_current_report[
+        "pages_with_industry_oem_specifications"
+    ] == 79
+    assert mag1_current_report["pages_with_typical_properties"] == 91
+    assert mag1_current_report[
+        "pages_with_container_bulk_availability"
+    ] == 106
+    assert mag1_current_report[
+        "normalized_output_sha256"
+    ] == hashlib.sha256(
+        (ROOT / "data/mag1-current-official-products.jsonl").read_bytes()
+    ).hexdigest()
+    assert mag1_current_report[
+        "normalized_exclusions_sha256"
+    ] == hashlib.sha256(
+        (ROOT / "data/mag1-current-official-exclusions.jsonl").read_bytes()
+    ).hexdigest()
+    assert report["mag1_current_official_input_sha256"] == (
+        mag1_current_report["normalized_output_sha256"]
+    )
+    assert report["mag1_current_products_matched_to_existing"] == 3
+    assert report["mag1_current_products_added"] == 103
+    assert policy_by_id[
+        "MAG1_CURRENT_OFFICIAL_PRODUCT_CATALOG"
+    ]["source_sha256"] == mag1_current_report[
+        "normalized_output_sha256"
+    ]
+    assert policy_by_id[
+        "MAG1_CURRENT_OFFICIAL_PRODUCT_CATALOG"
+    ]["observed_count"] == 106
+    assert all(
+        row["brand"] == "MAG 1"
+        and row["family_code"] in {"G", "H", "I", "M", "S", "T", "TF", "U"}
+        and row["http_status"] == 200
+        and row["pds_http_status"] == 200
+        and row["source_url"].startswith("https://mag1.com/products/")
+        and row["pds_url"].startswith("https://mag1.com/products/")
+        and row["technical"]
+        for row in mag1_current_rows
+    )
+    assert all(
+        row["scope_status"]
+        == "out_of_scope_cleaner_dressing_or_equipment_product"
+        and "family_code" not in row
+        for row in mag1_current_exclusions
+    )
+    assert db.execute(
+        "SELECT count(*) FROM products "
+        "WHERE source_id='MAG1_CURRENT_OFFICIAL_PRODUCT_CATALOG'"
+    ).fetchone()[0] == 103
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id='MAG1_CURRENT_OFFICIAL_PRODUCT_CATALOG'"
+    ).fetchone()[0] == 106
+    for grade in ("SAE 10", "SAE 30", "SAE 50"):
+        product_id = db.execute(
+            "SELECT product_id FROM products "
+            "WHERE source_id='MAG1_CURRENT_OFFICIAL_PRODUCT_CATALOG' "
+            "AND family_code='T' AND product_name_raw=?",
+            (f"MAG 1® TO-4 Torque Fluid {grade}",),
+        ).fetchone()[0]
+        assert db.execute(
+            "SELECT spec_value FROM specifications "
+            "WHERE product_id=? AND spec_type='sae_gear'",
+            (product_id,),
+        ).fetchone()[0] == grade
+        assert db.execute(
+            "SELECT count(*) FROM specifications "
+            "WHERE product_id=? AND spec_type='sae_engine'",
+            (product_id,),
+        ).fetchone()[0] == 0
+    assert haiti_lubex_mag1_report[
+        "evidence_rows"
+    ] == len(haiti_lubex_mag1_rows) == report[
+        "haiti_lubex_mag1_presence_source_rows"
+    ] == 1
+    assert haiti_lubex_mag1_report[
+        "normalized_output_sha256"
+    ] == hashlib.sha256(
+        (ROOT / "data/haiti-lubex-mag1-current-presence.jsonl").read_bytes()
+    ).hexdigest()
+    assert report["haiti_lubex_mag1_presence_input_sha256"] == (
+        haiti_lubex_mag1_report["normalized_output_sha256"]
+    )
+    assert policy_by_id[
+        "HAITI_LUBEX_MAG1_CURRENT_DISTRIBUTOR_PRESENCE"
+    ]["source_sha256"] == haiti_lubex_mag1_report[
+        "normalized_output_sha256"
+    ]
+    assert policy_by_id[
+        "HAITI_LUBEX_MAG1_CURRENT_DISTRIBUTOR_PRESENCE"
+    ]["observed_count"] == 1
+    assert haiti_lubex_mag1_rows[0][
+        "product_scope_status"
+    ] == "no_local_sku_stock_or_full_global_range_inference_permitted"
+    assert db.execute(
+        "SELECT count(*) FROM products "
+        "WHERE source_id='HAITI_LUBEX_MAG1_CURRENT_DISTRIBUTOR_PRESENCE'"
+    ).fetchone()[0] == 0
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id='HAITI_LUBEX_MAG1_CURRENT_DISTRIBUTOR_PRESENCE'"
     ).fetchone()[0] == 0
     assert policy_by_id["VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG"]["observed_count"] == 23
     assert db.execute(

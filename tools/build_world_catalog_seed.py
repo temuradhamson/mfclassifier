@@ -120,6 +120,8 @@ SHELL_GLOBAL_DISTRIBUTORS_JSONL = ROOT / "data" / "shell-global-current-distribu
 CASTROL_GLOBAL_DISTRIBUTORS_JSONL = ROOT / "data" / "castrol-global-current-distributors.jsonl"
 DOMINICAN_REPUBLIC_IMCA_MOBIL_JSONL = ROOT / "data" / "dominican-republic-imca-mobil-2025-products.jsonl"
 DOMINICAN_REPUBLIC_IMCA_MOBIL_WEB_JSONL = ROOT / "data" / "dominican-republic-imca-mobil-web-pages.jsonl"
+MAG1_CURRENT_OFFICIAL_JSONL = ROOT / "data" / "mag1-current-official-products.jsonl"
+HAITI_LUBEX_MAG1_PRESENCE_JSONL = ROOT / "data" / "haiti-lubex-mag1-current-presence.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
 SON_MANCAP_JSONL = ROOT / "data" / "son-mancap-chemical-lubricant-products.jsonl"
@@ -4325,6 +4327,118 @@ def merge_dominican_republic_imca_mobil_evidence(
     )
 
 
+def mag1_current_official_record(row: dict) -> dict:
+    """Convert one current official MAG 1 product/PDS identity."""
+    technical = row["technical"]
+    api_class = "; ".join(
+        [f"API {value}" for value in technical["api"]]
+        + [f"API {value}" for value in technical["api_gl"]]
+        + [f"ACEA {value}" for value in technical["acea"]]
+        + [f"ILSAC {value}" for value in technical["ilsac"]]
+        + [f"JASO {value}" for value in technical["jaso"]]
+        + [f"NMMA {value}" for value in technical["nmma"]]
+    )
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Current official MAG 1 product and PDS catalog",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": technical["sae_engine"] or technical["sae_gear"],
+        "api_class": api_class,
+        "viscosity": technical["iso_vg"],
+        "grease_class": "; ".join(technical["nlgi"]),
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": "Highline Warren",
+        "brand": row["brand"],
+        "market": "Global",
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": "official_manufacturer_current_product_and_pds",
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update({
+        "sae_engine": technical["sae_engine"],
+        "sae_gear": technical["sae_gear"],
+        "api": technical["api"],
+        "api_gl": technical["api_gl"],
+        "acea": technical["acea"],
+        "ilsac": technical["ilsac"],
+        "jaso": technical["jaso"],
+        "nmma": technical["nmma"],
+        "iso_vg": technical["iso_vg"],
+        "nlgi": "; ".join(technical["nlgi"]),
+        "dot": technical["dot"],
+        "industry_oem_specifications_source_reported": (
+            row["industry_oem_specifications"]
+        ),
+        "typical_properties_source_reported": row["typical_properties"],
+        "container_bulk_availability": row[
+            "container_bulk_availability"
+        ],
+        "source_category": row["source_category"],
+        "source_subhead": row["source_subhead"],
+        "source_url": row["source_url"],
+        "pds_url": row["pds_url"],
+        "source_image_url": row["source_image_url"],
+        "factual_projection_sha256": row["factual_projection_sha256"],
+        "product_page_sha256_observed": row[
+            "product_page_sha256_observed"
+        ],
+        "pds_page_sha256_observed": row["pds_page_sha256_observed"],
+        "source_quality_flags": row["source_quality_flags"],
+    })
+    record["canonical_key"] += (
+        f"|mag1_current:{normalize(row['source_record_id'])}"
+    )
+    record["product_id"] = (
+        "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    )
+    return record
+
+
+def merge_mag1_current_official_evidence(
+    target: dict,
+    source_record: dict,
+    raw: dict,
+    match_basis: str,
+) -> None:
+    """Attach one exact current MAG 1 card to an existing filed identity."""
+    target_specs = target["specifications"]
+    source_specs = source_record["specifications"]
+    for key in ("api", "api_gl", "acea", "ilsac", "jaso"):
+        target_specs[key] = sorted(
+            set(target_specs.get(key, [])) | set(source_specs.get(key, []))
+        )
+    for key in ("sae_engine", "sae_gear", "iso_vg", "nlgi"):
+        if not target_specs.get(key):
+            target_specs[key] = source_specs.get(key, "")
+    target_specs.setdefault(
+        "mag1_current_official_catalog_evidence", []
+    ).append({
+        "source_record_id": raw["source_record_id"],
+        "official_product_name": raw["product_name"],
+        "source_url": raw["source_url"],
+        "pds_url": raw["pds_url"],
+        "factual_projection_sha256": raw["factual_projection_sha256"],
+        "industry_oem_specifications_source_reported": raw[
+            "industry_oem_specifications"
+        ],
+        "match_basis": match_basis,
+    })
+    target["snapshot_date"] = max(
+        target.get("snapshot_date", ""),
+        raw["snapshot_date"],
+    )
+
+
 def kebs_smark_record(row: dict) -> dict:
     """Convert one normalized product identity from the public KEBS S-Mark directory."""
     technical = row["technical"]
@@ -6267,6 +6381,24 @@ def main() -> None:
         ).splitlines()
         if line
     ]
+    mag1_current_source_rows = [
+        json.loads(line)
+        for line in MAG1_CURRENT_OFFICIAL_JSONL.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        if line
+    ]
+    mag1_current_records = [
+        mag1_current_official_record(row)
+        for row in mag1_current_source_rows
+    ]
+    haiti_lubex_mag1_presence_rows = [
+        json.loads(line)
+        for line in HAITI_LUBEX_MAG1_PRESENCE_JSONL.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        if line
+    ]
     bahamas_cbs_availability_rows = [
         json.loads(line)
         for line in BAHAMAS_CBS_AVAILABILITY_JSONL.read_text(
@@ -7421,6 +7553,60 @@ def main() -> None:
         dominican_imca_mobil_product_key[
             raw["source_record_id"]
         ] = target["canonical_key"]
+    mag1_exact_existing_targets = {
+        "MAG1-E2B79A248C5D": ("JASO_4T", "2332"),
+        "MAG1-D32932ABC9C6": ("JASO_4T", "2331"),
+        "MAG1-311932FB0E77": ("NMMA_TCW3", "RL-93015J"),
+    }
+    existing_by_source_identity = {
+        (row["source_id"], row["source_record_id"]): row
+        for row in input_records
+    }
+    mag1_current_product_key = {}
+    mag1_current_matched_to_existing = 0
+    mag1_current_products_added = 0
+    for raw, source_record in zip(
+        mag1_current_source_rows,
+        mag1_current_records,
+    ):
+        existing_identity = mag1_exact_existing_targets.get(
+            raw["source_record_id"]
+        )
+        if existing_identity:
+            target = existing_by_source_identity.get(existing_identity)
+            if target is None:
+                raise RuntimeError(
+                    "MAG 1 exact filed target disappeared: "
+                    + repr(existing_identity)
+                )
+            source_specs = source_record["specifications"]
+            target_specs = target["specifications"]
+            if (
+                target["family_code"] != raw["family_code"]
+                or (
+                    source_specs["sae_engine"]
+                    and normalize(source_specs["sae_engine"])
+                    != normalize(target_specs.get("sae_engine"))
+                )
+            ):
+                raise RuntimeError(
+                    "MAG 1 exact filed target technical drift: "
+                    + raw["source_record_id"]
+                )
+            merge_mag1_current_official_evidence(
+                target,
+                source_record,
+                raw,
+                "explicit_current_title_grade_and_filed_standard_identity",
+            )
+            mag1_current_matched_to_existing += 1
+        else:
+            target = source_record
+            input_records.append(target)
+            mag1_current_products_added += 1
+        mag1_current_product_key[
+            raw["source_record_id"]
+        ] = target["canonical_key"]
     records, candidates = deduplicate(input_records)
     canonical_by_key = {row["canonical_key"]: row for row in records}
     for source_key, match_keys in blue_angel_review_keys:
@@ -7779,6 +7965,25 @@ def main() -> None:
             "source_record_id": raw["source_record_id"],
             "source_row": raw["source_page"],
             "relation": "official_authorized_distributor_country_catalog_grade",
+        }
+        link_key = (
+            link["product_id"],
+            link["source_id"],
+            link["source_record_id"],
+        )
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
+    for raw in mag1_current_source_rows:
+        target = canonical_by_key[
+            mag1_current_product_key[raw["source_record_id"]]
+        ]
+        link = {
+            "product_id": target["product_id"],
+            "source_id": raw["source_id"],
+            "source_record_id": raw["source_record_id"],
+            "source_row": None,
+            "relation": "official_manufacturer_current_product_and_pds",
         }
         link_key = (
             link["product_id"],
@@ -8873,6 +9078,8 @@ def main() -> None:
         "castrol_global_distributors_input_sha256": hashlib.sha256(CASTROL_GLOBAL_DISTRIBUTORS_JSONL.read_bytes()).hexdigest(),
         "dominican_imca_mobil_input_sha256": hashlib.sha256(DOMINICAN_REPUBLIC_IMCA_MOBIL_JSONL.read_bytes()).hexdigest(),
         "dominican_imca_mobil_web_input_sha256": hashlib.sha256(DOMINICAN_REPUBLIC_IMCA_MOBIL_WEB_JSONL.read_bytes()).hexdigest(),
+        "mag1_current_official_input_sha256": hashlib.sha256(MAG1_CURRENT_OFFICIAL_JSONL.read_bytes()).hexdigest(),
+        "haiti_lubex_mag1_presence_input_sha256": hashlib.sha256(HAITI_LUBEX_MAG1_PRESENCE_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "son_mancap_input_sha256": hashlib.sha256(SON_MANCAP_JSONL.read_bytes()).hexdigest(),
@@ -8964,6 +9171,16 @@ def main() -> None:
         ),
         "dominican_imca_mobil_web_source_rows": len(
             dominican_imca_mobil_web_rows
+        ),
+        "mag1_current_official_source_rows": len(
+            mag1_current_source_rows
+        ),
+        "mag1_current_products_matched_to_existing": (
+            mag1_current_matched_to_existing
+        ),
+        "mag1_current_products_added": mag1_current_products_added,
+        "haiti_lubex_mag1_presence_source_rows": len(
+            haiti_lubex_mag1_presence_rows
         ),
         "dominican_imca_mobil_products_matched_to_existing": (
             dominican_imca_mobil_matched_to_existing
