@@ -1,8 +1,8 @@
 {
   "active_offers": 3115,
   "canonical_key_duplicates": 0,
-  "canonical_products": 117768,
-  "compressed_database_sha256": "92522811cb67bf274a5557322393b334f4b225e8b45e65691991405e86968224",
+  "canonical_products": 117774,
+  "compressed_database_sha256": "183d4831e84d55eeaec05058a50cd2dfe2c68ec2d0b69bc9d021b8e018c6b8b0",
   "duplicate_review_queues": [
     {
       "candidate_pairs": 11189,
@@ -55,13 +55,13 @@
       "both_percent": 50.66,
       "both_selector_and_technical_basis_present": 25156,
       "existing_professional_key_gate_implemented": true,
-      "existing_professional_key_issue": 23575,
+      "existing_professional_key_issue": 23581,
       "family": "Моторные масла",
       "family_code": "M",
-      "products": 49652,
+      "products": 49658,
       "selector_grade_or_class_percent": 88.89,
-      "selector_grade_or_class_present": 44135,
-      "technical_basis_percent": 52.73,
+      "selector_grade_or_class_present": 44141,
+      "technical_basis_percent": 52.72,
       "technical_basis_present": 26180
     },
     {
@@ -182,25 +182,25 @@
       "technical_basis_present": 8
     }
   ],
-  "input_rows_before_canonicalization": 117769,
+  "input_rows_before_canonicalization": 117775,
   "interpretation": {
-    "confirmed_count": "117768 is the verified canonical row count of the current seed, not the final number of all products worldwide.",
+    "confirmed_count": "117774 is the verified canonical row count of the current seed, not the final number of all products worldwide.",
     "duplicate_metric": "Review pairs are candidates or conflicts, not proven removable duplicates.",
     "professional_gate_scope": "Family-specific professional_key_incomplete rules cover M/T/G/H/I/C/U/E/TF/S; source-level gaps remain explicit and are not filled by inference.",
     "selector_metric": "Presence is measured only from explicit normalized fields; absence may reflect source granularity rather than a parsing defect."
   },
-  "primary_sources_used": 156,
+  "primary_sources_used": 157,
   "products_using_explicitly_marked_brand_fallback": 36269,
-  "products_with_at_least_one_source_link": 117768,
-  "products_with_family": 117768,
+  "products_with_at_least_one_source_link": 117774,
+  "products_with_family": 117774,
   "products_with_missing_manufacturer": 660,
-  "products_with_normalized_name": 117768,
-  "products_with_primary_source_hash": 117768,
-  "products_with_primary_source_url": 117177,
+  "products_with_normalized_name": 117774,
+  "products_with_primary_source_hash": 117774,
+  "products_with_primary_source_url": 117183,
   "quality_issue_details": [
     {
       "issue_code": "professional_key_incomplete",
-      "rows": 79033,
+      "rows": 79039,
       "severity": "medium"
     },
     {
@@ -377,9 +377,9 @@
   "quality_issues_by_severity": {
     "high": 311,
     "low": 15,
-    "medium": 79151
+    "medium": 79157
   },
   "snapshot_date": "2026-07-22",
-  "source_registry_entries": 215,
+  "source_registry_entries": 216,
   "status": "offline_quality_audit_current_seed_not_worldwide_completion"
 }

@@ -107,6 +107,7 @@ BURUNDI_MOGAS_CURRENT_JSONL = ROOT / "data" / "burundi-mogas-current-products.js
 MOGAS_GLOBAL_MARKET_SHOPS_JSONL = ROOT / "data" / "mogas-global-market-shop-observations.jsonl"
 RWANDA_AKINAWA_CURRENT_JSONL = ROOT / "data" / "rwanda-akinawa-current-products.jsonl"
 RWANDA_RYMAX_CURRENT_JSONL = ROOT / "data" / "rwanda-rymax-current-products.jsonl"
+AFAL_EAST_AFRICA_FEATURED_JSONL = ROOT / "data/afal-east-africa-featured-products.jsonl"
 URUGUAY_ANCAP_LUBRICANT_JSONL = ROOT / "data" / "uruguay-ancap-current-lubricants.jsonl"
 COLOMBIA_TERPEL_LUBRICANT_JSONL = ROOT / "data" / "colombia-terpel-current-lubricants.jsonl"
 GUYANA_GUYOIL_LUBRICANT_JSONL = ROOT / "data" / "guyana-guyoil-current-lubricants.jsonl"
@@ -3730,6 +3731,51 @@ def rwanda_akinawa_current_record(row: dict) -> dict:
     return record
 
 
+def afal_east_africa_featured_record(row: dict) -> dict:
+    """Convert one product visibly featured by authorized Caltex distributor AFAL."""
+    specs = row["specifications"]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "AFAL authorized East Africa distributor featured product",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": specs["sae_engine"],
+        "api_class": "",
+        "viscosity": "",
+        "grease_class": "",
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": int(row["source_record_id"].rsplit("-", 1)[-1]),
+        "evidence_status": row["evidence_status"],
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update(specs)
+    record["specifications"].update({
+        "source_url": row["source_url"],
+        "source_facts_sha256": row["source_facts_sha256"],
+        "no_country_specific_availability_inferred": True,
+        "no_offer_created_no_price_package_stock_or_order_action": True,
+    })
+    record["canonical_key"] += (
+        f"|afal_east_africa_featured:{normalize(row['source_record_id'])}"
+    )
+    record["product_id"] = (
+        "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    )
+    return record
+
+
 def uruguay_ancap_lubricant_record(row: dict) -> dict:
     """Convert one current official ANCAP product/grade identity."""
     technical = row["technical"]
@@ -7059,6 +7105,18 @@ def main() -> None:
         for row in rwanda_akinawa_current_source_rows
     ]
     input_records.extend(rwanda_akinawa_current_records)
+    afal_east_africa_featured_source_rows = [
+        json.loads(line)
+        for line in AFAL_EAST_AFRICA_FEATURED_JSONL.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        if line
+    ]
+    afal_east_africa_featured_records = [
+        afal_east_africa_featured_record(row)
+        for row in afal_east_africa_featured_source_rows
+    ]
+    input_records.extend(afal_east_africa_featured_records)
     uruguay_ancap_lubricant_source_rows = [json.loads(line) for line in URUGUAY_ANCAP_LUBRICANT_JSONL.read_text(encoding="utf-8").splitlines() if line]
     uruguay_ancap_lubricant_records = [uruguay_ancap_lubricant_record(row) for row in uruguay_ancap_lubricant_source_rows]
     input_records.extend(uruguay_ancap_lubricant_records)
@@ -10574,6 +10632,7 @@ def main() -> None:
         "mogas_global_market_shops_input_sha256": hashlib.sha256(MOGAS_GLOBAL_MARKET_SHOPS_JSONL.read_bytes()).hexdigest(),
         "rwanda_akinawa_current_input_sha256": hashlib.sha256(RWANDA_AKINAWA_CURRENT_JSONL.read_bytes()).hexdigest(),
         "rwanda_rymax_current_input_sha256": hashlib.sha256(RWANDA_RYMAX_CURRENT_JSONL.read_bytes()).hexdigest(),
+        "afal_east_africa_featured_input_sha256": hashlib.sha256(AFAL_EAST_AFRICA_FEATURED_JSONL.read_bytes()).hexdigest(),
         "uruguay_ancap_lubricant_input_sha256": hashlib.sha256(URUGUAY_ANCAP_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "colombia_terpel_lubricant_input_sha256": hashlib.sha256(COLOMBIA_TERPEL_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "guyana_guyoil_lubricant_input_sha256": hashlib.sha256(GUYANA_GUYOIL_LUBRICANT_JSONL.read_bytes()).hexdigest(),
@@ -10912,6 +10971,9 @@ def main() -> None:
             rwanda_rymax_products_matched_to_existing
         ),
         "rwanda_rymax_products_added": rwanda_rymax_products_added,
+        "afal_east_africa_featured_source_rows": len(
+            afal_east_africa_featured_source_rows
+        ),
         "kebs_smark_source_rows": len(kebs_smark_source_rows),
         "east_africa_certified_source_rows": len(east_africa_certified_source_rows),
         "east_africa_certified_source_rows_by_source": dict(sorted(Counter(row["source_id"] for row in east_africa_certified_source_rows).items())),

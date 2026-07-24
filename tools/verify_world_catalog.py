@@ -252,6 +252,8 @@ def main() -> None:
     rwanda_akinawa_rows = [json.loads(line) for line in (ROOT / "data/rwanda-akinawa-current-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     rwanda_rymax_report = json.loads((ROOT / "data/rwanda-rymax-current-report.json").read_text(encoding="utf-8"))
     rwanda_rymax_rows = [json.loads(line) for line in (ROOT / "data/rwanda-rymax-current-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    afal_east_africa_report = json.loads((ROOT / "data/afal-east-africa-featured-products-report.json").read_text(encoding="utf-8"))
+    afal_east_africa_rows = [json.loads(line) for line in (ROOT / "data/afal-east-africa-featured-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     uruguay_ancap_report = json.loads((ROOT / "data/uruguay-ancap-current-lubricants-report.json").read_text(encoding="utf-8"))
     uruguay_ancap_rows = [json.loads(line) for line in (ROOT / "data/uruguay-ancap-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     colombia_terpel_report = json.loads((ROOT / "data/colombia-terpel-current-lubricants-report.json").read_text(encoding="utf-8"))
@@ -391,6 +393,7 @@ def main() -> None:
         + report["burundi_mogas_current_source_rows"]
         + report["rwanda_akinawa_current_source_rows"]
         + report["rwanda_rymax_products_added"]
+        + report["afal_east_africa_featured_source_rows"]
         + len(uruguay_ancap_rows)
         + len(colombia_terpel_rows)
         + len(guyana_guyoil_rows)
@@ -1116,9 +1119,9 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 5191
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3115
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 117769
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 117768
-    assert report["quality_issues"]["professional_key_incomplete"] == 79033
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 117775
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 117774
+    assert report["quality_issues"]["professional_key_incomplete"] == 79039
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
@@ -1126,7 +1129,7 @@ def main() -> None:
         GROUP BY p.family_code
     """)) == {
         "C": 2298, "E": 151, "G": 12431, "H": 5273, "I": 3875,
-        "M": 23575, "S": 12164, "T": 11897, "TF": 6729, "U": 640,
+        "M": 23581, "S": 12164, "T": 11897, "TF": 6729, "U": 640,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -2577,6 +2580,58 @@ def main() -> None:
     assert db.execute(
         "SELECT count(*) FROM product_offers "
         "WHERE source_id='RWANDA_RYMAX_CURRENT_COMPLETE_PAGINATED_CATALOG'"
+    ).fetchone()[0] == 0
+    assert afal_east_africa_report[
+        "featured_product_cards"
+    ] == len(afal_east_africa_rows) == report[
+        "afal_east_africa_featured_source_rows"
+    ] == 6
+    assert afal_east_africa_report["families"] == {"M": 6}
+    assert afal_east_africa_report["brands"] == {
+        "DELO": 3, "HAVOLINE": 3,
+    }
+    assert len(afal_east_africa_report["visible_distributor_markets"]) == 5
+    assert len(afal_east_africa_report["structured_metadata_markets"]) == 6
+    assert "South Sudan" not in afal_east_africa_report[
+        "visible_distributor_markets"
+    ]
+    assert "South Sudan" in afal_east_africa_report[
+        "structured_metadata_markets"
+    ]
+    assert afal_east_africa_report["images_hashed"] == 6
+    assert afal_east_africa_report["offers_created"] == 0
+    assert afal_east_africa_report[
+        "normalized_output_sha256"
+    ] == hashlib.sha256(
+        (ROOT / "data/afal-east-africa-featured-products.jsonl").read_bytes()
+    ).hexdigest()
+    assert all(
+        row["market"] == "East Africa regional"
+        and row["family_code"] == "M"
+        and row["manufacturer"] == "Chevron Lubricants"
+        and row["specifications"]["sae_engine"]
+        and not ({"address", "phone", "email", "contact_person"} & set(row))
+        for row in afal_east_africa_rows
+    )
+    assert policy_by_id[
+        "AFAL_CALTEX_EAST_AFRICA_FEATURED_PRODUCTS"
+    ]["source_sha256"] == afal_east_africa_report[
+        "normalized_output_sha256"
+    ]
+    assert policy_by_id[
+        "AFAL_CALTEX_EAST_AFRICA_FEATURED_PRODUCTS"
+    ]["observed_count"] == 6
+    assert db.execute(
+        "SELECT count(*) FROM products "
+        "WHERE source_id='AFAL_CALTEX_EAST_AFRICA_FEATURED_PRODUCTS'"
+    ).fetchone()[0] == 6
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id='AFAL_CALTEX_EAST_AFRICA_FEATURED_PRODUCTS'"
+    ).fetchone()[0] == 6
+    assert db.execute(
+        "SELECT count(*) FROM product_offers "
+        "WHERE source_id='AFAL_CALTEX_EAST_AFRICA_FEATURED_PRODUCTS'"
     ).fetchone()[0] == 0
     assert uruguay_ancap_report["catalog_product_families"] == 56
     assert uruguay_ancap_report["normalized_product_variants"] == len(uruguay_ancap_rows) == 88

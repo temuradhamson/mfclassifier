@@ -3076,6 +3076,21 @@
       "publication_status": "attributed_transformed_nonexpressive_product_grade_approval_document_link_and_hash_facts_only_no_descriptions_artwork_contacts_or_source_documents_redistributed",
       "observed_count": 68,
       "notes": "Six server-rendered listing responses contain 81 card occurrences and 13 repeated URLs, leaving 68 unique detail pages (C2/E1/G6/H6/I9/M19/T20/TF1/U4). Sixty-seven products link documents: 67 TDS and 56 SDS, all fetched for SHA-256 verification but not redistributed. Cross-market identity matching links 52 cards to the already captured Belize Rymax manufacturer catalog and adds only 16 Rwanda-specific variants. No prices, packages or analytical offers are created."
+    },
+    {
+      "source_id": "AFAL_CALTEX_EAST_AFRICA_FEATURED_PRODUCTS",
+      "title": "AFAL authorized Caltex East Africa distributor featured products",
+      "owner": "Africa Fuels & Lubricants Ltd.",
+      "source_type": "official_authorized_regional_distributor_live_homepage_featured_products",
+      "source_locator": "data/afal-east-africa-featured-products.jsonl",
+      "source_url": "https://www.afal.co/",
+      "terms_url": "https://www.afal.co/",
+      "source_sha256": "718c09f63aefa206e58b72afaaee6db87d27acf17245cc82630ff66148a9d7c8",
+      "access_status": "public_live_official_authorized_regional_distributor_homepage",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_transformed_nonexpressive_product_name_sae_regional_scope_image_link_and_hash_facts_only_no_images_descriptions_or_contacts_redistributed",
+      "observed_count": 6,
+      "notes": "The live homepage visibly features six motor-oil cards (DELO3/HAVOLINE3), all with explicit SAE grades; this is not represented as AFAL's complete catalog. AFAL's visible distributor paragraph names Kenya, Uganda, Burundi, Rwanda and Eastern DRC, while structured metadata additionally names South Sudan. The discrepancy and the page's 2021-04-07 modified date are retained. Cards remain regional evidence and are not multiplied into country-specific availability, stock or offers."
     }
   ]
 }

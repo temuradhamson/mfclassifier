@@ -1,0 +1,36 @@
+{
+  "brands": {
+    "DELO": 3,
+    "HAVOLINE": 3
+  },
+  "denominator_note": "The live official homepage visibly features exactly six product cards; it is not represented as AFAL's complete product catalog.",
+  "families": {
+    "M": 6
+  },
+  "featured_product_cards": 6,
+  "images_hashed": 6,
+  "normalized_output_sha256": "718c09f63aefa206e58b72afaaee6db87d27acf17245cc82630ff66148a9d7c8",
+  "offers_created": 0,
+  "publication_scope": "Factual product names, SAE grades, attributed regional scope, image links and hashes only; images, descriptions and contacts are not redistributed.",
+  "schema_version": 1,
+  "scope_note": "The visible distributor paragraph lists five markets, while current structured metadata additionally lists South Sudan. The discrepancy is retained and no card is expanded into country-specific stock or availability.",
+  "snapshot_date": "2026-07-24",
+  "source_id": "AFAL_CALTEX_EAST_AFRICA_FEATURED_PRODUCTS",
+  "source_page_date_modified": "2021-04-07",
+  "status": "live_official_authorized_regional_distributor_featured_products",
+  "structured_metadata_markets": [
+    "Kenya",
+    "Uganda",
+    "Burundi",
+    "Rwanda",
+    "Eastern Democratic Republic of Congo",
+    "South Sudan"
+  ],
+  "visible_distributor_markets": [
+    "Kenya",
+    "Uganda",
+    "Burundi",
+    "Rwanda",
+    "Eastern Democratic Republic of Congo"
+  ]
+}
