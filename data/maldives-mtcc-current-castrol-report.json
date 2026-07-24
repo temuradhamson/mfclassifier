@@ -1,0 +1,39 @@
+{
+  "access_note": "Cloudflare returns HTTP 403 to direct page/API retrieval from the research environment. The current official pages remain visible through search indexes; this snapshot is therefore explicitly versioned and requires periodic manual denominator review.",
+  "category_reported_first_page_range": "1–12",
+  "category_reported_total_results": 15,
+  "category_url": "https://mtcc.mv/brand/castrol-lubricants/",
+  "families": {
+    "C": 2,
+    "G": 3,
+    "H": 4,
+    "I": 1,
+    "M": 3,
+    "T": 1,
+    "TF": 1
+  },
+  "grain_note": "One row per one of the 15 explicitly listed current product names. Only SAE/ISO VG tokens intrinsic to a name are promoted to strict technical keys; other numerals remain source variants.",
+  "market": "Maldives",
+  "normalized_output_sha256": "b4a41395086220fe8513a11acacb8e9333c80b153fad0a1a41ce5e7d0c363bf0",
+  "normalized_product_rows": 15,
+  "offers_created": 0,
+  "official_brand_distributor_url": "https://www.castrol.com/en/global/corporate/about-castrol/distributors.html",
+  "owner": "Maldives Transport & Contracting Company Plc",
+  "products_url": "https://mtcc.mv/castrol-lubricants/",
+  "publication_scope": "Reference-use factual product identities, explicit name grades, market/distributor attribution, URLs and hashes only; no prose, images, contacts, page layout or training use.",
+  "quality_note": "The live High Temperature Grease detail result contains Transmax ATF prose. No MTCC detail prose, claimed standards, temperatures or description-derived grades are imported.",
+  "robots_content_signal": {
+    "ai_train": "no",
+    "search": "yes",
+    "use": "reference"
+  },
+  "robots_sha256": "842b34303164ead41bccb7c05d1707422e98d108753b397b6dcc19683eb02101",
+  "robots_url": "https://mtcc.mv/robots.txt",
+  "rows_with_iso_vg": 6,
+  "rows_with_sae": 1,
+  "rows_with_strict_nlgi": 0,
+  "schema_version": 1,
+  "snapshot_date": "2026-07-24",
+  "source_id": "MALDIVES_MTCC_COMPLETE_CURRENT_CASTROL_LISTING",
+  "status": "complete_current_official_indexed_listing_normalized"
+}
