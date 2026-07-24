@@ -258,6 +258,8 @@ def main() -> None:
     south_sudan_taam_rows = [json.loads(line) for line in (ROOT / "data/south-sudan-taam-pakelo-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     sudan_tappco_report = json.loads((ROOT / "data/sudan-tappco-report.json").read_text(encoding="utf-8"))
     sudan_tappco_rows = [json.loads(line) for line in (ROOT / "data/sudan-tappco-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    ethiopia_noc_report = json.loads((ROOT / "data/ethiopia-noc-caltex-report.json").read_text(encoding="utf-8"))
+    ethiopia_noc_rows = [json.loads(line) for line in (ROOT / "data/ethiopia-noc-caltex-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     uruguay_ancap_report = json.loads((ROOT / "data/uruguay-ancap-current-lubricants-report.json").read_text(encoding="utf-8"))
     uruguay_ancap_rows = [json.loads(line) for line in (ROOT / "data/uruguay-ancap-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     colombia_terpel_report = json.loads((ROOT / "data/colombia-terpel-current-lubricants-report.json").read_text(encoding="utf-8"))
@@ -400,6 +402,7 @@ def main() -> None:
         + report["afal_east_africa_featured_source_rows"]
         + report["south_sudan_taam_pakelo_products_added"]
         + report["sudan_tappco_products_added"]
+        + report["ethiopia_noc_caltex_products_added"]
         + len(uruguay_ancap_rows)
         + len(colombia_terpel_rows)
         + len(guyana_guyoil_rows)
@@ -1125,17 +1128,17 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 5191
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3115
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 118021
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 118020
-    assert report["quality_issues"]["professional_key_incomplete"] == 79163
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 118053
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 118052
+    assert report["quality_issues"]["professional_key_incomplete"] == 79171
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
         WHERE q.issue_code='professional_key_incomplete'
         GROUP BY p.family_code
     """)) == {
-        "C": 2298, "E": 151, "G": 12463, "H": 5280, "I": 3878,
-        "M": 23618, "S": 12175, "T": 11909, "TF": 6751, "U": 640,
+        "C": 2298, "E": 151, "G": 12466, "H": 5280, "I": 3878,
+        "M": 23617, "S": 12175, "T": 11915, "TF": 6751, "U": 640,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -2766,6 +2769,64 @@ def main() -> None:
     assert db.execute(
         "SELECT count(*) FROM product_offers "
         "WHERE source_id='SUDAN_TAPPCO_COMPLETE_PRODUCT_POST_CATALOG'"
+    ).fetchone()[0] == 0
+    assert ethiopia_noc_report["lubricant_link_occurrences"] == 23
+    assert ethiopia_noc_report["reviewed_product_series"] == 15
+    assert ethiopia_noc_report["identity_rows"] == len(
+        ethiopia_noc_rows
+    ) == report["ethiopia_noc_caltex_source_rows"] == 35
+    assert ethiopia_noc_report["family_identity_counts"] == {
+        "G": 3, "H": 13, "M": 7, "T": 12,
+    }
+    assert ethiopia_noc_report["resolved_pdf_observations"] == 22
+    assert ethiopia_noc_report["unique_resolved_pdf_payloads"] == 21
+    assert ethiopia_noc_report["broken_official_pdf_links"] == 1
+    assert ethiopia_noc_report["mismatched_tds_count"] == 3
+    assert ethiopia_noc_report[
+        "exact_existing_identity_matches"
+    ] == report[
+        "ethiopia_noc_caltex_products_matched_to_existing"
+    ] == 3
+    assert ethiopia_noc_report[
+        "new_archive_identities"
+    ] == report["ethiopia_noc_caltex_products_added"] == 32
+    assert ethiopia_noc_report[
+        "normalized_output_sha256"
+    ] == hashlib.sha256(
+        (ROOT / "data/ethiopia-noc-caltex-products.jsonl").read_bytes()
+    ).hexdigest()
+    assert all(
+        row["market"] == "Ethiopia"
+        and row["brand"] == "CALTEX"
+        and not ({"address", "phone", "email", "contact_person"} & set(row))
+        for row in ethiopia_noc_rows
+    )
+    assert all(
+        "mismatched_tds_technical_fields_not_assigned_to_product"
+        in row["specifications"]["source_quality_flags"]
+        for row in ethiopia_noc_rows
+        if row["specifications"]["source_series"]
+        in {"starplex", "molytex", "multifak"}
+    )
+    assert policy_by_id[
+        "ETHIOPIA_NOC_CALTEX_RECOVERABLE_OFFICIAL_ARCHIVE"
+    ]["source_sha256"] == ethiopia_noc_report[
+        "normalized_output_sha256"
+    ]
+    assert policy_by_id[
+        "ETHIOPIA_NOC_CALTEX_RECOVERABLE_OFFICIAL_ARCHIVE"
+    ]["observed_count"] == 35
+    assert db.execute(
+        "SELECT count(*) FROM products "
+        "WHERE source_id='ETHIOPIA_NOC_CALTEX_RECOVERABLE_OFFICIAL_ARCHIVE'"
+    ).fetchone()[0] == 32
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id='ETHIOPIA_NOC_CALTEX_RECOVERABLE_OFFICIAL_ARCHIVE'"
+    ).fetchone()[0] == 35
+    assert db.execute(
+        "SELECT count(*) FROM product_offers "
+        "WHERE source_id='ETHIOPIA_NOC_CALTEX_RECOVERABLE_OFFICIAL_ARCHIVE'"
     ).fetchone()[0] == 0
     assert uruguay_ancap_report["catalog_product_families"] == 56
     assert uruguay_ancap_report["normalized_product_variants"] == len(uruguay_ancap_rows) == 88

@@ -1,0 +1,30 @@
+{
+  "broken_official_pdf_links": 1,
+  "denominator_note": "The recoverable official archive page contains 26 PDF-link occurrences: 23 lubricant/TDS occurrences and three fuel-adulteration letters excluded as non-products. The 23 lubricant occurrences normalize to 15 series and 35 product-grade identities. This is not claimed as NOC Ethiopia's complete current catalog because other application routes currently fail to expose their former product content.",
+  "exact_existing_identity_matches": 3,
+  "family_identity_counts": {
+    "G": 3,
+    "H": 13,
+    "M": 7,
+    "T": 12
+  },
+  "identity_rows": 35,
+  "lubricant_link_occurrences": 23,
+  "mismatched_tds_count": 3,
+  "mismatched_tds_series": {
+    "molytex": "linked payload identifies Starplex EP",
+    "multifak": "linked payload identifies Molytex EP",
+    "starplex": "linked payload identifies Textran TDH Premium"
+  },
+  "new_archive_identities": 32,
+  "normalized_output_sha256": "09b759d1acd7617d3d096776fa4735b00a815f4e89b46436864c36ad8333644a",
+  "publication_scope": "Factual product names, grades, source-reported standards, document links and hashes only; descriptions, TDS files, artwork and contacts are not redistributed.",
+  "resolved_pdf_observations": 22,
+  "reviewed_product_series": 15,
+  "schema_version": 1,
+  "snapshot_date": "2026-07-24",
+  "source_id": "ETHIOPIA_NOC_CALTEX_RECOVERABLE_OFFICIAL_ARCHIVE",
+  "source_page_facts_sha256": "45694914e5d844cafe4174553754d94eb741ba5f6d06550b3f64a3fe0dad4898",
+  "status": "official_recoverable_country_distributor_archive",
+  "unique_resolved_pdf_payloads": 21
+}

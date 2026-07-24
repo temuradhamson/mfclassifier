@@ -3121,6 +3121,21 @@
       "publication_status": "attributed_transformed_nonexpressive_product_name_grade_category_standard_document_link_and_hash_facts_only_no_descriptions_tds_artwork_or_contacts_redistributed",
       "observed_count": 73,
       "notes": "The WordPress posts endpoint contains 35 posts: 33 lubricant product cards in seven technical categories plus two explicit non-product posts. The 33 cards expand to 73 reviewed product-grade identities (C11/G9/H13/I15/M11/S1/T11/TF2). Thirty PDF-link observations resolve to 27 unique TDS payloads; three live cards link the wrong product TDS, so those mismatched technical fields are excluded and explicitly flagged. Three cards have no TDS link. WooCommerce's 18 apparel/theme-demo products are not treated as lubricant products. Card modified dates are 2020 or 2022; current availability, stock, prices, packages and offers are not inferred."
+    },
+    {
+      "source_id": "ETHIOPIA_NOC_CALTEX_RECOVERABLE_OFFICIAL_ARCHIVE",
+      "title": "Recoverable official National Oil Ethiopia Caltex lubricant archive",
+      "owner": "National Oil Ethiopia Plc.",
+      "source_type": "official_country_distributor_recoverable_public_archive_with_linked_tds",
+      "source_locator": "data/ethiopia-noc-caltex-products.jsonl",
+      "source_url": "https://www.nocethiopia.com/index.php/2-uncategorised?start=30",
+      "terms_url": "https://www.nocethiopia.com/",
+      "source_sha256": "09b759d1acd7617d3d096776fa4735b00a815f4e89b46436864c36ad8333644a",
+      "access_status": "public_live_official_country_distributor_recoverable_archive",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_transformed_nonexpressive_product_name_grade_standard_document_link_and_hash_facts_only_no_descriptions_tds_artwork_or_contacts_redistributed",
+      "observed_count": 35,
+      "notes": "The recoverable official archive page has 26 PDF-link occurrences: 23 lubricant/TDS occurrences and three excluded fuel-adulteration letters. Fifteen product series expand to 35 reviewed product-grade identities (G3/H13/M7/T12). Twenty-two PDF observations resolve to 21 unique payloads; one duplicate agricultural Delo 400 LE link returns HTTP 500 while its earthmoving copy resolves. Three grease anchors are shifted to the preceding product's TDS, so mismatched technical fields are excluded and flagged. Three strict existing links leave 32 new products. This is not represented as NOC Ethiopia's complete current catalog because other former application routes no longer expose a reliable denominator; current availability, prices and offers are not inferred."
     }
   ]
 }

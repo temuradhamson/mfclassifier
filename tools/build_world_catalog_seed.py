@@ -110,6 +110,7 @@ RWANDA_RYMAX_CURRENT_JSONL = ROOT / "data" / "rwanda-rymax-current-products.json
 AFAL_EAST_AFRICA_FEATURED_JSONL = ROOT / "data/afal-east-africa-featured-products.jsonl"
 SOUTH_SUDAN_TAAM_PAKELO_JSONL = ROOT / "data/south-sudan-taam-pakelo-products.jsonl"
 SUDAN_TAPPCO_JSONL = ROOT / "data/sudan-tappco-products.jsonl"
+ETHIOPIA_NOC_CALTEX_JSONL = ROOT / "data/ethiopia-noc-caltex-products.jsonl"
 URUGUAY_ANCAP_LUBRICANT_JSONL = ROOT / "data" / "uruguay-ancap-current-lubricants.jsonl"
 COLOMBIA_TERPEL_LUBRICANT_JSONL = ROOT / "data" / "colombia-terpel-current-lubricants.jsonl"
 GUYANA_GUYOIL_LUBRICANT_JSONL = ROOT / "data" / "guyana-guyoil-current-lubricants.jsonl"
@@ -3897,6 +3898,82 @@ def sudan_tappco_record(row: dict) -> dict:
         "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
     )
     return record
+
+
+def ethiopia_noc_caltex_record(row: dict) -> dict:
+    """Convert one reviewed Caltex product/grade from NOC Ethiopia."""
+    specs = row["specifications"]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "NOC Ethiopia recoverable Caltex lubricant archive",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": specs.get("sae_engine", specs.get("sae_gear", "")),
+        "api_class": "/".join(specs.get("api", [])),
+        "viscosity": specs.get("iso_vg", ""),
+        "grease_class": specs.get("nlgi", ""),
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": 0,
+        "evidence_status": row["evidence_status"],
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update(specs)
+    record["specifications"].update({
+        "source_url": row["source_url"],
+        "source_product_name": row["source_product_name"],
+        "source_facts_sha256": row["source_facts_sha256"],
+        "no_offer_created_no_price_package_stock_or_order_action": True,
+    })
+    record["canonical_key"] += (
+        f"|ethiopia_noc_caltex:{normalize(row['source_record_id'])}"
+    )
+    record["product_id"] = (
+        "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    )
+    return record
+
+
+def merge_ethiopia_noc_caltex_evidence(
+    target: dict, source_record: dict, raw: dict
+) -> None:
+    """Attach NOC Ethiopia archive evidence to a strict existing identity."""
+    target_specs = target["specifications"]
+    source_specs = source_record["specifications"]
+    for key in (
+        "sae_engine", "sae_gear", "api", "api_gl", "acea", "jaso",
+        "iso_vg", "nlgi",
+    ):
+        if source_specs.get(key) and not target_specs.get(key):
+            target_specs[key] = source_specs[key]
+    target_specs.setdefault(
+        "ethiopia_noc_caltex_archive_evidence", []
+    ).append({
+        "source_record_id": raw["source_record_id"],
+        "source_product_name": raw["source_product_name"],
+        "source_grade": source_specs["source_grade"],
+        "source_labels": source_specs["source_labels"],
+        "source_document_urls": source_specs["source_document_urls"],
+        "source_document_sha256": source_specs["source_document_sha256"],
+        "source_document_status": source_specs["source_document_status"],
+        "source_facts_sha256": raw["source_facts_sha256"],
+        "strict_target_source_id": raw["existing_target_source_id"],
+        "strict_target_source_record_id": raw[
+            "existing_target_source_record_id"
+        ],
+        "current_ethiopia_availability_unverified": True,
+    })
 
 
 def uruguay_ancap_lubricant_record(row: dict) -> dict:
@@ -8617,6 +8694,65 @@ def main() -> None:
     mack_2014_source_rows = [json.loads(line) for line in MACK_2014_APPROVED_JSONL.read_text(encoding="utf-8").splitlines() if line]
     mack_2014_records = [mack_2014_approved_record(row) for row in mack_2014_source_rows]
     input_records.extend(mack_2014_records)
+    ethiopia_noc_caltex_source_rows = [
+        json.loads(line)
+        for line in ETHIOPIA_NOC_CALTEX_JSONL.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        if line
+    ]
+    ethiopia_noc_caltex_records = [
+        ethiopia_noc_caltex_record(row)
+        for row in ethiopia_noc_caltex_source_rows
+    ]
+    target_by_source_identity = {
+        (row["source_id"], row["source_record_id"]): row
+        for row in input_records
+    }
+    ethiopia_noc_caltex_product_key = {}
+    ethiopia_noc_caltex_matched_to_existing = 0
+    ethiopia_noc_caltex_products_added = 0
+    for raw, source_record in zip(
+        ethiopia_noc_caltex_source_rows, ethiopia_noc_caltex_records
+    ):
+        target_source_id = raw["existing_target_source_id"]
+        target_source_record_id = raw[
+            "existing_target_source_record_id"
+        ]
+        if target_source_id:
+            target = target_by_source_identity.get(
+                (target_source_id, target_source_record_id)
+            )
+            if target is None:
+                raise RuntimeError(
+                    "NOC Ethiopia strict target disappeared: "
+                    f"{target_source_id}/{target_source_record_id}"
+                )
+            if target["family_code"] != raw["family_code"]:
+                raise RuntimeError(
+                    "NOC Ethiopia strict target family drift: "
+                    f"{target_source_id}/{target_source_record_id}"
+                )
+            merge_ethiopia_noc_caltex_evidence(
+                target, source_record, raw
+            )
+            ethiopia_noc_caltex_matched_to_existing += 1
+        else:
+            target = source_record
+            input_records.append(target)
+            ethiopia_noc_caltex_products_added += 1
+        ethiopia_noc_caltex_product_key[
+            raw["source_record_id"]
+        ] = target["canonical_key"]
+    if (
+        ethiopia_noc_caltex_matched_to_existing,
+        ethiopia_noc_caltex_products_added,
+    ) != (3, 32):
+        raise RuntimeError(
+            "NOC Ethiopia denominator changed: "
+            f"{ethiopia_noc_caltex_matched_to_existing} matched, "
+            f"{ethiopia_noc_caltex_products_added} added"
+        )
     # This is a dated corporate catalog, not the login-gated current Cummins
     # registration list. Append it after all current matching passes so its
     # historical lifecycle can never overwrite a current product identity.
@@ -9554,6 +9690,25 @@ def main() -> None:
             "source_record_id": raw["source_record_id"],
             "source_row": int(raw["source_record_id"].rsplit("-", 1)[-1]),
             "relation": "official_sudan_manufacturer_product_grade_identity",
+        }
+        link_key = (
+            link["product_id"],
+            link["source_id"],
+            link["source_record_id"],
+        )
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
+    for raw in ethiopia_noc_caltex_source_rows:
+        target = canonical_by_key[
+            ethiopia_noc_caltex_product_key[raw["source_record_id"]]
+        ]
+        link = {
+            "product_id": target["product_id"],
+            "source_id": raw["source_id"],
+            "source_record_id": raw["source_record_id"],
+            "source_row": 0,
+            "relation": "official_ethiopia_distributor_archive_product_grade_identity",
         }
         link_key = (
             link["product_id"],
@@ -10880,6 +11035,7 @@ def main() -> None:
         "afal_east_africa_featured_input_sha256": hashlib.sha256(AFAL_EAST_AFRICA_FEATURED_JSONL.read_bytes()).hexdigest(),
         "south_sudan_taam_pakelo_input_sha256": hashlib.sha256(SOUTH_SUDAN_TAAM_PAKELO_JSONL.read_bytes()).hexdigest(),
         "sudan_tappco_input_sha256": hashlib.sha256(SUDAN_TAPPCO_JSONL.read_bytes()).hexdigest(),
+        "ethiopia_noc_caltex_input_sha256": hashlib.sha256(ETHIOPIA_NOC_CALTEX_JSONL.read_bytes()).hexdigest(),
         "uruguay_ancap_lubricant_input_sha256": hashlib.sha256(URUGUAY_ANCAP_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "colombia_terpel_lubricant_input_sha256": hashlib.sha256(COLOMBIA_TERPEL_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "guyana_guyoil_lubricant_input_sha256": hashlib.sha256(GUYANA_GUYOIL_LUBRICANT_JSONL.read_bytes()).hexdigest(),
@@ -11232,6 +11388,15 @@ def main() -> None:
         ),
         "sudan_tappco_source_rows": len(sudan_tappco_source_rows),
         "sudan_tappco_products_added": len(sudan_tappco_records),
+        "ethiopia_noc_caltex_source_rows": len(
+            ethiopia_noc_caltex_source_rows
+        ),
+        "ethiopia_noc_caltex_products_matched_to_existing": (
+            ethiopia_noc_caltex_matched_to_existing
+        ),
+        "ethiopia_noc_caltex_products_added": (
+            ethiopia_noc_caltex_products_added
+        ),
         "kebs_smark_source_rows": len(kebs_smark_source_rows),
         "east_africa_certified_source_rows": len(east_africa_certified_source_rows),
         "east_africa_certified_source_rows_by_source": dict(sorted(Counter(row["source_id"] for row in east_africa_certified_source_rows).items())),
