@@ -109,6 +109,7 @@ RWANDA_AKINAWA_CURRENT_JSONL = ROOT / "data" / "rwanda-akinawa-current-products.
 RWANDA_RYMAX_CURRENT_JSONL = ROOT / "data" / "rwanda-rymax-current-products.jsonl"
 AFAL_EAST_AFRICA_FEATURED_JSONL = ROOT / "data/afal-east-africa-featured-products.jsonl"
 SOUTH_SUDAN_TAAM_PAKELO_JSONL = ROOT / "data/south-sudan-taam-pakelo-products.jsonl"
+SUDAN_TAPPCO_JSONL = ROOT / "data/sudan-tappco-products.jsonl"
 URUGUAY_ANCAP_LUBRICANT_JSONL = ROOT / "data" / "uruguay-ancap-current-lubricants.jsonl"
 COLOMBIA_TERPEL_LUBRICANT_JSONL = ROOT / "data" / "colombia-terpel-current-lubricants.jsonl"
 GUYANA_GUYOIL_LUBRICANT_JSONL = ROOT / "data" / "guyana-guyoil-current-lubricants.jsonl"
@@ -3853,6 +3854,51 @@ def merge_south_sudan_taam_pakelo_evidence(
     target["snapshot_date"] = raw["snapshot_date"]
 
 
+def sudan_tappco_record(row: dict) -> dict:
+    """Convert one reviewed TAPPCO Sudan product/grade identity."""
+    specs = row["specifications"]
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Complete TAPPCO Sudan product-post catalog",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": specs.get("sae_engine", specs.get("sae_gear", "")),
+        "api_class": "/".join(specs.get("api", [])),
+        "viscosity": specs.get("iso_vg", ""),
+        "grease_class": specs.get("nlgi", ""),
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": row["manufacturer"],
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": int(row["source_record_id"].rsplit("-", 1)[-1]),
+        "evidence_status": row["evidence_status"],
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update(specs)
+    record["specifications"].update({
+        "source_url": row["source_url"],
+        "source_product_name": row["source_product_name"],
+        "source_facts_sha256": row["source_facts_sha256"],
+        "no_offer_created_no_price_package_stock_or_order_action": True,
+    })
+    record["canonical_key"] += (
+        f"|sudan_tappco:{normalize(row['source_record_id'])}"
+    )
+    record["product_id"] = (
+        "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    )
+    return record
+
+
 def uruguay_ancap_lubricant_record(row: dict) -> dict:
     """Convert one current official ANCAP product/grade identity."""
     technical = row["technical"]
@@ -7593,6 +7639,27 @@ def main() -> None:
             f"{south_sudan_taam_pakelo_matched_to_existing} matched, "
             f"{south_sudan_taam_pakelo_products_added} added"
         )
+    sudan_tappco_source_rows = [
+        json.loads(line)
+        for line in SUDAN_TAPPCO_JSONL.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        if line
+    ]
+    sudan_tappco_records = [
+        sudan_tappco_record(row) for row in sudan_tappco_source_rows
+    ]
+    if len(sudan_tappco_records) != 73:
+        raise RuntimeError(
+            f"TAPPCO Sudan denominator changed: {len(sudan_tappco_records)}"
+        )
+    input_records.extend(sudan_tappco_records)
+    sudan_tappco_product_key = {
+        raw["source_record_id"]: record["canonical_key"]
+        for raw, record in zip(
+            sudan_tappco_source_rows, sudan_tappco_records
+        )
+    }
     allison_source_rows = [json.loads(line) for line in ALLISON_JSONL.read_text(encoding="utf-8").splitlines() if line]
     allison_records = [allison_record(row) for row in allison_source_rows]
     input_records.extend(allison_records)
@@ -9477,6 +9544,25 @@ def main() -> None:
         if link_key not in source_link_keys:
             source_links.append(link)
             source_link_keys.add(link_key)
+    for raw in sudan_tappco_source_rows:
+        target = canonical_by_key[
+            sudan_tappco_product_key[raw["source_record_id"]]
+        ]
+        link = {
+            "product_id": target["product_id"],
+            "source_id": raw["source_id"],
+            "source_record_id": raw["source_record_id"],
+            "source_row": int(raw["source_record_id"].rsplit("-", 1)[-1]),
+            "relation": "official_sudan_manufacturer_product_grade_identity",
+        }
+        link_key = (
+            link["product_id"],
+            link["source_id"],
+            link["source_record_id"],
+        )
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
     for raw in dominican_imca_mobil_source_rows:
         target = canonical_by_key[
             dominican_imca_mobil_product_key[raw["source_record_id"]]
@@ -10793,6 +10879,7 @@ def main() -> None:
         "rwanda_rymax_current_input_sha256": hashlib.sha256(RWANDA_RYMAX_CURRENT_JSONL.read_bytes()).hexdigest(),
         "afal_east_africa_featured_input_sha256": hashlib.sha256(AFAL_EAST_AFRICA_FEATURED_JSONL.read_bytes()).hexdigest(),
         "south_sudan_taam_pakelo_input_sha256": hashlib.sha256(SOUTH_SUDAN_TAAM_PAKELO_JSONL.read_bytes()).hexdigest(),
+        "sudan_tappco_input_sha256": hashlib.sha256(SUDAN_TAPPCO_JSONL.read_bytes()).hexdigest(),
         "uruguay_ancap_lubricant_input_sha256": hashlib.sha256(URUGUAY_ANCAP_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "colombia_terpel_lubricant_input_sha256": hashlib.sha256(COLOMBIA_TERPEL_LUBRICANT_JSONL.read_bytes()).hexdigest(),
         "guyana_guyoil_lubricant_input_sha256": hashlib.sha256(GUYANA_GUYOIL_LUBRICANT_JSONL.read_bytes()).hexdigest(),
@@ -11143,6 +11230,8 @@ def main() -> None:
         "south_sudan_taam_pakelo_products_added": (
             south_sudan_taam_pakelo_products_added
         ),
+        "sudan_tappco_source_rows": len(sudan_tappco_source_rows),
+        "sudan_tappco_products_added": len(sudan_tappco_records),
         "kebs_smark_source_rows": len(kebs_smark_source_rows),
         "east_africa_certified_source_rows": len(east_africa_certified_source_rows),
         "east_africa_certified_source_rows_by_source": dict(sorted(Counter(row["source_id"] for row in east_africa_certified_source_rows).items())),

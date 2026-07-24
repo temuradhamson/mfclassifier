@@ -256,6 +256,8 @@ def main() -> None:
     afal_east_africa_rows = [json.loads(line) for line in (ROOT / "data/afal-east-africa-featured-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     south_sudan_taam_report = json.loads((ROOT / "data/south-sudan-taam-pakelo-report.json").read_text(encoding="utf-8"))
     south_sudan_taam_rows = [json.loads(line) for line in (ROOT / "data/south-sudan-taam-pakelo-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    sudan_tappco_report = json.loads((ROOT / "data/sudan-tappco-report.json").read_text(encoding="utf-8"))
+    sudan_tappco_rows = [json.loads(line) for line in (ROOT / "data/sudan-tappco-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     uruguay_ancap_report = json.loads((ROOT / "data/uruguay-ancap-current-lubricants-report.json").read_text(encoding="utf-8"))
     uruguay_ancap_rows = [json.loads(line) for line in (ROOT / "data/uruguay-ancap-current-lubricants.jsonl").read_text(encoding="utf-8").splitlines() if line]
     colombia_terpel_report = json.loads((ROOT / "data/colombia-terpel-current-lubricants-report.json").read_text(encoding="utf-8"))
@@ -397,6 +399,7 @@ def main() -> None:
         + report["rwanda_rymax_products_added"]
         + report["afal_east_africa_featured_source_rows"]
         + report["south_sudan_taam_pakelo_products_added"]
+        + report["sudan_tappco_products_added"]
         + len(uruguay_ancap_rows)
         + len(colombia_terpel_rows)
         + len(guyana_guyoil_rows)
@@ -1122,17 +1125,17 @@ def main() -> None:
     assert report["aichilon_rows_excluded"] == 2
     assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 5191
     assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3115
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 117948
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 117947
-    assert report["quality_issues"]["professional_key_incomplete"] == 79138
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 118021
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 118020
+    assert report["quality_issues"]["professional_key_incomplete"] == 79163
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
         WHERE q.issue_code='professional_key_incomplete'
         GROUP BY p.family_code
     """)) == {
-        "C": 2298, "E": 151, "G": 12454, "H": 5278, "I": 3875,
-        "M": 23614, "S": 12174, "T": 11905, "TF": 6749, "U": 640,
+        "C": 2298, "E": 151, "G": 12463, "H": 5280, "I": 3878,
+        "M": 23618, "S": 12175, "T": 11909, "TF": 6751, "U": 640,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -2701,6 +2704,68 @@ def main() -> None:
     assert db.execute(
         "SELECT count(*) FROM product_offers "
         "WHERE source_id='SOUTH_SUDAN_TAAM_PAKELO_COMPLETE_CATEGORY_CATALOG'"
+    ).fetchone()[0] == 0
+    assert sudan_tappco_report["wordpress_all_posts"] == 35
+    assert len(sudan_tappco_report["excluded_non_product_posts"]) == 2
+    assert sudan_tappco_report["product_posts"] == 33
+    assert sudan_tappco_report["category_counts"] == {
+        "Auxiliary": 2, "Diesel oils": 3, "Gear and Transmission": 4,
+        "Grease": 3, "Industrial": 16, "Marine and Two stroke": 3,
+        "Motor oils": 2,
+    }
+    assert sudan_tappco_report["identity_rows"] == len(
+        sudan_tappco_rows
+    ) == report["sudan_tappco_source_rows"] == report[
+        "sudan_tappco_products_added"
+    ] == 73
+    assert sudan_tappco_report["family_identity_counts"] == {
+        "C": 11, "G": 9, "H": 13, "I": 15, "M": 11,
+        "S": 1, "T": 11, "TF": 2,
+    }
+    assert sudan_tappco_report["grade_field_counts"] == {
+        "dot": 1, "iso_vg": 34, "nlgi": 9, "sae_engine": 10,
+        "sae_gear": 10, "source_grade": 9,
+    }
+    assert sudan_tappco_report["posts_without_tds"] == 3
+    assert sudan_tappco_report["pdf_link_observations"] == 30
+    assert sudan_tappco_report["unique_pdf_payloads"] == 27
+    assert sudan_tappco_report["mismatched_tds_count"] == 3
+    assert sudan_tappco_report[
+        "normalized_output_sha256"
+    ] == hashlib.sha256(
+        (ROOT / "data/sudan-tappco-products.jsonl").read_bytes()
+    ).hexdigest()
+    assert all(
+        row["market"] == "Sudan"
+        and row["brand"] == "TAPPCO"
+        and not ({"address", "phone", "email", "contact_person"} & set(row))
+        for row in sudan_tappco_rows
+    )
+    assert all(
+        "mismatched_tds_technical_fields_not_assigned_to_product"
+        in row["specifications"]["source_quality_flags"]
+        for row in sudan_tappco_rows
+        if row["specifications"]["source_post_id"] in {1270, 1265, 1223}
+    )
+    assert policy_by_id[
+        "SUDAN_TAPPCO_COMPLETE_PRODUCT_POST_CATALOG"
+    ]["source_sha256"] == sudan_tappco_report[
+        "normalized_output_sha256"
+    ]
+    assert policy_by_id[
+        "SUDAN_TAPPCO_COMPLETE_PRODUCT_POST_CATALOG"
+    ]["observed_count"] == 73
+    assert db.execute(
+        "SELECT count(*) FROM products "
+        "WHERE source_id='SUDAN_TAPPCO_COMPLETE_PRODUCT_POST_CATALOG'"
+    ).fetchone()[0] == 73
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id='SUDAN_TAPPCO_COMPLETE_PRODUCT_POST_CATALOG'"
+    ).fetchone()[0] == 73
+    assert db.execute(
+        "SELECT count(*) FROM product_offers "
+        "WHERE source_id='SUDAN_TAPPCO_COMPLETE_PRODUCT_POST_CATALOG'"
     ).fetchone()[0] == 0
     assert uruguay_ancap_report["catalog_product_families"] == 56
     assert uruguay_ancap_report["normalized_product_variants"] == len(uruguay_ancap_rows) == 88

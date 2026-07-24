@@ -3106,6 +3106,21 @@
       "publication_status": "attributed_transformed_nonexpressive_product_name_grade_code_category_and_evidence_hash_facts_only_no_descriptions_artwork_or_contacts_redistributed",
       "observed_count": 175,
       "notes": "All ten lubricant category pages are included. They publish 216 product occurrences; exact product-code deduplication removes 41 category repeats and leaves 175 unique Pakelo identities (C27/G23/H29/I23/M33/S10/T10/TF20), with no code/title/grade collision. Thirty-two identities publish SAE, 78 ISO VG and 19 NLGI. Exact name/grade/family matching links STOU Fluid SAE 15W/40 and UTTO Fluid 4 D SAE 10W/30 to existing current ZF identities, adding 173 new products. No descriptions, contacts, prices, packages, stock states or offers are published in the normalized catalog."
+    },
+    {
+      "source_id": "SUDAN_TAPPCO_COMPLETE_PRODUCT_POST_CATALOG",
+      "title": "Complete public TAPPCO Sudan product-post catalog",
+      "owner": "TAPPCO Lubricants",
+      "source_type": "official_manufacturer_complete_public_wordpress_product_post_catalog_with_linked_tds",
+      "source_locator": "data/sudan-tappco-products.jsonl",
+      "source_url": "https://tappco-lubes.com/our-products/",
+      "terms_url": "https://tappco-lubes.com/",
+      "source_sha256": "4bdac3eab07904e6d1843991cd8e8f7775217a812f5aaa2c9194a8197a3ff507",
+      "access_status": "public_live_official_manufacturer_product_posts_and_tds",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_transformed_nonexpressive_product_name_grade_category_standard_document_link_and_hash_facts_only_no_descriptions_tds_artwork_or_contacts_redistributed",
+      "observed_count": 73,
+      "notes": "The WordPress posts endpoint contains 35 posts: 33 lubricant product cards in seven technical categories plus two explicit non-product posts. The 33 cards expand to 73 reviewed product-grade identities (C11/G9/H13/I15/M11/S1/T11/TF2). Thirty PDF-link observations resolve to 27 unique TDS payloads; three live cards link the wrong product TDS, so those mismatched technical fields are excluded and explicitly flagged. Three cards have no TDS link. WooCommerce's 18 apparel/theme-demo products are not treated as lubricant products. Card modified dates are 2020 or 2022; current availability, stock, prices, packages and offers are not inferred."
     }
   ]
 }

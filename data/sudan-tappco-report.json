@@ -1,0 +1,564 @@
+{
+  "category_counts": {
+    "Auxiliary": 2,
+    "Diesel oils": 3,
+    "Gear and Transmission": 4,
+    "Grease": 3,
+    "Industrial": 16,
+    "Marine and Two stroke": 3,
+    "Motor oils": 2
+  },
+  "denominator_note": "The WordPress posts endpoint publishes 35 posts. Two are explicit non-product posts; all remaining 33 product posts in seven technical categories are included and expand to 73 reviewed product-grade identities. The WooCommerce product endpoint contains theme-demo apparel and is not a lubricant catalog.",
+  "excluded_non_product_posts": {
+    "511": "WordPress theme demonstration post",
+    "692": "Company information, not a product"
+  },
+  "family_identity_counts": {
+    "C": 11,
+    "G": 9,
+    "H": 13,
+    "I": 15,
+    "M": 11,
+    "S": 1,
+    "T": 11,
+    "TF": 2
+  },
+  "grade_field_counts": {
+    "dot": 1,
+    "iso_vg": 34,
+    "nlgi": 9,
+    "sae_engine": 10,
+    "sae_gear": 10,
+    "source_grade": 9
+  },
+  "identity_rows": 73,
+  "mismatched_tds_count": 3,
+  "mismatched_tds_posts": {
+    "1223": "linked PDF identifies SPRAYABLE Gear Lube, not SYNGEAR PAO",
+    "1265": "linked PDF identifies PPX MOTOR OIL SAE 50, not TEENA MOTOR",
+    "1270": "linked PDF identifies OPTIMA DIESEL, not OPTIMA VIMAX"
+  },
+  "normalized_output_sha256": "4bdac3eab07904e6d1843991cd8e8f7775217a812f5aaa2c9194a8197a3ff507",
+  "pdf_link_observations": 30,
+  "post_facts": [
+    {
+      "category": "Marine and Two stroke",
+      "date": "2020-03-17T14:22:14",
+      "description_sha256": "645601661d6920b752fb5d4744a6beaeda24307a8b58d03d294945e4c8bc6513",
+      "identity_rows": 1,
+      "modified": "2020-03-25T21:09:30",
+      "pdf_rows": [
+        {
+          "bytes": 184810,
+          "sha256": "c3afa49143e1f8587c1bca8d2caf367e6d5346439b7678c9662b41f68483f071",
+          "url": "https://tappco-lubes.com/wp-content/uploads/2020/03/TWO-STROKE-OIL-TC.pdf"
+        }
+      ],
+      "post_id": 1213,
+      "source_title": "TWO STROKE OIL TC"
+    },
+    {
+      "category": "Marine and Two stroke",
+      "date": "2020-03-17T14:22:40",
+      "description_sha256": "7b100ab19a7104bc58dd3f5b87f998c103f90be01a590b9925e001b0682a2615",
+      "identity_rows": 2,
+      "modified": "2020-03-25T21:09:22",
+      "pdf_rows": [
+        {
+          "bytes": 207570,
+          "sha256": "594b9b9fb979a366b5abc88e3a0f5a283545c6ea5a608186ed3de147f5a3ddc5",
+          "url": "https://tappco-lubes.com/wp-content/uploads/2020/03/MARINE-ULTRA-12-40.pdf"
+        }
+      ],
+      "post_id": 1215,
+      "source_title": "MARINE ULTRA (30-40)"
+    },
+    {
+      "category": "Marine and Two stroke",
+      "date": "2020-03-17T14:24:40",
+      "description_sha256": "034bc65a6d9de5acbe992aea05eabbf96b51a7edfbc1665e4b99c133faf758ef",
+      "identity_rows": 1,
+      "modified": "2020-03-25T21:09:15",
+      "pdf_rows": [
+        {
+          "bytes": 187186,
+          "sha256": "ff98560dd2553438600154f18de1e548f52df02a02ba3e1b49cd3dfd0716e07f",
+          "url": "https://tappco-lubes.com/wp-content/uploads/2020/03/MARINE-TWO-STROKE-TC-W3.pdf"
+        }
+      ],
+      "post_id": 1217,
+      "source_title": "MARINE TWO STROKE TC-W3"
+    },
+    {
+      "category": "Industrial",
+      "date": "2020-03-17T15:24:22",
+      "description_sha256": "6b9461360431867b95b3cecd8f9fd70406eb93d8df654b2dad783562d4829053",
+      "identity_rows": 1,
+      "modified": "2020-03-25T21:09:06",
+      "pdf_rows": [
+        {
+          "bytes": 199658,
+          "sha256": "0647ef70de8d9acc59200301d6bf06e0c1358143cc4b85adfe327571566256d1",
+          "url": "https://tappco-lubes.com/wp-content/uploads/2020/03/Ultra-Hi-Load-32.pdf"
+        }
+      ],
+      "post_id": 1219,
+      "source_title": "Ultra Hi-Load 32"
+    },
+    {
+      "category": "Industrial",
+      "date": "2020-03-17T15:24:50",
+      "description_sha256": "115931e5006441c9d48b4b67e097078b4b7b6e6f6defa954891893ae0948ed12",
+      "identity_rows": 1,
+      "modified": "2020-03-25T21:08:54",
+      "pdf_rows": [
+        {
+          "bytes": 189848,
+          "sha256": "ce821d83d5d0ac33ae15065a43a49f5300363a236079386543dba96ee610f1a3",
+          "url": "https://tappco-lubes.com/wp-content/uploads/2020/03/TRANSFORMER-OIL.pdf"
+        }
+      ],
+      "post_id": 1221,
+      "source_title": "TRANSFORMER OIL"
+    },
+    {
+      "category": "Industrial",
+      "date": "2020-03-17T15:25:19",
+      "description_sha256": "d2c980c0e9b627d400467b87dd7e355f7b7bd565666ec5f0c00f4f9999d943ee",
+      "identity_rows": 1,
+      "modified": "2020-03-25T21:08:45",
+      "pdf_rows": [
+        {
+          "bytes": 192664,
+          "sha256": "fb78cfff1ebd3aab8b91d502efae4c123e5686c5662ae92a869ddb68bb5792ed",
+          "url": "https://tappco-lubes.com/wp-content/uploads/2020/03/SPRAYBLE-Gear-Lube-1.pdf"
+        }
+      ],
+      "post_id": 1223,
+      "source_title": "SYNGEAR PAO Range"
+    },
+    {
+      "category": "Industrial",
+      "date": "2020-03-17T15:36:11",
+      "description_sha256": "a9b670614b8969a460fdb13744d3d858e032fa345e72c5af40015bbef9c07e67",
+      "identity_rows": 1,
+      "modified": "2020-03-25T21:08:36",
+      "pdf_rows": [
+        {
+          "bytes": 192664,
+          "sha256": "fb78cfff1ebd3aab8b91d502efae4c123e5686c5662ae92a869ddb68bb5792ed",
+          "url": "https://tappco-lubes.com/wp-content/uploads/2020/03/SPRAYBLE-Gear-Lube.pdf"
+        }
+      ],
+      "post_id": 1225,
+      "source_title": "SPRAYBLE Gear Lube"
+    },
+    {
+      "category": "Industrial",
+      "date": "2020-03-17T15:36:46",
+      "description_sha256": "7722a5c3fbb46977a8a8b2273aeb1f7ef6a10328c4c20a9563aec88bd6effbda",
+      "identity_rows": 4,
+      "modified": "2020-03-25T21:08:28",
+      "pdf_rows": [
+        {
+          "bytes": 187118,
+          "sha256": "71debb4628a6c9d77e939da9655a6aaa1ad935b0f7b299974d01f5efec86b4fd",
+          "url": "https://tappco-lubes.com/wp-content/uploads/2020/03/Rockdrill-Range.pdf"
+        }
+      ],
+      "post_id": 1227,
+      "source_title": "Rockdrill Range"
+    },
+    {
+      "category": "Industrial",
+      "date": "2020-03-17T15:37:16",
+      "description_sha256": "1d8d3c029d8dd9b333eb111f798e4a333794bc7517b1bcb46bfdffce7d0844f1",
+      "identity_rows": 1,
+      "modified": "2020-03-25T21:08:17",
+      "pdf_rows": [
+        {
+          "bytes": 183343,
+          "sha256": "aa014aa8acd499e6de48d161f3f9807af30233ca402b00698aaaef2a572c8667",
+          "url": "https://tappco-lubes.com/wp-content/uploads/2020/03/REFRIDGE-OIL-68.pdf"
+        }
+      ],
+      "post_id": 1229,
+      "source_title": "REFRIDGE OIL 68"
+    },
+    {
+      "category": "Industrial",
+      "date": "2020-03-17T15:38:06",
+      "description_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "identity_rows": 1,
+      "modified": "2020-03-25T21:08:00",
+      "pdf_rows": [],
+      "post_id": 1231,
+      "source_title": "INDUSTRIAL GEAR OIL"
+    },
+    {
+      "category": "Industrial",
+      "date": "2020-03-17T15:38:26",
+      "description_sha256": "ab21318fded32cf2fb0516cd1b0c12cc3646f261ce7da091665702691ed33fe2",
+      "identity_rows": 4,
+      "modified": "2020-03-25T21:07:49",
+      "pdf_rows": [
+        {
+          "bytes": 190290,
+          "sha256": "8148cf809b776f0808a1b1cbeb246921a72706bc3ec6048f81f2ff4cc154f663",
+          "url": "https://tappco-lubes.com/wp-content/uploads/2020/03/HYDRAULIC-OIL.pdf"
+        }
+      ],
+      "post_id": 1232,
+      "source_title": "HYDRAULIC OIL"
+    },
+    {
+      "category": "Industrial",
+      "date": "2020-03-17T15:37:53",
+      "description_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "identity_rows": 1,
+      "modified": "2020-03-25T21:08:09",
+      "pdf_rows": [],
+      "post_id": 1233,
+      "source_title": "MEDIC WHITE OIL"
+    },
+    {
+      "category": "Industrial",
+      "date": "2020-03-17T15:38:52",
+      "description_sha256": "7a1290a8e0e75bc11652c1304c0c6311529835b494d626f7ea2e256a0e91a9cd",
+      "identity_rows": 1,
+      "modified": "2020-03-25T21:07:04",
+      "pdf_rows": [
+        {
+          "bytes": 185580,
+          "sha256": "5034a36cf03a6bccef15d0922865cea35ede2c5676307afe4da46b25dee46aca",
+          "url": "https://tappco-lubes.com/wp-content/uploads/2020/03/HYDRAULIC-OIL-37.pdf"
+        }
+      ],
+      "post_id": 1237,
+      "source_title": "HYDRAULIC OIL 37"
+    },
+    {
+      "category": "Industrial",
+      "date": "2020-03-17T15:39:03",
+      "description_sha256": "7a1290a8e0e75bc11652c1304c0c6311529835b494d626f7ea2e256a0e91a9cd",
+      "identity_rows": 1,
+      "modified": "2020-03-25T21:06:51",
+      "pdf_rows": [
+        {
+          "bytes": 185527,
+          "sha256": "f99e28f82926fe7d649e8f9dbdb574136ab45e3ffb97be83c242c2f053d4dab3",
+          "url": "https://tappco-lubes.com/wp-content/uploads/2020/03/HYDRAULIC-OIL-10W.pdf"
+        }
+      ],
+      "post_id": 1238,
+      "source_title": "HYDRAULIC OIL 10W"
+    },
+    {
+      "category": "Industrial",
+      "date": "2020-03-17T15:39:17",
+      "description_sha256": "88158bbfd14e367c2fb419938fb5651b049f127c903e49891103179fb0ae664f",
+      "identity_rows": 6,
+      "modified": "2020-03-25T21:06:39",
+      "pdf_rows": [
+        {
+          "bytes": 191163,
+          "sha256": "f210b000b1cb58efaa131f474fafe188a432506bc0d41aad7a01e9a69711c3fd",
+          "url": "https://tappco-lubes.com/wp-content/uploads/2020/03/HYDRAULIC-HVI-OIL.pdf"
+        }
+      ],
+      "post_id": 1240,
+      "source_title": "HYDRAULIC HVI OIL"
+    },
+    {
+      "category": "Industrial",
+      "date": "2020-03-17T15:39:42",
+      "description_sha256": "0343eed3d0b8600e2690e76a69a2d142673ce780538f7ef8a3a042f6b73bc034",
+      "identity_rows": 3,
+      "modified": "2020-03-25T21:06:30",
+      "pdf_rows": [
+        {
+          "bytes": 183737,
+          "sha256": "310d18e9bc85070debe5a3dcd31dad1d4809138502bc3b1d64a6f13e6f50bc23",
+          "url": "https://tappco-lubes.com/wp-content/uploads/2020/03/HEAT-TRANSFER-OIL.pdf"
+        }
+      ],
+      "post_id": 1243,
+      "source_title": "HEAT TRANSFER OIL"
+    },
+    {
+      "category": "Industrial",
+      "date": "2020-03-17T15:39:56",
+      "description_sha256": "5f855e3bd9fea5d42ab4b1554810d294f0be9ceb15135f8ba95d698ba8c27369",
+      "identity_rows": 5,
+      "modified": "2020-03-25T21:06:18",
+      "pdf_rows": [
+        {
+          "bytes": 191260,
+          "sha256": "c50b81e11c68a0ccbd4c5c0a383b7218d511d0125de79ac31fb7aabfb8775107",
+          "url": "https://tappco-lubes.com/wp-content/uploads/2020/03/CYCLONE-TURBINE-OIL.pdf"
+        }
+      ],
+      "post_id": 1244,
+      "source_title": "CYCLONE TURBINE OIL"
+    },
+    {
+      "category": "Industrial",
+      "date": "2020-03-17T15:40:10",
+      "description_sha256": "2439a60afc5dd9677b01b1360c20aaf7de24c1042ed05475108cf64f3ace2db8",
+      "identity_rows": 5,
+      "modified": "2020-03-25T21:06:08",
+      "pdf_rows": [
+        {
+          "bytes": 196284,
+          "sha256": "d25982fe435e31a73cc53fb7ca4ef70c979b191429ec88781446a96f39222526",
+          "url": "https://tappco-lubes.com/wp-content/uploads/2020/03/Cyclone-PAO-Range.pdf"
+        }
+      ],
+      "post_id": 1245,
+      "source_title": "Cyclone PAO Range"
+    },
+    {
+      "category": "Grease",
+      "date": "2020-03-17T15:41:06",
+      "description_sha256": "30e9fcb47bc42bf9aa3edc7f7a886f88ed5948e83e4c831ad272076445041b12",
+      "identity_rows": 6,
+      "modified": "2022-11-13T09:35:48",
+      "pdf_rows": [
+        {
+          "bytes": 194608,
+          "sha256": "6d4709e47944fcb0a310fb827233127ebd50f43b0bd7a41912ebb02a7d1808d6",
+          "url": "https://tappco-lubes.com/wp-content/uploads/2022/11/LITHIUM-GREASE-EP.pdf"
+        }
+      ],
+      "post_id": 1248,
+      "source_title": "LITHIUM GREASE EP (0-00-000-1-2-3)"
+    },
+    {
+      "category": "Industrial",
+      "date": "2020-03-17T15:40:42",
+      "description_sha256": "f40c02e726c2241db56ff4b5518da923a2e3fd87990d05dd2761e379351e13b1",
+      "identity_rows": 5,
+      "modified": "2020-03-25T21:05:58",
+      "pdf_rows": [
+        {
+          "bytes": 188908,
+          "sha256": "cc0134f05e5f2d3c0b9cbc8e86ad273d24485d9033827565109eb9661bf6dc6a",
+          "url": "https://tappco-lubes.com/wp-content/uploads/2020/03/CYCLONE-COMPRESSOR-HT.pdf"
+        }
+      ],
+      "post_id": 1249,
+      "source_title": "CYCLONE COMPRESSOR HT"
+    },
+    {
+      "category": "Gear and Transmission",
+      "date": "2020-03-17T15:42:17",
+      "description_sha256": "8cf3c88e1ebdbb1df1f8612890f64d06994ddc033bd5b5924fd564aaa5a09a42",
+      "identity_rows": 2,
+      "modified": "2020-03-26T09:34:23",
+      "pdf_rows": [
+        {
+          "bytes": 189323,
+          "sha256": "981c61ac471ba5e310e39c76b0187e53b2a93c1417c166b713b7a74b7f4ccc3f",
+          "url": "https://tappco-lubes.com/wp-content/uploads/2020/03/HARVEST-UTTO.pdf"
+        }
+      ],
+      "post_id": 1251,
+      "source_title": "HARVEST UTTO (10W30-15W40)"
+    },
+    {
+      "category": "Grease",
+      "date": "2020-03-17T15:41:16",
+      "description_sha256": "fcffb7d729b4a1ee61b2097367f4c03aae05a5fcfdbf114147bddbc41574b05f",
+      "identity_rows": 1,
+      "modified": "2020-03-25T21:05:43",
+      "pdf_rows": [
+        {
+          "bytes": 188235,
+          "sha256": "d46367fccb79b73a8c427c51ddb8b432269dd3ab8663a4aae121b9bdeb519d4a",
+          "url": "https://tappco-lubes.com/wp-content/uploads/2020/03/LITHIUM-COMPLEX-EP-2.pdf"
+        }
+      ],
+      "post_id": 1253,
+      "source_title": "LITHIUM COMPLEX EP 2"
+    },
+    {
+      "category": "Gear and Transmission",
+      "date": "2020-03-17T15:42:38",
+      "description_sha256": "6985cd2f453402a0b690e91f297c4a0e0d9fabe36a00a2440c0f2415017a4544",
+      "identity_rows": 5,
+      "modified": "2020-03-25T21:05:18",
+      "pdf_rows": [
+        {
+          "bytes": 188224,
+          "sha256": "8eaa79b3f2855de802b9a92161490322e1bfb342c433044058feefaac9bdce22",
+          "url": "https://tappco-lubes.com/wp-content/uploads/2020/03/GEAR-OIL-GL5-1.pdf"
+        }
+      ],
+      "post_id": 1256,
+      "source_title": "GEAR OIL GL5 (90-140-250-80W90-85W140)"
+    },
+    {
+      "category": "Gear and Transmission",
+      "date": "2020-03-17T15:42:06",
+      "description_sha256": "760573638fa94edb9011f6060029d112039bdcdb3d71ce3f4ee1cb3df408e8a7",
+      "identity_rows": 3,
+      "modified": "2020-03-25T21:05:36",
+      "pdf_rows": [
+        {
+          "bytes": 186303,
+          "sha256": "5f024455b7dfe73351285802f27e6abc0f559f76acb4b6657ec30163b2c489df",
+          "url": "https://tappco-lubes.com/wp-content/uploads/2020/03/TRANSMISSION-TO-4.pdf"
+        }
+      ],
+      "post_id": 1257,
+      "source_title": "TRANSMISSION TO-4 (10W-30-50)"
+    },
+    {
+      "category": "Gear and Transmission",
+      "date": "2020-03-17T15:42:59",
+      "description_sha256": "a01f65745ec3a551eda87f6c0fd6e4337a6d9cc7104207a460dda1ca66d69f09",
+      "identity_rows": 1,
+      "modified": "2020-03-25T21:04:50",
+      "pdf_rows": [
+        {
+          "bytes": 201285,
+          "sha256": "f3dd9308348c6028605350153e8c63f86cc83e11e2b13632911900c8be062649",
+          "url": "https://tappco-lubes.com/wp-content/uploads/2020/03/ATF-DEXRON-III.pdf"
+        }
+      ],
+      "post_id": 1260,
+      "source_title": "ATF DEXRON III"
+    },
+    {
+      "category": "Motor oils",
+      "date": "2020-03-17T15:44:54",
+      "description_sha256": "87cebabeedb50cb14b060fc6ebe64b1638d52f2f5a23406c1959c8d98fb8af28",
+      "identity_rows": 1,
+      "modified": "2020-03-25T21:04:29",
+      "pdf_rows": [
+        {
+          "bytes": 185651,
+          "sha256": "482e47f357f037655e650f204fea85a94aa5a3735f67803c3deaac777629a788",
+          "url": "https://tappco-lubes.com/wp-content/uploads/2020/03/PPX-MOTOR-50.pdf"
+        }
+      ],
+      "post_id": 1264,
+      "source_title": "PPX MOTOR 50"
+    },
+    {
+      "category": "Motor oils",
+      "date": "2020-03-17T15:44:34",
+      "description_sha256": "b8f6f6693231fd27ea327689b743b0292ccbc81408efc336871bbff5551627f1",
+      "identity_rows": 1,
+      "modified": "2020-03-25T21:04:39",
+      "pdf_rows": [
+        {
+          "bytes": 185651,
+          "sha256": "482e47f357f037655e650f204fea85a94aa5a3735f67803c3deaac777629a788",
+          "url": "https://tappco-lubes.com/wp-content/uploads/2020/03/PPX-MOTOR-50.pdf"
+        }
+      ],
+      "post_id": 1265,
+      "source_title": "TEENA MOTOR 20W50"
+    },
+    {
+      "category": "Diesel oils",
+      "date": "2020-03-17T15:45:12",
+      "description_sha256": "20897f82afb6fab702647f47184add1ae9a9e26e9590e41bb000fb50e0f1f632",
+      "identity_rows": 1,
+      "modified": "2020-03-25T21:04:22",
+      "pdf_rows": [
+        {
+          "bytes": 192958,
+          "sha256": "9b05c43c01b1b64b4d56621787ac5618f3f20d284c429d7afc195451ac39c324",
+          "url": "https://tappco-lubes.com/wp-content/uploads/2020/03/SUPER-OPTIMA.pdf"
+        }
+      ],
+      "post_id": 1266,
+      "source_title": "SUPER OPTIMA 15W40"
+    },
+    {
+      "category": "Diesel oils",
+      "date": "2020-03-17T15:51:37",
+      "description_sha256": "060b920da1638519a13208e661a566a9408b720e8a1890c98f146f3b7c66f51e",
+      "identity_rows": 1,
+      "modified": "2020-03-25T21:04:13",
+      "pdf_rows": [
+        {
+          "bytes": 190192,
+          "sha256": "e1defeabc0bfe707bb318aee84a09930f3459d363c74b27ea085b4ed3628b7fa",
+          "url": "https://tappco-lubes.com/wp-content/uploads/2020/03/OPTIMA-DIESEL.pdf"
+        }
+      ],
+      "post_id": 1270,
+      "source_title": "OPTIMA VIMAX 20W50"
+    },
+    {
+      "category": "Diesel oils",
+      "date": "2020-03-17T15:52:09",
+      "description_sha256": "060b920da1638519a13208e661a566a9408b720e8a1890c98f146f3b7c66f51e",
+      "identity_rows": 3,
+      "modified": "2020-03-26T12:33:59",
+      "pdf_rows": [
+        {
+          "bytes": 190192,
+          "sha256": "e1defeabc0bfe707bb318aee84a09930f3459d363c74b27ea085b4ed3628b7fa",
+          "url": "https://tappco-lubes.com/wp-content/uploads/2020/03/OPTIMA-DIESEL.pdf"
+        }
+      ],
+      "post_id": 1272,
+      "source_title": "OPTIMA DIESEL (30-40-50)"
+    },
+    {
+      "category": "Auxiliary",
+      "date": "2020-03-17T15:52:43",
+      "description_sha256": "14398ca18b2b1a8f6872b5dbe2564b03d93821b946c6dc3987fbb3e9b432a75c",
+      "identity_rows": 1,
+      "modified": "2020-03-25T21:03:56",
+      "pdf_rows": [
+        {
+          "bytes": 205210,
+          "sha256": "f84569d7b6d7237aaa4626cc67c6fae6bbc9004b2be83d2c1e57d5b6b553f146",
+          "url": "https://tappco-lubes.com/wp-content/uploads/2020/03/UNIVERSAL-BRAKE-FLUID-DOT-4-1.pdf"
+        }
+      ],
+      "post_id": 1273,
+      "source_title": "UNIVERSAL BRAKE FLUID DOT-4"
+    },
+    {
+      "category": "Auxiliary",
+      "date": "2020-03-17T15:52:59",
+      "description_sha256": "432fdbaac3b6a11aecc3573c46a2415dd89f48222b7f272926613d8938e57fe9",
+      "identity_rows": 1,
+      "modified": "2020-03-25T21:03:46",
+      "pdf_rows": [
+        {
+          "bytes": 225274,
+          "sha256": "d9ac1198b7d4dcea2c46078ef6b4e46a7116ee6192d9a3028bdc62d7278cbc34",
+          "url": "https://tappco-lubes.com/wp-content/uploads/2020/03/Antifreeze-LL.pdf"
+        }
+      ],
+      "post_id": 1274,
+      "source_title": "Antifreeze LL"
+    },
+    {
+      "category": "Grease",
+      "date": "2022-11-13T09:37:26",
+      "description_sha256": "69413a345adedc0f82a7960b2d96d8196168e7a161f1d7bd9c38bcf5048a678e",
+      "identity_rows": 1,
+      "modified": "2022-11-13T09:37:26",
+      "pdf_rows": [],
+      "post_id": 1482,
+      "source_title": "LITHIUM GREASE MP 3"
+    }
+  ],
+  "posts_without_tds": 3,
+  "product_posts": 33,
+  "publication_scope": "Factual product names, grades, category membership, source-reported standards and evidence hashes only; descriptions, TDS files, artwork and contacts are not redistributed.",
+  "schema_version": 1,
+  "snapshot_date": "2026-07-24",
+  "source_id": "SUDAN_TAPPCO_COMPLETE_PRODUCT_POST_CATALOG",
+  "status": "live_complete_public_manufacturer_product_post_catalog",
+  "unique_pdf_payloads": 27,
+  "wordpress_all_posts": 35
+}
