@@ -291,6 +291,9 @@ def main() -> None:
     antigua_vadd_shell_rows = [json.loads(line) for line in (ROOT / "data/antigua-vadd-shell-current-presence.jsonl").read_text(encoding="utf-8").splitlines() if line]
     rubis_caribbean_total_report = json.loads((ROOT / "data/rubis-caribbean-total-current-presence-report.json").read_text(encoding="utf-8"))
     rubis_caribbean_total_rows = [json.loads(line) for line in (ROOT / "data/rubis-caribbean-total-current-presence.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    grenada_sol_report = json.loads((ROOT / "data/grenada-sol-current-catalog-report.json").read_text(encoding="utf-8"))
+    grenada_sol_sku_rows = [json.loads(line) for line in (ROOT / "data/grenada-sol-current-skus.jsonl").read_text(encoding="utf-8").splitlines() if line]
+    grenada_sol_product_rows = [json.loads(line) for line in (ROOT / "data/grenada-sol-current-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     kebs_smark_report = json.loads((ROOT / "data/kebs-smark-lubricant-products-report.json").read_text(encoding="utf-8"))
     kebs_smark_rows = [json.loads(line) for line in (ROOT / "data/kebs-smark-lubricant-products.jsonl").read_text(encoding="utf-8").splitlines() if line]
     east_africa_report = json.loads((ROOT / "data/east-africa-certified-lubricant-products-report.json").read_text(encoding="utf-8"))
@@ -376,6 +379,7 @@ def main() -> None:
         + len(belize_rymax_rows)
         + report["dominican_imca_mobil_products_added"]
         + report["mag1_current_products_added"]
+        + report["grenada_sol_products_added"]
         - report["gm_dual_standard_license_rows_merged"]
         - report["fuchs_exact_payload_identity_rows_matched"]
         - report["fuchs_exact_content_identity_rows_matched"]
@@ -1079,19 +1083,19 @@ def main() -> None:
     assert report["aichilon_products_matched_to_existing"] == 255
     assert report["aichilon_products_added"] == 60
     assert report["aichilon_rows_excluded"] == 2
-    assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 4973
-    assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3044
-    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 117458
-    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 117457
-    assert report["quality_issues"]["professional_key_incomplete"] == 78893
+    assert db.execute("SELECT count(*) FROM product_offers").fetchone()[0] == report["offers"] == 5027
+    assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status IN ('active', 'listed_current_catalog')").fetchone()[0] == report["active_offers"] == 3093
+    assert db.execute("SELECT input_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["input_rows"] == 117470
+    assert db.execute("SELECT canonical_rows FROM ingest_runs WHERE run_id=?", (report["run_id"],)).fetchone()[0] == report["canonical_rows"] == 117469
+    assert report["quality_issues"]["professional_key_incomplete"] == 78885
     assert dict(db.execute("""
         SELECT p.family_code, count(*) FROM quality_issues q
         JOIN products p USING(product_id)
         WHERE q.issue_code='professional_key_incomplete'
         GROUP BY p.family_code
     """)) == {
-        "C": 2290, "E": 149, "G": 12418, "H": 5272, "I": 3871,
-        "M": 23494, "S": 12163, "T": 11872, "TF": 6729, "U": 635,
+        "C": 2290, "E": 149, "G": 12419, "H": 5269, "I": 3873,
+        "M": 23490, "S": 12163, "T": 11868, "TF": 6729, "U": 635,
     }
     assert offline_quality_audit["compressed_database_sha256"] == hashlib.sha256((ROOT / "data/world-catalog.sqlite3.xz").read_bytes()).hexdigest()
     assert offline_quality_audit["input_rows_before_canonicalization"] == report["input_rows"]
@@ -1125,7 +1129,7 @@ def main() -> None:
         "complete_exact_signature_candidate": 470,
         "insufficient_comparable_evidence": 905,
     }
-    assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status='listed_current_catalog'").fetchone()[0] == report["current_catalog_listed_offers"] == 1589
+    assert db.execute("SELECT count(*) FROM product_offers WHERE lifecycle_status='listed_current_catalog'").fetchone()[0] == report["current_catalog_listed_offers"] == 1638
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_filed_registry'").fetchone()[0] == 3629
     assert db.execute("SELECT count(*) FROM products WHERE evidence_status='official_licensed_registry'").fetchone()[0] == 3030
     assert db.execute("SELECT count(*) FROM specifications WHERE spec_type='gm_license_occurrences'").fetchone()[0] == 1705
@@ -3094,6 +3098,65 @@ def main() -> None:
             "SELECT count(*) FROM product_sources WHERE source_id=?",
             (evidence_source_id,),
         ).fetchone()[0] == 0
+    assert grenada_sol_report["unique_skus"] == len(
+        grenada_sol_sku_rows
+    ) == report["grenada_sol_current_sku_rows"] == 54
+    assert grenada_sol_report["unique_product_grade_identities"] == len(
+        grenada_sol_product_rows
+    ) == report["grenada_sol_current_product_rows"] == 43
+    assert grenada_sol_report["product_grade_identities_by_family"] == {
+        "G": 2, "H": 5, "I": 5, "M": 24, "T": 7,
+    }
+    assert grenada_sol_report["normalized_output_sha256"] == hashlib.sha256(
+        (ROOT / "data/grenada-sol-current-skus.jsonl").read_bytes()
+    ).hexdigest() == report["grenada_sol_current_skus_input_sha256"]
+    assert grenada_sol_report[
+        "normalized_products_sha256"
+    ] == hashlib.sha256(
+        (ROOT / "data/grenada-sol-current-products.jsonl").read_bytes()
+    ).hexdigest() == report["grenada_sol_current_products_input_sha256"]
+    assert policy_by_id[
+        "GRENADA_SOL_CURRENT_ECOMMERCE_CATALOG"
+    ]["source_sha256"] == grenada_sol_report["normalized_products_sha256"]
+    assert policy_by_id[
+        "GRENADA_SOL_CURRENT_ECOMMERCE_CATALOG"
+    ]["observed_count"] == 43
+    assert report["grenada_sol_products_matched_to_existing"] == 31
+    assert report["grenada_sol_products_added"] == 12
+    assert report["grenada_sol_multi_candidate_rows"] == 14
+    assert report["grenada_sol_family_corrections"] == 3
+    assert report["grenada_sol_priced_skus"] == 49
+    assert report["grenada_sol_zero_price_placeholder_skus"] == 5
+    assert grenada_sol_report["availability"] == {
+        "InStock": 49, "NotAvailable": 1, "OutOfStock": 4,
+    }
+    assert db.execute(
+        "SELECT count(*) FROM product_sources "
+        "WHERE source_id='GRENADA_SOL_CURRENT_ECOMMERCE_CATALOG'"
+    ).fetchone()[0] == 43
+    assert db.execute(
+        "SELECT count(*) FROM product_offers "
+        "WHERE source_id='GRENADA_SOL_CURRENT_ECOMMERCE_CATALOG'"
+    ).fetchone()[0] == 54
+    assert db.execute(
+        "SELECT count(*) FROM product_offers "
+        "WHERE source_id='GRENADA_SOL_CURRENT_ECOMMERCE_CATALOG' "
+        "AND price_status='published_current_price' "
+        "AND price_amount>0 AND price_currency='XCD'"
+    ).fetchone()[0] == 49
+    assert db.execute(
+        "SELECT count(*) FROM product_offers "
+        "WHERE source_id='GRENADA_SOL_CURRENT_ECOMMERCE_CATALOG' "
+        "AND price_status='zero_price_placeholder_without_currency' "
+        "AND price_amount=0 AND price_currency=''"
+    ).fetchone()[0] == 5
+    assert {
+        row[1]
+        for row in db.execute("PRAGMA table_info(product_offers)")
+    } >= {
+        "price_amount", "price_currency", "price_status",
+        "availability", "source_url",
+    }
     assert policy_by_id["VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG"]["observed_count"] == 23
     assert db.execute(
         "SELECT count(*) FROM products WHERE source_id='VENEZUELA_PDV_CURRENT_CPE_LUBRICANT_CATALOG'"

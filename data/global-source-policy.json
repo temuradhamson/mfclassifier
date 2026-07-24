@@ -2911,6 +2911,21 @@
       "publication_status": "attributed_nonexpressive_brand_market_and_channel_facts_only_no_marketing_text_or_images_redistributed",
       "observed_count": 6,
       "notes": "RUBIS explicitly states that Total Lubricants are sold at its service stations in Antigua, Barbados, Grenada, Guyana, Saint Lucia and Saint Vincent. The six normalized rows prove brand/channel presence only; they do not establish local SKU, stock, price, formulation or availability of TotalEnergies' complete global catalog."
+    },
+    {
+      "source_id": "GRENADA_SOL_CURRENT_ECOMMERCE_CATALOG",
+      "title": "Complete current official Sol Grenada lubricant ecommerce catalog",
+      "owner": "Sol EC Ltd. Grenada",
+      "source_type": "official_country_ecommerce_complete_lubricant_categories_product_pages_prices_and_availability",
+      "source_locator": "data/grenada-sol-current-products.jsonl",
+      "source_url": "https://grenada.solpetroleum.com/",
+      "terms_url": "https://solpetroleum.com/terms-and-conditions/",
+      "source_sha256": "b97b601b8b9d6c5b37fa408e6353f6b1b6034170ea7173eb85c6a26fe5a5fa89",
+      "access_status": "public_official_country_ecommerce_rate_limit_respected",
+      "bulk_ingest_allowed": true,
+      "publication_status": "attributed_transformed_nonexpressive_product_specification_price_and_availability_facts_only_no_marketing_text_or_images_redistributed",
+      "observed_count": 43,
+      "notes": "Nine official lubricant leaf categories contain 57 listing occurrences and 54 unique Mobil package SKUs, collapsed by full professional signature into 43 product-grade identities (G2/H5/I5/M24/T7). Forty-nine SKUs have positive published XCD prices; five source pages expose zero-price placeholders without currency and are excluded from usable price analytics. Availability is retained as 49 InStock, four OutOfStock and one NotAvailable. Five pages omit JSON-LD and use a flagged same-page factual tracking fallback. Independent complete reruns reproduced byte-identical SKU, product and report outputs. Package SKUs remain offers; no availability of Mobil's unlisted global range is inferred."
     }
   ]
 }

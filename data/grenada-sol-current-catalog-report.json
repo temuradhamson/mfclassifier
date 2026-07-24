@@ -1,0 +1,61 @@
+{
+  "availability": {
+    "InStock": 49,
+    "NotAvailable": 1,
+    "OutOfStock": 4
+  },
+  "brands": {
+    "MOBIL": 54
+  },
+  "category_listing_occurrences": 57,
+  "category_listing_occurrences_by_category": {
+    "air-compressor-oils": 0,
+    "diesel-engine-oils": 10,
+    "gasoline-engine-oils": 19,
+    "gear-oils": 12,
+    "greases": 3,
+    "hydraulic-oils": 6,
+    "industrial-gear-oils": 2,
+    "outboard-motorcycle-oils": 2,
+    "transmission-oils": 3
+  },
+  "category_page_sha256": {
+    "air-compressor-oils": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "diesel-engine-oils": "eddaaecf158a3f3e44c9e0ff39a7269372cc6cb2b1ac92dccd182bdcbf927f60",
+    "gasoline-engine-oils": "974c2b0d6a11c1d2fae27b8ac65ff21823db671202a414866d8be57f556cc119",
+    "gear-oils": "56b98c3e632a276736d3657cc9584172e36daee9a3137ba38ff7d333ba71339c",
+    "greases": "e7354f124e15513b8423f5057418b42bc380690cba5615c6a45acb0d59138dda",
+    "hydraulic-oils": "2786a2307b46578ce6034227c452ba1c23f7c46b9506535303f75251849b789d",
+    "industrial-gear-oils": "ef40b5d6eb2844e5834898328d481d1b96a2eb026fb4f56109ee4a1ee92eb6a4",
+    "outboard-motorcycle-oils": "5a4f201b03f30ce73ee015794e22549f767bc1dc420e9b1adb3cff36f30143ce",
+    "transmission-oils": "010f8c1fb7aa412a0a368301a6bb56156569f2e0afa34eb8337447d5a2815447"
+  },
+  "category_pages_checked": 9,
+  "currency": [
+    "XCD"
+  ],
+  "detail_json_ld_statuses": {
+    "missing_fallback_to_detail_tracking_data": 5,
+    "present": 49
+  },
+  "identity_groups_with_multiple_package_skus": 10,
+  "normalized_output_sha256": "4f3a9bf70c842d68e03d02c54ab256ecb639830b42bb27bcff537bc7f88f722c",
+  "normalized_products_sha256": "b97b601b8b9d6c5b37fa408e6353f6b1b6034170ea7173eb85c6a26fe5a5fa89",
+  "package_skus_collapsed_by_identity": 11,
+  "priced_skus": 49,
+  "product_grade_identities_by_family": {
+    "G": 2,
+    "H": 5,
+    "I": 5,
+    "M": 24,
+    "T": 7
+  },
+  "quality_note": "All published lubricant leaf categories and product SKUs were checked. Package SKUs are retained as offers/evidence and grouped into product-grade identities; no global Mobil range inference.",
+  "skus_with_structured_specifications": 46,
+  "snapshot_date": "2026-07-24",
+  "source_id": "GRENADA_SOL_CURRENT_ECOMMERCE_CATALOG",
+  "source_url": "https://grenada.solpetroleum.com/",
+  "unique_product_grade_identities": 43,
+  "unique_skus": 54,
+  "zero_price_placeholder_skus": 5
+}

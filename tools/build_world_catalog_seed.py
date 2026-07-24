@@ -124,6 +124,8 @@ MAG1_CURRENT_OFFICIAL_JSONL = ROOT / "data" / "mag1-current-official-products.js
 HAITI_LUBEX_MAG1_PRESENCE_JSONL = ROOT / "data" / "haiti-lubex-mag1-current-presence.jsonl"
 ANTIGUA_VADD_SHELL_PRESENCE_JSONL = ROOT / "data" / "antigua-vadd-shell-current-presence.jsonl"
 RUBIS_CARIBBEAN_TOTAL_PRESENCE_JSONL = ROOT / "data" / "rubis-caribbean-total-current-presence.jsonl"
+GRENADA_SOL_CURRENT_SKUS_JSONL = ROOT / "data" / "grenada-sol-current-skus.jsonl"
+GRENADA_SOL_CURRENT_PRODUCTS_JSONL = ROOT / "data" / "grenada-sol-current-products.jsonl"
 KEBS_SMARK_JSONL = ROOT / "data" / "kebs-smark-lubricant-products.jsonl"
 EAST_AFRICA_CERTIFIED_JSONL = ROOT / "data" / "east-africa-certified-lubricant-products.jsonl"
 SON_MANCAP_JSONL = ROOT / "data" / "son-mancap-chemical-lubricant-products.jsonl"
@@ -4329,6 +4331,110 @@ def merge_dominican_republic_imca_mobil_evidence(
     )
 
 
+def grenada_sol_current_product_record(row: dict) -> dict:
+    """Convert one package-collapsed Sol Grenada product-grade identity."""
+    technical = row["technical"]
+    api_class = "; ".join([
+        *(f"API {value}" for value in technical["api"]),
+        *(f"API {value}" for value in technical["api_gl"]),
+        *(f"ACEA {value}" for value in technical["acea"]),
+        *(f"ILSAC {value}" for value in technical["ilsac"]),
+        *(f"JASO {value}" for value in technical["jaso"]),
+    ])
+    generic = {
+        "id": row["source_record_id"],
+        "source_number": row["source_record_id"],
+        "brand": row["brand"],
+        "name": row["product_name"],
+        "category": "Current official Sol Grenada ecommerce lubricant catalog",
+        "category_code": row["family_code"],
+        "family": FAMILY_NAMES[row["family_code"]],
+        "sae_class": (
+            technical["sae_engine"][0] if technical["sae_engine"]
+            else technical["sae_gear"][0] if technical["sae_gear"]
+            else ""
+        ),
+        "api_class": api_class,
+        "viscosity": (
+            f"ISO VG {technical['iso_vg'][0]}"
+            if technical["iso_vg"] else ""
+        ),
+        "grease_class": technical["nlgi"][0] if technical["nlgi"] else "",
+        "source": row["source_id"],
+    }
+    record = canonical_record(generic)
+    record.update({
+        "manufacturer": "ExxonMobil Product Solutions Company",
+        "brand": row["brand"],
+        "market": row["market"],
+        "source_id": row["source_id"],
+        "source_record_id": row["source_record_id"],
+        "source_row": None,
+        "evidence_status": "official_country_ecommerce_product_identity",
+        "lifecycle_status": row["lifecycle_status"],
+        "snapshot_date": row["snapshot_date"],
+    })
+    record["specifications"].update({
+        "sae_engine": technical["sae_engine"][0] if technical["sae_engine"] else "",
+        "sae_gear": technical["sae_gear"][0] if technical["sae_gear"] else "",
+        "iso_vg": technical["iso_vg"][0] if technical["iso_vg"] else "",
+        "nlgi": technical["nlgi"][0] if technical["nlgi"] else "",
+        "api": technical["api"],
+        "api_gl": technical["api_gl"],
+        "acea": technical["acea"],
+        "ilsac": technical["ilsac"],
+        "jaso": technical["jaso"],
+        "source_sku_record_ids": row["source_sku_record_ids"],
+        "source_product_codes": row["source_product_codes"],
+        "source_listing_titles": row["source_listing_titles"],
+        "source_urls": row["source_urls"],
+        "published_specification_items": row[
+            "published_specification_items"
+        ],
+        "source_quality_flags": row["source_quality_flags"],
+    })
+    record["canonical_key"] += (
+        f"|grenada_sol:{normalize(row['source_record_id'])}"
+    )
+    record["product_id"] = (
+        "WC-" + hashlib.sha256(record["canonical_key"].encode()).hexdigest()[:20]
+    )
+    return record
+
+
+def merge_grenada_sol_current_evidence(
+    target: dict,
+    source_record: dict,
+    raw: dict,
+    match_basis: str,
+) -> None:
+    """Attach current Grenada product/SKU evidence to a strict Mobil identity."""
+    target_specs = target["specifications"]
+    source_specs = source_record["specifications"]
+    for key in ("api", "api_gl", "acea", "ilsac", "jaso"):
+        target_specs[key] = sorted(
+            set(target_specs.get(key, [])) | set(source_specs.get(key, []))
+        )
+    for key in ("sae_engine", "sae_gear", "iso_vg", "nlgi"):
+        if not target_specs.get(key):
+            target_specs[key] = source_specs.get(key, "")
+    target_specs.setdefault("grenada_sol_current_catalog_evidence", []).append({
+        "source_record_id": raw["source_record_id"],
+        "source_sku_record_ids": raw["source_sku_record_ids"],
+        "source_product_codes": raw["source_product_codes"],
+        "source_urls": raw["source_urls"],
+        "published_specification_items": raw[
+            "published_specification_items"
+        ],
+        "source_quality_flags": raw["source_quality_flags"],
+        "match_basis": match_basis,
+    })
+    target["snapshot_date"] = max(
+        target.get("snapshot_date", ""),
+        raw["snapshot_date"],
+    )
+
+
 def mag1_current_official_record(row: dict) -> dict:
     """Convert one current official MAG 1 product/PDS identity."""
     technical = row["technical"]
@@ -5378,7 +5484,7 @@ def build_sqlite(records: list[dict], candidates: list[dict], issues: list[dict]
     CREATE TABLE certificates(product_id TEXT NOT NULL REFERENCES products(product_id), certificate_number TEXT, issued_at TEXT, expires_at TEXT, local_producer_certificate TEXT, technical_document TEXT, certificate_status TEXT);
     CREATE TABLE duplicate_decisions(product_id_a TEXT NOT NULL, product_id_b TEXT NOT NULL, reason TEXT NOT NULL, score REAL NOT NULL, decision TEXT NOT NULL);
     CREATE TABLE quality_issues(product_id TEXT NOT NULL REFERENCES products(product_id), issue_code TEXT NOT NULL, severity TEXT NOT NULL, field TEXT NOT NULL, value TEXT, expected TEXT, action TEXT NOT NULL);
-    CREATE TABLE product_offers(offer_id TEXT PRIMARY KEY, product_id TEXT NOT NULL REFERENCES products(product_id), market TEXT NOT NULL, package_name TEXT NOT NULL, unit TEXT NOT NULL, quantity_per_package REAL, weight_kg REAL, density_kg_per_l REAL, lifecycle_status TEXT NOT NULL, archive_type TEXT, archive_reason TEXT, source_id TEXT NOT NULL REFERENCES sources(source_id), source_record_id TEXT NOT NULL);
+    CREATE TABLE product_offers(offer_id TEXT PRIMARY KEY, product_id TEXT NOT NULL REFERENCES products(product_id), market TEXT NOT NULL, package_name TEXT NOT NULL, unit TEXT NOT NULL, quantity_per_package REAL, weight_kg REAL, density_kg_per_l REAL, lifecycle_status TEXT NOT NULL, archive_type TEXT, archive_reason TEXT, source_id TEXT NOT NULL REFERENCES sources(source_id), source_record_id TEXT NOT NULL, price_amount REAL, price_currency TEXT, price_status TEXT, availability TEXT, source_url TEXT);
     CREATE INDEX products_brand_name_idx ON products(brand, product_name_normalized);
     CREATE INDEX products_family_idx ON products(family_code);
     CREATE INDEX specs_type_value_idx ON specifications(spec_type, spec_value);
@@ -5419,7 +5525,13 @@ def build_sqlite(records: list[dict], candidates: list[dict], issues: list[dict]
     db.executemany("INSERT INTO duplicate_decisions VALUES (:product_id_a,:product_id_b,:reason,:score,:decision)", candidates)
     db.executemany("INSERT INTO quality_issues VALUES (:product_id,:issue_code,:severity,:field,:value,:expected,:action)", issues)
     db.executemany("INSERT INTO product_sources VALUES (:product_id,:source_id,:source_record_id,:source_row,:relation)", source_links)
-    db.executemany("INSERT INTO product_offers VALUES (:offer_id,:product_id,:market,:package_name,:unit,:quantity_per_package,:weight_kg,:density_kg_per_l,:lifecycle_status,:archive_type,:archive_reason,:source_id,:source_record_id)", offers)
+    for offer in offers:
+        offer.setdefault("price_amount", None)
+        offer.setdefault("price_currency", "")
+        offer.setdefault("price_status", "")
+        offer.setdefault("availability", "")
+        offer.setdefault("source_url", "")
+    db.executemany("INSERT INTO product_offers VALUES (:offer_id,:product_id,:market,:package_name,:unit,:quantity_per_package,:weight_kg,:density_kg_per_l,:lifecycle_status,:archive_type,:archive_reason,:source_id,:source_record_id,:price_amount,:price_currency,:price_status,:availability,:source_url)", offers)
     db.commit()
     db.close()
 
@@ -5560,9 +5672,10 @@ def build_workbook(records: list[dict], candidates: list[dict], issues: list[dic
         issue["product_id"], by_id[issue["product_id"]]["brand"], by_id[issue["product_id"]]["product_name_raw"],
         issue["issue_code"], issue["severity"], issue["field"], issue["value"], issue["expected"], issue["action"],
     ) for issue in issues))
-    add_sheet(wb, "09_Упаковки_SKU", ["Offer ID", "Product ID", "Рынок", "Упаковка", "Единица", "Количество", "Вес, кг", "Плотность, кг/л", "Статус", "Архив", "Причина", "Source record"], ((
+    add_sheet(wb, "09_Упаковки_SKU", ["Offer ID", "Product ID", "Рынок", "Упаковка", "Единица", "Количество", "Вес, кг", "Плотность, кг/л", "Статус", "Архив", "Причина", "Source record", "Цена", "Валюта", "Статус цены", "Наличие", "URL источника"], ((
         o["offer_id"], o["product_id"], o["market"], o["package_name"], o["unit"], o["quantity_per_package"],
         o["weight_kg"], o["density_kg_per_l"], o["lifecycle_status"], o["archive_type"], o["archive_reason"], o["source_record_id"],
+        o.get("price_amount"), o.get("price_currency"), o.get("price_status"), o.get("availability"), o.get("source_url"),
     ) for o in offers))
     add_sheet(wb, "10_Исключённые_строки", ["Source record", "Название", "Причина"], ((
         e["source_record_id"], e["name"], e["reason"]
@@ -6414,6 +6527,24 @@ def main() -> None:
             encoding="utf-8"
         ).splitlines()
         if line
+    ]
+    grenada_sol_current_sku_rows = [
+        json.loads(line)
+        for line in GRENADA_SOL_CURRENT_SKUS_JSONL.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        if line
+    ]
+    grenada_sol_current_product_rows = [
+        json.loads(line)
+        for line in GRENADA_SOL_CURRENT_PRODUCTS_JSONL.read_text(
+            encoding="utf-8"
+        ).splitlines()
+        if line
+    ]
+    grenada_sol_current_product_records = [
+        grenada_sol_current_product_record(row)
+        for row in grenada_sol_current_product_rows
     ]
     bahamas_cbs_availability_rows = [
         json.loads(line)
@@ -7569,6 +7700,108 @@ def main() -> None:
         dominican_imca_mobil_product_key[
             raw["source_record_id"]
         ] = target["canonical_key"]
+    def grenada_sol_compact_name(value: str) -> str:
+        value = str(value).replace("™", "").replace("®", "")
+        return re.sub(r"[^\w]+", "", normalize(value), flags=re.UNICODE)
+
+    grenada_existing_by_name = defaultdict(list)
+    for row in input_records:
+        compact_name = grenada_sol_compact_name(row["product_name_raw"])
+        if compact_name.startswith(("mobil", "nuto")):
+            grenada_existing_by_name[compact_name].append(row)
+    grenada_sol_product_key = {}
+    grenada_sol_products_matched_to_existing = 0
+    grenada_sol_products_added = 0
+    grenada_sol_multi_candidate_rows = 0
+    grenada_sol_family_corrections = 0
+    for raw, source_record in zip(
+        grenada_sol_current_product_rows,
+        grenada_sol_current_product_records,
+    ):
+        source_name = grenada_sol_compact_name(raw["product_name"])
+        candidate_names = [source_name]
+        if source_name.startswith("nutoh"):
+            candidate_names.append("mobil" + source_name)
+        candidates = [
+            candidate
+            for candidate_name in candidate_names
+            for candidate in grenada_existing_by_name[candidate_name]
+        ]
+        family_correction_allowed = (
+            raw["family_code"] == "I"
+            and source_name.startswith("mobilgear600xp")
+        )
+        candidates = [
+            candidate
+            for candidate in candidates
+            if (
+                candidate["family_code"] == raw["family_code"]
+                or (
+                    family_correction_allowed
+                    and candidate["family_code"] == "T"
+                )
+            )
+        ]
+        for spec_key in ("sae_engine", "sae_gear", "iso_vg", "nlgi"):
+            source_values = {
+                normalize(value)
+                for value in raw["technical"][spec_key]
+                if normalize(value)
+            }
+            if not source_values:
+                continue
+            candidates = [
+                candidate
+                for candidate in candidates
+                if not normalize(
+                    candidate["specifications"].get(spec_key)
+                )
+                or normalize(
+                    candidate["specifications"].get(spec_key)
+                ) in source_values
+            ]
+        match_basis = "exact_compact_product_name_family_and_compatible_grade"
+        if candidates:
+            if len(candidates) > 1:
+                grenada_sol_multi_candidate_rows += 1
+            target = min(
+                candidates,
+                key=lambda row: (
+                    "historical" in row.get("lifecycle_status", ""),
+                    source_priority.get(row["source_id"], 10),
+                    row["canonical_key"],
+                ),
+            )
+            if target["family_code"] != raw["family_code"]:
+                target["specifications"][
+                    "grenada_sol_current_family_correction"
+                ] = {
+                    "previous_family_code": target["family_code"],
+                    "current_family_code": raw["family_code"],
+                    "basis": (
+                        "current_country_catalog_industrial_gear_identity"
+                    ),
+                }
+                target["family_code"] = raw["family_code"]
+                target["family"] = FAMILY_NAMES[raw["family_code"]]
+                target["category"] = source_record["category"]
+                grenada_sol_family_corrections += 1
+                match_basis += "_with_industrial_family_correction"
+            merge_grenada_sol_current_evidence(
+                target,
+                source_record,
+                raw,
+                match_basis,
+            )
+            grenada_sol_products_matched_to_existing += 1
+        else:
+            target = source_record
+            input_records.append(target)
+            grenada_existing_by_name[source_name].append(target)
+            grenada_sol_products_added += 1
+        grenada_sol_product_key[
+            raw["source_record_id"]
+        ] = target["canonical_key"]
     mag1_exact_existing_targets = {
         "MAG1-E2B79A248C5D": ("JASO_4T", "2332"),
         "MAG1-D32932ABC9C6": ("JASO_4T", "2331"),
@@ -7981,6 +8214,25 @@ def main() -> None:
             "source_record_id": raw["source_record_id"],
             "source_row": raw["source_page"],
             "relation": "official_authorized_distributor_country_catalog_grade",
+        }
+        link_key = (
+            link["product_id"],
+            link["source_id"],
+            link["source_record_id"],
+        )
+        if link_key not in source_link_keys:
+            source_links.append(link)
+            source_link_keys.add(link_key)
+    for raw in grenada_sol_current_product_rows:
+        target = canonical_by_key[
+            grenada_sol_product_key[raw["source_record_id"]]
+        ]
+        link = {
+            "product_id": target["product_id"],
+            "source_id": raw["source_id"],
+            "source_record_id": raw["source_record_id"],
+            "source_row": None,
+            "relation": "official_country_ecommerce_product_identity",
         }
         link_key = (
             link["product_id"],
@@ -8658,6 +8910,47 @@ def main() -> None:
             "source_id": "aichilon-internal",
             "source_record_id": text(package["package_id"]),
         })
+    grenada_sol_sku_to_product = {
+        sku_record_id: product_row["source_record_id"]
+        for product_row in grenada_sol_current_product_rows
+        for sku_record_id in product_row["source_sku_record_ids"]
+    }
+    for raw in grenada_sol_current_sku_rows:
+        product_source_record_id = grenada_sol_sku_to_product[
+            raw["source_record_id"]
+        ]
+        target = canonical_by_key[
+            grenada_sol_product_key[product_source_record_id]
+        ]
+        is_available = raw["availability"] == "InStock"
+        offers.append({
+            "offer_id": "SOL-GD-" + hashlib.sha256(
+                raw["source_record_id"].encode()
+            ).hexdigest()[:20],
+            "product_id": target["product_id"],
+            "market": "Grenada",
+            "package_name": raw["source_listing_title"],
+            "unit": raw["sales_uom"] or "catalog_package",
+            "quantity_per_package": None,
+            "weight_kg": None,
+            "density_kg_per_l": None,
+            "lifecycle_status": (
+                "listed_current_catalog" if is_available
+                else "listed_current_catalog_unavailable"
+            ),
+            "archive_type": "" if is_available else "current_unavailable",
+            "archive_reason": (
+                "" if is_available
+                else f"Source availability: {raw['availability']}"
+            ),
+            "source_id": raw["source_id"],
+            "source_record_id": raw["source_record_id"],
+            "price_amount": float(raw["price"]) if raw["price"] else None,
+            "price_currency": raw["price_currency"],
+            "price_status": raw["price_status"],
+            "availability": raw["availability"],
+            "source_url": raw["source_url"],
+        })
     for raw in liqui_moly_current_source_rows:
         target = canonical_by_key[liqui_moly_current_product_key[raw["source_record_id"]]]
         for article in raw["articles"]:
@@ -9098,6 +9391,8 @@ def main() -> None:
         "haiti_lubex_mag1_presence_input_sha256": hashlib.sha256(HAITI_LUBEX_MAG1_PRESENCE_JSONL.read_bytes()).hexdigest(),
         "antigua_vadd_shell_presence_input_sha256": hashlib.sha256(ANTIGUA_VADD_SHELL_PRESENCE_JSONL.read_bytes()).hexdigest(),
         "rubis_caribbean_total_presence_input_sha256": hashlib.sha256(RUBIS_CARIBBEAN_TOTAL_PRESENCE_JSONL.read_bytes()).hexdigest(),
+        "grenada_sol_current_skus_input_sha256": hashlib.sha256(GRENADA_SOL_CURRENT_SKUS_JSONL.read_bytes()).hexdigest(),
+        "grenada_sol_current_products_input_sha256": hashlib.sha256(GRENADA_SOL_CURRENT_PRODUCTS_JSONL.read_bytes()).hexdigest(),
         "kebs_smark_input_sha256": hashlib.sha256(KEBS_SMARK_JSONL.read_bytes()).hexdigest(),
         "east_africa_certified_input_sha256": hashlib.sha256(EAST_AFRICA_CERTIFIED_JSONL.read_bytes()).hexdigest(),
         "son_mancap_input_sha256": hashlib.sha256(SON_MANCAP_JSONL.read_bytes()).hexdigest(),
@@ -9205,6 +9500,24 @@ def main() -> None:
         ),
         "rubis_caribbean_total_presence_source_rows": len(
             rubis_caribbean_total_presence_rows
+        ),
+        "grenada_sol_current_sku_rows": len(grenada_sol_current_sku_rows),
+        "grenada_sol_current_product_rows": len(
+            grenada_sol_current_product_rows
+        ),
+        "grenada_sol_products_matched_to_existing": (
+            grenada_sol_products_matched_to_existing
+        ),
+        "grenada_sol_products_added": grenada_sol_products_added,
+        "grenada_sol_multi_candidate_rows": grenada_sol_multi_candidate_rows,
+        "grenada_sol_family_corrections": grenada_sol_family_corrections,
+        "grenada_sol_priced_skus": sum(
+            row["price_status"] == "published_current_price"
+            for row in grenada_sol_current_sku_rows
+        ),
+        "grenada_sol_zero_price_placeholder_skus": sum(
+            row["price_status"] == "zero_price_placeholder_without_currency"
+            for row in grenada_sol_current_sku_rows
         ),
         "dominican_imca_mobil_products_matched_to_existing": (
             dominican_imca_mobil_matched_to_existing
